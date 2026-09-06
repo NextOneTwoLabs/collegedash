@@ -59,21 +59,33 @@ def _api_key(registry: dict) -> tuple[str, bool]:
     return "DEMO_KEY", True
 
 
+def _from_bulk(unit_id) -> dict | None:
+    """data/scorecard-bulk.json (written by the registry builder) avoids one API call per school."""
+    bulk = common.read_json(os.path.join(common.DATA_DIR, "scorecard-bulk.json"))
+    if not bulk or not unit_id:
+        return None
+    return next((r for r in bulk.get("results", []) if r.get("id") == unit_id), None)
+
+
 def collect(program: dict, registry: dict) -> dict:
     src = registry["sources"]["scorecard"]
-    key, demo = _api_key(registry)
-    params = {"api_key": key, "fields": ",".join(FIELDS)}
     unit_id = (program.get("ids") or {}).get("scorecardUnitId")
-    if unit_id:
-        params["id"] = str(unit_id)
-    else:
-        params["school.name"] = program["name"]
-    url = src["api"] + "?" + urllib.parse.urlencode(params)
-    payload, meta = common.fetch_json(url, max_age_hours=24 * 30)
-    results = payload.get("results") or []
-    if not results:
-        raise common.FetchError(f"scorecard: no results for {program['slug']}")
-    r = results[0]
+    r = _from_bulk(unit_id)
+    demo, meta = False, {}
+    if r is None:
+        key, demo = _api_key(registry)
+        params = {"api_key": key, "fields": ",".join(FIELDS)}
+        if unit_id:
+            params["id"] = str(unit_id)
+        else:
+            params["school.name"] = program["name"]
+        url = src["api"] + "?" + urllib.parse.urlencode(params)
+        payload, meta = common.fetch_json(url, max_age_hours=24 * 30)
+        results = payload.get("results") or []
+        if not results:
+            raise common.FetchError(f"scorecard: no results for {program['slug']}")
+        r = results[0]
+    params = {"id": str(r.get("id"))}
 
     def g(k):
         return r.get(k)

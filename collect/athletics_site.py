@@ -46,12 +46,36 @@ def _extract_club(sections: dict) -> str:
     return ""
 
 
+def detect_platform(html: str) -> str | None:
+    """Guess the athletics-site platform from the roster page markup."""
+    if "s-person-card" in html or "c-rosterpage" in html or "sidearmsports" in html.lower():
+        return "sidearm"
+    if "roster-card-item" in html or "roster-list-item" in html or "wmt.digital" in html:
+        return "wmt"
+    return None
+
+
 def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool = True) -> dict:
     slug = program["slug"]
-    platform = program["athletics"]["platform"]
+    base = program["athletics"].get("baseUrl")
+    if not base:
+        raise common.FetchError("athletics: no baseUrl in registry (athletics website unknown)")
+    platform = program["athletics"].get("platform") or "auto"
+    if platform == "auto":
+        probe_url = f"{base}{program['athletics']['sportPath']}/roster"
+        html0, _ = common.fetch_text(probe_url, max_age_hours=24)
+        platform = detect_platform(html0)
+        if not platform:
+            raise common.FetchError(f"athletics: unsupported site platform at {probe_url}")
+        program["athletics"]["platform"] = platform
+        reg = common.load_registry()
+        for p in reg["programs"]:
+            if p["slug"] == slug:
+                p["athletics"]["platform"] = platform
+        common.save_registry(reg)
+        common.log(f"athletics: detected platform '{platform}' for {slug}")
     ad = adapters.get(platform)
     u = ad.urls(program, registry)
-    base = program["athletics"]["baseUrl"]
 
     html, meta = common.fetch_text(u["roster"], max_age_hours=24)
     roster = ad.parse_roster(html, base)
