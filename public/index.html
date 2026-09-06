@@ -442,7 +442,7 @@ async function tabOverview(p) {
   return `
     <div class="tiles section">
       ${tile(cs ? `${cs.year} record` : 'Record', esc(cs?.record || ls?.record || '—'), cs?.confRecord && cs.confRecord !== '0-0-0' ? `${esc(cs.confRecord)} in conference` : (cs ? `${cs.gamesPlayed} played` : ''))}
-      ${tile(`${ls?.year ?? 'Last'} season`, esc(ls?.record || '—'), ls ? `${esc(ls.ncaaResult || 'No NCAA tournament')} · RPI ${rankStr(ls.rpiRank)}` : '')}
+      ${tile(`${ls?.year ?? 'Last'} season`, esc(ls?.record || '—'), ls ? `${esc(ls.ncaaResult || 'NCAA result not recorded')} · RPI ${rankStr(ls.rpiRank)}` : '')}
       ${tile('National titles', pr.nationalTitles.length, pr.nationalTitles.join(', ') || 'none')}
       ${tile('College Cups', pr.collegeCups.length, pr.collegeCups.length ? `last ${pr.collegeCups[pr.collegeCups.length - 1]}` : '')}
       ${tile('Head coach', esc(pr.headCoach.name || '—'), pr.headCoach.since ? `since ${pr.headCoach.since} (${pr.headCoach.seasons} seasons)` : '')}
