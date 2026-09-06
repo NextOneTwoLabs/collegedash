@@ -1,0 +1,9 @@
+# Cloudflare static-assets deployment. No Worker script: everything under public/ is served
+# as-is, and public/ is also what `python collegedash.py serve` serves locally, so the hosted
+# site and your local copy are the same files. Write endpoints (/api/*) exist only locally.
+
+name = "collegedash"
+compatibility_date = "2026-08-31"
+
+[assets]
+directory = "./public"

@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.pyo
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Raw HTTP cache - re-fetchable, never committed
+.cache/
+
+# Social scout: browser profile holds login cookies; cache holds thumbnails
+scout/browser-profile/
+scout/cache/
+
+# Local secrets (College Scorecard API key etc.)
+.env
+
+# programs/, data/ and public/ ARE committed - they are the durable database.

@@ -1,0 +1,87 @@
+# CollegeDash — Women's Soccer College Research
+
+A research dashboard for a high-school athlete evaluating NCAA Division I women's soccer
+programs. Every program gets one **profile** assembled from many public sources — school facts,
+climate, program history and yearly RPI, staff, roster, schedule, news and **commitments** — plus
+your own notes. The profile is a set of JSON files in git, and the dashboard is a single static
+page that reads them, so it hosts for free and works offline.
+
+Later phases add a student profile with personalised recommendations, a social-media scout for
+commitment announcements, and application tracking (see `PLAN.md`).
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+python collegedash.py serve            # http://127.0.0.1:8000/  (My Notes is editable here)
+```
+
+Any static server over `public/` also works (`cd public && python -m http.server`), read-only.
+
+## Add or refresh a program
+
+```bash
+python collegedash.py onboard stanford          # every collector for one program, then build
+python collegedash.py refresh                   # refresh all onboarded programs (what CI runs)
+python collegedash.py refresh --only tds,news   # a subset: scorecard climate wikipedia athletics tds soccerwire news rpi
+python collegedash.py build                     # re-merge sources -> public/data (after editing curated.json)
+python collegedash.py validate                  # schema + completeness report
+python collegedash.py rpi history --force       # re-download the 2007-2024 RPI archive
+python collegedash.py sweep tds --years 2027    # all-D1 commitments sweep (phase 2 daily job)
+```
+
+To onboard a new program add it to `public/data/registry.json` (ids for College Scorecard,
+TopDrawerSoccer, Wikipedia; athletics site platform; social handles) and run `onboard <slug>`.
+Set `SCORECARD_API_KEY` (free at https://api.data.gov/signup/) or the collector falls back to
+the rate-limited `DEMO_KEY`.
+
+## Layout
+
+| Path | What it is |
+|---|---|
+| `public/` | Everything the site serves — Cloudflare output dir and local server root |
+| `public/index.html` | The dashboard (vanilla JS, no build step) |
+| `public/data/registry.json` | Program registry + every source URL template |
+| `public/data/programs/<slug>.json` | Built profile per program; `index.json` = list rows |
+| `public/data/rpi/<year>.json` | End-of-season RPI 2007–2024 (all D1); `current.json` + `weekly/` = NCAA weekly |
+| `public/data/commitments/index.json` | Every resolved commitment across programs |
+| `programs/<slug>/curated.json` | **Your** notes and overrides — collectors never write here |
+| `programs/<slug>/commitments.reviewed.json` | Your decisions: approved social records, merges, status overrides |
+| `programs/<slug>/sources/*.json` | Raw collector output with provenance (`collector`, `sourceUrl`, `fetchedAt`) |
+| `data/commitments/` | All-D1 commitment sweeps with firstSeen/lastSeen (phase 2) |
+| `collect/` | Collectors; `adapters/` = athletics-site platforms (`wmt` now, `sidearm` next) |
+| `build.py` | Merges sources + curated + reviewed into `public/data`, resolves commitment identities |
+| `serve.py` | Local server with `/api/curated/<slug>` and `/api/review/<slug>` write endpoints |
+| `scout/` | Social-media scout (phase 2): watchlist, keyword filter, review queue |
+| `legacy/` | The original hand-written prototype, kept for reference only (data unverified) |
+| `.github/workflows/refresh.yml` | Daily refresh (commitments, news, RPI); full refresh on Mondays |
+
+## Sources
+
+| Data | Source | Notes |
+|---|---|---|
+| Roster, staff, bios, schedule, news | Official athletics site | Stanford = WMT Digital; most other D1 sites are Sidearm (adapter TBD) |
+| School facts | College Scorecard API | admission rate, test bands, size, cost, outcomes |
+| Climate | Open-Meteo ERA5 archive | 1991–2020 daily → monthly normals; no key |
+| History, honours | Wikipedia team article | infobox + year-by-year table |
+| RPI 2007–2024 | Chris Henderson, *RPI for Division I Women's Soccer* | end-of-season, recomputed under the 2024 formula (XLSX export; the CSV export loses formula values for 2021–24) |
+| RPI weekly | NCAA.com RPI page | only the latest week is published; each refresh archives a snapshot |
+| Commitments | TopDrawerSoccer team tab; SoccerWire directory (Elasticsearch proxy) | no dates on either; SoccerWire profile date is an approximation |
+
+## Commitments: how "up to date" works
+
+- **TopDrawerSoccer** team tab and **SoccerWire** are pulled daily. Records carry `firstSeen`/`lastSeen`;
+  one that vanishes gets `missingSince` and the profile flags `possibly-decommitted`.
+- The two are merged by normalised name + grad year, with nickname tolerance ("Ale" ↔ "Alessandra").
+  A name variant is kept as an alias. Manual merges live in `commitments.reviewed.json`.
+- `confidence` is **confirmed** with two independent sources, an official release, or a roster
+  appearance; else **single-source**. `status` is verbal → signed (press release) → enrolled (on roster).
+- `announced` is set only from real dates (press release, approved social post). Approximations
+  (SoccerWire profile creation, first seen) are shown as ≈ and never presented as announcement dates.
+- Phase 2 adds the social scout: a local Playwright browser watches program/aggregator Instagram
+  and X accounts, keyword-filters posts, and queues them for your approval — no LLM involved.
+
+## Deploying
+
+Cloudflare Pages / Workers static assets: connect the repo, production branch `main`, no build
+command, output directory `public`. Pushing to `main` deploys.

@@ -1,0 +1,112 @@
+{
+  "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>",
+  "updated": "2026-09-05",
+  "division": "D1",
+  "season": {
+    "_comment": "current = the fall season being played; gradYears = high-school classes tracked for commitments",
+    "current": 2026,
+    "gradYears": [2026, 2027, 2028, 2029]
+  },
+  "sources": {
+    "tds": {
+      "_comment": "TopDrawerSoccer. Team commitments tab is public HTML (no dates). The commitments search lists every girls commit per class, 25 per page, paginated with pageNo (0-based).",
+      "team": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/{tdsSlug}/clgid-{tdsClgId}",
+      "teamCommitments": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/{tdsSlug}/clgid-{tdsClgId}/tab-commitments",
+      "commitSearch": "https://www.topdrawersoccer.com/search/?query=&divisionId=&genderId=f&graduationYear={gradYear}&positionId=0&playerRating=&stateId=All&pageNo={page}&area=commitments",
+      "pageSize": 25
+    },
+    "soccerwire": {
+      "_comment": "SoccerWire player directory is backed by an Elasticsearch proxy; the page's ?filter= param is base64 JSON with facet keys meta.gender.raw, meta.graduation_year.raw, meta.is_committed.raw, meta.college_team.raw.",
+      "elasticProxy": "https://www.soccerwire.com/wp-json/v1/elastic-proxy/soccerwirecom-post-1/_search",
+      "directory": "https://www.soccerwire.com/soccer-player-directory/",
+      "pageSize": 21
+    },
+    "ncaaRpi": {
+      "_comment": "Server-rendered table (class 'sticky') with 'Through Games <date>' in figure.rankings-last-updated. Only the latest week is published, so each weekly snapshot is archived under public/data/rpi/weekly/.",
+      "current": "https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi"
+    },
+    "rpiHistory": {
+      "_comment": "End-of-season RPI reports 2007-2024 (no 2020) by Chris Henderson, 'RPI for Division I Women's Soccer'. Google Sheets, Teams tab exported as CSV. Ranks are recomputed under the 2024 NCAA formula, so pre-2024 values differ slightly from what the NCAA published at the time.",
+      "page": "https://sites.google.com/site/rpifordivisioniwomenssoccer/reports-archive",
+      "xlsxTemplate": "https://docs.google.com/spreadsheets/d/{sheetId}/export?format=xlsx",
+      "csvTemplate": "https://docs.google.com/spreadsheets/d/{sheetId}/gviz/tq?tqx=out:csv&sheet=Teams",
+      "sheets": {
+        "2024": "1Yr-6iSZnhojbe0CgSgMtqVWL_w-bLl8I",
+        "2023": "1RX-3HkLGZVaf3ptiY5YxytIJZ8nV09Wl",
+        "2022": "1s4zSjCysEnXThXdqV49NAeFT0Pr4gXnZ",
+        "2021": "1RFjtlML5yyvA7ljNmg_92DI4sMeqHc5J",
+        "2019": "1jISV8qxixWY5XK9ElI2M9OwpTW65a8GP",
+        "2018": "1fmcljR-2zyD8-Sdw0EE7WqlWB-p5zLXV",
+        "2017": "1N_drOt-14-KXK_fpM6JcjBrpiaUFW16t",
+        "2016": "1WmWsaM5FpGsY04XlliL1p_VmK6dkzIZ9",
+        "2015": "1MIy6dLnzLAvrqQfXJpPNWl2jdR5wZBdS",
+        "2014": "1VZgFdwNMfWjSzjLYDT63UbvD1wkXcksr",
+        "2013": "1ja1SyDbAeHpga0phYD3FxH7dZoO60SPp",
+        "2012": "1A1zlGyK_2H1UAzgNRBSEPseyJ7A6de_7",
+        "2011": "1gWN6FJT2zzQlKr0RrMdz2uLyr3G4ddpy",
+        "2010": "1Fxn8vLajqdEMQ8jZkH6frvqDfffCg4zX",
+        "2009": "1lGvenBpYd-Lc5dY68t2WZa7EPOT3y_1Y",
+        "2008": "1jTfqPJyj3HMlW2PSa09V0BvS6yaHPVvo",
+        "2007": "17h7yUY2ObNClWgW9GkX_WWuVV1lf6n-A"
+      }
+    },
+    "scorecard": {
+      "_comment": "US Dept. of Education College Scorecard. Free API key from https://api.data.gov/signup/ ; export SCORECARD_API_KEY. Falls back to DEMO_KEY (30 req/hour) when unset.",
+      "api": "https://api.data.gov/ed/collegescorecard/v1/schools",
+      "keyEnv": "SCORECARD_API_KEY"
+    },
+    "climate": {
+      "_comment": "Open-Meteo Historical Weather API (ERA5 reanalysis), no key. Daily data aggregated to 1991-2020 monthly normals.",
+      "api": "https://archive-api.open-meteo.com/v1/archive",
+      "normalsStart": 1991,
+      "normalsEnd": 2020
+    },
+    "wikipedia": {
+      "htmlApi": "https://en.wikipedia.org/api/rest_v1/page/html/{title}"
+    },
+    "athleticsPlatforms": {
+      "_comment": "Adapter per site platform. wmt = WMT Digital (Stanford): /roster, /roster/season/{year}, /roster/player/{slug}, /schedule/season/{year}, /news. sidearm = Sidearm Sports (most other D1 sites), added when the second program is onboarded.",
+      "wmt": {
+        "roster": "{baseUrl}{sportPath}/roster",
+        "rosterSeason": "{baseUrl}{sportPath}/roster/season/{year}",
+        "schedule": "{baseUrl}{sportPath}/schedule",
+        "scheduleSeason": "{baseUrl}{sportPath}/schedule/season/{year}",
+        "news": "{baseUrl}{sportPath}/news"
+      }
+    }
+  },
+  "programs": [
+    {
+      "slug": "stanford",
+      "onboarded": true,
+      "name": "Stanford University",
+      "shortName": "Stanford",
+      "nickname": "Cardinal",
+      "division": "D1",
+      "conference": "ACC",
+      "colors": ["#8C1515", "#FFFFFF"],
+      "athletics": {
+        "platform": "wmt",
+        "baseUrl": "https://gostanford.com",
+        "sportPath": "/sports/womens-soccer"
+      },
+      "ids": {
+        "scorecardUnitId": 243744,
+        "tdsClgId": 267,
+        "tdsSlug": "stanford",
+        "wikipedia": "Stanford_Cardinal_women's_soccer",
+        "ncaaName": "Stanford",
+        "rpiHistoryName": "Stanford"
+      },
+      "social": {
+        "x": "StanfordWSoccer",
+        "instagram": "stanfordwsoc"
+      },
+      "location": {
+        "lat": 37.4275,
+        "lon": -122.1697,
+        "timezone": "America/Los_Angeles"
+      }
+    }
+  ]
+}

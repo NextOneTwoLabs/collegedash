@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CollegeDash · Women's Soccer</title>
+<style>
+/* ===== THEME TOKENS (light on :root, dark under both scopes) ===== */
+:root {
+  color-scheme: light;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --page: #f9f9f7; --surface: #fcfcfb; --surface-alt: #f3f2ee;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --border-strong: rgba(11,11,11,0.18);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+  --s1-wash: rgba(42,120,214,0.10); --s2-wash: rgba(235,104,52,0.10);
+  --good: #0ca30c; --good-text: #006300; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  --accent: #8c1515; --accent-wash: rgba(140,21,21,0.08);
+  --radius: 10px; --radius-sm: 6px; --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --header-h: 56px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-alt: #232322;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.18);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    --s1-wash: rgba(57,135,229,0.12); --s2-wash: rgba(217,89,38,0.12);
+    --good-text: #0ca30c; --accent: #e0644d; --accent-wash: rgba(224,100,77,0.12);
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+  :root:not([data-theme="light"]) .badge.warn { color: #ffd77a; }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --surface-alt: #232322;
+  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.18);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+  --s1-wash: rgba(57,135,229,0.12); --s2-wash: rgba(217,89,38,0.12);
+  --good-text: #0ca30c; --accent: #e0644d; --accent-wash: rgba(224,100,77,0.12);
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+:root[data-theme="dark"] .badge.warn { color: #ffd77a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--page); color: var(--ink); font-size: 14px; line-height: 1.45; }
+a { color: var(--s1); text-decoration: none; } a:hover { text-decoration: underline; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.25; }
+h2 { font-size: 18px; } h3 { font-size: 15px; } h4 { font-size: 13px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; }
+p { margin: 0 0 8px; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { font-size: 12px; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
+tr:hover td { background: var(--surface-alt); }
+.num { text-align: right; }
+.tscroll { overflow-x: auto; max-width: 100%; }
+
+/* ===== LAYOUT ===== */
+.topbar { position: sticky; top: 0; z-index: 20; height: var(--header-h); display: flex; align-items: center; gap: 14px; padding: 0 18px;
+  background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+.brand { font-weight: 700; font-size: 16px; letter-spacing: -.01em; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.brand span { color: var(--muted); font-weight: 500; font-size: 12px; }
+.nav { display: flex; gap: 2px; }
+.nav a { padding: 6px 10px; border-radius: var(--radius-sm); color: var(--ink-2); font-weight: 500; }
+.nav a.active, .nav a:hover { background: var(--surface-alt); color: var(--ink); text-decoration: none; }
+.topbar .spacer { flex: 1; }
+.topbar input[type=search] { width: 220px; padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); }
+.updated { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.iconbtn { border: 1px solid var(--border-strong); background: var(--surface); border-radius: var(--radius-sm); padding: 5px 9px; color: var(--ink-2); }
+.iconbtn:hover { background: var(--surface-alt); }
+main { max-width: 1240px; margin: 0 auto; padding: 18px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.grid { display: grid; gap: 14px; }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.muted { color: var(--muted); } .small { font-size: 12px; } .ink2 { color: var(--ink-2); }
+.section { margin-bottom: 16px; }
+.section > h3 { margin-bottom: 8px; }
+.provenance { font-size: 11px; color: var(--muted); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--grid); display: flex; gap: 12px; flex-wrap: wrap; }
+.empty { color: var(--muted); font-style: italic; padding: 12px 0; }
+.badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid var(--border-strong); color: var(--ink-2); background: var(--surface-alt); white-space: nowrap; }
+.badge.good { color: var(--good-text); border-color: var(--good); }
+.badge.warn { color: #7a4d00; border-color: var(--warning); background: rgba(250,178,25,0.15); }
+.badge.crit { color: var(--critical); border-color: var(--critical); }
+.badge.accent { color: var(--accent); border-color: var(--accent); background: var(--accent-wash); }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border-radius: 4px; font-size: 11px; background: var(--surface-alt); border: 1px solid var(--border); color: var(--ink-2); }
+.chip a { color: inherit; }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border-strong); vertical-align: -2px; }
+.key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.tile { background: var(--surface-alt); border-radius: var(--radius-sm); padding: 10px 12px; }
+.tile .label { font-size: 11px; color: var(--ink-2); }
+.tile .value { font-size: 22px; font-weight: 600; margin-top: 2px; }
+.tile .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.hero { font-size: 48px; font-weight: 600; line-height: 1; }
+
+/* list view */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.filters select, .filters input { padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); }
+.pcard { display: grid; grid-template-columns: 6px 1fr; gap: 0; overflow: hidden; padding: 0; cursor: pointer; }
+.pcard:hover { border-color: var(--border-strong); }
+.pcard .bar { background: var(--accent); }
+.pcard .body { padding: 14px; }
+.pcard h3 { font-size: 16px; }
+.pcard .meta { color: var(--ink-2); font-size: 12px; margin: 2px 0 8px; }
+.pcard .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 12px; }
+.pcard .stats b { display: block; font-size: 15px; font-weight: 600; }
+.star { border: none; background: none; font-size: 18px; color: var(--muted); padding: 0 4px; }
+.star.on { color: var(--s4); }
+.complete { height: 4px; border-radius: 2px; background: var(--grid); margin-top: 10px; overflow: hidden; }
+.complete i { display: block; height: 100%; background: var(--s3); }
+
+/* profile */
+.phead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.phead .colors { display: flex; gap: 4px; }
+.phead .colors i { width: 18px; height: 34px; border-radius: 4px; border: 1px solid var(--border-strong); display: block; }
+.phead h1 { font-size: 24px; }
+.phead .sub { color: var(--ink-2); }
+.tabs { display: flex; gap: 2px; flex-wrap: wrap; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.tabs a { padding: 8px 12px; color: var(--ink-2); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+.tabs a.active { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs a:hover { text-decoration: none; color: var(--ink); }
+.links a { margin-right: 10px; }
+.stale { background: rgba(250,178,25,0.15); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; margin-bottom: 12px; }
+
+/* charts */
+.chart { position: relative; width: 100%; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .axis { stroke: var(--axis); stroke-width: 1; }
+.chart text { font-family: var(--font); font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.chart text.lbl { fill: var(--ink-2); font-weight: 600; }
+.chart .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .dot { stroke: var(--surface); stroke-width: 2; }
+.chart .bar { }
+.chart .hit { fill: transparent; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 12px; box-shadow: var(--shadow); white-space: nowrap; z-index: 5; }
+.tip b { font-weight: 600; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 8px; }
+
+/* roster matrix */
+.matrix td, .matrix th { text-align: center; padding: 5px 6px; }
+.matrix td.hot { background: var(--s1-wash); font-weight: 600; }
+details summary { cursor: pointer; color: var(--s1); font-size: 12px; }
+details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
+
+/* notes editor */
+textarea { width: 100%; min-height: 90px; padding: 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); resize: vertical; }
+.btn { border: 1px solid var(--border-strong); background: var(--surface-alt); border-radius: var(--radius-sm); padding: 6px 12px; font-weight: 500; }
+.btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+.notice { font-size: 12px; color: var(--ink-2); }
+.readonly-note { background: var(--surface-alt); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 10px; }
+.prose { white-space: pre-wrap; }
+
+/* commitments */
+.commit { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 8px 0; border-bottom: 1px solid var(--grid); }
+.commit .who { font-weight: 600; }
+.commit .who small { font-weight: 400; color: var(--ink-2); }
+.commit .srcs { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.commit .right { text-align: right; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.need td.pos { font-weight: 600; }
+.need td.neg { color: var(--critical); }
+
+@media (max-width: 700px) {
+  .topbar input[type=search] { width: 120px; }
+  .nav a { padding: 6px 7px; }
+  main { padding: 10px; }
+  .commit { grid-template-columns: 1fr; }
+  .commit .right { text-align: left; }
+}
+@media print { .topbar, .tabs, .filters { display: none; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/">CollegeDash <span>Women's Soccer · D1</span></a>
+  <nav class="nav" id="nav">
+    <a href="#/" data-route="list">Programs</a>
+    <a href="#/rpi" data-route="rpi">RPI</a>
+    <a href="#/compare" data-route="compare">Compare</a>
+  </nav>
+  <div class="spacer"></div>
+  <input type="search" id="q" placeholder="Search programs…" aria-label="Search programs">
+  <span class="updated" id="updated" title="When the data was last refreshed"></span>
+  <button class="iconbtn" id="themeBtn" title="Toggle light / dark">◐</button>
+</header>
+<main id="app"><div class="empty">Loading…</div></main>
+
+<script>
+'use strict';
+/* =====================================================================
+   CollegeDash dashboard - vanilla JS, no build step.
+   Reads the JSON that build.py writes under data/:
+     data/programs/index.json   list rows
+     data/programs/<slug>.json  full profile
+     data/rpi/current.json      latest weekly NCAA RPI
+     archive/refresh-state.json freshness
+   When served by serve.py (local), /api/status answers and the My Notes tab becomes editable.
+   ===================================================================== */
+const S = {
+  index: null, profiles: {}, rpi: null, refresh: null, local: false,
+  favorites: new Set(), q: '', filters: { conf: '', region: '', fav: false, sort: 'rpi' },
+  compare: [],
+};
+const $ = (sel, el = document) => el.querySelector(sel);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtPct = v => v == null ? '—' : (v * 100).toFixed(v < 0.1 ? 1 : 0) + '%';
+const fmtNum = v => v == null ? '—' : Number(v).toLocaleString();
+const fmtUsd = v => v == null ? '—' : '$' + Number(v).toLocaleString();
+const dash = v => (v === null || v === undefined || v === '') ? '—' : v;
+const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); };
+const ago = iso => { if (!iso) return ''; const ms = Date.now() - new Date(iso).getTime(); const h = ms / 36e5; if (h < 1) return `${Math.max(1, Math.round(ms / 6e4))}m ago`; if (h < 48) return `${Math.round(h)}h ago`; return `${Math.round(h / 24)}d ago`; };
+const ordinal = n => n == null ? '—' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4 === n % 10 ? n % 10 : 0] || 'th');
+const rankStr = n => n == null ? '—' : '#' + n;
+
+/* ---------- persistence (per-viewer conveniences only) ---------- */
+function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
+S.favorites = new Set(lsGet('cd.favorites', []));
+(function initTheme() {
+  const t = lsGet('cd.theme', null);
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  $('#themeBtn').onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next); lsSet('cd.theme', next);
+  };
+})();
+
+/* ---------- data ---------- */
+async function getJSON(url, opts) {
+  const r = await fetch(url, { cache: 'no-cache', ...(opts || {}) });
+  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  return r.json();
+}
+async function loadIndex() {
+  if (S.index) return S.index;
+  S.index = await getJSON('data/programs/index.json');
+  getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderUpdated(); }).catch(() => { });
+  getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
+  return S.index;
+}
+async function loadProfile(slug) {
+  if (!S.profiles[slug]) S.profiles[slug] = await getJSON(`data/programs/${slug}.json`);
+  return S.profiles[slug];
+}
+async function loadRpi() { if (!S.rpi) S.rpi = await getJSON('data/rpi/current.json'); return S.rpi; }
+function renderUpdated() {
+  const el = $('#updated');
+  const when = S.refresh?.updated || S.index?.updated;
+  el.textContent = when ? `Updated ${ago(when)}` : '';
+  el.title = when ? new Date(when).toLocaleString() : '';
+}
+
+/* ---------- router ---------- */
+function route() {
+  const h = location.hash.replace(/^#\/?/, '');
+  const parts = h.split('/').filter(Boolean);
+  const view = parts[0] || 'list';
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.route === (view === 'p' ? 'list' : view)));
+  const app = $('#app');
+  const go = p => p.catch(e => { app.innerHTML = `<div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div>`; console.error(e); });
+  if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
+  if (view === 'rpi') return go(renderRpi());
+  if (view === 'compare') { S.compare = (parts[1] || '').split(',').filter(Boolean); return go(renderCompare()); }
+  return go(renderList());
+}
+window.addEventListener('hashchange', route);
+$('#q').addEventListener('input', e => { S.q = e.target.value.trim().toLowerCase(); if (!location.hash.startsWith('#/p/')) renderList(); });
+
+/* ---------- charts (inline SVG, no library) ---------- */
+function svgLine(cfg) {
+  // cfg: {series:[{name,color,points:[{x,y,label}]}], xTicks:[{x,label}], yTicks:[{y,label}], yInverted, height, yLabel, fmt}
+  const W = cfg.width || 720, H = cfg.height || 260, m = { t: 14, r: 40, b: 28, l: 40 };
+  const pts = cfg.series.flatMap(s => s.points);
+  if (!pts.length) return '<div class="empty">No data</div>';
+  const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+  const x0 = cfg.xMin ?? Math.min(...xs), x1 = cfg.xMax ?? Math.max(...xs);
+  let y0 = cfg.yMin ?? Math.min(...ys), y1 = cfg.yMax ?? Math.max(...ys);
+  if (y0 === y1) { y0 -= 1; y1 += 1; }
+  const X = x => m.l + (x - x0) / (x1 - x0 || 1) * (W - m.l - m.r);
+  const Y = y => cfg.yInverted ? m.t + (y - y0) / (y1 - y0) * (H - m.t - m.b) : H - m.b - (y - y0) / (y1 - y0) * (H - m.t - m.b);
+  let out = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(cfg.aria || 'chart')}">`;
+  (cfg.yTicks || []).forEach(t => { out += `<line class="gridline" x1="${m.l}" x2="${W - m.r}" y1="${Y(t.y)}" y2="${Y(t.y)}"/><text x="${m.l - 6}" y="${Y(t.y) + 4}" text-anchor="end">${esc(t.label)}</text>`; });
+  out += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}"/>`;
+  (cfg.xTicks || []).forEach(t => { out += `<text x="${X(t.x)}" y="${H - m.b + 16}" text-anchor="middle">${esc(t.label)}</text>`; });
+  cfg.series.forEach(s => {
+    const sorted = [...s.points].sort((a, b) => a.x - b.x);
+    if (s.area) out += `<path d="M${X(sorted[0].x)},${H - m.b} ` + sorted.map(p => `L${X(p.x)},${Y(p.y)}`).join(' ') + ` L${X(sorted[sorted.length - 1].x)},${H - m.b} Z" fill="${s.color}" opacity="0.10"/>`;
+    out += `<path class="line" stroke="${s.color}" d="M` + sorted.map(p => `${X(p.x)},${Y(p.y)}`).join(' L') + `"/>`;
+    sorted.forEach(p => { out += `<circle class="dot" cx="${X(p.x)}" cy="${Y(p.y)}" r="4" fill="${s.color}"/>`; });
+    if (s.endLabel !== false) { const e = sorted[sorted.length - 1]; out += `<text class="lbl" x="${X(e.x) + 8}" y="${Y(e.y) + 4}">${esc(cfg.fmt ? cfg.fmt(e.y) : e.y)}</text>`; }
+  });
+  // hover hit targets (one per x)
+  const byX = new Map(); pts.forEach(p => { if (!byX.has(p.x)) byX.set(p.x, []); byX.get(p.x).push(p); });
+  const xsU = [...byX.keys()].sort((a, b) => a - b);
+  xsU.forEach((x, i) => {
+    const left = i === 0 ? m.l : (X(xsU[i - 1]) + X(x)) / 2, right = i === xsU.length - 1 ? W - m.r : (X(x) + X(xsU[i + 1])) / 2;
+    const tip = byX.get(x).map(p => `<b>${esc(p.label ?? (cfg.fmt ? cfg.fmt(p.y) : p.y))}</b>`).join(' · ');
+    out += `<rect class="hit" x="${left}" y="${m.t}" width="${Math.max(1, right - left)}" height="${H - m.t - m.b}" data-tip="${esc((cfg.xLabel ? cfg.xLabel(x) : x) + ': ')}${esc(tip.replace(/<\/?b>/g, ''))}" data-cx="${X(x)}"/>`;
+  });
+  return out + '</svg><div class="tip" hidden></div>';
+}
+function svgBars(cfg) {
+  // cfg: {points:[{label,y}], color, height, fmt, yMax}
+  const W = cfg.width || 720, H = cfg.height || 200, m = { t: 12, r: 12, b: 28, l: 40 };
+  const n = cfg.points.length; if (!n) return '<div class="empty">No data</div>';
+  const y1 = cfg.yMax ?? (Math.max(...cfg.points.map(p => p.y)) || 1);
+  const band = (W - m.l - m.r) / n, bw = Math.min(24, band * 0.6);
+  const Y = y => H - m.b - y / y1 * (H - m.t - m.b);
+  let out = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(cfg.aria || 'bar chart')}">`;
+  const ticks = cfg.yTicks || [0, y1 / 2, y1];
+  ticks.forEach(t => { out += `<line class="gridline" x1="${m.l}" x2="${W - m.r}" y1="${Y(t)}" y2="${Y(t)}"/><text x="${m.l - 6}" y="${Y(t) + 4}" text-anchor="end">${esc(cfg.fmt ? cfg.fmt(t) : t)}</text>`; });
+  out += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}"/>`;
+  cfg.points.forEach((p, i) => {
+    const cx = m.l + band * (i + 0.5), h = Math.max(0, H - m.b - Y(p.y));
+    const r = Math.min(4, h / 2);
+    out += `<path class="bar" fill="${cfg.color}" d="M${cx - bw / 2},${H - m.b} v${-(h - r)} a${r},${r} 0 0 1 ${r},${-r} h${bw - 2 * r} a${r},${r} 0 0 1 ${r},${r} v${h - r} z"/>`;
+    out += `<text x="${cx}" y="${H - m.b + 16}" text-anchor="middle">${esc(p.label)}</text>`;
+    out += `<rect class="hit" x="${cx - band / 2}" y="${m.t}" width="${band}" height="${H - m.t - m.b}" data-tip="${esc(p.label)}: ${esc(cfg.fmt ? cfg.fmt(p.y) : p.y)}" data-cx="${cx}"/>`;
+  });
+  return out + '</svg><div class="tip" hidden></div>';
+}
+function wireCharts(root) {
+  root.querySelectorAll('.chart').forEach(ch => {
+    const tip = $('.tip', ch); if (!tip) return;
+    ch.querySelectorAll('.hit').forEach(h => {
+      h.addEventListener('mousemove', e => {
+        tip.hidden = false; tip.textContent = h.dataset.tip;
+        const r = ch.getBoundingClientRect();
+        let x = e.clientX - r.left + 12, y = e.clientY - r.top - 30;
+        if (x + tip.offsetWidth > r.width) x = e.clientX - r.left - tip.offsetWidth - 12;
+        tip.style.left = x + 'px'; tip.style.top = Math.max(0, y) + 'px';
+      });
+      h.addEventListener('mouseleave', () => { tip.hidden = true; });
+    });
+  });
+}
+
+/* ---------- list view ---------- */
+async function renderList() {
+  const idx = await loadIndex();
+  const app = $('#app');
+  const confs = [...new Set(idx.programs.map(p => p.conference).filter(Boolean))].sort();
+  const regions = [...new Set(idx.programs.map(p => p.region).filter(Boolean))].sort();
+  const f = S.filters;
+  let rows = idx.programs.filter(p => (!S.q || (p.name + ' ' + p.nickname + ' ' + p.conference + ' ' + (p.city || '')).toLowerCase().includes(S.q))
+    && (!f.conf || p.conference === f.conf) && (!f.region || p.region === f.region) && (!f.fav || S.favorites.has(p.slug)));
+  const rpiOf = p => p.lastSeason?.rpiRank ?? p.currentSeason?.rpiRank ?? 999;
+  rows.sort((a, b) => f.sort === 'name' ? a.name.localeCompare(b.name) : f.sort === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1) : f.sort === 'titles' ? b.nationalTitles - a.nationalTitles : rpiOf(a) - rpiOf(b));
+  app.innerHTML = `
+    <div class="filters">
+      <select id="fConf"><option value="">All conferences</option>${confs.map(c => `<option ${f.conf === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
+      <select id="fRegion"><option value="">All regions</option>${regions.map(c => `<option ${f.region === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
+      <select id="fSort"><option value="rpi" ${f.sort === 'rpi' ? 'selected' : ''}>Sort: RPI</option><option value="name" ${f.sort === 'name' ? 'selected' : ''}>Sort: Name</option><option value="admit" ${f.sort === 'admit' ? 'selected' : ''}>Sort: Admission rate</option><option value="titles" ${f.sort === 'titles' ? 'selected' : ''}>Sort: National titles</option></select>
+      <label class="small"><input type="checkbox" id="fFav" ${f.fav ? 'checked' : ''}> ★ My list only</label>
+      <span class="muted small">${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'} · season ${idx.season?.current ?? ''}</span>
+    </div>
+    <div class="grid g3">${rows.map(cardHtml).join('') || '<div class="empty">No programs match.</div>'}</div>
+    <p class="muted small" style="margin-top:14px">Only onboarded programs appear here. Add one to <code>public/data/registry.json</code> and run <code>python collegedash.py onboard &lt;slug&gt;</code>.</p>`;
+  $('#fConf').onchange = e => { f.conf = e.target.value; renderList(); };
+  $('#fRegion').onchange = e => { f.region = e.target.value; renderList(); };
+  $('#fSort').onchange = e => { f.sort = e.target.value; renderList(); };
+  $('#fFav').onchange = e => { f.fav = e.target.checked; renderList(); };
+  app.querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('.star')) return; location.hash = `#/p/${c.dataset.slug}`; }));
+  app.querySelectorAll('.star').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); toggleFav(b.dataset.slug); renderList(); }));
+}
+function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); }
+function cardHtml(p) {
+  const cs = p.currentSeason, ls = p.lastSeason;
+  const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `'${y.slice(2)}: ${n}`).join(' · ');
+  return `<div class="card pcard" data-slug="${esc(p.slug)}">
+    <div class="bar" style="background:${esc(p.colors?.[0] || 'var(--accent)')}"></div>
+    <div class="body">
+      <div class="row" style="justify-content:space-between"><h3>${esc(p.shortName || p.name)} <span class="muted" style="font-weight:400">${esc(p.nickname || '')}</span></h3>
+        <button class="star ${S.favorites.has(p.slug) ? 'on' : ''}" data-slug="${esc(p.slug)}" title="Add to my list">${S.favorites.has(p.slug) ? '★' : '☆'}</button></div>
+      <div class="meta">${esc(p.conference || '')} · ${esc(p.city || '')}, ${esc(p.state || '')} · ${esc(p.ownership || '')}</div>
+      <div class="stats">
+        <div><span class="muted">${cs ? cs.year : 'Now'}</span><b>${esc(cs?.record || '—')}</b></div>
+        <div><span class="muted">RPI ${ls?.year ?? ''}</span><b>${rankStr(ls?.rpiRank)}</b></div>
+        <div><span class="muted">Titles</span><b>${p.nationalTitles}</b></div>
+        <div><span class="muted">Admit</span><b>${fmtPct(p.admissionRate)}</b></div>
+        <div><span class="muted">Undergrads</span><b>${fmtNum(p.undergradEnrollment)}</b></div>
+        <div><span class="muted">Coach</span><b style="font-size:12px">${esc(p.headCoach || '—')}${p.coachSince ? ` <span class="muted">since ${p.coachSince}</span>` : ''}</b></div>
+      </div>
+      <div class="small muted" style="margin-top:8px">Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster</div>
+      <div class="complete" title="Profile completeness ${Math.round(p.completeness * 100)}%"><i style="width:${Math.round(p.completeness * 100)}%"></i></div>
+    </div></div>`;
+}
+
+/* ---------- profile ---------- */
+const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['climate', 'Climate'], ['history', 'History & RPI'], ['staff', 'Staff'], ['roster', 'Roster'], ['commitments', 'Commitments'], ['schedule', 'Schedule'], ['news', 'News'], ['notes', 'My Notes']];
+function prov(meta, extra) {
+  if (!meta) return '';
+  const items = Array.isArray(meta) ? meta : [meta];
+  return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · as of ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
+}
+async function renderProfile(slug, tab) {
+  await loadIndex();
+  const p = await loadProfile(slug);
+  const app = $('#app');
+  const fav = S.favorites.has(slug);
+  const cs = p.seasons.find(s => s.inProgress), ls = p.seasons.find(s => !s.inProgress && s.record);
+  const stale = p._build.stale?.length ? `<div class="stale">Some data is stale: ${esc(p._build.stale.join('; '))}. Run <code>python collegedash.py refresh --slug ${esc(slug)}</code>.</div>` : '';
+  app.innerHTML = `
+    <div class="phead">
+      <div class="colors">${(p.colors || []).map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>
+      <div><h1>${esc(p.name)} <span class="muted" style="font-weight:400">${esc(p.nickname || '')}</span></h1>
+        <div class="sub">${esc(p.conference)} · ${esc(p.school?.city || '')}, ${esc(p.school?.state || '')} · ${cs ? `${cs.year}: <b>${esc(cs.record)}</b>${cs.confRecord && cs.confRecord !== '0-0-0' ? ` (${esc(cs.confRecord)} ${esc(p.conference)})` : ''}` : ''}${ls?.rpiRank ? ` · RPI ${ls.year}: <b>#${ls.rpiRank}</b>` : ''}</div>
+        <div class="links small" style="margin-top:4px">${Object.entries(p.links).filter(([k, v]) => v).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc({ athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' }[k] || k)}</a>`).join('')}</div></div>
+      <div class="spacer" style="flex:1"></div>
+      <button class="star ${fav ? 'on' : ''}" id="favBtn" title="Add to my list">${fav ? '★' : '☆'}</button>
+      <a class="btn" href="#/compare/${esc(slug)}">Compare</a>
+    </div>
+    ${stale}
+    <nav class="tabs">${TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="${k === tab ? 'active' : ''}">${l}</a>`).join('')}</nav>
+    <div id="tab"></div>`;
+  $('#favBtn').onclick = () => { toggleFav(slug); renderProfile(slug, tab); };
+  const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, notes: tabNotes }[tab] || tabOverview;
+  const el = $('#tab');
+  el.innerHTML = await fn(p);
+  wireCharts(el);
+  if (tab === 'notes') wireNotes(p);
+  window.scrollTo(0, 0);
+}
+function tile(label, value, sub) { return `<div class="tile"><div class="label">${esc(label)}</div><div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`; }
+
+async function tabOverview(p) {
+  const cs = p.seasons.find(s => s.inProgress), ls = p.seasons.find(s => !s.inProgress && s.record);
+  const sch = p.school || {}, pr = p.program, cur = p.curated || {};
+  const commits = Object.entries(p.commitmentsByYear || {});
+  const rpiPts = p.seasons.filter(s => s.rpiRank).slice(0, 6).reverse();
+  return `
+    <div class="tiles section">
+      ${tile(cs ? `${cs.year} record` : 'Record', esc(cs?.record || ls?.record || '—'), cs?.confRecord && cs.confRecord !== '0-0-0' ? `${esc(cs.confRecord)} in conference` : (cs ? `${cs.gamesPlayed} played` : ''))}
+      ${tile(`${ls?.year ?? 'Last'} season`, esc(ls?.record || '—'), ls ? `${esc(ls.ncaaResult || 'No NCAA tournament')} · RPI ${rankStr(ls.rpiRank)}` : '')}
+      ${tile('National titles', pr.nationalTitles.length, pr.nationalTitles.join(', ') || 'none')}
+      ${tile('College Cups', pr.collegeCups.length, pr.collegeCups.length ? `last ${pr.collegeCups[pr.collegeCups.length - 1]}` : '')}
+      ${tile('Head coach', esc(pr.headCoach.name || '—'), pr.headCoach.since ? `since ${pr.headCoach.since} (${pr.headCoach.seasons} seasons)` : '')}
+      ${tile('Admission rate', fmtPct(sch.admissionRate), sch.sat25 ? `SAT ${sch.sat25}–${sch.sat75}` : '')}
+      ${tile('Undergraduates', fmtNum(sch.undergradEnrollment), esc(sch.ownership || ''))}
+      ${tile('Commitments', commits.reduce((a, [, n]) => a + n, 0), commits.map(([y, n]) => `${y}: ${n}`).join(' · '))}
+    </div>
+    <div class="grid g2">
+      <div class="card"><h3>Program summary</h3>${cur.programSummary ? `<p class="prose">${esc(cur.programSummary)}</p>` : `<div class="empty">Not written yet — add it in <a href="#/p/${esc(p.slug)}/notes">My Notes</a>.</div>`}
+        ${cur.playingStyle ? `<h4 style="margin-top:10px">Playing style</h4><p class="prose">${esc(cur.playingStyle)}</p>` : ''}
+        ${cur.tags?.length ? `<div class="row">${cur.tags.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}</div>
+      <div class="card"><h3>RPI, recent seasons</h3>
+        <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, yMin: 1, yMax: Math.max(25, ...rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 25, label: '#25' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
+        <p class="small muted">Lower is better. End-of-season RPI; the current season shows the latest weekly rank once published.</p></div>
+      <div class="card"><h3>Location & climate</h3>
+        <p>${esc(sch.locale || '')}${sch.locale ? ' · ' : ''}${esc(sch.region || '')} · ${esc(sch.carnegie || '')}</p>
+        <p class="ink2">${esc(p.climate?.summary || 'Climate not collected yet.')}</p></div>
+      <div class="card"><h3>Roster snapshot ${p.roster ? p.roster.season : ''}</h3>
+        ${p.roster ? `<p>${p.roster.count} players · graduating this year: ${Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none listed'}</p>
+        <p class="small ink2">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')}</p>` : '<div class="empty">Roster not collected.</div>'}
+        ${p.news?.latest?.length ? `<h4 style="margin-top:10px">Latest news</h4><ul class="small" style="margin:4px 0 0;padding-left:16px">${p.news.latest.slice(0, 4).map(n => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="muted">${fmtDate(n.date)}</span></li>`).join('')}</ul>` : ''}</div>
+    </div>
+    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}</div>`;
+}
+
+async function tabSchool(p) {
+  const s = p.school;
+  if (!s) return '<div class="card empty">School facts not collected yet (College Scorecard).</div>';
+  const kv = (k, v) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`;
+  return `<div class="grid g2">
+    <div class="card"><h3>Admissions & academics</h3><table>
+      ${kv('Admission rate', fmtPct(s.admissionRate))}${kv('SAT (25th–75th)', s.sat25 ? `${s.sat25}–${s.sat75}` : '—')}${kv('ACT (25th–75th)', s.act25 ? `${s.act25}–${s.act75}` : '—')}
+      ${kv('Undergraduate enrollment', fmtNum(s.undergradEnrollment))}${kv('Graduate enrollment', fmtNum(s.gradEnrollment))}${kv('Carnegie classification', esc(dash(s.carnegie)))}
+      ${kv('6-year graduation rate', fmtPct(s.gradRate6yr))}${kv('First-year retention', fmtPct(s.retentionRate))}${kv('Median earnings, 10 yrs after entry', fmtUsd(s.medianEarnings10yr))}</table>
+      ${prov(s._meta)}</div>
+    <div class="card"><h3>Cost</h3><table>
+      ${kv('Type', esc(dash(s.ownership)))}${kv('Tuition (in-state)', fmtUsd(s.tuitionInState))}${kv('Tuition (out-of-state)', fmtUsd(s.tuitionOutOfState))}
+      ${kv('Cost of attendance', fmtUsd(s.costOfAttendance))}${kv('Average net price (after aid)', fmtUsd(s.netPriceAverage))}</table>
+      <p class="small muted" style="margin-top:8px">Net price is the average paid by aid recipients; athletic scholarships are separate (D1 women's soccer allows up to 14 equivalencies, program-dependent).</p></div>
+    <div class="card"><h3>Location</h3><table>
+      ${kv('Campus', `${esc(s.city)}, ${esc(s.state)} ${esc(s.zip || '')}`)}${kv('Setting', esc(dash(s.locale)))}${kv('Region', esc(dash(s.region)))}
+      ${kv('Website', s.website ? `<a href="https://${esc(s.website.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${esc(s.website)}</a>` : '—')}
+      ${kv('Map', s.lat ? `<a href="https://www.google.com/maps?q=${s.lat},${s.lon}" target="_blank" rel="noopener">Open in Google Maps</a>` : '—')}</table>
+      ${(p.curated?.academicsNotes) ? `<h4 style="margin-top:10px">My academics notes</h4><p class="prose">${esc(p.curated.academicsNotes)}</p>` : ''}</div>
+  </div>`;
+}
+
+async function tabClimate(p) {
+  const c = p.climate;
+  if (!c) return '<div class="card empty">Climate not collected yet.</div>';
+  const months = c.monthly;
+  const xT = months.map((m, i) => ({ x: i, label: m.month }));
+  const temp = svgLine({
+    width: 560, height: 240, yMin: Math.floor(Math.min(...months.map(m => m.tLowF)) / 10) * 10 - 5, yMax: Math.ceil(Math.max(...months.map(m => m.tHighF)) / 10) * 10 + 5,
+    series: [{ name: 'Avg high', color: 'var(--s2)', points: months.map((m, i) => ({ x: i, y: m.tHighF, label: `high ${m.tHighF}°F` })) },
+             { name: 'Avg low', color: 'var(--s1)', points: months.map((m, i) => ({ x: i, y: m.tLowF, label: `low ${m.tLowF}°F` })) }],
+    xTicks: xT, yTicks: [30, 50, 70, 90].map(y => ({ y, label: y + '°' })), fmt: v => v + '°F', xLabel: i => months[i].month, aria: 'Monthly average high and low temperature',
+  });
+  const rain = svgBars({ width: 560, height: 180, color: 'var(--s1)', points: months.map(m => ({ label: m.month, y: m.precipIn })), fmt: v => v.toFixed(1) + ' in', aria: 'Monthly precipitation' });
+  return `<div class="card section"><h3>${esc(c.summary)}</h3>
+    <div class="tiles" style="margin-top:10px">${tile('Fall season avg high', c.fallSeason.avgHighF + '°F', 'Aug–Nov')}${tile('Fall season avg low', c.fallSeason.avgLowF + '°F', 'Aug–Nov')}${tile('Fall season rain', c.fallSeason.precipIn + ' in', `${c.fallSeason.wetDays} wet days`)}${tile('Annual rain', c.annualPrecipIn + ' in', c.annualSnowIn >= 1 ? `${c.annualSnowIn} in snow` : 'no meaningful snow')}</div></div>
+    <div class="grid g2">
+      <div class="card"><h3>Temperature by month</h3><div class="legend"><span><i class="key" style="background:var(--s2)"></i>Average high</span><span><i class="key" style="background:var(--s1)"></i>Average low</span></div><div class="chart">${temp}</div></div>
+      <div class="card"><h3>Precipitation by month</h3><div class="chart">${rain}</div></div>
+    </div>
+    <div class="card section" style="margin-top:14px"><h3>Monthly normals ${esc(c.normalsPeriod)}</h3><div class="tscroll"><table>
+      <tr><th>Month</th><th class="num">High °F</th><th class="num">Low °F</th><th class="num">Rain in</th><th class="num">Snow in</th><th class="num">Wet days</th><th class="num">Days ≥90°</th><th class="num">Days ≤32°</th></tr>
+      ${months.map(m => `<tr><td>${m.month}</td><td class="num">${m.tHighF}</td><td class="num">${m.tLowF}</td><td class="num">${m.precipIn.toFixed(2)}</td><td class="num">${m.snowIn}</td><td class="num">${m.wetDays}</td><td class="num">${m.days90F}</td><td class="num">${m.daysFreeze}</td></tr>`).join('')}</table></div>
+      ${prov(c._meta, `Campus ${c.lat}, ${c.lon}`)}</div>`;
+}
+
+async function tabHistory(p) {
+  const pr = p.program;
+  const withRpi = p.seasons.filter(s => s.rpiRank).sort((a, b) => a.year - b.year);
+  const chart = svgLine({
+    width: 1160, height: 300, yInverted: true, yMin: 1, yMax: Math.max(30, ...withRpi.map(s => s.rpiRank)),
+    series: [{ name: 'RPI rank', color: 'var(--s1)', points: withRpi.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank} (${s.record || ''})` })) }],
+    xTicks: withRpi.filter((s, i) => i % 2 === 0 || i === withRpi.length - 1).map(s => ({ x: s.year, label: String(s.year) })),
+    yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 20, label: '#20' }, { y: 30, label: '#30' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'End-of-season RPI rank by year',
+  });
+  const yearsList = (label, arr) => `<tr><th>${label}</th><td>${arr.length ? `<b>${arr.length}</b> — ${arr.join(', ')}` : '—'}</td></tr>`;
+  return `<div class="card section"><h3>RPI rank by season</h3><div class="chart">${chart}</div>
+      <p class="small muted">Lower is better. 2007–2024 are end-of-season ranks recomputed under the 2024 NCAA formula (Chris Henderson's archive); 2025 onward are the NCAA's own published ranks. No 2020 (COVID season).</p></div>
+    <div class="grid g2">
+      <div class="card"><h3>Honors</h3><table>
+        ${yearsList('NCAA championships', pr.nationalTitles)}${yearsList('NCAA runner-up', pr.nationalRunnerUp)}${yearsList('College Cup (final four)', pr.collegeCups)}
+        ${yearsList('NCAA tournament appearances', pr.ncaaAppearances)}${yearsList('Conference regular-season titles', pr.confRegularSeasonTitles)}${yearsList('Conference tournament titles', pr.confTournamentTitles)}
+        <tr><th>All-time record</th><td>${pr.allTimeRecord.wins}-${pr.allTimeRecord.losses}-${pr.allTimeRecord.ties} (${pr.allTimeRecord.winPct ?? '—'}) over ${pr.allTimeRecord.seasons} seasons</td></tr>
+        <tr><th>Founded</th><td>${dash(pr.founded)}</td></tr><tr><th>Stadium</th><td>${esc(pr.stadium?.name || '—')}${pr.stadium?.capacity ? ` (capacity ${fmtNum(pr.stadium.capacity)})` : ''}</td></tr></table>
+        ${prov(pr._meta?.wikipedia)}</div>
+      <div class="card"><h3>Season by season</h3><div class="tscroll" style="max-height:520px;overflow-y:auto"><table>
+        <tr><th>Year</th><th>Coach</th><th>Record</th><th>Conf</th><th>Finish</th><th>NCAA</th><th class="num">RPI</th><th class="num">Seed</th><th class="num">KPI</th><th class="num">Massey</th></tr>
+        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ' <span class="badge">live</span>' : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td><td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td></tr>`).join('')}</table></div></div>
+    </div>`;
+}
+
+async function tabStaff(p) {
+  const pr = p.program, hc = pr.headCoach;
+  const person = s => `<tr><td><b>${esc(s.name)}</b>${s.bioUrl ? ` <a class="small" href="${esc(s.bioUrl)}" target="_blank" rel="noopener">bio</a>` : ''}</td><td>${esc(s.title)}</td><td class="small">${Object.entries(s.social || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${k}</a>`).join(' ')}</td></tr>`;
+  return `<div class="grid g2">
+    <div class="card"><h3>Head coach</h3>
+      <div class="hero" style="font-size:28px;margin:6px 0">${esc(hc.name || '—')}</div>
+      <p class="ink2">${esc(hc.title || '')}${hc.since ? ` · since ${hc.since} (${hc.seasons} seasons)` : ''}</p>
+      ${hc.bioUrl ? `<p><a href="${esc(hc.bioUrl)}" target="_blank" rel="noopener">Official bio</a></p>` : ''}
+      <h4 style="margin-top:12px">Coaching staff</h4><table>${pr.coaches.map(person).join('')}</table>
+      ${prov(pr._meta?.athletics)}</div>
+    <div class="card"><h3>Support staff</h3>${pr.supportStaff.length ? `<table>${pr.supportStaff.map(person).join('')}</table>` : '<div class="empty">None listed.</div>'}
+      ${(p.curated?.culture) ? `<h4 style="margin-top:12px">My notes on culture</h4><p class="prose">${esc(p.curated.culture)}</p>` : ''}</div></div>`;
+}
+
+async function tabRoster(p) {
+  const r = p.roster;
+  if (!r) return '<div class="card empty">Roster not collected yet.</div>';
+  const classes = ['FR', 'SO', 'JR', 'SR', 'GR'];
+  const cnt = (pos, c) => (r.byPosClass[pos]?.[c] || 0) + (r.byPosClass[pos]?.['R-' + c] || 0);
+  const matrix = `<table class="matrix"><tr><th></th>${classes.map(c => `<th>${c}</th>`).join('')}<th>Total</th></tr>
+    ${['GK', 'D', 'M', 'F'].map(pos => { const tot = classes.reduce((a, c) => a + cnt(pos, c), 0); return `<tr><th>${pos}</th>${classes.map(c => `<td class="${cnt(pos, c) >= 3 ? 'hot' : ''}">${cnt(pos, c) || ''}</td>`).join('')}<td><b>${tot}</b></td></tr>`; }).join('')}
+    <tr><th>Total</th>${classes.map(c => `<td><b>${['GK', 'D', 'M', 'F'].reduce((a, pos) => a + cnt(pos, c), 0)}</b></td>`).join('')}<td><b>${r.count}</b></td></tr></table>`;
+  const rows = r.players.map(pl => `<tr><td class="num">${esc(pl.number)}</td><td><b>${esc(pl.name)}</b>${pl.bioUrl ? ` <a class="small" href="${esc(pl.bioUrl)}" target="_blank" rel="noopener">bio</a>` : ''}
+      ${Object.keys(pl.bio || {}).length ? `<details><summary>notes</summary>${Object.entries(pl.bio).filter(([k]) => k !== 'intro').map(([k, v]) => `<p><b>${esc(k)}:</b> ${esc(v)}</p>`).join('')}</details>` : ''}</td>
+      <td>${esc(pl.pos)}</td><td>${esc(pl.classCode)}</td><td>${esc(pl.height)}</td><td>${esc(pl.hometown)}</td><td class="small">${esc(pl.highSchool)}${pl.previousSchool ? `<br><span class="muted">prev: ${esc(pl.previousSchool)}</span>` : ''}</td>
+      <td class="small">${esc(pl.club || '')}${pl.club ? `<br><span class="muted">${esc(pl.clubSource || '')}</span>` : ''}</td><td class="small">${esc(pl.major)}</td></tr>`).join('');
+  const hist = Object.entries(p.rosterHistory || {}).sort((a, b) => b[0] - a[0]);
+  return `<div class="grid g2 section">
+      <div class="card"><h3>Depth by position and class · ${r.season}</h3>${matrix}<p class="small muted" style="margin-top:6px">Redshirt classes are folded into their year. Graduating (SR/GR) this year: ${Object.entries(r.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}.</p></div>
+      <div class="card"><h3>Roster turnover</h3>${hist.length ? hist.map(([y, h]) => `<p><b>${y}</b>: ${h.count} players${h.departed ? ` · ${h.departed.length} not on the ${r.season} roster: <span class="ink2">${esc(h.departed.map(n => n.replace(/\b\w/g, ch => ch.toUpperCase())).join(', '))}</span>` : ''}</p>`).join('') : '<div class="empty">No prior rosters collected.</div>'}</div>
+    </div>
+    <div class="card"><h3>${r.season} roster · ${r.count} players</h3><div class="tscroll"><table>
+      <tr><th class="num">#</th><th>Name</th><th>Pos</th><th>Class</th><th>Ht</th><th>Hometown</th><th>High school</th><th>Club</th><th>Major</th></tr>${rows}</table></div>
+      ${prov(r._meta, 'Club comes from TopDrawerSoccer / SoccerWire commitment records where available; "bio text" means a best-effort read of the official bio.')}</div>`;
+}
+
+async function tabCommitments(p) {
+  const byYear = {};
+  p.commitments.forEach(c => { (byYear[c.gradYear] ||= []).push(c); });
+  const years = Object.keys(byYear).sort();
+  const statusBadge = s => `<span class="badge ${{ verbal: '', signed: 'good', enrolled: 'good', decommitted: 'crit' }[s]}">${s}</span>`;
+  const confBadge = c => c === 'confirmed' ? '<span class="badge good">confirmed</span>' : c === 'single-source' ? '<span class="badge warn">single source</span>' : '<span class="badge">unreviewed</span>';
+  const srcChip = s => { const label = { tds: 'TopDrawerSoccer', soccerwire: 'SoccerWire', press_release: 'Press release', instagram: 'Instagram', x: 'X' }[s.kind] || s.kind; return `<span class="chip">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(label)}</a>` : esc(label)}${s.missingSince ? ` <span class="muted" title="No longer listed since ${esc(s.missingSince)}">⚠</span>` : ''}</span>`; };
+  const when = c => c.status === 'enrolled' && !c.announced ? '<span class="muted">on roster</span>' : c.announced ? `<b>${fmtDate(c.announced)}</b><br><span class="muted">${esc(c.announcedSource.replace('_', ' '))}</span>` : c.approxDate ? `≈ ${fmtDate(c.approxDate.date)}<br><span class="muted">${esc(c.approxDate.basis)}</span>` : '<span class="muted">date unknown</span>';
+  const list = years.map(y => `<div class="card section"><h3>Class of ${y} <span class="muted" style="font-weight:400">· ${byYear[y].length} commit${byYear[y].length === 1 ? '' : 's'}</span></h3>
+    ${byYear[y].map(c => `<div class="commit"><div><div class="who">${esc(c.name)} <small>${esc(c.pos || '?')} · ${esc(c.club || 'club unknown')}${c.city ? ` · ${esc(c.city)}` : ''}${c.state ? `, ${esc(c.state)}` : ''}${c.highSchool ? ` · ${esc(c.highSchool)}` : ''}</small></div>
+        <div class="row" style="margin-top:4px">${statusBadge(c.status)} ${confBadge(c.confidence)} ${c.flags.map(f => `<span class="badge ${f === 'possibly-decommitted' ? 'crit' : ''}">${esc(f)}</span>`).join(' ')}${c.aliases.length ? `<span class="small muted">also listed as ${esc(c.aliases.join(', '))}</span>` : ''}</div>
+        <div class="srcs">${c.sources.map(srcChip).join('')}</div></div>
+      <div class="right">${when(c)}</div></div>`).join('')}</div>`).join('');
+  // roster need: graduating by position vs next class commits
+  const r = p.roster, next = r ? String(r.season + 1) : years[0];
+  const need = r ? ['GK', 'D', 'M', 'F'].map(pos => { const g = r.graduatingByPos[pos] || 0; const cm = (byYear[next] || []).filter(c => (c.pos || '').split('/')[0] === pos).length; return `<tr><td class="pos">${pos}</td><td class="num">${g}</td><td class="num">${cm}</td><td class="num ${cm - g < 0 ? 'neg' : ''}">${cm - g > 0 ? '+' : ''}${cm - g}</td></tr>`; }).join('') : '';
+  return `<div class="grid g2 section">
+      <div class="card"><h3>Roster need · seniors leaving after ${r?.season ?? ''} vs class of ${next ?? '—'}</h3>${r ? `<table class="need"><tr><th>Pos</th><th class="num">Graduating (SR/GR)</th><th class="num">Commits ${next ?? ''}</th><th class="num">Net</th></tr>${need}</table><p class="small muted" style="margin-top:6px">A rough read of where the next class fills holes. Transfers, early departures and redshirts are not modeled.</p>` : '<div class="empty">Roster not collected.</div>'}</div>
+      <div class="card"><h3>How to read this</h3><p class="small ink2"><b>confirmed</b> = listed by two independent sources, an official release, or already on the roster. <b>single source</b> = one recruiting site only. Dates marked ≈ are approximations (when a SoccerWire profile was created, or when this tool first saw the record), not announcement dates; approving a dated social post in the Review queue sets the real date. ⚠ on a source means the recruit dropped off that site's list — a possible decommit.</p>
+        ${p.curated?.recruitingNotes ? `<h4 style="margin-top:8px">My recruiting notes</h4><p class="prose">${esc(p.curated.recruitingNotes)}</p>` : ''}</div>
+    </div>
+    ${list || '<div class="card empty">No commitments collected yet.</div>'}
+    ${prov([{ source: 'TopDrawerSoccer team page', url: p.links.tds + '/tab-commitments', asOf: null }, { source: 'SoccerWire player directory', url: 'https://www.soccerwire.com/soccer-player-directory/', asOf: null }])}`;
+}
+
+async function tabSchedule(p) {
+  const s = p.schedule;
+  if (!s) return '<div class="card empty">Schedule not collected yet.</div>';
+  const row = g => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
+    <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : '<span class="muted">upcoming</span>'}</td>
+    <td class="small">${Object.entries(g.links || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(' · ')}</td></tr>`;
+  const hist = Object.entries(s.history || {}).sort((a, b) => b[0] - a[0]);
+  return `<div class="card section"><h3>${s.season} season · ${esc(s.record.text)}${s.record.confText && s.record.confText !== '0-0-0' ? ` · ${esc(s.record.confText)} conference` : ''} <span class="muted small">(${s.record.played} of ${s.record.scheduled} played${s.record.exhibitions ? `, ${s.record.exhibitions} exhibition excluded` : ''})</span></h3>
+      <div class="tscroll"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${s.games.map(row).join('')}</table></div>${prov(s._meta)}</div>
+    ${hist.map(([y, h]) => `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>${y}</b> season · ${esc(h.record)}</summary><div class="tscroll" style="margin-top:8px"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${h.games.map(row).join('')}</table></div></details>`).join('')}`;
+}
+
+async function tabNews(p) {
+  const n = p.news;
+  if (!n) return '<div class="card empty">News not collected yet.</div>';
+  const li = it => `<li><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a> <span class="muted small">${fmtDate(it.date)}</span></li>`;
+  return `<div class="grid g2"><div class="card"><h3>Recruiting-related</h3>${n.recruiting.length ? `<ul style="padding-left:18px">${n.recruiting.map(li).join('')}</ul>` : '<div class="empty">Nothing recruiting-related in the archive yet (signing-day releases usually land in November and February).</div>'}</div>
+    <div class="card"><h3>Latest</h3><ul style="padding-left:18px">${n.latest.map(li).join('')}</ul>${prov(n._meta)}</div></div>`;
+}
+
+const NOTE_FIELDS = [['programSummary', 'Program summary', 'What this program is, in a paragraph: level, identity, trajectory.'], ['playingStyle', 'Playing style', 'Formation, tempo, what they ask of each position.'], ['culture', 'Culture & coaching', 'How the staff runs the program; what players say.'], ['academicsNotes', 'Academics', 'Majors that fit, athlete support, admissions realities.'], ['recruitingNotes', 'Recruiting notes', 'Timeline, who recruits which positions, ID camps, contacts.'], ['myFitNotes', 'My fit', 'Why this program is or is not a fit for us.']];
+async function tabNotes(p) {
+  const c = p.curated || {};
+  const ro = !S.local;
+  return `<div class="card">
+    ${ro ? `<div class="readonly-note">Read-only here. To edit, run <code>python collegedash.py serve</code> and open <code>http://127.0.0.1:8000/#/p/${esc(p.slug)}/notes</code>, or edit <code>programs/${esc(p.slug)}/curated.json</code> directly.</div>` : `<div class="readonly-note">Saving writes <code>programs/${esc(p.slug)}/curated.json</code> and rebuilds the profile. Commit it to keep it.</div>`}
+    ${NOTE_FIELDS.map(([k, label, hint]) => `<div class="section"><h3>${label}</h3><p class="small muted">${hint}</p>${ro ? (c[k] ? `<p class="prose">${esc(c[k])}</p>` : '<div class="empty">Not written yet.</div>') : `<textarea data-k="${k}">${esc(c[k] || '')}</textarea>`}</div>`).join('')}
+    <div class="section"><h3>Tags</h3><p class="small muted">Comma-separated, e.g. reach, west coast, strong academics.</p>${ro ? `<div class="row">${(c.tags || []).map(t => `<span class="chip">${esc(t)}</span>`).join('') || '<span class="empty">none</span>'}</div>` : `<input id="tags" style="width:100%;padding:8px;border:1px solid var(--border-strong);border-radius:6px;background:var(--page)" value="${esc((c.tags || []).join(', '))}">`}</div>
+    ${ro ? '' : `<div class="row"><button class="btn primary" id="saveNotes">Save notes</button><span class="notice" id="saveMsg"></span></div>`}</div>`;
+}
+function wireNotes(p) {
+  const btn = $('#saveNotes'); if (!btn) return;
+  btn.onclick = async () => {
+    const cur = { ...(p.curated || {}) };
+    document.querySelectorAll('textarea[data-k]').forEach(t => { cur[t.dataset.k] = t.value; });
+    cur.tags = $('#tags').value.split(',').map(s => s.trim()).filter(Boolean);
+    const body = { _comment: 'Human-written notes for this program. Collectors never touch this file.', ...cur, overrides: (p.curated && p.curated.overrides) || {} };
+    $('#saveMsg').textContent = 'Saving…';
+    try {
+      const r = await fetch(`api/curated/${p.slug}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status);
+      delete S.profiles[p.slug]; S.index = null;
+      $('#saveMsg').textContent = `Saved to ${j.path} and rebuilt.`;
+    } catch (e) { $('#saveMsg').textContent = 'Save failed: ' + e.message; }
+  };
+}
+
+/* ---------- RPI view ---------- */
+async function renderRpi() {
+  const [idx, rpi] = await Promise.all([loadIndex(), loadRpi()]);
+  const onboarded = new Map(idx.programs.map(p => [p.slug, p]));
+  const bySchool = new Map(idx.programs.map(p => [p.shortName || p.name, p.slug]));
+  const q = S.q;
+  const rows = rpi.teams.filter(t => !q || (t.school + ' ' + t.conference).toLowerCase().includes(q));
+  $('#app').innerHTML = `<div class="card"><h2>NCAA Division I women's soccer RPI</h2><p class="ink2">Season ${rpi.season} · through games ${fmtDate(rpi.throughGames)} · ${rpi.teams.length} teams · <a href="${esc(rpi.sourceUrl)}" target="_blank" rel="noopener">NCAA.com</a></p>
+    <p class="small muted">Weekly snapshots are archived under <code>data/rpi/weekly/</code> each refresh; the NCAA only publishes the latest week. Programs already in CollegeDash are linked.</p>
+    <div class="tscroll"><table><tr><th class="num">Rank</th><th>School</th><th>Conference</th><th>Record</th><th>Home</th><th>Road</th><th>Neutral</th><th class="num">Prev</th></tr>
+    ${rows.map(t => { const slug = bySchool.get(t.school); return `<tr><td class="num"><b>${t.rank}</b></td><td>${slug ? `<a href="#/p/${slug}">${esc(t.school)}</a>` : esc(t.school)}</td><td>${esc(t.conference)}</td><td><b>${esc(t.record)}</b></td><td>${esc(t.home)}</td><td>${esc(t.road)}</td><td>${esc(t.neutral)}</td><td class="num muted">${dash(t.prevRank)}</td></tr>`; }).join('')}</table></div></div>`;
+}
+
+/* ---------- compare ---------- */
+async function renderCompare() {
+  const idx = await loadIndex();
+  const picked = S.compare.filter(s => idx.programs.some(p => p.slug === s)).slice(0, 4);
+  const profiles = await Promise.all(picked.map(loadProfile));
+  const app = $('#app');
+  const picker = `<div class="card section"><h3>Pick up to four programs</h3><div class="row">${idx.programs.map(p => `<label class="chip"><input type="checkbox" data-slug="${esc(p.slug)}" ${picked.includes(p.slug) ? 'checked' : ''}> ${esc(p.shortName || p.name)}</label>`).join('')}</div></div>`;
+  if (!profiles.length) { app.innerHTML = picker + '<div class="empty">Select programs above to compare them side by side.</div>'; wirePicker(); return; }
+  const rowsDef = [
+    ['Conference', p => esc(p.conference)], ['Location', p => `${esc(p.school?.city || '')}, ${esc(p.school?.state || '')}`], ['Setting', p => esc(p.school?.locale || '—')],
+    ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
+    ['Last season', p => { const s = p.seasons.find(x => !x.inProgress && x.record); return s ? `${esc(s.record)} · ${esc((s.ncaaResult || '').replace('NCAA ', '') || '—')}` : '—'; }],
+    ['RPI last season', p => { const s = p.seasons.find(x => !x.inProgress && x.rpiRank); return s ? `#${s.rpiRank} (${s.year})` : '—'; }],
+    ['Avg RPI, last 5 seasons', p => { const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
+    ['National titles', p => p.program.nationalTitles.length], ['College Cups', p => p.program.collegeCups.length],
+    ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],
+    ['Admission rate', p => fmtPct(p.school?.admissionRate)], ['SAT 25–75', p => p.school?.sat25 ? `${p.school.sat25}–${p.school.sat75}` : '—'], ['Undergraduates', p => fmtNum(p.school?.undergradEnrollment)],
+    ['Type', p => esc(p.school?.ownership || '—')], ['Out-of-state tuition', p => fmtUsd(p.school?.tuitionOutOfState)], ['Avg net price', p => fmtUsd(p.school?.netPriceAverage)],
+    ['6-yr grad rate', p => fmtPct(p.school?.gradRate6yr)],
+    ['Fall avg high / low', p => p.climate ? `${p.climate.fallSeason.avgHighF}° / ${p.climate.fallSeason.avgLowF}°F` : '—'], ['Annual rain', p => p.climate ? `${p.climate.annualPrecipIn} in` : '—'],
+    ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
+    ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
+    ['My tags', p => (p.curated?.tags || []).map(t => `<span class="chip">${esc(t)}</span>`).join(' ') || '—'],
+  ];
+  app.innerHTML = picker + `<div class="card"><div class="tscroll"><table><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(p.shortName || p.name)}</a></th>`).join('')}</tr>
+    ${rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')}</table></div></div>`;
+  wirePicker();
+  function wirePicker() {
+    app.querySelectorAll('input[data-slug]').forEach(cb => cb.onchange = () => {
+      const sel = [...app.querySelectorAll('input[data-slug]:checked')].map(c => c.dataset.slug).slice(0, 4);
+      location.hash = '#/compare/' + sel.join(',');
+    });
+  }
+}
+
+/* ---------- boot ---------- */
+loadIndex().then(() => { renderUpdated(); route(); }).catch(e => { $('#app').innerHTML = `<div class="card"><h2>Cannot load data</h2><p class="muted">${esc(e.message)}. Run <code>python collegedash.py build</code> first.</p></div>`; });
+</script>
+</body>
+</html>

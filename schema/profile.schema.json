@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://collegedash.local/schema/profile.schema.json",
+  "title": "CollegeDash program profile",
+  "type": "object",
+  "required": ["slug", "name", "conference", "program", "seasons", "commitments", "curated", "_build"],
+  "properties": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "shortName": {"type": ["string", "null"]},
+    "nickname": {"type": ["string", "null"]},
+    "division": {"type": "string"},
+    "conference": {"type": ["string", "null"]},
+    "colors": {"type": ["array", "null"], "items": {"type": "string"}},
+    "ids": {"type": "object"},
+    "social": {"type": "object"},
+    "links": {"type": "object"},
+    "school": {
+      "type": ["object", "null"],
+      "properties": {
+        "city": {"type": ["string", "null"]},
+        "state": {"type": ["string", "null"]},
+        "lat": {"type": ["number", "null"]},
+        "lon": {"type": ["number", "null"]},
+        "admissionRate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "undergradEnrollment": {"type": ["integer", "null"]},
+        "_meta": {"$ref": "#/$defs/meta"}
+      }
+    },
+    "climate": {
+      "type": ["object", "null"],
+      "properties": {
+        "monthly": {"type": "array", "minItems": 12, "maxItems": 12,
+          "items": {"type": "object", "required": ["month", "tHighF", "tLowF", "precipIn"]}},
+        "summary": {"type": "string"},
+        "_meta": {"$ref": "#/$defs/meta"}
+      }
+    },
+    "program": {
+      "type": "object",
+      "required": ["headCoach", "nationalTitles"],
+      "properties": {
+        "headCoach": {"type": "object", "properties": {"name": {"type": ["string", "null"]}, "since": {"type": ["integer", "null"]}}},
+        "coaches": {"type": "array"},
+        "stadium": {"type": ["object", "null"]},
+        "nationalTitles": {"type": "array", "items": {"type": "integer"}},
+        "collegeCups": {"type": "array", "items": {"type": "integer"}}
+      }
+    },
+    "seasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["year"],
+        "properties": {
+          "year": {"type": "integer", "minimum": 1980, "maximum": 2100},
+          "record": {"type": ["string", "null"], "pattern": "^\\d+-\\d+-\\d+$"},
+          "rpiRank": {"type": ["integer", "null"], "minimum": 1}
+        }
+      }
+    },
+    "roster": {
+      "type": ["object", "null"],
+      "required": ["season", "players", "byPosClass"],
+      "properties": {
+        "players": {"type": "array", "items": {"type": "object", "required": ["name", "pos", "classCode"]}}
+      }
+    },
+    "rosterHistory": {"type": "object"},
+    "schedule": {"type": ["object", "null"]},
+    "commitments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "gradYear", "college", "status", "confidence", "sources"],
+        "properties": {
+          "gradYear": {"type": "integer", "minimum": 2020, "maximum": 2040},
+          "status": {"enum": ["verbal", "signed", "enrolled", "decommitted"]},
+          "confidence": {"enum": ["confirmed", "single-source", "unreviewed"]},
+          "announced": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+          "sources": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["kind"]}}
+        }
+      }
+    },
+    "news": {"type": ["object", "null"]},
+    "curated": {"type": "object"},
+    "commitmentsByYear": {"type": "object"},
+    "_build": {
+      "type": "object",
+      "required": ["builtAt", "completeness", "sections", "stale"],
+      "properties": {"completeness": {"type": "number", "minimum": 0, "maximum": 1}}
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": ["object", "null"],
+      "properties": {"source": {"type": ["string", "null"]}, "url": {"type": ["string", "null"]}, "asOf": {"type": ["string", "null"]}}
+    }
+  }
+}
