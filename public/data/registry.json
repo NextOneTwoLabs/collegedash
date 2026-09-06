@@ -65,13 +65,21 @@
       "htmlApi": "https://en.wikipedia.org/api/rest_v1/page/html/{title}"
     },
     "athleticsPlatforms": {
-      "_comment": "Adapter per site platform. wmt = WMT Digital (Stanford): /roster, /roster/season/{year}, /roster/player/{slug}, /schedule/season/{year}, /news. sidearm = Sidearm Sports (most other D1 sites), added when the second program is onboarded.",
+      "_comment": "Adapter per site platform. wmt = WMT Digital (Stanford, UCLA): /roster, /roster/season/{year}, /roster/player/{slug}, /schedule/season/{year}, /news. sidearm = Sidearm Sports (USC, Duke, most D1): /roster, /roster/{year}, /roster/{slug}/{id}, /schedule/{year}, news via /rss?path=wsoc plus /archives.",
       "wmt": {
         "roster": "{baseUrl}{sportPath}/roster",
         "rosterSeason": "{baseUrl}{sportPath}/roster/season/{year}",
         "schedule": "{baseUrl}{sportPath}/schedule",
         "scheduleSeason": "{baseUrl}{sportPath}/schedule/season/{year}",
         "news": "{baseUrl}{sportPath}/news"
+      },
+      "sidearm": {
+        "roster": "{baseUrl}{sportPath}/roster",
+        "rosterSeason": "{baseUrl}{sportPath}/roster/{year}",
+        "schedule": "{baseUrl}{sportPath}/schedule",
+        "scheduleSeason": "{baseUrl}{sportPath}/schedule/{year}",
+        "news": "{baseUrl}{sportPath}/archives",
+        "rss": "{baseUrl}/rss?path=wsoc"
       }
     }
   },
@@ -107,6 +115,69 @@
         "lon": -122.1697,
         "timezone": "America/Los_Angeles"
       }
+    },
+    {
+      "slug": "ucla",
+      "onboarded": true,
+      "name": "University of California, Los Angeles",
+      "shortName": "UCLA",
+      "nickname": "Bruins",
+      "division": "D1",
+      "conference": "Big Ten",
+      "colors": ["#2774AE", "#FFD100"],
+      "athletics": { "platform": "wmt", "baseUrl": "https://uclabruins.com", "sportPath": "/sports/womens-soccer" },
+      "ids": {
+        "scorecardUnitId": 110662,
+        "tdsClgId": 266,
+        "tdsSlug": "ucla",
+        "wikipedia": "UCLA_Bruins_women's_soccer",
+        "ncaaName": "UCLA",
+        "rpiHistoryName": "UCLA"
+      },
+      "social": { "x": "UCLAWSoccer", "instagram": "uclawsoccer" },
+      "location": { "lat": 34.0718, "lon": -118.4422, "timezone": "America/Los_Angeles" }
+    },
+    {
+      "slug": "usc",
+      "onboarded": true,
+      "name": "University of Southern California",
+      "shortName": "USC",
+      "nickname": "Trojans",
+      "division": "D1",
+      "conference": "Big Ten",
+      "colors": ["#990000", "#FFCC00"],
+      "athletics": { "platform": "sidearm", "baseUrl": "https://usctrojans.com", "sportPath": "/sports/womens-soccer" },
+      "ids": {
+        "scorecardUnitId": 123961,
+        "tdsClgId": 271,
+        "tdsSlug": "usc",
+        "wikipedia": "USC_Trojans_women's_soccer",
+        "ncaaName": "Southern California",
+        "rpiHistoryName": "SouthernCalifornia"
+      },
+      "social": { "x": "USC_WSoccer", "instagram": "uscwsoccer" },
+      "location": { "lat": 34.0213, "lon": -118.2842, "timezone": "America/Los_Angeles" }
+    },
+    {
+      "slug": "duke",
+      "onboarded": true,
+      "name": "Duke University",
+      "shortName": "Duke",
+      "nickname": "Blue Devils",
+      "division": "D1",
+      "conference": "ACC",
+      "colors": ["#003087", "#FFFFFF"],
+      "athletics": { "platform": "sidearm", "baseUrl": "https://goduke.com", "sportPath": "/sports/womens-soccer" },
+      "ids": {
+        "scorecardUnitId": 198419,
+        "tdsClgId": 27,
+        "tdsSlug": "duke",
+        "wikipedia": "Duke_Blue_Devils_women's_soccer",
+        "ncaaName": "Duke",
+        "rpiHistoryName": "Duke"
+      },
+      "social": { "x": "DukeWSOC", "instagram": "dukewsoc" },
+      "location": { "lat": 36.0011, "lon": -78.9376, "timezone": "America/New_York" }
     }
   ]
 }

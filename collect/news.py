@@ -24,6 +24,13 @@ def collect(program: dict, registry: dict) -> dict:
     u = ad.urls(program, registry)
     html, meta = common.fetch_text(u["news"], max_age_hours=12)
     items = ad.parse_news(html, program["athletics"]["baseUrl"])
+    # Sidearm sites also publish an RSS feed with proper dates; merge it in when the adapter has one.
+    if u.get("rss") and hasattr(ad, "parse_rss"):
+        try:
+            xml_text, _ = common.fetch_text(u["rss"], max_age_hours=12)
+            items = ad.parse_rss(xml_text, program["athletics"]["baseUrl"]) + items
+        except common.FetchError as e:
+            common.log(f"news: rss failed: {e}")
     for it in items:
         it["recruiting"] = bool(RECRUIT_RE.search(it["title"]))
     # Keep the archive growing: merge with what we already have (by url).

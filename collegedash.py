@@ -71,7 +71,8 @@ def cmd_onboard(args):
         rpi.current(reg)
     except Exception as e:
         common.log(f"!! rpi current failed: {e}")
-    ok = all(run_collector(c, program, reg, bios=not args.no_bios) for c in COLLECTORS)
+    results = [run_collector(c, program, reg, bios=not args.no_bios) for c in COLLECTORS]  # no short-circuit
+    ok = all(results)
     import build
     build.build(reg)
     return 0 if ok else 1

@@ -25,7 +25,7 @@ CLASS_CODES = [
 ]
 HEIGHT_RE = re.compile(r"(\d)\s*[′'’]\s*(\d{1,2})")
 TITLE_YEAR_RE = re.compile(r"(?:19|20)\d\d")
-HEAD_COACH_RE = re.compile(r"head coach|director of women'?s soccer", re.I)
+HEAD_COACH_RE = re.compile(r"head (?:soccer )?coach|director of women'?s soccer", re.I)
 NOT_HEAD_RE = re.compile(r"assoc|assist|volunteer|director of (?:operations|ops)", re.I)
 
 
@@ -46,7 +46,9 @@ def class_code(label: str) -> str:
     for rx, code in CLASS_CODES:
         if rx.search(label or ""):
             return code
-    return ""
+    # abbreviations (Fr., So., Jr., Sr., Gr., R-Fr.) as used by list-view sites such as UCLA
+    from .sidearm import class_code as abbrev
+    return abbrev(label)
 
 
 def height_inches(txt: str) -> int | None:
@@ -74,9 +76,48 @@ def _social(card) -> dict:
     return out
 
 
+def _list_fields(item) -> dict:
+    """UCLA-style list view: fields carry a class suffix instead of a label."""
+    out = {}
+    for f in item.select("[class*=roster-player-list-profile-field--]"):
+        for c in f.get("class") or []:
+            if "profile-field--" in c:
+                out[c.split("profile-field--", 1)[1]] = common.clean(f.get_text(" "))
+    return out
+
+
 def parse_roster(html: str, base_url: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     players, staff = [], []
+    # WMT renders either a card grid (.roster-card-item, Stanford) or a list (li.roster-list-item, UCLA).
+    for item in soup.select("li.roster-list-item"):
+        link = item.select_one("a[href*='/roster/'][href*='/player/']")
+        staff_link = item.select_one("a[href*='/staff/']")
+        title_el = item.select_one(".roster-list-item__title")
+        name = common.clean(title_el.get_text(" ")) if title_el else ""
+        if link and not staff_link:
+            f = _list_fields(item)
+            num_el = item.select_one(".roster-list-item__jersey-number")
+            pos_label = f.get("position", "")
+            height = f.get("height", "")
+            players.append({
+                "number": common.clean(num_el.get_text()) if num_el else "",
+                "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label,
+                "height": height.replace("′", "'").replace("″", '"'), "heightIn": height_inches(height),
+                "classLabel": f.get("class-level", ""), "classCode": class_code(f.get("class-level", "")),
+                "hometown": f.get("hometown", ""), "highSchool": f.get("high-school", ""),
+                "previousSchool": f.get("previous-school", ""), "major": f.get("major", ""),
+                "bioUrl": urljoin(base_url, link["href"]), "social": _social(item),
+            })
+        elif staff_link and name:
+            pos_el = item.select_one(".roster-list-item__profile-field--position")
+            title = common.clean(pos_el.get_text(" ")) if pos_el else ""
+            staff.append({
+                "name": name, "title": title,
+                "isHeadCoach": bool(HEAD_COACH_RE.search(title)) and not NOT_HEAD_RE.search(title),
+                "isCoach": bool(re.search(r"coach|director of women", title, re.I)),
+                "bioUrl": urljoin(base_url, staff_link["href"]), "social": _social(item),
+            })
     for card in soup.select(".roster-card-item"):
         # current season: /roster/player/<slug>; past seasons: /roster/season/<y>/player/<slug>
         link = card.select_one("a[href*='/roster/'][href*='/player/']")
@@ -165,9 +206,68 @@ def parse_bio(html: str) -> dict:
     return {"meta": meta, "sections": sections}
 
 
+MONTHS_ABBR = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
+
+
+def _parse_block_layout(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
+    """Second WMT schedule layout (UCLA): div.schedule-item-block[--home] with <time> text only."""
+    games = []
+    for blk in soup.select(".schedule-item-block"):
+        classes = " ".join(blk.get("class") or [])
+        txt = blk.get_text(" ", strip=True)
+        venue = "home" if "--home" in classes else "away" if "--away" in classes else "neutral" if "--neutral" in classes else None
+        if venue is None:
+            m = re.match(r"^(home|away|neutral)\b", txt, re.I)
+            venue = m.group(1).lower() if m else None
+        md = blk.select_one(".schedule-event-date__month-day")
+        date = None
+        if md and season:
+            m = re.match(r"([A-Za-z]{3})[a-z]*\.?\s+(\d{1,2})", common.clean(md.get_text()))
+            if m and MONTHS_ABBR.get(m.group(1).lower()):
+                date = f"{season}-{MONTHS_ABBR[m.group(1).lower()]:02d}-{int(m.group(2)):02d}"
+        opp_el = blk.select_one(".schedule-item-team__opponent")
+        rank = None
+        opponent = None
+        if opp_el:
+            r = opp_el.select_one(".schedule-item-team__ranking")
+            if r and r.get_text().strip("# ").isdigit():
+                rank = int(r.get_text().strip("# "))
+                r.extract()
+            opponent = common.clean(opp_el.get_text(" "))
+        loc_el = blk.select_one(".schedule-event-location")
+        res_el = blk.select_one(".schedule-event-item-result")
+        result = score = None
+        if res_el:
+            rtxt = common.clean(res_el.get_text(" "))
+            m = re.search(r"\b(W|L|T)\b", rtxt)
+            result = m.group(1) if m else None
+            m2 = re.search(r"(\d+)\s*-\s*(\d+)", rtxt)
+            score = f"{m2.group(1)}-{m2.group(2)}" if m2 else None
+        links = {}
+        for a in blk.select(".schedule-event-item-links__link, .schedule-item-block__info a"):
+            label = common.clean(a.get_text(" ")).lower()
+            if a.get("href") and label and label != "women's soccer":
+                links[label] = urljoin(base_url, a["href"])
+        if not opponent:
+            continue
+        games.append({
+            "date": date, "datetime": None,
+            "exhibition": bool(re.search(r"exhibition", str(blk), re.I)),
+            "conferenceGame": bool(blk.select_one(".schedule-item-team__conference")),
+            "homeAway": {"home": "H", "away": "A", "neutral": "N"}.get(venue),
+            "opponent": opponent, "opponentRank": rank,
+            "location": common.clean(loc_el.get_text(" ")) if loc_el else None,
+            "result": result, "score": score, "links": links,
+        })
+    return games
+
+
 def parse_schedule(html: str, base_url: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     games = []
+    if not soup.select(".schedule-event-item") and soup.select(".schedule-item-block"):
+        season = _season_from_title(soup)
+        return {"season": season, "games": _parse_block_layout(soup, base_url, season)}
     for it in soup.select(".schedule-event-item"):
         t = it.find("time")
         dt = t.get("datetime") if t else None

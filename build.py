@@ -202,6 +202,8 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_cur, registry) -> list[dict]
         if not s.get("record"):
             rec = _record_from_games(games)
             s.update({"record": rec["text"], "wins": rec["wins"], "losses": rec["losses"], "ties": rec["ties"]})
+            if rec.get("confText") and rec["confText"] != "0-0-0" and not s.get("confRecord"):
+                s["confRecord"] = rec["confText"]
     for y, s in seasons.items():
         h = (rpi_hist.get(y) or {}).get(hist_name)
         if h:

@@ -53,48 +53,89 @@ def _infobox(soup: BeautifulSoup) -> dict:
     return out
 
 
+FINISH_RE = re.compile(r"\b(T-?\d+(?:st|nd|rd|th)|\d+(?:st|nd|rd|th))\b")
+NCAA_RE = re.compile(r"NCAA[^,;]*")
+COACH_RE = re.compile(r"^[A-Z][A-Za-z.'’\- ]{3,}$")
+BAD_COACH = re.compile(r"NCAA|Round|Final|Champion|Semifinal|Quarterfinal|Conference|Tournament|Runner|Winner|Sweet|Elite|"
+                       r"College Cup|Regional|Did not|—|–|^[WLT]\b", re.I)
+
+
 def _seasons_table(soup: BeautifulSoup) -> list[dict]:
+    """Year-by-year results. Wikipedia articles use several layouts:
+      Stanford: Year | Head coach | Overall | Conference | Conference Standing | NCAA Tournament
+      UCLA:     Season | Coach | Record (Overall, Conference) | Notes            (coach cell rowspans)
+      Duke:     Season | Head coach | Wins Losses Ties | Wins Losses Ties | Conference | NCAA
+    so the parser reads records from whatever cells look like records or W/L/T triples, and the
+    coach from the first name-like cell (carrying it forward across rowspans)."""
+    best = None
     for t in soup.find_all("table", class_=re.compile(r"wikitable")):
-        heads = [common.clean(th.get_text(" ")) for th in t.find_all("th")[:8]]
-        if heads and heads[0].lower().startswith("year") and any("overall" in h.lower() for h in heads):
-            break
-    else:
-        return []
-    heads = [common.clean(c.get_text(" ")).lower() for c in t.find("tr").find_all(["th", "td"])]
-
-    def col(*names):
-        for i, h in enumerate(heads):
-            if any(n in h for n in names):
-                return i
-        return None
-
-    ci = {"year": col("year", "season"), "coach": col("coach"), "overall": col("overall"),
-          "conf": col("conference"), "standing": col("standing", "finish", "place"), "ncaa": col("ncaa", "postseason")}
-    # 'conference' matches both 'Conference' and 'Conference Standing'; pick the first for record.
-    if ci["conf"] is not None and ci["standing"] == ci["conf"]:
-        ci["standing"] = next((i for i, h in enumerate(heads) if "standing" in h), None)
-    seasons = []
-    for tr in t.find_all("tr")[1:]:
-        cells = [common.clean(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
-        if not cells or not YEAR_RE.search(cells[0]) or cells[0].lower().startswith("total"):
+        rows = t.find_all("tr")
+        first = rows[0] if rows else None
+        heads = [common.clean(c.get_text(" ")).lower() for c in first.find_all(["th", "td"])] if first else []
+        if not heads or not heads[0].startswith(("year", "season")):
             continue
+        def is_season_row(r):
+            first_txt = common.clean(r.find(["th", "td"]).get_text(" ")) if r.find(["th", "td"]) else ""
+            # '2011' or '2020–21' are seasons; '2007–2013' is a coaching era, not a season
+            return bool(r.find("td")) and bool(YEAR_RE.match(first_txt)) and not re.search(r"\d{4}\s*[–-]\s*\d{4}", first_txt)
+        data_rows = [r for r in rows if is_season_row(r)]
+        if len(data_rows) < 5:
+            continue
+        joined = " ".join(common.clean(r.get_text(" ")).lower() for r in rows[:3])
+        if not re.search(r"record|overall|wins|w–l|w-l", joined) or re.search(r"opponent|round", joined):
+            continue
+        if best is None or len(data_rows) > len(best[1]):
+            best = (t, data_rows, rows)
+    if not best:
+        return []
+    t, data_rows, rows = best
+    header_txt = " ".join(common.clean(r.get_text(" ")).lower() for r in rows[:3])
+    split_wlt = "wins" in header_txt and "losses" in header_txt
+    seasons, coach_last = [], None
+    for tr in data_rows:
+        cells = [common.clean(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
         year_txt = cells[0]
         year = int(YEAR_RE.search(year_txt).group(0))
-
-        def cell(k):
-            i = ci.get(k)
-            return cells[i] if i is not None and i < len(cells) else ""
-
-        rec = _record(cell("overall"))
-        crec = _record(cell("conf"))
+        rest = cells[1:]
+        coach = next((c for c in rest if COACH_RE.match(c) and not BAD_COACH.search(c) and not RECORD_RE.search(c)), None)
+        if coach:
+            coach_last = coach
+        else:
+            coach = coach_last
+        rec = crec = None
+        if split_wlt:
+            nums = [int(c) for c in rest if re.fullmatch(r"\d{1,2}", c)]
+            if len(nums) >= 3:
+                rec = {"w": nums[0], "l": nums[1], "t": nums[2], "text": f"{nums[0]}-{nums[1]}-{nums[2]}"}
+            if len(nums) >= 6:
+                crec = {"w": nums[3], "l": nums[4], "t": nums[5], "text": f"{nums[3]}-{nums[4]}-{nums[5]}"}
+        else:
+            recs = [c for c in rest if RECORD_RE.search(c) and not re.search(r"[A-Za-z]{4,}", c)]
+            rec = _record(recs[0]) if recs else None
+            crec = _record(recs[1]) if len(recs) > 1 else None
+        ncaa = None
+        for c in rest:
+            m = NCAA_RE.search(c)
+            if m:
+                ncaa = common.clean(m.group(0))
+                break
+        if ncaa is None and split_wlt:
+            tail = [c for c in rest if not re.fullmatch(r"\d{1,2}", c) and c not in ("—", "–", "-") and c != coach]
+            if tail:
+                ncaa = "NCAA " + tail[-1] if "ncaa" not in tail[-1].lower() else tail[-1]
+        finish = None
+        for c in rest:
+            if c == coach or (ncaa and c == ncaa):
+                continue
+            m = FINISH_RE.search(c)
+            if m and not re.search(r"round|ncaa", c, re.I):
+                finish = m.group(1)
+                break
         seasons.append({
-            "year": year, "label": year_txt,
-            "headCoach": cell("coach") or None,
+            "year": year, "label": year_txt, "headCoach": coach,
             "record": rec["text"] if rec else None,
             "wins": rec["w"] if rec else None, "losses": rec["l"] if rec else None, "ties": rec["t"] if rec else None,
-            "confRecord": crec["text"] if crec else None,
-            "confFinish": cell("standing") or None,
-            "ncaaResult": cell("ncaa") or None,
+            "confRecord": crec["text"] if crec else None, "confFinish": finish, "ncaaResult": ncaa,
         })
     return seasons
 
@@ -127,7 +168,8 @@ def collect(program: dict, registry: dict) -> dict:
         "nickname": find("nickname") or None,
         "nationalTitles": _years(find("tournament championships", "national championships")),
         "nationalRunnerUp": _years(find("runner-up", "runner up")),
-        "collegeCups": _years(find("college cup")),
+        # some articles label the final four 'Semifinals' instead of 'College Cup'
+        "collegeCups": _years(find("college cup") or find("semifinal")),
         "ncaaQuarterfinals": _years(find("quarterfinal")),
         "ncaaAppearances": _years(find("tournament appearances", "ncaa appearances")),
         "confRegularSeasonTitles": _years(find("regular season champ")),
