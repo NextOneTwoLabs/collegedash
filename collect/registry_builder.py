@@ -57,7 +57,7 @@ STATE_TZ = {
 ALIASES = {
     "UConn": {"wiki": "UConn", "hist": "ConnecticutU"}, "Ole Miss": {"wiki": "Ole Miss", "tds": "mississippi", "hist": "MississippiU"},
     "UCF": {"wiki": "UCF", "tds": "ucf"}, "ULM": {"wiki": "Louisiana–Monroe", "tds": "louisiana-monroe", "hist": "LouisianaMonroe"},
-    "Miami (FL)": {"wiki": "Miami (FL)", "tds": "miami"}, "Miami (OH)": {"wiki": "Miami (OH)", "tds": "miami-oh"},
+    "Miami (FL)": {"wiki": "Miami (FL)", "tds": "miami-(fl)"}, "Miami (OH)": {"wiki": "Miami (OH)", "tds": "miami-(oh)"},
     "South Fla.": {"wiki": "South Florida", "tds": "south-florida", "hist": "SouthFlorida"},
     "ETSU": {"wiki": "East Tennessee State", "tds": "east-tennessee-state", "hist": "EastTennesseeState"},
     "FIU": {"wiki": "FIU", "tds": "fiu"}, "FGCU": {"wiki": "FGCU", "tds": "fgcu", "hist": "FloridaGulfCoast"},
@@ -66,7 +66,7 @@ ALIASES = {
     "CSUN": {"wiki": "Cal State Northridge", "tds": "csun", "hist": "CalStateNorthridge"},
     "Massachusetts": {"wiki": "UMass", "tds": "massachusetts", "hist": "Massachusetts"},
     "UMass Lowell": {"wiki": "UMass Lowell", "tds": "massachusetts-lowell"},
-    "Penn": {"wiki": "Penn", "tds": "penn", "hist": "PennsylvaniaU"}, "Loyola Maryland": {"wiki": "Loyola (MD)", "hist": "LoyolaMD"},
+    "Penn": {"wiki": "Penn", "tds": "penn", "hist": "PennsylvaniaU"}, "Loyola Maryland": {"wiki": "Loyola (MD)", "tds": "loyola-(md)", "hist": "LoyolaMD"},
     "LMU (CA)": {"wiki": "Loyola Marymount", "tds": "loyola-marymount", "hist": "LoyolaMarymount"},
     "Loyola Chicago": {"tds": "loyola-chicago"}, "Grambling": {"wiki": "Grambling State", "tds": "grambling-state", "hist": "Grambling"},
     "NIU": {"wiki": "Northern Illinois", "tds": "northern-illinois", "hist": "NorthernIllinois"},
@@ -74,7 +74,7 @@ ALIASES = {
     "UIW": {"wiki": "Incarnate Word", "tds": "incarnate-word", "hist": "IncarnateWord"},
     "UTRGV": {"wiki": "UT Rio Grande Valley", "tds": "utrgv", "hist": "TexasRGV"}, "UTSA": {"wiki": "UTSA", "tds": "utsa"},
     "UTEP": {"wiki": "UTEP", "tds": "utep"}, "LIU": {"wiki": "LIU", "tds": "liu", "hist": "LongIsland"},
-    "Queens (NC)": {"wiki": "Queens", "tds": "queens", "hist": "Queens"},
+    "Queens (NC)": {"wiki": "Queens", "tds": "queens-(nc)", "hist": "Queens"},
     "IU Indy": {"wiki": "IU Indianapolis", "tds": "iu-indianapolis", "hist": "IUPUI"},
     "Prairie View": {"wiki": "Prairie View A&M", "tds": "prairie-view-am", "hist": "PrairieViewA&M"},
     "Saint Francis": {"wiki": "Saint Francis", "tds": "saint-francis", "hist": "StFrancis"},
@@ -83,8 +83,8 @@ ALIASES = {
     "San Diego St.": {"tds": "san-diego-state"},
     "Southern Miss.": {"tds": "southern-mississippi", "hist": "SouthernMississippi"}, "McNeese": {"tds": "mcneese-state", "hist": "McNeeseState"},
     "SIUE": {"wiki": "SIU Edwardsville", "tds": "siue", "hist": "SIUEdwardsville"}, "Southern Ill.": {"hist": "SIUCarbondale"},
-    "St. Thomas (MN)": {"wiki": "St. Thomas", "tds": "st-thomas", "hist": "StThomas"}, "Saint Louis": {"tds": "saint-louis", "hist": "StLouis"},
-    "Saint Mary's (CA)": {"wiki": "Saint Mary's", "tds": "saint-marys", "hist": "StMarys"},
+    "St. Thomas (MN)": {"wiki": "St. Thomas", "tds": "st-thomas-(minn)", "hist": "StThomas"}, "Saint Louis": {"tds": "saint-louis", "hist": "StLouis"},
+    "Saint Mary's (CA)": {"wiki": "Saint Mary's", "tds": "st-marys-(ca)", "hist": "StMarys"},
     "St. John's (NY)": {"tds": "st-johns", "hist": "StJohns"},
     "Saint Joseph's": {"tds": "saint-josephs", "hist": "StJosephs"}, "Saint Peter's": {"tds": "saint-peters", "hist": "StPeters"},
     "Mount St. Mary's": {"tds": "mount-st-marys", "hist": "MountStMary"}, "St. Bonaventure": {"tds": "st-bonaventure", "hist": "StBonaventure"},
@@ -235,7 +235,7 @@ def fetch_tds_teams() -> dict[str, dict]:
             common.log(f"registry: tds conference {slug} failed: {e}")
             continue
         soup = BeautifulSoup(html, "html.parser")
-        for a in soup.find_all("a", href=re.compile(r"/college-soccer-details/women/([a-z0-9-]+)/clgid-(\d+)")):
+        for a in soup.find_all("a", href=re.compile(r"/college-soccer-details/women/([a-z0-9()'.-]+)/clgid-(\d+)")):
             m = re.search(r"/women/([a-z0-9-]+)/clgid-(\d+)", a["href"])
             name = a.get_text(" ", strip=True)
             if name and len(name) > 1:
