@@ -333,7 +333,9 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> l
         if fs and (c["firstSeen"] is None or fs < c["firstSeen"]):
             c["firstSeen"] = fs
 
-    tds_url = registry["sources"]["tds"]["teamCommitments"].format(tdsSlug=program["ids"]["tdsSlug"], tdsClgId=program["ids"]["tdsClgId"])
+    ids = program["ids"]
+    tds_url = (registry["sources"]["tds"]["teamCommitments"].format(tdsSlug=ids["tdsSlug"], tdsClgId=ids["tdsClgId"])
+               if ids.get("tdsClgId") and ids.get("tdsSlug") else None)
     for key, r in ((tds or {}).get("data", {}).get("records") or {}).items():
         add(r, {"kind": "tds", "url": r.get("playerUrl") or tds_url, "listUrl": tds_url,
                 "firstSeen": r.get("firstSeen"), "lastSeen": r.get("lastSeen"), "missingSince": r.get("missingSince")}, prefer=True)
@@ -425,7 +427,8 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur) -> dict:
         "links": {
             "athletics": a["baseUrl"] + a["sportPath"], "roster": a["baseUrl"] + a["sportPath"] + "/roster",
             "schedule": a["baseUrl"] + a["sportPath"] + "/schedule", "news": a["baseUrl"] + a["sportPath"] + "/news",
-            "tds": registry["sources"]["tds"]["team"].format(tdsSlug=program["ids"]["tdsSlug"], tdsClgId=program["ids"]["tdsClgId"]),
+            "tds": (registry["sources"]["tds"]["team"].format(tdsSlug=program["ids"]["tdsSlug"], tdsClgId=program["ids"]["tdsClgId"])
+                    if program["ids"].get("tdsClgId") and program["ids"].get("tdsSlug") else None),
             "wikipedia": (wiki or {}).get("data", {}).get("pageUrl"),
             "x": f"https://x.com/{program['social']['x']}" if program.get("social", {}).get("x") else None,
             "instagram": f"https://www.instagram.com/{program['social']['instagram']}/" if program.get("social", {}).get("instagram") else None,

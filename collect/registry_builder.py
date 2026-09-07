@@ -51,66 +51,139 @@ STATE_TZ = {
     "TN": "America/Chicago",
 }
 
-# NCAA short name -> Wikipedia institution name (only where normalisation alone fails)
-OVERRIDES_WIKI = {
-    "southern california": "usc", "miami (fl)": "miami", "miami (oh)": "miami (ohio)", "lmu (ca)": "loyola marymount",
-    "st. john's (ny)": "st. john's", "ole miss": "mississippi", "uconn": "connecticut", "umass": "massachusetts",
-    "uncw": "unc wilmington", "unc asheville": "unc asheville", "app state": "appalachian state", "fdu": "fairleigh dickinson",
-    "liu": "long island", "ucf": "central florida", "utep": "utep", "utsa": "utsa", "ut martin": "ut martin",
-    "fiu": "florida international", "fgcu": "florida gulf coast", "siue": "siu edwardsville", "smu": "smu", "tcu": "tcu",
-    "byu": "byu", "lsu": "lsu", "vcu": "vcu", "vmi": "vmi", "unlv": "unlv", "usc upstate": "south carolina upstate",
-    "sfa": "stephen f. austin", "csun": "cal state northridge", "ucsb": "uc santa barbara", "uc davis": "uc davis",
-    "uc irvine": "uc irvine", "uc riverside": "uc riverside", "uc san diego": "uc san diego", "umbc": "umbc", "umkc": "kansas city",
-    "penn": "pennsylvania", "pitt": "pittsburgh", "ga. southern": "georgia southern", "ga. tech": "georgia tech",
-    "col. of charleston": "college of charleston", "charleston so.": "charleston southern",
-    "boston u.": "boston university", "boston college": "boston college", "colorado": "colorado", "colorado col.": "colorado college",
-    "army west point": "army", "navy": "navy", "air force": "air force", "cal poly": "cal poly", "cal baptist": "california baptist",
-    "long beach st.": "long beach state", "sacramento st.": "sacramento state", "san diego st.": "san diego state",
-    "san jose st.": "san jose state", "fresno st.": "fresno state", "cal st. fullerton": "cal state fullerton",
-    "cal st. bakersfield": "cal state bakersfield", "saint mary's (ca)": "saint mary's", "loyola chicago": "loyola chicago",
-    "loyola maryland": "loyola maryland", "seattle u": "seattle", "the citadel": "the citadel", "ut rio grande valley": "utrgv",
-    "texas a&m-commerce": "east texas a&m", "queens (nc)": "queens university of charlotte", "southern ill.": "southern illinois",
-    "northern ill.": "northern illinois", "eastern ill.": "eastern illinois", "western ill.": "western illinois",
-    "eastern mich.": "eastern michigan", "western mich.": "western michigan", "central mich.": "central michigan",
-    "northern ky.": "northern kentucky", "western ky.": "western kentucky", "eastern ky.": "eastern kentucky",
-    "middle tenn.": "middle tennessee", "east tenn. st.": "east tennessee state", "southern miss.": "southern miss",
-    "ga. southern": "georgia southern", "ga. tech": "georgia tech", "fla. atlantic": "florida atlantic", "north fla.": "north florida",
-    "central conn. st.": "central connecticut", "southern ind.": "southern indiana", "purdue fort wayne": "purdue fort wayne",
-    "omaha": "omaha", "unc greensboro": "unc greensboro", "n.c. a&t": "north carolina a&t", "n.c. central": "north carolina central",
-    "nc state": "nc state", "ole miss": "ole miss", "mississippi val.": "mississippi valley state", "alcorn": "alcorn state",
-    "ark.-pine bluff": "arkansas–pine bluff", "little rock": "little rock", "central ark.": "central arkansas",
-    "northwestern st.": "northwestern state", "southeastern la.": "southeastern louisiana", "la.-monroe": "louisiana–monroe",
-    "mcneese": "mcneese", "nicholls": "nicholls", "houston christian": "houston christian", "a&m-corpus christi": "texas a&m–corpus christi",
-    "st. thomas (mn)": "st. thomas", "st. bonaventure": "st. bonaventure", "st. francis (pa)": "saint francis", "st. peter's": "saint peter's",
-    "mount st. mary's": "mount st. mary's", "saint joseph's": "saint joseph's", "saint louis": "saint louis", "detroit mercy": "detroit mercy",
-    "iupui": "iu indianapolis", "iu indy": "iu indianapolis", "ualbany": "albany", "umass lowell": "umass lowell", "uconn": "connecticut",
-    "southern utah": "southern utah", "utah tech": "utah tech", "utah valley": "utah valley", "tarleton st.": "tarleton state",
-    "grand canyon": "grand canyon", "sam houston": "sam houston", "kennesaw st.": "kennesaw state", "jacksonville st.": "jacksonville state",
-    "app state": "appalachian state", "james madison": "james madison", "old dominion": "old dominion", "coastal carolina": "coastal carolina",
-    "wright st.": "wright state", "youngstown st.": "youngstown state", "cleveland st.": "cleveland state", "oakland": "oakland",
-    "green bay": "green bay", "milwaukee": "milwaukee", "robert morris": "robert morris",
+# NCAA short name -> per-source targets that no normalisation can reach.
+#   wiki: institution as in the Wikipedia list; tds: TopDrawerSoccer slug; hist: RPI-archive team name;
+#   site: athletics website; scorecard: Scorecard school name
+ALIASES = {
+    "UConn": {"wiki": "UConn", "hist": "ConnecticutU"}, "Ole Miss": {"wiki": "Ole Miss", "tds": "mississippi", "hist": "MississippiU"},
+    "UCF": {"wiki": "UCF", "tds": "ucf"}, "ULM": {"wiki": "Louisiana–Monroe", "tds": "louisiana-monroe", "hist": "LouisianaMonroe"},
+    "Miami (FL)": {"wiki": "Miami (FL)", "tds": "miami"}, "Miami (OH)": {"wiki": "Miami (OH)", "tds": "miami-oh"},
+    "South Fla.": {"wiki": "South Florida", "tds": "south-florida", "hist": "SouthFlorida"},
+    "ETSU": {"wiki": "East Tennessee State", "tds": "east-tennessee-state", "hist": "EastTennesseeState"},
+    "FIU": {"wiki": "FIU", "tds": "fiu"}, "FGCU": {"wiki": "FGCU", "tds": "fgcu", "hist": "FloridaGulfCoast"},
+    "Col. of Charleston": {"wiki": "Charleston", "tds": "charleston", "hist": "CollegeofCharleston"},
+    "CSU Bakersfield": {"wiki": "Cal State Bakersfield", "tds": "cal-state-bakersfield", "hist": "CalStateBakersfield"},
+    "CSUN": {"wiki": "Cal State Northridge", "tds": "csun", "hist": "CalStateNorthridge"},
+    "Massachusetts": {"wiki": "UMass", "tds": "massachusetts", "hist": "Massachusetts"},
+    "UMass Lowell": {"wiki": "UMass Lowell", "tds": "massachusetts-lowell"},
+    "Penn": {"wiki": "Penn", "tds": "penn", "hist": "PennsylvaniaU"}, "Loyola Maryland": {"wiki": "Loyola (MD)", "hist": "LoyolaMD"},
+    "LMU (CA)": {"wiki": "Loyola Marymount", "tds": "loyola-marymount", "hist": "LoyolaMarymount"},
+    "Loyola Chicago": {"tds": "loyola-chicago"}, "Grambling": {"wiki": "Grambling State", "tds": "grambling-state", "hist": "Grambling"},
+    "NIU": {"wiki": "Northern Illinois", "tds": "northern-illinois", "hist": "NorthernIllinois"},
+    "UNI": {"wiki": "Northern Iowa", "tds": "northern-iowa", "hist": "NorthernIowa"},
+    "UIW": {"wiki": "Incarnate Word", "tds": "incarnate-word", "hist": "IncarnateWord"},
+    "UTRGV": {"wiki": "UT Rio Grande Valley", "tds": "utrgv", "hist": "TexasRGV"}, "UTSA": {"wiki": "UTSA", "tds": "utsa"},
+    "UTEP": {"wiki": "UTEP", "tds": "utep"}, "LIU": {"wiki": "LIU", "tds": "liu", "hist": "LongIsland"},
+    "Queens (NC)": {"wiki": "Queens", "tds": "queens", "hist": "Queens"},
+    "IU Indy": {"wiki": "IU Indianapolis", "tds": "iu-indianapolis", "hist": "IUPUI"},
+    "Prairie View": {"wiki": "Prairie View A&M", "tds": "prairie-view-am", "hist": "PrairieViewA&M"},
+    "Saint Francis": {"wiki": "Saint Francis", "tds": "saint-francis", "hist": "StFrancis"},
+    "Milwaukee": {"tds": "wisconsin-milwaukee"}, "Green Bay": {"tds": "wisconsin-green-bay", "site": "https://greenbayphoenix.com"},
+    "Chattanooga": {"tds": "ut-chattanooga"}, "Siena": {"tds": "siena-college"}, "Sam Houston": {"tds": "sam-houston-state"},
+    "San Diego St.": {"tds": "san-diego-state"},
+    "Southern Miss.": {"tds": "southern-mississippi", "hist": "SouthernMississippi"}, "McNeese": {"tds": "mcneese-state", "hist": "McNeeseState"},
+    "SIUE": {"wiki": "SIU Edwardsville", "tds": "siue", "hist": "SIUEdwardsville"}, "Southern Ill.": {"hist": "SIUCarbondale"},
+    "St. Thomas (MN)": {"wiki": "St. Thomas", "tds": "st-thomas", "hist": "StThomas"}, "Saint Louis": {"tds": "saint-louis", "hist": "StLouis"},
+    "Saint Mary's (CA)": {"wiki": "Saint Mary's", "tds": "saint-marys", "hist": "StMarys"},
+    "St. John's (NY)": {"tds": "st-johns", "hist": "StJohns"},
+    "Saint Joseph's": {"tds": "saint-josephs", "hist": "StJosephs"}, "Saint Peter's": {"tds": "saint-peters", "hist": "StPeters"},
+    "Mount St. Mary's": {"tds": "mount-st-marys", "hist": "MountStMary"}, "St. Bonaventure": {"tds": "st-bonaventure", "hist": "StBonaventure"},
+    "NC State": {"wiki": "NC State", "tds": "nc-state", "hist": "NCState"},
+    "App State": {"wiki": "Appalachian State", "tds": "appalachian-state", "hist": "AppalachianState"},
+    "Army West Point": {"wiki": "Army", "tds": "army", "hist": "Army"},
+    "UNCW": {"wiki": "UNC Wilmington", "tds": "unc-wilmington", "hist": "UNCWilmington"},
+    "UIC": {"wiki": "UIC", "tds": "uic", "hist": "IllinoisChicago"}, "Kansas City": {"wiki": "Kansas City", "tds": "kansas-city", "hist": "UMKC"},
+    "USC Upstate": {"wiki": "USC Upstate", "tds": "usc-upstate", "hist": "USCUpstate"},
+    "SFA": {"wiki": "Stephen F. Austin", "tds": "stephen-f-austin", "hist": "StephenFAustin"},
+    "Little Rock": {"wiki": "Little Rock", "tds": "little-rock", "hist": "UALR"}, "Omaha": {"wiki": "Omaha", "tds": "omaha", "hist": "UNOmaha"},
+    "FDU": {"wiki": "Fairleigh Dickinson", "tds": "fairleigh-dickinson", "hist": "FairleighDickinson"},
+    "Southeastern La.": {"hist": "SELouisiana"}, "UT Martin": {"wiki": "UT Martin", "tds": "ut-martin", "hist": "TennesseeMartin"},
+    "UAlbany": {"wiki": "Albany", "tds": "albany", "hist": "Albany"}, "Purdue Fort Wayne": {"hist": "IPFW"},
+    "Houston Christian": {"hist": "HoustonBaptist"}, "East Texas A&M": {"tds": "east-texas-am", "hist": "TexasCommerce"},
+    "A&M-Corpus Christi": {"wiki": "Texas A&M–Corpus Christi", "tds": "texas-am-corpus-christi", "hist": "TexasCorpusChristi"},
+    "Louisiana": {"wiki": "Louisiana", "tds": "louisiana", "hist": "LouisianaLafayette"},
+    "Southern U.": {"wiki": "Southern", "tds": "southern", "hist": "SouthernU"},
+    "Mississippi Val.": {"wiki": "Mississippi Valley State", "tds": "mississippi-valley-state", "hist": "MississippiValley"},
+    "Alcorn": {"wiki": "Alcorn State", "tds": "alcorn-state"}, "Detroit Mercy": {"tds": "detroit-mercy"}, "Seattle U": {"wiki": "Seattle", "tds": "seattle"},
+    "California Baptist": {"tds": "cal-baptist"}, "Boston U.": {"wiki": "Boston University", "hist": "BostonU"},
+    "The Citadel": {"wiki": "The Citadel", "tds": "the-citadel", "scorecard": "Citadel Military College of South Carolina"},
+    "Virginia Tech": {"scorecard": "Virginia Polytechnic Institute and State University"},
+    "Columbia": {"scorecard": "Columbia University in the City of New York"},
+    "Hawaii": {"wiki": "Hawaii", "scorecard": "University of Hawaii at Manoa"}, "Weber St.": {"scorecard": "Weber State University"},
+    "Southern Ind.": {"scorecard": "University of Southern Indiana", "hist": "SouthernIndiana"},
+    "BYU": {"site": "https://byucougars.com"}, "Elon": {"site": "https://elonphoenix.com"}, "North Dakota": {"site": "https://fightinghawks.com"},
+    "UIW": {"wiki": "Incarnate Word", "tds": "incarnate-word", "hist": "IncarnateWord", "site": "https://uiwcardinals.com"},
+    "FGCU": {"wiki": "Florida Gulf Coast", "tds": "fgcu", "hist": "FloridaGulfCoast", "scorecard": "Florida Gulf Coast University"},
+    "Central Conn. St.": {"wiki": "Central Connecticut", "tds": "central-connecticut", "hist": "CentralConnecticut", "scorecard": "Central Connecticut State University"},
+    "St. John's (NY)": {"wiki": "St. John's", "tds": "st-johns", "hist": "StJohns", "scorecard": "St. John's University-New York"},
+    "Southern Miss.": {"wiki": "Southern Miss", "tds": "southern-mississippi", "hist": "SouthernMississippi", "scorecard": "University of Southern Mississippi"},
+    "Mississippi Val.": {"hist": "MississippiValley", "scorecard": "Mississippi Valley State University"},
+    "Saint Francis": {"hist": "StFrancis", "scorecard": "Saint Francis University", "site": "https://sfuathletics.com"},
+    "Ark.-Pine Bluff": {"wiki": "Arkansas\u2013Pine Bluff", "tds": "arkansas-pine-bluff", "hist": "ArkansasPineBluff", "scorecard": "University of Arkansas at Pine Bluff"},
+    "Miami (OH)": {"wiki": "Miami (OH)", "scorecard": "Miami University-Oxford"},
+    "Southern U.": {"wiki": "Southern", "hist": "SouthernU", "scorecard": "Southern University and A & M College"},
+    "UConn": {"wiki": "UConn", "tds": "connecticut", "hist": "ConnecticutU", "site": "https://uconnhuskies.com"},
+    "FIU": {"wiki": "FIU", "tds": "florida-international"},
+    "UMass Lowell": {"wiki": "UMass Lowell", "tds": "massachusetts-lowell", "hist": "UMassLowell"},
+    "Tarleton St.": {"hist": "Tarleton"}, "Morehead St.": {"hist": "Morehead"}, "Nicholls": {"hist": "NichollsState", "site": "https://geauxcolonels.com"},
+    "Detroit Mercy": {"tds": "detroit-mercy", "hist": "Detroit"},
+    "Penn St.": {"site": "https://gopsusports.com"}, "LMU (CA)": {"wiki": "Loyola Marymount", "tds": "loyola-marymount", "hist": "LoyolaMarymount", "site": "https://lmulions.com"},
+    "East Texas A&M": {"tds": "east-texas-am", "hist": "TexasCommerce", "site": "https://lionathletics.com"},
+    "Lamar University": {"site": "https://lamarcardinals.com"}, "Oregon St.": {"site": "https://osubeavers.com"},
 }
 
 
+EXPAND = {
+    "fla.": "florida", "ga.": "georgia", "ky.": "kentucky", "mich.": "michigan", "ill.": "illinois", "ind.": "indiana",
+    "tenn.": "tennessee", "ark.": "arkansas", "colo.": "colorado", "ariz.": "arizona", "wash.": "washington", "caro.": "carolina",
+    "conn.": "connecticut", "mo.": "missouri", "la.": "louisiana", "miss.": "mississippi", "ala.": "alabama", "val.": "valley",
+    "col.": "college", "so.": "southern", "mass.": "massachusetts", "tex.": "texas", "okla.": "oklahoma", "minn.": "minnesota",
+    "wis.": "wisconsin", "neb.": "nebraska", "ore.": "oregon", "nev.": "nevada", "va.": "virginia", "pa.": "pennsylvania",
+    "n.c.": "north carolina", "s.c.": "south carolina", "n.j.": "new jersey", "n.y.": "new york", "md.": "maryland",
+    "del.": "delaware", "me.": "maine", "vt.": "vermont", "n.h.": "new hampshire", "r.i.": "rhode island", "w.va.": "west virginia",
+    "nw.": "northwestern", "cent.": "central", "int'l": "international", "intl.": "international",
+}
+
+
+def expand_ncaa(name: str) -> str:
+    """'South Fla.' -> 'South Florida'; 'Charleston So.' -> 'Charleston Southern'. 'St.' handled in norm_school."""
+    return " ".join(EXPAND.get(tok.lower(), tok) for tok in (name or "").split())
+
+
+SAINT_NAMES = r"(john|joseph|mary|peter|francis|thomas|bonaventure|louis|leo|michael|anselm|ambrose|edward|xavier|cloud|olaf)"
+
+
 def norm_school(s: str) -> str:
-    s = (s or "").lower().replace("&", " and ").replace("’", "'")
-    s = re.sub(r"\bst\.\s+(?=[a-z])", lambda m: "saint " if re.match(r"st\.\s+(john|joseph|mary|peter|francis|thomas|bonaventure|louis)", s[m.start():]) else "state ", s)
-    s = s.replace("st.", "state").replace("univ.", "").replace("u.", "")
-    s = re.sub(r"[().,'\-–/]", " ", s)
+    s = common.strip_accents(expand_ncaa(s or "")).lower().replace("&", " and ").replace("\u2019", "'")
+    s = re.sub(r"\bst\.?\s+(?=" + SAINT_NAMES + r")", "saint ", s)      # St. John's -> saint john's
+    s = re.sub(r"\bst\.", "state", s)                                    # Florida St. -> florida state
+    s = re.sub(r"\bmt\.?\s+", "mount ", s)
+    s = s.replace("univ.", "").replace("u.", "")
+    s = re.sub(r"[().,'\-\u2013/]", " ", s)
     # keep 'college' - it disambiguates Colorado vs Colorado College, Boston College, etc.
-    s = re.sub(r"\b(university|univ|of|the|at|campus)\b", " ", s)
+    s = re.sub(r"\b(university|univ|of|the|at|campus|u)\b", " ", s)
     return re.sub(r"\s+", " ", s).strip()
+
+
+def split_camel(s: str) -> str:
+    """'NorthCarolinaU' -> 'North Carolina U', 'UCSantaBarbara' -> 'UC Santa Barbara'."""
+    return re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", s or "")
 
 
 def tokens(s: str) -> set[str]:
     return set(norm_school(s).split())
 
 
-def best_match(name: str, candidates: dict[str, dict], *, min_score: float = 0.6) -> tuple[str | None, float]:
-    """candidates: {normalised name: row}. Exact normalised match first, then token overlap."""
+def best_match(name: str, candidates: dict[str, dict], *, min_score: float = 0.8) -> tuple[str | None, float]:
+    """candidates: {normalised name: row}. Exact normalised match, then compact (space-less) match,
+    then token overlap above min_score."""
     n = norm_school(name)
     if n in candidates:
         return n, 1.0
+    nc = n.replace(" ", "")
+    for cn in candidates:
+        if cn.replace(" ", "") == nc:
+            return cn, 0.95
     t = set(n.split())
     best, score = None, 0.0
     for cn in candidates:
@@ -245,7 +318,7 @@ SCORECARD_COLS = {
     "TUITIONFEE_IN": "latest.cost.tuition.in_state", "TUITIONFEE_OUT": "latest.cost.tuition.out_of_state",
     "COSTT4_A": "latest.cost.attendance.academic_year", "NPT4_PUB": "_npt_pub", "NPT4_PRIV": "_npt_priv",
     "C150_4": "latest.completion.completion_rate_4yr_150nt", "RET_FT4": "latest.student.retention_rate.four_year.full_time",
-    "MD_EARN_WNE_P10": "latest.earnings.10_yrs_after_entry.median", "PREDDEG": "_preddeg",
+    "MD_EARN_WNE_P10": "latest.earnings.10_yrs_after_entry.median", "PREDDEG": "_preddeg", "HIGHDEG": "_highdeg",
 }
 INT_COLS = {"id", "school.locale", "school.carnegie_basic", "school.ownership", "school.religious_affiliation", "latest.student.size",
             "latest.admissions.sat_scores.25th_percentile.critical_reading", "latest.admissions.sat_scores.75th_percentile.critical_reading",
@@ -253,7 +326,7 @@ INT_COLS = {"id", "school.locale", "school.carnegie_basic", "school.ownership", 
             "latest.admissions.sat_scores.average.overall", "latest.admissions.act_scores.25th_percentile.cumulative",
             "latest.admissions.act_scores.75th_percentile.cumulative", "latest.admissions.act_scores.midpoint.cumulative",
             "latest.cost.tuition.in_state", "latest.cost.tuition.out_of_state", "latest.cost.attendance.academic_year",
-            "latest.earnings.10_yrs_after_entry.median", "_npt_pub", "_npt_priv", "_preddeg"}
+            "latest.earnings.10_yrs_after_entry.median", "_npt_pub", "_npt_priv", "_preddeg", "_highdeg"}
 
 
 def _num(v: str, as_int: bool):
@@ -288,7 +361,8 @@ def fetch_scorecard_bulk(registry: dict) -> list[dict]:
         with zf.open(name) as f:
             reader = csv.DictReader(io.TextIOWrapper(f, encoding="utf-8", errors="replace"))
             for row in reader:
-                if row.get("PREDDEG") not in ("3", "4"):
+                # any institution that awards bachelor's degrees (HIGHDEG >= 3)
+                if row.get("HIGHDEG") not in ("3", "4"):
                     continue
                 r = {}
                 for col, key in SCORECARD_COLS.items():
@@ -300,6 +374,7 @@ def fetch_scorecard_bulk(registry: dict) -> list[dict]:
                 r["latest.cost.avg_net_price.overall"] = r.pop("_npt_pub", None) or r.pop("_npt_priv", None)
                 r.pop("_npt_priv", None)
                 r.pop("_preddeg", None)
+                r.pop("_highdeg", None)
                 results.append(r)
     common.write_json(SCORECARD_BULK, {"fetchedAt": common.now_iso(), "source": m.group(0), "count": len(results), "results": results})
     common.log(f"scorecard bulk: {len(results)} bachelor's/graduate institutions cached")
@@ -308,6 +383,8 @@ def fetch_scorecard_bulk(registry: dict) -> list[dict]:
 
 def match_scorecard(wiki_row: dict, bulk: list[dict]) -> dict | None:
     state = common.state_code(wiki_row.get("state"))
+    if not state and wiki_row.get("state"):
+        state = None
     full = (wiki_row.get("institutionArticle") or wiki_row["institution"]).replace("_", " ")
     full = re.sub(r"\s*\(.*?\)\s*$", "", full)
     want = tokens(full) | tokens(wiki_row["institution"])
@@ -329,6 +406,54 @@ def match_scorecard(wiki_row: dict, bulk: list[dict]) -> dict | None:
 
 # ---------- build ----------
 
+CONF_WORDS = {
+    "ACC": {"atlantic-coast", "acc"}, "Big Ten": {"big-ten", "bigten"}, "SEC": {"sec"}, "Big 12": {"big-12", "big12", "bigtwelve"},
+    "Big East": {"big-east", "bigeast"}, "American": {"american-athletic", "american"}, "Independent": {"independent"}, "Sun Belt": {"sun-belt", "sunbelt"},
+    "MAC": {"mid-american", "mac"}, "WCC": {"west-coast", "westcoast"}, "Ivy League": {"ivy-league", "ivy"},
+    "Mountain West": {"mountain-west", "mountainwest"}, "Big West": {"big-west", "bigwest"}, "A-10": {"atlantic-10", "atlantic10", "atlanticten"},
+    "CAA": {"coastal-athletic-association", "caa", "colonial"}, "C-USA": {"conference-usa", "cusa"}, "Horizon": {"horizon-league", "horizon"},
+    "MAAC": {"metro-atlantic-athletic-conference", "maac", "metroatlantic"}, "MVC": {"missouri-valley", "mvc"}, "NEC": {"northeast", "nec"},
+    "OVC": {"ohio-valley", "ovc"}, "Patriot": {"patriot-league", "patriot"}, "SoCon": {"southern", "socon"},
+    "Southland": {"southland"}, "SWAC": {"southwestern-athletic", "swac", "southwestern"}, "Summit League": {"summit-league", "summit"},
+    "UAC": {"united-athletic-conference", "uac", "wac", "asun", "atlanticsun"}, "ASUN": {"asun", "uac", "atlanticsun", "wac"}, "Big Sky": {"big-sky", "bigsky"},
+    "Big South": {"big-south", "bigsouth"}, "America East": {"america-east", "americaeast"}, "Pac-12": {"pacific-12", "pac-12", "pactwelve"},
+}
+
+
+def conf_consistent(ncaa_conf: str, other: str | None) -> bool | None:
+    """Loose check that a matched source row sits in the same conference; None when unknown."""
+    if not other:
+        return None
+    words = CONF_WORDS.get(ncaa_conf)
+    if not words:
+        return None
+    o = other.lower().replace(" ", "").replace("-", "")
+    return any(w.replace("-", "") in o or o in w.replace("-", "") for w in words)
+
+
+def wiki_infobox_site(article: str | None) -> str | None:
+    """Athletics website from the athletics-program article infobox (e.g. 'BYU_Cougars')."""
+    if not article:
+        return None
+    url = "https://en.wikipedia.org/api/rest_v1/page/html/" + urllib.parse.quote(article, safe="")
+    try:
+        html, _ = common.fetch_text(url, max_age_hours=24 * 90)
+    except common.FetchError:
+        return None
+    soup = BeautifulSoup(html, "html.parser")
+    ib = soup.find("table", class_=re.compile(r"\binfobox\b"))
+    if not ib:
+        return None
+    for tr in ib.find_all("tr"):
+        th = tr.find("th")
+        if th and "website" in th.get_text(" ", strip=True).lower():
+            a = tr.find("a", href=True)
+            if a and a["href"].startswith("http"):
+                m = re.match(r"(https?://[^/]+)", a["href"])
+                return m.group(1).replace("http://", "https://") if m else None
+    return None
+
+
 def build(registry: dict, *, limit: int | None = None) -> dict:
     master = load_ncaa_master()
     if not master:
@@ -338,49 +463,76 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     ncaa_index = fetch_ncaa_index()
     bulk = fetch_scorecard_bulk(registry)
     hist = common.read_json(os.path.join(common.RPI_OUT_DIR, "2024.json"), {}) or {}
-    hist_names = {norm_school(re.sub(r"(?<=[a-z])(?=[A-Z])", " ", t["team"])): t["team"] for t in hist.get("teams", [])}
+    hist_rows = {t["team"]: t for t in hist.get("teams", [])}
+    hist_by_norm = {norm_school(split_camel(t)): t for t in hist_rows}
     wiki_by_norm = {norm_school(r["institution"]): r for r in wiki}
+    wiki_by_inst = {r["institution"]: r for r in wiki}
     tds_by_norm = {norm_school(r["tdsName"]): r for r in tds.values()}
+    bulk_by_name = {r.get("school.name"): r for r in bulk}
     existing = {p["slug"]: p for p in registry["programs"]}
     existing_ncaa = {p["ids"].get("ncaaName"): p for p in registry["programs"]}
-    report = {"builtAt": common.now_iso(), "total": len(master), "unmatched": {"wikipedia": [], "tds": [], "ncaaIndex": [],
-              "athleticsUrl": [], "scorecard": [], "rpiHistory": [], "wikiArticle": []}, "lowConfidence": []}
-    programs = []
+    report = {"builtAt": common.now_iso(), "total": len(master),
+              "unmatched": {"wikipedia": [], "tds": [], "athleticsUrl": [], "scorecard": [], "rpiHistory": [], "wikiArticle": []},
+              "lowConfidence": [], "conferenceMismatch": []}
+    programs, used_slugs = [], set()
     for i, m in enumerate(master):
         if limit and i >= limit:
             break
-        name = m["ncaaName"]
+        name, conf = m["ncaaName"], m["conference"]
         if name in existing_ncaa:
             programs.append(existing_ncaa[name])
+            used_slugs.add(existing_ncaa[name]["slug"])
             continue
-        lookup = OVERRIDES_WIKI.get(name.lower(), name)
-        wn, ws = best_match(lookup, wiki_by_norm)
-        w = wiki_by_norm.get(wn) if wn else None
-        tn, ts = best_match(lookup, tds_by_norm)
-        t = tds_by_norm.get(tn) if tn else None
+        al = ALIASES.get(name, {})
+        # --- Wikipedia list row
+        w = wiki_by_inst.get(al["wiki"]) if al.get("wiki") else None
+        ws = 1.0 if w else 0.0
+        if not w:
+            wn, ws = best_match(name, wiki_by_norm)
+            w = wiki_by_norm.get(wn) if wn else None
+        # --- TopDrawerSoccer
+        t = tds.get(al["tds"]) if al.get("tds") else None
+        ts = 1.0 if t else 0.0
+        if not t:
+            tn, ts = best_match(name, tds_by_norm)
+            t = tds_by_norm.get(tn) if tn else None
+        # --- RPI archive name
+        hist_name = al.get("hist") if al.get("hist") in hist_rows else None
+        if not hist_name:
+            hn, hs = best_match(name, {k: {"team": v} for k, v in hist_by_norm.items()}, min_score=0.66)
+            hist_name = hist_by_norm.get(hn) if hn else None
+        # consistency checks against the NCAA conference
+        for label, other in (("rpiHistory", hist_name and hist_rows[hist_name].get("conference")),):
+            ok = conf_consistent(conf, other)
+            if ok is False:
+                report["conferenceMismatch"].append({"ncaaName": name, "conference": conf, "source": label, "matched": other,
+                                                     "matchedName": (t["tdsName"] if label == "tds" else w["institution"] if label == "wiki" else hist_name)})
         if not w:
             report["unmatched"]["wikipedia"].append(name)
         if not t:
             report["unmatched"]["tds"].append(name)
+        if not hist_name:
+            report["unmatched"]["rpiHistory"].append(name)
         if (w and ws < 1.0) or (t and ts < 1.0):
             report["lowConfidence"].append({"ncaaName": name, "wiki": w and w["institution"], "wikiScore": round(ws, 2),
                                             "tds": t and t["tdsName"], "tdsScore": round(ts, 2)})
-        slug = (t["tdsSlug"] if t else common.slugify(w["institution"] if w else name))
-        if slug in existing and existing[slug]["ids"].get("ncaaName") != name:
-            slug = slug + "-" + common.slugify(name)[:8]
+        # --- slug
+        slug = t["tdsSlug"] if t else common.slugify(w["institution"] if w else name)
+        if slug in used_slugs or (slug in existing and existing[slug]["ids"].get("ncaaName") != name):
+            slug = common.slugify(name)
+        used_slugs.add(slug)
+        # --- athletics website: alias > NCAA.com school page > Wikipedia athletics infobox
         ncaa_slug = ncaa_index.get(name)
-        if not ncaa_slug:
-            report["unmatched"]["ncaaIndex"].append(name)
-        ath_url = fetch_athletics_url(ncaa_slug) if ncaa_slug else None
+        ath_url = al.get("site") or (fetch_athletics_url(ncaa_slug) if ncaa_slug else None) or wiki_infobox_site(w.get("athleticsArticle") if w else None)
         if not ath_url:
             report["unmatched"]["athleticsUrl"].append(name)
-        sc = match_scorecard(w, bulk) if w else None
+        # --- Scorecard
+        sc = bulk_by_name.get(al["scorecard"]) if al.get("scorecard") else None
+        if not sc and w:
+            sc = match_scorecard(w, bulk)
         if not sc:
             report["unmatched"]["scorecard"].append(name)
-        hn, hs = best_match(name, {k: {"team": v} for k, v in hist_names.items()}, min_score=0.5)
-        hist_name = hist_names.get(hn) if hn else None
-        if not hist_name:
-            report["unmatched"]["rpiHistory"].append(name)
+        # --- Wikipedia soccer article
         wiki_title = soccer_article_for(w.get("athleticsArticle")) if w else None
         if not wiki_title:
             report["unmatched"]["wikiArticle"].append(name)
@@ -389,7 +541,7 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
             "slug": slug, "onboarded": False,
             "name": (w["institutionArticle"].replace("_", " ") if w and w.get("institutionArticle") else (w["institution"] if w else name)),
             "shortName": w["institution"] if w else name, "nickname": w["nickname"] if w else None,
-            "division": "D1", "conference": m["conference"], "colors": None,
+            "division": "D1", "conference": conf, "colors": None,
             "athletics": {"platform": "auto", "baseUrl": ath_url, "sportPath": "/sports/womens-soccer"},
             "ids": {"scorecardUnitId": sc.get("id") if sc else None, "tdsClgId": t["tdsClgId"] if t else None,
                     "tdsSlug": t["tdsSlug"] if t else None, "wikipedia": wiki_title, "ncaaName": name,
@@ -406,5 +558,6 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     common.save_registry(registry)
     report["counts"] = {k: len(v) for k, v in report["unmatched"].items()}
     common.write_json(REPORT_PATH, report)
-    common.log(f"registry: {len(programs)} programs; unmatched {report['counts']}; low-confidence {len(report['lowConfidence'])}")
+    common.log(f"registry: {len(programs)} programs; unmatched {report['counts']}; low-confidence {len(report['lowConfidence'])}; "
+               f"conference mismatches {len(report['conferenceMismatch'])}")
     return report

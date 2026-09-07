@@ -67,7 +67,8 @@ def _search(registry: dict, must: list[dict], *, size: int = PAGE, frm: int = 0,
 
 
 def team_key(program: dict) -> str:
-    return (program.get("ids") or {}).get("soccerwireTeam") or f"{program['ids']['tdsSlug']}-women"
+    ids = program.get("ids") or {}
+    return ids.get("soccerwireTeam") or f"{ids.get('tdsSlug') or program['slug']}-women"
 
 
 def collect(program: dict, registry: dict) -> dict:

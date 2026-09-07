@@ -597,7 +597,7 @@ async function tabCommitments(p) {
         ${p.curated?.recruitingNotes ? `<h4 style="margin-top:8px">My recruiting notes</h4><p class="prose">${esc(p.curated.recruitingNotes)}</p>` : ''}</div>
     </div>
     ${list || '<div class="card empty">No commitments collected yet.</div>'}
-    ${prov([{ source: 'TopDrawerSoccer team page', url: p.links.tds + '/tab-commitments', asOf: null }, { source: 'SoccerWire player directory', url: 'https://www.soccerwire.com/soccer-player-directory/', asOf: null }])}`;
+    ${prov([{ source: 'TopDrawerSoccer team page', url: p.links.tds ? p.links.tds + '/tab-commitments' : null, asOf: null }, { source: 'SoccerWire player directory', url: 'https://www.soccerwire.com/soccer-player-directory/', asOf: null }])}`;
 }
 
 async function tabSchedule(p) {

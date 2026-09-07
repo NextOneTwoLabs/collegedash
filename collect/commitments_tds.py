@@ -129,6 +129,8 @@ def _diff_merge(prev_records: dict, fresh: list[dict], today: str) -> tuple[dict
 
 def collect(program: dict, registry: dict) -> dict:
     ids = program["ids"]
+    if not ids.get("tdsClgId") or not ids.get("tdsSlug"):
+        raise common.FetchError("tds: no TopDrawerSoccer team id in registry for this program")
     url = registry["sources"]["tds"]["teamCommitments"].format(tdsSlug=ids["tdsSlug"], tdsClgId=ids["tdsClgId"])
     html, meta = common.fetch_text(url, max_age_hours=12)
     fresh = parse_team_commitments(html)
