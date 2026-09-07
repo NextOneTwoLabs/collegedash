@@ -59,7 +59,7 @@
         "type": "object",
         "required": ["year"],
         "properties": {
-          "year": {"type": "integer", "minimum": 1980, "maximum": 2100},
+          "year": {"type": "integer", "minimum": 1970, "maximum": 2100},
           "record": {"type": ["string", "null"], "pattern": "^\\d+-\\d+-\\d+$"},
           "rpiRank": {"type": ["integer", "null"], "minimum": 1}
         }
