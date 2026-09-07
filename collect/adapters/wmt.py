@@ -166,6 +166,13 @@ def parse_roster(html: str, base_url: str) -> dict:
             })
     if not players:
         _parse_redesign_layouts(soup, base_url, players, staff)
+    if not players:
+        _parse_legacy_layouts(soup, base_url, players, staff)
+    if not players and soup.find("table"):  # plain-table themes (arkansasrazorbacks.com)
+        from .sidearm import parse_roster_tables
+        tp, ts = parse_roster_tables(soup, base_url)
+        players.extend(tp)
+        staff.extend(ts)
     # de-duplicate staff (cards can appear twice in markup for mobile/desktop)
     seen, uniq = set(), []
     for s in staff:
@@ -203,6 +210,8 @@ def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, s
       table      <table> with roster-table-cell--* cells    (byucougars.com, ucfknights.com, nusports.com)
     Unlabeled card values are classified by shape: 5′10″ = height, 'Gr.'/'Junior' = class, else hometown."""
     for card in soup.select(".roster-card"):
+        if not card.select_one(".roster-card__title-link, .roster-card__body, .roster-card__heading"):
+            continue  # older themes use .roster-card as the wrapper of the whole list
         link = card.select_one("a.roster-card__title-link") or next(
             (l for l in card.select("a[href*='/roster/']") if common.clean(l.get_text(" "))), None)
         if not link:
@@ -452,3 +461,64 @@ def parse_news(html: str, base_url: str) -> list[dict]:
         seen.add(href)
         items.append({"title": title, "url": href, "date": date})
     return items
+
+
+def _split_info(txt: str) -> tuple[str, str, str]:
+    """'Goalkeeper - 5'11" Sophomore' / '5'7" / Junior' -> (position, height, class label)."""
+    txt = common.clean(txt.replace(" ", " "))
+    pos = ""
+    if " - " in txt:
+        pos, txt = [common.clean(x) for x in txt.split(" - ", 1)]
+    m = HEIGHT_RE.search(txt)
+    height = txt[m.start():m.end() + (1 if txt[m.end():m.end() + 1] in ('"', "″") else 0)] if m else ""
+    rest = txt.replace(height, "") if height else txt
+    rest = common.clean(rest.replace("/", " "))
+    class_label = rest if class_code(rest) else ""
+    return pos, height, class_label
+
+
+def _parse_legacy_layouts(soup: BeautifulSoup, base_url: str, players: list, staff: list) -> None:
+    """Older WMT themes: schema.org Person items (gamecocksonline.com: li[itemprop=athlete] with
+    .person__name / span.number / span.position / p.info) and the roster-item theme
+    (ukathletics.com: .roster-item with .roster-item__name / __number / __info). Coaches sit in a
+    following list with /roster/coach/ links."""
+    for item in soup.select("[itemprop='athlete']"):
+        link = item.select_one("a[href*='/roster/player/'], a[href*='/roster/']")
+        if not link:
+            continue
+        name_el = item.select_one(".person__name, .roster-item__name")
+        name = common.clean(name_el.get_text(" ")) if name_el else ""
+        if not name:
+            n = item.select_one("[itemprop='name']")
+            name = common.clean(n.get("content") or n.get_text(" ")) if n else ""
+        if not name:
+            continue
+        pos_el = item.select_one(".position, .roster-item__position")
+        info_el = item.select_one(".info, .roster-item__info")
+        pos, height, class_label = _split_info(info_el.get_text(" ") if info_el else "")
+        if pos_el:
+            pos = common.clean(pos_el.get_text(" "))
+        num_el = item.select_one(".number, .roster-item__number")
+        loc_el = item.select_one(".location, .roster-item__location")
+        players.append({
+            "number": common.clean(num_el.get_text()).lstrip("#") if num_el else "",
+            "name": name, "pos": common.norm_pos(pos), "posLabel": pos,
+            "height": height.replace("′", "'").replace("″", '"'), "heightIn": height_inches(height),
+            "classLabel": class_label, "classCode": class_code(class_label),
+            "hometown": common.clean(loc_el.get_text(" ")) if loc_el else "", "highSchool": "", "previousSchool": "",
+            "major": "", "club": "", "bioUrl": urljoin(base_url, link["href"]), "social": _social(item),
+        })
+    seen = set()
+    for link in soup.select("a[href*='/roster/coach/'], a[href*='/roster/staff/']"):
+        href = urljoin(base_url, link["href"])
+        item = link.find_parent(["li", "div"])
+        if href in seen or item is None:
+            continue
+        name_el = item.select_one(".person__name, .roster-item__name")
+        name = common.clean(name_el.get_text(" ")) if name_el else common.clean(link.get_text(" "))
+        title_el = item.select_one(".position, .roster-item__info")
+        title = common.clean(title_el.get_text(" ")) if title_el else ""
+        if not name:
+            continue
+        seen.add(href)
+        staff.append(_staff_from(item, name, title, href))

@@ -79,7 +79,7 @@ HEADER_ALIASES = {
     "academic year": "year", "athletic year": "year", "year": "year", "yr.": "year", "yr": "year",
     "class": "year", "cl.": "year", "cl": "year", "eligibility": "year", "elig.": "year",
     "height": "ht", "ht.": "ht", "ht": "ht",
-    "number": "#", "no": "#", "no.": "#", "#": "#", "jersey number": "#", "number jersey number": "#",
+    "number": "#", "no": "#", "no.": "#", "num": "#", "num.": "#", "#": "#", "jersey number": "#", "number jersey number": "#",
     "club team": "club", "club": "club",
 }
 
@@ -152,7 +152,11 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
             continue
         keys = " ".join(idx) + " " + caption
         rows = table.find_all("tr")[nhead:]
-        if "name" in idx and "pos" in idx:
+        # A staff table says "Title" (or "Alma Mater"); some themes label the coach role "Position",
+        # so a name+position table with none of number/height/year/hometown is staff too.
+        is_staff = ("title" in idx or "alma mater" in idx
+                    or ("pos" in idx and not any(k in idx for k in ("#", "ht", "year", "hometown"))))
+        if "name" in idx and "pos" in idx and not is_staff:
             ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
                   "yr": _col(idx, "year"), "home": _col(idx, "hometown"),
                   "hs": _col(idx, "high school", "previous", "last school"), "club": _col(idx, "club"),
@@ -180,17 +184,18 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                     number=cell("num"), name=name, pos_label=cell("pos"), height=cell("ht"), class_label=cell("yr"),
                     hometown=hometown, high_school=hs, previous_school=prev, club=cell("club"), major=cell("major"),
                     bio_url=bio_url, social=social_by_url.get(bio_url, {})))
-        elif "name" in idx and "title" in idx:
+        elif "name" in idx and is_staff:
             is_coaching = "coach" in keys
+            title_col = idx.get("title", idx.get("pos"))
             for tr in rows:
                 cells = tr.find_all(["td", "th"])
-                if len(cells) <= max(idx["name"], idx["title"]):
+                if len(cells) <= max(idx["name"], title_col):
                     continue
                 name = common.clean(cells[idx["name"]].get_text(" "))
                 # cells sometimes hold escaped HTML ("Academic Coordinator<br><em>W Soccer, ...</em>")
-                title = cells[idx["title"]].get_text("\n")
-                title = re.split(r"<br\s*/?>|\n", title)[0]
-                title = common.clean(re.sub(r"<[^>]+>", " ", title))
+                title = cells[title_col].get_text("\n")
+                segs = [common.clean(re.sub(r"<[^>]+>", " ", x)) for x in re.split(r"<br\s*/?>|\n", title)]
+                title = next((x for x in segs if x), "")
                 link = cells[idx["name"]].find("a", href=True)
                 if not name or name.lower() == "name":
                     continue

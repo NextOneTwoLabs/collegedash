@@ -561,3 +561,73 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     common.log(f"registry: {len(programs)} programs; unmatched {report['counts']}; low-confidence {len(report['lowConfidence'])}; "
                f"conference mismatches {len(report['conferenceMismatch'])}")
     return report
+
+
+# ---------- post-build fixes ----------
+
+WIKI_SEARCH = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=6&srsearch={q}"
+SEASON_ARTICLE_RE = re.compile(r"^\d{4}")
+
+
+def _wiki_search(q: str) -> list[str]:
+    url = WIKI_SEARCH.format(q=urllib.parse.quote(q, safe=""))
+    try:
+        payload, _ = common.fetch_json(url, max_age_hours=24 * 30)
+    except common.FetchError:
+        return []
+    return [hit.get("title", "") for hit in payload.get("query", {}).get("search", [])]
+
+
+def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
+    """Best guess at the program's Wikipedia team article via the search API, verified to exist.
+    Returns (canonical title or None, other plausible candidates)."""
+    short = program.get("shortName") or program["name"]
+    nick = program.get("nickname") or ""
+    key_tokens = {t for t in tokens(short) | tokens(nick) if len(t) > 2 and t not in ("state", "university", "college")}
+    queries = [f'"{short} {nick} women\'s soccer"', f"{short} {nick} women's soccer", f"{short} women's soccer"]
+    seen, plausible = [], []
+    for q in queries:
+        for title in _wiki_search(q):
+            if title in seen:
+                continue
+            seen.append(title)
+            low = title.lower()
+            if not low.endswith("women's soccer") or SEASON_ARTICLE_RE.match(title):
+                continue
+            if not (tokens(title) & key_tokens):
+                continue
+            plausible.append(title)
+        if plausible:
+            break
+    for title in plausible:
+        canon = wiki_canonical(title.replace(" ", "_"))
+        if canon:
+            return canon, [t for t in plausible if t != title]
+    return None, plausible
+
+
+def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = None) -> dict:
+    """Fill ids.wikipedia for onboarded programs that have none. Dry run by default; --apply
+    writes the registry (locked). Prints found / none tables."""
+    targets = [p for p in registry["programs"] if (slugs and p["slug"] in slugs)
+               or (not slugs and p.get("onboarded") and not (p.get("ids") or {}).get("wikipedia"))]
+    found, none = {}, []
+    for p in targets:
+        title, others = find_wiki_article(p)
+        if title:
+            found[p["slug"]] = title
+            common.log(f"wiki: {p['slug']:24} -> {title}" + (f"   (also: {', '.join(others)})" if others else ""))
+        else:
+            none.append(p["slug"])
+            common.log(f"wiki: {p['slug']:24} -> (none)" + (f"   candidates rejected: {', '.join(others)}" if others else ""))
+    print(f"\nfound {len(found)} of {len(targets)}; none: {', '.join(none) or '-'}")
+    if apply and found:
+        def mutate(reg):
+            for p in reg["programs"]:
+                if p["slug"] in found:
+                    p.setdefault("ids", {})["wikipedia"] = found[p["slug"]]
+        common.update_registry(mutate)
+        print(f"registry updated: ids.wikipedia set for {len(found)} programs")
+    elif found:
+        print("dry run - pass --apply to write the registry")
+    return {"found": found, "none": none}

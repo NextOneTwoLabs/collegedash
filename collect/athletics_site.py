@@ -47,7 +47,8 @@ def _extract_club(sections: dict) -> str:
 
 
 SIDEARM_MARKERS = ("s-person-card", "c-rosterpage", "sidearm-roster")
-WMT_MARKERS = ("roster-card-item", "roster-list-item", "roster-card__", "player-list-item", "roster-table-cell", "wmt.digital")
+WMT_MARKERS = ("roster-card-item", "roster-list-item", "roster-card__", "player-list-item", "roster-table-cell",
+               "itemprop=\"athlete\"", "roster-item__name", "person__name", "wmt-dfp-component", "wmt.digital")
 
 
 def detect_platform(html: str) -> str | None:
@@ -86,6 +87,8 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     if program["athletics"].get("rosterRequiresBrowser"):
         raise common.SkipCollector("athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); "
                                    "needs a headless browser, see athletics.note")
+    if program["athletics"].get("skipReason"):  # e.g. PrestoSports site with no adapter
+        raise common.SkipCollector(f"athletics: {program['athletics']['skipReason']} (registry athletics.skipReason)")
     platform = program["athletics"].get("platform") or "auto"
     if platform == "auto":
         probe_url = f"{base}{program['athletics']['sportPath']}/roster"
