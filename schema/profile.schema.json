@@ -31,7 +31,13 @@
       "type": ["object", "null"],
       "properties": {
         "monthly": {"type": "array", "minItems": 12, "maxItems": 12,
-          "items": {"type": "object", "required": ["month", "tHighF", "tLowF", "precipIn"]}},
+          "items": {"type": "object", "required": ["month", "tHighF", "tLowF", "precipIn"],
+            "properties": {"month": {"type": "string"}, "tHighF": {"type": ["number", "null"]}, "tLowF": {"type": ["number", "null"]},
+              "precipIn": {"type": ["number", "null"]}, "snowIn": {"type": ["number", "null"]}, "wetDays": {"type": ["number", "null"]},
+              "days90F": {"type": ["number", "null"]}, "daysFreeze": {"type": ["number", "null"]}}}},
+        "station": {"type": ["object", "null"], "description": "NOAA NCEI normals station the values come from",
+          "properties": {"id": {"type": "string"}, "name": {"type": ["string", "null"]}, "distanceKm": {"type": ["number", "null"]},
+            "elevationM": {"type": ["number", "null"]}}},
         "summary": {"type": "string"},
         "_meta": {"$ref": "#/$defs/meta"}
       }
@@ -88,7 +94,15 @@
     "_build": {
       "type": "object",
       "required": ["builtAt", "completeness", "sections", "stale"],
-      "properties": {"completeness": {"type": "number", "minimum": 0, "maximum": 1}}
+      "properties": {
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "failed": {"type": "array", "description": "collector runs whose last attempt failed (from refresh-state)",
+          "items": {"type": "object", "required": ["collector", "error"],
+            "properties": {"collector": {"type": "string"}, "error": {"type": "string"}, "at": {"type": ["string", "null"]}}}},
+        "skipped": {"type": "array", "description": "collectors with nothing to collect (no article, no TDS id, browser-only roster)",
+          "items": {"type": "object", "required": ["collector", "reason"],
+            "properties": {"collector": {"type": "string"}, "reason": {"type": "string"}, "at": {"type": ["string", "null"]}}}}
+      }
     }
   },
   "$defs": {

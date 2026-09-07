@@ -218,7 +218,7 @@ const fmtNum = v => v == null ? '—' : Number(v).toLocaleString();
 const fmtUsd = v => v == null ? '—' : '$' + Number(v).toLocaleString();
 const dash = v => (v === null || v === undefined || v === '') ? '—' : v;
 const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); };
-const ago = iso => { if (!iso) return ''; const ms = Date.now() - new Date(iso).getTime(); const h = ms / 36e5; if (h < 1) return `${Math.max(1, Math.round(ms / 6e4))}m ago`; if (h < 48) return `${Math.round(h)}h ago`; return `${Math.round(h / 24)}d ago`; };
+const ago = iso => { if (!iso || isNaN(new Date(iso))) return ''; const ms = Date.now() - new Date(iso).getTime(); const h = ms / 36e5; if (h < 1) return `${Math.max(1, Math.round(ms / 6e4))}m ago`; if (h < 48) return `${Math.round(h)}h ago`; return `${Math.round(h / 24)}d ago`; };
 const ordinal = n => n == null ? '—' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4 === n % 10 ? n % 10 : 0] || 'th');
 const rankStr = n => n == null ? '—' : '#' + n;
 
@@ -392,7 +392,7 @@ function cardHtml(p) {
         <div><span class="muted">Undergrads</span><b>${fmtNum(p.undergradEnrollment)}</b></div>
         <div><span class="muted">Coach</span><b style="font-size:12px">${esc(p.headCoach || '—')}${p.coachSince ? ` <span class="muted">since ${p.coachSince}</span>` : ''}</b></div>
       </div>
-      <div class="small muted" style="margin-top:8px">Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster</div>
+      <div class="small muted" style="margin-top:8px">Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster${p.failed?.length ? ` <span class="badge warn" title="Collectors failing: ${esc(p.failed.join(', '))}">${p.failed.length} failing</span>` : ''}</div>
       <div class="complete" title="Profile completeness ${Math.round(p.completeness * 100)}%"><i style="width:${Math.round(p.completeness * 100)}%"></i></div>
     </div></div>`;
 }
@@ -410,7 +410,11 @@ async function renderProfile(slug, tab) {
   const app = $('#app');
   const fav = S.favorites.has(slug);
   const cs = p.seasons.find(s => s.inProgress), ls = p.seasons.find(s => !s.inProgress && s.record);
-  const stale = p._build.stale?.length ? `<div class="stale">Some data is stale: ${esc(p._build.stale.join('; '))}. Run <code>python collegedash.py refresh --slug ${esc(slug)}</code>.</div>` : '';
+  const failed = p._build.failed || [];
+  const notices = [];
+  if (failed.length) notices.push(`Collectors failing: ${esc(failed.map(f => `${f.collector} (${f.error.replace(/^[a-z]+: /, '').slice(0, 90)})`).join('; '))}.`);
+  if (p._build.stale?.length) notices.push(`Some data is stale: ${esc(p._build.stale.join('; '))}.`);
+  const stale = notices.length ? `<div class="stale">${notices.join(' ')} Run <code>python collegedash.py refresh --slug ${esc(slug)}</code>.</div>` : '';
   app.innerHTML = `
     <div class="phead">
       <div class="colors">${(p.colors || []).map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>
@@ -465,7 +469,7 @@ async function tabOverview(p) {
         <p class="small ink2">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')}</p>` : '<div class="empty">Roster not collected.</div>'}
         ${p.news?.latest?.length ? `<h4 style="margin-top:10px">Latest news</h4><ul class="small" style="margin:4px 0 0;padding-left:16px">${p.news.latest.slice(0, 4).map(n => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="muted">${fmtDate(n.date)}</span></li>`).join('')}</ul>` : ''}</div>
     </div>
-    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}</div>`;
+    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · failing: ${esc(p._build.failed.map(f => f.collector).join(', '))}` : ''}${p._build.skipped?.length ? ` · skipped: ${esc(p._build.skipped.map(s => `${s.collector} (${s.reason.replace(/^[a-z]+: /, '').slice(0, 60)})`).join('; '))}` : ''}</div>`;
 }
 
 async function tabSchool(p) {
@@ -495,23 +499,31 @@ async function tabClimate(p) {
   if (!c) return '<div class="card empty">Climate not collected yet.</div>';
   const months = c.monthly;
   const xT = months.map((m, i) => ({ x: i, label: m.month }));
+  const num = (v, d = 1) => v == null || isNaN(v) ? '—' : Number(v).toFixed(d);
+  const degF = v => v == null ? '—' : `${v}°F`;
+  const highs = months.filter(m => m.tHighF != null), lows = months.filter(m => m.tLowF != null);
   const temp = svgLine({
-    width: 560, height: 240, yMin: Math.floor(Math.min(...months.map(m => m.tLowF)) / 10) * 10 - 5, yMax: Math.ceil(Math.max(...months.map(m => m.tHighF)) / 10) * 10 + 5,
-    series: [{ name: 'Avg high', color: 'var(--s2)', points: months.map((m, i) => ({ x: i, y: m.tHighF, label: `high ${m.tHighF}°F` })) },
-             { name: 'Avg low', color: 'var(--s1)', points: months.map((m, i) => ({ x: i, y: m.tLowF, label: `low ${m.tLowF}°F` })) }],
+    width: 560, height: 240,
+    yMin: lows.length ? Math.floor(Math.min(...lows.map(m => m.tLowF)) / 10) * 10 - 5 : 0,
+    yMax: highs.length ? Math.ceil(Math.max(...highs.map(m => m.tHighF)) / 10) * 10 + 5 : 100,
+    series: [{ name: 'Avg high', color: 'var(--s2)', points: months.map((m, i) => ({ x: i, y: m.tHighF, label: `high ${m.tHighF}°F` })).filter(p => p.y != null) },
+             { name: 'Avg low', color: 'var(--s1)', points: months.map((m, i) => ({ x: i, y: m.tLowF, label: `low ${m.tLowF}°F` })).filter(p => p.y != null) }],
     xTicks: xT, yTicks: [30, 50, 70, 90].map(y => ({ y, label: y + '°' })), fmt: v => v + '°F', xLabel: i => months[i].month, aria: 'Monthly average high and low temperature',
   });
-  const rain = svgBars({ width: 560, height: 180, color: 'var(--s1)', points: months.map(m => ({ label: m.month, y: m.precipIn })), fmt: v => v.toFixed(1) + ' in', aria: 'Monthly precipitation' });
-  return `<div class="card section"><h3>${esc(c.summary)}</h3>
-    <div class="tiles" style="margin-top:10px">${tile('Fall season avg high', c.fallSeason.avgHighF + '°F', 'Aug–Nov')}${tile('Fall season avg low', c.fallSeason.avgLowF + '°F', 'Aug–Nov')}${tile('Fall season rain', c.fallSeason.precipIn + ' in', `${c.fallSeason.wetDays} wet days`)}${tile('Annual rain', c.annualPrecipIn + ' in', c.annualSnowIn >= 1 ? `${c.annualSnowIn} in snow` : 'no meaningful snow')}</div></div>
+  const rain = svgBars({ width: 560, height: 180, color: 'var(--s1)', points: months.map(m => ({ label: m.month, y: m.precipIn ?? 0 })), fmt: v => v.toFixed(1) + ' in', aria: 'Monthly precipitation' });
+  const fs = c.fallSeason || {};
+  const snowNote = c.annualSnowIn == null ? 'snow not reported' : c.annualSnowIn >= 1 ? `${c.annualSnowIn} in snow` : 'no meaningful snow';
+  const station = c.station ? `Station ${esc(c.station.name || c.station.id)}${c.station.distanceKm != null ? `, ${Math.round(c.station.distanceKm)} km from campus` : ''}` : `Campus ${c.lat}, ${c.lon}`;
+  return `<div class="card section"><h3>${esc(c.summary || '')}</h3>
+    <div class="tiles" style="margin-top:10px">${tile('Fall season avg high', degF(fs.avgHighF), 'Aug–Nov')}${tile('Fall season avg low', degF(fs.avgLowF), 'Aug–Nov')}${tile('Fall season rain', fs.precipIn == null ? '—' : fs.precipIn + ' in', fs.wetDays == null ? '' : `${fs.wetDays} wet days`)}${tile('Annual rain', c.annualPrecipIn == null ? '—' : c.annualPrecipIn + ' in', snowNote)}</div></div>
     <div class="grid g2">
       <div class="card"><h3>Temperature by month</h3><div class="legend"><span><i class="key" style="background:var(--s2)"></i>Average high</span><span><i class="key" style="background:var(--s1)"></i>Average low</span></div><div class="chart">${temp}</div></div>
       <div class="card"><h3>Precipitation by month</h3><div class="chart">${rain}</div></div>
     </div>
-    <div class="card section" style="margin-top:14px"><h3>Monthly normals ${esc(c.normalsPeriod)}</h3><div class="tscroll"><table>
+    <div class="card section" style="margin-top:14px"><h3>Monthly normals ${esc(c.normalsPeriod || '')}</h3><div class="tscroll"><table>
       <tr><th>Month</th><th class="num">High °F</th><th class="num">Low °F</th><th class="num">Rain in</th><th class="num">Snow in</th><th class="num">Wet days</th><th class="num">Days ≥90°</th><th class="num">Days ≤32°</th></tr>
-      ${months.map(m => `<tr><td>${m.month}</td><td class="num">${m.tHighF}</td><td class="num">${m.tLowF}</td><td class="num">${m.precipIn.toFixed(2)}</td><td class="num">${m.snowIn}</td><td class="num">${m.wetDays}</td><td class="num">${m.days90F}</td><td class="num">${m.daysFreeze}</td></tr>`).join('')}</table></div>
-      ${prov(c._meta, `Campus ${c.lat}, ${c.lon}`)}</div>`;
+      ${months.map(m => `<tr><td>${esc(m.month)}</td><td class="num">${num(m.tHighF)}</td><td class="num">${num(m.tLowF)}</td><td class="num">${num(m.precipIn, 2)}</td><td class="num">${num(m.snowIn)}</td><td class="num">${num(m.wetDays)}</td><td class="num">${num(m.days90F)}</td><td class="num">${num(m.daysFreeze)}</td></tr>`).join('')}</table></div>
+      ${prov(c._meta, station)}</div>`;
 }
 
 async function tabHistory(p) {
@@ -541,13 +553,14 @@ async function tabHistory(p) {
 
 async function tabStaff(p) {
   const pr = p.program, hc = pr.headCoach;
+  if (!hc.name && !pr.coaches.length && !pr.supportStaff.length) return '<div class="card empty">Staff not collected yet (athletics site).</div>';
   const person = s => `<tr><td><b>${esc(s.name)}</b>${s.bioUrl ? ` <a class="small" href="${esc(s.bioUrl)}" target="_blank" rel="noopener">bio</a>` : ''}</td><td>${esc(s.title)}</td><td class="small">${Object.entries(s.social || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${k}</a>`).join(' ')}</td></tr>`;
   return `<div class="grid g2">
     <div class="card"><h3>Head coach</h3>
       <div class="hero" style="font-size:28px;margin:6px 0">${esc(hc.name || '—')}</div>
       <p class="ink2">${esc(hc.title || '')}${hc.since ? ` · since ${hc.since} (${hc.seasons} seasons)` : ''}</p>
       ${hc.bioUrl ? `<p><a href="${esc(hc.bioUrl)}" target="_blank" rel="noopener">Official bio</a></p>` : ''}
-      <h4 style="margin-top:12px">Coaching staff</h4><table>${pr.coaches.map(person).join('')}</table>
+      <h4 style="margin-top:12px">Coaching staff</h4>${pr.coaches.length ? `<table>${pr.coaches.map(person).join('')}</table>` : '<div class="empty">None listed.</div>'}
       ${prov(pr._meta?.athletics)}</div>
     <div class="card"><h3>Support staff</h3>${pr.supportStaff.length ? `<table>${pr.supportStaff.map(person).join('')}</table>` : '<div class="empty">None listed.</div>'}
       ${(p.curated?.culture) ? `<h4 style="margin-top:12px">My notes on culture</h4><p class="prose">${esc(p.curated.culture)}</p>` : ''}</div></div>`;
@@ -582,7 +595,7 @@ async function tabCommitments(p) {
   const statusBadge = s => `<span class="badge ${{ verbal: '', signed: 'good', enrolled: 'good', decommitted: 'crit' }[s]}">${s}</span>`;
   const confBadge = c => c === 'confirmed' ? '<span class="badge good">confirmed</span>' : c === 'single-source' ? '<span class="badge warn">single source</span>' : '<span class="badge">unreviewed</span>';
   const srcChip = s => { const label = { tds: 'TopDrawerSoccer', soccerwire: 'SoccerWire', press_release: 'Press release', instagram: 'Instagram', x: 'X' }[s.kind] || s.kind; return `<span class="chip">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(label)}</a>` : esc(label)}${s.missingSince ? ` <span class="muted" title="No longer listed since ${esc(s.missingSince)}">⚠</span>` : ''}</span>`; };
-  const when = c => c.status === 'enrolled' && !c.announced ? '<span class="muted">on roster</span>' : c.announced ? `<b>${fmtDate(c.announced)}</b><br><span class="muted">${esc(c.announcedSource.replace('_', ' '))}</span>` : c.approxDate ? `≈ ${fmtDate(c.approxDate.date)}<br><span class="muted">${esc(c.approxDate.basis)}</span>` : '<span class="muted">date unknown</span>';
+  const when = c => c.status === 'enrolled' && !c.announced ? '<span class="muted">on roster</span>' : c.announced ? `<b>${fmtDate(c.announced)}</b><br><span class="muted">${esc((c.announcedSource || '').replace(/_/g, ' '))}</span>` : c.approxDate ? `≈ ${fmtDate(c.approxDate.date)}<br><span class="muted">${esc(c.approxDate.basis)}</span>` : '<span class="muted">date unknown</span>';
   const list = years.map(y => `<div class="card section"><h3>Class of ${y} <span class="muted" style="font-weight:400">· ${byYear[y].length} commit${byYear[y].length === 1 ? '' : 's'}</span></h3>
     ${byYear[y].map(c => `<div class="commit"><div><div class="who">${esc(c.name)} <small>${esc(c.pos || '?')} · ${esc(c.club || 'club unknown')}${c.city ? ` · ${esc(c.city)}` : ''}${c.state ? `, ${esc(c.state)}` : ''}${c.highSchool ? ` · ${esc(c.highSchool)}` : ''}</small></div>
         <div class="row" style="margin-top:4px">${statusBadge(c.status)} ${confBadge(c.confidence)} ${c.flags.map(f => `<span class="badge ${f === 'possibly-decommitted' ? 'crit' : ''}">${esc(f)}</span>`).join(' ')}${c.aliases.length ? `<span class="small muted">also listed as ${esc(c.aliases.join(', '))}</span>` : ''}</div>
@@ -641,7 +654,7 @@ function wireNotes(p) {
     try {
       const r = await fetch(`api/curated/${p.slug}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status);
-      delete S.profiles[p.slug]; S.index = null;
+      delete S.profiles[p.slug]; S.index = null; S.refresh = null;
       $('#saveMsg').textContent = `Saved to ${j.path} and rebuilt.`;
     } catch (e) { $('#saveMsg').textContent = 'Save failed: ' + e.message; }
   };

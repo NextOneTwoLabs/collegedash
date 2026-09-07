@@ -410,7 +410,7 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> l
 
 # ---------- profile ----------
 
-def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur) -> dict:
+def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict | None = None) -> dict:
     slug = program["slug"]
     S = lambda n: common.load_source(slug, n)
     scorecard, climate, wiki, ath = S("scorecard"), S("climate"), S("wikipedia"), S("athletics")
@@ -454,8 +454,29 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur) -> dict:
     for c in profile["commitments"]:
         commits_by_year[str(c["gradYear"])] += 1
     profile["commitmentsByYear"] = dict(sorted(commits_by_year.items()))
-    profile["_build"] = _build_meta(profile, {"athletics": ath, "tds": tds, "soccerwire": sw, "news": news, "scorecard": scorecard})
+    envs = {"athletics": ath, "tds": tds, "soccerwire": sw, "news": news, "scorecard": scorecard,
+            "climate": climate, "wikipedia": wiki}
+    profile["_build"] = _build_meta(profile, envs, collector_outcomes(slug, state or {}))
     return profile
+
+
+def collector_outcomes(slug: str, state: dict) -> tuple[list[dict], list[dict]]:
+    """(failed, skipped) collector runs for this program from public/archive/refresh-state.json,
+    where run_collector records {ok, error|skipped, at} under '<slug>.<collector>'."""
+    failed, skipped = [], []
+    for key, entry in state.items():
+        if not isinstance(entry, dict) or not key.startswith(slug + "."):
+            continue
+        collector = key[len(slug) + 1:]
+        if "." in collector:
+            continue
+        if entry.get("ok") is False:
+            failed.append({"collector": collector, "error": str(entry.get("error", ""))[:300], "at": entry.get("at")})
+        elif entry.get("skipped"):
+            skipped.append({"collector": collector, "reason": str(entry["skipped"])[:300], "at": entry.get("at")})
+    failed.sort(key=lambda f: f["collector"])
+    skipped.sort(key=lambda f: f["collector"])
+    return failed, skipped
 
 
 def _deep_update(dst: dict, patch: dict):
@@ -466,7 +487,7 @@ def _deep_update(dst: dict, patch: dict):
             dst[k] = v
 
 
-def _build_meta(profile: dict, envs: dict) -> dict:
+def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], [])) -> dict:
     checks = {
         "school": bool(profile.get("school")),
         "climate": bool(profile.get("climate")),
@@ -481,16 +502,19 @@ def _build_meta(profile: dict, envs: dict) -> dict:
         "curated.playingStyle": bool(profile["curated"].get("playingStyle")),
         "curated.myFitNotes": bool(profile["curated"].get("myFitNotes")),
     }
-    thresholds = {"athletics": 14, "tds": 3, "soccerwire": 3, "news": 7, "scorecard": 120}
+    thresholds = {"athletics": 14, "tds": 3, "soccerwire": 3, "news": 7, "scorecard": 120, "climate": 400, "wikipedia": 45}
+    failed, skipped = outcomes
+    skipped_names = {s["collector"] for s in skipped}
     stale = []
     for k, env in envs.items():
         age = _age_days((env or {}).get("fetchedAt"))
         if env is None:
-            stale.append(f"{k}: never collected")
+            if k not in skipped_names:  # a deliberate skip (no article, no TDS id) is not staleness
+                stale.append(f"{k}: never collected")
         elif age is not None and age > thresholds.get(k, 30):
             stale.append(f"{k}: {age:.0f}d old")
     return {"builtAt": common.now_iso(), "completeness": round(sum(checks.values()) / len(checks), 2),
-            "sections": checks, "stale": stale}
+            "sections": checks, "stale": stale, "failed": failed, "skipped": skipped}
 
 
 def summary_row(p: dict) -> dict:
@@ -515,6 +539,7 @@ def summary_row(p: dict) -> dict:
         "commitmentsByYear": p.get("commitmentsByYear", {}),
         "fallClimate": (p.get("climate") or {}).get("fallSeason"),
         "completeness": p["_build"]["completeness"], "stale": p["_build"]["stale"], "builtAt": p["_build"]["builtAt"],
+        "failed": [f["collector"] for f in p["_build"].get("failed", [])],
         "tags": (p.get("curated") or {}).get("tags", []),
     }
 
@@ -522,9 +547,10 @@ def summary_row(p: dict) -> dict:
 def build(registry: dict) -> list[dict]:
     rpi_hist = load_rpi_history()
     rpi_cur = load_rpi_current()
+    state = common.load_refresh_state()
     rows, all_commits = [], []
     for program in common.iter_programs(registry):
-        profile = build_profile(program, registry, rpi_hist, rpi_cur)
+        profile = build_profile(program, registry, rpi_hist, rpi_cur, state)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
@@ -537,7 +563,8 @@ def build(registry: dict) -> list[dict]:
                       {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
-    validate(registry)
+    if not validate(registry):
+        common.log("!! build: schema validation reported errors (see SCHEMA lines above; `python collegedash.py validate`)")
     return rows
 
 
@@ -548,8 +575,7 @@ def validate(registry: dict, verbose: bool = False) -> bool:
         import jsonschema
     except ImportError:
         jsonschema = None
-        if verbose:
-            print("jsonschema not installed; skipping schema validation (pip install jsonschema)")
+        common.log("!! jsonschema not installed; skipping schema validation (pip install jsonschema)")
     for program in common.iter_programs(registry):
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json")
         p = common.read_json(path)

@@ -29,6 +29,16 @@ def record_key(name: str, grad_year: int | str) -> str:
     return f"{common.norm_name(name).replace(' ', '-')}-{grad_year}"
 
 
+def has_commitments_table(html: str) -> bool:
+    """True when the team page carries the commitments table at all (it may be empty)."""
+    soup = BeautifulSoup(html, "html.parser")
+    for table in soup.select("table.tds_table"):
+        heads = [common.clean(c.get_text()).lower() for c in table.select("thead td, thead th")]
+        if heads and "club" in heads and "name" in heads[0]:
+            return True
+    return False
+
+
 def parse_team_commitments(html: str) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     out = []
@@ -130,12 +140,14 @@ def _diff_merge(prev_records: dict, fresh: list[dict], today: str) -> tuple[dict
 def collect(program: dict, registry: dict) -> dict:
     ids = program["ids"]
     if not ids.get("tdsClgId") or not ids.get("tdsSlug"):
-        raise common.FetchError("tds: no TopDrawerSoccer team id in registry for this program")
+        raise common.SkipCollector("tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)")
     url = registry["sources"]["tds"]["teamCommitments"].format(tdsSlug=ids["tdsSlug"], tdsClgId=ids["tdsClgId"])
     html, meta = common.fetch_text(url, max_age_hours=12)
     fresh = parse_team_commitments(html)
+    if not fresh and not has_commitments_table(html):
+        raise common.FetchError(f"tds: no commitments table at {url} (markup change or wrong team id?)")
     if not fresh:
-        raise common.FetchError(f"tds: parsed 0 commitments from {url} (markup change?)")
+        common.log(f"tds: commitments tab is empty at {url}")
     prev = common.load_source(program["slug"], NAME)
     prev_records = (prev["data"].get("records") if prev else None) or {}
     # If the stored file predates today's diff semantics we still want to keep firstSeen values.
