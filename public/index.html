@@ -167,12 +167,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 18px; }
 details summary { cursor: pointer; color: var(--s1); font-size: 12px; }
 details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
 
-/* notes editor */
-textarea { width: 100%; min-height: 90px; padding: 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); resize: vertical; }
+/* buttons, hand-written text */
 .btn { border: 1px solid var(--border-strong); background: var(--surface-alt); border-radius: var(--radius-sm); padding: 6px 12px; font-weight: 500; }
 .btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
-.notice { font-size: 12px; color: var(--ink-2); }
-.readonly-note { background: var(--surface-alt); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 10px; }
 .prose { white-space: pre-wrap; }
 
 /* commitments */
@@ -219,7 +216,7 @@ textarea { width: 100%; min-height: 90px; padding: 8px; border: 1px solid var(--
      data/programs/<slug>.json  full profile
      data/rpi/current.json      latest weekly NCAA RPI
      archive/refresh-state.json freshness
-   When served by serve.py (local), /api/status answers and the My Notes tab becomes editable.
+   When served by serve.py (local), /api/status answers (S.local) - reserved for local-only editing features.
    ===================================================================== */
 const S = {
   index: null, profiles: {}, rpi: null, refresh: null, local: false,
@@ -440,7 +437,7 @@ function cardHtml(p) {
 }
 
 /* ---------- profile ---------- */
-const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['climate', 'Climate'], ['history', 'History & RPI'], ['staff', 'Staff'], ['roster', 'Roster'], ['commitments', 'Commitments'], ['schedule', 'Schedule'], ['news', 'News'], ['notes', 'My Notes']];
+const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['climate', 'Climate'], ['history', 'History & RPI'], ['staff', 'Staff'], ['roster', 'Roster'], ['commitments', 'Commitments'], ['schedule', 'Schedule'], ['news', 'News']];
 function prov(meta, extra) {
   if (!meta) return '';
   const items = Array.isArray(meta) ? meta : [meta];
@@ -472,18 +469,17 @@ async function renderProfile(slug, tab) {
     <nav class="tabs">${TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="${k === tab ? 'active' : ''}">${l}</a>`).join('')}</nav>
     <div id="tab"></div>`;
   $('#favBtn').onclick = () => { toggleFav(slug); renderProfile(slug, tab); };
-  const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, notes: tabNotes }[tab] || tabOverview;
+  const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews }[tab] || tabOverview;
   const el = $('#tab');
   el.innerHTML = await fn(p);
   wireCharts(el);
-  if (tab === 'notes') wireNotes(p);
   window.scrollTo(0, 0);
 }
 function tile(label, value, sub) { return `<div class="tile"><div class="label">${esc(label)}</div><div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`; }
 
 async function tabOverview(p) {
   const ls = p.seasons.find(s => !s.inProgress && s.record);
-  const sch = p.school || {}, pr = p.program, cur = p.curated || {};
+  const sch = p.school || {}, pr = p.program;
   const commits = Object.entries(p.commitmentsByYear || {});
   const rpiPts = p.seasons.filter(s => s.rpiRank).slice(0, 6).reverse();
   return `
@@ -499,19 +495,13 @@ async function tabOverview(p) {
       ${tile('Commitments', commits.reduce((a, [, n]) => a + n, 0), commits.map(([y, n]) => `${y}: ${n}`).join(' · '))}
     </div>
     <div class="grid g2">
-      <div class="card"><h3>Program summary</h3>${cur.programSummary ? `<p class="prose">${esc(cur.programSummary)}</p>` : `<div class="empty">Not written yet — add it in <a href="#/p/${esc(p.slug)}/notes">My Notes</a>.</div>`}
-        ${cur.playingStyle ? `<h4 style="margin-top:10px">Playing style</h4><p class="prose">${esc(cur.playingStyle)}</p>` : ''}
-        ${cur.tags?.length ? `<div class="row">${cur.tags.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}</div>
       <div class="card"><h3>RPI, recent seasons</h3>
         <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, yMin: 1, yMax: Math.max(25, ...rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 25, label: '#25' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
         <p class="small muted">Lower is better. End-of-season RPI; the current season shows the latest weekly rank once published.</p></div>
-      <div class="card"><h3>Location & climate</h3>
-        <p>${esc(sch.locale || '')}${sch.locale ? ' · ' : ''}${esc(sch.region || '')} · ${esc(sch.carnegie || '')}</p>
-        <p class="ink2">${esc(p.climate?.summary || 'Climate not collected yet.')}</p></div>
-      <div class="card"><h3>Roster snapshot ${p.roster ? p.roster.season : ''}</h3>
+      <div class="card"><h3>Roster snapshot${p.roster ? ` ${p.roster.season}` : ''}</h3>
         ${p.roster ? `<p>${p.roster.count} players · graduating this year: ${Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none listed'}</p>
-        <p class="small ink2">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')}</p>` : '<div class="empty">Roster not collected.</div>'}
-        ${p.news?.latest?.length ? `<h4 style="margin-top:10px">Latest news</h4><ul class="small" style="margin:4px 0 0;padding-left:16px">${p.news.latest.slice(0, 4).map(n => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="muted">${fmtDate(n.date)}</span></li>`).join('')}</ul>` : ''}</div>
+        ${posClassMatrix(p.roster)}
+        <p class="small ink2" style="margin-top:8px">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')} · <a href="#/p/${esc(p.slug)}/roster">Full roster →</a></p>` : '<div class="empty">Roster not collected yet.</div>'}</div>
     </div>
     <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · failing: ${esc(p._build.failed.map(f => f.collector).join(', '))}` : ''}${p._build.skipped?.length ? ` · skipped: ${esc(p._build.skipped.map(s => `${s.collector} (${s.reason.replace(/^[a-z]+: /, '').slice(0, 60)})`).join('; '))}` : ''}</div>`;
 }
@@ -610,14 +600,18 @@ async function tabStaff(p) {
       ${(p.curated?.culture) ? `<h4 style="margin-top:12px">My notes on culture</h4><p class="prose">${esc(p.curated.culture)}</p>` : ''}</div></div>`;
 }
 
+// Position x class depth chart; redshirt classes fold into their year. Shared by Overview and Roster.
+function posClassMatrix(r) {
+  const classes = ['FR', 'SO', 'JR', 'SR', 'GR'], positions = ['GK', 'D', 'M', 'F'];
+  const cnt = (pos, c) => (r.byPosClass[pos]?.[c] || 0) + (r.byPosClass[pos]?.['R-' + c] || 0);
+  return `<table class="matrix"><tr><th></th>${classes.map(c => `<th>${c}</th>`).join('')}<th>Total</th></tr>
+    ${positions.map(pos => { const tot = classes.reduce((a, c) => a + cnt(pos, c), 0); return `<tr><th>${pos}</th>${classes.map(c => `<td class="${cnt(pos, c) >= 3 ? 'hot' : ''}">${cnt(pos, c) || ''}</td>`).join('')}<td><b>${tot}</b></td></tr>`; }).join('')}
+    <tr><th>Total</th>${classes.map(c => `<td><b>${positions.reduce((a, pos) => a + cnt(pos, c), 0)}</b></td>`).join('')}<td><b>${r.count}</b></td></tr></table>`;
+}
 async function tabRoster(p) {
   const r = p.roster;
   if (!r) return '<div class="card empty">Roster not collected yet.</div>';
-  const classes = ['FR', 'SO', 'JR', 'SR', 'GR'];
-  const cnt = (pos, c) => (r.byPosClass[pos]?.[c] || 0) + (r.byPosClass[pos]?.['R-' + c] || 0);
-  const matrix = `<table class="matrix"><tr><th></th>${classes.map(c => `<th>${c}</th>`).join('')}<th>Total</th></tr>
-    ${['GK', 'D', 'M', 'F'].map(pos => { const tot = classes.reduce((a, c) => a + cnt(pos, c), 0); return `<tr><th>${pos}</th>${classes.map(c => `<td class="${cnt(pos, c) >= 3 ? 'hot' : ''}">${cnt(pos, c) || ''}</td>`).join('')}<td><b>${tot}</b></td></tr>`; }).join('')}
-    <tr><th>Total</th>${classes.map(c => `<td><b>${['GK', 'D', 'M', 'F'].reduce((a, pos) => a + cnt(pos, c), 0)}</b></td>`).join('')}<td><b>${r.count}</b></td></tr></table>`;
+  const matrix = posClassMatrix(r);
   const rows = r.players.map(pl => `<tr><td class="num">${esc(pl.number)}</td><td><b>${esc(pl.name)}</b>${pl.bioUrl ? ` <a class="small" href="${esc(pl.bioUrl)}" target="_blank" rel="noopener">bio</a>` : ''}
       ${Object.keys(pl.bio || {}).length ? `<details><summary>notes</summary>${Object.entries(pl.bio).filter(([k]) => k !== 'intro').map(([k, v]) => `<p><b>${esc(k)}:</b> ${esc(v)}</p>`).join('')}</details>` : ''}</td>
       <td>${esc(pl.pos)}</td><td>${esc(pl.classCode)}</td><td>${esc(pl.height)}</td><td>${esc(pl.hometown)}</td><td class="small">${esc(pl.highSchool)}${pl.previousSchool ? `<br><span class="muted">prev: ${esc(pl.previousSchool)}</span>` : ''}</td>
@@ -677,32 +671,6 @@ async function tabNews(p) {
     <div class="card"><h3>Latest</h3><ul style="padding-left:18px">${n.latest.map(li).join('')}</ul>${prov(n._meta)}</div></div>`;
 }
 
-const NOTE_FIELDS = [['programSummary', 'Program summary', 'What this program is, in a paragraph: level, identity, trajectory.'], ['playingStyle', 'Playing style', 'Formation, tempo, what they ask of each position.'], ['culture', 'Culture & coaching', 'How the staff runs the program; what players say.'], ['academicsNotes', 'Academics', 'Majors that fit, athlete support, admissions realities.'], ['recruitingNotes', 'Recruiting notes', 'Timeline, who recruits which positions, ID camps, contacts.'], ['myFitNotes', 'My fit', 'Why this program is or is not a fit for us.']];
-async function tabNotes(p) {
-  const c = p.curated || {};
-  const ro = !S.local;
-  return `<div class="card">
-    ${ro ? `<div class="readonly-note">Read-only here. To edit, run <code>python collegedash.py serve</code> and open <code>http://127.0.0.1:8000/#/p/${esc(p.slug)}/notes</code>, or edit <code>programs/${esc(p.slug)}/curated.json</code> directly.</div>` : `<div class="readonly-note">Saving writes <code>programs/${esc(p.slug)}/curated.json</code> and rebuilds the profile. Commit it to keep it.</div>`}
-    ${NOTE_FIELDS.map(([k, label, hint]) => `<div class="section"><h3>${label}</h3><p class="small muted">${hint}</p>${ro ? (c[k] ? `<p class="prose">${esc(c[k])}</p>` : '<div class="empty">Not written yet.</div>') : `<textarea data-k="${k}">${esc(c[k] || '')}</textarea>`}</div>`).join('')}
-    <div class="section"><h3>Tags</h3><p class="small muted">Comma-separated, e.g. reach, west coast, strong academics.</p>${ro ? `<div class="row">${(c.tags || []).map(t => `<span class="chip">${esc(t)}</span>`).join('') || '<span class="empty">none</span>'}</div>` : `<input id="tags" style="width:100%;padding:8px;border:1px solid var(--border-strong);border-radius:6px;background:var(--page)" value="${esc((c.tags || []).join(', '))}">`}</div>
-    ${ro ? '' : `<div class="row"><button class="btn primary" id="saveNotes">Save notes</button><span class="notice" id="saveMsg"></span></div>`}</div>`;
-}
-function wireNotes(p) {
-  const btn = $('#saveNotes'); if (!btn) return;
-  btn.onclick = async () => {
-    const cur = { ...(p.curated || {}) };
-    document.querySelectorAll('textarea[data-k]').forEach(t => { cur[t.dataset.k] = t.value; });
-    cur.tags = $('#tags').value.split(',').map(s => s.trim()).filter(Boolean);
-    const body = { _comment: 'Human-written notes for this program. Collectors never touch this file.', ...cur, overrides: (p.curated && p.curated.overrides) || {} };
-    $('#saveMsg').textContent = 'Saving…';
-    try {
-      const r = await fetch(`api/curated/${p.slug}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status);
-      delete S.profiles[p.slug]; S.index = null; S.refresh = null;
-      $('#saveMsg').textContent = `Saved to ${j.path} and rebuilt.`;
-    } catch (e) { $('#saveMsg').textContent = 'Save failed: ' + e.message; }
-  };
-}
 
 /* ---------- RPI view ---------- */
 async function renderRpi() {

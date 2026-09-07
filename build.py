@@ -498,10 +498,7 @@ def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], []
         "schedule": bool(profile.get("schedule")),
         "commitments": bool(profile.get("commitments")),
         "news": bool(profile.get("news")),
-        "curated.programSummary": bool(profile["curated"].get("programSummary")),
-        "curated.playingStyle": bool(profile["curated"].get("playingStyle")),
-        "curated.myFitNotes": bool(profile["curated"].get("myFitNotes")),
-    }
+    }  # hand-written curated fields are optional and do not count
     thresholds = {"athletics": 14, "tds": 3, "soccerwire": 3, "news": 7, "scorecard": 120, "climate": 400, "wikipedia": 45}
     failed, skipped = outcomes
     skipped_names = {s["collector"] for s in skipped}

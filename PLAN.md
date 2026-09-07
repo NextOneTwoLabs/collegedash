@@ -212,8 +212,8 @@ python collegedash.py build | validate | serve
 ### Dashboard (`public/index.html`)
 List (search/filter/sort/favorites) · Profile tabs: Overview · School & Location · Climate · History &
 RPI chart · Staff · Roster (table + pos×class grid) · **Commitments** (by class year, status badges,
-source chips, "new this week" highlight, per-position counts vs graduating seniors) · Schedule · My
-Notes · **Review** (local only) · Compare 2–4 programs. Provenance + as-of on every section.
+source chips, "new this week" highlight, per-position counts vs graduating seniors) · Schedule ·
+**Review** (local only) · Compare 2–4 programs. Provenance + as-of on every section.
 ECNLDash conventions (tokens, dark mode, hash routes, "Updated Xh ago"). Charts follow `dataviz` skill.
 
 ---

@@ -13,7 +13,7 @@ commitment announcements, and application tracking (see `PLAN.md`).
 
 ```bash
 pip install -r requirements.txt
-python collegedash.py serve            # http://127.0.0.1:8000/  (My Notes is editable here)
+python collegedash.py serve            # http://127.0.0.1:8000/
 ```
 
 Any static server over `public/` also works (`cd public && python -m http.server`), read-only.
@@ -47,7 +47,7 @@ the rate-limited `DEMO_KEY`.
 | `public/data/programs/<slug>.json` | Built profile per program; `index.json` = list rows |
 | `public/data/rpi/<year>.json` | End-of-season RPI 2007–2024 (all D1); `current.json` + `weekly/` = NCAA weekly |
 | `public/data/commitments/index.json` | Every resolved commitment across programs |
-| `programs/<slug>/curated.json` | **Your** notes and overrides — collectors never write here |
+| `programs/<slug>/curated.json` | Optional hand-written notes and overrides (edit by hand or `PUT /api/curated/<slug>`) — collectors never write here |
 | `programs/<slug>/commitments.reviewed.json` | Your decisions: approved social records, merges, status overrides |
 | `programs/<slug>/sources/*.json` | Raw collector output with provenance (`collector`, `sourceUrl`, `fetchedAt`) |
 | `data/commitments/` | All-D1 commitment sweeps with firstSeen/lastSeen (phase 2) |
