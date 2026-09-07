@@ -55,6 +55,21 @@ def detect_platform(html: str) -> str | None:
     return None
 
 
+def _persist_platform(program: dict, platform: str) -> None:
+    """Remember a detected platform in the registry (locked, so a concurrent process cannot
+    overwrite it) and on the in-memory program."""
+    slug = program["slug"]
+    program["athletics"]["platform"] = platform
+
+    def mutate(reg):
+        for p in reg["programs"]:
+            if p["slug"] == slug:
+                p["athletics"]["platform"] = platform
+
+    common.update_registry(mutate)
+    common.log(f"athletics: detected platform '{platform}' for {slug}")
+
+
 def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool = True) -> dict:
     slug = program["slug"]
     base = program["athletics"].get("baseUrl")
@@ -67,13 +82,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         platform = detect_platform(html0)
         if not platform:
             raise common.FetchError(f"athletics: unsupported site platform at {probe_url}")
-        program["athletics"]["platform"] = platform
-        reg = common.load_registry()
-        for p in reg["programs"]:
-            if p["slug"] == slug:
-                p["athletics"]["platform"] = platform
-        common.save_registry(reg)
-        common.log(f"athletics: detected platform '{platform}' for {slug}")
+        _persist_platform(program, platform)
     ad = adapters.get(platform)
     u = ad.urls(program, registry)
 

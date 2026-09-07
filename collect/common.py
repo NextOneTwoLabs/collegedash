@@ -11,12 +11,15 @@ Layout (mirrors ECNLDash):
 
 from __future__ import annotations
 
+import contextlib
 import datetime as _dt
+import gzip
 import hashlib
 import json
 import os
 import random
 import re
+import tempfile
 import time
 import unicodedata
 
@@ -57,6 +60,12 @@ class FetchError(RuntimeError):
     pass
 
 
+class SkipCollector(RuntimeError):
+    """Raised by a collector when there is nothing to collect for this program (no Wikipedia
+    article, no TopDrawerSoccer id, roster needs a browser). Recorded as ok+skipped, not as
+    a failure, so `refresh --failed` and the dashboard do not keep nagging about it."""
+
+
 # ---------- time ----------
 
 def now_iso() -> str:
@@ -81,14 +90,50 @@ def read_json(path: str, default=None):
 
 
 def write_json(path: str, obj, *, sort_keys: bool = False) -> str:
-    """Atomically write pretty JSON (UTF-8, trailing newline)."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
-        json.dump(obj, f, indent=2, ensure_ascii=False, sort_keys=sort_keys)
-        f.write("\n")
-    os.replace(tmp, path)
+    """Atomically write pretty JSON (UTF-8, trailing newline). The temp file name is unique per
+    writer so two processes (serve + refresh, onboard --all + refresh) never share one."""
+    d = os.path.dirname(path)
+    os.makedirs(d, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=d, prefix=os.path.basename(path) + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(obj, f, indent=2, ensure_ascii=False, sort_keys=sort_keys)
+            f.write("\n")
+        os.replace(tmp, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.remove(tmp)
+        raise
     return path
+
+
+@contextlib.contextmanager
+def _locked(path: str, *, timeout: float = 15.0, stale_after: float = 60.0):
+    """Cross-process lock around a read-modify-write of `path` (lock file = path + '.lock',
+    created with O_EXCL). A lock older than `stale_after` seconds is treated as abandoned."""
+    lock = path + ".lock"
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.close(fd)
+            break
+        except FileExistsError:
+            try:
+                if time.time() - os.path.getmtime(lock) > stale_after:
+                    os.remove(lock)
+                    continue
+            except OSError:
+                pass
+            if time.monotonic() > deadline:
+                raise RuntimeError(f"could not lock {path} within {timeout}s (stale {lock}?)")
+            time.sleep(0.05)
+    try:
+        yield
+    finally:
+        with contextlib.suppress(OSError):
+            os.remove(lock)
 
 
 # ---------- HTTP with raw cache ----------
@@ -140,12 +185,19 @@ def fetch(
     body_path = os.path.join(CACHE_DIR, key + ".body")
     meta_path = os.path.join(CACHE_DIR, key + ".json")
 
-    if os.path.exists(body_path) and os.path.exists(meta_path):
+    # Bodies are stored gzip-compressed (<key>.body.gz); plain <key>.body files from older runs are
+    # still readable. Athletics pages are 1-1.5 MB of HTML each and compress about 10x.
+    gz_path = body_path + ".gz"
+    stored = gz_path if os.path.exists(gz_path) else body_path if os.path.exists(body_path) else None
+    if stored and os.path.exists(meta_path):
         meta = read_json(meta_path, {})
-        age_h = (time.time() - os.path.getmtime(body_path)) / 3600.0
+        age_h = (time.time() - os.path.getmtime(stored)) / 3600.0
         if (max_age_hours and age_h <= max_age_hours) or os.environ.get("COLLEGEDASH_OFFLINE"):
-            with open(body_path, "rb") as f:
-                meta["fromCache"] = True
+            meta["fromCache"] = True
+            if stored.endswith(".gz"):
+                with gzip.open(stored, "rb") as f:
+                    return f.read(), meta
+            with open(stored, "rb") as f:
                 return f.read(), meta
 
     if os.environ.get("COLLEGEDASH_OFFLINE"):
@@ -168,17 +220,20 @@ def fetch(
             continue
         if resp.status_code in allow_status:
             meta = {"url": url, "status": resp.status_code, "fetchedAt": now_iso(), "fromCache": False,
-                    "contentType": resp.headers.get("Content-Type", "")}
-            with open(body_path, "wb") as f:
+                    "contentType": resp.headers.get("Content-Type", ""), "finalUrl": resp.url}
+            with gzip.open(gz_path, "wb", compresslevel=6) as f:
                 f.write(resp.content)
+            if os.path.exists(body_path):
+                os.remove(body_path)
             write_json(meta_path, meta)
             return resp.content, meta
         if resp.status_code in (429, 500, 502, 503, 504):
             last_err = FetchError(f"HTTP {resp.status_code} for {url}")
-            time.sleep(5 * (attempt + 1))
+            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one
+            time.sleep((25 if resp.status_code == 429 else 5) * (attempt + 1))
             continue
         raise FetchError(f"HTTP {resp.status_code} for {url}")
-    raise FetchError(f"giving up on {url}: {last_err}")
+    raise FetchError(f"giving up after {retries} attempts: {last_err}")  # last_err names the URL
 
 
 def fetch_text(url: str, **kw) -> tuple[str, dict]:
@@ -203,6 +258,17 @@ def load_registry() -> dict:
 def save_registry(reg: dict) -> None:
     reg["updated"] = today()
     write_json(REGISTRY_PATH, reg)
+
+
+def update_registry(mutate) -> dict:
+    """Read-modify-write the registry under a lock: `mutate(reg)` edits it in place. Returns the
+    freshly saved registry. Use this instead of load/save pairs so concurrent processes
+    (onboard --all, refresh, serve) never overwrite each other's changes."""
+    with _locked(REGISTRY_PATH):
+        reg = load_registry()
+        mutate(reg)
+        save_registry(reg)
+    return reg
 
 
 def get_program(slug: str, reg: dict | None = None) -> dict:
@@ -256,12 +322,17 @@ def load_reviewed(slug: str) -> dict:
 # ---------- refresh state ----------
 
 def update_refresh_state(key: str, info: dict) -> None:
-    state = read_json(REFRESH_STATE_PATH, {}) or {}
-    entry = dict(info)
-    entry["at"] = now_iso()
-    state[key] = entry
-    state["updated"] = now_iso()
-    write_json(REFRESH_STATE_PATH, state)
+    with _locked(REFRESH_STATE_PATH):
+        state = read_json(REFRESH_STATE_PATH, {}) or {}
+        entry = dict(info)
+        entry["at"] = now_iso()
+        state[key] = entry
+        state["updated"] = now_iso()
+        write_json(REFRESH_STATE_PATH, state)
+
+
+def load_refresh_state() -> dict:
+    return read_json(REFRESH_STATE_PATH, {}) or {}
 
 
 # ---------- text helpers ----------

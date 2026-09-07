@@ -20,7 +20,10 @@ RECRUIT_RE = re.compile(
 
 
 def collect(program: dict, registry: dict) -> dict:
-    ad = adapters.get(program["athletics"]["platform"])
+    platform = program["athletics"].get("platform") or "auto"
+    if platform == "auto":
+        raise common.FetchError("news: athletics platform unknown (athletics collector has not succeeded yet)")
+    ad = adapters.get(platform)
     u = ad.urls(program, registry)
     html, meta = common.fetch_text(u["news"], max_age_hours=12)
     items = ad.parse_news(html, program["athletics"]["baseUrl"])

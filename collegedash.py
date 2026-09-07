@@ -4,6 +4,8 @@ CollegeDash command line.
 
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
+                                [--failed] [--dry-run]   --failed: only collectors whose last run failed
+  python collegedash.py registry build|tidy|fix-wiki [--apply]
   python collegedash.py sweep [tds|soccerwire|all] [--years 2027,2028]
   python collegedash.py rpi [history|current|all] [--force]
   python collegedash.py build                            merge programs/* -> public/data
@@ -53,11 +55,24 @@ def run_collector(name: str, program: dict, registry: dict, **kw) -> bool:
             return False
         common.update_refresh_state(f"{program['slug']}.{name}", {"ok": True})
         return True
+    except common.SkipCollector as e:  # nothing to collect for this program; not a failure
+        common.log(f"-- {name} skipped for {program['slug']}: {e}")
+        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": True, "skipped": str(e)[:300]})
+        return True
     except Exception as e:  # keep going; partial progress is still committed
         common.log(f"!! {name} failed for {program['slug']}: {e}")
         traceback.print_exc()
-        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": False, "error": str(e)})
+        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": False, "error": str(e)[:300]})
         return False
+
+
+def _mark_onboarded(slug: str) -> dict:
+    def mutate(reg):
+        for p in reg["programs"]:
+            if p["slug"] == slug:
+                p["onboarded"] = True
+                p.setdefault("onboardedAt", common.today())
+    return common.update_registry(mutate)
 
 
 def cmd_onboard(args):
@@ -72,8 +87,8 @@ def cmd_onboard(args):
         return onboard_all(reg, bios=not args.no_bios, limit=args.limit)
     program = common.get_program(args.slug, reg)
     if not program.get("onboarded"):
-        program["onboarded"] = True
-        common.save_registry(reg)
+        reg = _mark_onboarded(args.slug)
+        program = common.get_program(args.slug, reg)
     results = [run_collector(c, program, reg, bios=not args.no_bios) for c in COLLECTORS]  # no short-circuit
     ok = all(results)
     import build
@@ -96,15 +111,9 @@ def onboard_all(reg, *, bios: bool, limit: int | None) -> int:
         failed = [c for c, ok in results.items() if not ok]
         if failed:
             failures[program["slug"]] = failed
-        # re-read registry: athletics may have written the detected platform
-        reg = common.load_registry()
-        for p in reg["programs"]:
-            if p["slug"] == program["slug"]:
-                p["onboarded"] = True
-                p["onboardedAt"] = common.today()
-                if failed:
-                    p["onboardIssues"] = failed
-        common.save_registry(reg)
+        # locked read-modify-write: athletics may have written the detected platform meanwhile.
+        # Per-collector outcomes live in refresh-state (build.py folds them into _build.failed).
+        reg = _mark_onboarded(program["slug"])
         if i % 10 == 0 or i == len(todo):
             try:
                 build.build(reg)
@@ -120,21 +129,44 @@ def onboard_all(reg, *, bios: bool, limit: int | None) -> int:
 def cmd_refresh(args):
     reg = common.load_registry()
     only = [c.strip() for c in args.only.split(",")] if args.only else COLLECTORS
+    unknown = [c for c in only if c not in COLLECTORS and c != "rpi"]
+    if unknown:
+        common.log(f"!! unknown collector(s) in --only: {', '.join(unknown)} (known: {', '.join(COLLECTORS)}, rpi)")
+        return 2
     programs = [common.get_program(args.slug, reg)] if args.slug else list(common.iter_programs(reg))
+    state = common.load_refresh_state() if args.failed else {}
+
+    def wanted(p, c):
+        if not args.failed:
+            return True
+        entry = state.get(f"{p['slug']}.{c}")
+        return isinstance(entry, dict) and entry.get("ok") is False
+
+    plan = [(p, [c for c in only if c in COLLECTORS and wanted(p, c)]) for p in programs]
+    plan = [(p, cs) for p, cs in plan if cs]
+    run_rpi = "rpi" in only or (not args.only and not args.failed)
+    if args.dry_run:
+        for p, cs in plan:
+            print(f"{p['slug']}: {', '.join(cs)}")
+        total = sum(len(cs) for _, cs in plan)
+        print(f"-- {len(plan)} programs, {total} collector runs" + (", plus rpi current" if run_rpi else ""))
+        return 0
     ok = True
-    if "rpi" in only or not args.only:
+    if run_rpi:
         from collect import rpi
         try:
             rpi.current(reg)
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
             ok = False
-    for p in programs:
-        for c in only:
-            if c in COLLECTORS:
-                ok = run_collector(c, p, reg, bios=not args.no_bios) and ok
+    for p, cs in plan:
+        for c in cs:
+            ok = run_collector(c, p, reg, bios=not args.no_bios) and ok
+    if not plan and not run_rpi:
+        common.log("nothing to refresh")
+        return 0
     import build
-    build.build(reg)
+    build.build(common.load_registry())
     return 0 if ok else 1
 
 
@@ -165,6 +197,15 @@ def cmd_rpi(args):
 def cmd_registry(args):
     reg = common.load_registry()
     from collect import registry_builder
+    if args.what == "tidy":
+        def mutate(r):
+            n = sum(1 for p in r["programs"] if p.pop("onboardIssues", None) is not None)
+            common.log(f"registry tidy: removed onboardIssues from {n} programs")
+        common.update_registry(mutate)
+        return 0
+    if args.what == "fix-wiki":
+        registry_builder.fix_wiki(reg, apply=args.apply, slugs=args.slug.split(",") if args.slug else None)
+        return 0
     report = registry_builder.build(reg, limit=args.limit)
     print(json.dumps({"counts": report["counts"], "lowConfidence": report["lowConfidence"][:40],
                       "unmatched": report["unmatched"]}, indent=1, ensure_ascii=False))
@@ -192,10 +233,13 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("onboard"); p.add_argument("slug", nargs="?", default=""); p.add_argument("--all", action="store_true"); p.add_argument("--limit", type=int); p.add_argument("--no-bios", action="store_true"); p.set_defaults(fn=cmd_onboard)
-    p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true"); p.set_defaults(fn=cmd_refresh)
+    p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true")
+    p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")
+    p.add_argument("--dry-run", action="store_true", help="print what would run, run nothing"); p.set_defaults(fn=cmd_refresh)
     p = sub.add_parser("sweep"); p.add_argument("source", nargs="?", default="all", choices=["tds", "soccerwire", "all"]); p.add_argument("--years"); p.set_defaults(fn=cmd_sweep)
     p = sub.add_parser("rpi"); p.add_argument("what", nargs="?", default="all", choices=["history", "current", "all"]); p.add_argument("--force", action="store_true"); p.set_defaults(fn=cmd_rpi)
-    p = sub.add_parser("registry"); p.add_argument("what", nargs="?", default="build", choices=["build"]); p.add_argument("--limit", type=int); p.set_defaults(fn=cmd_registry)
+    p = sub.add_parser("registry"); p.add_argument("what", nargs="?", default="build", choices=["build", "tidy", "fix-wiki"]); p.add_argument("--limit", type=int)
+    p.add_argument("--apply", action="store_true", help="fix-wiki: write discovered article titles to the registry"); p.add_argument("--slug"); p.set_defaults(fn=cmd_registry)
     p = sub.add_parser("build"); p.set_defaults(fn=cmd_build)
     p = sub.add_parser("validate"); p.set_defaults(fn=cmd_validate)
     p = sub.add_parser("serve"); p.add_argument("--port", type=int, default=8000); p.set_defaults(fn=cmd_serve)

@@ -141,7 +141,9 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
 
 
 def collect(program: dict, registry: dict) -> dict:
-    title = program["ids"]["wikipedia"]
+    title = program["ids"].get("wikipedia")
+    if not title:
+        raise common.FetchError("wikipedia: no team article for this program (most mid-majors have none)")
     url = registry["sources"]["wikipedia"]["htmlApi"].format(title=urllib.parse.quote(title, safe=""))
     html, meta = common.fetch_text(url, max_age_hours=24 * 7)
     soup = BeautifulSoup(html, "html.parser")
