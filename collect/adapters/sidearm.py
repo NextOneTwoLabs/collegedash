@@ -70,55 +70,93 @@ def _season_from_title(soup: BeautifulSoup) -> int | None:
     return None
 
 
+# Roster table headers vary by site generation and theme ("Name" / "Full Name" / "Player",
+# "Pos." / "Position", "Year" / "Academic Year" / "Class" / "Cl.", "Number Jersey Number" on WMT
+# tables). Everything is folded onto one canonical key before column lookup.
+HEADER_ALIASES = {
+    "full name": "name", "player": "name", "player name": "name", "name": "name",
+    "position": "pos", "pos.": "pos", "pos": "pos",
+    "academic year": "year", "athletic year": "year", "year": "year", "yr.": "year", "yr": "year",
+    "class": "year", "cl.": "year", "cl": "year", "eligibility": "year", "elig.": "year",
+    "height": "ht", "ht.": "ht", "ht": "ht",
+    "number": "#", "no": "#", "no.": "#", "#": "#", "jersey number": "#", "number jersey number": "#",
+    "club team": "club", "club": "club",
+}
+
+
+def _norm_header(text: str) -> str:
+    h = common.clean(text).lower()
+    return HEADER_ALIASES.get(h, h)
+
+
 def _header_index(table) -> tuple[dict[str, int], int, str]:
     """Return (header index, number of header rows, caption). Staff tables have a caption row
-    ('Coaching Staff') above the real header row."""
+    ('Coaching Staff') above the real header row. Header names are canonicalised through
+    HEADER_ALIASES; the first column wins when two headers fold onto the same key."""
     rows = table.find_all("tr")[:2]
     caption = ""
     for n, tr in enumerate(rows, start=1):
-        heads = [common.clean(c.get_text(" ")).lower() for c in tr.find_all(["th", "td"])]
+        heads = [_norm_header(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
         if "name" in heads:
-            return {h: i for i, h in enumerate(heads)}, n, caption
+            idx: dict[str, int] = {}
+            for i, h in enumerate(heads):
+                idx.setdefault(h, i)
+            return idx, n, caption
         caption = " ".join(heads)
     return {}, 0, caption
 
 
 def _col(idx: dict, *names):
+    """Column index for the first header that equals one of `names`; failing that, the first
+    header that starts with one of them (so 'hometown / high school' still serves 'hometown')."""
+    for n in names:
+        if n in idx:
+            return idx[n]
     for n in names:
         for h, i in idx.items():
-            if h == n or h.startswith(n):
+            if h.startswith(n):
                 return i
     return None
 
 
-def parse_roster(html: str, base_url: str) -> dict:
-    soup = BeautifulSoup(html, "html.parser")
-    players, staff = [], []
-    # social links live on the person cards, keyed by bio url
-    social_by_url: dict[str, dict] = {}
-    for card in soup.select(".s-person-card"):
-        a = card.find("a", href=re.compile(r"/roster/[a-z0-9-]+/\d+$"))
-        if not a:
-            continue
-        soc = {}
-        for l in card.find_all("a", href=True):
-            if "instagram.com" in l["href"]:
-                soc["instagram"] = l["href"]
-            elif "twitter.com" in l["href"] or "x.com/" in l["href"]:
-                soc["x"] = l["href"]
-        if soc:
-            social_by_url[urljoin(base_url, a["href"])] = soc
+def _player_record(*, number, name, pos_label, height, class_label, hometown, high_school,
+                   previous_school="", club="", major="", bio_url=None, social=None) -> dict:
+    ht = height or ""
+    return {
+        "number": number or "", "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label or "",
+        "height": re.sub(r"\s*''\s*$", '"', ht).replace("' ", "'").replace("′", "'").replace("″", '"'),
+        "heightIn": height_inches(ht),
+        "classLabel": class_label or "", "classCode": class_code(class_label or ""),
+        "hometown": hometown or "", "highSchool": high_school or "", "previousSchool": previous_school or "",
+        "major": major or "", "club": club or "", "bioUrl": bio_url, "social": social or {},
+    }
 
+
+def _split_slash(txt: str) -> tuple[str, str]:
+    """'Milton, Ontario / Kielburger Secondary' -> ('Milton, Ontario', 'Kielburger Secondary')."""
+    if " / " in txt:
+        a, b = txt.split(" / ", 1)
+        return common.clean(a), common.clean(b)
+    return txt, ""
+
+
+def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict | None = None) -> tuple[list, list]:
+    """Players and staff from <table> markup: the player table (name + position columns) and the
+    'Coaching Staff' / 'Support Staff' tables (name + title). Shared with the WMT adapter, whose
+    table theme uses the same header vocabulary."""
+    social_by_url = social_by_url or {}
+    players, staff = [], []
     for table in soup.find_all("table"):
         idx, nhead, caption = _header_index(table)
         if not idx:
             continue
         keys = " ".join(idx) + " " + caption
         rows = table.find_all("tr")[nhead:]
-        if "name" in idx and ("pos." in keys or "pos" in idx):
-            ci = {"num": _col(idx, "#", "no."), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
-                  "yr": _col(idx, "year", "yr", "cl", "class"), "home": _col(idx, "hometown"),
-                  "hs": _col(idx, "high school", "previous", "last school"), "club": _col(idx, "club")}
+        if "name" in idx and "pos" in idx:
+            ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
+                  "yr": _col(idx, "year"), "home": _col(idx, "hometown"),
+                  "hs": _col(idx, "high school", "previous", "last school"), "club": _col(idx, "club"),
+                  "major": _col(idx, "major", "academic major")}
             for tr in rows:
                 cells = tr.find_all(["td", "th"])
                 if len(cells) < 4:
@@ -131,22 +169,17 @@ def parse_roster(html: str, base_url: str) -> dict:
                 name_cell = cells[ci["name"]] if ci["name"] is not None and ci["name"] < len(cells) else None
                 link = name_cell.find("a", href=True) if name_cell else None
                 name = cell("name")
-                if not name:
+                if not name or name.lower() in ("name", "full name"):
                     continue
-                hs_raw = cell("hs")
-                hs, prev = hs_raw, ""
-                if " / " in hs_raw:
-                    hs, prev = [common.clean(x) for x in hs_raw.split(" / ", 1)]
-                ht = cell("ht")
+                hometown = cell("home")
+                hs, prev = _split_slash(cell("hs"))
+                if ci["hs"] is None and " / " in hometown:  # single 'Hometown / High School' column
+                    hometown, hs = _split_slash(hometown)
                 bio_url = urljoin(base_url, link["href"]) if link else None
-                pos_label = cell("pos")
-                players.append({
-                    "number": cell("num"), "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label,
-                    "height": re.sub(r"\s*''\s*$", '"', ht).replace("' ", "'"), "heightIn": height_inches(ht),
-                    "classLabel": cell("yr"), "classCode": class_code(cell("yr")),
-                    "hometown": cell("home"), "highSchool": hs, "previousSchool": prev, "major": "",
-                    "club": cell("club"), "bioUrl": bio_url, "social": social_by_url.get(bio_url, {}),
-                })
+                players.append(_player_record(
+                    number=cell("num"), name=name, pos_label=cell("pos"), height=cell("ht"), class_label=cell("yr"),
+                    hometown=hometown, high_school=hs, previous_school=prev, club=cell("club"), major=cell("major"),
+                    bio_url=bio_url, social=social_by_url.get(bio_url, {})))
         elif "name" in idx and "title" in idx:
             is_coaching = "coach" in keys
             for tr in rows:
@@ -163,10 +196,85 @@ def parse_roster(html: str, base_url: str) -> dict:
                     continue
                 staff.append({
                     "name": name, "title": title,
-                    "isHeadCoach": is_coaching and bool(HEAD_COACH_RE.search(title)) and not NOT_HEAD_RE.search(title),
-                    "isCoach": is_coaching,
+                    "isHeadCoach": bool(HEAD_COACH_RE.search(title)) and not NOT_HEAD_RE.search(title),
+                    "isCoach": is_coaching or bool(re.search(r"coach", title, re.I)),
                     "bioUrl": urljoin(base_url, link["href"]) if link else None, "social": {},
                 })
+    return players, staff
+
+
+def _sr_labelled(el) -> tuple[str, str]:
+    """('position', 'GK') from <span><span class="sr-only">Position</span> GK</span>."""
+    label = ""
+    for sr in el.select(".sr-only"):
+        label = common.clean(sr.get_text(" ")).lower()
+        sr.extract()
+    return label, common.clean(el.get_text(" "))
+
+
+def _parse_person_cards(soup: BeautifulSoup, base_url: str, social_by_url: dict) -> list[dict]:
+    """Players from .s-person-card markup (current Sidearm theme). Used when the page carries no
+    player table. Cards are rendered twice (list + standard variants), so dedupe on bio URL."""
+    players, seen = [], set()
+    for card in soup.select(".s-person-card"):
+        a = card.find("a", href=re.compile(r"/roster/[a-z0-9-]+/\d+$"))
+        if not a:
+            continue
+        bio_url = urljoin(base_url, a["href"])
+        if bio_url in seen:
+            continue
+        h3 = card.select_one(".s-person-details__personal-single-line h3, .s-person-details__personal h3")
+        name = common.clean(h3.get_text(" ")) if h3 else common.clean(a.get_text(" "))
+        if not name:
+            continue
+        seen.add(bio_url)
+        stats = {}
+        for item in card.select(".s-person-details__bio-stats-item"):
+            label, value = _sr_labelled(item)
+            if label:
+                stats.setdefault(label, value)
+        stamp = card.select_one(".s-stamp__text")
+        number = _sr_labelled(stamp)[1] if stamp else ""
+        home_el = card.select_one("[data-test-id$='person-hometown'], .s-person-card__content__person__location-item")
+        hs_el = card.select_one("[data-test-id$='person-high-school'], .s-person-card__content__person__high-school-item")
+        hometown = _sr_labelled(home_el)[1] if home_el else ""
+        high_school = _sr_labelled(hs_el)[1] if hs_el else ""
+        club = next((v for k, v in stats.items() if k.startswith("custom field") or "club" in k), "")
+        players.append(_player_record(
+            number=number, name=name, pos_label=stats.get("position", ""), height=stats.get("height", ""),
+            class_label=stats.get("academic year", stats.get("class", stats.get("year", ""))),
+            hometown=hometown, high_school=high_school, club=club, bio_url=bio_url,
+            social=social_by_url.get(bio_url, {})))
+    return players
+
+
+def looks_client_rendered(html: str) -> bool:
+    """True when the roster page is a template filled in by the browser (legacy Sidearm Knockout /
+    Vue sites, or the current theme's skeleton loader): the served HTML never contains players."""
+    return ("{{ roster." in html or "v-cloak" in html or "@season @sport" in html
+            or ("skeleton-loader" in html and "c-rosterpage" in html) or html.count("data-bind=") > 40)
+
+
+def parse_roster(html: str, base_url: str) -> dict:
+    soup = BeautifulSoup(html, "html.parser")
+    # social links live on the person cards, keyed by bio url
+    social_by_url: dict[str, dict] = {}
+    for card in soup.select(".s-person-card"):
+        a = card.find("a", href=re.compile(r"/roster/[a-z0-9-]+/\d+$"))
+        if not a:
+            continue
+        soc = {}
+        for l in card.find_all("a", href=True):
+            if "instagram.com" in l["href"]:
+                soc["instagram"] = l["href"]
+            elif "twitter.com" in l["href"] or "x.com/" in l["href"]:
+                soc["x"] = l["href"]
+        if soc:
+            social_by_url[urljoin(base_url, a["href"])] = soc
+
+    players, staff = parse_roster_tables(soup, base_url, social_by_url)
+    if not players:
+        players = _parse_person_cards(soup, base_url, social_by_url)
     seen, uniq = set(), []
     for s in staff:
         k = s["bioUrl"] or s["name"]

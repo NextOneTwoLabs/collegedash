@@ -46,12 +46,20 @@ def _extract_club(sections: dict) -> str:
     return ""
 
 
+SIDEARM_MARKERS = ("s-person-card", "c-rosterpage", "sidearm-roster")
+WMT_MARKERS = ("roster-card-item", "roster-list-item", "roster-card__", "player-list-item", "roster-table-cell", "wmt.digital")
+
+
 def detect_platform(html: str) -> str | None:
-    """Guess the athletics-site platform from the roster page markup."""
-    if "s-person-card" in html or "c-rosterpage" in html or "sidearmsports" in html.lower():
+    """Guess the athletics-site platform from the roster page markup. Specific roster markers
+    first; the generic 'sidearmsports' string (asset host) only as a last resort, since some WMT
+    pages embed Sidearm-hosted images."""
+    if any(m in html for m in SIDEARM_MARKERS):
         return "sidearm"
-    if "roster-card-item" in html or "roster-list-item" in html or "wmt.digital" in html:
+    if any(m in html for m in WMT_MARKERS):
         return "wmt"
+    if "sidearmsports" in html.lower():
+        return "sidearm"
     return None
 
 
@@ -75,12 +83,17 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     base = program["athletics"].get("baseUrl")
     if not base:
         raise common.FetchError("athletics: no baseUrl in registry (athletics website unknown)")
+    if program["athletics"].get("rosterRequiresBrowser"):
+        raise common.SkipCollector("athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); "
+                                   "needs a headless browser, see athletics.note")
     platform = program["athletics"].get("platform") or "auto"
     if platform == "auto":
         probe_url = f"{base}{program['athletics']['sportPath']}/roster"
         html0, _ = common.fetch_text(probe_url, max_age_hours=24)
         platform = detect_platform(html0)
         if not platform:
+            if len(html0) < 2000:
+                raise common.FetchError(f"athletics: {probe_url} is a stub/redirect page ({len(html0)} bytes) - wrong baseUrl?")
             raise common.FetchError(f"athletics: unsupported site platform at {probe_url}")
         _persist_platform(program, platform)
     ad = adapters.get(platform)
@@ -89,6 +102,21 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     html, meta = common.fetch_text(u["roster"], max_age_hours=24)
     roster = ad.parse_roster(html, base)
     if not roster["players"]:
+        # the registry platform may be wrong (detected from a generic marker); trust the markup
+        detected = detect_platform(html)
+        if detected and detected != platform:
+            common.log(f"athletics: registry says {platform} but roster markup looks like {detected}; switching")
+            platform = detected
+            _persist_platform(program, platform)
+            ad = adapters.get(platform)
+            u = ad.urls(program, registry)
+            html, meta = common.fetch_text(u["roster"], max_age_hours=24)
+            roster = ad.parse_roster(html, base)
+    if not roster["players"]:
+        from .adapters.sidearm import looks_client_rendered
+        if looks_client_rendered(html):
+            raise common.FetchError(f"athletics: roster page is rendered in the browser at {u['roster']}; "
+                                    f"set athletics.rosterRequiresBrowser=true in the registry to skip it")
         raise common.FetchError(f"athletics: roster parse found 0 players at {u['roster']}")
     season = roster["season"] or registry["season"]["current"]
     common.log(f"athletics[{platform}]: {season} roster {len(roster['players'])} players, {len(roster['staff'])} staff")

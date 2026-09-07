@@ -164,6 +164,8 @@ def parse_roster(html: str, base_url: str) -> dict:
                 "bioUrl": urljoin(base_url, staff_link["href"]),
                 "social": _social(card),
             })
+    if not players:
+        _parse_redesign_layouts(soup, base_url, players, staff)
     # de-duplicate staff (cards can appear twice in markup for mobile/desktop)
     seen, uniq = set(), []
     for s in staff:
@@ -171,6 +173,117 @@ def parse_roster(html: str, base_url: str) -> dict:
             seen.add(s["bioUrl"])
             uniq.append(s)
     return {"season": _season_from_title(soup), "players": players, "staff": uniq}
+
+
+def _labelled_fields(item) -> dict:
+    """<span class="profile-field-content"><strong class="...__title">Hometown</strong>
+    <span class="...__value">O'Fallon, Mo.</span></span> -> {'hometown': "O'Fallon, Mo."}."""
+    out = {}
+    for f in item.select(".profile-field-content"):
+        lab = f.select_one(".profile-field-content__title")
+        val = f.select_one(".profile-field-content__value")
+        if lab and val:
+            out[common.clean(lab.get_text(" ")).lower()] = common.clean(val.get_text(" "))
+    return out
+
+
+def _staff_from(item, name: str, title: str, link) -> dict:
+    return {
+        "name": name, "title": title,
+        "isHeadCoach": bool(HEAD_COACH_RE.search(title)) and not NOT_HEAD_RE.search(title),
+        "isCoach": bool(re.search(r"coach|director of women", title, re.I)),
+        "bioUrl": link, "social": _social(item),
+    }
+
+
+def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, staff: list) -> None:
+    """The 2025 WMT redesign ships three roster themes:
+      card grid  .roster-card        (clemsontigers.com, gobearcats.com, goseattleu.com)
+      list       li.player-list-item + li.staff-list-item   (gopsusports.com)
+      table      <table> with roster-table-cell--* cells    (byucougars.com, ucfknights.com, nusports.com)
+    Unlabeled card values are classified by shape: 5′10″ = height, 'Gr.'/'Junior' = class, else hometown."""
+    for card in soup.select(".roster-card"):
+        link = card.select_one("a.roster-card__title-link") or next(
+            (l for l in card.select("a[href*='/roster/']") if common.clean(l.get_text(" "))), None)
+        if not link:
+            continue
+        name = common.clean(link.get_text(" "))
+        href = urljoin(base_url, link["href"])
+        pos_el = card.select_one(".roster-card__position")
+        pos_label = common.clean(pos_el.get_text(" ")) if pos_el else ""
+        if not name:
+            continue
+        if "/staff/" in href:
+            staff.append(_staff_from(card, name, pos_label, href))
+            continue
+        # unlabeled values (clemson: .roster-players-cards-item__info-item; purdue/cincinnati:
+        # .roster-player-card-profile-field__value, sometimes with an aria-label such as "Height")
+        fields = _labelled_fields(card)
+        vals = []
+        for v in card.select(".roster-players-cards-item__info-item, .roster-player-card-profile-field__value"):
+            if "roster-player-card-profile-field__value--position" in (v.get("class") or []):
+                continue
+            txt = common.clean(v.get_text(" "))
+            if not txt:
+                continue
+            if v.get("aria-label"):
+                fields.setdefault(common.clean(v["aria-label"]).lower(), txt)
+            else:
+                vals.append(txt)
+        height = fields.get("height") or next((v for v in vals if HEIGHT_RE.search(v)), "")
+        class_label = fields.get("class", fields.get("year", "")) or next((v for v in vals if v != height and class_code(v)), "")
+        hometown = next((v for v in vals if v not in (height, class_label)), "")
+        num_el = card.select_one(".roster-card__jersey-number")
+        players.append({
+            "number": common.clean(num_el.get_text()).lstrip("#") if num_el else "",
+            "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label,
+            "height": height.replace("′", "'").replace("″", '"'), "heightIn": height_inches(height),
+            "classLabel": class_label, "classCode": class_code(class_label),
+            "hometown": fields.get("hometown", hometown), "highSchool": fields.get("high school", ""),
+            "previousSchool": fields.get("previous school", ""), "major": fields.get("major", ""),
+            "club": fields.get("club team", fields.get("club", "")),
+            "bioUrl": href, "social": _social(card),
+        })
+    for item in soup.select("li.player-list-item"):
+        link = item.select_one("a.player-list-item__title-link") or next(
+            (l for l in item.select("a[href*='/roster/'][href*='/player/']") if common.clean(l.get_text(" "))), None)
+        if not link:
+            continue
+        name = common.clean(link.get_text(" "))
+        if not name:
+            continue
+        f = _labelled_fields(item)
+        pos_el = item.select_one(".player-list-item__position")
+        pos_label = common.clean(pos_el.get_text(" ")) if pos_el else f.get("position", "")
+        num_el = item.select_one(".player-list-item__jersey-number")
+        height = f.get("height", "")
+        class_label = f.get("year", f.get("class", ""))
+        players.append({
+            "number": common.clean(num_el.get_text()).lstrip("#") if num_el else "",
+            "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label,
+            "height": height.replace("′", "'").replace("″", '"'), "heightIn": height_inches(height),
+            "classLabel": class_label, "classCode": class_code(class_label),
+            "hometown": f.get("hometown", ""), "highSchool": f.get("high school", ""),
+            "previousSchool": f.get("previous school", ""), "major": f.get("major", ""),
+            "club": f.get("club team", f.get("club", "")),
+            "bioUrl": urljoin(base_url, link["href"]), "social": _social(item),
+        })
+    for item in soup.select("li.staff-list-item"):
+        link = item.select_one("a.staff-list-item__title-link") or next(
+            (l for l in item.select("a[href*='/staff/']") if common.clean(l.get_text(" "))), None)
+        if not link:
+            continue
+        name = common.clean(link.get_text(" "))
+        title_el = item.select_one(".staff-list-item__position, [class*='staff-list-item__'][class*='position'], [class*='staff-list-item__'][class*='title']:not(a)")
+        f = _labelled_fields(item)
+        title = common.clean(title_el.get_text(" ")) if title_el and title_el is not link else f.get("title", f.get("position", ""))
+        if name:
+            staff.append(_staff_from(item, name, title, urljoin(base_url, link["href"])))
+    if not players and soup.select("table .roster-table-cell"):
+        from .sidearm import parse_roster_tables
+        tp, ts = parse_roster_tables(soup, base_url)
+        players.extend(tp)
+        staff.extend(ts)
 
 
 def parse_bio(html: str) -> dict:
