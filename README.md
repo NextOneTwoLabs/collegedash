@@ -24,6 +24,8 @@ Any static server over `public/` also works (`cd public && python -m http.server
 python collegedash.py onboard stanford          # every collector for one program, then build
 python collegedash.py refresh                   # refresh all onboarded programs (what CI runs)
 python collegedash.py refresh --only tds,news   # a subset: scorecard climate wikipedia athletics tds soccerwire news rpi
+python collegedash.py refresh --failed --dry-run # re-run only collectors whose last run failed (drop --dry-run to run)
+python tools/roster_check.py                    # offline: parse every cached roster page, report per-program outcome
 python collegedash.py build                     # re-merge sources -> public/data (after editing curated.json)
 python collegedash.py validate                  # schema + completeness report
 python collegedash.py rpi history --force       # re-download the 2007-2024 RPI archive
@@ -49,7 +51,8 @@ the rate-limited `DEMO_KEY`.
 | `programs/<slug>/commitments.reviewed.json` | Your decisions: approved social records, merges, status overrides |
 | `programs/<slug>/sources/*.json` | Raw collector output with provenance (`collector`, `sourceUrl`, `fetchedAt`) |
 | `data/commitments/` | All-D1 commitment sweeps with firstSeen/lastSeen (phase 2) |
-| `collect/` | Collectors; `adapters/` = athletics-site platforms (`wmt` now, `sidearm` next) |
+| `collect/` | Collectors; `adapters/` = athletics-site platforms (`sidearm`, `wmt`) |
+| `tools/` | Maintenance scripts: offline roster parser check, athletics URL probe, cache compaction |
 | `build.py` | Merges sources + curated + reviewed into `public/data`, resolves commitment identities |
 | `serve.py` | Local server with `/api/curated/<slug>` and `/api/review/<slug>` write endpoints |
 | `scout/` | Social-media scout (phase 2): watchlist, keyword filter, review queue |
@@ -60,9 +63,9 @@ the rate-limited `DEMO_KEY`.
 
 | Data | Source | Notes |
 |---|---|---|
-| Roster, staff, bios, schedule, news | Official athletics site | Stanford = WMT Digital; most other D1 sites are Sidearm (adapter TBD) |
+| Roster, staff, bios, schedule, news | Official athletics site | Sidearm (two generations) and WMT Digital (four roster themes); a few legacy sites render rosters in the browser and are skipped (`athletics.rosterRequiresBrowser`) |
 | School facts | College Scorecard API | admission rate, test bands, size, cost, outcomes |
-| Climate | Open-Meteo ERA5 archive | 1991–2020 daily → monthly normals; no key |
+| Climate | NOAA NCEI 1991–2020 U.S. Climate Normals (monthly) | nearest airport/coop station to campus; no key, no quota |
 | History, honours | Wikipedia team article | infobox + year-by-year table |
 | RPI 2007–2024 | Chris Henderson, *RPI for Division I Women's Soccer* | end-of-season, recomputed under the 2024 formula (XLSX export; the CSV export loses formula values for 2021–24) |
 | RPI weekly | NCAA.com RPI page | only the latest week is published; each refresh archives a snapshot |
