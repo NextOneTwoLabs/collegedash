@@ -582,16 +582,17 @@ def _norm_title(t: str) -> str:
     return re.sub(r"[^a-z0-9 ]+", " ", common.strip_accents(t.replace("_", " ")).lower()).strip()
 
 
-def _accept_title(title: str, short: str) -> bool:
-    """Only '<Short name> <Nickname> women's soccer' style titles for THIS school: the title must
-    end with women's soccer, not be a season article, and start with the school's short name
-    ('Illinois State ...' never accepts 'Northern Illinois Huskies women's soccer')."""
-    low = _norm_title(title)
-    if not low.endswith("women s soccer") or SEASON_ARTICLE_RE.match(title):
+def _accept_title(title: str, short: str, nick: str = "") -> bool:
+    """Only the title forms '<Short> <Nickname> women's soccer' / '<Short> women's soccer' for THIS
+    school ('Iowa' must not accept 'Iowa State Cyclones women's soccer', 'Illinois State' must not
+    accept 'Northern Illinois Huskies women's soccer')."""
+    if SEASON_ARTICLE_RE.match(title):
         return False
-    # keep dashes here so 'Louisiana' does not accept 'Louisiana–Monroe Warhawks ...'
-    raw = common.strip_accents(title.replace("_", " ")).lower()
-    return low.startswith(_norm_title(short) + " ") and raw.startswith(common.strip_accents(short).lower() + " ")
+    low = _norm_title(title)
+    wanted = {_norm_title(f"{short} women's soccer")}
+    if nick:
+        wanted.add(_norm_title(f"{short} {nick} women's soccer"))
+    return low in wanted
 
 
 def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
@@ -605,7 +606,7 @@ def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
     probes = [f"{short} {nick} women's soccer", f"{short} women's soccer"] if nick else [f"{short} women's soccer"]
     for title in probes:
         canon = wiki_canonical(title.replace(" ", "_"))
-        if canon and _accept_title(canon, short):
+        if canon and _accept_title(canon, short, nick):
             return canon, rejected
     seen = []
     for q in (f"{short} {nick} women's soccer", f"{short} women's soccer"):
@@ -613,9 +614,9 @@ def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
             if title in seen:
                 continue
             seen.append(title)
-            if _accept_title(title, short):
+            if _accept_title(title, short, nick):
                 canon = wiki_canonical(title.replace(" ", "_"))
-                if canon and _accept_title(canon, short):
+                if canon and _accept_title(canon, short, nick):
                     return canon, rejected
             elif _norm_title(title).endswith("women s soccer") and not SEASON_ARTICLE_RE.match(title):
                 rejected.append(title)
