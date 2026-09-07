@@ -5,7 +5,7 @@ CollegeDash command line.
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
-  python collegedash.py registry build|tidy|fix-wiki [--apply]
+  python collegedash.py registry build|tidy|fix-wiki|colors [--apply] [--slug a,b]
   python collegedash.py sweep [tds|soccerwire|all] [--years 2027,2028]
   python collegedash.py rpi [history|current|all] [--force]
   python collegedash.py build                            merge programs/* -> public/data
@@ -206,6 +206,9 @@ def cmd_registry(args):
     if args.what == "fix-wiki":
         registry_builder.fix_wiki(reg, apply=args.apply, slugs=args.slug.split(",") if args.slug else None)
         return 0
+    if args.what == "colors":
+        registry_builder.fill_colors(reg, apply=args.apply, slugs=args.slug.split(",") if args.slug else None)
+        return 0
     report = registry_builder.build(reg, limit=args.limit)
     print(json.dumps({"counts": report["counts"], "lowConfidence": report["lowConfidence"][:40],
                       "unmatched": report["unmatched"]}, indent=1, ensure_ascii=False))
@@ -238,8 +241,8 @@ def main(argv=None):
     p.add_argument("--dry-run", action="store_true", help="print what would run, run nothing"); p.set_defaults(fn=cmd_refresh)
     p = sub.add_parser("sweep"); p.add_argument("source", nargs="?", default="all", choices=["tds", "soccerwire", "all"]); p.add_argument("--years"); p.set_defaults(fn=cmd_sweep)
     p = sub.add_parser("rpi"); p.add_argument("what", nargs="?", default="all", choices=["history", "current", "all"]); p.add_argument("--force", action="store_true"); p.set_defaults(fn=cmd_rpi)
-    p = sub.add_parser("registry"); p.add_argument("what", nargs="?", default="build", choices=["build", "tidy", "fix-wiki"]); p.add_argument("--limit", type=int)
-    p.add_argument("--apply", action="store_true", help="fix-wiki: write discovered article titles to the registry"); p.add_argument("--slug"); p.set_defaults(fn=cmd_registry)
+    p = sub.add_parser("registry"); p.add_argument("what", nargs="?", default="build", choices=["build", "tidy", "fix-wiki", "colors"]); p.add_argument("--limit", type=int)
+    p.add_argument("--apply", action="store_true", help="fix-wiki/colors: write the results to the registry"); p.add_argument("--slug"); p.set_defaults(fn=cmd_registry)
     p = sub.add_parser("build"); p.set_defaults(fn=cmd_build)
     p = sub.add_parser("validate"); p.set_defaults(fn=cmd_validate)
     p = sub.add_parser("serve"); p.add_argument("--port", type=int, default=8000); p.set_defaults(fn=cmd_serve)

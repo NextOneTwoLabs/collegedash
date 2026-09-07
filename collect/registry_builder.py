@@ -648,3 +648,136 @@ def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = N
     elif found:
         print("dry run - pass --apply to write the registry")
     return {"found": found, "none": none}
+
+
+# ---------- team colours (Wikipedia Module:College color/data) ----------
+
+COLOR_MODULE_URL = "https://en.wikipedia.org/w/index.php?title=Module:College_color/data&action=raw"
+# One entry per line:  ["Key"] = {"RRGGBB", "RRGGBB", ..., name1="crimson", cite="..."},  -- optional comment
+#                      ["Alias"] = "Canonical Key",
+_COLOR_ENTRY = re.compile(r'^\s*\["(?P<key>[^"]+)"\]\s*=\s*(?:"(?P<alias>[^"]+)"|\{(?P<body>.*)\})\s*,?\s*(?:--.*)?$')
+_HEX6 = re.compile(r'"([0-9A-Fa-f]{6})"')
+_BODY_TAIL = re.compile(r"\b(?:name\d|cite|order)\s*=")  # cite text can contain stray hex-looking strings
+COLOR_OVERRIDES = {  # registry slug -> module key where no name form matches
+    "loyola-chicago": "Loyola Ramblers", "long-beach-state": "Long Beach State Beach",
+    "mississippi-val": "Mississippi Valley State Delta Devils", "saint-francis": "Saint Francis Red Flash",
+    "ohio-university": "Ohio Bobcats", "st-thomas": "St. Thomas (Minnesota) Tommies",
+}
+
+
+def fetch_color_table() -> tuple[dict[str, list[str]], dict[str, str]]:
+    """(entries: key -> ['#RRGGBB', ...], aliases: key -> canonical key) from the Lua data module."""
+    text, _ = common.fetch_text(COLOR_MODULE_URL, max_age_hours=24 * 30)
+    entries: dict[str, list[str]] = {}
+    aliases: dict[str, str] = {}
+    for line in text.splitlines():
+        m = _COLOR_ENTRY.match(line)
+        if not m:
+            continue
+        if m.group("alias"):
+            aliases[m.group("key")] = m.group("alias")
+            continue
+        head = _BODY_TAIL.split(m.group("body"))[0]
+        hexes = ["#" + h.upper() for h in _HEX6.findall(head)]
+        if hexes:
+            entries[m.group("key")] = hexes
+    if len(entries) < 500:
+        raise common.FetchError(f"college colour table parsed only {len(entries)} entries (format change?)")
+    common.log(f"colors: {len(entries)} entries, {len(aliases)} aliases from Wikipedia")
+    return entries, aliases
+
+
+def _color_norm(s: str) -> str:
+    s = common.strip_accents(s or "").lower().replace("’", "'").replace("–", "-").replace("—", "-")
+    s = re.sub(r"\([^)]*\)", " ", s)
+    s = re.sub(r"[^a-z0-9]+", " ", s)
+    s = re.sub(r"\bst\b", "saint", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _resolve_color_key(key: str | None, entries: dict, aliases: dict) -> str | None:
+    for _ in range(4):
+        if not key:
+            return None
+        if key in entries:
+            return key
+        key = aliases.get(key)
+    return None
+
+
+def _registry_colors(hexes: list[str]) -> list[str]:
+    """Wikipedia stores {primary, contrast-text colour, secondary, ...}; the registry keeps [primary, secondary]."""
+    if len(hexes) >= 3:
+        return [hexes[0], hexes[2]]
+    return hexes[:2]
+
+
+def match_colors(program: dict, entries: dict, aliases: dict, by_norm: dict[str, str]) -> tuple[str | None, str]:
+    slug = program["slug"]
+    short = program.get("shortName") or program["name"]
+    nick = program.get("nickname") or ""
+    bare_nick = re.sub(r"^Lady\s+", "", nick)
+
+    def lookup(text: str, how: str):
+        k = _resolve_color_key(text, entries, aliases)
+        if k:
+            return k, how
+        k = _resolve_color_key(by_norm.get(_color_norm(text)), entries, aliases)
+        return (k, how + "-norm") if k else (None, "")
+
+    if slug in COLOR_OVERRIDES:
+        k = _resolve_color_key(COLOR_OVERRIDES[slug], entries, aliases)
+        if k:
+            return k, "override"
+    candidates = []
+    if nick:
+        candidates.append((f"{short} {nick}", "exact"))
+        if bare_nick != nick:
+            candidates.append((f"{short} {bare_nick}", "no-lady"))
+        candidates.append((f"{program['name']} {nick}", "fullname"))
+    for text, how in candidates:
+        k, h = lookup(text, how)
+        if k:
+            return k, h
+    # unique prefix (+ suffix) scan over normalised keys
+    ns, nn = _color_norm(short), _color_norm(bare_nick)
+    hits = [k for n, k in by_norm.items() if n.startswith(ns + " ") and (not nn or n.endswith(" " + nn))]
+    hits = sorted({_resolve_color_key(k, entries, aliases) for k in hits} - {None})
+    if len(hits) == 1:
+        return hits[0], "prefix"
+    return None, ""
+
+
+def fill_colors(registry: dict, *, apply: bool = False, slugs: list[str] | None = None) -> dict:
+    """Fill `colors` for programs that have none from Wikipedia's college colour table. Dry run by
+    default; --apply writes the registry (locked). Hand-set colours are never overwritten."""
+    entries, aliases = fetch_color_table()
+    by_norm: dict[str, str] = {}
+    for k in list(entries) + list(aliases):
+        by_norm.setdefault(_color_norm(k), k)
+    targets = [p for p in registry["programs"] if not slugs or p["slug"] in slugs]
+    found, none, kept = {}, [], []
+    for p in targets:
+        if p.get("colors"):
+            kept.append(p["slug"])
+            common.log(f"colors: {p['slug']:24} -> (kept) {p['colors']}  hand-set")
+            continue
+        key, how = match_colors(p, entries, aliases, by_norm)
+        if key:
+            found[p["slug"]] = _registry_colors(entries[key])
+            common.log(f"colors: {p['slug']:24} -> {key:40} {' '.join(found[p['slug']])}   ({how})")
+        else:
+            none.append(p["slug"])
+            common.log(f"colors: {p['slug']:24} -> (none)")
+    print(f"\nmatched {len(found)} of {len(targets) - len(kept)} needing colours; kept {len(kept)} hand-set; "
+          f"unmatched: {', '.join(none) or '-'}")
+    if apply and found:
+        def mutate(reg):
+            for p in reg["programs"]:
+                if p["slug"] in found and not p.get("colors"):
+                    p["colors"] = found[p["slug"]]
+        common.update_registry(mutate)
+        print(f"registry updated: colors set for {len(found)} programs")
+    elif found:
+        print("dry run - pass --apply to write the registry")
+    return {"found": found, "none": none, "kept": kept}

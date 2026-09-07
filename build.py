@@ -528,6 +528,7 @@ def summary_row(p: dict) -> dict:
         "city": school.get("city"), "state": school.get("state"), "region": school.get("region"),
         "ownership": school.get("ownership"), "undergradEnrollment": school.get("undergradEnrollment"),
         "admissionRate": school.get("admissionRate"), "sat25": school.get("sat25"), "sat75": school.get("sat75"),
+        "tuitionInState": school.get("tuitionInState"), "tuitionOutOfState": school.get("tuitionOutOfState"),
         "headCoach": p["program"]["headCoach"].get("name"), "coachSince": p["program"]["headCoach"].get("since"),
         "nationalTitles": len(p["program"].get("nationalTitles") or []),
         "collegeCups": len(p["program"].get("collegeCups") or []),
