@@ -578,32 +578,48 @@ def _wiki_search(q: str) -> list[str]:
     return [hit.get("title", "") for hit in payload.get("query", {}).get("search", [])]
 
 
+def _norm_title(t: str) -> str:
+    return re.sub(r"[^a-z0-9 ]+", " ", common.strip_accents(t.replace("_", " ")).lower()).strip()
+
+
+def _accept_title(title: str, short: str) -> bool:
+    """Only '<Short name> <Nickname> women's soccer' style titles for THIS school: the title must
+    end with women's soccer, not be a season article, and start with the school's short name
+    ('Illinois State ...' never accepts 'Northern Illinois Huskies women's soccer')."""
+    low = _norm_title(title)
+    if not low.endswith("women s soccer") or SEASON_ARTICLE_RE.match(title):
+        return False
+    # keep dashes here so 'Louisiana' does not accept 'Louisiana–Monroe Warhawks ...'
+    raw = common.strip_accents(title.replace("_", " ")).lower()
+    return low.startswith(_norm_title(short) + " ") and raw.startswith(common.strip_accents(short).lower() + " ")
+
+
 def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
-    """Best guess at the program's Wikipedia team article via the search API, verified to exist.
-    Returns (canonical title or None, other plausible candidates)."""
+    """Best guess at the program's Wikipedia team article, verified to exist. Direct title probes
+    first ('Kentucky Wildcats women's soccer'), then the search API; a probe that redirects to the
+    athletics article ('Kentucky Wildcats') means there is no dedicated article.
+    Returns (canonical title or None, rejected-but-plausible candidates)."""
     short = program.get("shortName") or program["name"]
     nick = program.get("nickname") or ""
-    key_tokens = {t for t in tokens(short) | tokens(nick) if len(t) > 2 and t not in ("state", "university", "college")}
-    queries = [f'"{short} {nick} women\'s soccer"', f"{short} {nick} women's soccer", f"{short} women's soccer"]
-    seen, plausible = [], []
-    for q in queries:
+    rejected: list[str] = []
+    probes = [f"{short} {nick} women's soccer", f"{short} women's soccer"] if nick else [f"{short} women's soccer"]
+    for title in probes:
+        canon = wiki_canonical(title.replace(" ", "_"))
+        if canon and _accept_title(canon, short):
+            return canon, rejected
+    seen = []
+    for q in (f"{short} {nick} women's soccer", f"{short} women's soccer"):
         for title in _wiki_search(q):
             if title in seen:
                 continue
             seen.append(title)
-            low = title.lower()
-            if not low.endswith("women's soccer") or SEASON_ARTICLE_RE.match(title):
-                continue
-            if not (tokens(title) & key_tokens):
-                continue
-            plausible.append(title)
-        if plausible:
-            break
-    for title in plausible:
-        canon = wiki_canonical(title.replace(" ", "_"))
-        if canon:
-            return canon, [t for t in plausible if t != title]
-    return None, plausible
+            if _accept_title(title, short):
+                canon = wiki_canonical(title.replace(" ", "_"))
+                if canon and _accept_title(canon, short):
+                    return canon, rejected
+            elif _norm_title(title).endswith("women s soccer") and not SEASON_ARTICLE_RE.match(title):
+                rejected.append(title)
+    return None, rejected
 
 
 def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = None) -> dict:
