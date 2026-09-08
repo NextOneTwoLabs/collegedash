@@ -414,7 +414,7 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 const S = {
   index: null, profiles: {}, refresh: null, local: false,
   favorites: new Set(), compare: [], q: '',
-  filters: { conf: '', region: '', sort: 'rpi', classYear: '', view: 'cards', moreStats: false },
+  filters: { conf: [], region: [], sort: 'rpi', classYear: [], view: 'cards', moreStats: false }, // conf/region/classYear: [] = all
   sidebarTab: 'programs', residency: '',
 };
 const RPI_SEASON = 2025;
@@ -512,6 +512,10 @@ function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 S.favorites = new Set(lsGet('cd.favorites', []));
 S.compare = (lsGet('cd.compare', []) || []).slice(0, 4);
 Object.assign(S.filters, lsGet('cd.filters', {}) || {});
+for (const k of ['conf', 'region', 'classYear']) { const v = S.filters[k]; S.filters[k] = Array.isArray(v) ? v.map(String) : v ? [String(v)] : []; } // older saves held one value
+// multi-select pill groups: toggling a value removes it or adds it; "All" clears the group, so All and a value are never both active
+function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
+const pillAttrs = (attr, value, on) => `class="pill${on ? ' active' : ''}" data-${attr}="${esc(value)}" aria-pressed="${on}"`;
 S.residency = lsGet('cd.residency', '') || '';
 function saveState() { lsSet('cd.filters', S.filters); lsSet('cd.compare', S.compare); lsSet('cd.residency', S.residency); }
 
@@ -621,11 +625,11 @@ function renderSidebar() {
       <div class="sidebar-section-title">Browse</div>
       <div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
       <div class="browse-label">Region</div>
-      <div class="pill-row" role="group" aria-label="Region"><button class="pill${!f.region ? ' active' : ''}" data-region="">All</button>${REGIONS.map(r => `<button class="pill${f.region === r ? ' active' : ''}" data-region="${esc(r)}">${esc(r)}</button>`).join('')}</div>
+      <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
       <div class="browse-label">Recruiting class</div>
-      <div class="pill-row" role="group" aria-label="Recruiting class"><button class="pill${!f.classYear ? ' active' : ''}" data-class="">All</button>${years.map(y => `<button class="pill${f.classYear === String(y) ? ' active' : ''}" data-class="${y}">'${String(y).slice(2)}</button>`).join('')}</div>
+      <div class="pill-row" role="group" aria-label="Recruiting class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>
       <div class="browse-label">Conference</div>
-      <div class="pill-row" role="group" aria-label="Conference"><button class="pill${!f.conf ? ' active' : ''}" data-conf="">All</button>${confs.map(([c, n]) => `<button class="pill${f.conf === c ? ' active' : ''}" data-conf="${esc(c)}" title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`).join('')}</div>`;
+      <div class="pill-row" role="group" aria-label="Conference"><button ${pillAttrs('conf', '', !f.conf.length)}>All</button>${confs.map(([c, n]) => `<button ${pillAttrs('conf', c, f.conf.includes(c))} title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`).join('')}</div>`;
   } else if (tab === 'shortlist') {
     const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999));
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
@@ -644,9 +648,9 @@ function renderSidebar() {
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span><span><kbd>c</kbd> cards / table</span></div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { f.conf = b.dataset.conf; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { f.region = b.dataset.region; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { f.classYear = b.dataset.class; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
@@ -695,7 +699,7 @@ function route() {
   $('#main').scrollTop = 0;
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
   if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
-    S.filters.conf = decodeURIComponent(parts[1] || ''); saveState(); renderSidebar();
+    const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; saveState(); renderSidebar();
     history.replaceState(null, '', '#/'); return go(renderList());
   }
   if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = ''; saveState(); location.replace('#/'); return; }
@@ -794,12 +798,14 @@ function filteredPrograms() {
   const idx = S.index, f = S.filters;
   const score = new Map();
   idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
-  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug)) && (!f.conf || p.conference === f.conf) && (!f.region || p.region === f.region));
+  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug)) && (!f.conf.length || f.conf.includes(p.conference)) && (!f.region.length || f.region.includes(p.region)));
   rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || sortCmp(f.sort)(a, b));
   return rows;
 }
 const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missing last (Infinity - Infinity is NaN)
-const commitsFor = (p, y) => y ? (p.commitmentsByYear || {})[y] || 0 : Object.values(p.commitmentsByYear || {}).reduce((a, b) => a + b, 0);
+// commits for the selected recruiting classes (all classes when none is selected)
+const commitsFor = (p, years) => Object.entries(p.commitmentsByYear || {}).filter(([y]) => !years.length || years.includes(y)).reduce((a, [, n]) => a + n, 0);
+const classLabel = years => years.length ? `Commits ${years.map(y => `'${String(y).slice(2)}`).join('+')}` : 'Commits';
 function sortCmp(key) {
   const cy = S.filters.classYear;
   return (a, b) => key === 'name' ? a.name.localeCompare(b.name)
@@ -816,13 +822,15 @@ async function renderList() {
   const idx = await loadIndex();
   const f = S.filters;
   const rows = filteredPrograms();
-  const title = f.conf || 'All programs';
+  const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
   const bits = [`NCAA Division I women's soccer`, `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
-  if (f.region) bits.push(`${f.region} region`);
+  if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
+  if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
+  if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
   if (S.q) bits.push(`matching “${esc(S.q)}”`);
   bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
   const tabs = [['cards', 'Cards'], ['table', 'Table']].map(([k, l]) => `<button class="view-tab${f.view === k ? ' active' : ''}" role="tab" aria-selected="${f.view === k}" data-view="${k}">${l}</button>`).join('');
-  const crumbs = f.conf ? [{ label: 'All programs', href: '#/' }, { label: f.conf }] : [{ label: 'All programs' }];
+  const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${body}</div>`;
@@ -835,7 +843,7 @@ async function renderList() {
 function cardHtml(p) {
   const tc = teamColors(p), cy = S.filters.classYear;
   const years = Object.entries(p.commitmentsByYear || {});
-  const commits = years.length ? years.map(([y, n]) => cy === y ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
+  const commits = years.length ? years.map(([y, n]) => cy.includes(y) ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
   const meta = [p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc).join(' · ');
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
     <div ${bandAttrs(tc)}><h3>${esc(p.shortName || p.name)}<span class="nick">${esc(p.nickname || '')}</span></h3>
@@ -862,7 +870,7 @@ function tableHtml(rows) {
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
     ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
-    ['commits', cy ? `Commits '${cy.slice(2)}` : 'Commits', 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
+    ['commits', classLabel(cy), 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
     ['titles', 'Titles', 'num col-extra', p => p.nationalTitles || '—', 'titles'],
     ['cups', 'College Cups', 'num col-extra', p => p.collegeCups || '—'],
     ['region', 'Region', 'col-extra', p => esc(p.region || '—')],
@@ -872,7 +880,7 @@ function tableHtml(rows) {
   const head = cols.map(([k, label, cls, , sortKey]) => `<th class="${cls}${sortKey ? ' sortable' : ''}${sortKey && f.sort === sortKey ? ' sort-active' : ''}" ${sortKey ? `data-sort="${sortKey}"` : ''}>${esc(label)}</th>`).join('');
   const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn]) => `<td class="${cls}">${fn(p)}</td>`).join('')}</tr>`).join('');
   return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">
-    <div class="flight-header"><div class="flight-title">${esc(f.conf || 'All programs')}</div>
+    <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
     <div class="table-footnote">RPI and record are the ${RPI_SEASON} season as published by the NCAA · Admission rate and size are for the whole university · Select a program for details</div>
