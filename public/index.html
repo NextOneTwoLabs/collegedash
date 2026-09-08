@@ -1,245 +1,427 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CollegeDash · Women's Soccer</title>
+<title>College Soccer · nextonetwo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ===== THEME TOKENS (light on :root, dark under both scopes) ===== */
+/* ===== THEME TOKENS (shared with ecnl.nextonetwo.com) ===== */
 :root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --header-height: 60px;
+  --sidebar-width: 280px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+  --transition-fast: 0.18s ease; --transition-med: 0.3s ease;
+  --s1: #1d4ed8; --s2: #ea580c; --s3: #059669; --s4: #d97706; --s5: #db2777;
+  --s1-wash: #eef4ff; --s2-wash: rgba(234,88,12,0.10);
+  --good: #059669; --good-text: #047857; --warning: #d97706; --serious: #ea580c; --critical: #b91c1c;
+}
+[data-theme="light"] {
   color-scheme: light;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --page: #f9f9f7; --surface: #fcfcfb; --surface-alt: #f3f2ee;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --border-strong: rgba(11,11,11,0.18);
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
-  --s1-wash: rgba(42,120,214,0.10); --s2-wash: rgba(235,104,52,0.10);
-  --good: #0ca30c; --good-text: #006300; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
-  --accent: #8c1515; --accent-wash: rgba(140,21,21,0.08);
-  --radius: 10px; --radius-sm: 6px; --shadow: 0 1px 3px rgba(0,0,0,0.06);
-  --header-h: 56px;
+  --bg-body: #f5f6f8; --bg-surface: #ffffff; --bg-surface-alt: #f8f9fb; --bg-header: #ffffff;
+  --text-primary: #111827; --text-secondary: #5b6472; --text-header: #111827;
+  --border: #e3e6ea; --border-light: #eef0f3;
+  --accent: #1d4ed8; --accent-hover: #1e40af; --accent-text: #1d4ed8; --accent-contrast: #ffffff;
+  --accent-surface: #eef4ff; --accent-glow: rgba(29, 78, 216, 0.12);
+  --danger-text: #b91c1c; --gold: #d97706; --gold-glow: rgba(217, 119, 6, 0.14); --star-color: #d97706;
+  --row-hover: #f3f5f8;
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05); --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08); --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
+  --warn-bg: rgba(217, 119, 6, 0.10); --warn-text: #7a4d00;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --page: #0d0d0d; --surface: #1a1a19; --surface-alt: #232322;
-    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.18);
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
-    --s1-wash: rgba(57,135,229,0.12); --s2-wash: rgba(217,89,38,0.12);
-    --good-text: #0ca30c; --accent: #e0644d; --accent-wash: rgba(224,100,77,0.12);
-    --shadow: 0 1px 3px rgba(0,0,0,0.4);
-  }
-  :root:not([data-theme="light"]) .badge.warn { color: #ffd77a; }
-}
-:root[data-theme="dark"] {
+[data-theme="dark"] {
   color-scheme: dark;
-  --page: #0d0d0d; --surface: #1a1a19; --surface-alt: #232322;
-  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.18);
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
-  --s1-wash: rgba(57,135,229,0.12); --s2-wash: rgba(217,89,38,0.12);
-  --good-text: #0ca30c; --accent: #e0644d; --accent-wash: rgba(224,100,77,0.12);
-  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  --bg-body: #0f1115; --bg-surface: #171a21; --bg-surface-alt: #1d2129; --bg-header: #171a21;
+  --text-primary: #e8eaee; --text-secondary: #9aa3b2; --text-header: #e8eaee;
+  --border: #2a2f3a; --border-light: #232833;
+  --accent: #60a5fa; --accent-hover: #93c5fd; --accent-text: #7cb3fb; --accent-contrast: #0b1220;
+  --accent-surface: rgba(96, 165, 250, 0.12); --accent-glow: rgba(96, 165, 250, 0.16);
+  --danger-text: #f87171; --gold: #fbbf24; --gold-glow: rgba(251, 191, 36, 0.14); --star-color: #fbbf24;
+  --row-hover: #1f242e;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3); --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4); --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --s1: #7cb3fb; --s3: #34d399; --s4: #fbbf24; --good-text: #34d399; --critical: #f87171; --warn-bg: rgba(251, 191, 36, 0.12); --warn-text: #fbbf24;
+  --s1-wash: rgba(96, 165, 250, 0.14);
 }
-:root[data-theme="dark"] .badge.warn { color: #ffd77a; }
+/* aliases: the section renderers were written against the older token names */
+:root {
+  --page: var(--bg-body); --surface: var(--bg-surface); --surface-alt: var(--bg-surface-alt);
+  --ink: var(--text-primary); --ink-2: var(--text-secondary); --muted: var(--text-secondary);
+  --grid: var(--border-light); --axis: var(--border); --border-strong: var(--border);
+  --accent-wash: var(--accent-surface); --radius: var(--radius-md); --shadow: none;
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { font-family: var(--font); background: var(--page); color: var(--ink); font-size: 14px; line-height: 1.45; }
-a { color: var(--s1); text-decoration: none; } a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+body { font-family: var(--font); background: var(--bg-body); color: var(--text-primary); font-size: 14px; line-height: 1.45; height: 100vh; overflow: hidden; }
+a { color: var(--accent-text); text-decoration: none; } a:hover { text-decoration: underline; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 [hidden] { display: none !important; }
 h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.25; }
-h2 { font-size: 18px; } h3 { font-size: 15px; } h4 { font-size: 13px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; }
+h2 { font-size: 18px; } h3 { font-size: 15px; } h4 { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
 p { margin: 0 0 8px; }
 code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
 table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
-th { font-size: 12px; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
-tr:hover td { background: var(--surface-alt); }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+th { font-size: 12px; color: var(--text-secondary); font-weight: 600; white-space: nowrap; }
+tr:hover td { background: var(--row-hover); }
 .num { text-align: right; }
 .tscroll { overflow-x: auto; max-width: 100%; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ===== HEADER ===== */
+.header { background: var(--bg-header); color: var(--text-header); padding: 0 20px; height: var(--header-height); display: flex; align-items: center; justify-content: space-between;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100; border-bottom: 1px solid var(--border); transition: background var(--transition-med), border-color var(--transition-med); }
+.header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.hamburger { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-secondary); cursor: pointer; transition: background var(--transition-fast), color var(--transition-fast); }
+.hamburger:hover { background: var(--bg-surface-alt); color: var(--text-primary); }
+.hamburger svg { width: 20px; height: 20px; }
+.wordmark { font-size: 21px; font-weight: 800; letter-spacing: -0.6px; line-height: 1; color: var(--text-primary); text-decoration: none; white-space: nowrap; }
+.wordmark:hover { text-decoration: none; }
+.wordmark .accent { color: var(--accent); }
+.header-divider { width: 1px; height: 24px; background: var(--border); }
+.section-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+.header-right { display: flex; align-items: center; gap: 14px; }
+.observed-top { font-size: 13px; font-weight: 500; color: var(--text-secondary); white-space: nowrap; }
+.header-link { font-size: 13px; font-weight: 600; color: var(--accent-text); white-space: nowrap; }
+.theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; background: none; border: 1px solid var(--border); color: var(--text-primary); border-radius: var(--radius-sm); cursor: pointer; font-size: 15px; line-height: 1; transition: background var(--transition-fast), border-color var(--transition-fast); }
+.theme-toggle:hover { background: var(--bg-surface-alt); }
 
 /* ===== LAYOUT ===== */
-.topbar { position: sticky; top: 0; z-index: 20; height: var(--header-h); display: flex; align-items: center; gap: 14px; padding: 0 18px;
-  background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
-.brand { font-weight: 700; font-size: 16px; letter-spacing: -.01em; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-.brand span { color: var(--muted); font-weight: 500; font-size: 12px; }
-.nav { display: flex; gap: 2px; }
-.nav a { padding: 6px 10px; border-radius: var(--radius-sm); color: var(--ink-2); font-weight: 500; }
-.nav a.active, .nav a:hover { background: var(--surface-alt); color: var(--ink); text-decoration: none; }
-.topbar .spacer { flex: 1; }
-.topbar .search { position: relative; display: flex; align-items: center; }
-.topbar input[type=search] { width: 260px; padding: 6px 28px 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); color: var(--ink); -webkit-appearance: none; appearance: none; }
-.topbar input[type=search]::-webkit-search-cancel-button { display: none; }
-.topbar .search .clear { position: absolute; right: 4px; border: none; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 999px; }
-.topbar .search .clear:hover { color: var(--ink); background: var(--surface-alt); }
-.pcard .foot .why { color: var(--ink-2); background: var(--surface-alt); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-size: 11px; }
-.updated { font-size: 12px; color: var(--muted); white-space: nowrap; }
-.iconbtn { border: 1px solid var(--border-strong); background: var(--surface); border-radius: var(--radius-sm); padding: 5px 9px; color: var(--ink-2); }
-.iconbtn:hover { background: var(--surface-alt); }
-main { max-width: 1240px; margin: 0 auto; padding: 18px; }
-.site-notice { max-width: 1240px; margin: 0 auto; padding: 12px 18px 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--grid); }
-.faq { max-width: 760px; margin: 0 auto; }
-.faq .card { margin-bottom: 14px; }
-.faq h2 { font-size: 22px; margin-bottom: 4px; }
-.faq h3 { font-size: 16px; margin-bottom: 8px; }
-.faq p, .faq li { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
-.faq p + p { margin-top: 8px; }
-.faq ul { margin: 6px 0 0 18px; }
-.faq table td, .faq table th { vertical-align: top; }
-.faq .lead { color: var(--ink); font-size: 15px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.layout { display: flex; height: calc(100vh - var(--header-height)); margin-top: var(--header-height); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 49; opacity: 0; transition: opacity var(--transition-med); }
+.sidebar-overlay.visible { display: block; opacity: 1; }
+.sidebar { width: var(--sidebar-width); min-width: var(--sidebar-width); background: var(--bg-surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; padding: 12px 0 0; transition: transform var(--transition-med), background var(--transition-med); z-index: 50; }
+.sidebar-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); padding: 12px 20px 6px; }
+.sidebar-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.sidebar-tab { flex: 1; padding: 12px 6px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); transition: all var(--transition-fast); font-family: var(--font); background: none; white-space: nowrap; }
+.sidebar-tab:hover { color: var(--text-primary); }
+.sidebar-tab.active { color: var(--accent-text); border-bottom-color: var(--accent); }
+.sidebar-search { padding: 4px 16px 8px; position: relative; }
+.search-input { width: 100%; height: 40px; padding: 8px 32px 8px 34px; font-size: 13px; font-family: var(--font); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary);
+  background: var(--bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat; transition: all var(--transition-fast); -webkit-appearance: none; appearance: none; }
+.search-input::-webkit-search-cancel-button { display: none; }
+.search-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
+.search-clear { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); border: none; background: none; color: var(--text-secondary); font-size: 16px; line-height: 1; padding: 4px 6px; border-radius: 999px; cursor: pointer; }
+.search-clear:hover { color: var(--text-primary); background: var(--bg-surface-alt); }
+.search-status { padding: 0 20px 6px; font-size: 12px; color: var(--text-secondary); min-height: 18px; }
+.browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
+.browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
+.browse-row .browse-label { padding: 0; min-width: 52px; }
+.season-select { flex: 1; min-width: 0; padding: 7px 10px; font-size: 13px; font-family: var(--font); color: var(--text-primary); background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: border-color var(--transition-fast), box-shadow var(--transition-fast); }
+.season-select:hover { border-color: var(--accent-text); }
+.season-select:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 16px 10px; }
+.pill { padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 999px; cursor: pointer; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-primary); transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); text-align: center; line-height: 1.25; font-family: var(--font); }
+.pill:hover { border-color: var(--accent); color: var(--accent-text); }
+.pill.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+.conference-list { list-style: none; margin: 0; padding: 0; flex: 1; }
+.conference-item { width: 100%; padding: 9px 20px 9px 17px; font-size: 13px; font-weight: 500; font-family: var(--font); text-align: left; cursor: pointer; background: none; border: none; border-left: 3px solid transparent; transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--text-primary); }
+.conference-item:hover { background: var(--bg-surface-alt); color: var(--accent-text); }
+.conference-item.active { background: var(--accent-surface); border-left-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+.conference-item .count { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+.side-list { list-style: none; margin: 0; padding: 0 8px 8px; }
+.side-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.side-item:hover { background: var(--bg-surface-alt); }
+.side-item .name { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.side-item .meta { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+.side-item .rm { border: none; background: none; color: var(--text-secondary); font-size: 14px; padding: 2px 4px; border-radius: 999px; }
+.side-item .rm:hover { color: var(--danger-text); background: var(--bg-surface-alt); }
+.side-actions { display: flex; gap: 8px; padding: 6px 16px 12px; flex-wrap: wrap; }
+.side-empty { padding: 8px 20px 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.shortcut-hint { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--text-secondary); padding: 10px 16px; border-top: 1px solid var(--border); margin-top: auto; background: var(--bg-surface-alt); }
+.shortcut-hint span { white-space: nowrap; }
+.shortcut-hint kbd { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-family: var(--font); }
+.swatches { display: inline-flex; gap: 2px; vertical-align: middle; flex-shrink: 0; }
+.swatches i { display: inline-block; width: 8px; height: 16px; border-radius: 2px; border: 1px solid var(--border); }
+.swatches.lg i { width: 10px; height: 22px; border-radius: 3px; }
+
+/* ===== MAIN ===== */
+.main { flex: 1; min-width: 0; overflow-y: auto; display: flex; flex-direction: column; }
+#app { flex: 1; }
+.content-header { display: flex; flex-direction: column; padding: 18px 28px 0; background: var(--bg-surface); border-bottom: 1px solid var(--border); }
+.content-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 14px; }
+.content-header-main { min-width: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; flex-wrap: wrap; }
+.breadcrumb a { color: var(--text-secondary); } .breadcrumb a:hover { color: var(--accent-text); text-decoration: none; }
+.breadcrumb-sep { opacity: 0.5; font-size: 10px; }
+.breadcrumb-current { color: var(--text-primary); font-weight: 600; }
+.content-title { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.content-title .nick { font-size: 15px; font-weight: 500; color: var(--text-secondary); }
+.content-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.content-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.observed { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+.ext-links { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.open-external { padding: 6px 8px; font-size: 12px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid transparent; background: none; color: var(--accent-text); cursor: pointer; text-decoration: none; transition: background var(--transition-fast), color var(--transition-fast); display: inline-flex; align-items: center; gap: 5px; font-family: var(--font); white-space: nowrap; }
+.open-external:hover { background: var(--accent-surface); color: var(--accent-hover); text-decoration: none; }
+.open-external svg { width: 14px; height: 14px; flex-shrink: 0; }
+.view-tabs { display: flex; align-items: stretch; gap: 24px; margin-bottom: -1px; flex-wrap: wrap; }
+.view-tab { font-family: inherit; font-size: 14px; font-weight: 600; padding: 6px 2px 12px; border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--text-secondary); cursor: pointer; transition: color var(--transition-fast), border-color var(--transition-fast); text-decoration: none; }
+.view-tab:hover { color: var(--text-primary); text-decoration: none; }
+.view-tab.active { color: var(--accent-text); border-bottom-color: var(--accent); }
+.content-body { padding: 20px 28px 40px; }
+.site-notice { padding: 12px 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+.notice-bar { background: var(--warn-bg); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 12px; margin-bottom: 14px; color: var(--text-primary); }
+
+/* ===== PRIMITIVES ===== */
+.card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; }
 .grid { display: grid; gap: 14px; }
 .g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.muted { color: var(--muted); } .small { font-size: 12px; } .ink2 { color: var(--ink-2); }
+.muted { color: var(--text-secondary); } .small { font-size: 12px; } .ink2 { color: var(--text-secondary); }
 .section { margin-bottom: 16px; }
 .section > h3 { margin-bottom: 8px; }
-.provenance { font-size: 11px; color: var(--muted); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--grid); display: flex; gap: 12px; flex-wrap: wrap; }
-.empty { color: var(--muted); font-style: italic; padding: 12px 0; }
-.badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid var(--border-strong); color: var(--ink-2); background: var(--surface-alt); white-space: nowrap; }
+.provenance { font-size: 11px; color: var(--text-secondary); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light); display: flex; gap: 12px; flex-wrap: wrap; }
+.empty { color: var(--text-secondary); font-style: italic; padding: 12px 0; }
+.badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); color: var(--text-secondary); background: var(--bg-surface-alt); white-space: nowrap; }
 .badge.good { color: var(--good-text); border-color: var(--good); }
-.badge.warn { color: #7a4d00; border-color: var(--warning); background: rgba(250,178,25,0.15); }
+.badge.warn { color: var(--warn-text); border-color: var(--warning); background: var(--warn-bg); }
 .badge.crit { color: var(--critical); border-color: var(--critical); }
-.badge.accent { color: var(--accent); border-color: var(--accent); background: var(--accent-wash); }
-.chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border-radius: 4px; font-size: 11px; background: var(--surface-alt); border: 1px solid var(--border); color: var(--ink-2); }
+.badge.accent { color: var(--accent-text); border-color: var(--accent); background: var(--accent-surface); }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border-radius: 4px; font-size: 11px; background: var(--bg-surface-alt); border: 1px solid var(--border); color: var(--text-secondary); }
 .chip a { color: inherit; }
-.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border-strong); vertical-align: -2px; }
+.chip-x { border: none; background: none; color: var(--text-secondary); padding: 0 2px; font-size: 13px; line-height: 1; }
+.chip-x:hover { color: var(--danger-text); }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border); vertical-align: -2px; }
 .key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
-
-/* stat tiles */
+.btn { border: 1px solid var(--border); background: var(--bg-surface); border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 13px; color: var(--text-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: border-color var(--transition-fast), background var(--transition-fast); }
+.btn:hover { border-color: var(--accent); color: var(--accent-text); text-decoration: none; }
+.btn.primary { background: var(--accent-text); color: var(--accent-contrast); border-color: var(--accent-text); }
+.btn.primary:hover { filter: brightness(0.92); color: var(--accent-contrast); }
+.btn.on { border-color: var(--accent); color: var(--accent-text); background: var(--accent-surface); }
+.btn.pillbtn { border-radius: 999px; }
+.prose { white-space: pre-wrap; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.tile { background: var(--surface-alt); border-radius: var(--radius-sm); padding: 10px 12px; }
-.tile .label { font-size: 11px; color: var(--ink-2); }
+.tile { background: var(--bg-surface-alt); border-radius: var(--radius-sm); padding: 10px 12px; }
+.tile .label { font-size: 11px; color: var(--text-secondary); }
 .tile .value { font-size: 22px; font-weight: 600; margin-top: 2px; }
-.tile .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.tile .sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 .hero { font-size: 48px; font-weight: 600; line-height: 1; }
 
-/* list view */
-.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
-.filters select, .filters input { padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); }
-/* team-colour band, shared by list cards and the profile header */
+/* ===== PROGRAM CARDS (kept; tokens updated) ===== */
 .band { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 14px 16px 12px; }
-.band.neutral { background: var(--surface-alt); color: var(--ink); }
-.band h3, .band h1 { color: inherit; }
+.band.neutral { background: var(--bg-surface-alt); color: var(--text-primary); }
+.band h3 { color: inherit; }
 .band .nick { display: block; font-size: 12px; font-weight: 500; opacity: .85; margin-top: 2px; }
 .band .titles { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; opacity: .9; white-space: nowrap; }
 .stripe { height: 5px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .cards { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.pcard { display: flex; flex-direction: column; padding: 0; overflow: hidden; cursor: pointer; }
-.pcard:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(0,0,0,.10); }
+.pcard { display: flex; flex-direction: column; padding: 0; overflow: hidden; cursor: pointer; transition: border-color var(--transition-fast); }
+.pcard:hover { border-color: var(--accent); }
+.pcard.in-compare { box-shadow: inset 3px 0 0 var(--accent); }
 .pcard .band h3 { font-size: 17px; line-height: 1.2; }
 .pcard .body { flex: 1; padding: 14px 16px 12px; }
-.pcard .meta { color: var(--ink-2); font-size: 12px; margin-bottom: 12px; }
+.pcard .meta { color: var(--text-secondary); font-size: 12px; margin-bottom: 12px; }
 .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
-.facts .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.facts .label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
 .facts .value { font-size: 18px; font-weight: 600; margin-top: 2px; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .facts .value small { display: block; font-size: 13px; }
-.pcard .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px 8px 16px; border-top: 1px solid var(--grid); color: var(--muted); font-size: 12px; }
+.pcard .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 16px; border-top: 1px solid var(--border-light); color: var(--text-secondary); font-size: 12px; }
+.pcard .foot b { color: var(--text-primary); }
 .pcard .foot .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-left: 6px; vertical-align: middle; }
-.star { border: none; background: none; font-size: 18px; color: var(--muted); padding: 0 4px; }
-.star.on { color: var(--s4); }
+.pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-size: 11px; }
+.foot-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.35; transition: all var(--transition-fast); line-height: 1; color: var(--text-primary); }
+.star-btn:hover { opacity: 0.8; transform: scale(1.15); }
+.star-btn.starred { opacity: 1; color: var(--star-color); }
+.cmp-btn { background: none; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 600; padding: 3px 7px; color: var(--text-secondary); line-height: 1; transition: all var(--transition-fast); }
+.cmp-btn:hover { color: var(--accent-text); border-color: var(--accent); }
+.cmp-btn.on { color: var(--accent-text); background: var(--accent-surface); border-color: var(--accent); }
+.star-btn-label { font-size: 13px; font-weight: 600; opacity: 1; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-primary); background: var(--bg-surface); }
+.star-btn-label:hover { transform: none; border-color: var(--accent); }
+.star-btn-label.starred { border-color: var(--accent); color: var(--accent-text); }
 
-/* profile */
-.phead { margin-bottom: 14px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
-.phead .band { align-items: center; flex-wrap: wrap; padding: 18px 20px 14px; }
-.phead .band h1 { font-size: 26px; }
-.phead .band h1 .nick { display: inline; font-size: 16px; font-weight: 400; margin-left: 8px; }
-.phead .actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-.phead .band .star { color: inherit; opacity: .75; } .phead .band .star.on { opacity: 1; }
-.phead .band .btn { background: transparent; color: inherit; border-color: currentColor; }
-.phead .under { padding: 10px 20px 12px; }
-.phead .sub { color: var(--ink-2); }
-.phead .links { margin-top: 4px; }
-.tabs { display: flex; gap: 2px; flex-wrap: wrap; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
-.tabs a { padding: 8px 12px; color: var(--ink-2); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
-.tabs a.active { color: var(--ink); border-bottom-color: var(--accent); }
-.tabs a:hover { text-decoration: none; color: var(--ink); }
-.links a { margin-right: 10px; }
-.stale { background: rgba(250,178,25,0.15); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; margin-bottom: 12px; }
+/* ===== TABLE VIEW ===== */
+.flight-panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.flight-header { padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.flight-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; }
+.flight-header-right { display: flex; align-items: center; gap: 12px; }
+.flight-team-count { font-size: 12px; color: var(--text-secondary); font-weight: 500; white-space: nowrap; }
+.more-stats-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; font: inherit; font-size: 11px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: color var(--transition-fast), border-color var(--transition-fast); }
+.more-stats-btn:hover { color: var(--accent-text); border-color: var(--accent-text); }
+.standings-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.standings-table th { padding: 8px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; user-select: none; position: sticky; top: 0; background: var(--bg-surface); z-index: 1; }
+.standings-table th.sortable { cursor: pointer; }
+.standings-table th.sortable:hover, .standings-table th.sort-active { color: var(--accent-text); }
+.standings-table th.sort-active::after { content: ' ▾'; font-size: 9px; }
+.standings-table th.sort-active.sort-asc::after { content: ' ▴'; }
+.standings-table td { padding: 11px 12px; border-bottom: 1px solid var(--border-light); vertical-align: middle; transition: background var(--transition-fast); }
+.standings-table tbody tr:last-child td { border-bottom: none; }
+.standings-table tr:hover td { background: var(--row-hover); }
+.standings-table .num { text-align: center; font-variant-numeric: tabular-nums; }
+.standings-table .num-strong { font-weight: 600; }
+.standings-table small { display: block; font-size: 12px; }
+.standings-table small.dim { color: var(--text-secondary); }
+.standings-table tr.team-row { cursor: pointer; }
+.standings-table tr.team-row-highlight td { background: var(--accent-surface); }
+.standings-table tr.team-row-highlight td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.standings-table .col-extra { display: none; }
+.standings-panel.show-more .col-extra { display: table-cell; }
+.rank-num { display: inline-block; min-width: 24px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+.rank-num.rank-top { color: var(--accent-text); font-weight: 700; }
+.team-cell { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+.team-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
+.team-sub { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+.table-footnote { padding: 10px 20px 12px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+
+/* ===== PROGRAM PAGE: content + at-a-glance panel ===== */
+.conf-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; width: 100%; }
+.conf-main { min-width: 0; }
+.glance-panel { position: sticky; top: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; min-width: 0; }
+.glance-head { padding: 16px 18px; background: var(--accent-surface); border-bottom: 1px solid var(--border); }
+.glance-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent-text); }
+.glance-name { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 18px; font-weight: 800; letter-spacing: -0.2px; min-width: 0; }
+.glance-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.glance-meta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
+.glance-follow { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.glance-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+.stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-of { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.glance-next { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+.glance-next-opp { margin-top: 4px; font-size: 16px; font-weight: 700; }
+.glance-next-opp.muted { font-weight: 500; color: var(--text-secondary); }
+.glance-next-when { margin-top: 4px; font-size: 13px; font-weight: 600; }
+.glance-next-where, .glance-last { margin-top: 3px; font-size: 12px; color: var(--text-secondary); }
+.glance-last { margin-top: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.form-chip { width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+.form-chip.inline { width: 18px; height: 18px; border-radius: 4px; font-size: 10px; }
+.form-chip.w { background: var(--accent-text); color: var(--accent-contrast); }
+.form-chip.d { background: #64748b; }
+.form-chip.l { background: var(--danger-text); }
+[data-theme="dark"] .form-chip.l { color: #1a0505; }
+.glance-more summary { padding: 12px 18px; font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; color: var(--text-primary); }
+.glance-more summary::-webkit-details-marker { display: none; }
+.glance-more summary::before { content: '▸ '; color: var(--text-secondary); }
+.glance-more[open] summary::before { content: '▾ '; }
+.glance-dl { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; padding: 0 18px 14px; font-size: 13px; }
+.glance-dl dt { color: var(--text-secondary); }
+.glance-dl dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.glance-actions { padding: 12px 18px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 6px; }
+.glance-link { font-size: 13px; font-weight: 600; color: var(--accent-text); text-decoration: none; }
+.glance-link:hover { text-decoration: underline; }
 
 /* charts */
 .chart { position: relative; width: 100%; }
 .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
-.chart .gridline { stroke: var(--grid); stroke-width: 1; }
-.chart .axis { stroke: var(--axis); stroke-width: 1; }
-.chart text { font-family: var(--font); font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
-.chart text.lbl { fill: var(--ink-2); font-weight: 600; }
+.chart .gridline { stroke: var(--border-light); stroke-width: 1; }
+.chart .axis { stroke: var(--border); stroke-width: 1; }
+.chart text { font-family: var(--font); font-size: 11px; fill: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.chart text.lbl { fill: var(--text-secondary); font-weight: 600; }
 .chart .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.chart .dot { stroke: var(--surface); stroke-width: 2; }
+.chart .dot { stroke: var(--bg-surface); stroke-width: 2; }
 .chart .bar { }
 .chart .hit { fill: transparent; }
-.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 12px; box-shadow: var(--shadow); white-space: nowrap; z-index: 5; }
+.tip { position: absolute; pointer-events: none; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 8px; font-size: 12px; box-shadow: var(--shadow-md); white-space: nowrap; z-index: 5; }
 .tip b { font-weight: 600; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 8px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); margin: 4px 0 8px; }
 
 /* roster matrix */
 .matrix td, .matrix th { text-align: center; padding: 5px 6px; }
-.matrix td.hot { background: var(--s1-wash); font-weight: 600; }
-details summary { cursor: pointer; color: var(--s1); font-size: 12px; }
-details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
-
-/* buttons, hand-written text */
-.btn { border: 1px solid var(--border-strong); background: var(--surface-alt); border-radius: var(--radius-sm); padding: 6px 12px; font-weight: 500; }
-.btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
-.prose { white-space: pre-wrap; }
+.matrix td.hot { background: var(--accent-surface); font-weight: 600; }
+details summary { cursor: pointer; color: var(--accent-text); font-size: 12px; }
+details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 
 /* commitments */
-.commit { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 8px 0; border-bottom: 1px solid var(--grid); }
+.commit { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 8px 0; border-bottom: 1px solid var(--border-light); }
 .commit .who { font-weight: 600; }
-.commit .who small { font-weight: 400; color: var(--ink-2); }
+.commit .who small { font-weight: 400; color: var(--text-secondary); }
 .commit .srcs { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
-.commit .right { text-align: right; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.commit .right { text-align: right; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 .need td.pos { font-weight: 600; }
 .need td.neg { color: var(--critical); }
 
-@media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
-@media (max-width: 700px) {
-  .topbar input[type=search] { width: 140px; }
-  .nav a { padding: 6px 7px; }
-  main { padding: 10px; }
+/* compare */
+.cmp-add { position: relative; max-width: 360px; flex: 1; }
+.cmp-add .search-input { height: 36px; }
+.cmp-results { position: absolute; left: 0; right: 0; top: 40px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); z-index: 10; max-height: 260px; overflow-y: auto; }
+.cmp-results button { display: flex; width: 100%; align-items: center; gap: 8px; padding: 8px 10px; border: none; background: none; text-align: left; font-size: 13px; color: var(--text-primary); }
+.cmp-results button:hover { background: var(--bg-surface-alt); }
+.cmp-results .meta { font-size: 11px; color: var(--text-secondary); margin-left: auto; white-space: nowrap; }
+.cmp-table th.group { background: var(--bg-surface-alt); color: var(--text-primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; }
+.cmp-table td.dim { color: var(--text-secondary); }
+.cmp-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+
+/* FAQ */
+.faq { max-width: 760px; }
+.faq .card { margin-bottom: 14px; }
+.faq h2 { font-size: 22px; margin-bottom: 4px; }
+.faq h3 { font-size: 16px; margin-bottom: 8px; }
+.faq p, .faq li { font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+.faq p + p { margin-top: 8px; }
+.faq ul { margin: 6px 0 0 18px; }
+.faq table td, .faq table th { vertical-align: top; }
+.faq .lead { color: var(--text-primary); font-size: 15px; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
+@media (max-width: 1024px) { .conf-layout { grid-template-columns: 1fr; } .glance-panel { order: -1; position: static; } }
+@media (max-width: 768px) {
+  .observed-top, .header-link { display: none; }
+  .sidebar { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: 280px; min-width: 280px; transform: translateX(-100%); box-shadow: none; }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .content-header { padding: 14px 16px 0; }
+  .content-header-row { flex-direction: column; align-items: flex-start; }
+  .content-header-right { align-items: flex-start; }
+  .content-body { padding: 14px 16px 30px; }
+  .site-notice { padding: 12px 16px 20px; }
   .commit { grid-template-columns: 1fr; }
   .commit .right { text-align: left; }
+  .view-tabs { gap: 16px; overflow-x: auto; flex-wrap: nowrap; }
+  .team-name { max-width: 150px; }
 }
-@media print { .topbar, .tabs, .filters { display: none; } }
+@media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
+@media print { .header, .sidebar, .view-tabs { display: none; } body { overflow: auto; height: auto; } .layout { height: auto; margin: 0; } }
 </style>
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#/">CollegeDash <span>Women's Soccer · D1</span></a>
-  <nav class="nav" id="nav">
-    <a href="#/" data-route="list">Programs</a>
-    <a href="#/rpi" data-route="rpi">RPI</a>
-    <a href="#/compare" data-route="compare">Compare</a>
-    <a href="#/faq" data-route="faq">FAQ</a>
-  </nav>
-  <div class="spacer"></div>
-  <div class="search"><input type="search" id="q" placeholder="Search programs (UCLA, Ole Miss, Gauchos)…" aria-label="Search programs" autocomplete="off"><button class="clear" id="qClear" title="Clear search" aria-label="Clear search" hidden>×</button></div>
-  <span class="updated" id="updated" title="When the data was last refreshed"></span>
-  <button class="iconbtn" id="themeBtn" title="Toggle light / dark">◐</button>
-</header>
-<main id="app"><div class="empty">Loading…</div></main>
-<footer class="site-notice">Collected automatically from public sources; not owned or verified by CollegeDash. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></footer>
+<div class="header">
+  <div class="header-left">
+    <button class="hamburger" id="sidebarToggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/></svg>
+    </button>
+    <a class="wordmark" href="#/">next<span class="accent">one</span>two</a>
+    <div class="header-divider"></div>
+    <div class="section-label">College Soccer</div>
+  </div>
+  <div class="header-right">
+    <span class="observed-top" id="observedTop" title="When the data was last collected"></span>
+    <a class="header-link" href="#/faq">About the data</a>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Switch to dark mode">🌙</button>
+  </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="layout" id="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Navigation"></aside>
+  <div class="main" id="main">
+    <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
+    <footer class="site-notice">Collected automatically from public sources; not owned or verified by nextonetwo. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></footer>
+  </div>
+</div>
 
 <script>
 'use strict';
 /* =====================================================================
-   CollegeDash dashboard - vanilla JS, no build step.
+   nextonetwo · College Soccer dashboard - vanilla JS, no build step.
    Reads the JSON that build.py writes under data/:
-     data/programs/index.json   list rows
+     data/programs/index.json   one summary entry per program (cards, table, search)
      data/programs/<slug>.json  full profile
-     data/rpi/current.json      latest weekly NCAA RPI
      archive/refresh-state.json freshness
-   When served by serve.py (local), /api/status answers (S.local) - reserved for local-only editing features.
+   Same design system as ecnl.nextonetwo.com (header, sidebar, at-a-glance panel).
    ===================================================================== */
 const S = {
-  index: null, profiles: {}, rpi: null, refresh: null, local: false,
-  favorites: new Set(), q: '', filters: { conf: '', region: '', fav: false, sort: 'rpi' },
-  compare: [],
+  index: null, profiles: {}, refresh: null, local: false,
+  favorites: new Set(), compare: [], q: '',
+  filters: { conf: '', region: '', sort: 'rpi', classYear: '', view: 'cards', moreStats: false },
+  sidebarTab: 'programs', residency: '',
 };
+const RPI_SEASON = 2025;
+const NCAA_RPI_URL = 'https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi';
 const $ = (sel, el = document) => el.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmtPct = v => v == null ? '—' : (v * 100).toFixed(v < 0.1 ? 1 : 0) + '%';
@@ -247,9 +429,11 @@ const fmtNum = v => v == null ? '—' : Number(v).toLocaleString();
 const fmtUsd = v => v == null ? '—' : '$' + Number(v).toLocaleString();
 const dash = v => (v === null || v === undefined || v === '') ? '—' : v;
 const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); };
-const ago = iso => { if (!iso || isNaN(new Date(iso))) return ''; const ms = Date.now() - new Date(iso).getTime(); const h = ms / 36e5; if (h < 1) return `${Math.max(1, Math.round(ms / 6e4))}m ago`; if (h < 48) return `${Math.round(h)}h ago`; return `${Math.round(h / 24)}d ago`; };
+const fmtDay = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); };
 const ordinal = n => n == null ? '—' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4 === n % 10 ? n % 10 : 0] || 'th');
 const rankStr = n => n == null ? '—' : '#' + n;
+const EXT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+const extLink = (href, text) => `<a class="open-external" href="${esc(href)}" target="_blank" rel="noopener">${EXT_ICON}${esc(text)}</a>`;
 
 /* ---------- team colours ---------- */
 const hexRgb = hex => { const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(hex || '').trim()); if (!m) return null;
@@ -258,18 +442,21 @@ function luminance(hex) { const rgb = hexRgb(hex); if (!rgb) return null;
   const [r, g, b] = rgb.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b; }
 // WCAG: white and near-black give equal contrast at L = 0.179; above it dark text wins
-function contrastText(hex) { const L = luminance(hex); return L == null ? 'var(--ink)' : L > 0.179 ? '#111111' : '#ffffff'; }
+function contrastText(hex) { const L = luminance(hex); return L == null ? 'var(--text-primary)' : L > 0.179 ? '#111111' : '#ffffff'; }
 function teamColors(p) {
   const c = (p.colors || []).filter(hexRgb).map(h => '#' + h.replace('#', '')); // only real hex values reach style=""
   if (!c.length) return { primary: null, secondary: null, text: null, neutral: true };
   return { primary: c[0], secondary: c[1] || null, text: contrastText(c[0]), neutral: false };
 }
 const bandAttrs = tc => tc.neutral ? 'class="band neutral"' : `class="band" style="background:${esc(tc.primary)};color:${tc.text}"`;
-const stripeHtml = tc => `<div class="stripe" style="background:${esc(tc.secondary || 'var(--grid)')}"></div>`;
-function tuitionHtml(inS, outS) { // one figure when equal or one side missing; two short lines otherwise
+const stripeHtml = tc => `<div class="stripe" style="background:${esc(tc.secondary || 'var(--border-light)')}"></div>`;
+const swatchesHtml = (p, lg) => { const tc = teamColors(p); return `<span class="swatches${lg ? ' lg' : ''}" aria-hidden="true"><i style="background:${esc(tc.primary || 'var(--border)')}"></i><i style="background:${esc(tc.secondary || 'var(--border-light)')}"></i></span>`; };
+function tuitionHtml(inS, outS, state) { // one figure when equal or one side missing; two short lines otherwise
   if (inS == null && outS == null) return '—';
   if (inS == null || outS == null || inS === outS) return fmtUsd(outS ?? inS);
-  return `<small>${fmtUsd(inS)} in</small><small>${fmtUsd(outS)} out</small>`;
+  const home = S.residency && state && S.residency === state;
+  const away = S.residency && state && S.residency !== state;
+  return `<small class="${away ? 'dim' : ''}">${fmtUsd(inS)} in</small><small class="${home ? 'dim' : ''}">${fmtUsd(outS)} out</small>`;
 }
 const fact = (label, value) => `<div><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`;
 
@@ -317,20 +504,48 @@ function matchScore(p, q) {
   if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
   return null;
 }
+function searchMatches(q = S.q, limit = Infinity) {
+  if (!S.index || !q) return [];
+  return S.index.programs.map(p => ({ p, m: matchScore(p, q) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score).slice(0, limit);
+}
 
 /* ---------- persistence (per-viewer conveniences only) ---------- */
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
 S.favorites = new Set(lsGet('cd.favorites', []));
-(function initTheme() {
-  const t = lsGet('cd.theme', null);
-  if (t) document.documentElement.setAttribute('data-theme', t);
-  $('#themeBtn').onclick = () => {
-    const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    const next = cur === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next); lsSet('cd.theme', next);
-  };
+S.compare = (lsGet('cd.compare', []) || []).slice(0, 4);
+Object.assign(S.filters, lsGet('cd.filters', {}) || {});
+S.residency = lsGet('cd.residency', '') || '';
+function saveState() { lsSet('cd.filters', S.filters); lsSet('cd.compare', S.compare); lsSet('cd.residency', S.residency); }
+
+/* theme: data-theme on <html>, same mechanism as the ECNL dashboard */
+function setThemeToggle(isDark) { const b = $('#themeToggle'); b.textContent = isDark ? '☀️' : '🌙'; b.title = isDark ? 'Switch to light mode' : 'Switch to dark mode'; b.setAttribute('aria-label', b.title); }
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  setThemeToggle(!isDark);
+  lsSet('cd.theme', isDark ? 'light' : 'dark');
+}
+(function loadTheme() {
+  const saved = lsGet('cd.theme', null) || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  setThemeToggle(saved === 'dark');
+  $('#themeToggle').onclick = toggleTheme;
 })();
+
+/* sidebar: collapses on desktop (remembered), slides in as a drawer on phones */
+const isPhone = () => window.innerWidth <= 768;
+function toggleSidebar() {
+  const sb = $('#sidebar'), ov = $('#sidebarOverlay'), btn = $('#sidebarToggle');
+  if (isPhone()) { const open = sb.classList.toggle('open'); ov.classList.toggle('visible', open); btn.setAttribute('aria-expanded', String(open)); return; }
+  const collapsed = $('#layout').classList.toggle('sidebar-collapsed');
+  btn.setAttribute('aria-expanded', String(!collapsed));
+  lsSet('cd.sidebar', collapsed ? 'collapsed' : 'open');
+}
+function closeDrawer() { if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); } }
+$('#sidebarToggle').onclick = toggleSidebar;
+$('#sidebarOverlay').onclick = toggleSidebar;
+if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- data ---------- */
 async function getJSON(url, opts) {
@@ -342,7 +557,13 @@ async function loadIndex() {
   if (S.index) return S.index;
   S.index = await getJSON('data/programs/index.json');
   S.index.programs.forEach(prepareSearch);
-  getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderUpdated(); }).catch(() => { });
+  try {
+    const rpi = await getJSON('data/rpi/current.json');
+    if (rpi?.season === RPI_SEASON && Array.isArray(rpi.teams)) S.rpiByName = new Map(rpi.teams.map(t => [t.school, t.rank]));
+  } catch { /* the weekly table is optional */ }
+  S.index.byConf = {};
+  S.index.programs.forEach(p => { S.index.byConf[p.conference || 'Other'] = (S.index.byConf[p.conference || 'Other'] || 0) + 1; });
+  getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
   getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
   return S.index;
 }
@@ -350,12 +571,123 @@ async function loadProfile(slug) {
   if (!S.profiles[slug]) S.profiles[slug] = await getJSON(`data/programs/${slug}.json`);
   return S.profiles[slug];
 }
-async function loadRpi() { if (!S.rpi) S.rpi = await getJSON('data/rpi/current.json'); return S.rpi; }
-function renderUpdated() {
-  const el = $('#updated');
-  const when = S.refresh?.updated || S.index?.updated;
-  el.textContent = when ? `Updated ${ago(when)}` : '';
-  el.title = when ? new Date(when).toLocaleString() : '';
+const observedIso = () => S.refresh?.updated || S.index?.updated;
+const observedText = () => observedIso() ? `Data checked ${fmtDate(observedIso())}` : '';
+function renderObserved() {
+  const el = $('#observedTop'); const iso = observedIso();
+  el.textContent = observedText(); el.title = iso ? new Date(iso).toLocaleString() : '';
+  document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
+}
+const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
+// RPI for the ranking season: the NCAA's published table (data/rpi/current.json, keyed by school name) first,
+// then whatever the program's own season rows carry
+const rpiOf = p => S.rpiByName?.get(p.shortName || p.name) ?? (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
+const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };
+
+/* ---------- favourites and compare ---------- */
+function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar(); }
+function toggleCompare(slug) {
+  const i = S.compare.indexOf(slug);
+  if (i >= 0) S.compare.splice(i, 1);
+  else if (S.compare.length >= 4) { alert('Compare holds four programs at a time. Remove one to add another.'); return false; }
+  else S.compare.push(slug);
+  saveState(); renderSidebar(); return true;
+}
+const starBtn = (slug, wide) => { const on = S.favorites.has(slug); return `<button class="star-btn${on ? ' starred' : ''}${wide ? ' star-btn-label' : ''}" data-fav="${esc(slug)}" aria-pressed="${on}" title="${on ? 'Remove from shortlist' : 'Save to shortlist'}">${wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆')}</button>`; };
+const cmpBtn = (slug, wide) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}" title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${on ? 'Comparing' : 'Compare'}</button>`; };
+// delegated: works for cards, table rows, glance panel and sidebar lists
+document.addEventListener('click', e => {
+  const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav); syncToggles(); return; }
+  const c = e.target.closest('[data-cmp]'); if (c) { e.stopPropagation(); e.preventDefault(); toggleCompare(c.dataset.cmp); syncToggles(); return; }
+});
+function syncToggles() { // refresh every star / compare control in place without re-rendering the view
+  document.querySelectorAll('[data-fav]').forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
+  document.querySelectorAll('[data-cmp]').forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
+  document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('in-compare', S.compare.includes(c.dataset.slug)));
+}
+
+/* ---------- sidebar ---------- */
+const REGIONS = ['West', 'Midwest', 'South', 'Mid-Atlantic', 'Northeast'];
+const SORTS = [['rpi', `RPI ${RPI_SEASON}`], ['name', 'Name'], ['admit', 'Admission rate'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
+function renderSidebar() {
+  const sb = $('#sidebar'); if (!S.index) return;
+  const f = S.filters, tab = S.sidebarTab;
+  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${S.favorites.size ? ` (${S.favorites.size})` : ''}`], ['compare', `⇄ Compare${S.compare.length ? ` (${S.compare.length})` : ''}`]];
+  let body = '';
+  if (tab === 'programs') {
+    const confs = Object.entries(S.index.byConf).sort((a, b) => a[0].localeCompare(b[0]));
+    const years = S.index.season?.gradYears || [];
+    body = `
+      <div class="sidebar-section-title">Find a program</div>
+      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc($('#q')?.value || '')}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.q ? '' : 'hidden'}>✕</button></div>
+      <div class="search-status" id="qStatus"></div>
+      <div class="sidebar-section-title">Browse</div>
+      <div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+      <div class="browse-label">Region</div>
+      <div class="pill-row" role="group" aria-label="Region"><button class="pill${!f.region ? ' active' : ''}" data-region="">All</button>${REGIONS.map(r => `<button class="pill${f.region === r ? ' active' : ''}" data-region="${esc(r)}">${esc(r)}</button>`).join('')}</div>
+      <div class="browse-label">Recruiting class</div>
+      <div class="pill-row" role="group" aria-label="Recruiting class"><button class="pill${!f.classYear ? ' active' : ''}" data-class="">All</button>${years.map(y => `<button class="pill${f.classYear === String(y) ? ' active' : ''}" data-class="${y}">'${String(y).slice(2)}</button>`).join('')}</div>
+      <div class="browse-label">Conference</div>
+      <ul class="conference-list">
+        <li><button class="conference-item${!f.conf ? ' active' : ''}" data-conf="">All programs <span class="count">${S.index.programs.length}</span></button></li>
+        ${confs.map(([c, n]) => `<li><button class="conference-item${f.conf === c ? ' active' : ''}" data-conf="${esc(c)}">${esc(c)} <span class="count">${n}</span></button></li>`).join('')}
+      </ul>`;
+  } else if (tab === 'shortlist') {
+    const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999));
+    body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(p.shortName || p.name)}</span><span class="meta">${rpiCell(p)}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+         <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
+      : `<div class="side-empty">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
+  } else {
+    const rows = S.compare.map(programBySlug).filter(Boolean);
+    body = `<div class="sidebar-section-title">Comparing</div>` + (rows.length
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(p.shortName || p.name)}</span><span class="meta">${esc(p.conference || '')}</span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+         <div class="side-actions"><a class="btn primary" href="#/compare/${S.compare.map(esc).join(',')}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
+      : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
+  }
+  sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
+    ${body}
+    <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span><span><kbd>c</kbd> cards / table</span></div>`;
+  sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { f.conf = b.dataset.conf; saveState(); closeDrawer(); location.hash = f.conf ? `#/c/${encodeURIComponent(f.conf)}` : '#/'; if (currentView() === 'list') { renderSidebar(); renderList(); } });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { f.region = b.dataset.region; saveState(); renderSidebar(); rerenderForFilters(); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { f.classYear = b.dataset.class; saveState(); renderSidebar(); rerenderForFilters(); });
+  sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
+  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
+  const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
+  const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
+  const q = $('#q');
+  if (q) {
+    q.addEventListener('input', e => setQuery(e.target.value));
+    q.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${top.p.slug}`; } }
+      else if (e.key === 'Escape') { q.value = ''; setQuery(''); }
+    });
+    $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
+    updateSearchStatus();
+  }
+}
+function rerenderForFilters() { if (currentView() === 'list' || currentView() === 'c') renderList(); }
+function currentView() { return location.hash.replace(/^#\/?/, '').split('/')[0] || 'list'; }
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, select, textarea')) return;
+  if (e.key === '/') { e.preventDefault(); S.sidebarTab = 'programs'; renderSidebar(); if (isPhone()) toggleSidebar(); $('#q')?.focus(); }
+  else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); renderList(); }
+});
+
+/* ---------- search box ---------- */
+let qTimer = null;
+function setQuery(v) {
+  S.q = normText(v);
+  const clr = $('#qClear'); if (clr) clr.hidden = !v;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { updateSearchStatus(); if (currentView() === 'list' || currentView() === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
+}
+function updateSearchStatus() {
+  const el = $('#qStatus'); if (!el) return;
+  if (!S.q) { el.textContent = ''; return; }
+  const n = searchMatches().length;
+  el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first` : 'No match - try the short name (UCLA, Ole Miss) or the mascot';
 }
 
 /* ---------- router ---------- */
@@ -363,40 +695,32 @@ function route() {
   const h = location.hash.replace(/^#\/?/, '');
   const parts = h.split('/').filter(Boolean);
   const view = parts[0] || 'list';
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.route === (view === 'p' ? 'list' : view)));
   const app = $('#app');
-  const go = p => p.catch(e => { app.innerHTML = `<div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div>`; console.error(e); });
+  const go = p => p.catch(e => { app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e); });
+  $('#main').scrollTop = 0;
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
-  if (view === 'rpi') return go(renderRpi());
-  if (view === 'compare') { S.compare = (parts[1] || '').split(',').filter(Boolean); return go(renderCompare()); }
+  if (view === 'c') { S.filters.conf = decodeURIComponent(parts[1] || ''); saveState(); renderSidebar(); return go(renderList()); }
+  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = ''; saveState(); location.replace('#/'); return; }
+  if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
+  if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   if (view === 'faq') return go(renderFaq());
+  if (S.filters.conf && !parts.length) { S.filters.conf = ''; saveState(); renderSidebar(); }
   return go(renderList());
 }
 window.addEventListener('hashchange', route);
-/* ---------- search box ---------- */
-let qTimer = null;
-function rerenderForQuery() {
-  const view = location.hash.replace(/^#\/?/, '').split('/')[0] || 'list';
-  if (view === 'list') renderList();
-  else if (view === 'rpi') renderRpi().catch(console.error);
-  // on a profile or compare view the query is kept and applied when the user returns to Programs
+
+/* ---------- page header (breadcrumb › title › subtitle, right-side facts, view tabs) ---------- */
+function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', tabs = '' }) {
+  const crumb = crumbs.map((c, i) => i === crumbs.length - 1
+    ? `<span class="breadcrumb-current">${esc(c.label)}</span>`
+    : `<a href="${esc(c.href)}">${esc(c.label)}</a><span class="breadcrumb-sep">›</span>`).join('');
+  return `<div class="content-header"><div class="content-header-row">
+      <div class="content-header-main">${crumb ? `<div class="breadcrumb">${crumb}</div>` : ''}
+        <h1 class="content-title">${title}${nick ? `<span class="nick">${esc(nick)}</span>` : ''}</h1>
+        ${subtitle ? `<div class="content-subtitle">${subtitle}</div>` : ''}</div>
+      <div class="content-header-right"><div class="observed">${esc(observedText())}</div>${right ? `<div class="ext-links">${right}</div>` : ''}</div>
+    </div>${tabs ? `<div class="view-tabs" role="tablist">${tabs}</div>` : ''}</div>`;
 }
-function setQuery(v) {
-  S.q = normText(v);
-  $('#qClear').hidden = !v;
-  clearTimeout(qTimer);
-  qTimer = setTimeout(rerenderForQuery, 80);
-}
-function searchMatches() {
-  if (!S.index || !S.q) return [];
-  return S.index.programs.map(p => ({ p, m: matchScore(p, S.q) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score);
-}
-$('#q').addEventListener('input', e => setQuery(e.target.value));
-$('#q').addEventListener('keydown', e => {
-  if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { $('#q').value = ''; setQuery(''); location.hash = `#/p/${top.p.slug}`; } }
-  else if (e.key === 'Escape') { $('#q').value = ''; setQuery(''); }
-});
-$('#qClear').addEventListener('click', () => { $('#q').value = ''; setQuery(''); $('#q').focus(); });
 
 /* ---------- charts (inline SVG, no library) ---------- */
 function svgLine(cfg) {
@@ -467,63 +791,105 @@ function wireCharts(root) {
   });
 }
 
-/* ---------- list view ---------- */
-async function renderList() {
-  const idx = await loadIndex();
-  const app = $('#app');
-  const confs = [...new Set(idx.programs.map(p => p.conference).filter(Boolean))].sort();
-  const regions = [...new Set(idx.programs.map(p => p.region).filter(Boolean))].sort();
-  const f = S.filters;
+
+/* ---------- list view: cards or table ---------- */
+function filteredPrograms() {
+  const idx = S.index, f = S.filters;
   const score = new Map();
   idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
-  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug))
-    && (!f.conf || p.conference === f.conf) && (!f.region || p.region === f.region) && (!f.fav || S.favorites.has(p.slug)));
-  const rpiOf = p => p.lastSeason?.rpiRank ?? p.currentSeason?.rpiRank ?? 999;
-  const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missing last (Infinity - Infinity is NaN)
-  const SORTS = [['rpi', 'RPI'], ['name', 'Name'], ['admit', 'Admission rate'], ['titles', 'National titles'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads']];
-  const bySort = (a, b) => f.sort === 'name' ? a.name.localeCompare(b.name)
-    : f.sort === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
-    : f.sort === 'titles' ? b.nationalTitles - a.nationalTitles
-    : f.sort === 'tuition' ? tuitionOf(a) - tuitionOf(b)
-    : f.sort === 'undergrads' ? (b.undergradEnrollment ?? -1) - (a.undergradEnrollment ?? -1)
-    : rpiOf(a) - rpiOf(b);
-  rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || bySort(a, b)); // best match first, then the chosen sort
-  app.innerHTML = `
-    <div class="filters">
-      <select id="fConf"><option value="">All conferences</option>${confs.map(c => `<option ${f.conf === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
-      <select id="fRegion"><option value="">All regions</option>${regions.map(c => `<option ${f.region === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
-      <select id="fSort">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>Sort: ${l}</option>`).join('')}</select>
-      <label class="small"><input type="checkbox" id="fFav" ${f.fav ? 'checked' : ''}> ★ My list only</label>
-      <span class="muted small">${S.q ? `${rows.length} match${rows.length === 1 ? '' : 'es'} for “${esc(S.q)}” · ` : ''}${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'} · season ${idx.season?.current ?? ''}</span>
-    </div>
-    <div class="grid cards">${rows.map(cardHtml).join('') || (S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match.</div>')}</div>
-`;
-  $('#fConf').onchange = e => { f.conf = e.target.value; renderList(); };
-  $('#fRegion').onchange = e => { f.region = e.target.value; renderList(); };
-  $('#fSort').onchange = e => { f.sort = e.target.value; renderList(); };
-  $('#fFav').onchange = e => { f.fav = e.target.checked; renderList(); };
-  app.querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('.star')) return; location.hash = `#/p/${c.dataset.slug}`; }));
-  app.querySelectorAll('.star').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); toggleFav(b.dataset.slug); renderList(); }));
+  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug)) && (!f.conf || p.conference === f.conf) && (!f.region || p.region === f.region));
+  rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || sortCmp(f.sort)(a, b));
+  return rows;
 }
-function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); }
+const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missing last (Infinity - Infinity is NaN)
+const commitsFor = (p, y) => y ? (p.commitmentsByYear || {})[y] || 0 : Object.values(p.commitmentsByYear || {}).reduce((a, b) => a + b, 0);
+function sortCmp(key) {
+  const cy = S.filters.classYear;
+  return (a, b) => key === 'name' ? a.name.localeCompare(b.name)
+    : key === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
+    : key === 'titles' ? b.nationalTitles - a.nationalTitles
+    : key === 'tuition' ? tuitionOf(a) - tuitionOf(b)
+    : key === 'undergrads' ? (b.undergradEnrollment ?? -1) - (a.undergradEnrollment ?? -1)
+    : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
+    : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
+    : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
+    : (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999);
+}
+async function renderList() {
+  const idx = await loadIndex();
+  const f = S.filters;
+  const rows = filteredPrograms();
+  const title = f.conf || 'All programs';
+  const bits = [`NCAA Division I women's soccer`, `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
+  if (f.region) bits.push(`${f.region} region`);
+  if (S.q) bits.push(`matching “${esc(S.q)}”`);
+  bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
+  const tabs = [['cards', 'Cards'], ['table', 'Table']].map(([k, l]) => `<button class="view-tab${f.view === k ? ' active' : ''}" role="tab" aria-selected="${f.view === k}" data-view="${k}">${l}</button>`).join('');
+  const crumbs = f.conf ? [{ label: 'All programs', href: '#/' }, { label: f.conf }] : [{ label: 'All programs' }];
+  const empty = S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
+  const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${body}</div>`;
+  const app = $('#app');
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
+  app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
+  app.querySelectorAll('th[data-sort]').forEach(th => th.onclick = () => { f.sort = th.dataset.sort; saveState(); renderSidebar(); renderList(); });
+  const more = $('#moreStats'); if (more) more.onclick = () => { f.moreStats = !f.moreStats; saveState(); renderList(); };
+}
 function cardHtml(p) {
-  const tc = teamColors(p), ls = p.lastSeason, fav = S.favorites.has(p.slug);
-  const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `'${y.slice(2)} ${n}`).join(' · ');
+  const tc = teamColors(p), cy = S.filters.classYear;
+  const years = Object.entries(p.commitmentsByYear || {});
+  const commits = years.length ? years.map(([y, n]) => cy === y ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
   const meta = [p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc).join(' · ');
-  return `<div class="card pcard" data-slug="${esc(p.slug)}">
+  return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
     <div ${bandAttrs(tc)}><h3>${esc(p.shortName || p.name)}<span class="nick">${esc(p.nickname || '')}</span></h3>
       ${p.nationalTitles > 0 ? `<span class="titles">${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}</span>` : ''}</div>
     ${stripeHtml(tc)}
     <div class="body"><div class="meta">${meta}</div>
       <div class="facts">
-        ${fact(ls?.year ? `RPI ${ls.year}` : 'RPI', rankStr(ls?.rpiRank))}
+        ${fact(`RPI ${RPI_SEASON}`, rpiCell(p))}
         ${fact('Admit rate', fmtPct(p.admissionRate))}
         ${fact('Undergrads', fmtNum(p.undergradEnrollment))}
-        ${fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState))}
+        ${fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state))}
       </div></div>
-    <div class="foot"><span>Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
-      <button class="star ${fav ? 'on' : ''}" data-slug="${esc(p.slug)}" title="Add to my list">${fav ? '★' : '☆'}</button></div>
+    <div class="foot"><span>Commits ${commits} · ${p.rosterSize ?? '—'} on roster${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
+      <span class="foot-actions">${cmpBtn(p.slug)}${starBtn(p.slug)}</span></div>
   </div>`;
+}
+function tableHtml(rows) {
+  const f = S.filters, cy = f.classYear;
+  const cols = [
+    ['rank', '#', 'num', p => { const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
+    ['star', '', '', p => starBtn(p.slug)],
+    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(p.shortName || p.name)}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
+    ['record', `Record ${RPI_SEASON}`, 'num', p => p.lastSeason?.year === RPI_SEASON ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
+    ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
+    ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
+    ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
+    ['commits', cy ? `Commits '${cy.slice(2)}` : 'Commits', 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
+    ['titles', 'Titles', 'num col-extra', p => p.nationalTitles || '—', 'titles'],
+    ['cups', 'College Cups', 'num col-extra', p => p.collegeCups || '—'],
+    ['region', 'Region', 'col-extra', p => esc(p.region || '—')],
+    ['type', 'Type', 'col-extra', p => esc((p.ownership || '—').replace(/ (nonprofit|for-profit)$/, ''))],
+    ['cmp', '', '', p => cmpBtn(p.slug)],
+  ];
+  const head = cols.map(([k, label, cls, , sortKey]) => `<th class="${cls}${sortKey ? ' sortable' : ''}${sortKey && f.sort === sortKey ? ' sort-active' : ''}" ${sortKey ? `data-sort="${sortKey}"` : ''}>${esc(label)}</th>`).join('');
+  const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn]) => `<td class="${cls}">${fn(p)}</td>`).join('')}</tr>`).join('');
+  return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">
+    <div class="flight-header"><div class="flight-title">${esc(f.conf || 'All programs')}</div>
+      <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
+    <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
+    <div class="table-footnote">RPI and record are the ${RPI_SEASON} season as published by the NCAA · Admission rate and size are for the whole university · Select a program for details</div>
+  </div>`;
+}
+
+/* ---------- shortlist view ---------- */
+async function renderShortlist() {
+  await loadIndex();
+  const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort(sortCmp('rpi'));
+  const right = rows.length >= 2 ? `<a class="open-external" href="#/compare/${rows.slice(0, 4).map(p => esc(p.slug)).join(',')}">⇄ Compare ${Math.min(rows.length, 4)}</a>` : '';
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
+    + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
+  $('#app').querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
 }
 
 /* ---------- profile ---------- */
@@ -531,40 +897,72 @@ const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['clima
 function prov(meta, extra) {
   if (!meta) return '';
   const items = Array.isArray(meta) ? meta : [meta];
-  return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · as of ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
+  return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · checked ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
+}
+const LINK_LABELS = { athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' };
+function glanceHtml(p, row) {
+  const seasons = p.seasons || [];
+  const s25 = seasons.find(s => s.year === RPI_SEASON);
+  const cur = seasons.find(s => s.inProgress);
+  const sch = p.school || {}, pr = p.program || {};
+  // next unplayed game on or after today, and the most recent played one - from the schedule the profile already carries
+  const today = new Date().toISOString().slice(0, 10);
+  const games = (p.schedule?.games || []).filter(g => g.date);
+  const nxt = games.filter(g => !g.result && g.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+  const last = games.filter(g => g.result).sort((a, b) => b.date.localeCompare(a.date))[0];
+  const chip = r => r ? `<span class="form-chip inline ${r === 'W' ? 'w' : r === 'L' ? 'l' : 'd'}">${esc(r === 'T' ? 'D' : r)}</span>` : '';
+  const at = g => g ? (g.homeAway === 'A' ? 'at ' : g.homeAway === 'N' ? 'vs ' : 'vs ') : '';
+  const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—';
+  return `<div class="glance-head">
+      <div class="glance-eyebrow">Program at a glance</div>
+      <div class="glance-name">${swatchesHtml(row || p, true)}<span title="${esc(p.name)}">${esc(p.shortName || p.name)}</span></div>
+      <div class="glance-meta">${esc(p.conference || '')}${sch.city ? ` · ${esc(sch.city)}, ${esc(sch.state || '')}` : ''}</div>
+      <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
+    </div>
+    <div class="glance-stats">
+      <div><div class="stat-label">RPI ${RPI_SEASON}</div><div class="stat-value">${s25?.rpiRank ? `#${s25.rpiRank}` : '—'}</div>${s25?.record ? `<div class="stat-sub">${esc(s25.record)}${s25.ncaaResult ? ` · ${esc(s25.ncaaResult)}` : ''}</div>` : ''}</div>
+      <div><div class="stat-label">${cur ? `${cur.year} so far` : 'National titles'}</div><div class="stat-value">${cur ? esc(cur.record || '—') : (pr.nationalTitles || []).length}</div>${cur ? `<div class="stat-sub">${(pr.nationalTitles || []).length} national title${(pr.nationalTitles || []).length === 1 ? '' : 's'}</div>` : ''}</div>
+      <div><div class="stat-label">Admit rate</div><div class="stat-value">${fmtPct(sch.admissionRate)}</div><div class="stat-sub">whole university</div></div>
+      <div><div class="stat-label">Undergrads</div><div class="stat-value">${fmtNum(sch.undergradEnrollment)}</div><div class="stat-sub">${esc((sch.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))}</div></div>
+    </div>
+    <div class="glance-next">
+      <div class="glance-eyebrow">Next match</div>
+      ${nxt ? `<div class="glance-next-opp">${at(nxt)}${esc(nxt.opponent)}${nxt.opponentRank ? ` <span class="muted">#${nxt.opponentRank}</span>` : ''}</div><div class="glance-next-when">${esc(fmtDay(nxt.date))}</div>${nxt.location ? `<div class="glance-next-where">${esc(nxt.location)}</div>` : ''}` : `<div class="glance-next-opp muted">${p.schedule ? 'No upcoming match listed' : 'Schedule not collected'}</div>`}
+      ${last ? `<div class="glance-last">Last: ${chip(last.result)} ${esc(last.score || '')} ${at(last)}${esc(last.opponent)}</div>` : ''}
+    </div>
+    <details class="glance-more"><summary>More facts</summary><dl class="glance-dl">
+      <dt>Tuition (in / out)</dt><dd>${fmtUsd(sch.tuitionInState)} / ${fmtUsd(sch.tuitionOutOfState)}</dd>
+      <dt>Avg net price</dt><dd>${fmtUsd(sch.netPriceAverage)}</dd>
+      <dt>Head coach</dt><dd>${esc(pr.headCoach?.name || '—')}</dd>
+      <dt>Roster</dt><dd>${p.roster?.count ?? '—'}</dd>
+      <dt>Commitments</dt><dd>${esc(commits)}</dd>
+      <dt>College Cups</dt><dd>${(pr.collegeCups || []).length}</dd>
+    </dl></details>
+    <div class="glance-actions">${S.compare.length && !S.compare.includes(p.slug) ? `<a class="glance-link" href="#/compare/${[...S.compare.slice(0, 3), p.slug].map(esc).join(',')}">Compare with ${esc(programBySlug(S.compare[0])?.shortName || 'selection')} →</a>` : `<a class="glance-link" href="#/compare/${esc(p.slug)}">Start a comparison →</a>`}</div>`;
 }
 async function renderProfile(slug, tab) {
   await loadIndex();
   const p = await loadProfile(slug);
+  const row = programBySlug(slug);
   const app = $('#app');
-  const fav = S.favorites.has(slug);
-  const ls = p.seasons.find(s => !s.inProgress && s.record);
+  const s25 = (p.seasons || []).find(s => s.year === RPI_SEASON);
   const failed = p._build.failed || [];
   const notices = [];
-  if (failed.length) notices.push(`Collectors failing: ${esc(failed.map(f => `${f.collector} (${f.error.replace(/^[a-z]+: /, '').slice(0, 90)})`).join('; '))}.`);
-  if (p._build.stale?.length) notices.push(`Some data is stale: ${esc(p._build.stale.join('; '))}.`);
-  const stale = notices.length ? `<div class="stale">${notices.join(' ')} Run <code>python collegedash.py refresh --slug ${esc(slug)}</code>.</div>` : '';
-  const tc = teamColors(p), titles = p.program?.nationalTitles?.length || 0;
-  app.innerHTML = `
-    <div class="phead">
-      <div ${bandAttrs(tc)}><h1>${esc(p.name)}<span class="nick">${esc(p.nickname || '')}</span></h1>
-        <div class="actions"><button class="star ${fav ? 'on' : ''}" id="favBtn" title="Add to my list">${fav ? '★' : '☆'}</button><a class="btn" href="#/compare/${esc(slug)}">Compare</a></div></div>
-      ${stripeHtml(tc)}
-      <div class="under">
-        <div class="sub">${esc(p.conference)} · ${esc(p.school?.city || '')}, ${esc(p.school?.state || '')}${ls?.rpiRank ? ` · RPI ${ls.year}: <b>#${ls.rpiRank}</b>` : ''}${titles ? ` · ${titles} national title${titles === 1 ? '' : 's'}` : ''}</div>
-        <div class="links small">${Object.entries(p.links).filter(([k, v]) => v).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc({ athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' }[k] || k)}</a>`).join('')}</div>
-      </div>
-    </div>
-    ${stale}
-    <nav class="tabs">${TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="${k === tab ? 'active' : ''}">${l}</a>`).join('')}</nav>
-    <div id="tab"></div>`;
-  $('#favBtn').onclick = () => { toggleFav(slug); renderProfile(slug, tab); };
+  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
+  if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
+  const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
+  const titles = p.program?.nationalTitles?.length || 0;
+  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? `${titles} national title${titles === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ');
+  const right = Object.entries(p.links).filter(([, v]) => v).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
+  const tabs = TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${l}</a>`).join('');
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: p.shortName || p.name }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+    + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews }[tab] || tabOverview;
   const el = $('#tab');
   el.innerHTML = await fn(p);
   wireCharts(el);
-  window.scrollTo(0, 0);
 }
+
 function tile(label, value, sub) { return `<div class="tile"><div class="label">${esc(label)}</div><div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`; }
 
 async function tabOverview(p) {
@@ -762,57 +1160,71 @@ async function tabNews(p) {
 }
 
 
-/* ---------- RPI view ---------- */
-async function renderRpi() {
-  const [idx, rpi] = await Promise.all([loadIndex(), loadRpi()]);
-  const onboarded = new Map(idx.programs.map(p => [p.slug, p]));
-  const bySchool = new Map(idx.programs.map(p => [p.shortName || p.name, p.slug]));
-  const q = S.q;
-  const rows = rpi.teams.filter(t => !q || tokensPrefixWords(wordsOf(q), wordsOf(normText(t.school + ' ' + t.conference))));
-  $('#app').innerHTML = `<div class="card"><h2>NCAA Division I women's soccer RPI</h2><p class="ink2">Season ${rpi.season} · through games ${fmtDate(rpi.throughGames)} · ${rpi.teams.length} teams · <a href="${esc(rpi.sourceUrl)}" target="_blank" rel="noopener">NCAA.com</a></p>
-    <p class="small muted">Weekly snapshots are archived under <code>data/rpi/weekly/</code> each refresh; the NCAA only publishes the latest week. Programs already in CollegeDash are linked.</p>
-    <div class="tscroll"><table><tr><th class="num">Rank</th><th>School</th><th>Conference</th><th>Record</th><th>Home</th><th>Road</th><th>Neutral</th><th class="num">Prev</th></tr>
-    ${rows.map(t => { const slug = bySchool.get(t.school); return `<tr><td class="num"><b>${t.rank}</b></td><td>${slug ? `<a href="#/p/${slug}">${esc(t.school)}</a>` : esc(t.school)}</td><td>${esc(t.conference)}</td><td><b>${esc(t.record)}</b></td><td>${esc(t.home)}</td><td>${esc(t.road)}</td><td>${esc(t.neutral)}</td><td class="num muted">${dash(t.prevRank)}</td></tr>`; }).join('')}</table></div></div>`;
-}
 
 /* ---------- compare ---------- */
+const US_STATES = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
 async function renderCompare() {
   const idx = await loadIndex();
   const picked = S.compare.filter(s => idx.programs.some(p => p.slug === s)).slice(0, 4);
   const profiles = await Promise.all(picked.map(loadProfile));
   const app = $('#app');
-  const picker = `<div class="card section"><h3>Pick up to four programs</h3><div class="row">${idx.programs.map(p => `<label class="chip"><input type="checkbox" data-slug="${esc(p.slug)}" ${picked.includes(p.slug) ? 'checked' : ''}> ${esc(p.shortName || p.name)}</label>`).join('')}</div></div>`;
-  if (!profiles.length) { app.innerHTML = picker + '<div class="empty">Select programs above to compare them side by side.</div>'; wirePicker(); return; }
-  const rowsDef = [
-    ['Conference', p => esc(p.conference)], ['Location', p => `${esc(p.school?.city || '')}, ${esc(p.school?.state || '')}`], ['Setting', p => esc(p.school?.locale || '—')],
-    ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
-    ['Last season', p => { const s = p.seasons.find(x => !x.inProgress && x.record); return s ? `${esc(s.record)} · ${esc((s.ncaaResult || '').replace('NCAA ', '') || '—')}` : '—'; }],
-    ['RPI last season', p => { const s = p.seasons.find(x => !x.inProgress && x.rpiRank); return s ? `#${s.rpiRank} (${s.year})` : '—'; }],
-    ['Avg RPI, last 5 seasons', p => { const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
-    ['National titles', p => p.program.nationalTitles.length], ['College Cups', p => p.program.collegeCups.length],
-    ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],
-    ['Admission rate', p => fmtPct(p.school?.admissionRate)], ['SAT 25–75', p => p.school?.sat25 ? `${p.school.sat25}–${p.school.sat75}` : '—'], ['Undergraduates', p => fmtNum(p.school?.undergradEnrollment)],
-    ['Type', p => esc(p.school?.ownership || '—')], ['Out-of-state tuition', p => fmtUsd(p.school?.tuitionOutOfState)], ['Avg net price', p => fmtUsd(p.school?.netPriceAverage)],
-    ['6-yr grad rate', p => fmtPct(p.school?.gradRate6yr)],
-    ['Fall avg high / low', p => p.climate ? `${p.climate.fallSeason.avgHighF}° / ${p.climate.fallSeason.avgLowF}°F` : '—'], ['Annual rain', p => p.climate ? `${p.climate.annualPrecipIn} in` : '—'],
-    ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
-    ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
-    ['My tags', p => (p.curated?.tags || []).map(t => `<span class="chip">${esc(t)}</span>`).join(' ') || '—'],
+  const home = S.residency;
+  const inState = p => home && p.school?.state === home;
+  const tuitionRow = p => { const s = p.school || {}; if (s.tuitionInState == null && s.tuitionOutOfState == null) return '—';
+    if (!home) return `${fmtUsd(s.tuitionInState)} in / ${fmtUsd(s.tuitionOutOfState)} out`;
+    return inState(p) ? `<b>${fmtUsd(s.tuitionInState)}</b> <span class="muted">in-state</span>` : `<b>${fmtUsd(s.tuitionOutOfState)}</b> <span class="muted">out-of-state</span>`; };
+  const groups = [
+    ['Academics', [
+      ['Admission rate', p => fmtPct(p.school?.admissionRate)], ['SAT 25–75', p => p.school?.sat25 ? `${p.school.sat25}–${p.school.sat75}` : '—'],
+      ['Undergraduates', p => fmtNum(p.school?.undergradEnrollment)], ['Type', p => esc(p.school?.ownership || '—')],
+      ['6-yr graduation rate', p => fmtPct(p.school?.gradRate6yr)], ['Setting', p => esc(p.school?.locale || '—')],
+    ]],
+    ['Soccer', [
+      [`RPI ${RPI_SEASON}`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      [`RPI ${RPI_SEASON - 1}`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      ['Avg RPI, last 5 seasons', p => { const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
+      [`${RPI_SEASON} record`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.record ? `${esc(s.record)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
+      ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
+      ['National titles', p => p.program.nationalTitles.length], ['College Cups', p => p.program.collegeCups.length],
+      ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],
+      ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
+      ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
+    ]],
+    ['Cost', [
+      ['Tuition / yr', tuitionRow], ['Cost of attendance', p => fmtUsd(p.school?.costOfAttendance)],
+      ['Avg net price after aid', p => `${fmtUsd(p.school?.netPriceAverage)} <span class="muted small">average, not a family estimate</span>`],
+    ]],
+    ['Campus life', [
+      ['Location', p => `${esc(p.school?.city || '')}, ${esc(p.school?.state || '')}`],
+      ['Fall avg high / low', p => p.climate ? `${p.climate.fallSeason.avgHighF}° / ${p.climate.fallSeason.avgLowF}°F` : '—'], ['Annual rain', p => p.climate ? `${p.climate.annualPrecipIn} in` : '—'],
+    ]],
   ];
-  app.innerHTML = picker + `<div class="card"><div class="tscroll"><table><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(p.shortName || p.name)}</a></th>`).join('')}</tr>
-    ${rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')}</table></div></div>`;
-  wirePicker();
-  function wirePicker() {
-    app.querySelectorAll('input[data-slug]').forEach(cb => cb.onchange = () => {
-      const sel = [...app.querySelectorAll('input[data-slug]:checked')].map(c => c.dataset.slug).slice(0, 4);
-      location.hash = '#/compare/' + sel.join(',');
+  const chips = picked.map(s => { const p = programBySlug(s); return `<span class="chip">${esc(p?.shortName || s)} <button class="chip-x" data-cmp="${esc(s)}" title="Remove">✕</button></span>`; }).join('');
+  const bar = `<div class="cmp-bar">${chips}
+      ${picked.length < 4 ? `<div class="cmp-add"><input type="search" class="search-input" id="cmpAdd" placeholder="Add a school…" aria-label="Add a school to compare" autocomplete="off"><div class="cmp-results" id="cmpResults" hidden></div></div>` : ''}
+      <label class="small muted">I live in <select class="season-select" id="residency" style="flex:none;width:auto"><option value="">(not set)</option>${US_STATES.map(s => `<option ${home === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label></div>`;
+  const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(p.shortName || p.name)}</a></th>`).join('')}</tr>
+      ${groups.map(([g, rowsDef]) => `<tr><th class="group" colspan="${profiles.length + 1}">${g}</th></tr>` + rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')).join('')}</table></div></div>`
+    : '<div class="card"><p class="muted">Add up to four programs with ⇄ Compare on any card or program page, or type a school name above.</p></div>';
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
+    + `<div class="content-body">${bar}${table}</div>`;
+  const add = $('#cmpAdd'), res = $('#cmpResults');
+  if (add) {
+    add.addEventListener('input', () => {
+      const hits = searchMatches(normText(add.value), 8).filter(h => !S.compare.includes(h.p.slug));
+      res.hidden = !add.value || !hits.length;
+      res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span>${esc(h.p.shortName || h.p.name)}</span><span class="meta">${esc(h.p.conference || '')}</span></button>`).join('');
+      res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = `#/compare/${S.compare.join(',')}`; });
     });
+    add.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = res.querySelector('[data-add]'); if (first) first.click(); } });
   }
+  const rs = $('#residency'); if (rs) rs.onchange = e => { S.residency = e.target.value; saveState(); renderCompare(); };
+  app.querySelectorAll('.chip-x[data-cmp]').forEach(b => b.addEventListener('click', () => { setTimeout(() => location.hash = `#/compare/${S.compare.join(',')}`, 0); }));
 }
 
 /* ---------- FAQ ---------- */
 const FEEDBACK_EMAIL = 'nextonetwolabs@gmail.com';
-const feedbackLink = (text = FEEDBACK_EMAIL) => `<a href="mailto:${esc(FEEDBACK_EMAIL)}?subject=${encodeURIComponent('CollegeDash feedback')}">${esc(text)}</a>`;
+const feedbackLink = (text = FEEDBACK_EMAIL) => `<a href="mailto:${esc(FEEDBACK_EMAIL)}?subject=${encodeURIComponent('College Soccer feedback')}">${esc(text)}</a>`;
 async function renderFaq() {
   const ext = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
   const sources = [
@@ -824,9 +1236,9 @@ async function renderFaq() {
     [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
   ];
   const app = $('#app');
-  app.innerHTML = `<div class="faq">
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h2>About the data</h2>
-      <p class="lead">CollegeDash gathers public information about NCAA Division I women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
+      <p class="lead">nextonetwo College Soccer gathers public information about NCAA Division I women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
 
     <div class="card"><h3>Where does the data come from?</h3>
       <p>Every figure comes from a public source that coaches, journalists and families already rely on. Nothing is estimated or made up.</p>
@@ -847,18 +1259,19 @@ async function renderFaq() {
         <li><b>Commitments.</b> Recruiting sites list verbal commitments. They are not binding, can be withdrawn, and a name disappearing from a list is only a hint that something changed.</li>
         <li><b>Rosters and coaches.</b> Staff changes and transfers happen mid-year; the official athletics site is the authority.</li>
       </ul>
-      <p>Treat CollegeDash as a starting point for questions, and confirm anything that matters with the school’s admissions or athletics office.</p></div>
+      <p>Treat this site as a starting point for questions, and confirm anything that matters with the school’s admissions or athletics office.</p></div>
 
     <div class="card"><h3>What about players’ privacy?</h3>
-      <p>CollegeDash shows only what official rosters and public recruiting sites already publish: name, position, club, home state and class year. No contact details are collected. If you would like a record removed, email ${feedbackLink()}.</p></div>
+      <p>This site shows only what official rosters and public recruiting sites already publish: name, position, club, home state and class year. No contact details are collected. If you would like a record removed, email ${feedbackLink()}.</p></div>
 
     <div class="card"><h3>Found a mistake or have a suggestion?</h3>
       <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
-  </div>`;
+  </div></div>`;
 }
 
+
 /* ---------- boot ---------- */
-loadIndex().then(() => { renderUpdated(); route(); }).catch(e => { $('#app').innerHTML = `<div class="card"><h2>Cannot load data</h2><p class="muted">${esc(e.message)}. Run <code>python collegedash.py build</code> first.</p></div>`; });
+loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => { $('#app').innerHTML = `<div class="content-body"><div class="card"><h2>The data could not be loaded</h2><p class="muted">${esc(e.message)}. Please try again in a few minutes.</p></div></div>`; });
 </script>
 </body>
 </html>
