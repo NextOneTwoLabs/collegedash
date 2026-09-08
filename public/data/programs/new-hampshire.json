@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T17:54:00Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 43.038922,
+    "lon": -71.451842,
+    "timezone": "America/New_York",
+    "elevationM": 68.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014710",
+      "name": "MANCHESTER AP",
+      "state": "NH",
+      "distanceKm": 11.8,
+      "elevationM": 68.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 34.1,
+        "tLowF": 17.1,
+        "precipIn": 2.44,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 28.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 37.4,
+        "tLowF": 19.0,
+        "precipIn": 2.73,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 25.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 45.6,
+        "tLowF": 27.4,
+        "precipIn": 3.45,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 22.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.9,
+        "tLowF": 37.5,
+        "precipIn": 3.33,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 0.2,
+        "daysFreeze": 7.1
+      },
+      {
+        "month": "May",
+        "tHighF": 70.1,
+        "tLowF": 47.7,
+        "precipIn": 3.38,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 1.1,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Jun",
+        "tHighF": 78.7,
+        "tLowF": 57.6,
+        "precipIn": 4.04,
+        "snowIn": null,
+        "wetDays": 8.0,
+        "days90F": 3.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 84.1,
+        "tLowF": 63.6,
+        "precipIn": 3.3,
+        "snowIn": null,
+        "wetDays": 6.7,
+        "days90F": 6.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 82.4,
+        "tLowF": 62.1,
+        "precipIn": 3.35,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 4.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 74.6,
+        "tLowF": 54.1,
+        "precipIn": 3.72,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 1.1,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Oct",
+        "tHighF": 62.1,
+        "tLowF": 42.3,
+        "precipIn": 3.88,
+        "snowIn": null,
+        "wetDays": 6.4,
+        "days90F": 0.0,
+        "daysFreeze": 3.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 50.0,
+        "tLowF": 32.9,
+        "precipIn": 3.48,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 15.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 39.3,
+        "tLowF": 23.5,
+        "precipIn": 3.29,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 25.8
+      }
+    ],
+    "annualPrecipIn": 40.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 67.3,
+      "avgLowF": 47.9,
+      "precipIn": 14.4,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 84.1°F), coldest Jan (avg low 17.1°F). 40.4 in of rain per year. Fall season (Aug–Nov): highs around 67.3°F, 14.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014710,USW00014745,USC00275211&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:18Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Steve Welham",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/steve-welham/2483",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Steve Welham",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/steve-welham/2483",
+        "social": {}
+      },
+      {
+        "name": "Jessica Nei",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/jessica-nei/2484",
+        "social": {}
+      },
+      {
+        "name": "Stuart Horne",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/stuart-horne/2482",
+        "social": {}
+      },
+      {
+        "name": "Josh Needle",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/josh-needle/2481",
+        "social": {}
+      },
+      {
+        "name": "Charles Brissette",
+        "title": "Director of Player Analytics",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/charles-brissette/2489",
+        "social": {}
+      },
+      {
+        "name": "Lauren Walker",
+        "title": "Student Coach/Manager",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/coaches/lauren-walker/2496",
+        "social": {}
+      },
+      {
+        "name": "Trevor Sylvester",
+        "title": "Assistant Strength & Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/staff/trevor-sylvester/346",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Matt Carmichael",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/staff/matt-carmichael/315",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +313,2632 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://unhwildcats.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:26:22Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "3-2-2",
+      "wins": 3,
+      "losses": 2,
+      "ties": 2,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "Steve Welham"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "4-6-7",
+      "wins": 4,
+      "losses": 6,
+      "ties": 7,
+      "confRecord": "2-2-4",
+      "rpiRank": 250,
+      "rpi": {
+        "rank": 250,
+        "record": "3-6-7",
+        "through": "2025-12-08",
+        "prevRank": 249,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 250,
+            "record": "3-6-7"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "12-5-1",
+      "wins": 12,
+      "losses": 5,
+      "ties": 1,
+      "confRecord": "6-2-0",
+      "rpiRank": 71,
+      "rpi": {
+        "rank": 71,
+        "sosRank": 51,
+        "balancedRank": 110,
+        "kpiRank": 110,
+        "masseyRank": 141,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "6-5-5",
+      "wins": 6,
+      "losses": 5,
+      "ties": 5,
+      "confRecord": "3-1-4",
+      "rpiRank": 170,
+      "rpi": {
+        "rank": 170,
+        "sosRank": 157,
+        "balancedRank": 213,
+        "kpiRank": 178,
+        "masseyRank": 227,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "00",
+        "name": "Sonja Zeepvat",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Mendham, N.J. / West Morris Mendham",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "STA Soccer",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/sonja-zeepvat/12882",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Olivia Moynihan",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Sayville, N.Y. / Sayville",
+        "highSchool": "EMSC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/olivia-moynihan/12878",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Riley Restic",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mendon, Mass. / Nipmuc Regional",
+        "highSchool": "NEFC 08 GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/riley-restic/12884",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "3",
+        "name": "Emma Kucal",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cumberland, R.I. / Cumberland",
+        "highSchool": "Rhode Island Surf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/emma-kucal/12876",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Olivia Siwicki",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "North Andover, Mass. / North Andover",
+        "highSchool": "New England Surf",
+        "previousSchool": "",
+        "major": "",
+        "club": "New England Surf",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/olivia-siwicki/12879",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "5",
+        "name": "Ava VanBuskirk",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Marlborough, Mass. / Marlborough",
+        "highSchool": "NEFC Girls Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/ava-vanbuskirk/12880",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Angel Deluhery",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bethlehem, Pa. / Moravian Academy",
+        "highSchool": "Penn Fusion",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/angel-deluhery/12871",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Riley Mitza",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Tyngsborough, Mass. / Tyngsborough",
+        "highSchool": "FC Stars",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/riley-mitza/12877",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Jules Vano",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Yorktown, N.Y. / Yorktown",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/jules-vano/12881",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Nina Ciri",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hopkinton, Mass. / Buckingham Browne and Nichols School",
+        "highSchool": "FC Stars",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/nina-ciri/12868",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Amelia Wojcik",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mississauga, Ontario / Port Credit Secondary School",
+        "highSchool": "Vaughan Soccer Club",
+        "previousSchool": "",
+        "major": "",
+        "club": "Vaughan SC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/amelia-wojcik/12885",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Abby Beasley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Fishers, Ind. / Cathedral",
+        "highSchool": "Indy Eleven Pro Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/abby-beasley/12866",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Lindsay Lenhard",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Spencerport, N.Y. / Spencerport",
+        "highSchool": "UNC Wilmington",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/lindsay-lenhard/12886",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Molly Tufts",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Weymouth, Mass. / Weymouth",
+        "highSchool": "Scorpions SC",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/molly-tufts/12887",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Kayla Smyrnios",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Lynnfield, Mass. / Pingree School",
+        "highSchool": "NEFC",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/kayla-smyrnios/12888",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Greta Caulton",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Amherst, N.H. / Souhegan",
+        "highSchool": "FC Stars of Massachusetts",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/greta-caulton/12867",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Summer Haarala",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Framingham, Mass. / Framingham",
+        "highSchool": "NEFC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/summer-haarala/12875",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Amber Clarke",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cato, N.Y. / Cato-Meridian",
+        "highSchool": "Syracuse Development Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Syracuse Development Academy",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/amber-clarke/12869",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "21",
+        "name": "Madison Donati",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Pacifica, Calif. / Terra Nova",
+        "highSchool": "Burlingame Soccer Club",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/madison-donati/12872",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Addison Davis",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Kenmore, N.Y. / Nichols School",
+        "highSchool": "Western Carolina University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/addison-davis/12889",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Megan Jakubicka",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'1\"",
+        "heightIn": 61,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Sandwich, Mass. / Sandwich Middle High",
+        "highSchool": "Scorpions SC",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/megan-jakubicka/12890",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "26",
+        "name": "Meryn Primanti",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Philadelphia, Pa. / Owen J. Roberts",
+        "highSchool": "Penn Fusion",
+        "previousSchool": "",
+        "major": "",
+        "club": "Penn Fusion SA",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/meryn-primanti/12891",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Natalie Zibinskas",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kensington, N.H. / Thayer Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/natalie-zibinskas/12883",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Dulce Lytle",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wyomissing, Pa. / Wyomissing Junior/Senior",
+        "highSchool": "FC Delco",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/dulce-lytle/12892",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Alyssa Gimmel",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "North Ridgeville, Ohio / North Ridgeville",
+        "highSchool": "Cleveland Force",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/alyssa-gimmel/12874",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Caroline Cohen",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Glastonbury, Conn. / Miss Porter's School",
+        "highSchool": "FSA",
+        "previousSchool": "",
+        "major": "",
+        "club": "FSA FC",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/caroline-cohen/12870",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "34",
+        "name": "Paige Santos",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Charlotte, N.C. / Weddington",
+        "highSchool": "Charlotte Independence",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/paige-santos/12893",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "42",
+        "name": "Elizabeth Finn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Scituate, Mass. / Worcester Academy",
+        "highSchool": "FC Stars",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://unhwildcats.com/sports/womens-soccer/roster/elizabeth-finn/12873",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 5,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 4,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 6,
+      "SO": 10,
+      "FR": 8,
+      "JR": 4
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "F": 4,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://unhwildcats.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:26:22Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sonja Zeepvat",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Mendham, N.J. / West Morris Mendham",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Olivia Moynihan",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Sayville, N.Y. / Sayville",
+          "highSchool": "EMSC"
+        },
+        {
+          "number": "2",
+          "name": "Molly McHugh",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Tyngsboro, Mass. / Tyngsboro",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "3",
+          "name": "Emma Kucal",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cumberland, R.I. / Cumberland",
+          "highSchool": "Rhode Island Surf"
+        },
+        {
+          "number": "4",
+          "name": "Olivia Siwicki",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "North Andover, Mass. / North Andover",
+          "highSchool": "New England Surf"
+        },
+        {
+          "number": "5",
+          "name": "Ava VanBuskirk",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Marlborough, Mass. / Marlborough",
+          "highSchool": "NEFC Girls Academy"
+        },
+        {
+          "number": "6",
+          "name": "Angel Deluhery",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bethlehem, Pa. / Moravian Academy",
+          "highSchool": "Penn Fusion"
+        },
+        {
+          "number": "7",
+          "name": "Riley Mitza",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Tyngsborough, Mass. / Tyngsborough",
+          "highSchool": "FC Stars"
+        },
+        {
+          "number": "8",
+          "name": "Jules Vano",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Yorktown, N.Y. / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Nina Ciri",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Hopkinton, Mass. / Buckingham Browne and Nichols School",
+          "highSchool": "FC Stars"
+        },
+        {
+          "number": "10",
+          "name": "Ricshya Walker",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Philadelphia, Pa. / Parkway Center City Middle College",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Lauren Walker",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Essexville, Mich. / Garber",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Maddie Kolb",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Tolland, Conn. / Tolland",
+          "highSchool": "Oakwood"
+        },
+        {
+          "number": "15",
+          "name": "Brooke Pearson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Plainville, Conn. / Miss Porters School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lily Johnson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Wyckoff, N.J. / Ramapo",
+          "highSchool": "NYCFC Development Academy"
+        },
+        {
+          "number": "17",
+          "name": "Greta Caulton",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Amherst, N.H. / Souhegan",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "18",
+          "name": "Summer Haarala",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Framingham, Mass. / Framingham",
+          "highSchool": "NEFC"
+        },
+        {
+          "number": "19",
+          "name": "Amber Clarke",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cato, N.Y. / Cato-Meridian",
+          "highSchool": "Syracuse Development Academy"
+        },
+        {
+          "number": "21",
+          "name": "Madison Donati",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Pacifica, Calif. / Terra Nova",
+          "highSchool": "Burlingame Soccer Club"
+        },
+        {
+          "number": "23",
+          "name": "Abby Beasley",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Fishers, Ind. / Cathedral",
+          "highSchool": "Indy Eleven Pro Academy"
+        },
+        {
+          "number": "24",
+          "name": "Abbi Maier",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": "Ohio Elite SA"
+        },
+        {
+          "number": "27",
+          "name": "Natalie Zibinskas",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Kensington, N.H. / Thayer Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Alyssa Gimmel",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "North Ridgeville, Ohio / North Ridgeville",
+          "highSchool": "Cleveland Force"
+        },
+        {
+          "number": "30",
+          "name": "Elaina Grenz",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "River Edge, N.J. / River Dell Regional",
+          "highSchool": "World Class FC ECNL"
+        },
+        {
+          "number": "32",
+          "name": "Caroline Cohen",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Glastonbury, Conn. / Miss Porter's School",
+          "highSchool": "FSA"
+        },
+        {
+          "number": "33",
+          "name": "Chloe DeLyser",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Marion, N.Y. / Marion",
+          "highSchool": "Ohio State"
+        },
+        {
+          "number": "42",
+          "name": "Elizabeth Finn",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Scituate, Mass. / Worcester Academy",
+          "highSchool": "FC Stars"
+        }
+      ],
+      "departed": [
+        "abbi maier",
+        "brooke pearson",
+        "chloe delyser",
+        "elaina grenz",
+        "lauren walker",
+        "lily johnson",
+        "maddie kolb",
+        "molly mchugh",
+        "ricshya walker"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sonja Zeepvat",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Mendham, N.J. / West Morris Mendham",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Lilly Vermilya",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Framingham, Mass. / Framingham",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Molly McHugh",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Tyngsboro, Mass. / Tyngsboro",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "3",
+          "name": "Grace Burcaw",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Nazareth, Pa. / Moravian Academy",
+          "highSchool": "Match Fit Academy"
+        },
+        {
+          "number": "4",
+          "name": "Olivia Siwicki",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "North Andover, Mass. / North Andover",
+          "highSchool": "New England Surf"
+        },
+        {
+          "number": "5",
+          "name": "Ava VanBuskirk",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Marlborough, Mass. / Marlborough",
+          "highSchool": "NEFC Girls Academy"
+        },
+        {
+          "number": "6",
+          "name": "Anna Hewlett",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Webster, N.Y. / Webster Schroeder / Western NY Flash",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Megan Logue",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Oak Hills, Calif. / Serrano",
+          "highSchool": "Central Michigan"
+        },
+        {
+          "number": "8",
+          "name": "Jules Vano",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Yorktown, N.Y. / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Brooke Samborski",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Chicopee, Mass. / Belchertown",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "10",
+          "name": "Ally Giovino",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Westford, Mass. / Westford Academy",
+          "highSchool": "Colgate"
+        },
+        {
+          "number": "11",
+          "name": "Beth Winnor",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Hidden Valley, Pa. / Greensburg Central Catholic",
+          "highSchool": "Pittsburgh Riverhounds Development Academy"
+        },
+        {
+          "number": "12",
+          "name": "Delaney Lappin",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Corbin City, N.J. / Ocean City",
+          "highSchool": "Drexel"
+        },
+        {
+          "number": "14",
+          "name": "Maddie Kolb",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Tolland, Conn. / Tolland",
+          "highSchool": "Oakwood"
+        },
+        {
+          "number": "15",
+          "name": "Brooke Pearson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Plainville, Conn. / Miss Porters School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lily Johnson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Wyckoff, N.J. / Ramapo",
+          "highSchool": "NYCFC Development Academy"
+        },
+        {
+          "number": "17",
+          "name": "Greta Caulton",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Amherst, N.H. / Souhegan",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "18",
+          "name": "Summer Haarala",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Framingham, Mass. / Framingham",
+          "highSchool": "NEFC"
+        },
+        {
+          "number": "19",
+          "name": "Meghan Guarente",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Sewell, N.J. / Gloucester County Institute of Technology",
+          "highSchool": "SJEB Rush"
+        },
+        {
+          "number": "20",
+          "name": "Giovanna Castorina",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Sewell, N.J. / Washington Township",
+          "highSchool": "SJEB RUSH"
+        },
+        {
+          "number": "21",
+          "name": "Madison Donati",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pacifica, Calif. / Terra Nova",
+          "highSchool": "Burlingame Soccer Club"
+        },
+        {
+          "number": "22",
+          "name": "Ginny Delacruz",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Fairfax, Va. / Robinson Secondary School",
+          "highSchool": "William & Mary"
+        },
+        {
+          "number": "23",
+          "name": "Lydia Poulin",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "West Hartford, Conn. / Miss Porter's School",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Abbi Maier",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": "Ohio Elite SA"
+        },
+        {
+          "number": "25",
+          "name": "Sally Rainey",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "West Lebanon, N.H. / Lebanon",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "28",
+          "name": "Delaney Diltz",
+          "pos": "",
+          "classCode": "R-JR",
+          "hometown": "San Diego, Calif. / Cathedral Catholic",
+          "highSchool": "Creighton"
+        },
+        {
+          "number": "30",
+          "name": "Elaina Grenz",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "River Edge, N.J. / River Dell Regional",
+          "highSchool": "World Class FC ECNL"
+        },
+        {
+          "number": "32",
+          "name": "Caroline Cohen",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Glastonbury, Conn. / Miss Porter's School",
+          "highSchool": "FSA"
+        },
+        {
+          "number": "33",
+          "name": "Chloe DeLyser",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Marion, N.Y. / Marion",
+          "highSchool": "Ohio State"
+        },
+        {
+          "number": "42",
+          "name": "Elizabeth Finn",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Scituate, Mass. / Worcester Academy",
+          "highSchool": "FC Stars"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sonja Zeepvat",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Mendham, N.J. / West Morris Mendham",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Lilly Vermilya",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Framingham, Mass. / Framingham",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Molly McHugh",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Tyngsboro, Mass. / Tyngsboro",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "3",
+          "name": "Grace Burcaw",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Nazareth, Pa. / Moravian Academy",
+          "highSchool": "Match Fit Academy"
+        },
+        {
+          "number": "4",
+          "name": "Logan Nicholson",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "St. Augustine, Fla. / Allen D. Nease / Armada FC",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Anna Hewlett",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Webster, N.Y. / Webster Schroeder / Western NY Flash",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Megan Logue",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Oak Hills, Calif. / Serrano",
+          "highSchool": "Central Michigan"
+        },
+        {
+          "number": "8",
+          "name": "Jules Vano",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Yorktown, N.Y. / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Brooke Samborski",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Chicopee, Mass. / Belchertown",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "10",
+          "name": "Katie Oliver",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Leesburg, Virginia / Woodgrove High School",
+          "highSchool": "Radford University"
+        },
+        {
+          "number": "11",
+          "name": "Beth Winnor",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Hidden Valley, Pa. / Greensburg Central Catholic",
+          "highSchool": "Pittsburgh Riverhounds Development Academy"
+        },
+        {
+          "number": "12",
+          "name": "Ella Dudley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "St. Augustine, Fla. / Bartram Trail / Armada FC",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Maddie Kolb",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Tolland, Conn. / Tolland",
+          "highSchool": "Oakwood"
+        },
+        {
+          "number": "15",
+          "name": "Keegan Mayer",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Summit, N.J. / Summit / Players Development Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lily Johnson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wyckoff, N.J. / Ramapo",
+          "highSchool": "NYCFC Development Academy"
+        },
+        {
+          "number": "17",
+          "name": "Greta Caulton",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Amherst, N.H. / Souhegan",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "18",
+          "name": "Summer Haarala",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Framingham, Mass. / Framingham",
+          "highSchool": "NEFC"
+        },
+        {
+          "number": "19",
+          "name": "Meghan Guarente",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sewell, N.J. / Gloucester County Institute of Technology",
+          "highSchool": "SJEB Rush"
+        },
+        {
+          "number": "20",
+          "name": "Alivia Kelly",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Pembroke, Mass. / Thayer Academy",
+          "highSchool": "Scorpions FC"
+        },
+        {
+          "number": "22",
+          "name": "Ashley Buchheit",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Downingtown, Pa. / Downingtown S.T.E.M. Academy",
+          "highSchool": "FC Delco"
+        },
+        {
+          "number": "23",
+          "name": "Annie Renz",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Milton, Massachusetts / Milton Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Abbi Maier",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": "Ohio Elite SA"
+        },
+        {
+          "number": "25",
+          "name": "Sally Rainey",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "West Lebanon, N.H. / Lebanon",
+          "highSchool": "FC Stars of Massachusetts"
+        },
+        {
+          "number": "26",
+          "name": "Maggie Moore",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Newmarket, New Hampshire / Newmarket",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Delaney Diltz",
+          "pos": "",
+          "classCode": "R-SO",
+          "hometown": "San Diego, Calif. / Cathedral Catholic",
+          "highSchool": "Creighton"
+        },
+        {
+          "number": "30",
+          "name": "Elaina Grenz",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "River Edge, N.J. / River Dell Regional",
+          "highSchool": "World Class FC ECNL"
+        },
+        {
+          "number": "33",
+          "name": "Chloe DeLyser",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Marion, N.Y. / Marion",
+          "highSchool": "Ohio State"
+        },
+        {
+          "number": "42",
+          "name": "Elizabeth Finn",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Scituate, Mass. / Worcester Academy",
+          "highSchool": "FC Stars"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 3,
+      "losses": 2,
+      "ties": 2,
+      "text": "3-2-2",
+      "played": 7,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Stonehill",
+        "opponentRank": null,
+        "location": "Skyhawk Field, Easton, Mass.",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/stonehill/boxscore/9666",
+          "recap": "https://unhwildcats.com/news/2026/8/13/womens-soccer-womens-soccer-ties-stonehill-1-1-in-season-opener",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/stonehill/304"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Siena",
+        "opponentRank": null,
+        "location": "Hickey Field, Loudonville, N.Y.",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/siena/boxscore/9667",
+          "recap": "https://unhwildcats.com/news/2026/8/16/womens-soccer-wildcats-fall-to-siena-1-0",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/siena/155"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Dartmouth",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/dartmouth/boxscore/9668",
+          "recap": "https://unhwildcats.com/news/2026/8/23/womens-soccer-womens-soccer-ties-dartmouth-0-0",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/dartmouth/95"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Rhode Island",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/rhode-island/boxscore/9669",
+          "recap": "https://unhwildcats.com/news/2026/8/27/womens-soccer-cats-defeat-rhode-island-1-0-for-first-win-of-season",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/rhode-island/133"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Northeastern",
+        "opponentRank": null,
+        "location": "Parsons Field, Brookline, Mass.",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/northeastern/boxscore/9670",
+          "recap": "https://unhwildcats.com/news/2026/8/30/womens-soccer-vanbuskirks-first-two-collegiate-goals-lift-cats-past-northeastern-4-1",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/northeastern/78"
+        }
+      },
+      {
+        "date": "2026-09-02",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Merrimack",
+        "opponentRank": null,
+        "location": "Martone-Mejail Field, North Andover, Mass.",
+        "result": "W",
+        "score": "4-2",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/merrimack/boxscore/9671",
+          "recap": "https://unhwildcats.com/news/2026/9/2/womens-soccer-womens-soccer-downs-merrimack-4-2-for-third-straight-win",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/merrimack/105"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Yale",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2026/yale/boxscore/9672",
+          "recap": "https://unhwildcats.com/news/2026/9/6/womens-soccer-womens-soccer-falls-to-yale-1-0",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/yale/16"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Harvard",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/eventCalendarId/401886289?gameId=401886289&sourceLang=en&om-navmethod=espn:globalsearch:results",
+          "live stats": "https://unhwildcats.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/harvard/14"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "NJIT",
+        "opponentRank": null,
+        "location": "Lubetkin Field, Newark, N.J.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://njithighlanders.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/njit/120"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UMBC",
+        "opponentRank": null,
+        "location": "Retriever Soccer Park, Baltimore, Md.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://umbcretrievers.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umbc/332"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Bryant",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://unhwildcats.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/bryant/70"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Binghamton",
+        "opponentRank": null,
+        "location": "Bearcats Sports Complex, Vestal, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/binghamton/29"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UNH Blue/White Game",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/unh-bluewhite-game/180"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Maine",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://unhwildcats.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine/81"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UMass Lowell",
+        "opponentRank": null,
+        "location": "Cushing Field Complex, Lowell, Mass.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://goriverhawks.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umass-lowell/84"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Vermont",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://unhwildcats.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/vermont/86"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UAlbany",
+        "opponentRank": null,
+        "location": "Wildcat Stadium, Durham, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://unhwildcats.com/sidearmstats/wsoc/summary",
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/ualbany/69"
+        }
+      },
+      {
+        "date": "2026-11-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "America East First Round",
+        "opponentRank": null,
+        "location": null,
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/america-east-first-round/276"
+        }
+      },
+      {
+        "date": "2026-11-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "America East Semifinal",
+        "opponentRank": null,
+        "location": null,
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/america-east-semifinal/276"
+        }
+      },
+      {
+        "date": "2026-11-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "America East Final",
+        "opponentRank": null,
+        "location": null,
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://unhwildcats.com/sports/wsoc/opponent-history/america-east-final/276"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "4-6-7",
+        "games": [
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Boston University",
+            "opponentRank": null,
+            "location": "Nickerson Field, Boston, Mass.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/boston-university/boxscore/9165",
+              "recap": "https://unhwildcats.com/news/2025/8/17/womens-soccer-cats-fall-to-bu-in-season-opener",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/boston-university/57"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stonehill",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/stonehill/boxscore/9166",
+              "recap": "https://unhwildcats.com/news/2025/8/21/womens-soccer-womens-soccer-ties-stonehill-1-1"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Holy Cross",
+            "opponentRank": null,
+            "location": "Linda Johnson Smith Soccer Stadium, Worcester, Mass.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/holy-cross/boxscore/9167",
+              "recap": "https://unhwildcats.com/news/2025/8/28/womens-soccer-womens-soccer-drops-match-at-holy-cross-3-1",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/holy-cross/148"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Siena",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/siena/boxscore/9168",
+              "recap": "https://unhwildcats.com/news/2025/8/31/womens-soccer-womens-soccer-plays-to-0-0-tie-versus-siena"
+            }
+          },
+          {
+            "date": "2025-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Merrimack",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "4-3",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/merrimack/boxscore/9169",
+              "recap": "https://unhwildcats.com/news/2025/9/3/womens-soccer-womens-soccer-tallies-4-3-win-over-merrimack"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stony Brook",
+            "opponentRank": null,
+            "location": "Kenneth P. LaValle Stadium, Stony Brook, N.Y.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/stony-brook/boxscore/9170",
+              "recap": "https://unhwildcats.com/news/2025/9/7/womens-soccer-womens-soccer-rallies-for-2-2-draw-at-stony-brook",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/stony-brook/10"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Jordan Field, Cambridge, Mass.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/harvard/boxscore/9171",
+              "recap": "https://unhwildcats.com/news/2025/9/14/womens-soccer-womens-soccer-falls-just-short-at-harvard-3-2",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/harvard/14"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southern Maine",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/southern-maine/boxscore/9238",
+              "recap": "https://unhwildcats.com/news/2025/9/21/womens-soccer-cats-defeat-southern-maine-4-1-on-senior-day"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Vermont",
+            "opponentRank": null,
+            "location": "Virtue Field, Burlington, Vt.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/vermont/boxscore/9173",
+              "recap": "https://unhwildcats.com/news/2025/9/28/womens-soccer-cats-fall-to-vermont-2-1-in-conference-opener",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/vermont/86"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UMass Lowell",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/umass-lowell/boxscore/9174",
+              "recap": "https://unhwildcats.com/news/2025/10/2/womens-soccer-womens-soccer-edges-umass-lowell-1-0"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "NJIT",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/njit/boxscore/9175",
+              "recap": "https://unhwildcats.com/news/2025/10/5/womens-soccer-womens-soccer-ties-njit-2-2"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAlbany",
+            "opponentRank": null,
+            "location": "Bob Ford Field, Albany, N.Y.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/ualbany/boxscore/9176",
+              "recap": "https://unhwildcats.com/news/2025/10/12/womens-soccer-womens-soccer-tallies-3-1-win-at-ualbany",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/ualbany/69"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Bryant",
+            "opponentRank": null,
+            "location": "Beirne Stadium, Smithfield, R.I.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/bryant/boxscore/9177",
+              "recap": "https://unhwildcats.com/news/2025/10/16/womens-soccer-womens-soccer-plays-to-0-0-draw-at-bryant",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/bryant/70"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Binghamton",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/binghamton/boxscore/9178",
+              "recap": "https://unhwildcats.com/news/2025/10/19/womens-soccer-cats-earn-valuable-league-point-in-1-1-tie-with-first-place-binghamton"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UMBC",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/umbc/boxscore/9179",
+              "recap": "https://unhwildcats.com/news/2025/10/26/womens-soccer-clinches-ae-tourney-bid-with-1-1-tie-versus-umbc"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Maine",
+            "opponentRank": null,
+            "location": "New Balance Soccer Complex, Orono, Maine",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/maine/boxscore/9180",
+              "recap": "https://unhwildcats.com/news/2025/10/30/womens-soccer-womens-soccer-falls-to-maine-2-1-in-regular-season-finale",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine/81"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Maine (First Round)",
+            "opponentRank": null,
+            "location": "New Balance Soccer Complex, Orono, Maine",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2025/maine-first-round-/boxscore/9407",
+              "recap": "https://unhwildcats.com/news/2025/11/2/womens-soccer-womens-soccer-falls-to-maine-2-1-in-ae-first-round",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine-first-round/81"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "12-5-1",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stonehill",
+            "opponentRank": null,
+            "location": "W.B. Mason Stadium, North Easton, Mass.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/stonehill/boxscore/8681",
+              "recap": "https://unhwildcats.com/news/2024/8/15/womens-soccer-maier-records-goal-assist-in-2-0-season-opening-win-at-stonehill",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/stonehill/304"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Holy Cross",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/holy-cross/boxscore/8682",
+              "recap": "https://unhwildcats.com/news/2024/8/18/womens-soccer-lappins-pair-of-late-goals-lifts-unh-past-holy-cross-3-2",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/holy-cross/148"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Louisville",
+            "opponentRank": null,
+            "location": "Louisville, Ky.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/louisville/boxscore/8683",
+              "recap": "https://unhwildcats.com/news/2024/8/22/womens-soccer-raineys-superb-saves-and-lappins-late-goal-lift-unh-to-1-1-tie-at-louisville",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/louisville/211"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/uconn/boxscore/8684",
+              "recap": "https://unhwildcats.com/news/2024/8/25/womens-soccer-rainey-records-seven-saves-in-1-0-loss-to-uconn",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/uconn/92"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "LIU",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/liu/boxscore/8685",
+              "recap": "https://unhwildcats.com/news/2024/9/1/womens-soccer-guarente-lifts-unh-past-liu-3-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/liu/283"
+            }
+          },
+          {
+            "date": "2024-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Merrimack",
+            "opponentRank": null,
+            "location": "Martone-Mejail Field, North Andover, Mass.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/merrimack/boxscore/8686",
+              "recap": "https://unhwildcats.com/news/2024/9/4/womens-soccer-unh-earns-2-0-win-over-merrimack",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/merrimack/105"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Boston University",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/boston-university/boxscore/8687",
+              "recap": "https://unhwildcats.com/news/2024/9/8/womens-soccer-gaurente-leads-unh-past-bu-in-1-0-victory",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/boston-university/57"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stony Brook",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/stony-brook/boxscore/8688",
+              "recap": "https://unhwildcats.com/news/2024/9/15/womens-soccer-new-hampshire-falls-1-0-to-stony-brook-on-senior-day",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/stony-brook/10"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Vermont",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/vermont/boxscore/8689",
+              "recap": "https://unhwildcats.com/news/2024/9/22/womens-soccer-guarente-and-grenz-lead-new-hampshire-past-vermont"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Binghamton",
+            "opponentRank": null,
+            "location": "Bearcats Sports Complex, Vestal, N.Y.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/binghamton/boxscore/8690",
+              "recap": "https://unhwildcats.com/news/2024/9/29/womens-soccer-giovinos-game-winning-goal-leads-unh-over-binghamton",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/binghamton/29"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UAlbany",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/ualbany/boxscore/8691",
+              "recap": "https://unhwildcats.com/news/2024/10/3/womens-soccer-lappin-leads-new-hampshire-past-ualbany",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/ualbany/69"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "NJIT",
+            "opponentRank": null,
+            "location": "Lubetkin Field, Newark, N.J.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/njit/boxscore/8692",
+              "recap": "https://unhwildcats.com/news/2024/10/6/womens-soccer-gaurente-strikes-twice-as-unh-defeats-njit-for-fourth-straight-win",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/njit/120"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UMass Lowell",
+            "opponentRank": null,
+            "location": "Cushing Field Complex, Lowell, Mass.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/umass-lowell/boxscore/8693",
+              "recap": "https://unhwildcats.com/news/2024/10/17/womens-soccer-wildcats-fall-2-0-to-river-hawks",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umass-lowell/84"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Bryant",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/bryant/boxscore/8694",
+              "recap": "https://unhwildcats.com/news/2024/10/20/womens-soccer-maiers-goal-lifts-unh-past-bryant-and-into-the-playoffs",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/bryant/70"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UMBC",
+            "opponentRank": null,
+            "location": "Retriever Soccer Park, Baltimore, Md.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/umbc/boxscore/8695",
+              "recap": "https://unhwildcats.com/news/2024/10/27/womens-soccer-unh-earns-3-2-win-over-umbc-to-clinch-first-round-bye",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umbc/332"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Maine",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/maine/boxscore/8696",
+              "recap": "https://unhwildcats.com/news/2024/10/31/womens-soccer-unh-falls-1-0-to-maine",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine/81"
+            }
+          },
+          {
+            "date": "2024-11-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Binghamton",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/binghamton/boxscore/8698",
+              "recap": "https://unhwildcats.com/news/2024/11/7/womens-soccer-cats-advance-to-america-east-final-with-3-1-win-over-binghamton",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/binghamton/29"
+            }
+          },
+          {
+            "date": "2024-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "University of Maine",
+            "opponentRank": null,
+            "location": "Mahaney Diamond, Orono, Maine",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2024/university-of-maine/boxscore/8699",
+              "recap": "https://unhwildcats.com/news/2024/11/10/womens-soccer-wildcats-fall-3-0-to-maine-in-america-east-championship-game",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/university-of-maine/81"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "6-5-5",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stonehill College",
+            "opponentRank": null,
+            "location": "Tucker Field, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/stonehill-college/boxscore/8305",
+              "recap": "https://unhwildcats.com/news/2023/8/17/womens-soccer-wildcats-record-1-0-shutout-in-season-opener-against-stonehill",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/stonehill-college/304"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Minnesota",
+            "opponentRank": null,
+            "location": "Elizabeth Lyle Robbie Stadium, Minneapolis, Minn.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/minnesota/boxscore/8306",
+              "recap": "https://unhwildcats.com/news/2023/8/20/womens-soccer-wildcats-fall-to-big-10-opponent-minnesota-4-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/minnesota/110"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Manhattan College",
+            "opponentRank": null,
+            "location": "Tucker Field, Durham, N.H.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/manhattan-college/boxscore/8307",
+              "recap": "https://unhwildcats.com/news/2023/8/24/wildcats-defeat-jaspers-in-2-0-shutout",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/manhattan-college/82"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Siena College",
+            "opponentRank": null,
+            "location": "Hickey Field, Loudonville, N.Y.",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/siena-college/boxscore/8308",
+              "recap": "https://unhwildcats.com/news/2023/8/31/womens-soccer-six-different-wildcats-score-as-unh-explodes-past-siena-6-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/siena-college/155"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Connecticut",
+            "opponentRank": null,
+            "location": "Joseph J. Morrone Stadium, Storrs, Conn.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/connecticut/boxscore/8309",
+              "recap": "https://unhwildcats.com/news/2023/9/3/womens-soccer-wildcats-fall-to-big-east-opponent-uconn-2-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/connecticut/92"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Merrimack College",
+            "opponentRank": null,
+            "location": "Tucker Field, Durham, N.H.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/merrimack-college/boxscore/8310",
+              "recap": "https://unhwildcats.com/news/2023/9/7/womens-soccer-wildcats-tie-merrimack-0-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/merrimack-college/105"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Boston University",
+            "opponentRank": null,
+            "location": "Nickerson Field, Boston, Mass.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/boston-university/boxscore/8311",
+              "recap": "https://unhwildcats.com/news/2023/9/10/womens-soccer-wildcats-fall-to-boston-university-2-1",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/boston-university/57"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Binghamton",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/binghamton/boxscore/8312",
+              "recap": "https://unhwildcats.com/news/2023/9/17/womens-soccer-wildcats-fall-to-binghamton-1-0-in-first-america-east-battle-of-the-season",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/binghamton/29"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Bryant",
+            "opponentRank": null,
+            "location": "Beirne Stadium, Smithfield, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/bryant/boxscore/8313",
+              "recap": "https://unhwildcats.com/news/2023/9/24/womens-soccer-two-score-first-as-wildcats-in-2-0-victory-over-bryant",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/bryant/70"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UMass Lowell",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/umass-lowell/boxscore/8314",
+              "recap": "https://unhwildcats.com/news/2023/9/28/womens-soccer-wildcats-tie-river-hawks-0-0",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umass-lowell/84"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Albany",
+            "opponentRank": null,
+            "location": "Bob Ford Field, Albany, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/albany/boxscore/8315",
+              "recap": "https://unhwildcats.com/news/2023/10/1/womens-soccer-wildcats-down-ualbany-in-comeback-fashion-2-1",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/albany/69"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Vermont",
+            "opponentRank": null,
+            "location": "Virtue Field, Burlington, Vt.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/vermont/boxscore/8316",
+              "recap": "https://unhwildcats.com/news/2023/10/12/womens-soccer-maier-scores-late-in-1-1-tie-versus-vermont",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/vermont/86"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "NJIT",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/njit/boxscore/8317",
+              "recap": "https://unhwildcats.com/news/2023/10/15/womens-soccer-kelly-scores-lone-goal-in-1-0-senior-day-win-over-njit"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UMBC",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/umbc/boxscore/8318",
+              "recap": "https://unhwildcats.com/news/2023/10/22/womens-soccer-wildcats-clinch-playoff-berth-in-0-0-tie-against-umbc",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/umbc/85"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Maine",
+            "opponentRank": null,
+            "location": "Alfond Stadium, Orono, Maine",
+            "result": null,
+            "score": null,
+            "links": {
+              "watch": "https://www.espn.com/watch/player/_/id/1cec3c08-1df0-4bf9-8c0c-fbd551ba04e4?om-navmethod=espn:globalsearch:results",
+              "live stats": "https://goblackbears.com/sidearmstats/wsoc/summary",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine/81"
+            }
+          },
+          {
+            "date": "2023-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Maine",
+            "opponentRank": null,
+            "location": "Alfond Stadium, Orono, ME",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/maine/boxscore/8507",
+              "recap": "https://unhwildcats.com/news/2023/10/27/womens-soccer-wildcats-tie-maine-0-0-host-america-east-quarterfinal-on-monday-oct-30",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/maine/81"
+            }
+          },
+          {
+            "date": "2023-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Vermont",
+            "opponentRank": null,
+            "location": "Wildcat Stadium, Durham, N.H.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://unhwildcats.com/sports/womens-soccer/stats/2023/vermont/boxscore/8338",
+              "recap": "https://unhwildcats.com/news/2023/10/30/mens-basketball-wildcats-fall-to-vermont-in-america-east-quarterfinal-2-1",
+              "history": "https://unhwildcats.com/sports/wsoc/opponent-history/vermont/86"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://unhwildcats.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:26:22Z"
+    }
+  },
   "commitments": [
     {
       "id": "amelia-wojcik-2026",
@@ -117,7 +2951,7 @@
       "city": "Mississauga",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +2970,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +2986,7 @@
       "city": "South Hamilton",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -196,7 +3030,7 @@
       "city": "East Sandwich",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -215,7 +3049,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -231,7 +3065,7 @@
       "city": "Chester Springs",
       "highSchool": "Owen J Roberts",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -275,7 +3109,7 @@
       "city": "Weymouth",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -294,7 +3128,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -310,7 +3144,7 @@
       "city": "Weddington",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -329,7 +3163,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -345,7 +3179,7 @@
       "city": "Mendon",
       "highSchool": "",
       "college": "new-hampshire",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -364,7 +3198,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -699,41 +3533,27 @@
     "2027": 6
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://unhwildcats.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T17:56:34Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=43.038922&longitude=-71.451842&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T17:56:33Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T17:56:33Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:26:09Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

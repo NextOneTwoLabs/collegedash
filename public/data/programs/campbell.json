@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T17:59:40Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 35.409149,
+    "lon": -78.738238,
+    "timezone": "America/New_York",
+    "elevationM": 56.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093740",
+      "name": "FAYETTEVILLE RGNL AP",
+      "state": "NC",
+      "distanceKm": 48.2,
+      "elevationM": 56.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 54.0,
+        "tLowF": 34.0,
+        "precipIn": 3.15,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 14.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 57.8,
+        "tLowF": 36.2,
+        "precipIn": 2.78,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 10.3
+      },
+      {
+        "month": "Mar",
+        "tHighF": 65.3,
+        "tLowF": 42.3,
+        "precipIn": 3.08,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 4.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 74.8,
+        "tLowF": 50.8,
+        "precipIn": 3.15,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.8,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "May",
+        "tHighF": 82.1,
+        "tLowF": 59.7,
+        "precipIn": 3.11,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 5.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 88.5,
+        "tLowF": 68.2,
+        "precipIn": 4.89,
+        "snowIn": null,
+        "wetDays": 6.7,
+        "days90F": 16.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.4,
+        "tLowF": 71.9,
+        "precipIn": 4.95,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 21.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 89.3,
+        "tLowF": 70.2,
+        "precipIn": 5.36,
+        "snowIn": null,
+        "wetDays": 7.4,
+        "days90F": 17.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 83.9,
+        "tLowF": 64.6,
+        "precipIn": 4.87,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 7.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 74.8,
+        "tLowF": 52.9,
+        "precipIn": 3.23,
+        "snowIn": null,
+        "wetDays": 4.1,
+        "days90F": 0.7,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Nov",
+        "tHighF": 64.9,
+        "tLowF": 42.3,
+        "precipIn": 3.04,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 0.0,
+        "daysFreeze": 4.6
+      },
+      {
+        "month": "Dec",
+        "tHighF": 56.8,
+        "tLowF": 36.3,
+        "precipIn": 2.97,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 11.9
+      }
+    ],
+    "annualPrecipIn": 44.6,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 78.2,
+      "avgLowF": 57.5,
+      "precipIn": 16.5,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 91.4°F), coldest Jan (avg low 34.0°F). 44.6 in of rain per year. Fall season (Aug–Nov): highs around 78.2°F, 16.5 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093740,USW00013722,USC00314987&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:21Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": "Dustin Fonder",
-      "title": null,
-      "since": 2015,
-      "seasons": 12,
-      "bioUrl": null,
+      "name": "Jeff Gross",
+      "title": "Head Coach",
+      "since": null,
+      "seasons": null,
+      "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/coaches/jeff-gross/1373",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Jeff Gross",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/coaches/jeff-gross/1373",
+        "social": {}
+      },
+      {
+        "name": "Todd Herman",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/coaches/todd-herman/1374",
+        "social": {}
+      },
+      {
+        "name": "Hannah Davies",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/coaches/hannah-davies/1375",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Alex Keough",
+        "title": "Assistant Athletics Director, Sports Performance (WBB, MSOC, WSOC)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/staff/alex-keough/327",
+        "social": {}
+      },
+      {
+        "name": "Douglas Hunter",
+        "title": "Academic Coordinator",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/staff/douglas-hunter/328",
+        "social": {}
+      },
+      {
+        "name": "Sydney Jones",
+        "title": "Assistant Director of Athletic Communications",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/staff/sydney-jones/329",
+        "social": {}
+      },
+      {
+        "name": "Stephanie Tighe",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/staff/stephanie-tighe/330",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Eakes Athletics Complex",
       "capacity": 1000
@@ -140,7 +347,11 @@
         "url": "https://en.wikipedia.org/wiki/Campbell_Fighting_Camels_men%27s_soccer",
         "asOf": "2026-09-07T18:02:14Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gocamels.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:26:33Z"
+      }
     }
   },
   "seasons": [
@@ -1059,9 +1270,1294 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "0",
+        "name": "Anaïs van Doesburg",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Montréal, Canada",
+        "highSchool": "Vanier Collège",
+        "previousSchool": "",
+        "major": "",
+        "club": "UTRGV | Académie du CF Montréal",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/anas-van-doesburg/11706",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "00",
+        "name": "Alice Tyson",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Charlotte, NC",
+        "highSchool": "East Mecklenburg High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/alice-tyson/11891",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kennedy Reed",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Katy, Texas",
+        "highSchool": "Seven Lakes HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "UTSA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/kennedy-reed/11714",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "3",
+        "name": "Abygaelle Normand",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Blainville Québec, Canada",
+        "highSchool": "École secondaire St-Gabriel",
+        "previousSchool": "",
+        "major": "",
+        "club": "CF Montréal Academy / NDC québec (PEF)",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/abygaelle-normand/11705",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "5",
+        "name": "Lydia Parker",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Greenville, S.C.",
+        "highSchool": "Eastside HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "CESA 07G ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/lydia-parker/11892",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "6",
+        "name": "Zahra Fepessi",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sanford, N.C.",
+        "highSchool": "Grace Christian HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "North Carolina Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/zahra-fepessi/11694",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Laney Heafner",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Kernersville, N.C.",
+        "highSchool": "Bishop McGuinness",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/laney-heafner/11893",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Grace Bannon",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "McKees Rocks, Pa.",
+        "highSchool": "Montour HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pittsburgh Riverhounds Development Academy",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/grace-bannon/11688",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Kate Latini",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "New Port Richey, Fla.",
+        "highSchool": "Carrollwood Day School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/kate-latini/11702",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "10",
+        "name": "Susan Guzman",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Wilson, N.C.",
+        "highSchool": "James B. Hunt HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "WYSA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/susan-guzman/11697",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "11",
+        "name": "Mia Fairchild",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tampa, Fla.",
+        "highSchool": "Academy of the Holy Names",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier Soccer Club / USF",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/mia-fairchild/11693",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Gretchen Baker",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Boise, Idaho",
+        "highSchool": "Kuna HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Boise Timbers Thorns",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/gretchen-baker/11894",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Ava Kanaar",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Brooksville, Fla.",
+        "highSchool": "F.W. Springstead HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/ava-kanaar/11700",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "14",
+        "name": "Mya Wooton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Beckley, W.Va.",
+        "highSchool": "Woodrow Wilson HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/mya-wooton/11712",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "15",
+        "name": "Kira Moore",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Williamsburg, Va.",
+        "highSchool": "Lafayette HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Richmond United ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/kira-moore/11703",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "16",
+        "name": "Olivia Vandre",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Burlington, N.C.",
+        "highSchool": "Walter M. Williams HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/olivia-vandre/11707",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "17",
+        "name": "Ella Wineka",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mechanicsburg, Pa.",
+        "highSchool": "Cumberland Valley HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Keystone FC GA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/ella-wineka/11710",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "18",
+        "name": "Linnea Hedlund",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Vienna, Va.",
+        "highSchool": "George C. Marshall HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Arlington ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/linnea-hedlund/11895",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "19",
+        "name": "Sadie Badgett",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Denver, N.C.",
+        "highSchool": "East Lincoln HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte SA ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/sadie-badgett/11687",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "20",
+        "name": "Abby Connolly",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Thomasville, N.C.",
+        "highSchool": "East Davidson HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/abby-connolly/11691",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Mia Turtle",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Tampa, Fla.",
+        "highSchool": "Braulio Alonso High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/mia-turtle/11896",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "23",
+        "name": "Caitlyn Boucher",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Severna Park, Md.",
+        "highSchool": "Severna Park HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Maryland United ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/caitlyn-boucher/11690",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "24",
+        "name": "Jazzy Zakhar",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Harrisburg, Pa.",
+        "highSchool": "Central Dauphin High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/jazzy-zakhar/11897",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Tyler Baughan",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cornelius, N.C.",
+        "highSchool": "Community School of Davidson",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Independence ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/tyler-baughan/11689",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "26",
+        "name": "Samantha Witte",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hebron, Md.",
+        "highSchool": "Mardela Middle & High",
+        "previousSchool": "",
+        "major": "",
+        "club": "Coppermind Soccer Club GA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/samantha-witte/11711",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "27",
+        "name": "Gillian Garrison",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Sanford, N.C.",
+        "highSchool": "Lee County HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion ECNL",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/gillian-garrison/11696",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "28",
+        "name": "Avery Garrett",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Huntersville, N.C.",
+        "highSchool": "Pine Lake Preparatory",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Development Academy GA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/avery-garrett/11695",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "41",
+        "name": "Emily Ehresmann",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Southampton, Pa.",
+        "highSchool": "Insight Homeschool Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Delaware GA",
+        "bioUrl": "https://gocamels.com/sports/womens-soccer/roster/emily-ehresmann/11692",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 5,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 4,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 3,
+      "FR": 7,
+      "SO": 8,
+      "JR": 10
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocamels.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:26:33Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Anaïs van Doesburg",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Montréal, Canada",
+          "highSchool": "Vanier Collège"
+        },
+        {
+          "number": "2",
+          "name": "Natalie Darling",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Anaheim Hills, Calif.",
+          "highSchool": "Canyon HS"
+        },
+        {
+          "number": "3",
+          "name": "Abygaelle Normand",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Blainville Québec, Canada",
+          "highSchool": "École secondaire St-Gabriel"
+        },
+        {
+          "number": "6",
+          "name": "Zahra Fepessi",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sanford, N.C.",
+          "highSchool": "Grace Christian HS"
+        },
+        {
+          "number": "7",
+          "name": "Elise Holcey",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Savannah, Ga.",
+          "highSchool": "Savannah Arts Academy"
+        },
+        {
+          "number": "8",
+          "name": "Lauren Koczenasz",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Grand Rapids, Mich.",
+          "highSchool": "Forest Hills Central HS"
+        },
+        {
+          "number": "9",
+          "name": "Kate Latini",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "New Port Richey, Fla.",
+          "highSchool": "Carrollwood Day School"
+        },
+        {
+          "number": "10",
+          "name": "Susan Guzman",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wilson, N.C.",
+          "highSchool": "James B. Hunt HS"
+        },
+        {
+          "number": "11",
+          "name": "Mia Fairchild",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Tampa, Fla.",
+          "highSchool": "Academy of the Holy Names"
+        },
+        {
+          "number": "12",
+          "name": "McKenna Vogel",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Farmville, Va.",
+          "highSchool": "Prince Edward County HS"
+        },
+        {
+          "number": "13",
+          "name": "Ava Kanaar",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Brooksville, Fla.",
+          "highSchool": "F.W. Springstead HS"
+        },
+        {
+          "number": "14",
+          "name": "Christina Muñoz",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Coram, N.Y.",
+          "highSchool": "Green Valley HS (Henderson, Nev.)"
+        },
+        {
+          "number": "15",
+          "name": "Kira Moore",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Williamsburg, Va.",
+          "highSchool": "Lafayette HS"
+        },
+        {
+          "number": "16",
+          "name": "Olivia Vandre",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Burlington, N.C.",
+          "highSchool": "Walter M. Williams HS"
+        },
+        {
+          "number": "17",
+          "name": "Ella Wineka",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mechanicsburg, Pa.",
+          "highSchool": "Cumberland Valley HS"
+        },
+        {
+          "number": "19",
+          "name": "Sadie Badgett",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Denver, N.C.",
+          "highSchool": "East Lincoln HS"
+        },
+        {
+          "number": "20",
+          "name": "Abby Connolly",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Thomasville, N.C.",
+          "highSchool": "East Davidson HS"
+        },
+        {
+          "number": "21",
+          "name": "Taylor Walker",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Williamsburg, Va.",
+          "highSchool": "Lafayette HS"
+        },
+        {
+          "number": "22",
+          "name": "Grace Bannon",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "McKees Rocks, Pa.",
+          "highSchool": "Montour HS"
+        },
+        {
+          "number": "23",
+          "name": "Caitlyn Boucher",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Severna Park, Md.",
+          "highSchool": "Severna Park HS"
+        },
+        {
+          "number": "24",
+          "name": "Natalie Jamison",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Yorba Linda, Calif.",
+          "highSchool": "Yorba Linda HS"
+        },
+        {
+          "number": "25",
+          "name": "Tyler Baughan",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cornelius, N.C.",
+          "highSchool": "Community School of Davidson"
+        },
+        {
+          "number": "26",
+          "name": "Samantha Witte",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Hebron, Md.",
+          "highSchool": "Mardela Middle & High"
+        },
+        {
+          "number": "27",
+          "name": "Gillian Garrison",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Sanford, N.C.",
+          "highSchool": "Lee County HS"
+        },
+        {
+          "number": "28",
+          "name": "Avery Garrett",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Huntersville, N.C.",
+          "highSchool": "Pine Lake Preparatory"
+        },
+        {
+          "number": "29",
+          "name": "Mya Wooton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Beckley, W.Va.",
+          "highSchool": "Woodrow Wilson HS"
+        },
+        {
+          "number": "35",
+          "name": "JLo Varada",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "San Juan, Puerto Rico",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "41",
+          "name": "Emily Ehresmann",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Southampton, Pa.",
+          "highSchool": "Insight Homeschool Academy"
+        }
+      ],
+      "departed": [
+        "christina munoz",
+        "elise holcey",
+        "jlo varada",
+        "lauren koczenasz",
+        "mckenna vogel",
+        "natalie darling",
+        "natalie jamison",
+        "taylor walker"
+      ]
+    },
+    "2024": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Anaïs van Doesburg",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Montréal, Canada",
+          "highSchool": "Vanier Collège"
+        },
+        {
+          "number": "2",
+          "name": "Natalie Darling",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Anaheim Hills, Calif.",
+          "highSchool": "Canyon HS"
+        },
+        {
+          "number": "3",
+          "name": "Abygaelle Normand",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Blainville Québec, Canada",
+          "highSchool": "École secondaire St-Gabriel"
+        },
+        {
+          "number": "5",
+          "name": "Megan Swift",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Ladera Ranch, Calif.",
+          "highSchool": "San Juan Hills HS"
+        },
+        {
+          "number": "6",
+          "name": "Zahra Fepessi",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Sanford, N.C.",
+          "highSchool": "Grace Christian HS"
+        },
+        {
+          "number": "7",
+          "name": "Elise Holcey",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Savannah, Ga.",
+          "highSchool": "Savannah Arts Academy"
+        },
+        {
+          "number": "8",
+          "name": "Lauren Koczenasz",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Grand Rapids, Mich.",
+          "highSchool": "Forest Hills Central HS"
+        },
+        {
+          "number": "9",
+          "name": "Alyssa Tucker",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Grace Christian School"
+        },
+        {
+          "number": "10",
+          "name": "Susan Guzman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wilson, N.C.",
+          "highSchool": "James B. Hunt HS"
+        },
+        {
+          "number": "11",
+          "name": "Emely Rubio",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bowie, Md.",
+          "highSchool": "St. John's College HS"
+        },
+        {
+          "number": "12",
+          "name": "Meghan Bernetti",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Annapolis, Md.",
+          "highSchool": "Archbishop Spalding HS"
+        },
+        {
+          "number": "13",
+          "name": "Ava Kanaar",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Brooksville, Fla.",
+          "highSchool": "F.W. Springstead HS"
+        },
+        {
+          "number": "14",
+          "name": "Christina Muñoz",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Coram, N.Y.",
+          "highSchool": "Green Valley HS (Henderson, Nev.)"
+        },
+        {
+          "number": "16",
+          "name": "Olivia Vandre",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Burlington, N.C.",
+          "highSchool": "Walter M. Williams HS"
+        },
+        {
+          "number": "17",
+          "name": "Ella Wineka",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mechanicsburg, Pa.",
+          "highSchool": "Cumberland Valley HS"
+        },
+        {
+          "number": "18",
+          "name": "Riley Terrill",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Stockton Springs, Maine",
+          "highSchool": "Pinewood Prep"
+        },
+        {
+          "number": "19",
+          "name": "Kaleigh Backlund",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Gilbert, Ariz.",
+          "highSchool": "Highland HS"
+        },
+        {
+          "number": "20",
+          "name": "Abby Connolly",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Thomasville, N.C.",
+          "highSchool": "East Davidson HS"
+        },
+        {
+          "number": "21",
+          "name": "Kendall Lincoln",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Stephens City, Va.",
+          "highSchool": "Sherando HS"
+        },
+        {
+          "number": "23",
+          "name": "Caitlyn Boucher",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Severna Park, Md.",
+          "highSchool": "Severna Park HS"
+        },
+        {
+          "number": "24",
+          "name": "Natalie Jamison",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Yorba Linda, Calif.",
+          "highSchool": "Yorba Linda HS"
+        },
+        {
+          "number": "25",
+          "name": "Tyler Baughan",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cornelius, N.C.",
+          "highSchool": "Community School of Davidson"
+        },
+        {
+          "number": "27",
+          "name": "Gillian Garrison",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Sanford, N.C.",
+          "highSchool": "Lee County HS"
+        },
+        {
+          "number": "28",
+          "name": "Rieke Protze",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Bremen, Germany",
+          "highSchool": "Oberschule am Leibnizplatz"
+        },
+        {
+          "number": "29",
+          "name": "Adele Schwab",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Troutman, N.C.",
+          "highSchool": "South Iredell HS"
+        },
+        {
+          "number": "31",
+          "name": "Sierra Vance",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Fairfax, Va.",
+          "highSchool": "Bishop O'Connell"
+        },
+        {
+          "number": "35",
+          "name": "JLo Varada",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "San Juan, Puerto Rico",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "41",
+          "name": "Emily Ehresmann",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Southampton, Pa.",
+          "highSchool": "Insight Homeschool Academy"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 24,
+      "players": [
+        {
+          "number": "0",
+          "name": "Stephanie Martelli",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Swedesboro, N.J.",
+          "highSchool": "Kingsway Regional HS"
+        },
+        {
+          "number": "2",
+          "name": "Natalie Darling",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Anaheim Hills, Calif.",
+          "highSchool": "Canyon HS"
+        },
+        {
+          "number": "3",
+          "name": "Bayleigh Humbert",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Apex, N.C.",
+          "highSchool": "Middle Creek HS"
+        },
+        {
+          "number": "5",
+          "name": "Megan Swift",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Ladera Ranch, Calif.",
+          "highSchool": "San Juan Hills HS"
+        },
+        {
+          "number": "6",
+          "name": "Zahra Fepessi",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Sanford, N.C.",
+          "highSchool": "Grace Christian HS"
+        },
+        {
+          "number": "7",
+          "name": "Elise Holcey",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Savannah, Ga.",
+          "highSchool": "Savannah Arts Academy"
+        },
+        {
+          "number": "8",
+          "name": "Lauren Koczenasz",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Grand Rapids, Mich.",
+          "highSchool": "Forest Hills Central HS"
+        },
+        {
+          "number": "9",
+          "name": "Alyssa Tucker",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Grace Christian School"
+        },
+        {
+          "number": "10",
+          "name": "Laney Peabody",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Solana Beach, Calif.",
+          "highSchool": "Mater Dei HS"
+        },
+        {
+          "number": "11",
+          "name": "Emely Rubio",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bowie, Md.",
+          "highSchool": "St. John's College HS"
+        },
+        {
+          "number": "12",
+          "name": "Meghan Bernetti",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Annapolis, Md.",
+          "highSchool": "Archbishop Spalding HS"
+        },
+        {
+          "number": "13",
+          "name": "Kellsie Flint",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rye, New Hampshire",
+          "highSchool": "Portsmouth HS"
+        },
+        {
+          "number": "15",
+          "name": "Amber Liston",
+          "pos": "F/M",
+          "classCode": "R-SR",
+          "hometown": "Sacramento, Calif.",
+          "highSchool": "Folsom High School"
+        },
+        {
+          "number": "16",
+          "name": "Sage Dougherty",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Cameron, N.C.",
+          "highSchool": "Union Pines HS"
+        },
+        {
+          "number": "18",
+          "name": "Riley Terrill",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Stockton Springs, Maine",
+          "highSchool": "Pinewood Prep"
+        },
+        {
+          "number": "19",
+          "name": "Kaleigh Backlund",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Gilbert, Ariz.",
+          "highSchool": "Highland HS"
+        },
+        {
+          "number": "20",
+          "name": "Cazzi Norgren",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Cary, N.C.",
+          "highSchool": "Panther Creek HS"
+        },
+        {
+          "number": "21",
+          "name": "Reagan Baiotto",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Hubert, N.C.",
+          "highSchool": "Swansboro HS"
+        },
+        {
+          "number": "24",
+          "name": "Natalie Jamison",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Yorba Linda, Calif.",
+          "highSchool": "Yorba Linda HS"
+        },
+        {
+          "number": "27",
+          "name": "Olivia Neal",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": "Heritage HS"
+        },
+        {
+          "number": "28",
+          "name": "Rieke Protze",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Bremen, Germany",
+          "highSchool": "Oberschule am Leibnizplatz"
+        },
+        {
+          "number": "29",
+          "name": "Adele Schwab",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Troutman, N.C.",
+          "highSchool": "South Iredell HS"
+        },
+        {
+          "number": "31",
+          "name": "Sierra Vance",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Fairfax, Va.",
+          "highSchool": "Bishop O'Connell"
+        },
+        {
+          "number": "35",
+          "name": "JLo Varada",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "San Juan, Puerto Rico",
+          "highSchool": "IMG Academy"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocamels.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:26:33Z"
+    }
+  },
   "commitments": [
     {
       "id": "gretchen-baker-2026",
@@ -1074,7 +2570,7 @@
       "city": "Kuna",
       "highSchool": "",
       "college": "campbell",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -1093,7 +2589,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1186,35 +2682,21 @@
     "2026": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gocamels.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:02:15Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=35.409149&longitude=-78.738238&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T18:02:13Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

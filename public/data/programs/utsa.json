@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://goutsa.com/sports/womens-soccer",
-    "roster": "https://goutsa.com/sports/womens-soccer/roster",
-    "schedule": "https://goutsa.com/sports/womens-soccer/schedule",
-    "news": "https://goutsa.com/sports/womens-soccer/news",
+    "athletics": "https://goutsa.com/sports/soccer",
+    "roster": "https://goutsa.com/sports/soccer/roster",
+    "schedule": "https://goutsa.com/sports/soccer/schedule",
+    "news": "https://goutsa.com/sports/soccer/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/utsa/clgid-297",
     "wikipedia": "https://en.wikipedia.org/wiki/UTSA_Roadrunners_women%27s_soccer",
     "x": null,
@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T05:19:08Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 29.583709,
+    "lon": -98.620657,
+    "timezone": "America/Chicago",
+    "elevationM": 240.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012921",
+      "name": "SAN ANTONIO INTL AP",
+      "state": "TX",
+      "distanceKm": 13.9,
+      "elevationM": 240.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 63.3,
+        "tLowF": 41.0,
+        "precipIn": 1.96,
+        "snowIn": 0.0,
+        "wetDays": 3.7,
+        "days90F": 0.0,
+        "daysFreeze": 4.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 67.5,
+        "tLowF": 45.1,
+        "precipIn": 1.74,
+        "snowIn": 0.1,
+        "wetDays": 3.1,
+        "days90F": 0.2,
+        "daysFreeze": 2.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 73.8,
+        "tLowF": 51.8,
+        "precipIn": 2.31,
+        "snowIn": 0.0,
+        "wetDays": 4.1,
+        "days90F": 0.5,
+        "daysFreeze": 1.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 80.3,
+        "tLowF": 58.4,
+        "precipIn": 2.42,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 3.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 86.6,
+        "tLowF": 66.4,
+        "precipIn": 4.4,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 11.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 92.4,
+        "tLowF": 72.7,
+        "precipIn": 3.28,
+        "snowIn": 0.0,
+        "wetDays": 4.6,
+        "days90F": 24.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 94.9,
+        "tLowF": 74.7,
+        "precipIn": 2.41,
+        "snowIn": 0.0,
+        "wetDays": 3.1,
+        "days90F": 28.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 96.0,
+        "tLowF": 74.9,
+        "precipIn": 2.15,
+        "snowIn": 0.0,
+        "wetDays": 3.1,
+        "days90F": 28.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 90.1,
+        "tLowF": 69.6,
+        "precipIn": 3.88,
+        "snowIn": 0.0,
+        "wetDays": 4.8,
+        "days90F": 19.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 82.2,
+        "tLowF": 60.4,
+        "precipIn": 3.75,
+        "snowIn": 0.0,
+        "wetDays": 3.8,
+        "days90F": 5.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 71.7,
+        "tLowF": 49.8,
+        "precipIn": 2.08,
+        "snowIn": 0.0,
+        "wetDays": 3.3,
+        "days90F": 0.1,
+        "daysFreeze": 1.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 64.7,
+        "tLowF": 42.4,
+        "precipIn": 2.0,
+        "snowIn": 0.1,
+        "wetDays": 3.3,
+        "days90F": 0.0,
+        "daysFreeze": 4.3
+      }
+    ],
+    "annualPrecipIn": 32.4,
+    "annualSnowIn": 0.2,
+    "fallSeason": {
+      "avgHighF": 85.0,
+      "avgLowF": 63.7,
+      "precipIn": 11.9,
+      "wetDays": 15.0
+    },
+    "summary": "Hottest month Aug (avg high 96.0°F), coldest Jan (avg low 41.0°F). 32.4 in of rain per year, essentially no snow. Fall season (Aug–Nov): highs around 85.0°F, 11.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012921,USW00012909,USC00418169&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:43Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Derek Pittman",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/derek-pittman",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Derek Pittman",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/derek-pittman",
+        "social": {}
+      },
+      {
+        "name": "Scott Sinclair",
+        "title": "Assistant Coach (Recruiting Coordinator)",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/scott-sinclair",
+        "social": {}
+      },
+      {
+        "name": "Colleen Pitts",
+        "title": "Assistant Coach (Goalkeepers Coach)",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/colleen-pitts",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Shelby Dale",
+        "title": "Associate Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/shelby-dale",
+        "social": {}
+      },
+      {
+        "name": "Sophia Kennedy",
+        "title": "Director of Sports Performance for Olympic Sports",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/sophia-kennedy",
+        "social": {}
+      },
+      {
+        "name": "Hunter Puestow",
+        "title": "Program Coordinator, Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/hunter-puestow",
+        "social": {}
+      },
+      {
+        "name": "Beth Noteware",
+        "title": "Assistant Athletics Director, Olympic Sports/Academic Services",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/beth-noteware",
+        "social": {}
+      },
+      {
+        "name": "Michael Stambaugh",
+        "title": "Associate Athletics Communications Director",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/season/2026/staff/michael-stambaugh",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Park West Athletics Complex",
       "capacity": 1000
@@ -117,13 +332,1404 @@
         "url": "https://en.wikipedia.org/wiki/UTSA_Roadrunners_women%27s_soccer",
         "asOf": "2026-09-07T05:19:41Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://goutsa.com/sports/soccer/roster",
+        "asOf": "2026-09-08T01:07:56Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Kylie Kissee",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Redshirt Freshman",
+        "classCode": "R-FR",
+        "hometown": "Seguin Texas",
+        "highSchool": "Robert G. Cole High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/kylie-kissee",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Jasmine Kessler",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Spring, Texas",
+        "highSchool": "Klein Collins High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Challenge SC",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/jasmine-kessler",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Jaelyn Bracamonte",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Redshirt Freshman",
+        "classCode": "R-FR",
+        "hometown": "Houston, Texas",
+        "highSchool": "Clear Lake High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/jaelyn-bracamonte",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kameron Kloza",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Graduate Student",
+        "classCode": "GR",
+        "hometown": "San Antonio, Texas",
+        "highSchool": "LEE High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/kameron-kloza",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Bri Carrigan",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Tomball, Texas",
+        "highSchool": "Tomball Memorial High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Challenge SC",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/bri-carrigan",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Leah Varela",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Rio Rancho, N.M.",
+        "highSchool": "IMG Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/leah-varela",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Taliyah Spain",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Dripping Springs, Texas",
+        "highSchool": "Dripping Springs High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/taliyah-spain",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Jazira Gonzalez",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Aguadilla, Puerto Rico",
+        "highSchool": "Western Reserve Academy (OH)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/jazira-gonzalez",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Ava Jackson",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Burnaby, British Columbia",
+        "highSchool": "Burnaby Central Secondary School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/ava-jackson",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Sam Garofalo",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Aurora, Colo.",
+        "highSchool": "Cherokee Trail High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Colorado Rapids Youth",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/sam-garofalo",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "9",
+        "name": "Dulci Binns",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Redshirt Freshman",
+        "classCode": "R-FR",
+        "hometown": "Leicestershire, England",
+        "highSchool": "Brookvale Groby Learning Campus",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/dulci-binns",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Amelia Clark",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Austin, Texas",
+        "highSchool": "Lake Travis High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Austin Sting",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/amelia-clark",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Addi O'Kelley",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Austin, Texas",
+        "highSchool": "Stephen F. Austin High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/addi-okelly",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Claire Garritson",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Keller, Texas",
+        "highSchool": "Keller High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Royal",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/claire-garritson",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Valeria Sanchez",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Houston, Texas",
+        "highSchool": "Iowa Colony High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC (TX)",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/val-sanchez",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Emma Kate Schroll",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Graduate Student",
+        "classCode": "GR",
+        "hometown": "Dacula, Ga.",
+        "highSchool": "Mill Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/emma-kate-schroll",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Isabel Peters",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Cedar Park, Texas",
+        "highSchool": "Cedar Park High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/isabel-peters",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Kacey Grahmann",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Leander, Texas",
+        "highSchool": "Rouse High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/kacey-grahmann",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Sadie Paul",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Fort Worth, Texas",
+        "highSchool": "IMG Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/sadie-paul",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Lilli Denhardt",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Meridian, Idaho",
+        "highSchool": "Owyhee High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/lilli-denhardt",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Sofia Peters",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "6-1",
+        "heightIn": 73,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Cedar Park, Texas",
+        "highSchool": "Cedar Park High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/sofia-peters",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Sabrina Taber",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Redshirt Junior",
+        "classCode": "R-JR",
+        "hometown": "San Antonio, Texas",
+        "highSchool": "Smithson Valley High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/sabrina-taber",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Caroline Pelkofski",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Cape Coral, Fla.",
+        "highSchool": "Bishop Verot High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/caroline-pelkofski",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Olivia Christodoulides",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Austin, Texas",
+        "highSchool": "James Bowie High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/olivia-christodoulides",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Brooklyn Bailey",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Spring, Texas",
+        "highSchool": "Klein Collins High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/brooklyn-bailey",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Aaliyaiah Durden",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Redshirt Junior",
+        "classCode": "R-JR",
+        "hometown": "Spring, Texas",
+        "highSchool": "Klein Oak High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/aaliyaiah-durden",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Olivia D’Ambrosia",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Parker, Colo.",
+        "highSchool": "Fountain Valley High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/olivia-dambrosia",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Adelina Torres-Rava",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Orlando, Fla.",
+        "highSchool": "Timber Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Kraze/Krush",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/adelina-torres-rava",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "98",
+        "name": "Shea Ryan",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Roseville, Calif.",
+        "highSchool": "Granite Bay High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://goutsa.com/sports/soccer/roster/player/she-ryan",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 2,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 3,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 1,
+        "SO": 1,
+        "R-SO": 2,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "R-FR": 3,
+      "SR": 3,
+      "GR": 2,
+      "R-SO": 5,
+      "JR": 3,
+      "FR": 7,
+      "SO": 4,
+      "R-JR": 2
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "D": 2,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://goutsa.com/sports/soccer/roster",
+      "asOf": "2026-09-08T01:07:56Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Jasmine Kessler",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Collins High School"
+        },
+        {
+          "number": "1",
+          "name": "Jaelyn Bracamonte",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Houston, Texas",
+          "highSchool": "Clear Lake High School"
+        },
+        {
+          "number": "2",
+          "name": "Kameron Kloza",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "LEE High School"
+        },
+        {
+          "number": "3",
+          "name": "Bri Carrigan",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Tomball, Texas",
+          "highSchool": "Tomball Memorial High School"
+        },
+        {
+          "number": "4",
+          "name": "Leah Varela",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Rio Rancho, N.M.",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "5",
+          "name": "Taliyah Spain",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Dripping Springs, Texas",
+          "highSchool": "Dripping Springs High School"
+        },
+        {
+          "number": "6",
+          "name": "Bryn Maxwell",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Zionsville, Ind.",
+          "highSchool": "Zionsville High School"
+        },
+        {
+          "number": "7",
+          "name": "Ava Jackson",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Burnaby, British Columbia",
+          "highSchool": "Burnaby Central Secondary School"
+        },
+        {
+          "number": "8",
+          "name": "Haley Lopez",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Rowlett High School"
+        },
+        {
+          "number": "9",
+          "name": "Isabella Januario",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Edmonton, Alberta",
+          "highSchool": "Salisbury Composite High School"
+        },
+        {
+          "number": "10",
+          "name": "Brooke Viccars",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Richmond, British Columbia",
+          "highSchool": "McMath Secondary School"
+        },
+        {
+          "number": "11",
+          "name": "Addi O'Kelley",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Austin, Texas",
+          "highSchool": "Stephen F. Austin High School"
+        },
+        {
+          "number": "12",
+          "name": "Emelie Ekman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Järfälla, Sweden",
+          "highSchool": "Solna Gymnasium"
+        },
+        {
+          "number": "13",
+          "name": "Zoё May",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "Immaculata High School"
+        },
+        {
+          "number": "14",
+          "name": "Kennedy Reed",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Katy, Texas",
+          "highSchool": "Seven Lakes High School"
+        },
+        {
+          "number": "15",
+          "name": "Isabel Peters",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Cedar Park, Texas",
+          "highSchool": "Cedar Park High School"
+        },
+        {
+          "number": "16",
+          "name": "Kacey Grahmann",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Leander, Texas",
+          "highSchool": "Rouse High School"
+        },
+        {
+          "number": "17",
+          "name": "Kamryn Watson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Baton Rouge, La.",
+          "highSchool": "St. Michael High School"
+        },
+        {
+          "number": "18",
+          "name": "Maria Reyes",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Georgetown, Texas",
+          "highSchool": "Rouse High School"
+        },
+        {
+          "number": "19",
+          "name": "Sofia Peters",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cedar Park, Texas",
+          "highSchool": "Cedar Park High School"
+        },
+        {
+          "number": "20",
+          "name": "Abigail Casey",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Atonement Catholic"
+        },
+        {
+          "number": "21",
+          "name": "Rylee Miller",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Midland, Texas",
+          "highSchool": "Midland Legacy High School"
+        },
+        {
+          "number": "22",
+          "name": "Olivia Christodoulides",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Austin, Texas",
+          "highSchool": "James Bowie High School"
+        },
+        {
+          "number": "23",
+          "name": "Brooklyn Bailey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Collins High School"
+        },
+        {
+          "number": "24",
+          "name": "Aaliyaiah Durden",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Oak High School"
+        },
+        {
+          "number": "26",
+          "name": "Michelle Polo",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Magnolia, Texas",
+          "highSchool": "Magnolia High School"
+        },
+        {
+          "number": "29",
+          "name": "Brilynn Mueller",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Liberty, Mo.",
+          "highSchool": "Liberty High School"
+        },
+        {
+          "number": "44",
+          "name": "Izzy Lane",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "London, England",
+          "highSchool": "Sir Thomas Fremantle School"
+        }
+      ],
+      "departed": [
+        "abigail casey",
+        "brilynn mueller",
+        "brooke viccars",
+        "bryn maxwell",
+        "emelie ekman",
+        "haley lopez",
+        "isabella januario",
+        "izzy lane",
+        "kamryn watson",
+        "kennedy reed",
+        "maria reyes",
+        "michelle polo",
+        "rylee miller",
+        "zo may"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Jasmine Kessler",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Collins High School"
+        },
+        {
+          "number": "1",
+          "name": "Isobel Herrod",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Oak HS"
+        },
+        {
+          "number": "2",
+          "name": "Kameron Kloza",
+          "pos": "",
+          "classCode": "R-JR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "LEE High School"
+        },
+        {
+          "number": "3",
+          "name": "Bri Carrigan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tomball, Texas",
+          "highSchool": "Tomball Memorial High School"
+        },
+        {
+          "number": "4",
+          "name": "Sophie Morrin",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Cheshire, England",
+          "highSchool": "St. Nicholas Catholic HS"
+        },
+        {
+          "number": "5",
+          "name": "Jordan Walker",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Burleson, Texas",
+          "highSchool": "Burleson HS"
+        },
+        {
+          "number": "6",
+          "name": "Maci Geltmeier",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Cleburne, Texas",
+          "highSchool": "Cleburne HS"
+        },
+        {
+          "number": "7",
+          "name": "Brooke Viccars",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Richmond, British Columbia",
+          "highSchool": "McMath Secondary School"
+        },
+        {
+          "number": "8",
+          "name": "Haley Lopez",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Rowlett High School"
+        },
+        {
+          "number": "9",
+          "name": "Isabella Januario",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Edmonton, Alberta",
+          "highSchool": "Salisbury Composite High School"
+        },
+        {
+          "number": "10",
+          "name": "Tyler Coker",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "New Braunfels, Texas",
+          "highSchool": "New Braunfels HS"
+        },
+        {
+          "number": "11",
+          "name": "Addi O'Kelley",
+          "pos": "M/D",
+          "classCode": "R-FR",
+          "hometown": "Austin, Texas",
+          "highSchool": "Stephen F. Austin High School"
+        },
+        {
+          "number": "12",
+          "name": "Jordyn Hyland",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Golden, Colo.",
+          "highSchool": "Golden HS"
+        },
+        {
+          "number": "13",
+          "name": "Zoё May",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "Immaculata High School"
+        },
+        {
+          "number": "14",
+          "name": "Kiana Sparrow",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Aurora, Colo.",
+          "highSchool": "Cherokee Trail HS"
+        },
+        {
+          "number": "15",
+          "name": "Isabel Peters",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cedar Park, Texas",
+          "highSchool": "Cedar Park High School"
+        },
+        {
+          "number": "16",
+          "name": "Sasjah Dade",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ontario, Calif.",
+          "highSchool": "Eleanor Roosevelt HS"
+        },
+        {
+          "number": "17",
+          "name": "Allie Allen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Abilene, Texas",
+          "highSchool": "Wylie HS"
+        },
+        {
+          "number": "18",
+          "name": "Hannah Warnken",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Missouri City, Texas",
+          "highSchool": "Ridge Point HS"
+        },
+        {
+          "number": "19",
+          "name": "Sabrina Hillyer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Katy, Texas",
+          "highSchool": "St. John's XXIII College Prep"
+        },
+        {
+          "number": "20",
+          "name": "Lulie MacFarlane",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Vancouver, British Columbia, Canada",
+          "highSchool": "Burnaby Central Secondary"
+        },
+        {
+          "number": "21",
+          "name": "Ava Jackson",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Burnaby, British Columbia",
+          "highSchool": "Burnaby Central Secondary School"
+        },
+        {
+          "number": "22",
+          "name": "Olivia Christodoulides",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Austin, Texas",
+          "highSchool": "James Bowie High School"
+        },
+        {
+          "number": "23",
+          "name": "Lauren Fincher",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Houston, Texas",
+          "highSchool": "Friendswood HS"
+        },
+        {
+          "number": "24",
+          "name": "Addy Johnson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Edmond, Okla.",
+          "highSchool": "Edmond Memorial HS"
+        },
+        {
+          "number": "26",
+          "name": "Michelle Polo",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Magnolia, Texas",
+          "highSchool": "Magnolia High School"
+        },
+        {
+          "number": "27",
+          "name": "Rylee Miller",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Midland, Texas",
+          "highSchool": "Midland Legacy High School"
+        },
+        {
+          "number": "29",
+          "name": "Olivia Alvarez",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Arlington, Texas",
+          "highSchool": "Arlington HS"
+        },
+        {
+          "number": "33",
+          "name": "Peyton Godbey",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": "North Brunswick HS"
+        },
+        {
+          "number": "44",
+          "name": "Izzy Lane",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "London, England",
+          "highSchool": "Sir Thomas Fremantle School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Mia Krusinski",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Ursuline Academy"
+        },
+        {
+          "number": "00",
+          "name": "Jasmine Kessler",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Collins High School"
+        },
+        {
+          "number": "1",
+          "name": "Isobel Herrod",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Oak HS"
+        },
+        {
+          "number": "2",
+          "name": "Thandie Reinkensmeier",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Bad Oeynhausen, Germany",
+          "highSchool": "Europaschule Bad Oeynhausen"
+        },
+        {
+          "number": "3",
+          "name": "Sarina Russ",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Lafayette, Colo.",
+          "highSchool": "Fairview HS"
+        },
+        {
+          "number": "4",
+          "name": "Sophie Morrin",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Cheshire, England",
+          "highSchool": "St. Nicholas Catholic HS"
+        },
+        {
+          "number": "5",
+          "name": "Jordan Walker",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Burleson, Texas",
+          "highSchool": "Burleson HS"
+        },
+        {
+          "number": "6",
+          "name": "Maci Geltmeier",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Cleburne, Texas",
+          "highSchool": "Cleburne HS"
+        },
+        {
+          "number": "7",
+          "name": "Mikhaela Cortez",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Oak Harbor, Wash.",
+          "highSchool": "Oak Harbor HS"
+        },
+        {
+          "number": "8",
+          "name": "Haley Lopez",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Rowlett High School"
+        },
+        {
+          "number": "9",
+          "name": "Marlee Fray",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Coconut Creek, Fla.",
+          "highSchool": "American Heritage High School"
+        },
+        {
+          "number": "10",
+          "name": "Tyler Coker",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "New Braunfels, Texas",
+          "highSchool": "New Braunfels HS"
+        },
+        {
+          "number": "11",
+          "name": "Maddie Reynolds",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Marcus HS"
+        },
+        {
+          "number": "12",
+          "name": "Jordyn Hyland",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Golden, Colo.",
+          "highSchool": "Golden HS"
+        },
+        {
+          "number": "13",
+          "name": "Deja Sandoval",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Albuquerque, N.M.",
+          "highSchool": "La Cueva HS"
+        },
+        {
+          "number": "14",
+          "name": "Makela Solbak",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif.",
+          "highSchool": "Mira Mesa HS"
+        },
+        {
+          "number": "15",
+          "name": "Alissa Stewart",
+          "pos": "F/M",
+          "classCode": "GR",
+          "hometown": "Burlington, Ontario, Canada",
+          "highSchool": "Dr. Frank J. Hayden Secondary School"
+        },
+        {
+          "number": "16",
+          "name": "Sasjah Dade",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ontario, Calif.",
+          "highSchool": "Eleanor Roosevelt HS"
+        },
+        {
+          "number": "17",
+          "name": "Zoë Lam",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Cheyenne, Wyo.",
+          "highSchool": "Cheyenne Central HS"
+        },
+        {
+          "number": "18",
+          "name": "Hannah Warnken",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Missouri City, Texas",
+          "highSchool": "Ridge Point HS"
+        },
+        {
+          "number": "19",
+          "name": "Sabrina Hillyer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Katy, Texas",
+          "highSchool": "St. John's XXIII College Prep"
+        },
+        {
+          "number": "20",
+          "name": "Avery Chaney",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Brandeis HS"
+        },
+        {
+          "number": "21",
+          "name": "Brittany Holden",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif.",
+          "highSchool": "Granite Hills HS"
+        },
+        {
+          "number": "22",
+          "name": "Mackenzie Kaufhold",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Rockwall, Texas",
+          "highSchool": "Rockwall Heath HS"
+        },
+        {
+          "number": "23",
+          "name": "Alex Granville",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Maitland, Fla.",
+          "highSchool": "Winter Park HS"
+        },
+        {
+          "number": "24",
+          "name": "Kendall Gouner",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Monument, Colo.",
+          "highSchool": "Palmer Ridge HS"
+        },
+        {
+          "number": "26",
+          "name": "Michelle Polo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Magnolia, Texas",
+          "highSchool": "Magnolia High School"
+        },
+        {
+          "number": "27",
+          "name": "Hollan Winton",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Lakeway, Texas",
+          "highSchool": "Lake Travis HS"
+        },
+        {
+          "number": "28",
+          "name": "Reagan Amberson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "New Hope, Pa.",
+          "highSchool": "The Pennington School"
+        },
+        {
+          "number": "29",
+          "name": "Olivia Alvarez",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Arlington, Texas",
+          "highSchool": "Arlington HS"
+        },
+        {
+          "number": "33",
+          "name": "Peyton Godbey",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": "North Brunswick HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://goutsa.com/sports/soccer/schedule",
+      "asOf": "2026-09-08T01:07:56Z"
+    }
+  },
   "commitments": [
     {
       "id": "adelina-torres-rava-2026",
@@ -136,7 +1742,7 @@
       "city": "Orlando",
       "highSchool": "",
       "college": "utsa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -155,7 +1761,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -171,7 +1777,7 @@
       "city": "Austin",
       "highSchool": "",
       "college": "utsa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -215,7 +1821,7 @@
       "city": "Keller",
       "highSchool": "",
       "college": "utsa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -234,7 +1840,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -250,7 +1856,7 @@
       "city": "Aurora",
       "highSchool": "",
       "college": "utsa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -269,7 +1875,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -285,7 +1891,7 @@
       "city": "Arcola",
       "highSchool": "",
       "college": "utsa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -304,7 +1910,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -494,48 +2100,116 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [
+      {
+        "title": "Roadrunners welcome Texas Southern for Salute to Armed Forces",
+        "url": "https://goutsa.com/news/2026/08/27/wsoc2026-texassouthern-preview",
+        "date": "2026-08-26",
+        "recruiting": true
+      }
+    ],
+    "latest": [
+      {
+        "title": "Bailey’s last-second game-winner captures Pittman’s 67th win",
+        "url": "https://goutsa.com/news/2026/09/4/wsoc2026-etamu-recap",
+        "date": "2026-09-03",
+        "recruiting": false
+      },
+      {
+        "title": "UTSA hits road to Commerce for East Texas A&M on Thursday",
+        "url": "https://goutsa.com/news/2026/09/2/wsoc2026-etamu-preview",
+        "date": "2026-09-02",
+        "recruiting": false
+      },
+      {
+        "title": "UTSA and Texas Southern finish even in weather-delayed draw",
+        "url": "https://goutsa.com/news/2026/08/28/utsa-and-texas-southern-finish-even-in-weather-delayed-draw",
+        "date": "2026-08-28",
+        "recruiting": false
+      },
+      {
+        "title": "Roadrunners welcome Texas Southern for Salute to Armed Forces",
+        "url": "https://goutsa.com/news/2026/08/27/wsoc2026-texassouthern-preview",
+        "date": "2026-08-26",
+        "recruiting": true
+      },
+      {
+        "title": "UTSA delivers convincing victory over St. Mary’s to close week two",
+        "url": "https://goutsa.com/news/2026/08/24/wsoc2026-stmu-recap",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Roadrunners to host St. Mary’s for Salute to First Responders",
+        "url": "https://goutsa.com/news/2026/08/23/roadrunners-to-host-st-marys-for-salute-to-first-responders",
+        "date": "2026-08-22",
+        "recruiting": false
+      },
+      {
+        "title": "UTSA celebrates first victory with clean sheet against Colorado College",
+        "url": "https://goutsa.com/news/2026/08/21/wsoc2026-coloradoclg-recap",
+        "date": "2026-08-20",
+        "recruiting": false
+      },
+      {
+        "title": "Orange out slated for Colorado College at Park West on Thursday",
+        "url": "https://goutsa.com/news/2026/08/20/wsoc2026-coloradocollege-preview",
+        "date": "2026-08-19",
+        "recruiting": false
+      },
+      {
+        "title": "Roadrunners battle to historic draw at No. 6 TCU",
+        "url": "https://goutsa.com/news/2026/08/17/wsoc2026-tcu-recap",
+        "date": "2026-08-16",
+        "recruiting": false
+      },
+      {
+        "title": "Roadrunners travel to Fort Worth to face No. 6 TCU",
+        "url": "https://goutsa.com/news/2026/08/16/wsoc2026-tcu-preview",
+        "date": "2026-08-15",
+        "recruiting": false
+      },
+      {
+        "title": "Roadrunners rally to a season-opening draw in the Battle for I-35",
+        "url": "https://goutsa.com/news/2026/08/13/wsoc2026-txst-recap",
+        "date": "2026-08-12",
+        "recruiting": false
+      },
+      {
+        "title": "Kloza Named to Preseason Hermann Trophy Watch List",
+        "url": "https://goutsa.com/news/2026/08/12/wsoc2026-kloza-hermannwatchlist",
+        "date": "2026-08-12",
+        "recruiting": false
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://goutsa.com/sports/soccer/news",
+      "asOf": "2026-09-08T01:07:58Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 5,
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://goutsa.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:19:42Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=29.583709&longitude=-98.620657&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:19:40Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T05:19:45Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

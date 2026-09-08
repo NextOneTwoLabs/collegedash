@@ -69,18 +69,217 @@
       "asOf": "2026-09-07T16:55:11Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.469073,
+    "lon": -87.407846,
+    "timezone": "America/New_York",
+    "elevationM": 175.3,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00003868",
+      "name": "TERRE HAUTE HULMAN RGNL AP",
+      "state": "IN",
+      "distanceKm": 8.7,
+      "elevationM": 175.3
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 36.7,
+        "tLowF": 20.7,
+        "precipIn": 2.6,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 0.0,
+        "daysFreeze": 25.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 41.6,
+        "tLowF": 24.1,
+        "precipIn": 2.02,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 0.0,
+        "daysFreeze": 22.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 52.8,
+        "tLowF": 32.8,
+        "precipIn": 2.92,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 16.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 64.9,
+        "tLowF": 42.9,
+        "precipIn": 4.71,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 0.0,
+        "daysFreeze": 4.1
+      },
+      {
+        "month": "May",
+        "tHighF": 74.6,
+        "tLowF": 53.4,
+        "precipIn": 4.71,
+        "snowIn": null,
+        "wetDays": 9.0,
+        "days90F": 0.9,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 83.3,
+        "tLowF": 62.2,
+        "precipIn": 4.64,
+        "snowIn": null,
+        "wetDays": 7.7,
+        "days90F": 5.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.9,
+        "tLowF": 64.8,
+        "precipIn": 4.34,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 7.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.6,
+        "tLowF": 62.5,
+        "precipIn": 2.99,
+        "snowIn": null,
+        "wetDays": 4.3,
+        "days90F": 5.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.0,
+        "tLowF": 54.2,
+        "precipIn": 2.93,
+        "snowIn": null,
+        "wetDays": 4.4,
+        "days90F": 3.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.7,
+        "tLowF": 43.0,
+        "precipIn": 3.44,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.1,
+        "daysFreeze": 3.8
+      },
+      {
+        "month": "Nov",
+        "tHighF": 52.6,
+        "tLowF": 33.7,
+        "precipIn": 3.05,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 14.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 41.1,
+        "tLowF": 25.9,
+        "precipIn": 2.49,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 23.1
+      }
+    ],
+    "annualPrecipIn": 40.8,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 70.7,
+      "avgLowF": 48.4,
+      "precipIn": 12.4,
+      "wetDays": 19.0
+    },
+    "summary": "Hottest month Jul (avg high 85.9°F), coldest Jan (avg low 20.7°F). 40.8 in of rain per year. Fall season (Aug–Nov): highs around 70.7°F, 12.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00003868,USW00093823,USC00128723&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:50Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Paul Lawrence",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/coaches/paul-lawrence/1300",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Paul Lawrence",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/coaches/paul-lawrence/1300",
+        "social": {}
+      },
+      {
+        "name": "Chris Gnehm",
+        "title": "Assosicate Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/coaches/chris-gnehm/1301",
+        "social": {}
+      },
+      {
+        "name": "Ola Shogelola",
+        "title": "Assistant Coach / Performance Analyst",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/coaches/ola-shogelola/1303",
+        "social": {}
+      },
+      {
+        "name": "Hayley Herron",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/coaches/hayley-herron/1304",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Anna Chor",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/staff/anna-chor/213",
+        "social": {}
+      },
+      {
+        "name": "Meagan Brakob, MS, LAT, ATC",
+        "title": "Athletic Trainer / Soccer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/staff/meagan-brakob-ms-lat-atc/211",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +297,1443 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gosycamores.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:24:28Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "00",
+        "name": "Sofie Hansen",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Kolding, Denmark / Munkensdam Gymnasium",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/sofie-hansen/9555",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Allie Turnbull",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Maple Ridge, British Columbia, Canada / Maple Ridge Secondary",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/allie-turnbull/9556",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Mackenzie Mills",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Vancouver, British Columbia, Canada / Notre Dame Regional Secondary",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/mackenzie-mills/9546",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Elise McDonald",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Falls Church, Va. / St. John's College",
+        "highSchool": "Saint Leo",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/elise-mcdonald/9545",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Avery Oergel",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Fulton, Md. / Reservoir",
+        "highSchool": "Louisville",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/avery-oergel/9548",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Ava Evans",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Charlotte, N.C. / Providence",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/ava-evans/9557",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Madison Ziebarth",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Hoffman Estates, Ill. / Barrington",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/madison-ziebarth/9554",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Dasha Tuckova",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lethbridge, Alberta, Canada / Lethbridge Collegiate Institute",
+        "highSchool": "Idaho",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/dasha-tuckova/9558",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Keira Gill",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Maple Grove, Minn. / Maple Grove",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/keira-gill/9559",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Peyton Wetzel",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cedarburg, Wis. / Cedarburg",
+        "highSchool": "Michigan Tech",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/peyton-wetzel/9560",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Ashlyn Cohen",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cooper City, Fla. / Cooper City",
+        "highSchool": "Valparaiso",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/ashlyn-cohen/9539",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Dominae Butler",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Indianapolis, Ind. / Park Tudor",
+        "highSchool": "Murray State",
+        "previousSchool": "Western Michigan",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/dominae-butler/9561",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Isabella Berta",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Joliet, Ill. / Joliet Catholic Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/isabella-berta/9538",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Addison Hamm",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Canton, Ohio / Glenoak",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/addison-hamm/9540",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Kaylin Klutcharch",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Homer Glen, Ill. / Lockport",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/kaylin-klutcharch/9541",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Ava Stevens",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "St. Louis, Mo. / Penn",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "St. Louis Development Academy",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/ava-stevens/9562",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Freya Robbie",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Woodstock, Conn. / The Woodstock Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/freya-robbie/9549",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Emely Lopez",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Shakopee, Minn. / Shakopee",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/emely-lopez/9563",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Riley Mathews",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Columbia, Ill. / Columbia",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/riley-mathews/9544",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Alex Lehnert",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "New Lenox, Ill. / Lincoln-Way Central",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/alex-lehnert/9542",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Kaitlynn Long",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Springboro, Ohio / Springboro",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/kaitlynn-long/9543",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Hailey Morgan",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "St. Louis, Mo. / Fort Zumwalt East",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/hailey-morgan/9547",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Meagyn Riffle",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cincinnati, Ohio / West Clermont",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/meagyn-riffle/9564",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Addyson Warner",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Dana Point, Calif. / El Toro",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Legends FC",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/addyson-warner/9552",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "CharlieBleu Saunders",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Northville, Mich. / Northville",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/charliebleu-saunders/9550",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Quinn Urquhart",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Chicago, Ill. / Saint Ignatius College Prep",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/quinn-urquhart/9551",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Annah Wasiak",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Carmel, Ind. / Cathedral",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/annah-wasiak/9553",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Tori Angelo",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Perkasie, Pa. / Pennridge",
+        "highSchool": "Seton Hall",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gosycamores.com/sports/womens-soccer/roster/tori-angelo/9537",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 5,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 12,
+      "FR": 6,
+      "SR": 1,
+      "R-SO": 1,
+      "JR": 8
+    },
+    "graduatingByPos": {
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gosycamores.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:24:28Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Alicia Perez",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Leon, Spain / Colegio Leones JM",
+          "highSchool": "Bethel (Tenn.)"
+        },
+        {
+          "number": "00",
+          "name": "Delaney Timmons",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Ventura, Calif. / Buena",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Rosemary Elliott",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "West Des Moines, Iowa / Waukee",
+          "highSchool": "Limestone"
+        },
+        {
+          "number": "2",
+          "name": "Mackenzie Mills",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Vancouver, British Columbia, Canada / Notre Dame Regional Secondary",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Elise McDonald",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Falls Church, Va. / St. John's College",
+          "highSchool": "Saint Leo"
+        },
+        {
+          "number": "4",
+          "name": "Avery Oergel",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Fulton, Md. / Reservoir",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "5",
+          "name": "Anna Chor",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "O'Fallon, Ill. / O'Fallon Township High School",
+          "highSchool": "UTEP"
+        },
+        {
+          "number": "6",
+          "name": "Madison Ziebarth",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Hoffman Estates, Ill. / Barrington",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Layne Frericks",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Spring Grove, Ill. / Richmond-Burton",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Ashlyn Cohen",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cooper City, Fla. / Cooper City",
+          "highSchool": "Valparaiso"
+        },
+        {
+          "number": "11",
+          "name": "Skylar Cano",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Newport Beach, Calif. / Mater Dei",
+          "highSchool": "Utah Valley"
+        },
+        {
+          "number": "12",
+          "name": "Isabella Berta",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Joliet, Ill. / Joliet Catholic Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Addison Hamm",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Canton, Ohio / Glenoak",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kaylin Klutcharch",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Homer Glen, Ill. / Lockport",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Autumn Fairfax",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Culpeper, Va. / Cupeper County",
+          "highSchool": "Coastal Carolina"
+        },
+        {
+          "number": "16",
+          "name": "Brooklyn Woods",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Waukee, Iowa / Waukee High School",
+          "highSchool": "Iowa"
+        },
+        {
+          "number": "17",
+          "name": "Freya Robbie",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Woodstock, Conn. / The Woodstock Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Riley Mathews",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Columbia, Ill. / Columbia",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Alex Lehnert",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "New Lenox, Ill. / Lincoln-Way Central",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kaitlynn Long",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Springboro, Ohio / Springboro",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Hailey Morgan",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. Louis, Mo. / Fort Zumwalt East",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Lina Fasquelle",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Lille, France / Lycée Henri Darras",
+          "highSchool": "Cowley College"
+        },
+        {
+          "number": "24",
+          "name": "Addyson Warner",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Dana Point, Calif. / El Toro",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Lola Minic",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Kenosha, Wis. / Westosha Central",
+          "highSchool": "Wisconsin-Parkside"
+        },
+        {
+          "number": "26",
+          "name": "CharlieBleu Saunders",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Northville, Mich. / Northville",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Jordan Goldstein",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Corona, Calif. / Santiago",
+          "highSchool": "Upper Iowa"
+        },
+        {
+          "number": "28",
+          "name": "Quinn Urquhart",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Chicago, Ill. / Saint Ignatius College Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Corynn DeGroote",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "West Terre Haute, Ind. / West Vigo High School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Annah Wasiak",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Carmel, Ind. / Cathedral",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Ella Roesch",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "St. Louis, Mo. / Parkway West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Tori Angelo",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Perkasie, Pa. / Pennridge",
+          "highSchool": "Seton Hall"
+        }
+      ],
+      "departed": [
+        "alicia perez",
+        "anna chor",
+        "autumn fairfax",
+        "brooklyn woods",
+        "corynn degroote",
+        "delaney timmons",
+        "ella roesch",
+        "jordan goldstein",
+        "layne frericks",
+        "lina fasquelle",
+        "lola minic",
+        "rosemary elliott",
+        "skylar cano"
+      ]
+    },
+    "2024": {
+      "count": 36,
+      "players": [
+        {
+          "number": "00",
+          "name": "Delaney Timmons",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Ventura, Calif. / Buena",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Maddie Alexander",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Battle Creek, Mich. / Harper Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Alexa Mackey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Brunswick, Ohio / Brunswick HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Kayla Duane",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pewaukee, Wis. / Waukesha West",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Olivia Lovell",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Waukee, Iowa / Waukee HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Anna Chor",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "O'Fallon, Ill. / O'Fallon Township High School",
+          "highSchool": "UTEP"
+        },
+        {
+          "number": "6",
+          "name": "Emily Boyer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Carmel, Ind. / Carmel",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Layne Frericks",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Spring Grove, Ill. / Richmond-Burton",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Grace Quinn",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Anthem, Ariz. / Boulder Creek",
+          "highSchool": "Northern Arizona"
+        },
+        {
+          "number": "9",
+          "name": "Trystyn Divich",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev. / Faith Lutheran High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Nora Henderson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Brentwood, Tenn. / Ravenwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Audrey Roberts",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "La Grange, Ky. / Oldham County High School",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Tess Wright",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Bloomfield Hills, Mich. / Bloomfield Hills",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Audrey Stephens",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "North Aurora, Ill. / West Aurora HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kaylin Klutcharch",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Homer Glen, Ill. / Lockport",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Chloe Tesny",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Medina, Ohio / Medina HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Brooklyn Woods",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Waukee, Iowa / Waukee High School",
+          "highSchool": "Iowa"
+        },
+        {
+          "number": "17",
+          "name": "Maddie Helling",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Union, Mo. / Union HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Olivia Hopper",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Lawrenceburg, Ind. / East Central",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Emma Elliott",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Hinsdale, Ill. / Hinsdale Central",
+          "highSchool": "UT Martin"
+        },
+        {
+          "number": "20",
+          "name": "Alex Lehnert",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "New Lenox, Ill. / Lincoln-Way Central",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kaitlynn Long",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Springboro, Ohio / Springboro",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Caitlin Mullen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Grand Rapids, Mich. / Catholic Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Lina Fasquelle",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lille, France / Lycée Henri Darras",
+          "highSchool": "Cowley College"
+        },
+        {
+          "number": "24",
+          "name": "Mackenzie Kent",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Aurora, Ind. / St. Henry District HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Isabel Garcia",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Johnston, Iowa / Des Moines Christian School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Eve Frousiakis",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Huntington Beach, Calif. / Marina",
+          "highSchool": "Palm Beach Atlantic"
+        },
+        {
+          "number": "27",
+          "name": "Emma Famulak",
+          "pos": "D/F",
+          "classCode": "SR",
+          "hometown": "Grand Rapids, Mich. / Forest Hills Eastern",
+          "highSchool": "Milwaukee"
+        },
+        {
+          "number": "28",
+          "name": "Wimberley Wright",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Denton, Texas / Ryan",
+          "highSchool": "Texas State"
+        },
+        {
+          "number": "29",
+          "name": "Corynn DeGroote",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "West Terre Haute, Ind. / West Vigo High School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alexa Seiler",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Karlsruhe, Germany / Justus-Knecht-Gymnasium",
+          "highSchool": "Chicago State"
+        },
+        {
+          "number": "31",
+          "name": "Ella Roesch",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "St. Louis, Mo. / Parkway West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Madison Ziebarth",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Hoffman Estates, Ill. / Barrington",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Autumn Fairfax",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Culpeper, Va. / Cupeper County",
+          "highSchool": "Coastal Carolina"
+        },
+        {
+          "number": "47",
+          "name": "Hailey Morgan",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "St. Louis, Mo. / Fort Zumwalt East",
+          "highSchool": ""
+        },
+        {
+          "number": "54",
+          "name": "Ella Gorrie",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Chatham, Ill. / Glenwood High School",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Madeline Lotspeich",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "O'Fallon, Mo. / Fort Zumwalt West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Maddie Alexander",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Battle Creek, Mich. / Harper Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Alexa Mackey",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Brunswick, Ohio / Brunswick HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Katie Yankey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Floyds Knobs, Ind. / Floyd Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Olivia Lovell",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Waukee, Iowa / Waukee HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Gabby Starman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "O'Fallon, Mo. / Fort Zumwalt North High School",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Carly Hudnall",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Noblesville, Ind. / Noblesville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Carlie Jensen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ankeny, Iowa / Ankeny Centennial HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Adelaide Wolfe",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Bettendorf, Iowa / Pleasant Valley High School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Trystyn Divich",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev. / Faith Lutheran High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Nora Henderson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Brentwood, Tenn. / Ravenwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Audrey Roberts",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "La Grange, Ky. / Oldham County High School",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Isabella Hunter",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "New Baltimore, Mich. / Anchor Bay HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Audrey Stephens",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "North Aurora, Ill. / West Aurora HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kloe Pettigrew",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Newton, Iowa / Newton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Chloe Tesny",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Medina, Ohio / Medina HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Brooklyn Woods",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Waukee, Iowa / Waukee High School",
+          "highSchool": "Iowa"
+        },
+        {
+          "number": "17",
+          "name": "Maddie Helling",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Union, Mo. / Union HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Josie Bakaitis",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Chesterton, Ind. / Chesterton High School",
+          "highSchool": "Illinois State University"
+        },
+        {
+          "number": "19",
+          "name": "Emma Elliott",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Hinsdale, Ill. / Hinsdale Central",
+          "highSchool": "UT Martin"
+        },
+        {
+          "number": "20",
+          "name": "Sasha Thompson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Terre Haute, Ind. / North Vigo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Anna Chor",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "O'Fallon, Ill. / O'Fallon Township High School",
+          "highSchool": "UTEP"
+        },
+        {
+          "number": "22",
+          "name": "Caitlin Mullen",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Grand Rapids, Mich. / Catholic Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Lina Fasquelle",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lille, France / Lycée Henri Darras",
+          "highSchool": "Cowley College"
+        },
+        {
+          "number": "24",
+          "name": "Mackenzie Kent",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Aurora, Ind. / St. Henry District HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Isabel Garcia",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Johnston, Iowa / Des Moines Christian School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Corynn DeGroote",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "West Terre Haute, Ind. / West Vigo High School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alexa Seiler",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Karlsruhe, Germany / Justus-Knecht-Gymnasium",
+          "highSchool": "Chicago State"
+        },
+        {
+          "number": "31",
+          "name": "Ella Roesch",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "St. Louis, Mo. / Parkway West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "54",
+          "name": "Ella Gorrie",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Chatham, Ill. / Glenwood High School",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gosycamores.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:24:28Z"
+    }
+  },
   "commitments": [
     {
       "id": "ava-stevens-2026",
@@ -117,7 +1746,7 @@
       "city": "O'Fallon",
       "highSchool": "",
       "college": "indiana-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -332,41 +1961,27 @@
     "2027": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gosycamores.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T16:57:48Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.469073&longitude=-87.407846&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T16:57:46Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T16:57:46Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:24:17Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

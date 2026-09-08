@@ -69,18 +69,209 @@
       "asOf": "2026-09-07T05:00:32Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 28.602159,
+    "lon": -81.200889,
+    "timezone": "America/New_York",
+    "elevationM": 32.9,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012841",
+      "name": "ORLANDO EXECUTIVE AP",
+      "state": "FL",
+      "distanceKm": 14.4,
+      "elevationM": 32.9
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 71.2,
+        "tLowF": 51.8,
+        "precipIn": 2.61,
+        "snowIn": null,
+        "wetDays": 3.8,
+        "days90F": 0.0,
+        "daysFreeze": 0.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 74.3,
+        "tLowF": 54.3,
+        "precipIn": 2.06,
+        "snowIn": null,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 78.4,
+        "tLowF": 58.3,
+        "precipIn": 2.74,
+        "snowIn": null,
+        "wetDays": 4.0,
+        "days90F": 0.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 83.2,
+        "tLowF": 62.8,
+        "precipIn": 2.7,
+        "snowIn": null,
+        "wetDays": 3.9,
+        "days90F": 3.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 88.2,
+        "tLowF": 68.7,
+        "precipIn": 3.66,
+        "snowIn": null,
+        "wetDays": 5.3,
+        "days90F": 13.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.7,
+        "tLowF": 73.4,
+        "precipIn": 8.17,
+        "snowIn": null,
+        "wetDays": 11.8,
+        "days90F": 20.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.9,
+        "tLowF": 75.0,
+        "precipIn": 8.07,
+        "snowIn": null,
+        "wetDays": 11.9,
+        "days90F": 25.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.8,
+        "tLowF": 75.3,
+        "precipIn": 7.66,
+        "snowIn": null,
+        "wetDays": 11.7,
+        "days90F": 25.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 89.5,
+        "tLowF": 73.9,
+        "precipIn": 6.55,
+        "snowIn": null,
+        "wetDays": 9.8,
+        "days90F": 17.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 84.4,
+        "tLowF": 68.3,
+        "precipIn": 3.24,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 4.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 77.8,
+        "tLowF": 60.1,
+        "precipIn": 1.73,
+        "snowIn": null,
+        "wetDays": 3.0,
+        "days90F": 0.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 73.1,
+        "tLowF": 54.5,
+        "precipIn": 2.28,
+        "snowIn": null,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.3
+      }
+    ],
+    "annualPrecipIn": 51.5,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 85.9,
+      "avgLowF": 69.4,
+      "precipIn": 19.2,
+      "wetDays": 29.0
+    },
+    "summary": "Hottest month Jul (avg high 91.9°F), coldest Jan (avg low 51.8°F). 51.5 in of rain per year. Fall season (Aug–Nov): highs around 85.9°F, 19.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012841,USW00012854,USW00012815&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:52Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Tiffany Roberts Sahaydak",
-      "title": null,
+      "title": "Head Coach",
       "since": 2013,
       "seasons": 14,
-      "bioUrl": null,
+      "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/tiffany-roberts-sahaydak",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Tiffany Roberts Sahaydak",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/tiffany-roberts-sahaydak",
+        "social": {}
+      },
+      {
+        "name": "Tim Sahaydak",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/tim-sahaydak",
+        "social": {}
+      },
+      {
+        "name": "Chris Cummings",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/chris-cummings",
+        "social": {}
+      },
+      {
+        "name": "Gary Ogilvie",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/gary-ogilvie",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Katy Ling",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/season/2026/staff/katy-ling",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "UCF Soccer and Track Stadium",
       "capacity": 2000
@@ -173,7 +364,11 @@
         "url": "https://en.wikipedia.org/wiki/UCF_Knights_women%27s_soccer",
         "asOf": "2026-09-07T05:01:06Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ucfknights.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:04:44Z"
+      }
     }
   },
   "seasons": [
@@ -903,9 +1098,1329 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "0",
+        "name": "Ansley Ittel",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Canton, Ga.",
+        "highSchool": "Cherokee HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/ansley-ittel",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Kaïna Cesar",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Tours, France",
+        "highSchool": "Academic D'Aix Marseille",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/kaina-cesar",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Bella Douglas",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Montclair, N.J.",
+        "highSchool": "Montclair Kimberley Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/bella-douglas",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Guta Franke",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Porto Alegre, Brazil",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/guta-franke",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Jessica McCullen",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Redshirt Senior",
+        "classCode": "R-SR",
+        "hometown": "Longwood, Fla.",
+        "highSchool": "Lyman HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/jessica-mccullen",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Natalie Leon",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Redshirt Freshman",
+        "classCode": "R-FR",
+        "hometown": "San Clemente, Calif.",
+        "highSchool": "Santa Margarita Catholic HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/natalie-leon",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Naomi Clark",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Parker, Colo.",
+        "highSchool": "Grandview HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/naomi-clark",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Tyra Eriksen",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Örnsköldsvik, Sweden",
+        "highSchool": "Maja Beskow School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/tyra-eriksen",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Gabi Berchon",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Porto Alegre, Brazil",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/gabi-berchon",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Daniela Ocampo",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Alajuela, Costa Rica",
+        "highSchool": "Saint Paul College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/daniela-ocampo",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Alysiah Lockette",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Colorado Springs, Colo.",
+        "highSchool": "Village HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/alysiah-lockette",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Jada Silvest",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Redshirt Junior",
+        "classCode": "R-JR",
+        "hometown": "Land O' Lakes, Fla.",
+        "highSchool": "Land O' Lakes HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/jada-silvest",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Maria Tregansin",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Redshirt Senior",
+        "classCode": "R-SR",
+        "hometown": "Winter Garden, Fla.",
+        "highSchool": "Montverde Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/maria-tregansin",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Camryn Szotak",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "Middletown, N.J.",
+        "highSchool": "Middletown HS South",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/camryn-szotak",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Haley Cramer",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Lee's Summit, Mo.",
+        "highSchool": "Blue Springs South HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "KC Athletics",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/haley-cramer",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Momo Chogyoji",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Kanagawa, Japan",
+        "highSchool": "Junmonji HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/momo-chogyoji",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Ainsley Moy",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Freehold, N.J.",
+        "highSchool": "Freehold Township HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/ainsley-moy",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Kalena Bellini",
+        "pos": "F/D",
+        "posLabel": "Forward/Defender",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Lehi, Utah",
+        "highSchool": "Skyridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Wasatch SC",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/kalena-bellini",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "20",
+        "name": "Payton Patrick",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Redshirt Senior",
+        "classCode": "R-SR",
+        "hometown": "Parkton, Md.",
+        "highSchool": "Hereford HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/payton-patrick",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Sophia May",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Chula Vista, Calif.",
+        "highSchool": "Eastlake HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/sophia-may",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Brooke Mulroney",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Redshirt Senior",
+        "classCode": "R-SR",
+        "hometown": "Weymouth, Mass.",
+        "highSchool": "Thayer Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/brooke-mulroney",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Edidiong Etim",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Uyo, Nigeria",
+        "highSchool": "Brain Trust Secondary",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/edidiong-etim",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Ella Holloran",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Wellington, Fla.",
+        "highSchool": "IMG Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "IMG Academy",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/ella-holloran",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "Katsi Bengoa",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "San Juan, Puerto Rico",
+        "highSchool": "Bishop Moore HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/katsi-bengoa",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Carli Crews",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Redshirt Sophomore",
+        "classCode": "R-SO",
+        "hometown": "High Point, N.C.",
+        "highSchool": "Southwest Guilford HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/carli-crews",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Virginia Green",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Nashville, Tenn.",
+        "highSchool": "IMG Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "IMG Academy",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/virginia-green",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "31",
+        "name": "Brianne MacDonald",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Redshirt Junior",
+        "classCode": "R-JR",
+        "hometown": "Chelsea, Quebec",
+        "highSchool": "Cégep Heritage",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ucfknights.com/sports/womens-soccer/roster/player/brianne-macdonald",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 1,
+        "SO": 0,
+        "R-SO": 2,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 2,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 1,
+        "JR": 4,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 1,
+        "GR": 0
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 1,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 4,
+      "JR": 8,
+      "SR": 2,
+      "R-SR": 4,
+      "R-FR": 1,
+      "R-SO": 3,
+      "FR": 3,
+      "R-JR": 2
+    },
+    "graduatingByPos": {
+      "D": 3,
+      "F": 2,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ucfknights.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:04:44Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Genesis Perez Watson",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "San Jose, Costa Rica",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "2",
+          "name": "Haylee Mersereau",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Boca Raton, Fla.",
+          "highSchool": "Boca Raton Community HS"
+        },
+        {
+          "number": "3",
+          "name": "Guta Franke",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Porto Alegre, Brazil",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Jessica McCullen",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Longwood, Fla.",
+          "highSchool": "Lyman HS"
+        },
+        {
+          "number": "5",
+          "name": "Natalie Leon",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Clemente, Calif.",
+          "highSchool": "Santa Margarita Catholic HS"
+        },
+        {
+          "number": "6",
+          "name": "Kayla Chatman-Haggerty",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Seattle, Wash.",
+          "highSchool": "Ballard HS"
+        },
+        {
+          "number": "7",
+          "name": "Tyra Eriksen",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "Örnsköldsvik, Sweden",
+          "highSchool": "Maja Beskow School"
+        },
+        {
+          "number": "8",
+          "name": "Gabi Berchon",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Porto Alegre, Brazil",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Rajanah Reed",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Glendale, Ariz.",
+          "highSchool": "Deer Valley HS"
+        },
+        {
+          "number": "11",
+          "name": "Liz Worden",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Riverside, Calif.",
+          "highSchool": "Martin Luther King HS"
+        },
+        {
+          "number": "12",
+          "name": "Jada Silvest",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Land O' Lakes, Fla.",
+          "highSchool": "Land O' Lakes HS"
+        },
+        {
+          "number": "13",
+          "name": "Maria Tregansin",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Winter Garden, Fla.",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "14",
+          "name": "Camryn Szotak",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Middletown, N.J.",
+          "highSchool": "Middletown HS South"
+        },
+        {
+          "number": "16",
+          "name": "Hannah Boughton",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Colleyville, Texas",
+          "highSchool": "Covenant Christian Academy"
+        },
+        {
+          "number": "17",
+          "name": "Honoka Hamano",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Tokyo, Japan",
+          "highSchool": "JFA Academy Fukushima"
+        },
+        {
+          "number": "18",
+          "name": "Ainsley Moy",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Freehold, N.J.",
+          "highSchool": "Freehold Township HS"
+        },
+        {
+          "number": "19",
+          "name": "Kalena Bellini",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "Lehi, Utah",
+          "highSchool": "Skyridge HS"
+        },
+        {
+          "number": "20",
+          "name": "Payton Patrick",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Parkton, Md.",
+          "highSchool": "Hereford HS"
+        },
+        {
+          "number": "21",
+          "name": "Sophia May",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Chula Vista, Calif.",
+          "highSchool": "Eastlake HS"
+        },
+        {
+          "number": "22",
+          "name": "Brooke Mulroney",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Weymouth, Mass.",
+          "highSchool": "Thayer Academy"
+        },
+        {
+          "number": "23",
+          "name": "Edidiong Etim",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Uyo, Nigeria",
+          "highSchool": "Brain Trust Secondary"
+        },
+        {
+          "number": "25",
+          "name": "Ella Holloran",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wellington, Fla.",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "26",
+          "name": "Katsi Bengoa",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "San Juan, Puerto Rico",
+          "highSchool": "Bishop Moore HS"
+        },
+        {
+          "number": "28",
+          "name": "Audrey Buck",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Melbourne Beach, Fla.",
+          "highSchool": "Melbourne HS"
+        },
+        {
+          "number": "30",
+          "name": "Sami Lipcon",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Miami, Fla.",
+          "highSchool": "Miami Palmetto HS"
+        },
+        {
+          "number": "31",
+          "name": "Brianne MacDonald",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Chelsea, Quebec",
+          "highSchool": "Cégep Heritage"
+        }
+      ],
+      "departed": [
+        "audrey buck",
+        "genesis perez watson",
+        "hannah boughton",
+        "haylee mersereau",
+        "honoka hamano",
+        "kayla chatman haggerty",
+        "liz worden",
+        "rajanah reed",
+        "sami lipcon"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Genesis Perez Watson",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "San Jose, Costa Rica",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "1",
+          "name": "Lizah Pistorio",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Providence HS"
+        },
+        {
+          "number": "2",
+          "name": "Taylor Jacobson",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "Lake Nona HS"
+        },
+        {
+          "number": "3",
+          "name": "Guta Franke",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Porto Alegre, Brazil",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Jessica McCullen",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Longwood, Fla.",
+          "highSchool": "Lyman HS"
+        },
+        {
+          "number": "5",
+          "name": "Jalen Haas",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "Lake Nona HS"
+        },
+        {
+          "number": "6",
+          "name": "Kayla Chatman-Haggerty",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Seattle, Wash.",
+          "highSchool": "Ballard HS"
+        },
+        {
+          "number": "7",
+          "name": "Daniella Chung",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Boca Raton, Fla.",
+          "highSchool": "American Heritage HS"
+        },
+        {
+          "number": "8",
+          "name": "Gabi Berchon",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Porto Alegre, Brazil",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Caitlyn Matthews",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound HS"
+        },
+        {
+          "number": "11",
+          "name": "Polly Watson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Manchester, England",
+          "highSchool": "Chorlton HS"
+        },
+        {
+          "number": "12",
+          "name": "Jada Silvest",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Land O' Lakes, Fla.",
+          "highSchool": "Land O' Lakes HS"
+        },
+        {
+          "number": "13",
+          "name": "Maria Tregansin",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Winter Garden, Fla.",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "14",
+          "name": "Chloe Netzel",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "St. Louis, Mo.",
+          "highSchool": "Liberty HS"
+        },
+        {
+          "number": "15",
+          "name": "Emily Thompson",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Broward County, Fla.",
+          "highSchool": "American Heritage HS"
+        },
+        {
+          "number": "17",
+          "name": "Honoka Hamano",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tokyo, Japan",
+          "highSchool": "JFA Academy Fukushima"
+        },
+        {
+          "number": "18",
+          "name": "Natalia Ballinas",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Weston, Fla.",
+          "highSchool": "Cypress Bay HS"
+        },
+        {
+          "number": "19",
+          "name": "Lilly Nava",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Fort Lauderdale, Fla.",
+          "highSchool": "Westminster Academy"
+        },
+        {
+          "number": "20",
+          "name": "Annika Huhta",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Espoo, Finland",
+          "highSchool": "Pohjois-Haagan Yhteiskoulu"
+        },
+        {
+          "number": "21",
+          "name": "Kyleigh Thelen",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Oviedo, Fla.",
+          "highSchool": "Oviedo HS"
+        },
+        {
+          "number": "22",
+          "name": "Brooke Mulroney",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Weymouth, Mass.",
+          "highSchool": "Thayer Academy"
+        },
+        {
+          "number": "23",
+          "name": "Edidiong Etim",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Uyo, Nigeria",
+          "highSchool": "Brain Trust Secondary"
+        },
+        {
+          "number": "24",
+          "name": "Grace Thao",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Irvine, Calif.",
+          "highSchool": "Orange Lutheran HS"
+        },
+        {
+          "number": "25",
+          "name": "Ella Holloran",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wellington, Fla.",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "26",
+          "name": "Katsi Bengoa",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "San Juan, Puerto Rico",
+          "highSchool": "Bishop Moore HS"
+        },
+        {
+          "number": "27",
+          "name": "Jade Steele",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Lake Worth, Fla.",
+          "highSchool": "Park Vista HS"
+        },
+        {
+          "number": "28",
+          "name": "Audrey Buck",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Melbourne Beach, Fla.",
+          "highSchool": "Melbourne HS"
+        },
+        {
+          "number": "30",
+          "name": "Sami Lipcon",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Miami, Fla.",
+          "highSchool": "Miami Palmetto HS"
+        },
+        {
+          "number": "33",
+          "name": "Iisa Elovaara",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Richmond, Va.",
+          "highSchool": "Freeman HS"
+        },
+        {
+          "number": "37",
+          "name": "Mia Asenjo",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Malverne, N.Y.",
+          "highSchool": "Montverde Academy"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "#0",
+          "name": "Genesis Perez Watson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "San Jose, Costa Rica",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "#1",
+          "name": "Caroline DeLisle",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Tampa, Fla.",
+          "highSchool": "Paul R. Wharton"
+        },
+        {
+          "number": "#2",
+          "name": "Olivia Lewis",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Cooper City, Fla",
+          "highSchool": "Cooper City"
+        },
+        {
+          "number": "#4",
+          "name": "Jessica McCullen",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Longwood, Fla.",
+          "highSchool": "Lyman HS"
+        },
+        {
+          "number": "#5",
+          "name": "Ellie Moreno",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Winter Park, Fla.",
+          "highSchool": "Winter Park"
+        },
+        {
+          "number": "#7",
+          "name": "Daniella Chung",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Boca Raton, Fla.",
+          "highSchool": "American Heritage HS"
+        },
+        {
+          "number": "#8",
+          "name": "Ariel Young",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Ottawa, Canada",
+          "highSchool": "Burnaby Central Secondary School"
+        },
+        {
+          "number": "#9",
+          "name": "Sanja Homann",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Freiburg, Germany",
+          "highSchool": ""
+        },
+        {
+          "number": "#11",
+          "name": "Polly Watson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Manchester, England",
+          "highSchool": "Chorlton HS"
+        },
+        {
+          "number": "#12",
+          "name": "Katie Bradley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bolton, England",
+          "highSchool": ""
+        },
+        {
+          "number": "#13",
+          "name": "Maria Tregansin",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Winter Garden, Fla.",
+          "highSchool": "Montverde Academy"
+        },
+        {
+          "number": "#14",
+          "name": "Chloe Netzel",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "St. Louis, Mo.",
+          "highSchool": "Liberty HS"
+        },
+        {
+          "number": "#17",
+          "name": "Dayana Martin",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Boca Raton, Fla.",
+          "highSchool": "Boca Raton Community HS"
+        },
+        {
+          "number": "#18",
+          "name": "Lilly Nava",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fort Lauderdale, Fla.",
+          "highSchool": "Westminster Academy"
+        },
+        {
+          "number": "#19",
+          "name": "Maggie Jenkins",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Wellington, New Zealand",
+          "highSchool": ""
+        },
+        {
+          "number": "#20",
+          "name": "Annika Huhta",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Espoo, Finland",
+          "highSchool": "Pohjois-Haagan Yhteiskoulu"
+        },
+        {
+          "number": "#21",
+          "name": "Kyleigh Thelen",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Oviedo, Fla.",
+          "highSchool": "Oviedo HS"
+        },
+        {
+          "number": "#22",
+          "name": "Kailey Scott",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "Edgewater HS"
+        },
+        {
+          "number": "#23",
+          "name": "Talia Gabarra",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Annapolis, Md.",
+          "highSchool": "Broadneck"
+        },
+        {
+          "number": "#24",
+          "name": "Emma Agin",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Safety Harbor, Fla.",
+          "highSchool": "Clearwater Central Catholic High School"
+        },
+        {
+          "number": "#25",
+          "name": "Brooke Mulroney",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Weymouth, Mass.",
+          "highSchool": "Thayer Academy"
+        },
+        {
+          "number": "#26",
+          "name": "Natalia Ballinas",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Weston, Fla.",
+          "highSchool": "Cypress Bay HS"
+        },
+        {
+          "number": "#27",
+          "name": "Jade Steele",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lake Worth, Fla.",
+          "highSchool": "Park Vista HS"
+        },
+        {
+          "number": "#28",
+          "name": "Audrey Buck",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Melbourne Beach, Fla.",
+          "highSchool": "Melbourne HS"
+        },
+        {
+          "number": "#30",
+          "name": "Lizah Pistorio",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Providence HS"
+        },
+        {
+          "number": "#31",
+          "name": "Jada Silvest",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Land O' Lakes, Fla.",
+          "highSchool": "Land O' Lakes HS"
+        },
+        {
+          "number": "#32",
+          "name": "Tianna Hogan",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Port St. Lucie, Fla.",
+          "highSchool": "Lincoln Park Academy"
+        },
+        {
+          "number": "#33",
+          "name": "Morgan O'Connor",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Oxford, Miss.",
+          "highSchool": "Oxford HS"
+        },
+        {
+          "number": "#34",
+          "name": "Jalen Haas",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "Lake Nona HS"
+        },
+        {
+          "number": "#37",
+          "name": "Mia Asenjo",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Malverne, N.Y.",
+          "highSchool": "Montverde Academy"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ucfknights.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:04:44Z"
+    }
+  },
   "commitments": [
     {
       "id": "haley-cramer-2026",
@@ -918,7 +2433,7 @@
       "city": "Lees Summit",
       "highSchool": "",
       "college": "ucf",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -997,7 +2512,7 @@
       "city": "Nashville",
       "highSchool": "",
       "college": "ucf",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1016,7 +2531,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1497,35 +3012,21 @@
     "2028": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://ucfknights.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:01:07Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=28.602159&longitude=-81.200889&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:01:05Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

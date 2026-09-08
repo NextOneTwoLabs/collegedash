@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T06:30:14Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.131159,
+    "lon": -84.51428,
+    "timezone": "America/New_York",
+    "elevationM": 149.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093812",
+      "name": "CINCINNATI LUNKEN AP",
+      "state": "OH",
+      "distanceKm": 8.8,
+      "elevationM": 149.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 40.6,
+        "tLowF": 23.6,
+        "precipIn": 2.86,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 24.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 45.0,
+        "tLowF": 25.7,
+        "precipIn": 2.79,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 21.1
+      },
+      {
+        "month": "Mar",
+        "tHighF": 54.6,
+        "tLowF": 33.4,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 7.8,
+        "days90F": 0.0,
+        "daysFreeze": 14.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 66.6,
+        "tLowF": 42.5,
+        "precipIn": 4.37,
+        "snowIn": null,
+        "wetDays": 8.2,
+        "days90F": 0.0,
+        "daysFreeze": 3.5
+      },
+      {
+        "month": "May",
+        "tHighF": 75.4,
+        "tLowF": 52.7,
+        "precipIn": 4.7,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 0.6,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 83.3,
+        "tLowF": 61.2,
+        "precipIn": 4.61,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 4.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.6,
+        "tLowF": 65.3,
+        "precipIn": 4.39,
+        "snowIn": null,
+        "wetDays": 7.4,
+        "days90F": 9.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.9,
+        "tLowF": 63.7,
+        "precipIn": 3.39,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 7.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.7,
+        "tLowF": 55.9,
+        "precipIn": 3.07,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 3.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 67.9,
+        "tLowF": 44.2,
+        "precipIn": 3.05,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.2,
+        "daysFreeze": 2.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.1,
+        "tLowF": 34.1,
+        "precipIn": 2.91,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 14.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.6,
+        "tLowF": 28.0,
+        "precipIn": 3.32,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 21.6
+      }
+    ],
+    "annualPrecipIn": 43.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 72.2,
+      "avgLowF": 49.5,
+      "precipIn": 12.4,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 86.6°F), coldest Jan (avg low 23.6°F). 43.4 in of rain per year. Fall season (Aug–Nov): highs around 72.2°F, 12.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093812,USW00093814,USC00331515&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:57Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Erica Demers",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/erica-demers",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Erica Demers",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/erica-demers",
+        "social": {}
+      },
+      {
+        "name": "Paul Babba",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/paul-babba",
+        "social": {}
+      },
+      {
+        "name": "Olivia Silverman",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/olivia-silverman",
+        "social": {}
+      },
+      {
+        "name": "Ella Rogers",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/ella-rogers",
+        "social": {}
+      },
+      {
+        "name": "Kevin Deitz",
+        "title": "Assistant Sports Performance Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/kevin-deitz",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Areti Filippidis",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/areti-filippidis",
+        "social": {}
+      },
+      {
+        "name": "Alexandria Coleman",
+        "title": "Assistant Director, Olympic Sports Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/season/2026/staff/alexandria-coleman",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +305,1536 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gobearcats.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:17:29Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 30,
+    "players": [
+      {
+        "number": "1",
+        "name": "Molly Kubistek",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pittsburgh Riverhounds",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/molly-kubistek",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/molly_kubistek/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "2",
+        "name": "Ally Gilbert",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/ally-gilbert",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/allylgilbert/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Coley Sidloski",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/coley-sidloski",
+        "social": {
+          "instagram": "https://www.instagram.com/coleysidloski"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Carly Oubs",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/carly-oubs",
+        "social": {
+          "instagram": "https://www.instagram.com/carly_oubs"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Joelle Bader",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Vancouver Rise",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/joelle-bader",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/jojo1bader/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Karson Yon",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/karson-yon",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/karson.yon/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Emma Gioffre",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/emma-gioffre",
+        "social": {
+          "instagram": "https://www.instagram.com/emmagioffre"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Molly Cochran",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/molly-cochran",
+        "social": {
+          "instagram": "https://www.instagram.com/mollycochrann"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Braelyn Even",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Elite Soccer Academy",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/braelyn-even",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/braelyneven/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "10",
+        "name": "Brooklynn Schomaker",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Michigan Hawks",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/brooklynn-schomaker",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/brooklynn.schomaker/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Tiana Campbell",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/tiana-campbell",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/tianagcampbell/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Rhegan Coombs",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "HTX Soccer",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/rhegan-coombs",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/rhegan.coombs/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Ella Burke",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/ella-burke",
+        "social": {
+          "instagram": "https://www.instagram.com/ella._burke"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Joy Kimwemwe",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/joy-kimwemwe",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/joy.butoto/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Kailey Shannon",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Michigan Hawks",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/kailey-shannon",
+        "social": {
+          "instagram": "https://www.instagram.com/kaileyshannon15"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "16",
+        "name": "Lexi O'Shea",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cincinnati United Premier",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/lexi-oshea",
+        "social": {
+          "instagram": "https://www.instagram.com/_lexioshea"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Bryana Gaynor",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/bryana-gaynor",
+        "social": {
+          "instagram": "https://www.instagram.com/bryanagaynor"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Kayla Gaynor",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/kayla-gaynor",
+        "social": {
+          "instagram": "https://www.instagram.com/kaylaagaynor"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Anna Barber",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/anna-barber",
+        "social": {
+          "instagram": "https://www.instagram.com/annabarber19"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Katelyn Jamie",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/katelyn-jamie",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/katelyn._.jamie/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Amber Branum",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/amber-branum",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/amberbranumm/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Jade Dubois",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/jade-dubois",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/jade.dubois_228/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Christa Gibbons",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gwinnett Soccer Academy (GSA)",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/christa-gibbons",
+        "social": {
+          "instagram": "https://www.instagram.com/christa__gibbons"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "25",
+        "name": "Allysia Iaquinto",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "WNY Flash",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/allysia-iaquinto",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/allysia.iaquinto/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "26",
+        "name": "Ava \"AJ\" Hendrick",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/ava-aj-hendrick",
+        "social": {
+          "instagram": "https://www.instagram.com/avaa.hendrickk"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Vanessa Manoil",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/vanessa-manoil",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/vanessamanoil_/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Vanessa Kaminski-Roth",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "North Mississauga Soccer Club",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/vanessa-kaminski-roth",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/kvroth_/"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "32",
+        "name": "Dru Dorsey",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Iowa",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/dru-dorsey",
+        "social": {
+          "instagram": "https://www.instagram.com/dru.dorsey"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "33",
+        "name": "Brylee Borgman",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/brylee-borgman",
+        "social": {
+          "instagram": "https://www.instagram.com/https://www.instagram.com/brylee_borgman/"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "99",
+        "name": "Amber Brandon",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gobearcats.com/sports/womens-soccer/roster/player/amber-brandon",
+        "social": {
+          "instagram": "https://www.instagram.com/_amberbrandon"
+        },
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "FR": 8,
+      "GR": 4,
+      "JR": 8,
+      "SR": 3,
+      "SO": 7
+    },
+    "graduatingByPos": {
+      "D": 4,
+      "F": 1,
+      "M": 1,
+      "GK": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gobearcats.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:17:29Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "1",
+          "name": "Camryn Miller",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Megan Smith",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Coley Sidloski",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Carly Oubs",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Rylee Felton",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Karson Yon",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Emma Gioffre",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Molly Cochran",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Laura Zemberyova",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Lily DiBernardo",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Faith Broering",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Claire Rea",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Ella Burke",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Joy Kimwemwe",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Kailey Shannon",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lexi O'Shea",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Bryana Gaynor",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kayla Gaynor",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Anna Barber",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Jada Arthurs",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Jenna Daveler",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Christa Gibbons",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Ellie Flower",
+          "pos": "F/M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ashlyn Basinger",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Ava \"AJ\" Hendrick",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Maddie Swingle",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Dru Dorsey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Kate Helfen",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Amber Brandon",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "ashlyn basinger",
+        "camryn miller",
+        "claire rea",
+        "ellie flower",
+        "faith broering",
+        "jada arthurs",
+        "jenna daveler",
+        "kate helfen",
+        "laura zemberyova",
+        "lily dibernardo",
+        "maddie swingle",
+        "megan smith",
+        "rylee felton"
+      ]
+    },
+    "2024": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Payton Hasse",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Megan Smith",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Coley Sidloski",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Carly Oubs",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Rylee Felton",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Vyviene Spaulding",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Emma Gioffre",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Laura Zemberyova",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Lauren Bastian",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Faith Broering",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Claire Rea",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Ella Burke",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Brooke Brown",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Mandie Simon",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Clara Love",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Fran Stables",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Anna Barber",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kendal Green",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Jada Arthurs",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Erin Coleman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Iris Schuh",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Ellie Flower",
+          "pos": "F/M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ashlyn Basinger",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Emma Schmelzer",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Maddie Swingle",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Jenna Daveler",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Paige Miller",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Sabrina Taber",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Olivia Stone",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Anna Rexford",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Kate Helfen",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Amber Brandon",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 35,
+      "players": [
+        {
+          "number": "0",
+          "name": "Payton Hasse",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Molly Coles",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Megan Smith",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Teni Akindoju",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Lauren Moraitis",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Vyviene Spaulding",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Chloe Spitler",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Sarah Kate Rath",
+          "pos": "F/D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Alexis Campbell",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Lauren Bastian",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Faith Broering",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Elizabeth Fortuna",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Sydney Waiters",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Brooke Brown",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Mandie Simon",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Addi O'Kelley",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Fran Stables",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kendall Battle",
+          "pos": "F/D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kendal Green",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mackenzie Tucker",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Ashley Barron",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Iris Schuh",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Ellie Flower",
+          "pos": "F/M",
+          "classCode": "R-SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Claire Rea",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Emma Schmelzer",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Maddie Swingle",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Laura Zemberyova",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Paige Miller",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Sabrina Taber",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Kayla Cassidy",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Erin Coleman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Anna Rexford",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Emma Gioffre",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Ella Burke",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Maura Giesler",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gobearcats.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:17:29Z"
+    }
+  },
   "commitments": [
     {
       "id": "allysia-iaquinto-2026",
@@ -117,7 +1847,7 @@
       "city": "Stoney Creek",
       "highSchool": "",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +1866,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1882,7 @@
       "city": "Fairfield",
       "highSchool": "",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -196,7 +1926,7 @@
       "city": "Novi",
       "highSchool": "Novi",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -240,7 +1970,7 @@
       "city": "",
       "highSchool": "",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -259,7 +1989,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -275,7 +2005,7 @@
       "city": "McMurray",
       "highSchool": "",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -294,7 +2024,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -310,7 +2040,7 @@
       "city": "Katy",
       "highSchool": "Katy",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -354,7 +2084,7 @@
       "city": "Kitchener",
       "highSchool": "",
       "college": "cincinnati",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -373,7 +2103,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -626,41 +2356,27 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gobearcats.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:30:48Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.131159&longitude=-84.51428&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York",
-        "at": "2026-09-07T06:30:47Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:30:47Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:17:18Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

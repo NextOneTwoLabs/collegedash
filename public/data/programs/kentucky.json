@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://ukathletics.com/sports/womens-soccer",
-    "roster": "https://ukathletics.com/sports/womens-soccer/roster",
-    "schedule": "https://ukathletics.com/sports/womens-soccer/schedule",
-    "news": "https://ukathletics.com/sports/womens-soccer/news",
+    "athletics": "https://ukathletics.com/sports/wsoc",
+    "roster": "https://ukathletics.com/sports/wsoc/roster",
+    "schedule": "https://ukathletics.com/sports/wsoc/schedule",
+    "news": "https://ukathletics.com/sports/wsoc/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/kentucky/clgid-275",
     "wikipedia": null,
     "x": null,
@@ -69,18 +69,209 @@
       "asOf": "2026-09-07T05:08:04Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 38.038911,
+    "lon": -84.504747,
+    "timezone": "America/New_York",
+    "elevationM": 298.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093820",
+      "name": "LEXINGTON BLUEGRASS AP",
+      "state": "KY",
+      "distanceKm": 8.9,
+      "elevationM": 298.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 42.3,
+        "tLowF": 25.4,
+        "precipIn": 3.42,
+        "snowIn": 4.7,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 22.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 46.8,
+        "tLowF": 28.3,
+        "precipIn": 3.64,
+        "snowIn": 4.5,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 19.2
+      },
+      {
+        "month": "Mar",
+        "tHighF": 56.1,
+        "tLowF": 35.8,
+        "precipIn": 4.48,
+        "snowIn": 2.8,
+        "wetDays": 8.0,
+        "days90F": 0.0,
+        "daysFreeze": 13.1
+      },
+      {
+        "month": "Apr",
+        "tHighF": 67.2,
+        "tLowF": 45.2,
+        "precipIn": 4.42,
+        "snowIn": 0.2,
+        "wetDays": 7.9,
+        "days90F": 0.0,
+        "daysFreeze": 2.9
+      },
+      {
+        "month": "May",
+        "tHighF": 75.8,
+        "tLowF": 55.0,
+        "precipIn": 5.44,
+        "snowIn": 0.0,
+        "wetDays": 8.6,
+        "days90F": 0.3,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Jun",
+        "tHighF": 83.8,
+        "tLowF": 62.8,
+        "precipIn": 4.96,
+        "snowIn": 0.0,
+        "wetDays": 7.8,
+        "days90F": 4.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.9,
+        "tLowF": 66.5,
+        "precipIn": 5.12,
+        "snowIn": 0.0,
+        "wetDays": 7.7,
+        "days90F": 9.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 86.2,
+        "tLowF": 65.2,
+        "precipIn": 3.71,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 7.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 80.2,
+        "tLowF": 58.1,
+        "precipIn": 3.42,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 3.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 68.6,
+        "tLowF": 47.0,
+        "precipIn": 3.66,
+        "snowIn": 0.0,
+        "wetDays": 5.5,
+        "days90F": 0.2,
+        "daysFreeze": 1.6
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.8,
+        "tLowF": 36.4,
+        "precipIn": 3.37,
+        "snowIn": 0.4,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 11.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 45.9,
+        "tLowF": 29.6,
+        "precipIn": 4.2,
+        "snowIn": 1.9,
+        "wetDays": 7.6,
+        "days90F": 0.0,
+        "daysFreeze": 19.3
+      }
+    ],
+    "annualPrecipIn": 49.8,
+    "annualSnowIn": 14.5,
+    "fallSeason": {
+      "avgHighF": 72.7,
+      "avgLowF": 51.7,
+      "precipIn": 14.2,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 86.9°F), coldest Jan (avg low 25.4°F). 49.8 in of rain per year, 14.5 in of snow. Fall season (Aug–Nov): highs around 72.7°F, 14.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093820,USW00063838,USC00154369&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:20Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Troy Fabiano",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/troy-fabiano/",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Troy Fabiano",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/troy-fabiano/",
+        "social": {}
+      },
+      {
+        "name": "Brenton Saylor",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/brenton-saylor/",
+        "social": {}
+      },
+      {
+        "name": "Marco Fabiano",
+        "title": "Assistant Coach/Recruiting Coordinator",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/marco-fabiano/",
+        "social": {}
+      },
+      {
+        "name": "Jelena Sever",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/jelana-sever/",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Nick Stevens",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/coach/nick-stevens/",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +289,1439 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ukathletics.com/sports/wsoc/roster",
+        "asOf": "2026-09-08T01:06:44Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 25,
+    "players": [
+      {
+        "number": "0",
+        "name": "Shelby Henderson",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Soccer",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/shelby-henderson/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Emilie Maihs",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "6'1\"",
+        "heightIn": 73,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/emilie-maihs/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Isabella Winton",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/isabella-winton/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Michelle Moskau",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Atlanta Fire United",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/michelle-moskau/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Kyla Dawn",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Legends FC",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/kyla-dawn/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Jordyn Dunn",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/jordyn-dunn/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Anna Sikorski",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "SC Wave",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/anna-sikorski/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Juliette Rayo",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/juliette-rayo/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Lexi Tylenda",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Beadling SC",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/alexis-tylenda/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Nadia Ramadan",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/nadia-ramadan/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Katherine Truitt",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/katherine-truitt/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Elise Ernest",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Northern Virginia Alliance",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/elise-ernest/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Sydney Arendarczyk",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Rockford Raptors",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/sydney-arendarczyk/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Elle Price",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "PDA",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/elle-price/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Elkie Bowyer",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/elkie-bowyer/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Rayna Powers",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/rayna-powers/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Alexa Pino",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/alexa-pino/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "McKenzie Godfrey",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tophat SC",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/mckenzie-godfrey/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Megan Holland",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/megan-holland/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Kendall Campbell",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/kendall-campbell/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Dani Chaump",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Royal",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/dani-chaump/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Teagan Myers",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/teagan-myers/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "35",
+        "name": "Gianna Tuzzolino",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/gianna-tuzzolino/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "38",
+        "name": "Amy Dekkers",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/amy-dekkers/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "41",
+        "name": "Mika Sueoka",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "'\" Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ukathletics.com/sports/wsoc/roster/player/mika-sueoka/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 7,
+      "JR": 7,
+      "SR": 3,
+      "FR": 8
+    },
+    "graduatingByPos": {
+      "D": 2,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ukathletics.com/sports/wsoc/roster",
+      "asOf": "2026-09-08T01:06:44Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Shelby Henderson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Khadijah Cissé",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Skye Leach",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Michelle Moskau",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sophie Harlan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Mimi Dominguez",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Anna Sikorski",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Catherine Rapp",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Thalia Morisi",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Lexi Tylenda",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Tanner Strickland",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Katherine Truitt",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Marilia Nieves-Melchor",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Kaylin Mallon",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Dana Dahm",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Mallory Glass",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Elkie Bowyer",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Rayna Powers",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Gabi Poretto",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Sydni Fink",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Megan Holland",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Kendall Campbell",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ava Plezia",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Teagan Myers",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Grace Hoytink",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Maddie Eastman",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Gianna Tuzzolino",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Isabella Boyce",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "55",
+          "name": "Abigail Stager",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "abigail stager",
+        "ava plezia",
+        "catherine rapp",
+        "dana dahm",
+        "gabi poretto",
+        "grace hoytink",
+        "isabella boyce",
+        "kaylin mallon",
+        "khadijah cisse",
+        "maddie eastman",
+        "mallory glass",
+        "marilia nieves melchor",
+        "mimi dominguez",
+        "skye leach",
+        "sophie harlan",
+        "sydni fink",
+        "tanner strickland",
+        "thalia morisi"
+      ]
+    },
+    "2024": {
+      "count": 39,
+      "players": [
+        {
+          "number": "0",
+          "name": "Gaby Rourke",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Nikki Coryell",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Maddie Kemp",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Michelle Moskau",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Dana Dahm",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Jadyn Rupnow",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Kennedy Chambers",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Mia Bookhard",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Thalia Morisi",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Elsi Twombly",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Tanner Strickland",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Katherine Truitt",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Sophia Mattice",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Annalise Cannada",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Alyssa Abramson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Mallory Glass",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Marzia Josephson",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Sydney Neira",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Catherine DeRosa",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Anna Sikorski",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Tallulah Miller",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Grace Phillpotts",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Makala Woods",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Ashley Mekitarian",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Myra Schneider",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Sydni Fink",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Emerson Andrews",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Lexi Tylenda",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Grace Hoytink",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Maddie Eastman",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Jasmine Nixon",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Gianna Tuzzolino",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Lesley Kiesling",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "37",
+          "name": "Reese Wilson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Kathleen Ngulefac",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "40",
+          "name": "Avery Lampe",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "42",
+          "name": "Marilia Nieves-Melchor",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "43",
+          "name": "Isabella Stewart",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "55",
+          "name": "Abigail Stager",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 35,
+      "players": [
+        {
+          "number": "0",
+          "name": "Èvelyn Parry",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Steph Stull",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Hadley Williams",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Anna Young",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Dana Dahm",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Jadyn Rupnow",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Kennedy Chambers",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Mia Bookhard",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Katelyn Fishnick",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Maggy Henschler",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Tanner Strickland",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Katherine Truitt",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Taya Hjorth",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Annalise Cannada",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Lola Sommer",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Mallory Glass",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Marzia Josephson",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Sydney Neira",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Úlfa Úlfarsdóttir",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Gianna Koss",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Tallulah Miller",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Ella Kane",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Grace Phillpotts",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Claudia Najera",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Maya Lacognato",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Hayden Petrick",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Sydney Bolinger",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Sophia Caruso",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jordyn Rhodes",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Sam Halligan",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Grace Hoytink",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Maddie Eastman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Maria Castaldo",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Lesley Kiesling",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "40",
+          "name": "Payton Robertson",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ukathletics.com/sports/wsoc/schedule",
+      "asOf": "2026-09-08T01:06:44Z"
+    }
+  },
   "commitments": [
     {
       "id": "danielle-chaump-2026",
@@ -117,7 +1734,7 @@
       "city": "Dallas",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +1778,7 @@
       "city": "Sterling",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -205,7 +1822,7 @@
       "city": "Bethlehem",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -224,7 +1841,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -240,7 +1857,7 @@
       "city": "Cedar Hill",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -284,7 +1901,7 @@
       "city": "Atlanta",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -328,7 +1945,7 @@
       "city": "Lake Zurich",
       "highSchool": "",
       "college": "kentucky",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -862,7 +2479,15 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [],
+    "latest": [],
+    "_meta": {
+      "source": "news",
+      "url": "https://ukathletics.com/sports/wsoc/news",
+      "asOf": "2026-09-08T01:06:45Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 6,
@@ -870,47 +2495,27 @@
     "2028": 6
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://ukathletics.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:08:39Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=38.038911&longitude=-84.504747&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:08:37Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T05:08:44Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:08:37Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:06:33Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T19:22:48Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 29.46708,
+    "lon": -98.46583,
+    "timezone": "America/Chicago",
+    "elevationM": 240.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012921",
+      "name": "SAN ANTONIO INTL AP",
+      "state": "TX",
+      "distanceKm": 8.8,
+      "elevationM": 240.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 63.3,
+        "tLowF": 41.0,
+        "precipIn": 1.96,
+        "snowIn": 0.0,
+        "wetDays": 3.7,
+        "days90F": 0.0,
+        "daysFreeze": 4.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 67.5,
+        "tLowF": 45.1,
+        "precipIn": 1.74,
+        "snowIn": 0.1,
+        "wetDays": 3.1,
+        "days90F": 0.2,
+        "daysFreeze": 2.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 73.8,
+        "tLowF": 51.8,
+        "precipIn": 2.31,
+        "snowIn": 0.0,
+        "wetDays": 4.1,
+        "days90F": 0.5,
+        "daysFreeze": 1.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 80.3,
+        "tLowF": 58.4,
+        "precipIn": 2.42,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 3.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 86.6,
+        "tLowF": 66.4,
+        "precipIn": 4.4,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 11.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 92.4,
+        "tLowF": 72.7,
+        "precipIn": 3.28,
+        "snowIn": 0.0,
+        "wetDays": 4.6,
+        "days90F": 24.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 94.9,
+        "tLowF": 74.7,
+        "precipIn": 2.41,
+        "snowIn": 0.0,
+        "wetDays": 3.1,
+        "days90F": 28.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 96.0,
+        "tLowF": 74.9,
+        "precipIn": 2.15,
+        "snowIn": 0.0,
+        "wetDays": 3.1,
+        "days90F": 28.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 90.1,
+        "tLowF": 69.6,
+        "precipIn": 3.88,
+        "snowIn": 0.0,
+        "wetDays": 4.8,
+        "days90F": 19.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 82.2,
+        "tLowF": 60.4,
+        "precipIn": 3.75,
+        "snowIn": 0.0,
+        "wetDays": 3.8,
+        "days90F": 5.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 71.7,
+        "tLowF": 49.8,
+        "precipIn": 2.08,
+        "snowIn": 0.0,
+        "wetDays": 3.3,
+        "days90F": 0.1,
+        "daysFreeze": 1.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 64.7,
+        "tLowF": 42.4,
+        "precipIn": 2.0,
+        "snowIn": 0.1,
+        "wetDays": 3.3,
+        "days90F": 0.0,
+        "daysFreeze": 4.3
+      }
+    ],
+    "annualPrecipIn": 32.4,
+    "annualSnowIn": 0.2,
+    "fallSeason": {
+      "avgHighF": 85.0,
+      "avgLowF": 63.7,
+      "precipIn": 11.9,
+      "wetDays": 15.0
+    },
+    "summary": "Hottest month Aug (avg high 96.0°F), coldest Jan (avg low 41.0°F). 32.4 in of rain per year, essentially no snow. Fall season (Aug–Nov): highs around 85.0°F, 11.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012921,USW00012970,USC00417947&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:58:04Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,7 +228,24 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Jake Plant",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/coaches/jake-plant/3624",
+        "social": {}
+      },
+      {
+        "name": "Victoria Ramirez",
+        "title": "Associate Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/coaches/victoria-ramirez/3625",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +264,1216 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://uiwcardinals.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:29:31Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 24,
+    "players": [
+      {
+        "number": "0",
+        "name": "Harriet Muller",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Taranaki, New Zealand",
+        "highSchool": "New Plymouth Girls HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/harriet-muller/14626",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Hannah Alexander",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Austin, Texas",
+        "highSchool": "Lake Travis HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/hannah-alexander/14601",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Atiana Lara",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Katy, Texas",
+        "highSchool": "Katy HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/atiana-lara/14615",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Kiana Villa",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Las Vegas, Nev.",
+        "highSchool": "West Career and Technical Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/kiana-villa/14623",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Zaiba Ishaque",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Manchester, England",
+        "highSchool": "Wake Forest",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/zaiba-ishaque/14627",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Grasyn Unruh",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "New Braunfels, Texas",
+        "highSchool": "New Braunfels HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/grasyn-unruh/14622",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Morgan Heintz",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "New Braunfels, Texas",
+        "highSchool": "Smithson HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/morgan-heintz/14628",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Abigail Casey",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Antonio, Texas",
+        "highSchool": "The Atonement Catholic Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/abigail-casey/14629",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Hayden Kish",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Orlando, Fla.",
+        "highSchool": "The Geneva School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/hayden-kish/14630",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Tyler Coker",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Albuquerque, N.M.",
+        "highSchool": "New Braunfels HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/tyler-coker/14606",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Taylor Kish",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Orlando, Fla.",
+        "highSchool": "The Geneva School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/taylor-kish/14613",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Peri Olmo",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Katy, Texas",
+        "highSchool": "Jordan HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/peri-olmo/14619",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Olivia Orellana",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Katy, Texas",
+        "highSchool": "Seven Lakes HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/olivia-orellana/14631",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Jennovi Diederich",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Antonio, Texas",
+        "highSchool": "Brennan HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/jennovi-diederich/14871",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Sloane Guion",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Round Rock, Texas",
+        "highSchool": "Round Rock HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/sloane-guion/14611",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Lily Ruff",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dripping Springs, Texas",
+        "highSchool": "Dripping Springs HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/lily-ruff/14632",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Montanna Mathews",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Albury, Australia",
+        "highSchool": "Xavier HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/montanna-mathews/14618",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Alex Knutson",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dripping Springs, Texas",
+        "highSchool": "Dripping Springs H.S.",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/alex-knutson/14614",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Joella Livingston",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Forsyth, Ill.",
+        "highSchool": "Saint Teresa HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/joella-livingston/14616",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Julia Watson",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Villa Park, Calif.",
+        "highSchool": "Rosary Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/julia-watson/14624",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Riley Sheldon",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Auckland, New Zealand",
+        "highSchool": "Rangitoto College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/riley-sheldon/14621",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Veronica Navarrete Cevada",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Managua, Nicaragua",
+        "highSchool": "American Nicaraguan School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/veronica-navarrete-cevada/14633",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Carolina Flores",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Antonio, Texas",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "San Antonio City SC",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/carolina-flores/14634",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "31",
+        "name": "Louise Coates",
+        "pos": "D",
+        "posLabel": "DEF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Staffordshire, England",
+        "highSchool": "Repton School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uiwcardinals.com/sports/womens-soccer/roster/louise-coates/14635",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 10,
+      "GR": 1,
+      "SO": 4,
+      "SR": 4,
+      "JR": 5
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "D": 2,
+      "F": 1,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uiwcardinals.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:29:31Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 25,
+      "players": [
+        {
+          "number": "0",
+          "name": "Chloe Bagshaw",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Crowthorne, England",
+          "highSchool": "Edgbarrow HS"
+        },
+        {
+          "number": "00",
+          "name": "Nadine Robberts",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Auckland, New Zealand",
+          "highSchool": "Botany Downs Secondary College"
+        },
+        {
+          "number": "1",
+          "name": "Hannah Alexander",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Austin, Texas",
+          "highSchool": "Lake Travis HS"
+        },
+        {
+          "number": "2",
+          "name": "Atiana Lara",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Katy, Texas",
+          "highSchool": "Katy HS"
+        },
+        {
+          "number": "3",
+          "name": "Kiana Villa",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "West Career and Technical Academy"
+        },
+        {
+          "number": "5",
+          "name": "Grasyn Unruh",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "New Braunfels, Texas",
+          "highSchool": "New Braunfels HS"
+        },
+        {
+          "number": "6",
+          "name": "Sinead Duffy",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Gig Harbor, Wash.",
+          "highSchool": "Peninsula High School"
+        },
+        {
+          "number": "7",
+          "name": "Melissa Bailey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Greenbank High School"
+        },
+        {
+          "number": "8",
+          "name": "Zara Dominguez",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Ciudad Juarez, Mexico",
+          "highSchool": "Coronado High School/Heartland CC"
+        },
+        {
+          "number": "9",
+          "name": "Tyler Coker",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Albuquerque, N.M.",
+          "highSchool": "New Braunfels HS"
+        },
+        {
+          "number": "10",
+          "name": "Taylor Kish",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "The Geneva School"
+        },
+        {
+          "number": "11",
+          "name": "Peri Olmo",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Katy, Texas",
+          "highSchool": "Jordan HS"
+        },
+        {
+          "number": "12",
+          "name": "Abigail Wilson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Prosper, Texas",
+          "highSchool": "Prosper High School"
+        },
+        {
+          "number": "13",
+          "name": "Jennovi Diederich",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Brennan HS"
+        },
+        {
+          "number": "14",
+          "name": "Rylee Halpin",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "San Antonio, TX",
+          "highSchool": "William J. Brennan HS"
+        },
+        {
+          "number": "15",
+          "name": "Meredith Caviglia",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Holtsville, N.Y",
+          "highSchool": "Sachem East High School"
+        },
+        {
+          "number": "16",
+          "name": "Lily Beckham",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tyler, Texas",
+          "highSchool": "Tyler Legacy HS"
+        },
+        {
+          "number": "17",
+          "name": "Sloane Guion",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Round Rock, Texas",
+          "highSchool": "Round Rock HS"
+        },
+        {
+          "number": "18",
+          "name": "Brianna Mata",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Rowlett, TX",
+          "highSchool": "Sachse Highschool"
+        },
+        {
+          "number": "20",
+          "name": "Montanna Mathews",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Albury, Australia",
+          "highSchool": "Xavier HS"
+        },
+        {
+          "number": "21",
+          "name": "Alex Knutson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dripping Springs, Texas",
+          "highSchool": "Dripping Springs H.S."
+        },
+        {
+          "number": "24",
+          "name": "Joella Livingston",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Forsyth, Ill.",
+          "highSchool": "Saint Teresa HS"
+        },
+        {
+          "number": "25",
+          "name": "Julia Watson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Villa Park, Calif.",
+          "highSchool": "Rosary Academy"
+        },
+        {
+          "number": "26",
+          "name": "Cauvais Deane",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Ajax, Ontario, Canada",
+          "highSchool": "Notre Dame Secondary School"
+        },
+        {
+          "number": "27",
+          "name": "Riley Sheldon",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Auckland, New Zealand",
+          "highSchool": "Rangitoto College"
+        }
+      ],
+      "departed": [
+        "abigail wilson",
+        "brianna mata",
+        "cauvais deane",
+        "chloe bagshaw",
+        "lily beckham",
+        "melissa bailey",
+        "meredith caviglia",
+        "nadine robberts",
+        "rylee halpin",
+        "sinead duffy",
+        "zara dominguez"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Erica Defferding",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Frisco, TX",
+          "highSchool": "Liberty High School"
+        },
+        {
+          "number": "00",
+          "name": "Faith Davies",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Chicago, IL",
+          "highSchool": "Glenbard East/Eastern Illinois"
+        },
+        {
+          "number": "1",
+          "name": "Nadine Robberts",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Auckland, New Zealand",
+          "highSchool": "Botany Downs Secondary College"
+        },
+        {
+          "number": "2",
+          "name": "Sierra Wannamaker",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "San Antonio, TX",
+          "highSchool": "James Madison High School"
+        },
+        {
+          "number": "3",
+          "name": "Kiana Villa",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "West Career and Technical Academy"
+        },
+        {
+          "number": "4",
+          "name": "Kayla Smith",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Burleson, TX",
+          "highSchool": "Burleson Centennial High School"
+        },
+        {
+          "number": "5",
+          "name": "Addison Rodriguez",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Floresville, TX",
+          "highSchool": "Incarnate Word High School"
+        },
+        {
+          "number": "6",
+          "name": "Sinead Duffy",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Gig Harbor, Wash.",
+          "highSchool": "Peninsula High School"
+        },
+        {
+          "number": "7",
+          "name": "Melissa Bailey",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Greenbank High School"
+        },
+        {
+          "number": "8",
+          "name": "Micayla Ratukalou",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Sacramento, CA",
+          "highSchool": "St. Francis Catholic High School"
+        },
+        {
+          "number": "9",
+          "name": "Zara Dominguez",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Ciudad Juarez, Mexico",
+          "highSchool": "Coronado High School/Heartland CC"
+        },
+        {
+          "number": "10",
+          "name": "Taylor Kish",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "The Geneva School"
+        },
+        {
+          "number": "11",
+          "name": "Peri Olmo",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Katy, Texas",
+          "highSchool": "Jordan HS"
+        },
+        {
+          "number": "12",
+          "name": "Abigail Wilson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Prosper, Texas",
+          "highSchool": "Prosper High School"
+        },
+        {
+          "number": "14",
+          "name": "Bailey Moyer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Highlands Ranch, CO",
+          "highSchool": "ThunderRidge Highschool"
+        },
+        {
+          "number": "15",
+          "name": "Meredith Caviglia",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Holtsville, N.Y",
+          "highSchool": "Sachem East High School"
+        },
+        {
+          "number": "16",
+          "name": "Ellie Mai Sanford",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Pontypool, Wales",
+          "highSchool": "St. Albans RC High School"
+        },
+        {
+          "number": "18",
+          "name": "Brianna Mata",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rowlett, TX",
+          "highSchool": "Sachse Highschool"
+        },
+        {
+          "number": "19",
+          "name": "Chiara-Sophie Silberstorff",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Reinfeld, Germany",
+          "highSchool": "Eichendorfschule Wolfsburg"
+        },
+        {
+          "number": "20",
+          "name": "Montanna Mathews",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Albury, Australia",
+          "highSchool": "Xavier HS"
+        },
+        {
+          "number": "21",
+          "name": "Alex Knutson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Dripping Springs, Texas",
+          "highSchool": "Dripping Springs H.S."
+        },
+        {
+          "number": "22",
+          "name": "Sadie Bell",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "San Antonio, TX",
+          "highSchool": "LEE Highschool"
+        },
+        {
+          "number": "24",
+          "name": "Joella Livingston",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Forsyth, Ill.",
+          "highSchool": "Saint Teresa HS"
+        },
+        {
+          "number": "25",
+          "name": "Julia Watson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Villa Park, Calif.",
+          "highSchool": "Rosary Academy"
+        },
+        {
+          "number": "26",
+          "name": "Janaya Doane",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Schertz, TX",
+          "highSchool": "Byron P. Steele II High School"
+        },
+        {
+          "number": "27",
+          "name": "Riley Sheldon",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Auckland, New Zealand",
+          "highSchool": "Rangitoto College"
+        },
+        {
+          "number": "35",
+          "name": "Isabella Cox",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Newbury, England",
+          "highSchool": "John Madejski Academy"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Erica Defferding",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Frisco, TX",
+          "highSchool": "Liberty High School"
+        },
+        {
+          "number": "00",
+          "name": "Faith Davies",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Chicago, IL",
+          "highSchool": "Glenbard East/Eastern Illinois"
+        },
+        {
+          "number": "1",
+          "name": "Makenzie Hall",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "McKinney, TX",
+          "highSchool": "Mckinney Boyd High School"
+        },
+        {
+          "number": "2",
+          "name": "Sierra Wannamaker",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Antonio, TX",
+          "highSchool": "James Madison High School"
+        },
+        {
+          "number": "3",
+          "name": "Kiana Villa",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "West Career and Technical Academy"
+        },
+        {
+          "number": "4",
+          "name": "Kayla Smith",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Burleson, TX",
+          "highSchool": "Burleson Centennial High School"
+        },
+        {
+          "number": "5",
+          "name": "Addison Rodriguez",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Floresville, TX",
+          "highSchool": "Incarnate Word High School"
+        },
+        {
+          "number": "6",
+          "name": "Amaya Spearman",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Wichita Falls, TX",
+          "highSchool": "Rider High School"
+        },
+        {
+          "number": "7",
+          "name": "Melissa Bailey",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Liverpool, England",
+          "highSchool": "Greenbank High School"
+        },
+        {
+          "number": "8",
+          "name": "Micayla Ratukalou",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Sacramento, CA",
+          "highSchool": "St. Francis Catholic High School"
+        },
+        {
+          "number": "9",
+          "name": "Zara Dominguez",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Ciudad Juarez, Mexico",
+          "highSchool": "Coronado High School/Heartland CC"
+        },
+        {
+          "number": "10",
+          "name": "Taylor Kish",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Orlando, Fla.",
+          "highSchool": "The Geneva School"
+        },
+        {
+          "number": "11",
+          "name": "Eve Clarkson",
+          "pos": "D/M",
+          "classCode": "GR",
+          "hometown": "Whalley, Lancashire, England",
+          "highSchool": "St. Wilfrids Academy"
+        },
+        {
+          "number": "12",
+          "name": "Payton Adams",
+          "pos": "D/M",
+          "classCode": "GR",
+          "hometown": "Frisco, TX",
+          "highSchool": "Wakeland High School"
+        },
+        {
+          "number": "14",
+          "name": "Bailey Moyer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Highlands Ranch, CO",
+          "highSchool": "ThunderRidge Highschool"
+        },
+        {
+          "number": "15",
+          "name": "Hadley Carpenter",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Waco, TX",
+          "highSchool": "Midway Highschool"
+        },
+        {
+          "number": "16",
+          "name": "Ellie Mai Sanford",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Pontypool, Wales",
+          "highSchool": "St. Albans RC High School"
+        },
+        {
+          "number": "17",
+          "name": "Diana Hilhorst",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Breukelen, Utrecht, Netherlands",
+          "highSchool": "RSG Broklede"
+        },
+        {
+          "number": "18",
+          "name": "Brianna Mata",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rowlett, TX",
+          "highSchool": "Sachse Highschool"
+        },
+        {
+          "number": "20",
+          "name": "Lauren Miller",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Prosper, Texas",
+          "highSchool": "Prosper High School"
+        },
+        {
+          "number": "21",
+          "name": "Alex Knutson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Dripping Springs, Texas",
+          "highSchool": "Dripping Springs H.S."
+        },
+        {
+          "number": "22",
+          "name": "Sadie Bell",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Antonio, TX",
+          "highSchool": "LEE Highschool"
+        },
+        {
+          "number": "23",
+          "name": "Abigail Wilson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Prosper, Texas",
+          "highSchool": "Prosper High School"
+        },
+        {
+          "number": "24",
+          "name": "Sinead Duffy",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gig Harbor, Wash.",
+          "highSchool": "Peninsula High School"
+        },
+        {
+          "number": "26",
+          "name": "Janaya Doane",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Schertz, TX",
+          "highSchool": "Byron P. Steele II High School"
+        },
+        {
+          "number": "28",
+          "name": "Meredith Caviglia",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Holtsville, N.Y",
+          "highSchool": "Sachem East High School"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uiwcardinals.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:29:31Z"
+    }
+  },
   "commitments": [
     {
       "id": "camila-miranda-2027",
@@ -152,7 +1521,7 @@
       "city": "San Antonio",
       "highSchool": "",
       "college": "incarnate-word",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1540,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -328,41 +1697,27 @@
     "2027": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://uiwcardinals.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T19:25:22Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=29.46708&longitude=-98.46583&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago: ",
-        "at": "2026-09-07T19:25:21Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T19:25:21Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:29:19Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

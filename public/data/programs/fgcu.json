@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T06:16:13Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 26.463638,
+    "lon": -81.7726,
+    "timezone": "America/New_York",
+    "elevationM": 9.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012894",
+      "name": "FT MYERS SW FL RGNL AP",
+      "state": "FL",
+      "distanceKm": 8.2,
+      "elevationM": 9.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 74.7,
+        "tLowF": 54.4,
+        "precipIn": 2.36,
+        "snowIn": null,
+        "wetDays": 2.7,
+        "days90F": 0.0,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Feb",
+        "tHighF": 77.6,
+        "tLowF": 55.9,
+        "precipIn": 1.49,
+        "snowIn": null,
+        "wetDays": 2.2,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 80.2,
+        "tLowF": 58.8,
+        "precipIn": 1.92,
+        "snowIn": null,
+        "wetDays": 2.8,
+        "days90F": 0.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 84.6,
+        "tLowF": 63.5,
+        "precipIn": 1.87,
+        "snowIn": null,
+        "wetDays": 2.9,
+        "days90F": 4.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 88.3,
+        "tLowF": 67.7,
+        "precipIn": 3.02,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 14.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.3,
+        "tLowF": 73.0,
+        "precipIn": 10.33,
+        "snowIn": null,
+        "wetDays": 11.3,
+        "days90F": 21.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 90.6,
+        "tLowF": 74.8,
+        "precipIn": 8.56,
+        "snowIn": null,
+        "wetDays": 13.1,
+        "days90F": 24.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.4,
+        "tLowF": 75.7,
+        "precipIn": 8.75,
+        "snowIn": null,
+        "wetDays": 13.7,
+        "days90F": 25.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 89.9,
+        "tLowF": 74.8,
+        "precipIn": 8.49,
+        "snowIn": null,
+        "wetDays": 11.4,
+        "days90F": 19.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 86.1,
+        "tLowF": 69.5,
+        "precipIn": 3.11,
+        "snowIn": null,
+        "wetDays": 3.8,
+        "days90F": 8.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 81.0,
+        "tLowF": 62.8,
+        "precipIn": 1.89,
+        "snowIn": null,
+        "wetDays": 2.4,
+        "days90F": 0.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 76.8,
+        "tLowF": 57.6,
+        "precipIn": 1.6,
+        "snowIn": null,
+        "wetDays": 2.9,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      }
+    ],
+    "annualPrecipIn": 53.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 87.1,
+      "avgLowF": 70.7,
+      "precipIn": 22.2,
+      "wetDays": 31.0
+    },
+    "summary": "Hottest month Aug (avg high 91.4°F), coldest Jan (avg low 54.4°F). 53.4 in of rain per year. Fall season (Aug–Nov): highs around 87.1°F, 22.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012894,USW00012835,USC00084210&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:36Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Jim Blankenship",
@@ -1836,11 +1985,11 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": false,
       "rpi": false,
@@ -1849,16 +1998,8 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=26.463638&longitude=-81.7726&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York:",
-        "at": "2026-09-07T06:16:45Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

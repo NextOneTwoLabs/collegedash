@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T18:55:09Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 42.668344,
+    "lon": -71.124216,
+    "timezone": "America/New_York",
+    "elevationM": 45.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094723",
+      "name": "LAWRENCE MUNI AP",
+      "state": "MA",
+      "distanceKm": 5.4,
+      "elevationM": 45.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 34.8,
+        "tLowF": 19.3,
+        "precipIn": 2.86,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 27.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 37.5,
+        "tLowF": 20.6,
+        "precipIn": 2.44,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 24.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 45.3,
+        "tLowF": 28.1,
+        "precipIn": 3.42,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 21.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 57.7,
+        "tLowF": 37.6,
+        "precipIn": 3.6,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.1,
+        "daysFreeze": 6.8
+      },
+      {
+        "month": "May",
+        "tHighF": 68.5,
+        "tLowF": 47.6,
+        "precipIn": 3.39,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 0.7,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.3,
+        "tLowF": 57.1,
+        "precipIn": 3.99,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 2.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 83.2,
+        "tLowF": 63.2,
+        "precipIn": 3.48,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 6.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.6,
+        "tLowF": 61.7,
+        "precipIn": 3.04,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 73.8,
+        "tLowF": 53.9,
+        "precipIn": 3.75,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 1.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 61.8,
+        "tLowF": 42.7,
+        "precipIn": 4.1,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 2.9
+      },
+      {
+        "month": "Nov",
+        "tHighF": 50.6,
+        "tLowF": 33.9,
+        "precipIn": 3.52,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 14.1
+      },
+      {
+        "month": "Dec",
+        "tHighF": 40.1,
+        "tLowF": 25.2,
+        "precipIn": 3.32,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 24.8
+      }
+    ],
+    "annualPrecipIn": 40.9,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 67.0,
+      "avgLowF": 48.0,
+      "precipIn": 14.4,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 83.2°F), coldest Jan (avg low 19.3°F). 40.9 in of rain per year. Fall season (Aug–Nov): highs around 67.0°F, 14.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094723,USW00054733,USC00194105&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:50Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,8 +228,58 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Gabe Mejail",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/coaches/gabe-mejail/1781",
+        "social": {}
+      },
+      {
+        "name": "Paul Athanasiadis",
+        "title": "Associate Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/coaches/paul-athanasiadis/1782",
+        "social": {}
+      },
+      {
+        "name": "Rich Perry",
+        "title": "Assistant Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/coaches/rich-perry/1783",
+        "social": {}
+      },
+      {
+        "name": "Sam Rom",
+        "title": "Assistant Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/coaches/sam-rom/1826",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Rachel Souza",
+        "title": "Women's Soccer Graduate Assistant",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/coaches/rachel-souza/1793",
+        "social": {}
+      },
+      {
+        "name": "Erin Burke, MS, LAT, ATC",
+        "title": "Athletic Trainer (WSOC, WBB, WLAX, WBow)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/staff/erin-burke-ms-lat-atc/47",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +297,1478 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://merrimackathletics.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:28:20Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 31,
+    "players": [
+      {
+        "number": "0",
+        "name": "Hanna Taylor",
+        "pos": "",
+        "posLabel": "G",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Smiths, Bermuda",
+        "highSchool": "Brewster / Seacoast GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/hanna-taylor/15454",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Addison Israel",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Guilford, Conn.",
+        "highSchool": "Guilford / CFC ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/addison-israel/15476",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Kaitlyn Brewi",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lambertville, NJ",
+        "highSchool": "North Hunterdon / HEX FC Bucks",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/kaitlyn-brewi/15475",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kate Powers",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Maple Grove, Minn.",
+        "highSchool": "Maple Grove / Tonka Fusion Elite",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/kate-powers/15474",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Lilly Cook",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Canyon, Texas",
+        "highSchool": "Amarillo / Dallas Texans ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/lilly-cook/15471",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Taylor Pedra",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mount Sinai, N.Y.",
+        "highSchool": "Mount Sinai / New York Surf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/taylor-pedra/15470",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Lucia Antonucci",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Malden, Mass.",
+        "highSchool": "Mystic Valley Charter / Boston Bolts GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/lucia-antonucci/15456",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Katherine Hartman",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Phoenix, Ariz.",
+        "highSchool": "Sunnyslope / Phoenix Rising ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/katherine-hartman/15461",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Fallon Ryan",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hull, Mass.",
+        "highSchool": "Hull / Mass City DPL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/fallon-ryan/15477",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Liv Campbell",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "South Grafton, Mass.",
+        "highSchool": "Grafton / FC Stars ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/liv-campbell/15473",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Emily McCabe",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Canton, Mass.",
+        "highSchool": "Canton / Scorpions ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/emily-mccabe/15467",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Emma Cengarle",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Ramsey, N.J.",
+        "highSchool": "Ramsey / World Class ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/emma-cengarle/15458",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Abby Tober",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Warwick, R.I.",
+        "highSchool": "North Kingston / Rhode Island Surf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/abby-tober/15468",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Daniela Almeida",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tewksbury, Mass.",
+        "highSchool": "Tewksbury / FC Stars of MA",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/daniela-almeida/15453",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Kylie Fuller",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Bridgewater, Mass.",
+        "highSchool": "West Bridgewater / Scorpions ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/kylie-fuller/15479",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Emily Webb",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cranston, R.I.",
+        "highSchool": "Cranston West / Rhode Island Surf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/emily-webb/15480",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Sofia Gialanella",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Barnegat, N.J.",
+        "highSchool": "Saint Rose / Players Development Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/sofia-gialanella/15455",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Bella Keogh",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Plaistow, N.H.",
+        "highSchool": "Timberlane / Seacoast United GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/bella-keogh/15464",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Sophia Keogh",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Plaistow, N.H.",
+        "highSchool": "Timberlane / Seacoast United GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/sophia-keogh/15465",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Shea MacDougall",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Rockland, Mass.",
+        "highSchool": "Rockland / South Shore Select ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/shea-macdougall/15466",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Piper Crotty",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Scituate, Mass.",
+        "highSchool": "Scituate / NEFC GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/piper-crotty/15482",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Ava Lovergine",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Holbrook, N.Y.",
+        "highSchool": "Sachem East / SUSA ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/ava-lovergine/15483",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Lauren Boughner",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Middleton, Mass.",
+        "highSchool": "Mascononomet / NEFC North Shore",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/lauren-boughner/15472",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Grace Holobinko",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wall, N.J.",
+        "highSchool": "Wall / PDA ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/grace-holobinko/15463",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Gabrielle Geloso",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Rutland, Mass.",
+        "highSchool": "Wachusett Regional / FC Stars ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/gabrielle-geloso/15460",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Skyler Ortega",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Scottsdale, Ariz.",
+        "highSchool": "Notre Dame Prep / Arsenal ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Royals FC - Arizona",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/skyler-ortega/15484",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "Hannah Carr",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Braintree, Mass.",
+        "highSchool": "Braintree / South Shore Select ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/hannah-carr/15485",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Kat Regan",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Medfield, Mass.",
+        "highSchool": "Bishop Feehan / NEFC GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/kat-regan/15486",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "30",
+        "name": "Liv Linus",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Huntingdon Valley, Pa.",
+        "highSchool": "William Penn Charter / Real Jersey FC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/liv-linus/15488",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "31",
+        "name": "Olivia Dunham",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mansfield, Mass.",
+        "highSchool": "Mansfield / Scorpions ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/olivia-dunham/15459",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "Lena Pilipski",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Barrington, R.I.",
+        "highSchool": "Barrington / Scorpions ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://merrimackathletics.com/sports/womens-soccer/roster/lena-pilipski/15487",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 7,
+      "SO": 9,
+      "JR": 7,
+      "SR": 8
+    },
+    "graduatingByPos": {
+      "M": 3,
+      "?": 3,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://merrimackathletics.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:28:20Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Liliana Mantoni",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "East Longmeadow, MA",
+          "highSchool": "East Longmeadow / NEFC"
+        },
+        {
+          "number": "00",
+          "name": "Addison Israel",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Guilford, Conn.",
+          "highSchool": "Guilford / CFC ECNL"
+        },
+        {
+          "number": "1",
+          "name": "Kaitlyn Brewi",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lambertville, NJ",
+          "highSchool": "North Hunterdon / HEX FC Bucks"
+        },
+        {
+          "number": "2",
+          "name": "Kate Powers",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Maple Grove, Minn.",
+          "highSchool": "Maple Grove / Tonka Fusion Elite"
+        },
+        {
+          "number": "3",
+          "name": "Lilly Cook",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Canyon, Texas",
+          "highSchool": "Amarillo / Dallas Texans ECNL"
+        },
+        {
+          "number": "4",
+          "name": "Taylor Pedra",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Mount Sinai, N.Y.",
+          "highSchool": "Mount Sinai / New York Surf"
+        },
+        {
+          "number": "5",
+          "name": "Kellianne Caldwell",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Weymouth, Mass.",
+          "highSchool": "Tabor / FC Stars ECNL"
+        },
+        {
+          "number": "7",
+          "name": "Caleigh Christensen",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Mendon, MA",
+          "highSchool": "Nipmuc Regional / FC Stars ECNL"
+        },
+        {
+          "number": "8",
+          "name": "Liv Campbell",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "South Grafton, Mass.",
+          "highSchool": "Grafton / FC Stars ECNL"
+        },
+        {
+          "number": "9",
+          "name": "Emily McCabe",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Canton, Mass.",
+          "highSchool": "Canton / Scorpions ECNL"
+        },
+        {
+          "number": "10",
+          "name": "Kyra Whitman",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Stafford, TX",
+          "highSchool": "Fort Bend Christ / Kaptiva SA"
+        },
+        {
+          "number": "11",
+          "name": "Abby Tober",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Warwick, R.I.",
+          "highSchool": "North Kingston / Rhode Island Surf"
+        },
+        {
+          "number": "12",
+          "name": "Daniela Almeida",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Tewksbury, Mass.",
+          "highSchool": "Tewksbury / FC Stars of MA"
+        },
+        {
+          "number": "13",
+          "name": "Kylie Fuller",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "West Bridgewater, Mass.",
+          "highSchool": "West Bridgewater / Scorpions ECNL"
+        },
+        {
+          "number": "14",
+          "name": "Emily Webb",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cranston, R.I.",
+          "highSchool": "Cranston West / Rhode Island Surf"
+        },
+        {
+          "number": "15",
+          "name": "Sofia Gialanella",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Barnegat, N.J.",
+          "highSchool": "Saint Rose / Players Development Academy"
+        },
+        {
+          "number": "16",
+          "name": "Bella Keogh",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "17",
+          "name": "Sophia Keogh",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "18",
+          "name": "Shea MacDougall",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Rockland, Mass.",
+          "highSchool": "Rockland / South Shore Select ECNL"
+        },
+        {
+          "number": "19",
+          "name": "Piper Crotty",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Scituate, Mass.",
+          "highSchool": "Scituate / NEFC GA"
+        },
+        {
+          "number": "20",
+          "name": "Ava Lovergine",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Holbrook, N.Y.",
+          "highSchool": "Sachem East / SUSA ECNL"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Boughner",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Middleton, Mass.",
+          "highSchool": "Mascononomet / NEFC North Shore"
+        },
+        {
+          "number": "22",
+          "name": "Lena Pilipski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Barrington, R.I.",
+          "highSchool": "Barrington / Scorpions ECNL"
+        },
+        {
+          "number": "23",
+          "name": "Maddie Eddy",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Seekonk, MA",
+          "highSchool": "Bishop Feehan / Scorpions ECNL"
+        },
+        {
+          "number": "24",
+          "name": "Skyler Ortega",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Scottsdale, Ariz.",
+          "highSchool": "Notre Dame Prep / Arsenal ECNL"
+        },
+        {
+          "number": "25",
+          "name": "Fallon Ryan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Hull, Mass.",
+          "highSchool": "Hull / Mass City DPL"
+        },
+        {
+          "number": "26",
+          "name": "Hannah Carr",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Braintree, Mass.",
+          "highSchool": "Braintree / South Shore Select ECNL"
+        },
+        {
+          "number": "27",
+          "name": "Kat Regan",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Medfield, Mass.",
+          "highSchool": "Bishop Feehan / NEFC GA"
+        },
+        {
+          "number": "30",
+          "name": "Liv Linus",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Huntingdon Valley, Pa.",
+          "highSchool": "William Penn Charter / Real Jersey FC"
+        },
+        {
+          "number": "33",
+          "name": "Adrianna Marinello",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Salem, NH",
+          "highSchool": "Central Catholic / NEFC North Shore"
+        }
+      ],
+      "departed": [
+        "adrianna marinello",
+        "caleigh christensen",
+        "kellianne caldwell",
+        "kyra whitman",
+        "liliana mantoni",
+        "maddie eddy"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Liliana Mantoni",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "East Longmeadow, MA",
+          "highSchool": "East Longmeadow / NEFC"
+        },
+        {
+          "number": "00",
+          "name": "Lily Morgan",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Hudson, OH",
+          "highSchool": "Hudson / Cleveland FC"
+        },
+        {
+          "number": "2",
+          "name": "Ella Cormier",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Acton, Mass.",
+          "highSchool": "Acton-Boxborough / FC Stars ECNL"
+        },
+        {
+          "number": "3",
+          "name": "Lilly Cook",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Canyon, Texas",
+          "highSchool": "Amarillo / Dallas Texans ECNL"
+        },
+        {
+          "number": "4",
+          "name": "Abigail Cieri",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Matawan, NJ",
+          "highSchool": "Saint John Vianney / NJ Elite Fusion"
+        },
+        {
+          "number": "5",
+          "name": "Madelyn O'Brien",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Oswego, Ill.",
+          "highSchool": "Rosary / Evolution Soccer Club"
+        },
+        {
+          "number": "6",
+          "name": "Maria Sevastos",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mansfield, MA",
+          "highSchool": "Mansfield / NEFC"
+        },
+        {
+          "number": "7",
+          "name": "Caleigh Christensen",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Mendon, MA",
+          "highSchool": "Nipmuc Regional / FC Stars ECNL"
+        },
+        {
+          "number": "8",
+          "name": "Liv Campbell",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "South Grafton, Mass.",
+          "highSchool": "Grafton / FC Stars ECNL"
+        },
+        {
+          "number": "9",
+          "name": "Emily McCabe",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Canton, Mass.",
+          "highSchool": "Canton / Scorpions ECNL"
+        },
+        {
+          "number": "10",
+          "name": "Kyra Whitman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Stafford, TX",
+          "highSchool": "Fort Bend Christ / Kaptiva SA"
+        },
+        {
+          "number": "11",
+          "name": "Abby Tober",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Warwick, R.I.",
+          "highSchool": "North Kingston / Rhode Island Surf"
+        },
+        {
+          "number": "12",
+          "name": "Daniela Almeida",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Tewksbury, Mass.",
+          "highSchool": "Tewksbury / FC Stars of MA"
+        },
+        {
+          "number": "13",
+          "name": "Cassie Avenick",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Bristow, Va.",
+          "highSchool": "Brentsville District / Metro United DA"
+        },
+        {
+          "number": "14",
+          "name": "Emily Webb",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cranston, R.I.",
+          "highSchool": "Cranston West / Rhode Island Surf"
+        },
+        {
+          "number": "15",
+          "name": "Sofia Gialanella",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Barnegat, N.J.",
+          "highSchool": "Saint Rose / Players Development Academy"
+        },
+        {
+          "number": "16",
+          "name": "Bella Keogh",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "17",
+          "name": "Sophia Keogh",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "18",
+          "name": "Shea MacDougall",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Rockland, Mass.",
+          "highSchool": "Rockland / South Shore Select ECNL"
+        },
+        {
+          "number": "19",
+          "name": "Aja Alimonti",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Peabody, Mass.",
+          "highSchool": "Peabody / NEFC"
+        },
+        {
+          "number": "20",
+          "name": "Ava Lovergine",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Holbrook, N.Y.",
+          "highSchool": "Sachem East / SUSA ECNL"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Boughner",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Middleton, Mass.",
+          "highSchool": "Mascononomet / NEFC North Shore"
+        },
+        {
+          "number": "22",
+          "name": "Emma Rogorzenski",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "West Hartford, Conn.",
+          "highSchool": "William H. Hall / FSA SC United ECNL"
+        },
+        {
+          "number": "23",
+          "name": "Maddie Eddy",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Seekonk, MA",
+          "highSchool": "Bishop Feehan / Scorpions ECNL"
+        },
+        {
+          "number": "24",
+          "name": "Caroline Howland",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Lancaster, Mass.",
+          "highSchool": "Nashoba / FC Stars ECNL"
+        },
+        {
+          "number": "25",
+          "name": "Emely Zelayandia",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Worcester, Mass.",
+          "highSchool": "Notre Dame Academy / NEFC DPL"
+        },
+        {
+          "number": "26",
+          "name": "Jillian Golden",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Richmond Hill, Ont.",
+          "highSchool": "Bill Crothers / Vaughan Soccer Club"
+        },
+        {
+          "number": "27",
+          "name": "Julia Ostermann",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Melville, NY",
+          "highSchool": "Saint Anthony's / SUSA ECNL"
+        },
+        {
+          "number": "28",
+          "name": "Rory Parri",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Madison, CT",
+          "highSchool": "Daniel Hand / Connecticut Rush"
+        },
+        {
+          "number": "30",
+          "name": "Liv Linus",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Huntingdon Valley, Pa.",
+          "highSchool": "William Penn Charter / Real Jersey FC"
+        },
+        {
+          "number": "32",
+          "name": "Taylor Pedra",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mount Sinai, N.Y.",
+          "highSchool": "Mount Sinai / New York Surf"
+        },
+        {
+          "number": "33",
+          "name": "Adrianna Marinello",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Salem, NH",
+          "highSchool": "Central Catholic / NEFC North Shore"
+        },
+        {
+          "number": "40",
+          "name": "Kaitlyn Brewi",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lambertville, NJ",
+          "highSchool": "North Hunterdon / HEX FC Bucks"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Liliana Mantoni",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "East Longmeadow, MA",
+          "highSchool": "East Longmeadow / NEFC"
+        },
+        {
+          "number": "00",
+          "name": "Lily Morgan",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Hudson, OH",
+          "highSchool": "Hudson / Cleveland FC"
+        },
+        {
+          "number": "1",
+          "name": "Roo Sawyer",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Londonderry, N.H.",
+          "highSchool": "Londonderry / FC Stars NH"
+        },
+        {
+          "number": "2",
+          "name": "Ella Cormier",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Acton, Mass.",
+          "highSchool": "Acton-Boxborough / FC Stars ECNL"
+        },
+        {
+          "number": "3",
+          "name": "Kylie Pucci",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mahwah, NJ",
+          "highSchool": "Mahwah / World Class (ECNL)"
+        },
+        {
+          "number": "4",
+          "name": "Abigail Cieri",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Matawan, NJ",
+          "highSchool": "Saint John Vianney / NJ Elite Fusion"
+        },
+        {
+          "number": "5",
+          "name": "Madelyn O'Brien",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Oswego, Ill.",
+          "highSchool": "Rosary / Evolution Soccer Club"
+        },
+        {
+          "number": "6",
+          "name": "Maria Sevastos",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Mansfield, MA",
+          "highSchool": "Mansfield / NEFC"
+        },
+        {
+          "number": "7",
+          "name": "Caleigh Christensen",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Mendon, MA",
+          "highSchool": "Nipmuc Regional / FC Stars ECNL"
+        },
+        {
+          "number": "8",
+          "name": "Ashlee Purcell",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Wakefield, Mass.",
+          "highSchool": "Wakefield Memorial / Aztec Boston"
+        },
+        {
+          "number": "9",
+          "name": "Emily McCabe",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Canton, Mass.",
+          "highSchool": "Canton / Scorpions ECNL"
+        },
+        {
+          "number": "10",
+          "name": "Kyla Sustad",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Willet, NY",
+          "highSchool": "Cincinnatus / Syracuse Development Academy"
+        },
+        {
+          "number": "11",
+          "name": "Abby Tober",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Warwick, R.I.",
+          "highSchool": "North Kingston / Rhode Island Surf"
+        },
+        {
+          "number": "12",
+          "name": "Daniela Almeida",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tewksbury, Mass.",
+          "highSchool": "Tewksbury / FC Stars of MA"
+        },
+        {
+          "number": "13",
+          "name": "Cassie Avenick",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bristow, Va.",
+          "highSchool": "Brentsville District / Metro United DA"
+        },
+        {
+          "number": "14",
+          "name": "Emily Webb",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cranston, R.I.",
+          "highSchool": "Cranston West / Rhode Island Surf"
+        },
+        {
+          "number": "15",
+          "name": "Sofia Gialanella",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Barnegat, N.J.",
+          "highSchool": "Saint Rose / Players Development Academy"
+        },
+        {
+          "number": "16",
+          "name": "Bella Keogh",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "17",
+          "name": "Sophia Keogh",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Plaistow, N.H.",
+          "highSchool": "Timberlane / Seacoast United GA"
+        },
+        {
+          "number": "18",
+          "name": "Shea MacDougall",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Rockland, Mass.",
+          "highSchool": "Rockland / South Shore Select ECNL"
+        },
+        {
+          "number": "19",
+          "name": "Aja Alimonti",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Peabody, Mass.",
+          "highSchool": "Peabody / NEFC"
+        },
+        {
+          "number": "20",
+          "name": "Jessica Haskin",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Wynantskill, NY",
+          "highSchool": "Averill Park / Capital United - Albany"
+        },
+        {
+          "number": "22",
+          "name": "Emma Rogorzenski",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "West Hartford, Conn.",
+          "highSchool": "William H. Hall / FSA SC United ECNL"
+        },
+        {
+          "number": "23",
+          "name": "Molly Murnane",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Scarborough, Maine",
+          "highSchool": "Scarborough /Seacoast United Maine"
+        },
+        {
+          "number": "24",
+          "name": "Caroline Howland",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Lancaster, Mass.",
+          "highSchool": "Nashoba / FC Stars ECNL"
+        },
+        {
+          "number": "25",
+          "name": "Emely Zelayandia",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Worcester, Mass.",
+          "highSchool": "Notre Dame Academy / NEFC DPL"
+        },
+        {
+          "number": "26",
+          "name": "Jillian Golden",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Richmond Hill, Ont.",
+          "highSchool": "Bill Crothers / Vaughan Soccer Club"
+        },
+        {
+          "number": "27",
+          "name": "Julia Ostermann",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Melville, NY",
+          "highSchool": "Saint Anthony's / SUSA ECNL"
+        },
+        {
+          "number": "28",
+          "name": "Sydney Haskin",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Wynantskill, NY",
+          "highSchool": "Averill Park / Capital United - Albany"
+        },
+        {
+          "number": "29",
+          "name": "Meghan Burke",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Foxboro, Mass.",
+          "highSchool": "Foxboro High School / Scorpions SC"
+        },
+        {
+          "number": "31",
+          "name": "Emma Panarella",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Southington, Conn.",
+          "highSchool": "Southington / FSA FC United ECNL"
+        },
+        {
+          "number": "33",
+          "name": "Adrianna Marinello",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Salem, NH",
+          "highSchool": "Central Catholic / NEFC North Shore"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://merrimackathletics.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:28:20Z"
+    }
+  },
   "commitments": [
     {
       "id": "olivia-dunham-2026",
@@ -117,7 +1781,7 @@
       "city": "Mansfield",
       "highSchool": "",
       "college": "merrimack",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1800,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -393,41 +2057,27 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://merrimackathletics.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:57:43Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=42.668344&longitude=-71.124216&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T18:57:42Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T18:57:42Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:28:10Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

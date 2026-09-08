@@ -69,18 +69,217 @@
       "asOf": "2026-09-07T16:35:32Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 32.770816,
+    "lon": -117.192073,
+    "timezone": "America/Los_Angeles",
+    "elevationM": 4.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00023188",
+      "name": "SAN DIEGO LINDBERGH FLD",
+      "state": "CA",
+      "distanceKm": 4.2,
+      "elevationM": 4.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 66.4,
+        "tLowF": 50.3,
+        "precipIn": 1.98,
+        "snowIn": null,
+        "wetDays": 4.0,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 66.2,
+        "tLowF": 51.8,
+        "precipIn": 2.2,
+        "snowIn": null,
+        "wetDays": 4.1,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 67.0,
+        "tLowF": 54.5,
+        "precipIn": 1.46,
+        "snowIn": null,
+        "wetDays": 3.1,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 68.8,
+        "tLowF": 57.1,
+        "precipIn": 0.65,
+        "snowIn": null,
+        "wetDays": 1.7,
+        "days90F": 0.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 69.5,
+        "tLowF": 60.0,
+        "precipIn": 0.28,
+        "snowIn": null,
+        "wetDays": 0.7,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 71.7,
+        "tLowF": 62.6,
+        "precipIn": 0.05,
+        "snowIn": null,
+        "wetDays": 0.1,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 75.3,
+        "tLowF": 66.1,
+        "precipIn": 0.08,
+        "snowIn": null,
+        "wetDays": 0.1,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 77.3,
+        "tLowF": 67.5,
+        "precipIn": 0.01,
+        "snowIn": null,
+        "wetDays": 0.0,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 77.2,
+        "tLowF": 66.2,
+        "precipIn": 0.12,
+        "snowIn": null,
+        "wetDays": 0.2,
+        "days90F": 0.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 74.6,
+        "tLowF": 61.5,
+        "precipIn": 0.5,
+        "snowIn": null,
+        "wetDays": 1.1,
+        "days90F": 0.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 70.7,
+        "tLowF": 54.8,
+        "precipIn": 0.79,
+        "snowIn": null,
+        "wetDays": 1.9,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 66.0,
+        "tLowF": 49.8,
+        "precipIn": 1.67,
+        "snowIn": null,
+        "wetDays": 3.1,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      }
+    ],
+    "annualPrecipIn": 9.8,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 75.0,
+      "avgLowF": 62.5,
+      "precipIn": 1.4,
+      "wetDays": 3.0
+    },
+    "summary": "Hottest month Aug (avg high 77.3°F), coldest Dec (avg low 49.8°F). 9.8 in of rain per year. Fall season (Aug–Nov): highs around 75.0°F, 1.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00023188,USW00003131,USC00047741&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:38Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Greg LaPorte",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/coaches/greg-laporte/6028",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Greg LaPorte",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/coaches/greg-laporte/6028",
+        "social": {}
+      },
+      {
+        "name": "Jackie Altschuld",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/coaches/jackie-altschuld/6030",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Nick Boyer",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/coaches/nick-boyer/6031",
+        "social": {}
+      },
+      {
+        "name": "Joel Favor",
+        "title": "Assistant Director of Athletic Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/staff/joel-favor/198",
+        "social": {}
+      },
+      {
+        "name": "Chelsea Clarke",
+        "title": "Registered Dietician",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/staff/chelsea-clarke/200",
+        "social": {}
+      },
+      {
+        "name": "Max Fritsch",
+        "title": "Assistant Director of Strategic Communications",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/staff/max-fritsch/201",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +297,1407 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://usdtoreros.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:23:55Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "00",
+        "name": "Ilise Medrano",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "La Habra, CA / La Habra HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Finance",
+        "club": "So Cal Blues",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/ilise-medrano/13470",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Sophia Smelich",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Redondo Beach, CA / Redondo Union HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/sophia-smelich/13485",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Marissa Morales",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Gilbert, AZ / Arete Preparatory School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Phoenix Rising FC",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/marissa-morales/13473",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "3",
+        "name": "Emma Elias",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "San Diego, CA / Mater Dei Catholic HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Marketing",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/emma-elias/13463",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Clara Geuzaine",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Highlands Ranch, CO / Rock Canyon HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Real Colorado",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/clara-geuzaine/13465",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "5",
+        "name": "Kate Sealy",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "San Diego, CA / Westview HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Accountancy",
+        "club": "SDSC Surf",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/kate-sealy/13477",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Ella Callanan",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Portland, OR / Franklin HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Portland Thorns Academy",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/ella-callanan/13462",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Lily Johnson",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Murrieta, CA / Murrieta Valley High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "City SC Southwest",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/lily-johnson/13481",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Hannah Faklaris",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Atlanta, GA / Marist School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Tophat",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/hannah-faklaris/13464",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Hailey Vermilyea",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Poway, CA / Poway HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/hailey-vermilyea/13479",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Daniella Guerrero",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Lakeland, FL / McKeel Academy of Technology",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Psychology",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/daniella-guerrero/13467",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Cameron Welch",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Carlsbad, CA / San Marcos HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/cameron-welch/13483",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Maquena O'Callaghan",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Escondido, CA / San Pasqual HS",
+        "highSchool": "Auburn",
+        "previousSchool": "",
+        "major": "Business Administration",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/maquena-o-callaghan/13475",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Brianna Nesser",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Riverside, CA / Martin Luther King Jr. HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Psychology",
+        "club": "Slammers FC",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/brianna-nesser/13474",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Abby Haley",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Mission Viejo, CA / Capistrano Valley HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/abby-haley/13468",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Madeline Roder",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Walnut Creek, CA / Carondelet HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Mustang SC",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/madeline-roder/13486",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Kaylee Smith",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "San Diego, CA / Francis Parker School",
+        "highSchool": "Santa Clara",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/kaylee-smith/13488",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Mia Teran",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Temecula, CA / St. Jeanne de Lestonnac",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/mia-teran/13484",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Ruby Shoots",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Crofton, MD / Crofton HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Environmental & Ocean Science",
+        "club": "Pipeline SC",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/ruby-shoots/13478",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "21",
+        "name": "Gianna Melton",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "San Clemente, CA / San Clemente HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/gianna-melton/13471",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Macy Ratermann",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Diego, CA / Westview HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "SDSC Surf",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/macy-ratermann/13476",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "23",
+        "name": "Elise Miller",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Gig Harbor, WA / Gig Harbor HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Pacific Northwest Soccer Club",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/elise-miller/13472",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "24",
+        "name": "Chloe Walls",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Chula Vista, CA / Francis Parker School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Slammers HB Køge",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/chloe-walls/13480",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "25",
+        "name": "Paige Bickley",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Carlsbad, CA / Santa Fe Christian",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "City SC",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/paige-bickley/13461",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "27",
+        "name": "Tamia Graham",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dublin, Ohio / Dublin Scioto HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Behavioral Neuroscience",
+        "club": "Cincinnati United Premier",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/tamia-graham/13466",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "28",
+        "name": "Jonnie Quiroz",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Agoura Hill, CA / Oaks Christian High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/jonnie-quiroz/13482",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Veronica Osejo",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Benicia, CA / Benicia HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pleasanton Rage",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/veronica-osejo/13487",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "Makenna Liebman",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Scottsdale, AZ / Notre Dame Prep",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/makenna-liebman/13469",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "77",
+        "name": "Amanda Anders",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Marcos, CA / Mission Hills HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://usdtoreros.com/sports/womens-soccer/roster/amanda-anders/13459",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 1,
+        "SO": 0,
+        "R-SO": 2,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 2,
+        "SO": 2,
+        "R-SO": 2,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 1,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 2,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 6,
+      "FR": 7,
+      "JR": 2,
+      "R-SO": 5,
+      "SO": 3,
+      "R-SR": 1,
+      "R-FR": 5
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 3,
+      "D": 2,
+      "F": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://usdtoreros.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:23:55Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Aliya Garrett",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Banff, Canada / Sunrise Mountain HS",
+          "highSchool": "Salt Lake CC"
+        },
+        {
+          "number": "00",
+          "name": "Ilise Medrano",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "La Habra, CA / La Habra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Marissa Morales",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Gilbert, AZ / Arete Preparatory School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Emma Elias",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "San Diego, CA / Mater Dei Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Clara Geuzaine",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Highlands Ranch, CO / Rock Canyon HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Kate Sealy",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "San Diego, CA / Westview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ella Callanan",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Portland, OR / Franklin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Jenna Rubidoux",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "El Cajon, CA / Christian HS",
+          "highSchool": "Air Force"
+        },
+        {
+          "number": "8",
+          "name": "Hannah Faklaris",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Atlanta, GA / Marist School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Olivia Jandreski",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Diego, CA / Torrey Pines HS",
+          "highSchool": "Grand Canyon"
+        },
+        {
+          "number": "10",
+          "name": "Daniella Guerrero",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Lakeland, FL / McKeel Academy of Technology",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Katelyn Bessemer",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Elk Grove, CA / Pleasant Grove HS",
+          "highSchool": "Sacramento State"
+        },
+        {
+          "number": "12",
+          "name": "Maquena O'Callaghan",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Escondido, CA / San Pasqual HS",
+          "highSchool": "Auburn"
+        },
+        {
+          "number": "13",
+          "name": "Brianna Nesser",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Riverside, CA / Martin Luther King Jr. HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Abby Haley",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Mission Viejo, CA / Capistrano Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Kylie Smith",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Centennial, CO / Smoky Hill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Emma Gonzalez",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Orange, CA / Orange Lutheran HS",
+          "highSchool": "UC Riverside"
+        },
+        {
+          "number": "17",
+          "name": "Mikayla Abrenica",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Temecula, CA / Great Oak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Abigail Colton",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Carlsbad, CA / La Costa Canyon HS",
+          "highSchool": "Wake Forest"
+        },
+        {
+          "number": "19",
+          "name": "Josefine Schlichting",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Sollstedt, Germany / Sportgymnasium Jena",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Ruby Shoots",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Crofton, MD / Crofton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Gianna Melton",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "San Clemente, CA / San Clemente HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Macy Ratermann",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "San Diego, CA / Westview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Elise Miller",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Gig Harbor, WA / Gig Harbor HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Chloe Walls",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Chula Vista, CA / Francis Parker School",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Paige Bickley",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Carlsbad, CA / Santa Fe Christian",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Tamia Graham",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Dublin, Ohio / Dublin Scioto HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Hailey Vermilyea",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Poway, CA / Poway HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Makenna Liebman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Scottsdale, AZ / Notre Dame Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Amanda Anders",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "San Marcos, CA / Mission Hills HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "abigail colton",
+        "aliya garrett",
+        "emma gonzalez",
+        "jenna rubidoux",
+        "josefine schlichting",
+        "katelyn bessemer",
+        "kylie smith",
+        "mikayla abrenica",
+        "olivia jandreski"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Aliya Garrett",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Banff, Canada / Sunrise Mountain HS",
+          "highSchool": "Salt Lake CC"
+        },
+        {
+          "number": "00",
+          "name": "Ilise Medrano",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "La Habra, CA / La Habra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Chloe Walls",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Chula Vista, CA / Francis Parker School",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Marissa Morales",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Gilbert, AZ / Arete Preparatory School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Lexi Zandonella-Arasa",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Concord, Calif. / Carondelet HS",
+          "highSchool": "Sonoma State"
+        },
+        {
+          "number": "4",
+          "name": "Clara Geuzaine",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Highlands Ranch, CO / Rock Canyon HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Kate Sealy",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "San Diego, CA / Westview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ella Callanan",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Portland, OR / Franklin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Sara Evans",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Fayetteville, Ga. / Starr's Mill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Katie Baxter",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Sammamish, Wash. / Eastside Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Daniella Guerrero",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Lakeland, FL / McKeel Academy of Technology",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Ashley Wright",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Gig Harbor, Wash. / Gig Harbor HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Margaret Rabbitt",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Concord, Mass. / Concord-Carlisle Regional HS",
+          "highSchool": "George Washington"
+        },
+        {
+          "number": "13",
+          "name": "Brianna Nesser",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Riverside, CA / Martin Luther King Jr. HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Lexi Nobles",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "North Tustin, Calif. / Foothill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Kylie Smith",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Centennial, CO / Smoky Hill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "My Haugland Sørsdahl",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Moss, Norway / Wang Toppidrett",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "17",
+          "name": "Mikayla Abrenica",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Temecula, CA / Great Oak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Hannah Faklaris",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Atlanta, GA / Marist School",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Josefine Schlichting",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sollstedt, Germany / Sportgymnasium Jena",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Ruby Shoots",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Crofton, MD / Crofton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Rhea Pearson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Salt Lake City, Utah / East HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Katelyn Bessemer",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Elk Grove, CA / Pleasant Grove HS",
+          "highSchool": "Sacramento State"
+        },
+        {
+          "number": "24",
+          "name": "Lauren Tanner",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Truckee, Calif. / Tahoe Truckee HS",
+          "highSchool": "Arkansas"
+        },
+        {
+          "number": "25",
+          "name": "Molly Quarry",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Bowen Island, Canada / Burnaby Central HS",
+          "highSchool": "Nebraska"
+        },
+        {
+          "number": "26",
+          "name": "Maquena O'Callaghan",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Escondido, CA / San Pasqual HS",
+          "highSchool": "Auburn"
+        },
+        {
+          "number": "27",
+          "name": "Jenn Hashimoto",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "North Vancouver, Canada / Burnaby Central Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Jenna Rubidoux",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "El Cajon, CA / Christian HS",
+          "highSchool": "Air Force"
+        },
+        {
+          "number": "29",
+          "name": "Aba Dunbar",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Coronado, Calif. / Coronado HS",
+          "highSchool": "Notre Dame"
+        },
+        {
+          "number": "30",
+          "name": "Tamia Graham",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Dublin, Ohio / Dublin Scioto HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Emma Elias",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "San Diego, CA / Mater Dei Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Olivia Jandreski",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Diego, CA / Torrey Pines HS",
+          "highSchool": "Grand Canyon"
+        },
+        {
+          "number": "33",
+          "name": "Natalie Yoo",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Austin, Texas / Lake Travis HS",
+          "highSchool": "Texas A&M"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Ilise Medrano",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "La Habra, CA / La Habra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Sophine Kevorkian",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "San Diego, CA / La Jolla HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Maronne Suzuki",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Seattle, WA / Ingraham HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Lexi Zandonella-Arasa",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Concord, Calif. / Carondelet HS",
+          "highSchool": "Sonoma State"
+        },
+        {
+          "number": "4",
+          "name": "Olivia Stone",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Austin, TX / Regents School",
+          "highSchool": "Northwestern & Vanderbilt"
+        },
+        {
+          "number": "6",
+          "name": "Laney Steed",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Sharpsburg, GA / East Coweta HS",
+          "highSchool": "Florida"
+        },
+        {
+          "number": "7",
+          "name": "Sara Evans",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Fayetteville, Ga. / Starr's Mill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Emma Thielbahr",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Sandpoint, ID / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Katie Baxter",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Sammamish, Wash. / Eastside Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Bella Piete",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Alpine, CA / West Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Ashley Wright",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Gig Harbor, Wash. / Gig Harbor HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Kate Sealy",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Diego, CA / Westview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Lexi Nobles",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "North Tustin, Calif. / Foothill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Kylie Smith",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Centennial, CO / Smoky Hill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Ruby Shoots",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Crofton, MD / Crofton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Mikayla Abrenica",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Temecula, CA / Great Oak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Brianna Pearson",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Corona, CA / Norco HS",
+          "highSchool": "Utah"
+        },
+        {
+          "number": "19",
+          "name": "Josefine Schlichting",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Sollstedt, Germany / Sportgymnasium Jena",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kylie Perez",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cerritos, CA / Gahr HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Talei Moodie",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Oakland, CA / Saint Mary's College HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Kamryn Simpson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Antonio, TX / Ladybird Johnson HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Lauren Tanner",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Truckee, Calif. / Tahoe Truckee HS",
+          "highSchool": "Arkansas"
+        },
+        {
+          "number": "26",
+          "name": "Daniella Guerrero",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lakeland, FL / McKeel Academy of Technology",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Jenn Hashimoto",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "North Vancouver, Canada / Burnaby Central Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Elle Mullard",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Phoenix, Ariz. / Phoenix Country Day",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Aba Dunbar",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Coronado, Calif. / Coronado HS",
+          "highSchool": "Notre Dame"
+        },
+        {
+          "number": "30",
+          "name": "Tamia Graham",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Dublin, Ohio / Dublin Scioto HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://usdtoreros.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:23:55Z"
+    }
+  },
   "commitments": [
     {
       "id": "lily-johnson-2026",
@@ -117,7 +1710,7 @@
       "city": "",
       "highSchool": "",
       "college": "san-diego",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1729,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1745,7 @@
       "city": "Concord",
       "highSchool": "",
       "college": "san-diego",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1764,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -187,7 +1780,7 @@
       "city": "",
       "highSchool": "",
       "college": "san-diego",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -206,7 +1799,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -455,41 +2048,27 @@
     "2027": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://usdtoreros.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T16:38:06Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=32.770816&longitude=-117.192073&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_An",
-        "at": "2026-09-07T16:38:04Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T16:38:04Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:23:45Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

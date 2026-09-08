@@ -1,145 +1,152 @@
 {
   "collector": "climate",
-  "sourceUrl": "https://archive-api.open-meteo.com/v1/archive?latitude=47.65538&longitude=-122.30514&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_Angeles",
-  "fetchedAt": "2026-09-07T04:55:29Z",
-  "provider": "Open-Meteo ERA5",
+  "sourceUrl": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094290,USW00024234,USW00094248&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+  "fetchedAt": "2026-09-08T00:51:37Z",
+  "provider": "NOAA NCEI 1991-2020 U.S. Climate Normals (monthly)",
   "fromCache": false,
   "data": {
     "lat": 47.65538,
     "lon": -122.30514,
     "timezone": "America/Los_Angeles",
-    "elevationM": 50.0,
+    "elevationM": 18.3,
     "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094290",
+      "name": "SEATTLE SAND PT WSFO",
+      "state": "WA",
+      "distanceKm": 5.1,
+      "elevationM": 18.3
+    },
     "monthly": [
       {
         "month": "Jan",
-        "tHighF": 45.0,
-        "tLowF": 35.9,
-        "precipIn": 6.96,
-        "snowIn": 2.1,
-        "wetDays": 17.9,
+        "tHighF": 47.4,
+        "tLowF": 37.2,
+        "precipIn": 5.14,
+        "snowIn": 0.9,
+        "wetDays": 12.2,
         "days90F": 0.0,
-        "daysFreeze": 8.2
+        "daysFreeze": 7.3
       },
       {
         "month": "Feb",
-        "tHighF": 47.4,
-        "tLowF": 35.5,
-        "precipIn": 4.59,
-        "snowIn": 1.7,
-        "wetDays": 14.4,
+        "tHighF": 49.8,
+        "tLowF": 37.0,
+        "precipIn": 3.54,
+        "snowIn": 1.0,
+        "wetDays": 9.1,
         "days90F": 0.0,
-        "daysFreeze": 7.2
+        "daysFreeze": 6.0
       },
       {
         "month": "Mar",
-        "tHighF": 51.1,
-        "tLowF": 37.9,
-        "precipIn": 5.32,
-        "snowIn": 0.7,
-        "wetDays": 17.3,
+        "tHighF": 53.9,
+        "tLowF": 39.2,
+        "precipIn": 3.86,
+        "snowIn": 0.0,
+        "wetDays": 10.7,
         "days90F": 0.0,
-        "daysFreeze": 3.1
+        "daysFreeze": 2.0
       },
       {
         "month": "Apr",
-        "tHighF": 55.8,
-        "tLowF": 41.1,
-        "precipIn": 4.34,
-        "snowIn": 0.1,
-        "wetDays": 15.0,
+        "tHighF": 58.8,
+        "tLowF": 42.8,
+        "precipIn": 2.98,
+        "snowIn": 0.0,
+        "wetDays": 8.8,
         "days90F": 0.0,
-        "daysFreeze": 0.6
+        "daysFreeze": 0.1
       },
       {
         "month": "May",
-        "tHighF": 62.2,
-        "tLowF": 46.9,
-        "precipIn": 3.07,
+        "tHighF": 65.3,
+        "tLowF": 48.3,
+        "precipIn": 2.16,
         "snowIn": 0.0,
-        "wetDays": 12.2,
+        "wetDays": 6.4,
         "days90F": 0.0,
         "daysFreeze": 0.0
       },
       {
         "month": "Jun",
-        "tHighF": 66.9,
-        "tLowF": 51.7,
-        "precipIn": 2.7,
+        "tHighF": 70.2,
+        "tLowF": 52.7,
+        "precipIn": 1.57,
         "snowIn": 0.0,
-        "wetDays": 10.2,
-        "days90F": 0.0,
+        "wetDays": 4.7,
+        "days90F": 0.2,
         "daysFreeze": 0.0
       },
       {
         "month": "Jul",
-        "tHighF": 73.7,
-        "tLowF": 56.2,
-        "precipIn": 1.25,
+        "tHighF": 76.5,
+        "tLowF": 56.5,
+        "precipIn": 0.78,
         "snowIn": 0.0,
-        "wetDays": 5.8,
-        "days90F": 0.4,
+        "wetDays": 2.1,
+        "days90F": 1.0,
         "daysFreeze": 0.0
       },
       {
         "month": "Aug",
-        "tHighF": 74.1,
-        "tLowF": 56.8,
-        "precipIn": 1.52,
+        "tHighF": 77.0,
+        "tLowF": 57.1,
+        "precipIn": 1.0,
         "snowIn": 0.0,
-        "wetDays": 5.0,
-        "days90F": 0.1,
+        "wetDays": 2.7,
+        "days90F": 0.8,
         "daysFreeze": 0.0
       },
       {
         "month": "Sep",
-        "tHighF": 68.2,
-        "tLowF": 52.7,
-        "precipIn": 2.71,
+        "tHighF": 71.3,
+        "tLowF": 53.2,
+        "precipIn": 1.74,
         "snowIn": 0.0,
-        "wetDays": 8.8,
-        "days90F": 0.0,
+        "wetDays": 4.6,
+        "days90F": 0.1,
         "daysFreeze": 0.0
       },
       {
         "month": "Oct",
-        "tHighF": 57.9,
-        "tLowF": 46.0,
-        "precipIn": 5.43,
+        "tHighF": 60.5,
+        "tLowF": 46.7,
+        "precipIn": 3.65,
         "snowIn": 0.0,
-        "wetDays": 14.4,
+        "wetDays": 8.8,
         "days90F": 0.0,
-        "daysFreeze": 0.2
+        "daysFreeze": 0.1
       },
       {
         "month": "Nov",
-        "tHighF": 49.2,
-        "tLowF": 39.9,
-        "precipIn": 7.78,
-        "snowIn": 1.0,
-        "wetDays": 18.0,
+        "tHighF": 51.9,
+        "tLowF": 40.9,
+        "precipIn": 5.85,
+        "snowIn": 0.2,
+        "wetDays": 12.3,
         "days90F": 0.0,
-        "daysFreeze": 2.8
+        "daysFreeze": 2.7
       },
       {
         "month": "Dec",
-        "tHighF": 44.0,
-        "tLowF": 35.8,
-        "precipIn": 7.03,
-        "snowIn": 2.7,
-        "wetDays": 17.7,
+        "tHighF": 46.5,
+        "tLowF": 37.0,
+        "precipIn": 5.55,
+        "snowIn": 1.7,
+        "wetDays": 12.1,
         "days90F": 0.0,
-        "daysFreeze": 7.7
+        "daysFreeze": 6.7
       }
     ],
-    "annualPrecipIn": 52.7,
-    "annualSnowIn": 8.3,
+    "annualPrecipIn": 37.8,
+    "annualSnowIn": 3.8,
     "fallSeason": {
-      "avgHighF": 62.4,
-      "avgLowF": 48.9,
-      "precipIn": 17.4,
-      "wetDays": 46.0
+      "avgHighF": 65.2,
+      "avgLowF": 49.5,
+      "precipIn": 12.2,
+      "wetDays": 28.0
     },
-    "summary": "Hottest month Aug (avg high 74.1°F), coldest Feb (avg low 35.5°F). 52.7 in of rain per year, 8.3 in of snow. Fall season (Aug–Nov): highs around 62.4°F, 17.4 in of rain over the season."
+    "summary": "Hottest month Aug (avg high 77.0°F), coldest Feb (avg low 37.0°F). 37.8 in of rain per year, 3.8 in of snow. Fall season (Aug–Nov): highs around 65.2°F, 12.2 in of rain over the season."
   }
 }

@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T06:22:02Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.679577,
+    "lon": -75.752822,
+    "timezone": "America/New_York",
+    "elevationM": 24.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013781",
+      "name": "WILMINGTON NEW CASTLE CO AP",
+      "state": "DE",
+      "distanceKm": 13.0,
+      "elevationM": 24.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 41.4,
+        "tLowF": 25.6,
+        "precipIn": 3.23,
+        "snowIn": 6.1,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 23.6
+      },
+      {
+        "month": "Feb",
+        "tHighF": 44.1,
+        "tLowF": 27.0,
+        "precipIn": 2.83,
+        "snowIn": 7.8,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 21.2
+      },
+      {
+        "month": "Mar",
+        "tHighF": 52.5,
+        "tLowF": 33.9,
+        "precipIn": 4.16,
+        "snowIn": 3.1,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 14.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 64.2,
+        "tLowF": 43.5,
+        "precipIn": 3.51,
+        "snowIn": 0.1,
+        "wetDays": 6.5,
+        "days90F": 0.1,
+        "daysFreeze": 2.0
+      },
+      {
+        "month": "May",
+        "tHighF": 73.5,
+        "tLowF": 53.4,
+        "precipIn": 3.57,
+        "snowIn": 0.0,
+        "wetDays": 6.7,
+        "days90F": 1.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.2,
+        "tLowF": 63.0,
+        "precipIn": 4.67,
+        "snowIn": 0.0,
+        "wetDays": 7.0,
+        "days90F": 3.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.8,
+        "tLowF": 68.3,
+        "precipIn": 4.41,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 9.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.9,
+        "tLowF": 66.6,
+        "precipIn": 3.98,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 5.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 78.5,
+        "tLowF": 59.3,
+        "precipIn": 4.38,
+        "snowIn": 0.0,
+        "wetDays": 5.9,
+        "days90F": 1.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 67.0,
+        "tLowF": 47.3,
+        "precipIn": 3.68,
+        "snowIn": 0.0,
+        "wetDays": 5.5,
+        "days90F": 0.1,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.9,
+        "tLowF": 37.4,
+        "precipIn": 3.06,
+        "snowIn": 0.2,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 9.9
+      },
+      {
+        "month": "Dec",
+        "tHighF": 46.0,
+        "tLowF": 30.3,
+        "precipIn": 3.85,
+        "snowIn": 2.9,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 20.1
+      }
+    ],
+    "annualPrecipIn": 45.3,
+    "annualSnowIn": 20.2,
+    "fallSeason": {
+      "avgHighF": 71.6,
+      "avgLowF": 52.6,
+      "precipIn": 15.1,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 86.8°F), coldest Jan (avg low 25.6°F). 45.3 in of rain per year, 20.2 in of snow. Fall season (Aug–Nov): highs around 71.6°F, 15.1 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013781,USW00003761,USC00076410&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:46Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,8 +228,58 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Kelly Lawrence",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/coaches/kelly-lawrence/5684",
+        "social": {}
+      },
+      {
+        "name": "Shannon Coley",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/coaches/shannon-coley/5685",
+        "social": {}
+      },
+      {
+        "name": "Adam Richardson",
+        "title": "Assistant Coach/Director, Program Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/coaches/adam-richardson/5687",
+        "social": {}
+      },
+      {
+        "name": "Mesiah Polycarpe, BS, CSCS, USAW, PN1, APCC",
+        "title": "Assistant Strength and Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/staff/mesiah--polycarpe-bs-cscs-usaw-pn-apcc/551",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Sarah Jefferson, MS, ATC",
+        "title": "Assistant Athletic Trainer Contact: W. Soccer, Tennis",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/staff/sarah-jefferson-ms-atc/650",
+        "social": {}
+      },
+      {
+        "name": "Nick Vuylsteke",
+        "title": "Assistant Director, Communications and Creative Services Contact: W. Soccer, Swimming & Diving, Baseball, Secondary W. Basketball",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/staff/nick-vuylsteke/512",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +297,2758 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://bluehens.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:16:54Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "3-0-3",
+      "wins": 3,
+      "losses": 0,
+      "ties": 3,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": null
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "10-2-6",
+      "wins": 10,
+      "losses": 2,
+      "ties": 6,
+      "confRecord": "3-2-3",
+      "rpiRank": 144,
+      "rpi": {
+        "rank": 144,
+        "record": "10-2-6",
+        "through": "2025-12-08",
+        "prevRank": 147,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 144,
+            "record": "10-2-6"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "6-7-6",
+      "wins": 6,
+      "losses": 7,
+      "ties": 6,
+      "confRecord": "4-2-4",
+      "rpiRank": 166,
+      "rpi": {
+        "rank": 166,
+        "sosRank": 181,
+        "balancedRank": 180,
+        "kpiRank": 148,
+        "masseyRank": 183,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "5-5-8",
+      "wins": 5,
+      "losses": 5,
+      "ties": 8,
+      "confRecord": "2-3-7",
+      "rpiRank": 224,
+      "rpi": {
+        "rank": 224,
+        "sosRank": 204,
+        "balancedRank": 216,
+        "kpiRank": 183,
+        "masseyRank": 209,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "0",
+        "name": "Charlotte Kulikosky",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Arlington, Va.",
+        "highSchool": "Washington-Liberty",
+        "previousSchool": "",
+        "major": "Economics",
+        "club": "Arlington Soccer",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/charlotte-kulikosky/30894",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Sophia Hall",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Malvern, Pa.",
+        "highSchool": "Academy of Notre Dame",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/sophia-hall/30892",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Maura Fisher",
+        "pos": "D/M",
+        "posLabel": "Defense/Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Chester, Pa.",
+        "highSchool": "Reed Henderson",
+        "previousSchool": "",
+        "major": "Biomedical Engineering",
+        "club": "Penn Fusion",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/maura-fisher/30889",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Claire Ballinger",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Downingtown, Pa.",
+        "highSchool": "Agnes Irwin",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Athletic Club",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/claire-ballinger/32033",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Tessa Poremba",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Ashburn, Va.",
+        "highSchool": "Independence",
+        "previousSchool": "",
+        "major": "Criminal Justice",
+        "club": "Northern Virginia Alliance",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/tessa-poremba/32035",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Ava Ticconi",
+        "pos": "D/M",
+        "posLabel": "Defense/Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ontario, Canada",
+        "highSchool": "Assumption Catholic Secondary",
+        "previousSchool": "",
+        "major": "University Studies",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/ava-ticconi/30903",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Ava Sallee",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fleetwood, Pa.",
+        "highSchool": "Fleetwood Area High School",
+        "previousSchool": "",
+        "major": "Communications",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/ava-sallee/30901",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Cassandra Saldarini",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Morris Plains, N.J.",
+        "highSchool": "Parsippany Hills",
+        "previousSchool": "",
+        "major": "Health Sciences",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/cassandra-saldarini/30900",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Sarah Fritz",
+        "pos": "M/F",
+        "posLabel": "Midfield/Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mifflinburg, Pa.",
+        "highSchool": "Mifflinburg Area High School",
+        "previousSchool": "",
+        "major": "Nutrition and Dietetics",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/sarah-fritz/30890",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Adiat Olaogun-Dickson",
+        "pos": "M/F",
+        "posLabel": "Midfield/Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Sicklerville, N.J.",
+        "highSchool": "Timber Creek Regional",
+        "previousSchool": "",
+        "major": "Management",
+        "club": "FC DELCO",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/adiat-olaogundickson/30895",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "11",
+        "name": "Ava Agresti",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Monmouth Beach, N.J.",
+        "highSchool": "Shore Regional",
+        "previousSchool": "",
+        "major": "Fashion Merchandising/Management",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/ava-agresti/30885",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Maggie Holloway",
+        "pos": "M/F",
+        "posLabel": "Midfield/Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Douglassville, Pa.",
+        "highSchool": "Daniel Boone Area High School",
+        "previousSchool": "",
+        "major": "Kinesiology",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/maggie-holloway/30893",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Willa Pratt",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sauquoit, N.Y.",
+        "highSchool": "New Hartford",
+        "previousSchool": "",
+        "major": "Biomedical Engineering",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/willa-pratt/30896",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Olivia Bley",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "West Chester, Pa.",
+        "highSchool": "Westtown School",
+        "previousSchool": "",
+        "major": "Business Analytics",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/olivia-bley/30887",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Rianna Khananisho",
+        "pos": "D/M",
+        "posLabel": "Defense/Midfield",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Toronto, Ontario",
+        "highSchool": "Holy Cross Catholic Academy",
+        "previousSchool": "",
+        "major": "Business Undeclared",
+        "club": "Woodbridge SC",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/rianna-khananisho/32036",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Maggie Groh",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "York, Pa.",
+        "highSchool": "Dallastown",
+        "previousSchool": "",
+        "major": "Kinesiology",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/maggie-groh/30891",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Olivia Pillitteri",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Toronto, Ontario",
+        "highSchool": "Holy Cross Catholic Academy",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/olivia-pillitteri/32034",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Julia Hahn",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Columbus, Ohio",
+        "highSchool": "Upper Arlington",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/julia-hahn/30907",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Gabby Riley",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Middletown, Del.",
+        "highSchool": "Middletown High School",
+        "previousSchool": "",
+        "major": "Kinesiology",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/gabby-riley/30899",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Reese Reimann",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bridgewater, N.J.",
+        "highSchool": "Bridgewater-Raritan",
+        "previousSchool": "",
+        "major": "Kinesiology",
+        "club": "PDA",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/reese-reimann/32032",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Calista Collins",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "River Edge, N.J.",
+        "highSchool": "Saddler River Day School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/calista-collins/30888",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Gianna Berkley",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Jackson, N.J.",
+        "highSchool": "Jackson Memorial",
+        "previousSchool": "",
+        "major": "University Studies",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/gianna-berkley/30886",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Taisiya Reid",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Solomons, Md.",
+        "highSchool": "Patuxent",
+        "previousSchool": "",
+        "major": "Sports Health",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/taisiya-reid/30897",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Brooke Vogel",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mickleton, N.J.",
+        "highSchool": "Gloucester County Institute of Technology",
+        "previousSchool": "",
+        "major": "Finance",
+        "club": "Penn Fusion",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/brooke-vogel/30905",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "32",
+        "name": "Sophia Zeppos",
+        "pos": "M/F",
+        "posLabel": "Midfield/Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Reading, Pa.",
+        "highSchool": "Wyomissing Area",
+        "previousSchool": "",
+        "major": "Business Undeclared",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/sophia-zeppos/30906",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "99",
+        "name": "Leah Rhinehart",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fallston, Md.",
+        "highSchool": "Fallston High School",
+        "previousSchool": "",
+        "major": "Computer Science",
+        "club": "",
+        "bioUrl": "https://bluehens.com/sports/womens-soccer/roster/leah-rhinehart/30898",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 4,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 7,
+      "FR": 5,
+      "JR": 9,
+      "SR": 5
+    },
+    "graduatingByPos": {
+      "F": 3,
+      "M": 1,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://bluehens.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:16:54Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Charlotte Kulikosky",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Arlington, Va.",
+          "highSchool": "Washington-Liberty"
+        },
+        {
+          "number": "1",
+          "name": "Sophia Hall",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Malvern, Pa.",
+          "highSchool": "Academy of Notre Dame"
+        },
+        {
+          "number": "2",
+          "name": "Maura Fisher",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "Reed Henderson"
+        },
+        {
+          "number": "4",
+          "name": "Ava Ticconi",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Ontario, Canada",
+          "highSchool": "Assumption Catholic Secondary"
+        },
+        {
+          "number": "6",
+          "name": "Leilah Sallee",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fleetwood, Pa.",
+          "highSchool": "Fleetwood Area HS"
+        },
+        {
+          "number": "7",
+          "name": "Ava Sallee",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Fleetwood, Pa.",
+          "highSchool": "Fleetwood Area High School"
+        },
+        {
+          "number": "8",
+          "name": "Cassandra Saldarini",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Morris Plains, N.J.",
+          "highSchool": "Parsippany Hills"
+        },
+        {
+          "number": "9",
+          "name": "Sarah Fritz",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Mifflinburg, Pa.",
+          "highSchool": "Mifflinburg Area High School"
+        },
+        {
+          "number": "10",
+          "name": "Adiat Olaogun-Dickson",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Sicklerville, N.J.",
+          "highSchool": "Timber Creek Regional"
+        },
+        {
+          "number": "11",
+          "name": "Ava Agresti",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Monmouth Beach, N.J.",
+          "highSchool": "Shore Regional"
+        },
+        {
+          "number": "12",
+          "name": "Maggie Holloway",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Douglassville, Pa.",
+          "highSchool": "Daniel Boone Area High School"
+        },
+        {
+          "number": "13",
+          "name": "Willa Pratt",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sauquoit, N.Y.",
+          "highSchool": "New Hartford"
+        },
+        {
+          "number": "14",
+          "name": "Olivia Bley",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "Westtown School"
+        },
+        {
+          "number": "15",
+          "name": "Lilli Lubic",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Ashburn, Va.",
+          "highSchool": "Independence"
+        },
+        {
+          "number": "16",
+          "name": "Maggie Groh",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "York, Pa.",
+          "highSchool": "Dallastown"
+        },
+        {
+          "number": "17",
+          "name": "Alayna Eyman",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "North East, Md.",
+          "highSchool": "Rising Sun"
+        },
+        {
+          "number": "20",
+          "name": "Gabby Riley",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Middletown, Del.",
+          "highSchool": "Middletown High School"
+        },
+        {
+          "number": "21",
+          "name": "Ryan Mundy",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Wilmington, Del.",
+          "highSchool": "The Charter School of Wilmington"
+        },
+        {
+          "number": "22",
+          "name": "Calista Collins",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "River Edge, N.J.",
+          "highSchool": "Saddler River Day School"
+        },
+        {
+          "number": "24",
+          "name": "Gianna Berkley",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Jackson, N.J.",
+          "highSchool": "Jackson Memorial"
+        },
+        {
+          "number": "25",
+          "name": "Taisiya Reid",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Solomons, Md.",
+          "highSchool": "Patuxent"
+        },
+        {
+          "number": "26",
+          "name": "Brooke Vogel",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mickleton, N.J.",
+          "highSchool": "Gloucester County Institute of Technology"
+        },
+        {
+          "number": "27",
+          "name": "Olivia Hoover",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Glen Ridge, NJ",
+          "highSchool": "Glen Ridge HS"
+        },
+        {
+          "number": "32",
+          "name": "Sophia Zeppos",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Reading, Pa.",
+          "highSchool": "Wyomissing Area"
+        },
+        {
+          "number": "33",
+          "name": "Constanze Viehmann",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ladenburg, Germany",
+          "highSchool": "TSG 1899 Hoffenheim"
+        },
+        {
+          "number": "99",
+          "name": "Leah Rhinehart",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Fallston, Md.",
+          "highSchool": "Fallston High School"
+        }
+      ],
+      "departed": [
+        "alayna eyman",
+        "constanze viehmann",
+        "leilah sallee",
+        "lilli lubic",
+        "olivia hoover",
+        "ryan mundy"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelly Chittenden",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Ridgefield, Conn.",
+          "highSchool": "Ridgefield High School"
+        },
+        {
+          "number": "1",
+          "name": "Mia Reed",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Manheim, Pa.",
+          "highSchool": "Manheim Central"
+        },
+        {
+          "number": "2",
+          "name": "Carly Binn",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Middletown, N.J.",
+          "highSchool": "Middletown North"
+        },
+        {
+          "number": "3",
+          "name": "Morgan Tilley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Neptune City, N.J.",
+          "highSchool": "Saint John's Catholic Prep"
+        },
+        {
+          "number": "4",
+          "name": "Laura Fluegge",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Dessau, Germany",
+          "highSchool": "Sportschule Potsdam"
+        },
+        {
+          "number": "5",
+          "name": "Caitlin St. Leger",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bear, Del.",
+          "highSchool": "Caravel Academy"
+        },
+        {
+          "number": "6",
+          "name": "Leilah Sallee",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Fleetwood, Pa.",
+          "highSchool": "Fleetwood Area HS"
+        },
+        {
+          "number": "7",
+          "name": "Ava Sallee",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fleetwood, Pa.",
+          "highSchool": "Fleetwood Area High School"
+        },
+        {
+          "number": "8",
+          "name": "Cassandra Saldarini",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Morris Plains, N.J.",
+          "highSchool": "Parsippany Hills"
+        },
+        {
+          "number": "9",
+          "name": "Sarah Fritz",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Mifflinburg, Pa.",
+          "highSchool": "Mifflinburg Area High School"
+        },
+        {
+          "number": "10",
+          "name": "Paige Kenton",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Wilmington, Del.",
+          "highSchool": "Padua Academy"
+        },
+        {
+          "number": "11",
+          "name": "Ava Agresti",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Monmouth Beach, N.J.",
+          "highSchool": "Shore Regional"
+        },
+        {
+          "number": "12",
+          "name": "Maggie Holloway",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Douglassville, Pa.",
+          "highSchool": "Daniel Boone Area High School"
+        },
+        {
+          "number": "13",
+          "name": "Willa Pratt",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Sauquoit, N.Y.",
+          "highSchool": "New Hartford"
+        },
+        {
+          "number": "14",
+          "name": "Olivia Bley",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "Westtown School"
+        },
+        {
+          "number": "16",
+          "name": "Maggie Groh",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "York, Pa.",
+          "highSchool": "Dallastown"
+        },
+        {
+          "number": "17",
+          "name": "Alayna Eyman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "North East, Md.",
+          "highSchool": "Rising Sun"
+        },
+        {
+          "number": "18",
+          "name": "Sydni Wright",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bear, Del.",
+          "highSchool": "Padua Academy"
+        },
+        {
+          "number": "19",
+          "name": "Sydney Adkins",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Harrisburg, Pa.",
+          "highSchool": "Central Dauphin"
+        },
+        {
+          "number": "20",
+          "name": "Gabby Riley",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Middletown, Del.",
+          "highSchool": "Middletown High School"
+        },
+        {
+          "number": "21",
+          "name": "Ryan Mundy",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Wilmington, Del.",
+          "highSchool": "The Charter School of Wilmington"
+        },
+        {
+          "number": "22",
+          "name": "Calista Collins",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "River Edge, N.J.",
+          "highSchool": "Saddler River Day School"
+        },
+        {
+          "number": "25",
+          "name": "Taisiya Reid",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Solomons, Md.",
+          "highSchool": "Patuxent"
+        },
+        {
+          "number": "26",
+          "name": "Brooke Vogel",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mickleton, N.J.",
+          "highSchool": "Gloucester County Institute of Technology"
+        },
+        {
+          "number": "27",
+          "name": "Olivia Hoover",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Glen Ridge, NJ",
+          "highSchool": "Glen Ridge HS"
+        },
+        {
+          "number": "29",
+          "name": "Amy Swain",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Ashburn. Va.",
+          "highSchool": "Stone Bridge"
+        },
+        {
+          "number": "33",
+          "name": "Constanze Viehmann",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ladenburg, Germany",
+          "highSchool": "TSG 1899 Hoffenheim"
+        },
+        {
+          "number": "35",
+          "name": "Kyla Burns",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Ruby, N.Y. /",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Leah Rhinehart",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Fallston, Md.",
+          "highSchool": "Fallston High School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelly Chittenden",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Ridgefield, Conn.",
+          "highSchool": "Ridgefield High School"
+        },
+        {
+          "number": "1",
+          "name": "Mia Reed",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Manheim, Pa.",
+          "highSchool": "Manheim Central"
+        },
+        {
+          "number": "2",
+          "name": "Carly Binn",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Middletown, N.J.",
+          "highSchool": "Middletown North"
+        },
+        {
+          "number": "3",
+          "name": "Morgan Tilley",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Neptune City, N.J.",
+          "highSchool": "Saint John's Catholic Prep"
+        },
+        {
+          "number": "4",
+          "name": "Laura Fluegge",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dessau, Germany",
+          "highSchool": "Sportschule Potsdam"
+        },
+        {
+          "number": "5",
+          "name": "Caitlin St. Leger",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bear, Del.",
+          "highSchool": "Caravel Academy"
+        },
+        {
+          "number": "6",
+          "name": "Leilah Sallee",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fleetwood, Pa.",
+          "highSchool": "Fleetwood Area HS"
+        },
+        {
+          "number": "7",
+          "name": "Anna Sisson",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Haymarket, Va.",
+          "highSchool": "Battlefield"
+        },
+        {
+          "number": "8",
+          "name": "Grace Harvey",
+          "pos": "D/F",
+          "classCode": "SR",
+          "hometown": "Gaithersburg, Md. /",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Raychel Speicher",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Monaca, Pa.",
+          "highSchool": "Hopewell"
+        },
+        {
+          "number": "10",
+          "name": "Maddie Schepers",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Port Deposit, Md. /",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Sydney Adkins",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Harrisburg, Pa.",
+          "highSchool": "Central Dauphin"
+        },
+        {
+          "number": "12",
+          "name": "Claudia Benz",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Stamford, Conn.",
+          "highSchool": "Westhill"
+        },
+        {
+          "number": "13",
+          "name": "Willa Pratt",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Sauquoit, N.Y.",
+          "highSchool": "New Hartford"
+        },
+        {
+          "number": "14",
+          "name": "Katie Hackley",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Ottsville, Pa.",
+          "highSchool": "Germantown Academy"
+        },
+        {
+          "number": "15",
+          "name": "Julianna Bell",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "West Chester East"
+        },
+        {
+          "number": "16",
+          "name": "Maggie Groh",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "York, Pa.",
+          "highSchool": "Dallastown"
+        },
+        {
+          "number": "17",
+          "name": "Alayna Eyman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "North East, Md.",
+          "highSchool": "Rising Sun"
+        },
+        {
+          "number": "18",
+          "name": "Sydni Wright",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bear, Del.",
+          "highSchool": "Padua Academy"
+        },
+        {
+          "number": "19",
+          "name": "Lea Panagiotidis",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Norwalk, Conn.",
+          "highSchool": "St. Luke's"
+        },
+        {
+          "number": "20",
+          "name": "Kristin Wolf",
+          "pos": "D/F",
+          "classCode": "SR",
+          "hometown": "Annandale, N.J.",
+          "highSchool": "North Hunterdon"
+        },
+        {
+          "number": "21",
+          "name": "Ryan Mundy",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Wilmington, Del.",
+          "highSchool": "The Charter School of Wilmington"
+        },
+        {
+          "number": "22",
+          "name": "Calista Collins",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "River Edge, N.J.",
+          "highSchool": "Saddler River Day School"
+        },
+        {
+          "number": "24",
+          "name": "Lauren Elwell",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Lower Gwynedd, Pa.",
+          "highSchool": "Wissahickon"
+        },
+        {
+          "number": "25",
+          "name": "Taisiya Reid",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Solomons, Md.",
+          "highSchool": "Patuxent"
+        },
+        {
+          "number": "27",
+          "name": "Olivia Hoover",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Glen Ridge, NJ",
+          "highSchool": "Glen Ridge HS"
+        },
+        {
+          "number": "28",
+          "name": "Cassandra Saldarini",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Morris Plains, N.J.",
+          "highSchool": "Parsippany Hills"
+        },
+        {
+          "number": "33",
+          "name": "Constanze Viehmann",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Ladenburg, Germany",
+          "highSchool": "TSG 1899 Hoffenheim"
+        },
+        {
+          "number": "35",
+          "name": "Kyla Burns",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Ruby, N.Y. /",
+          "highSchool": ""
+        },
+        {
+          "number": "44",
+          "name": "Izzy Lane",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Buckinghamshire, England /",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Odaliana Gomez",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Hasbrouck Heights, NJ /",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 3,
+      "losses": 0,
+      "ties": 3,
+      "text": "3-0-3",
+      "played": 6,
+      "scheduled": 19,
+      "confText": null,
+      "exhibitions": 2
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Rider",
+        "opponentRank": null,
+        "location": "Lawrenceville, N.J.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/rider-exhibition/98"
+        }
+      },
+      {
+        "date": "2026-08-09",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Marshall",
+        "opponentRank": null,
+        "location": "Huntington, W.V.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/marshall-exhibition/77"
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "George Washington",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": "W",
+        "score": "3-2",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/george-washington/boxscore/35280",
+          "recap": "https://bluehens.com/news/2026/8/15/womens-soccer-wins-back-and-forth-affair-over-george-washington-in-season-opener",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/george-washington/62"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "VCU",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/vcu/boxscore/35281",
+          "recap": "https://bluehens.com/news/2026/8/20/womens-soccer-defeats-vcu-behind-grohs-multi-goal-game",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/vcu/111"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Navy",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": "T",
+        "score": "2-2",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/navy/boxscore/35282",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/navy/29"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Towson",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/towson/boxscore/35283",
+          "recap": "https://bluehens.com/news/2026/8/27/womens-soccer-ties-towson",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/towson/28"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UMBC",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/umbc/boxscore/35284",
+          "recap": "https://bluehens.com/news/2026/8/30/womens-soccer-celebrates-senior-day-vs-umbc",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/umbc/224"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Bucknell",
+        "opponentRank": null,
+        "location": "Lewisburg, Pa.",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://bluehens.com/sports/womens-soccer/stats/2026/bucknell/boxscore/35285",
+          "recap": "https://bluehens.com/news/2026/9/3/mutli-goal-game-from-saldarini-lifts-womens-soccer-to-win-over-bucknell",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/bucknell/19"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Georgetown",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664270",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/georgetown/63"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Drexel",
+        "opponentRank": null,
+        "location": "Philadelphia, Pa.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664295&vislive=dela",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/drexel/23"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Villanova",
+        "opponentRank": null,
+        "location": "Villanova, Pa.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665463&vislive=dela",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/villanova/1"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Columbia",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674538",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/columbia/53"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Missouri State",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664272",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/missouri-state/298"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "FIU",
+        "opponentRank": null,
+        "location": "Miami, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=673958&vislive=dela",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/fiu/243"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Kennesaw State",
+        "opponentRank": null,
+        "location": "Kennesaw, Ga.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/kennesaw-state/1460"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Western Kentucky",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664267",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/western-kentucky/231"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Middle Tennessee",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674540",
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/middle-tennessee/1417"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Liberty",
+        "opponentRank": null,
+        "location": "Lynchburg, Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/liberty/157"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Jacksonville State",
+        "opponentRank": null,
+        "location": "Jacksonville, Ala.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/jacksonville-state/1388"
+        }
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Sam Houston",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/sam-houston/100"
+        }
+      },
+      {
+        "date": "2026-11-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Conference USA",
+        "opponentRank": null,
+        "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://bluehens.com/sports/wsoc/opponent-history/conference-usa/1494"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "10-2-6",
+        "games": [
+          {
+            "date": "2025-08-07",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Army",
+            "opponentRank": null,
+            "location": "West Point, N.Y.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/army-exhibition/9"
+            }
+          },
+          {
+            "date": "2025-08-10",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/temple-exhibition/105"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Mount St. Mary's (Md.)",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "5-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/mount-st-marys-md-/boxscore/34638",
+              "recap": "https://bluehens.com/news/2025/8/14/womens-soccer-opens-2025-campaign-with-5-2-2-win-over-mount-st-mary-s",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/mount-st-marys-md/121"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Bucknell",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/bucknell/boxscore/34639",
+              "recap": "https://bluehens.com/news/2025/8/17/late-game-heroics-leads-to-womens-soccer-win-over-bucknell",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/bucknell/19"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "George Mason",
+            "opponentRank": null,
+            "location": "Fairfax, Va.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/george-mason/boxscore/34640",
+              "recap": "https://bluehens.com/news/2025/8/21/womens-soccer-continues-hot-start-to-season-with-2-0-win-over-george-mason",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/george-mason/61"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Navy",
+            "opponentRank": null,
+            "location": "Annapolis, Md.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/navy/boxscore/34641",
+              "recap": "https://bluehens.com/news/2025/8/24/womens-soccer-remains-unbeaten-with-win-over-navy",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/navy/29"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Towson, Md.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/towson/boxscore/34642",
+              "recap": "https://bluehens.com/news/2025/8/28/strong-second-half-leads-to-draw-for-womens-soccer",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/towson/28"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UMBC",
+            "opponentRank": null,
+            "location": "Baltimore, Md.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/umbc/boxscore/34643",
+              "recap": "https://bluehens.com/news/2025/8/31/second-half-goal-leads-to-win-over-umbc-for-womens-soccer",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/umbc/224"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/cornell/boxscore/34644",
+              "recap": "https://bluehens.com/news/2025/9/4/womens-soccer-off-to-best-start-in-program-history-after-3-1-win-over-cornell",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/cornell/54"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Drexel",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/drexel/boxscore/34645",
+              "recap": "https://bluehens.com/news/2025/9/7/womens-soccer-celebrates-senior-day-on-sunday-against-drexel",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/drexel/23"
+            }
+          },
+          {
+            "date": "2025-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "William & Mary",
+            "opponentRank": null,
+            "location": "Newark, Del.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/william-mary/boxscore/34646",
+              "recap": "https://bluehens.com/news/2025/9/12/late-game-goal-from-groh-leads-womens-soccer-to-win-over-william-mary",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/william-mary/117"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "FIU",
+            "opponentRank": null,
+            "location": "Newark, Del.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/fiu/boxscore/34647",
+              "recap": "https://bluehens.com/news/2025/9/21/womens-soccer-dropped-cusa-home-opener-vs-fiu",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/fiu/243"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "New Mexico State",
+            "opponentRank": null,
+            "location": "Las Cruces, N.M.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/new-mexico-state/boxscore/34648",
+              "recap": "https://bluehens.com/news/2025/9/25/womens-soccer-earned-first-conference-point-in-1-1-draw-at-new-mexico-state",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/new-mexico-state/308"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTEP",
+            "opponentRank": null,
+            "location": "El Paso, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/utep/boxscore/34649",
+              "recap": "https://bluehens.com/news/2025/9/28/last-second-goal-leads-womens-soccer-to-conference-win-over-utep",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/utep/1489"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Missouri State",
+            "opponentRank": null,
+            "location": "Springfield, Mo.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/missouri-state/boxscore/34650",
+              "recap": "https://bluehens.com/news/2025/10/5/womens-soccer-earned-conference-point-in-1-1-draw-at-missouri-state",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/missouri-state/298"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Jacksonville State",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/jacksonville-state/boxscore/34651",
+              "recap": "https://bluehens.com/news/2025/10/9/second-half-surge-leads-womens-soccer-to-2-0-win-over-jax-state",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/jacksonville-state/1388"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Newark, Del.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/kennesaw-state/boxscore/34652",
+              "recap": "https://bluehens.com/news/2025/10/12/womens-soccer-defeats-kennesaw-state-4-0",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/kennesaw-state/1460"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Newark, Del.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/liberty/boxscore/34653",
+              "recap": "https://bluehens.com/news/2025/10/19/womens-soccer-dropped-cusa-match-against-liberty",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/liberty/157"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "LA Tech",
+            "opponentRank": null,
+            "location": "Ruston, La.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/la-tech/boxscore/34654",
+              "recap": "https://bluehens.com/news/2025/10/26/womens-soccer-closed-regular-season-with-tie-over-la-tech",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/la-tech/245"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Lynchburg, Va.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2025/sam-houston/boxscore/34936",
+              "recap": "https://bluehens.com/news/2025/11/2/womens-soccer-2025-campaign-concludes-with-loss-vs-sam-houston-in-penalty-kicks",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/sam-houston/100"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "6-7-6",
+        "games": [
+          {
+            "date": "2024-08-07",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/marshall-exhibition/77"
+            }
+          },
+          {
+            "date": "2024-08-10",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Army",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/army-exhibition/9"
+            }
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "Morgantown, W. Va.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/west-virginia/boxscore/33981",
+              "recap": "https://bluehens.com/news/2024/8/15/womens-soccer-release-wvu",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/west-virginia/266"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Bucknell",
+            "opponentRank": null,
+            "location": "Lewisburg, Pa.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/bucknell/boxscore/33982",
+              "recap": "https://bluehens.com/news/2024/8/18/late-goal-for-womens-soccer-earns-1-1-tie-at-bucknell",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/bucknell/19"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 21 Virginia Tech",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/virginia-tech/boxscore/33983",
+              "recap": "https://bluehens.com/news/2024/8/22/womens-soccer-dropped-home-opener-to-no-21-virginia-tech",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/virginia-tech/114"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "La Salle",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "L",
+            "score": "2-4",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/la-salle/boxscore/33984",
+              "recap": "https://bluehens.com/news/2024/8/25/womens-soccer-st-leger-records-multi-goal-game-vs-la-salle",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/la-salle/72"
+            }
+          },
+          {
+            "date": "2024-08-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Lynchburg, Va.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/liberty/boxscore/33985",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/liberty/157"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Richmond",
+            "opponentRank": null,
+            "location": "Richmond, Va.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/richmond/boxscore/33986",
+              "recap": "https://bluehens.com/news/2024/9/1/womens-soccer-swain-scored-first-goal-as-a-blue-hen-in-win-over-richmond",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/richmond/97"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/penn/boxscore/33987",
+              "recap": "https://bluehens.com/news/2024/9/5/womens-soccer-kenton-scored-second-goal-of-season-in-tie-against-penn",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/penn/51"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "George Mason",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/george-mason/boxscore/33988",
+              "recap": "https://bluehens.com/news/2024/9/15/womens-soccer-scores-season-high-in-senior-day-victory",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/george-mason/61"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/hofstra/boxscore/33990",
+              "recap": "https://bluehens.com/news/2024/9/22/late-goal-leads-womens-soccer-to-caa-win-over-hofstra",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/hofstra/22"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Hampton",
+            "opponentRank": null,
+            "location": "Hampton, Va.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/hampton/boxscore/33991",
+              "recap": "https://bluehens.com/news/2024/9/26/second-half-goal-from-viehmann-leads-womens-soccer-to-caa-win",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/hampton/66"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "William & Mary",
+            "opponentRank": null,
+            "location": "Williamsburg, Va.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/william-mary/boxscore/33992",
+              "recap": "https://bluehens.com/news/2024/9/29/womens-soccer-remains-unbeaten-in-caa-play-with-win-over-william-mary",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/william-mary/117"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/campbell/boxscore/33993",
+              "recap": "https://bluehens.com/news/2024/10/3/late-goals-helped-womens-soccer-defeat-campbell",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/campbell/44"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Monmouth",
+            "opponentRank": null,
+            "location": "West Long Branch, N.J.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/monmouth/boxscore/33994",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/monmouth/79"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Drexel",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/drexel/boxscore/33995",
+              "recap": "https://bluehens.com/news/2024/10/10/womens-soccer-ties-drexel",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/drexel/23"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Stony Brook",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/stony-brook/boxscore/33996",
+              "recap": "https://bluehens.com/news/2024/10/13/womens-soccer-dropped-caa-match-vs-stony-brook",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/stony-brook/103"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Charleston",
+            "opponentRank": null,
+            "location": "Charleston, S.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/charleston/boxscore/33997",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/charleston/36"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium, Newark, Del.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/towson/boxscore/33998",
+              "recap": "https://bluehens.com/news/2024/10/24/womens-soccer-draws-vs-towson",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/towson/28"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Northeastern",
+            "opponentRank": null,
+            "location": "Boston, Ma.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/northeastern/boxscore/34000",
+              "recap": "https://bluehens.com/news/2024/10/27/womens-soccer-clinched-caa-tournament-spot-with-tie-over-northeastern",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/northeastern/86"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 4 Hofstra",
+            "opponentRank": null,
+            "location": "West Long Branch, N.J.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2024/hofstra/boxscore/34027",
+              "recap": "https://bluehens.com/news/2024/10/31/womens-soccer-season-ends-in-caa-tournament-vs-hofstra",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/hofstra/22"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "5-5-8",
+        "games": [
+          {
+            "date": "2023-08-09",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Navy",
+            "opponentRank": null,
+            "location": "Annapolis, Md.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/navy-exhibition/29"
+            }
+          },
+          {
+            "date": "2023-08-13",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Delaware State University",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/delaware-state-university-exhibition/107"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Syracuse",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/syracuse/boxscore/33185",
+              "recap": "https://bluehens.com/news/2023/8/17/lawrence-gets-first-ever-win-and-first-power-win-as-womens-soccer-downs-syracuse",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/syracuse/30"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Lynchburg, VA",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/liberty/boxscore/33186",
+              "recap": "https://bluehens.com/news/2023/8/20/womens-soccer-drops-road-match-against-liberty",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/liberty/157"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "La Salle",
+            "opponentRank": null,
+            "location": "Philadelphia, PA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/la-salle/boxscore/33187",
+              "recap": "https://bluehens.com/news/2023/8/24/womens-soccer-defeats-la-salle-for-the-first-time-in-philadelphia-since-1999",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/la-salle/72"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "University of Pennsylvania",
+            "opponentRank": null,
+            "location": "Philadelphia, PA",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/university-of-pennsylvania/boxscore/33188",
+              "recap": "https://bluehens.com/news/2023/8/27/womens-soccer-drops-road-contest-against-penn",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/university-of-pennsylvania/51"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Saint Francis",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/saint-francis/boxscore/33189",
+              "recap": "https://bluehens.com/news/2023/8/31/womens-soccer-four-blue-hens-contribute-goals-in-win-over-saint-francis",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/saint-francis/177"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Richmond",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/richmond/boxscore/33190",
+              "recap": "https://bluehens.com/news/2023/9/3/womens-soccer-remains-unbeaten-with-tie-against-richmond",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/richmond/97"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Towson, MD",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/towson/boxscore/33191",
+              "recap": "https://bluehens.com/news/2023/9/7/womens-soccer-picks-up-point-in-conference-opener-against-towson",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/towson/28"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "William & Mary",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/william-mary/boxscore/33192",
+              "recap": "https://bluehens.com/news/2023/9/10/womens-soccer-drops-conference-home-opener-against-william-mary",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/william-mary/117"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Stony Brook",
+            "opponentRank": null,
+            "location": "Stony Brook, NY",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/stony-brook/boxscore/33193",
+              "recap": "https://bluehens.com/news/2023/9/14/womens-soccer-late-second-half-goals-leads-to-tie-against-stony-brook",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/stony-brook/103"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Drexel",
+            "opponentRank": null,
+            "location": "Philadelphia, PA",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/drexel/boxscore/33194",
+              "recap": "https://bluehens.com/news/2023/9/17/womens-soccer-picked-up-conference-point-with-tie-against-drexel",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/drexel/23"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Monmouth",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/monmouth/boxscore/33195",
+              "recap": "https://bluehens.com/news/2023/9/21/womens-soccer-drops-conference-contest-against-monmouth",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/monmouth/79"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Northeastern",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/northeastern/boxscore/33196",
+              "recap": "https://bluehens.com/news/2023/9/28/late-goal-leads-to-tie-for-womens-soccer-against-northeastern",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/northeastern/86"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charleston",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/charleston/boxscore/33197",
+              "recap": "https://bluehens.com/news/2023/10/1/womens-soccer-celebrates-senior-day-and-picks-up-point-against-charleston",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/charleston/36"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Elon",
+            "opponentRank": null,
+            "location": "Elon, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/elon/boxscore/33198",
+              "recap": "https://bluehens.com/news/2023/10/5/womens-soccer-speicher-scores-second-fastest-goal-in-program-history-in-win-over-elon",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/elon/138"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Buies Creek, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/campbell/boxscore/33199",
+              "recap": "https://bluehens.com/news/2023/10/8/womens-soccer-bell-scores-first-career-goal-in-tie-against-campbell",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/campbell/44"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "Hempstead, NY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/hofstra/boxscore/33200",
+              "recap": "https://bluehens.com/news/2023/10/15/womens-soccer-drops-conference-contest-against-hofstra",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/hofstra/22"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Hampton",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "W",
+            "score": "9-1",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/hampton/boxscore/33201",
+              "recap": "https://bluehens.com/news/2023/10/19/womens-soccer-ties-program-record-for-goals-in-a-game-in-win-over-hampton",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/hampton/66"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Carolina Wilmington",
+            "opponentRank": null,
+            "location": "Stuart & Suzanne Grant Stadium",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://bluehens.com/sports/womens-soccer/stats/2023/north-carolina-wilmington/boxscore/33202",
+              "recap": "https://bluehens.com/news/2023/10/22/womens-soccer-season-concludes-with-draw-against-uncw",
+              "history": "https://bluehens.com/sports/wsoc/opponent-history/north-carolina-wilmington/109"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://bluehens.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:16:54Z"
+    }
+  },
   "commitments": [
     {
       "id": "claire-ballinger-2026",
@@ -117,7 +3061,7 @@
       "city": "Downingtown",
       "highSchool": "",
       "college": "delaware",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +3080,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +3096,7 @@
       "city": "Somerset",
       "highSchool": "",
       "college": "delaware",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -196,7 +3140,7 @@
       "city": "Woodbridge",
       "highSchool": "",
       "college": "delaware",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -215,7 +3159,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -231,7 +3175,7 @@
       "city": "Ashburn",
       "highSchool": "Independence",
       "college": "delaware",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -589,41 +3533,27 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 0.89,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://bluehens.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:22:36Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.679577&longitude=-75.752822&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T06:22:34Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:22:34Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:16:41Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

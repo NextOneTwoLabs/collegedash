@@ -1,145 +1,152 @@
 {
   "collector": "climate",
-  "sourceUrl": "https://archive-api.open-meteo.com/v1/archive?latitude=40.008781&longitude=-105.270823&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FDenver",
-  "fetchedAt": "2026-09-07T04:50:23Z",
-  "provider": "Open-Meteo ERA5",
+  "sourceUrl": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094075,USW00023062,USC00050848&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+  "fetchedAt": "2026-09-08T00:51:17Z",
+  "provider": "NOAA NCEI 1991-2020 U.S. Climate Normals (monthly)",
   "fromCache": false,
   "data": {
     "lat": 40.008781,
     "lon": -105.270823,
     "timezone": "America/Denver",
-    "elevationM": 1651.0,
+    "elevationM": 2995.6,
     "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094075",
+      "name": "BOULDER 14 W",
+      "state": "CO",
+      "distanceKm": 23.2,
+      "elevationM": 2995.6
+    },
     "monthly": [
       {
         "month": "Jan",
-        "tHighF": 39.2,
-        "tLowF": 15.1,
-        "precipIn": 0.94,
-        "snowIn": 6.6,
-        "wetDays": 5.1,
+        "tHighF": 28.6,
+        "tLowF": 11.8,
+        "precipIn": 2.67,
+        "snowIn": null,
+        "wetDays": 6.9,
         "days90F": 0.0,
-        "daysFreeze": 30.6
+        "daysFreeze": 30.9
       },
       {
         "month": "Feb",
-        "tHighF": 41.5,
-        "tLowF": 16.2,
-        "precipIn": 1.02,
-        "snowIn": 7.0,
-        "wetDays": 6.6,
+        "tHighF": 27.8,
+        "tLowF": 11.5,
+        "precipIn": 2.77,
+        "snowIn": null,
+        "wetDays": 8.3,
         "days90F": 0.0,
-        "daysFreeze": 27.5
+        "daysFreeze": 27.7
       },
       {
         "month": "Mar",
-        "tHighF": 50.3,
-        "tLowF": 23.2,
-        "precipIn": 1.96,
-        "snowIn": 10.4,
-        "wetDays": 8.3,
+        "tHighF": 35.6,
+        "tLowF": 16.7,
+        "precipIn": 3.68,
+        "snowIn": null,
+        "wetDays": 9.1,
         "days90F": 0.0,
-        "daysFreeze": 26.8
+        "daysFreeze": 30.0
       },
       {
         "month": "Apr",
-        "tHighF": 57.1,
-        "tLowF": 30.9,
-        "precipIn": 3.02,
-        "snowIn": 11.7,
+        "tHighF": 40.3,
+        "tLowF": 21.5,
+        "precipIn": 4.83,
+        "snowIn": null,
         "wetDays": 10.8,
         "days90F": 0.0,
-        "daysFreeze": 14.9
+        "daysFreeze": 28.3
       },
       {
         "month": "May",
-        "tHighF": 66.4,
-        "tLowF": 41.0,
-        "precipIn": 3.88,
-        "snowIn": 4.0,
-        "wetDays": 14.4,
+        "tHighF": 50.1,
+        "tLowF": 28.6,
+        "precipIn": 3.82,
+        "snowIn": null,
+        "wetDays": 9.2,
         "days90F": 0.0,
-        "daysFreeze": 2.8
+        "daysFreeze": 25.0
       },
       {
         "month": "Jun",
-        "tHighF": 77.8,
-        "tLowF": 50.9,
-        "precipIn": 2.9,
-        "snowIn": 0.2,
-        "wetDays": 12.9,
-        "days90F": 1.7,
-        "daysFreeze": 0.0
+        "tHighF": 61.8,
+        "tLowF": 35.9,
+        "precipIn": 1.95,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 0.0,
+        "daysFreeze": 6.3
       },
       {
         "month": "Jul",
-        "tHighF": 83.7,
-        "tLowF": 57.4,
-        "precipIn": 2.78,
-        "snowIn": 0.0,
-        "wetDays": 13.2,
-        "days90F": 5.5,
-        "daysFreeze": 0.0
+        "tHighF": 67.9,
+        "tLowF": 42.5,
+        "precipIn": 3.04,
+        "snowIn": null,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 0.3
       },
       {
         "month": "Aug",
-        "tHighF": 81.7,
-        "tLowF": 56.4,
-        "precipIn": 2.64,
-        "snowIn": 0.0,
-        "wetDays": 13.3,
-        "days90F": 2.5,
-        "daysFreeze": 0.0
+        "tHighF": 65.8,
+        "tLowF": 40.8,
+        "precipIn": 2.51,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 1.4
       },
       {
         "month": "Sep",
-        "tHighF": 74.5,
-        "tLowF": 48.6,
-        "precipIn": 2.06,
-        "snowIn": 1.4,
-        "wetDays": 9.1,
-        "days90F": 0.5,
-        "daysFreeze": 0.6
+        "tHighF": 58.5,
+        "tLowF": 33.6,
+        "precipIn": 2.01,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 10.9
       },
       {
         "month": "Oct",
-        "tHighF": 61.4,
-        "tLowF": 36.5,
-        "precipIn": 1.82,
-        "snowIn": 5.0,
-        "wetDays": 7.1,
+        "tHighF": 46.8,
+        "tLowF": 26.0,
+        "precipIn": 2.17,
+        "snowIn": null,
+        "wetDays": 6.1,
         "days90F": 0.0,
-        "daysFreeze": 6.8
+        "daysFreeze": 24.8
       },
       {
         "month": "Nov",
-        "tHighF": 48.3,
-        "tLowF": 23.7,
-        "precipIn": 1.27,
-        "snowIn": 7.5,
-        "wetDays": 6.2,
+        "tHighF": 35.3,
+        "tLowF": 19.1,
+        "precipIn": 2.26,
+        "snowIn": null,
+        "wetDays": 6.1,
         "days90F": 0.0,
-        "daysFreeze": 23.1
+        "daysFreeze": 27.7
       },
       {
         "month": "Dec",
-        "tHighF": 39.0,
-        "tLowF": 15.1,
-        "precipIn": 0.88,
-        "snowIn": 6.3,
-        "wetDays": 5.2,
+        "tHighF": 28.0,
+        "tLowF": 11.5,
+        "precipIn": 2.15,
+        "snowIn": null,
+        "wetDays": 7.5,
         "days90F": 0.0,
-        "daysFreeze": 30.3
+        "daysFreeze": 30.9
       }
     ],
-    "annualPrecipIn": 25.2,
-    "annualSnowIn": 60.1,
+    "annualPrecipIn": 33.9,
+    "annualSnowIn": null,
     "fallSeason": {
-      "avgHighF": 66.5,
-      "avgLowF": 41.3,
-      "precipIn": 7.8,
-      "wetDays": 36.0
+      "avgHighF": 51.6,
+      "avgLowF": 29.9,
+      "precipIn": 8.9,
+      "wetDays": 23.0
     },
-    "summary": "Hottest month Jul (avg high 83.7°F), coldest Jan (avg low 15.1°F). 25.2 in of rain per year, 60.1 in of snow. Fall season (Aug–Nov): highs around 66.5°F, 7.8 in of rain over the season."
+    "summary": "Hottest month Jul (avg high 67.9°F), coldest Feb (avg low 11.5°F). 33.9 in of rain per year. Fall season (Aug–Nov): highs around 51.6°F, 8.9 in of rain over the season."
   }
 }

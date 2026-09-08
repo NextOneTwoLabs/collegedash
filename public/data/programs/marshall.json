@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:55:43Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 38.422482,
+    "lon": -82.428964,
+    "timezone": "America/New_York",
+    "elevationM": 251.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00003860",
+      "name": "HUNTINGTON TRI STATE AP",
+      "state": "WV",
+      "distanceKm": 12.7,
+      "elevationM": 251.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 43.2,
+        "tLowF": 26.4,
+        "precipIn": 3.1,
+        "snowIn": 6.0,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 22.4
+      },
+      {
+        "month": "Feb",
+        "tHighF": 47.3,
+        "tLowF": 29.1,
+        "precipIn": 3.37,
+        "snowIn": 5.8,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 18.8
+      },
+      {
+        "month": "Mar",
+        "tHighF": 56.8,
+        "tLowF": 36.1,
+        "precipIn": 4.16,
+        "snowIn": 4.3,
+        "wetDays": 8.4,
+        "days90F": 0.0,
+        "daysFreeze": 13.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 68.8,
+        "tLowF": 45.5,
+        "precipIn": 3.91,
+        "snowIn": 0.3,
+        "wetDays": 8.2,
+        "days90F": 0.0,
+        "daysFreeze": 2.7
+      },
+      {
+        "month": "May",
+        "tHighF": 76.2,
+        "tLowF": 54.2,
+        "precipIn": 4.51,
+        "snowIn": 0.0,
+        "wetDays": 8.2,
+        "days90F": 0.8,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 83.3,
+        "tLowF": 62.4,
+        "precipIn": 4.2,
+        "snowIn": 0.0,
+        "wetDays": 8.2,
+        "days90F": 4.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.4,
+        "tLowF": 66.4,
+        "precipIn": 5.08,
+        "snowIn": 0.0,
+        "wetDays": 8.4,
+        "days90F": 9.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.5,
+        "tLowF": 64.8,
+        "precipIn": 3.95,
+        "snowIn": 0.0,
+        "wetDays": 6.4,
+        "days90F": 7.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.6,
+        "tLowF": 57.7,
+        "precipIn": 3.16,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 3.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 68.6,
+        "tLowF": 46.1,
+        "precipIn": 3.02,
+        "snowIn": 0.2,
+        "wetDays": 5.9,
+        "days90F": 0.2,
+        "daysFreeze": 2.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 56.6,
+        "tLowF": 36.6,
+        "precipIn": 3.07,
+        "snowIn": 0.5,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 11.8
+      },
+      {
+        "month": "Dec",
+        "tHighF": 46.7,
+        "tLowF": 30.4,
+        "precipIn": 3.57,
+        "snowIn": 2.7,
+        "wetDays": 7.2,
+        "days90F": 0.0,
+        "daysFreeze": 19.3
+      }
+    ],
+    "annualPrecipIn": 45.1,
+    "annualSnowIn": 19.8,
+    "fallSeason": {
+      "avgHighF": 72.6,
+      "avgLowF": 51.3,
+      "precipIn": 13.2,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 86.4°F), coldest Jan (avg low 26.4°F). 45.1 in of rain per year, 19.8 in of snow. Fall season (Aug–Nov): highs around 72.6°F, 13.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00003860,USC00464397,USC00466912&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:59Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Rafa Simoes",
@@ -79,8 +228,50 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Rafa Simoes",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/coaches/rafa-simoes/2208",
+        "social": {}
+      },
+      {
+        "name": "Augusto Maciel",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/coaches/augusto-maciel/2211",
+        "social": {}
+      },
+      {
+        "name": "Erich Rodrigues Leite",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/coaches/erich-rodrigues-leite/2236",
+        "social": {}
+      },
+      {
+        "name": "Thaynara De Jesus",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/coaches/thaynara-de-jesus/2286",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Evan Jarret",
+        "title": "Assistant Athletic Trainer (WSOC)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/staff/evan-jarret/202",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Veterans Memorial Soccer Complex",
       "capacity": 1006
@@ -105,13 +296,2728 @@
         "url": "https://en.wikipedia.org/wiki/Marshall_Thundering_Herd_women%27s_soccer",
         "asOf": "2026-09-07T05:56:16Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://herdzone.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:13:17Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "3-2-2",
+      "wins": 3,
+      "losses": 2,
+      "ties": 2,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": null
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "8-5-4",
+      "wins": 8,
+      "losses": 5,
+      "ties": 4,
+      "confRecord": "4-2-4",
+      "rpiRank": 111,
+      "rpi": {
+        "rank": 111,
+        "record": "7-5-4",
+        "through": "2025-12-08",
+        "prevRank": 115,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 111,
+            "record": "7-5-4"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "3-8-5",
+      "wins": 3,
+      "losses": 8,
+      "ties": 5,
+      "confRecord": "1-5-4",
+      "rpiRank": 220,
+      "rpi": {
+        "rank": 220,
+        "sosRank": 274,
+        "balancedRank": 249,
+        "kpiRank": 208,
+        "masseyRank": 246,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "7-9-1",
+      "wins": 7,
+      "losses": 9,
+      "ties": 1,
+      "confRecord": "2-8-0",
+      "rpiRank": 126,
+      "rpi": {
+        "rank": 126,
+        "sosRank": 168,
+        "balancedRank": 171,
+        "kpiRank": 130,
+        "masseyRank": 209,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "1",
+        "name": "Emma Durand",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Angers, France",
+        "highSchool": "Nantes University",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Nantes",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/emma-durand/11041",
+        "social": {
+          "instagram": "https://www.instagram.com/emma_durand1"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "2",
+        "name": "Nerea Munoz",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Madrid, Spain",
+        "highSchool": "IES Ortega Y Gasset",
+        "previousSchool": "",
+        "major": "",
+        "club": "Atletico Madrid",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/nerea-munoz/11275",
+        "social": {
+          "instagram": "https://www.instagram.com/neremunozz._"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "3",
+        "name": "Maria Chaves",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lisbon, Portugal",
+        "highSchool": "Salesianos do Estoril",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/maria-chaves/11039",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "4",
+        "name": "Holly Tickle",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Preston, England",
+        "highSchool": "Rainhill",
+        "previousSchool": "",
+        "major": "",
+        "club": "Liverpool FC",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/holly-tickle/11276",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "5",
+        "name": "Sol Taboada",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Barcelona, Spain",
+        "highSchool": "Granés Batxillerat",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Levante Badalona",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/sol-taboada/11269",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "6",
+        "name": "Luana Gusmao",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Rio de Janeiro, Brazil",
+        "highSchool": "Objetivo Araraquara",
+        "previousSchool": "",
+        "major": "",
+        "club": "Flamengo",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/luana-gusmao/11048",
+        "social": {
+          "instagram": "https://www.instagram.com/luanagusmao_soccer"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Bailey Fisher",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Hurricane, W.Va.",
+        "highSchool": "Hurricane HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/bailey-fisher/11044",
+        "social": {
+          "instagram": "https://www.instagram.com/bailey_fisher7"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "8",
+        "name": "Luiza Travassos",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Rio de Janeiro, Brazil",
+        "highSchool": "Escola Eleva",
+        "previousSchool": "",
+        "major": "",
+        "club": "Flumniense",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/luiza-travassos/11062",
+        "social": {
+          "x": "https://twitter.com/travassosluiza",
+          "instagram": "https://www.instagram.com/luizatravassosfut"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "9",
+        "name": "Wiktoria Mikrut",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Rzeszow, Poland",
+        "highSchool": "Szkola Mistrzostwa Sportowego Resovia w Rzeszowie",
+        "previousSchool": "",
+        "major": "",
+        "club": "Resovia Rzeszow",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/wiktoria-mikrut/11273",
+        "social": {
+          "instagram": "https://www.instagram.com/wiktoriamikrut"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "10",
+        "name": "Nicole Navarro",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Barcelona, Spain",
+        "highSchool": "Santo Angel",
+        "previousSchool": "",
+        "major": "",
+        "club": "Espanyol",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/nicole-navarro/11057",
+        "social": {
+          "instagram": "https://www.instagram.com/nicole_na05"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "11",
+        "name": "Geovanna Souza",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Goiania, Brazil",
+        "highSchool": "Ferroviaria",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sunflower State FC",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/geovanna-souza/11060",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Romina Olmedo",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Montevideo, Uruguay",
+        "highSchool": "Penarol",
+        "previousSchool": "",
+        "major": "",
+        "club": "Defensor Sporting Club",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/romina-olmedo/11268",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "13",
+        "name": "Aoi Kawabuchi",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Saitama, Japan",
+        "highSchool": "Sakuchosei HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Corsicana",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/aoi-kawabuchi/11271",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "14",
+        "name": "Olivia Verbeet",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "6'1\"",
+        "heightIn": 73,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Den Haag, Netherlands",
+        "highSchool": "ADO Den Haag Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "ADO Den Haag Academy",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/olivia-verbeet/11265",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "15",
+        "name": "Florencia Saavedra",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Santiago, Chile",
+        "highSchool": "Dunalastair School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Universidad Catolica",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/florencia-saavedra/11267",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "16",
+        "name": "Larissa Ozorio",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Belo Horizonte, Brazil",
+        "highSchool": "Colegio Santa Maria Minas",
+        "previousSchool": "",
+        "major": "",
+        "club": "Clube Atletico Mineiro",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/larissa-ozorio/11058",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "17",
+        "name": "Katia Cardaba",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Madrid, Spain",
+        "highSchool": "Colegios Ramón y Cajal",
+        "previousSchool": "",
+        "major": "",
+        "club": "Atletico Madrid",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/katia-cardaba/11274",
+        "social": {
+          "instagram": "https://www.instagram.com/katiacardaaba"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "18",
+        "name": "Smilla Rehn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Stockholm, Sweden",
+        "highSchool": "Allsvenskan",
+        "previousSchool": "",
+        "major": "",
+        "club": "IF Brommapojkarna",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/smilla-rehn/11264",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "19",
+        "name": "Lea Misch",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Halle (Saale), Germany",
+        "highSchool": "Sportgymnasium Leipzig",
+        "previousSchool": "",
+        "major": "",
+        "club": "RB Leipzig",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/lea-misch/11056",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "20",
+        "name": "Julia Migacz",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Krzeszow, Poland",
+        "highSchool": "IV Liceum Ogolnoksztalcace w Walbrzychu",
+        "previousSchool": "",
+        "major": "",
+        "club": "SKP Bielawlanka Bielawa",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/julia-migacz/11272",
+        "social": {
+          "instagram": "https://www.instagram.com/migi_7"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Delfina Lombardi",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bahia Blanca, Argentina",
+        "highSchool": "River Plate HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Instituto River Plate",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/delfina-lombardi/11266",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "22",
+        "name": "Mara Terrazas",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cancun, Mexico",
+        "highSchool": "AIM",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pachuca",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/mara-terrazas/11263",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "23",
+        "name": "Giulia Lucarelli",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Rome, Italy",
+        "highSchool": "IISS Cesare Battist",
+        "previousSchool": "",
+        "major": "",
+        "club": "S.S. Lazio",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/giulia-lucarelli/11262",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "24",
+        "name": "Brooklyn McComas",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Monroe, Ohio",
+        "highSchool": "Monroe HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cincinnati United Premier",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/brooklyn-mccomas/11053",
+        "social": {
+          "instagram": "https://www.instagram.com/brooklyn.mccomas"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "25",
+        "name": "Madison Townes",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Aldie, Va.",
+        "highSchool": "John Champe HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Va. Marauders",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/madison-townes/11061",
+        "social": {
+          "x": "https://twitter.com/MadisonTownes2",
+          "instagram": "https://www.instagram.com/madison.townes_"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "27",
+        "name": "Izzy Young",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "London, England",
+        "highSchool": "London City",
+        "previousSchool": "",
+        "major": "",
+        "club": "Chelsea",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/izzy-young/11270",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "28",
+        "name": "Marta Garcia",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Madrid, Spain",
+        "highSchool": "Íes Arcipreste de Hita",
+        "previousSchool": "",
+        "major": "",
+        "club": "Madrid CFF",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/marta-garcia/11046",
+        "social": {
+          "instagram": "https://www.instagram.com/marttaagarciaa._"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "99",
+        "name": "Katie McCutcheon",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Point Pleasant, W.Va.",
+        "highSchool": "Point Pleasant HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Eastern Elite Soccer Academy",
+        "bioUrl": "https://herdzone.com/sports/womens-soccer/roster/katie-mccutcheon/11054",
+        "social": {
+          "instagram": "https://www.instagram.com/_katiemccutcheon"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 4,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "JR": 9,
+      "SR": 3,
+      "SO": 8,
+      "GR": 4,
+      "FR": 4
+    },
+    "graduatingByPos": {
+      "D": 2,
+      "M": 4,
+      "F": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://herdzone.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:13:17Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "1",
+          "name": "Emma Durand",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Angers, France",
+          "highSchool": "Nantes University"
+        },
+        {
+          "number": "2",
+          "name": "Kajsa Ekstrom",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Umea, Sweden",
+          "highSchool": "Umea Elitidrottsgymnasium"
+        },
+        {
+          "number": "3",
+          "name": "Maria Chaves",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lisbon, Portugal",
+          "highSchool": "Salesianos do Estoril"
+        },
+        {
+          "number": "4",
+          "name": "Angel Fowler",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Sutton, London, England",
+          "highSchool": "Cheam"
+        },
+        {
+          "number": "5",
+          "name": "Fernanda Dantas",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Salvador, Brazil",
+          "highSchool": "Pan American School of Porto Alegre"
+        },
+        {
+          "number": "6",
+          "name": "Ami Komori",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Otsu, Japan",
+          "highSchool": "Kyoto Seika"
+        },
+        {
+          "number": "7",
+          "name": "Bailey Fisher",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Hurricane, W.Va.",
+          "highSchool": "Hurricane HS"
+        },
+        {
+          "number": "8",
+          "name": "Luiza Travassos",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Rio de Janeiro, Brazil",
+          "highSchool": "Escola Eleva"
+        },
+        {
+          "number": "9",
+          "name": "Tiggi Gent",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Manchester, England",
+          "highSchool": "Blessed Trinity"
+        },
+        {
+          "number": "10",
+          "name": "Nicole Navarro",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Barcelona, Spain",
+          "highSchool": "Santo Angel"
+        },
+        {
+          "number": "11",
+          "name": "Geovanna Souza",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Goiania, Brazil",
+          "highSchool": "Ferroviaria"
+        },
+        {
+          "number": "13",
+          "name": "Rylie McKinney",
+          "pos": "D/M",
+          "classCode": "R-SO",
+          "hometown": "Monroe, Ohio",
+          "highSchool": "Monroe HS"
+        },
+        {
+          "number": "14",
+          "name": "Mia Eickmann",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ehingen (Donau), Germany",
+          "highSchool": "Kaufmannische Schule Ehingen"
+        },
+        {
+          "number": "15",
+          "name": "Lou Brossault",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Rennes, France",
+          "highSchool": "Lycée Bréquigny"
+        },
+        {
+          "number": "16",
+          "name": "Larissa Ozorio",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Belo Horizonte, Brazil",
+          "highSchool": "Colegio Santa Maria Minas"
+        },
+        {
+          "number": "17",
+          "name": "Laura Rodriguez",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Ibague, Colombia",
+          "highSchool": "Colegio San Bonafico de las Lanzas"
+        },
+        {
+          "number": "18",
+          "name": "Marcella Alves",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Lagoa Santa, Brazil",
+          "highSchool": "Colegio Magnum Cidade Nova"
+        },
+        {
+          "number": "19",
+          "name": "Lea Misch",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Halle (Saale), Germany",
+          "highSchool": "Sportgymnasium Leipzig"
+        },
+        {
+          "number": "20",
+          "name": "Mackenzie Mackreth",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Leeds, England",
+          "highSchool": "Prince Henry's Grammar School"
+        },
+        {
+          "number": "21",
+          "name": "Anna Linsler",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Emmendingen, Germany",
+          "highSchool": "GHSE Emmendingen"
+        },
+        {
+          "number": "24",
+          "name": "Brooklyn McComas",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Monroe, Ohio",
+          "highSchool": "Monroe HS"
+        },
+        {
+          "number": "25",
+          "name": "Madison Townes",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Aldie, Va.",
+          "highSchool": "John Champe HS"
+        },
+        {
+          "number": "26",
+          "name": "Luana Gusmao",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Rio de Janeiro, Brazil",
+          "highSchool": "Objetivo Araraquara"
+        },
+        {
+          "number": "27",
+          "name": "Ruby Johnson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Saddlewoth, England",
+          "highSchool": "Ashton Sixth Form"
+        },
+        {
+          "number": "28",
+          "name": "Marta Garcia",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Madrid, Spain",
+          "highSchool": "Íes Arcipreste de Hita"
+        },
+        {
+          "number": "32",
+          "name": "Katie McCutcheon",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Point Pleasant, W.Va.",
+          "highSchool": "Point Pleasant HS"
+        },
+        {
+          "number": "99",
+          "name": "Alexis Wolgemuth",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Lincolnton, N.C.",
+          "highSchool": "Fred T. Foard HS"
+        }
+      ],
+      "departed": [
+        "alexis wolgemuth",
+        "ami komori",
+        "angel fowler",
+        "anna linsler",
+        "fernanda dantas",
+        "kajsa ekstrom",
+        "laura rodriguez",
+        "lou brossault",
+        "mackenzie mackreth",
+        "marcella alves",
+        "mia eickmann",
+        "ruby johnson",
+        "rylie mckinney",
+        "tiggi gent"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "1",
+          "name": "Tyra Stenseth",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Fjellhamar, Norway /",
+          "highSchool": "Kolbotn"
+        },
+        {
+          "number": "2",
+          "name": "Kajsa Ekstrom",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Umea, Sweden / Umea Elitidrottsgymnasium",
+          "highSchool": "Florida Tech"
+        },
+        {
+          "number": "3",
+          "name": "Maria Chaves",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lisbon, Portugal / Salesianos do Estoril",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Angel Fowler",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Sutton, London, England / Cheam",
+          "highSchool": "Monroe College"
+        },
+        {
+          "number": "5",
+          "name": "Fernanda Dantas",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Salvador, Brazil / Pan American School of Porto Alegre",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ami Komori",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Otsu, Japan / Kyoto Seika",
+          "highSchool": "St. Bonaventure"
+        },
+        {
+          "number": "7",
+          "name": "Bailey Fisher",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Hurricane, W.Va. / Hurricane HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Luiza Travassos",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rio de Janeiro, Brazil / Escola Eleva",
+          "highSchool": "Indiana"
+        },
+        {
+          "number": "9",
+          "name": "Ebony Leckey",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Derry, Northern Ireland / Queens University of Belfast",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Nicole Navarro",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Barcelona, Spain / Santo Angel",
+          "highSchool": "Iowa Western CC"
+        },
+        {
+          "number": "11",
+          "name": "Alice Johansson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Gustafsberg, Sweden /",
+          "highSchool": "Uddevalla"
+        },
+        {
+          "number": "12",
+          "name": "Emma Durand",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Angers, France / Nantes University",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Rylie McKinney",
+          "pos": "D/M",
+          "classCode": "R-FR",
+          "hometown": "Monroe, Ohio / Monroe HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Katie Porter",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / HomeLife Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ava Hall",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Scott Depot, W.Va. / Winfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Larissa Ozorio",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Belo Horizonte, Brazil / Colegio Santa Maria Minas",
+          "highSchool": "Central Methodist"
+        },
+        {
+          "number": "17",
+          "name": "Cameron Dye",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Powell, Ohio / Olentangy Liberty HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Emma Shields",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Ona, W.Va / Cabell Midland HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Lea Misch",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Halle (Saale), Germany / Sportgymnasium Leipzig",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carolina Falcao",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lisbon, Portugal /",
+          "highSchool": "Sporting"
+        },
+        {
+          "number": "21",
+          "name": "Abigail Gerretsen",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Toronto, Ontario, Canada / De La Salle College",
+          "highSchool": "Southern Illinois"
+        },
+        {
+          "number": "24",
+          "name": "Brooklyn McComas",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Monroe, Ohio / Monroe HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Madison Townes",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Aldie, Va. / John Champe HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Rebecca Heath",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Romford, England /",
+          "highSchool": "Hashtag"
+        },
+        {
+          "number": "27",
+          "name": "Elodie Metho",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Yaounde, Cameroon / College Polyvalent MCD",
+          "highSchool": "Faulkner"
+        },
+        {
+          "number": "28",
+          "name": "Alyssa Hardin",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Royersford, Pa. / The Agnes Irwin School",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Ashlyn Drayer",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Chesterland, Ohio / West Geauga HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Amelia Compston",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Charleston, W.Va / Sissonvile HS",
+          "highSchool": "West Liberty"
+        },
+        {
+          "number": "99",
+          "name": "Alexis Wolgemuth",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Lincolnton, N.C. / Fred T. Foard HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Regan Meyer",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Liberty Township, Ohio / Lakota West HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Ashlyn Drayer",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Chesterland, Ohio / West Geauga HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Kylie Archer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Nicholasville, Ky. / West Jessamine HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Katie Porter",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / HomeLife Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Ada Clare Tempert",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Baltimore, Md. / Mercy HS",
+          "highSchool": "Loyola (Md)"
+        },
+        {
+          "number": "6",
+          "name": "Olivia Gandee",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ripley, W.Va. / Ripley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Cassidy Bell",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Trophy Club, Texas / Byron Nelson HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Ava Trethewey",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Charleston, W.Va / George Washington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Yoshiki Kitadai",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Kochi, Japan / Shukugawa",
+          "highSchool": "Indiana"
+        },
+        {
+          "number": "10",
+          "name": "Ava Hall",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Scott Depot, W.Va. / Winfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Abi Hugh",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Huntington, W.Va. / St. Joseph HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Kellyn Fausel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "New Philadelphia, Ohio / New Philadelphia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Rylie McKinney",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Monroe, Ohio / Monroe HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Bailey Fisher",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Hurricane, W.Va. / Hurricane HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Luiza Travassos",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rio de Janeiro, Brazil / Escola Eleva",
+          "highSchool": "Indiana"
+        },
+        {
+          "number": "16",
+          "name": "Campbell George",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Grand Rapids, Mich. / Forest Hills Northern HS",
+          "highSchool": "Xavier"
+        },
+        {
+          "number": "17",
+          "name": "Cameron Dye",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Powell, Ohio / Olentangy Liberty HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Hannah Telleysh",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Orlando, Fla. / Lake Nona HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "20",
+          "name": "Makai Laguines",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Warner Robins, Ga. / Warner Robins HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Regina Fiabema",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Tromsoe, Norway / Ishavsbyen",
+          "highSchool": "Monroe College"
+        },
+        {
+          "number": "23",
+          "name": "Madison Townes",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Aldie, Va. / John Champe HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Kylie Krynzel",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Dayton, Ohio / Archbishop Alter HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ella Dinwiddie",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Medina, Ohio / Wadsworth HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Taylor Kennedy",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Alyssa Hardin",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Royersford, Pa. / The Agnes Irwin School",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Demari Curry",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Ellicott City, Md. / Elizabeth Seton",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Alexis Wolgemuth",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lincolnton, N.C. / Fred T. Foard HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 3,
+      "losses": 2,
+      "ties": 2,
+      "text": "3-2-2",
+      "played": 7,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 1
+    },
+    "games": [
+      {
+        "date": "2026-08-09",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Delaware",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/delaware-exhibition/82"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Morehead State",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/morehead-state/boxscore/11567",
+          "recap": "https://herdzone.com/news/2026/8/13/womens-soccer-herd-womens-soccer-opens-2026-season-with-3-1-victory",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/morehead-state/29"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Ohio",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/ohio/22"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "High Point",
+        "opponentRank": null,
+        "location": "High Point, N.C.",
+        "result": "L",
+        "score": "0-4",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/high-point/boxscore/11569",
+          "recap": "https://herdzone.com/news/2026/8/20/womens-soccer-womens-soccer-drops-contest-at-high-point",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/high-point/95"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Wright State",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": "W",
+        "score": "3-2",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/wright-state/boxscore/11570",
+          "recap": "https://herdzone.com/news/2026/8/23/womens-soccer-herd-comes-from-behind-to-defeat-wright-state-3-2",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/wright-state/130"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Belmont",
+        "opponentRank": null,
+        "location": "Nashville, Tenn.",
+        "result": "T",
+        "score": "3-3",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/belmont/boxscore/11571",
+          "recap": "https://herdzone.com/news/2026/8/27/womens-soccer-mikrut-nets-hat-trick-as-herd-battles-belmont-to-3-3-draw",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/belmont/244"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "UT Martin",
+        "opponentRank": null,
+        "location": "Martin, Tenn.",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/ut-martin/boxscore/11572",
+          "recap": "https://herdzone.com/news/2026/8/30/womens-soccer-first-half-header-lifts-herd-to-road-victory",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/ut-martin/119"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Murray State",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/murray-state/boxscore/11573",
+          "recap": "https://herdzone.com/news/2026/9/3/womens-soccer-herd-plays-to-goalless-draw-thursday-evening-against-murray-state",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/murray-state/105"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "WVU",
+        "opponentRank": 7,
+        "location": "Morgantown, W.Va.",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://herdzone.com/sports/womens-soccer/stats/2026/-7-wvu/boxscore/11574",
+          "recap": "https://herdzone.com/news/2026/9/6/womens-soccer-herd-downed-by-lone-second-half-goal-at-no-7-wvu",
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/7-wvu/47"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Bellarmine",
+        "opponentRank": null,
+        "location": "Louisville, Ky.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/bellarmine/333"
+        }
+      },
+      {
+        "date": "2026-09-19",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Louisiana Tech",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/louisiana-tech/36"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Troy",
+        "opponentRank": null,
+        "location": "Troy, Ala.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/troy/229"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "JMU",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/jmu/40"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Georgia Southern",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-southern/91"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Old Dominion",
+        "opponentRank": null,
+        "location": "Norfolk, Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/old-dominion/21"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "ULM",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/ulm/37"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Louisiana",
+        "opponentRank": null,
+        "location": "Lafayette, La.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/louisiana/340"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Georgia State",
+        "opponentRank": null,
+        "location": "Atlanta, Ga.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-state/1"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "App State",
+        "opponentRank": null,
+        "location": "Hoops Family Field, Huntington, W.Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/app-state/20"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Coastal Carolina",
+        "opponentRank": null,
+        "location": "Conway, S.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/coastal-carolina/76"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Sun Belt Conference Championship",
+        "opponentRank": null,
+        "location": "Foley, Ala.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://herdzone.com/sports/wsoc/opponent-history/sun-belt-conference-championship/349"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "8-5-4",
+        "games": [
+          {
+            "date": "2025-08-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UPike (Fans First)",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/upike-fans-first/338"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Morehead State",
+            "opponentRank": null,
+            "location": "Morehead, Ky.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/morehead-state/boxscore/11106",
+              "recap": "https://herdzone.com/news/2025/8/14/womens-soccer-herd-womens-soccer-opens-2025-season-with-3-0-road-victory",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/morehead-state/29"
+            }
+          },
+          {
+            "date": "2025-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Glenville State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/glenville-state/boxscore/11107",
+              "recap": "https://herdzone.com/news/2025/8/20/womens-soccer-herd-cruises-to-6-0-victory-in-home-opener",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/glenville-state/282"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Athens, Ohio",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/ohio/boxscore/11108",
+              "recap": "https://herdzone.com/news/2025/8/24/womens-soccer-womens-soccer-makes-history-with-first-win-at-ohio-2-1",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/ohio/22"
+            }
+          },
+          {
+            "date": "2025-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Wright State",
+            "opponentRank": null,
+            "location": "Dayton, Ohio",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/wright-state/boxscore/11109",
+              "recap": "https://herdzone.com/news/2025/8/27/womens-soccer-marshall-women-edge-wright-state-2-1-in-hard-fought-road-victory",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/wright-state/130"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Murray State",
+            "opponentRank": null,
+            "location": "Murray, Ky.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/murray-state/boxscore/11110",
+              "recap": "https://herdzone.com/news/2025/8/31/womens-soccer-herd-womens-soccer-drops-late-decision-at-murray-state",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/murray-state/105"
+            }
+          },
+          {
+            "date": "2025-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Fairmont State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": null,
+            "score": null,
+            "links": {
+              "recap": "https://herdzone.com/news/2025/9/5/womens-soccer-marshall-womens-soccer-match-abandoned-due-to-severe-weather",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/fairmont-state/249"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "WVU",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/wvu/boxscore/11112",
+              "recap": "https://herdzone.com/news/2025/9/11/womens-soccer-herd-battles-in-home-defeat-against-west-virginia"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia Southern",
+            "opponentRank": null,
+            "location": "Statesboro, Ga.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/georgia-southern/boxscore/11113",
+              "recap": "https://herdzone.com/news/2025/9/14/womens-soccer-womens-soccer-earns-1-1-draw-at-georgia-southern",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-southern/91"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Monroe, La.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/ulm/boxscore/11114",
+              "recap": "https://herdzone.com/news/2025/9/18/womens-soccer-late-ulm-goal-sinks-marshall-women-in-monroe-3-2",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/ulm/37"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/georgia-state/boxscore/11115",
+              "recap": "https://herdzone.com/news/2025/9/21/womens-soccer-marshall-women-edge-georgia-state-3-2-in-dramatic-conference-home-opener",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-state/1"
+            }
+          },
+          {
+            "date": "2025-09-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/arkansas-state/boxscore/11116",
+              "recap": "https://herdzone.com/news/2025/9/27/womens-soccer-marshall-womens-soccer-dominant-in-3-0-win-over-arkansas-state",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/arkansas-state/138"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "JMU",
+            "opponentRank": null,
+            "location": "Harrisonburg, Va.",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/jmu/boxscore/11117",
+              "recap": "https://herdzone.com/news/2025/10/2/womens-soccer-marshall-drops-road-decision-to-defending-champions-jmu",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/jmu/40"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/old-dominion/boxscore/11118",
+              "recap": "https://herdzone.com/news/2025/10/5/womens-soccer-womens-soccer-battles-sbc-east-leaders-odu-to-goalless-draw"
+            }
+          },
+          {
+            "date": "2025-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Mobile, Ala.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/south-alabama/boxscore/11119",
+              "recap": "https://herdzone.com/news/2025/10/10/womens-soccer-marshall-earns-gritty-0-0-draw-at-south-alabama-behind-defensive-stand",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/south-alabama/224"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Boone, N.C.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/app-state/boxscore/11120",
+              "recap": "https://herdzone.com/news/2025/10/19/womens-soccer-womens-soccer-strengthens-postseason-position-with-2-0-victory-at-app-state",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/app-state/20"
+            }
+          },
+          {
+            "date": "2025-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/coastal-carolina/boxscore/11121",
+              "recap": "https://herdzone.com/news/2025/10/24/womens-soccer-postseason-bound-herd-womens-soccer-clinches-sbc-tournament-berth-with-friday-result",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/coastal-carolina/76"
+            }
+          },
+          {
+            "date": "2025-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/southern-miss/boxscore/11122",
+              "recap": "https://herdzone.com/news/2025/10/29/womens-soccer-herd-cruises-into-postseason-with-5-0-win-behind-fowlers-hat-trick",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/southern-miss/56"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Seed ULM",
+            "opponentRank": 3,
+            "location": "Foley Sports Tourism Complex, Foley, Ala.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2025/-3-seed-ulm/boxscore/11335",
+              "recap": "https://herdzone.com/news/2025/11/3/womens-soccer-womens-soccers-season-ends-in-narrow-1-0-defeat-to-ulm-in-sun-belt-conference-quarterfinals"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "3-8-5",
+        "games": [
+          {
+            "date": "2024-08-07",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Delaware",
+            "opponentRank": null,
+            "location": "Newark, Del.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/delaware-exhibition/82"
+            }
+          },
+          {
+            "date": "2024-08-10",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Drexel",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/drexel-exhibition/167"
+            }
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Morehead State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/morehead-state/boxscore/10606",
+              "recap": "https://herdzone.com/news/2024/8/15/womens-soccer-herd-womens-soccer-opens-new-era-with-home-draw",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/morehead-state/29"
+            }
+          },
+          {
+            "date": "2024-08-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Hanover, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/dartmouth/boxscore/10607",
+              "recap": "https://herdzone.com/news/2024/8/23/womens-soccer-early-goal-downs-marshall-womens-soccer",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/dartmouth/162"
+            }
+          },
+          {
+            "date": "2024-08-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Cambridge, Mass.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/harvard/boxscore/10608",
+              "recap": "https://herdzone.com/news/2024/8/26/womens-soccer-herd-battles-in-1-0-loss-to-harvard",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/harvard/281"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Belmont",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/belmont/boxscore/10609",
+              "recap": "https://herdzone.com/news/2024/9/1/womens-soccer-herd-womens-soccer-earns-special-win-with-fowlers-late-winner",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/belmont/244"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Athens, Ohio",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/ohio/boxscore/10610",
+              "recap": "https://herdzone.com/news/2024/9/5/womens-soccer-herd-womens-soccer-comes-up-short-at-ohio",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/ohio/22"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Indiana State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/indiana-state/boxscore/10611",
+              "recap": "https://herdzone.com/news/2024/9/8/womens-soccer-deja-vu-herd-womens-soccer-wins-on-another-late-goal",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/indiana-state/178"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Atlanta, Ga.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/georgia-state/boxscore/10613",
+              "recap": "https://herdzone.com/news/2024/9/22/womens-soccer-marshall-womens-soccer-draws-at-gsu-in-sbc-opener",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-state/1"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "San Marcos, Texas",
+            "result": "L",
+            "score": "1-6",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/texas-state/boxscore/10614",
+              "recap": "https://herdzone.com/news/2024/9/26/womens-soccer-mccomas-scores-first-collegiate-goal-at-texas-state",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/texas-state/346"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/troy/boxscore/10615",
+              "recap": "https://herdzone.com/news/2024/9/29/womens-soccer-herd-womens-soccer-starts-fast-defeats-troy-3-0",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/troy/229"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia Southern",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/georgia-southern/boxscore/10616",
+              "recap": "https://herdzone.com/news/2024/10/6/womens-soccer-herd-womens-soccer-drops-game-sunday-after-second-half-goal",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-southern/91"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Hattiesburg, Miss.",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/southern-miss/boxscore/10617",
+              "recap": "https://herdzone.com/news/2024/10/10/womens-soccer-womens-soccer-picks-up-road-point-at-southern-miss",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/southern-miss/56"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/app-state/boxscore/10618",
+              "recap": "https://herdzone.com/news/2024/10/13/womens-soccer-herd-womens-soccer-plays-to-hard-fought-draw-sunday",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/app-state/20"
+            }
+          },
+          {
+            "date": "2024-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Conway, S.C.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/coastal-carolina/boxscore/10619",
+              "recap": "https://herdzone.com/news/2024/10/18/womens-soccer-first-half-goal-downs-herd-womens-soccer",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/coastal-carolina/76"
+            }
+          },
+          {
+            "date": "2024-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "ODU",
+            "opponentRank": null,
+            "location": "Norfolk, Va.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/odu/boxscore/10620",
+              "recap": "https://herdzone.com/news/2024/10/23/womens-soccer-wolgemuths-season-high-9-saves-secures-crucial-road-point-for-herd-womens-soccer",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/odu/21"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "JMU",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/jmu/boxscore/10621",
+              "recap": "https://herdzone.com/news/2024/10/27/womens-soccer-herd-womens-soccer-battles-in-3-2-defeat-to-jmu",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/jmu/40"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2024/louisiana/boxscore/10622",
+              "recap": "https://herdzone.com/news/2024/10/31/womens-soccer-herd-womens-soccer-concludes-season-against-louisiana",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/louisiana/340"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "7-9-1",
+        "games": [
+          {
+            "date": "2023-08-05",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Cullowhee, N.C.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/western-carolina-exhibition/17"
+            }
+          },
+          {
+            "date": "2023-08-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Cincinnati (Fans First)",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/cincinnati-fans-first/15"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kentucky",
+            "opponentRank": null,
+            "location": "Lexington, Ky.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/kentucky-exhibition/42"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Morehead State",
+            "opponentRank": null,
+            "location": "Morehead, Ky.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/morehead-state/boxscore/9042",
+              "recap": "https://herdzone.com/news/2023/8/17/womens-soccer-dominant-second-half-propels-herd-womens-soccer-to-season-opening-victory",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/morehead-state/29"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "High Point",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/high-point/boxscore/9043",
+              "recap": "https://herdzone.com/news/2023/8/20/womens-soccer-fishers-free-kick-leads-herd-past-high-point",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/high-point/95"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Indiana State",
+            "opponentRank": null,
+            "location": "Terre Haute, Ind.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/indiana-state/boxscore/9044",
+              "recap": "https://herdzone.com/news/2023/8/24/womens-soccer-herd-remains-undefeated-after-road-draw-at-indiana-state",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/indiana-state/178"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/ohio/boxscore/9045",
+              "recap": "https://herdzone.com/news/2023/8/31/womens-soccer-herd-womens-soccer-defeats-ohio"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Gardner-Webb",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/gardner-webb/boxscore/9046",
+              "recap": "https://herdzone.com/news/2023/9/3/womens-soccer-herd-womens-soccer-remains-unbeaten-after-3-0-win-over-gardner-webb"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Miami (Ohio)",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/miami-ohio-/boxscore/9047",
+              "recap": "https://herdzone.com/news/2023/9/7/womens-soccer-gandees-strike-seals-herd-victory-over-miami-ohio"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/liberty/boxscore/9048",
+              "recap": "https://herdzone.com/news/2023/9/10/womens-soccer-herd-upended-by-liberty-set-sights-on-conference-play"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/ulm/boxscore/9049",
+              "recap": "https://herdzone.com/news/2023/9/17/womens-soccer-marshall-womens-soccer-falls-in-sun-belt-opener"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "JMU",
+            "opponentRank": null,
+            "location": "Harrisonburg, Va.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/jmu/boxscore/9050",
+              "recap": "https://herdzone.com/news/2023/9/21/womens-soccer-herd-womens-soccer-drops-road-contest-at-jmu",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/jmu/40"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/south-alabama/boxscore/9051",
+              "recap": "https://herdzone.com/news/2023/9/24/womens-soccer-herd-unable-to-overcome-unbeaten-south-alabama"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Troy, Ala.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/troy/boxscore/9052",
+              "recap": "https://herdzone.com/news/2023/9/30/womens-soccer-herd-womens-soccer-thunders-back-to-pick-up-road-victory",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/troy/229"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/old-dominion/boxscore/9053",
+              "recap": "https://herdzone.com/news/2023/10/5/womens-soccer-late-goal-drops-herd-womens-soccer-thursday-night"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Boone, N.C.",
+            "result": "L",
+            "score": "1-5",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/app-state/boxscore/9054",
+              "recap": "https://herdzone.com/news/2023/10/8/womens-soccer-second-half-goals-down-marshall-womens-soccer",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/app-state/20"
+            }
+          },
+          {
+            "date": "2023-10-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/georgia-state/boxscore/9055",
+              "recap": "https://herdzone.com/news/2023/10/14/womens-soccer-fisher-scores-sixth-goal-in-herd-womens-soccer-loss-to-gsu",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-state/1"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia Southern",
+            "opponentRank": null,
+            "location": "Statesboro, GA",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/georgia-southern/boxscore/9056",
+              "recap": "https://herdzone.com/news/2023/10/19/womens-soccer-marshall-womens-soccer-drops-contest-at-georgia-southern",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/georgia-southern/91"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/coastal-carolina/boxscore/9057",
+              "recap": "https://herdzone.com/news/2023/10/22/womens-soccer-marshall-womens-soccer-defeats-coastal-carolina-after-late-penalty-kick",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/coastal-carolina/76"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Lafayette, La.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://herdzone.com/sports/womens-soccer/stats/2023/louisiana/boxscore/9058",
+              "recap": "https://herdzone.com/news/2023/10/26/womens-soccer-marshall-womens-soccer-concludes-season-at-louisiana",
+              "history": "https://herdzone.com/sports/wsoc/opponent-history/louisiana/340"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://herdzone.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:13:17Z"
+    }
+  },
   "commitments": [],
   "news": {
     "recruiting": [
@@ -205,41 +3111,21 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 0.89,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "tds: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://herdzone.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:56:18Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=38.422482&longitude=-82.428964&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:56:16Z"
-      },
-      {
-        "collector": "tds",
-        "error": "tds: parsed 0 commitments from https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/marshall/clgid-97/tab-commitments (markup change?)",
-        "at": "2026-09-07T05:56:21Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

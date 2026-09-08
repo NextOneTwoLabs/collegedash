@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T18:10:27Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.722523,
+    "lon": -73.796104,
+    "timezone": "America/New_York",
+    "elevationM": 3.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014732",
+      "name": "NEW YORK LAGUARDIA AP",
+      "state": "NY",
+      "distanceKm": 9.5,
+      "elevationM": 3.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 40.2,
+        "tLowF": 28.6,
+        "precipIn": 3.25,
+        "snowIn": 8.6,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 19.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 42.7,
+        "tLowF": 29.9,
+        "precipIn": 2.93,
+        "snowIn": 9.8,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 17.2
+      },
+      {
+        "month": "Mar",
+        "tHighF": 49.9,
+        "tLowF": 36.2,
+        "precipIn": 4.01,
+        "snowIn": 5.4,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 9.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 61.3,
+        "tLowF": 46.0,
+        "precipIn": 3.85,
+        "snowIn": 0.4,
+        "wetDays": 6.4,
+        "days90F": 0.1,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "May",
+        "tHighF": 71.8,
+        "tLowF": 55.7,
+        "precipIn": 3.58,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 1.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 81.1,
+        "tLowF": 65.7,
+        "precipIn": 4.03,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.4,
+        "tLowF": 71.9,
+        "precipIn": 4.3,
+        "snowIn": 0.0,
+        "wetDays": 6.3,
+        "days90F": 9.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.5,
+        "tLowF": 71.0,
+        "precipIn": 4.41,
+        "snowIn": 0.0,
+        "wetDays": 6.4,
+        "days90F": 5.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 77.2,
+        "tLowF": 64.4,
+        "precipIn": 3.88,
+        "snowIn": 0.0,
+        "wetDays": 5.8,
+        "days90F": 1.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.0,
+        "tLowF": 53.3,
+        "precipIn": 3.81,
+        "snowIn": 0.1,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.0,
+        "tLowF": 43.2,
+        "precipIn": 3.15,
+        "snowIn": 0.3,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 2.6
+      },
+      {
+        "month": "Dec",
+        "tHighF": 45.4,
+        "tLowF": 34.7,
+        "precipIn": 4.08,
+        "snowIn": 5.2,
+        "wetDays": 7.3,
+        "days90F": 0.0,
+        "daysFreeze": 12.3
+      }
+    ],
+    "annualPrecipIn": 45.3,
+    "annualSnowIn": 29.8,
+    "fallSeason": {
+      "avgHighF": 70.7,
+      "avgLowF": 58.0,
+      "precipIn": 15.2,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 86.4°F), coldest Jan (avg low 28.6°F). 45.3 in of rain per year, 29.8 in of snow. Fall season (Aug–Nov): highs around 70.7°F, 15.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014732,USW00094789,USC00300961&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:27Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Ian Stone",
-      "title": null,
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/ian-stone/885",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Ian Stone",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/ian-stone/885",
+        "social": {}
+      },
+      {
+        "name": "Amy Marron",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/amy-marron/886",
+        "social": {}
+      },
+      {
+        "name": "Samie Scaffidi",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/samie--scaffidi/887",
+        "social": {}
+      },
+      {
+        "name": "Jesse Corke",
+        "title": "Goalkeeping Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/jesse-corke/907",
+        "social": {}
+      },
+      {
+        "name": "Samantha Masur",
+        "title": "Director of Soccer Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/coaches/samantha--masur/888",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Tricia Fratta",
+        "title": "Associate Athletic Trainer (Women's Soccer, Women's Tennis, Softball)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/staff/tricia-fratta/62",
+        "social": {}
+      },
+      {
+        "name": "Robert Basile",
+        "title": "Director of Strength & Conditioning",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/staff/robert-basile/63",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": null,
       "capacity": null
@@ -112,13 +319,2769 @@
         "url": "https://en.wikipedia.org/wiki/St._John%27s_Red_Storm_women%27s_soccer",
         "asOf": "2026-09-07T18:13:01Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://redstormsports.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:26:57Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "2-3-1",
+      "wins": 2,
+      "losses": 3,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Ian Stone"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "3-9-5",
+      "wins": 3,
+      "losses": 9,
+      "ties": 5,
+      "confRecord": "1-6-3",
+      "rpiRank": 256,
+      "rpi": {
+        "rank": 256,
+        "record": "3-9-5",
+        "through": "2025-12-08",
+        "prevRank": 256,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 256,
+            "record": "3-9-5"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "6-7-5",
+      "wins": 6,
+      "losses": 7,
+      "ties": 5,
+      "confRecord": "1-6-3",
+      "rpiRank": 178,
+      "rpi": {
+        "rank": 178,
+        "sosRank": 190,
+        "balancedRank": 146,
+        "kpiRank": 160,
+        "masseyRank": 133,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "10-6-3",
+      "wins": 10,
+      "losses": 6,
+      "ties": 3,
+      "confRecord": "5-4-1",
+      "rpiRank": 61,
+      "rpi": {
+        "rank": 61,
+        "sosRank": 87,
+        "balancedRank": 79,
+        "kpiRank": 74,
+        "masseyRank": 89,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Kayla Bower",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Lincoln Park, N.J. / DePaul Catholic",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/kayla-bower/6309",
+        "social": {
+          "x": "https://twitter.com/Kaylarbower",
+          "instagram": "https://www.instagram.com/Kaylarbower"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Gianna Pietrafesa",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wynantskill, N.Y. / Averill Park",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/gianna-pietrafesa/6332",
+        "social": {
+          "x": "https://twitter.com/giannapiegk08",
+          "instagram": "https://www.instagram.com/giannapie_08"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "1",
+        "name": "Ava Voynovich",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Roslyn Heights, N.Y. / Roslyn",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/ava-voynovich/6329",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Nora Basile",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Rockville Centre, N.Y. / South Side",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "East Meadow SC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/nora-basile/6307",
+        "social": {
+          "instagram": "https://www.instagram.com/norabasilee"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "3",
+        "name": "Julia Lombardo",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Tuxedo Park, N.Y. / Albertus Magnus HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/julia-lombardo/6318",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Hope Van Tuyle",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Leesburg, Va. / Heritage",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/hope-van-tuyle/6328",
+        "social": {
+          "x": "https://twitter.com/h0pe_vantuyl3",
+          "instagram": "https://www.instagram.com/Hope.vantuyle"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Juliana Dane",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Watertown, Conn. / Holy Cross HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/juliana-dane/6312",
+        "social": {
+          "instagram": "https://www.instagram.com/Juliana_dane"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Sia Bharadwaj",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Ramon, Calif / Monte Vista HS",
+        "highSchool": "Sacramento State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/sia-bharadwaj/6330",
+        "social": {
+          "instagram": "https://www.instagram.com/siabhara"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Samantha Goldberg",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Woodbury, N.Y. / Syosset",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Long Island SC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/samantha-goldberg/6316",
+        "social": {
+          "instagram": "https://www.instagram.com/Sami.Goldberg"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Julia Rollison",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Leesburg, Va. / Tuscarora",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Northern Virginia Alliance",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/julia-rollison/6333",
+        "social": {
+          "x": "https://twitter.com/juliarollo39",
+          "instagram": "https://www.instagram.com/j.rollo12"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "10",
+        "name": "Jaylen Vallecillo",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Queens, N.Y. / Christ the King Regional",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "East Meadow SC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/jaylen-vallecillo/6327",
+        "social": {
+          "instagram": "https://www.instagram.com/Itz.jaylenv"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "11",
+        "name": "Daniela Monzon",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Levittown, N.Y. / St. Anthony's",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/daniela-monzon/6320",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Stephanie Cornelius",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Pittsburgh, Pa. / Pine-Richland",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Beadling SC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/stephanie-cornelius/6311",
+        "social": {
+          "instagram": "https://www.instagram.com/Stephaniecornelius_"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Nia Derodel",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Dix Hills, N.Y. / Half Hollow Hills West",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/nia-derodel/6313",
+        "social": {
+          "instagram": "https://www.instagram.com/nia.derodel"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Taryn Madsen",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lakeville, Mass. / Thayer Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/taryn-madsen/6319",
+        "social": {
+          "instagram": "https://www.instagram.com/taryn.madsen"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Leana Ruiz",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Massapequa Park, N.Y. / St. Anthony's",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "SUSA Academy",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/leana-ruiz/6322",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "19",
+        "name": "Daisy Burt",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Newcastle, England / Whitley Bay",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/daisy-burt/6310",
+        "social": {
+          "x": "https://twitter.com/Burt8Daisy",
+          "instagram": "https://www.instagram.com/daisyburt05"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Erin Palmeri",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Islip, N.Y. / West Islip",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "SUSA Academy",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/erin-palmeri/6321",
+        "social": {
+          "x": "https://twitter.com/erin_palmeri",
+          "instagram": "https://www.instagram.com/erinpalmeri_"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "21",
+        "name": "Janelle Sylvestre",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Hamilton, Ontario, Canada / St. Thomas More",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/janelle-sylvestre/6325",
+        "social": {
+          "instagram": "https://www.instagram.com/Janelle.sylvestre"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Kailey McCormick",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mineola, N.Y. / Holy Trinity",
+        "highSchool": "Seton Hall",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/kailey-mccormick/6331",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Leah Anand",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Leesburg, Va. / St. Paul VI",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/leah-anand/6306",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Lauren Spence",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Eatontown, N.J. / Monmouth Regional",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/lauren-spence/6323",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Carly Schuler",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Massapequa, N.Y. / Massapequa",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/carly-schuler/6334",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Abby Fitzmaurice",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Philadelphia, Pa / Springside Chestnut Hill Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/abby-fitzmaurice/6315",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Maya Terwilliger",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mystic, Conn. / Stonington",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/maya-terwilliger/6326",
+        "social": {
+          "instagram": "https://www.instagram.com/maya_rose8"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Julianna Bivona",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Rockville Centre, N.Y. / Sacred Heart Academy",
+        "highSchool": "University of South Florida",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/julianna-bivona/6308",
+        "social": {
+          "instagram": "https://www.instagram.com/juliannabivona"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Alina Lagace",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Latham, N.Y. / Shaker",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/alina-lagace/6317",
+        "social": {
+          "instagram": "https://www.instagram.com/alinalagace07"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Snæfríður Eva Eiríksdóttir",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Reykjavik, Iceland / Verzunarskoli Islands",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/snfrur-eva-eirksdttir/6314",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "35",
+        "name": "Telma Steindórsdóttir",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Kópavogur, Iceland / Menntaskólinn í Kópavogi",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://redstormsports.com/sports/womens-soccer/roster/telma-steindrsdttir/6324",
+        "social": {
+          "instagram": "https://www.instagram.com/telmaasteindors"
+        },
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 6,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 6,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "GR": 2,
+      "FR": 3,
+      "SO": 10,
+      "JR": 11,
+      "SR": 3
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 3,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://redstormsports.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:26:57Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kayla Bower",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Lincoln Park, N.J.",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Iris de Rouw",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Rotterdam, Netherlands",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Ava Voynovich",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Roslyn Heights, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Nora Basile",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Rockville Centre, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Julia Lombardo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tuxedo Park, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Hope Van Tuyle",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Leesburg, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Juliana Dane",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Watertown, Conn.",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Molly McGlame",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hanover, Mass.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Samantha Goldberg",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Woodbury, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Mia Agresti",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Monmouth Beach, N.J.",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Jaylen Vallecillo",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Queens, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Daniela Monzon",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Levittown, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Stephanie Cornelius",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Nia Derodel",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Dix Hills, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Taryn Madsen",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Lakeville, Mass.",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Leana Ruiz",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Massapequa Park, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Daisy Burt",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Newcastle, England",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Erin Palmeri",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "West Islip, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Janelle Sylvestre",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Hamilton, Ontario, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Reese Dunaway",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Mars, Pa.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Leah Anand",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Leesburg, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Lauren Spence",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Eatontown, N.J.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Emily Riggins",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bethpage, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Abby Fitzmaurice",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Philadelphia, Pa",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Maya Terwilliger",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mystic, Conn.",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Julianna Bivona",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Rockville Centre, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alina Lagace",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Latham, N.Y.",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Madison Mariani",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Richmond Hill, Ontario, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Snæfríður Eva Eiríksdóttir",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Reykjavik, Iceland",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Telma Steindórsdóttir",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Kópavogur, Iceland",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "emily riggins",
+        "iris de rouw",
+        "madison mariani",
+        "mia agresti",
+        "molly mcglame",
+        "reese dunaway"
+      ]
+    },
+    "2024": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kayla Bower",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Lincoln Park, N.J. / DePaul Catholic",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Megan Sical",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Port Chester, N.Y. / Port Chester",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Nora Basile",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Rockville Centre, N.Y. / South Side",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Lauryn Tran",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Calgary, Canada / Rundle College",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Hope Van Tuyle",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Leesburg, Va. / Heritage",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Juliana Dane",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Watertown, Conn. / Holy Cross HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Molly McGlame",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Hanover, Mass. / Hanover",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Samantha Goldberg",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Woodbury, N.Y. / Syosset",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Mia Agresti",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Monmouth Beach, N.J. / Shore Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Jordyn Levy",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Dix Hills, N.Y. / Half Hollow Hills West",
+          "highSchool": "Indiana"
+        },
+        {
+          "number": "11",
+          "name": "Daniela Monzon",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Levittown, N.Y. / St. Anthony's",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Stephanie Cornelius",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Pittsburgh, Pa. / Pine-Richland",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Taryn Madsen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lakeville, Mass. / Thayer Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Alex Taylor",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Vienna, Va. / George C. Marshall",
+          "highSchool": "Fordham"
+        },
+        {
+          "number": "16",
+          "name": "Nicole Multer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Islip, N.Y. / Islip High School",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Brenna Haufler",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Oceanside, N.Y. / Oceanside",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Nia Derodel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Dix Hills, N.Y. / Half Hollow Hills West",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Alyssa O'Brien",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Danville, Calif. / Dougherty Valley",
+          "highSchool": "UC Santa Barbara"
+        },
+        {
+          "number": "21",
+          "name": "Janelle Sylvestre",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Hamilton, Ontario, Canada / St. Thomas More",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Reese Dunaway",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mars, Pa. / Mars Area",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Athina Sofroniou",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Dix Hills, N.Y. / Half Hollow Hills East",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Lauren Spence",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Eatontown, N.J. / Monmouth Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Emily Riggins",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bethpage, N.Y. / Saint Anthony's",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Abby Fitzmaurice",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Philadelphia, Pa / Springside Chestnut Hill Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emma Chungata",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "East Meadow, N.Y. / Kellenberg Memorial",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Malene Nielsen",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Julesminde, Denmark / Ikast-Brande",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "30",
+          "name": "Jailene DeJesus",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Wyomissing, Pa. / Wilson",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Madison Mariani",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Richmond Hill, Ontario, Canada / Country Day School",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Freya Meadows-Tuson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Reading, England / John Madejski Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Snæfríður Eva Eiríksdóttir",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Reykjavik, Iceland / Verzunarskoli Islands",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Telma Steindórsdóttir",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Kópavogur, Iceland / Menntaskólinn í Kópavogi",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kayla Bower",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lincoln Park, N.J. / DePaul Catholic",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Maria O'Sullivan",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Ballincollig, Ireland / Ballincollig Community School",
+          "highSchool": "Fordham"
+        },
+        {
+          "number": "1",
+          "name": "Megan Sical",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Port Chester, N.Y. / Port Chester",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Angelina Scoma",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Danville, Calif. / Carondelet",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sydney Moore",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Farmingdale, N.Y. / Farmingdale",
+          "highSchool": "Boston College"
+        },
+        {
+          "number": "5",
+          "name": "Frederique St.-Jean",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Quebec, Canada / College Francais",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Juliana Dane",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Watertown, Conn. / Holy Cross HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Molly McGlame",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Hanover, Mass. / Hanover",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Ava Collins",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Auckland, New Zealand / St. Cuthbert's College",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Mia Agresti",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Monmouth Beach, N.J. / Shore Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Jordyn Levy",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Dix Hills, N.Y. / Half Hollow Hills West",
+          "highSchool": "Indiana"
+        },
+        {
+          "number": "11",
+          "name": "Daniela Monzon",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Levittown, N.Y. / St. Anthony's",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Jessica Garziano",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Melville, N.Y. / Half Hollow Hills East",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Stephanie Cornelius",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Pittsburgh, Pa. / Pine-Richland",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Katherine Turner",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "London, England / Cardinal Vaughan Memorial School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Nicole Multer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Islip, N.Y. / Islip High School",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Brenna Haufler",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Oceanside, N.Y. / Oceanside",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Isabelle Aviza",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Medway, Mass. / Medway",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Lauryn Tran",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Calgary, Canada / Rundle College",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Nicole Gordon",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Amityville, N.Y. / St. Anthony's",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Reese Dunaway",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mars, Pa. / Mars Area",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Athina Sofroniou",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dix Hills, N.Y. / Half Hollow Hills East",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Emily Riggins",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bethpage, N.Y. / Saint Anthony's",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Abby Fitzmaurice",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Philadelphia, Pa / Springside Chestnut Hill Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Isabella Tomeo",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "West Islip, N.Y. / West Islip",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jailene DeJesus",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Wyomissing, Pa. / Wilson",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 2,
+      "losses": 3,
+      "ties": 1,
+      "text": "2-3-1",
+      "played": 6,
+      "scheduled": 19,
+      "confText": "0-0-0",
+      "exhibitions": 2
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Wagner",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/wagner-exhibition/153"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Quinnipiac",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": "T",
+        "score": "2-2",
+        "links": {
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/quinnipiac-exhibition/126"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UMass",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/umass/boxscore/15390",
+          "recap": "https://redstormsports.com/news/2026/8/13/womens-soccer-st-johns-comeback-falls-short-against-umass-in-season-opener-2-1",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/umass/77"
+        }
+      },
+      {
+        "date": "2026-08-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Boston College",
+        "opponentRank": null,
+        "location": "Newton, Mass. (Newton Campus Lacrosse & Soccer Field)",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/boston-college/boxscore/15391",
+          "recap": "https://redstormsports.com/news/2026/8/17/womens-soccer-st-johns-falls-short-at-boston-college-2-1",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/boston-college/10"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Towson",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/towson/boxscore/15392",
+          "recap": "https://redstormsports.com/news/2026/8/20/womens-soccer-st-johns-proves-victorious-2-1-thriller-over-towson-on-senior-day"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Columbia",
+        "opponentRank": null,
+        "location": "New York, N.Y. (Rocco B. Commisso Soccer Stadium)",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/columbia/boxscore/15393",
+          "recap": "https://redstormsports.com/news/2026/8/23/womens-soccer-st-johns-battles-to-scoreless-draw-at-columbia",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/columbia/26"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "UMBC",
+        "opponentRank": null,
+        "location": "Baltimore, Md. (Retriever Soccer Park)",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/umbc/boxscore/15394",
+          "recap": "https://redstormsports.com/news/2026/8/27/womens-soccer-st-johns-tops-umbc-2-0",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/umbc/165"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Monmouth",
+        "opponentRank": null,
+        "location": "West Long Branch, N.J. (Hesse Field)",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://redstormsports.com/sports/womens-soccer/stats/2026/monmouth/boxscore/15395",
+          "recap": "https://redstormsports.com/news/2026/9/3/womens-soccer-st-johns-falls-at-monmouth-1-0",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/monmouth/306"
+        }
+      },
+      {
+        "date": "2026-09-09",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Central Connecticut",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/eventCalendarId/401886625?gameId=401886625&sourceLang=en&om-navmethod=espn:globalsearch:results",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663215",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/central-connecticut/20"
+        }
+      },
+      {
+        "date": "2026-09-19",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Penn",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663212",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/penn/120"
+        }
+      },
+      {
+        "date": "2026-09-26",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Villanova",
+        "opponentRank": null,
+        "location": "Villanova, Pa. (Higgins Soccer Complex)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665459&vislive=stjo",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/villanova/96"
+        }
+      },
+      {
+        "date": "2026-09-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UConn",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663216",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/uconn/57"
+        }
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Creighton",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663217",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/creighton/30"
+        }
+      },
+      {
+        "date": "2026-10-07",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Butler",
+        "opponentRank": null,
+        "location": "Indianapolis, Ind. (Bud and Jackie Sellick Bowl)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663984&vislive=stjo",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/butler/16"
+        }
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Georgetown",
+        "opponentRank": null,
+        "location": "Washington, D.C. (Shaw Field)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664572&vislive=stjo",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/georgetown/1"
+        }
+      },
+      {
+        "date": "2026-10-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Marquette",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663218",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/marquette/73"
+        }
+      },
+      {
+        "date": "2026-10-21",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Providence",
+        "opponentRank": null,
+        "location": "Providence, R.I. (Chapey Field at Anderson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://friars.com/sidearmstats/wsoc/summary",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/providence/128"
+        }
+      },
+      {
+        "date": "2026-10-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Xavier",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663219",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/xavier/100"
+        }
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "DePaul",
+        "opponentRank": null,
+        "location": "Chicago, Ill. (Wish Field)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664276&vislive=stjo",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/depaul/32"
+        }
+      },
+      {
+        "date": "2026-11-07",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Seton Hall",
+        "opponentRank": null,
+        "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663220",
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/seton-hall/110"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "BIG EAST Tournament",
+        "opponentRank": null,
+        "location": "Boyds, Md. (Maryland SoccerPlex)",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://redstormsports.com/sports/wsoc/opponent-history/big-east-tournament/294"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "3-9-5",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UMass",
+            "opponentRank": null,
+            "location": "Amherst, Mass. (Rudd Field)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/umass/boxscore/14900",
+              "recap": "https://redstormsports.com/news/2025/8/14/womens-soccer-st-johns-falls-at-umass-in-season-opener-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/umass/77"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Saint Joseph's (Pa.)",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa. (Sweeney Field)",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/saint-josephs-pa-/boxscore/14901",
+              "recap": "https://redstormsports.com/news/2025/8/24/womens-soccer-st-johns-tops-saint-josephs-on-the-road-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/saint-josephs-pa/134"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Youngstown State",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/youngstown-state/boxscore/14903",
+              "recap": "https://redstormsports.com/news/2025/8/31/womens-soccer-early-goals-power-st-johns-past-youngstown-state-2-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/youngstown-state/206"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Columbia",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/columbia/boxscore/14904",
+              "recap": "https://redstormsports.com/news/2025/9/4/womens-soccer-st-johns-drops-contest-to-columbia-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/columbia/26"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Monmouth",
+            "opponentRank": null,
+            "location": "West Long Branch, N.J. (Hesse Field)",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/monmouth/boxscore/14905",
+              "recap": "https://redstormsports.com/news/2025/9/7/womens-soccer-st-johns-set-back-at-monmouth-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/monmouth/306"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "FDU",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/fdu/boxscore/14906",
+              "recap": "https://redstormsports.com/news/2025/9/11/womens-soccer-jaylen-vallecillo-tallies-brace-as-st-johns-draws-fdu-2-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/fdu/41"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/boston-college/boxscore/14907",
+              "recap": "https://redstormsports.com/news/2025/9/14/womens-soccer-st-johns-tallies-impressive-draw-against-boston-college-0-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/boston-college/10"
+            }
+          },
+          {
+            "date": "2025-09-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Storrs, Conn. (Morrone Stadium)",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/uconn/boxscore/14908",
+              "recap": "https://redstormsports.com/news/2025/9/20/womens-soccer-st-johns-drops-big-east-opener-at-uconn-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/uconn/57"
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/providence/boxscore/14909",
+              "recap": "https://redstormsports.com/news/2025/9/24/womens-soccer-st-johns-draws-providence-on-wednesday-night-1-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/providence/128"
+            }
+          },
+          {
+            "date": "2025-09-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Seton Hall",
+            "opponentRank": null,
+            "location": "South Orange, N.J. (Owen T. Carroll Field)",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/seton-hall/boxscore/14910",
+              "recap": "https://redstormsports.com/news/2025/9/27/womens-soccer-kayla-bower-impresses-in-st-johns-scoreless-draw-at-seton-hall-0-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/seton-hall/110"
+            }
+          },
+          {
+            "date": "2025-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Marquette",
+            "opponentRank": null,
+            "location": "Milwaukee, Ws. (Valley Fields)",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/marquette/boxscore/14911",
+              "recap": "https://redstormsports.com/news/2025/10/1/womens-soccer-st-johns-drops-contest-at-marquette-3-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/marquette/73"
+            }
+          },
+          {
+            "date": "2025-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 15 Georgetown",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/georgetown/boxscore/14912",
+              "recap": "https://redstormsports.com/news/2025/10/4/womens-soccer-st-johns-falls-to-no-15-georgetown-on-saturday-night",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/georgetown/1"
+            }
+          },
+          {
+            "date": "2025-10-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Villanova",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/villanova/boxscore/14913",
+              "recap": "https://redstormsports.com/news/2025/10/11/womens-soccer-st-johns-falls-to-villanova-on-senior-night-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/villanova/96"
+            }
+          },
+          {
+            "date": "2025-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 20 Xavier",
+            "opponentRank": null,
+            "location": "Cincinnati, Ohio (Corcoran Field)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/xavier/boxscore/14914",
+              "recap": "https://redstormsports.com/news/2025/10/15/womens-soccer-st-johns-falls-at-no-20-xavier",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/xavier/100"
+            }
+          },
+          {
+            "date": "2025-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Butler",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/butler/boxscore/14915",
+              "recap": "https://redstormsports.com/news/2025/10/22/womens-soccer-hope-van-tuyles-equalizer-propels-st-johns-to-draw-butler-1-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/butler/16"
+            }
+          },
+          {
+            "date": "2025-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "DePaul",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Cox Family Field at Belson Stadium)",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/depaul/boxscore/14916",
+              "recap": "https://redstormsports.com/news/2025/10/25/womens-soccer-st-johns-takes-down-depaul-in-home-finale-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/depaul/32"
+            }
+          },
+          {
+            "date": "2025-11-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Creighton",
+            "opponentRank": null,
+            "location": "Omaha, Neb. (Morrison Stadium)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2025/creighton/boxscore/14917",
+              "recap": "https://redstormsports.com/news/2025/11/1/womens-soccer-st-johns-falls-at-creighton-in-season-finale",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/creighton/30"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "6-7-5",
+        "games": [
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colgate",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/colgate/boxscore/14424",
+              "recap": "https://redstormsports.com/news/2024/8/18/womens-soccer-st-johns-powers-past-colgate-in-season-opener-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/colgate/23"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Towson, Md. (Tiger Field)",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/towson/boxscore/14425",
+              "recap": "https://redstormsports.com/news/2024/8/22/womens-soccer-sofronious-dazzling-equalizer-salvages-draw-at-towson-1-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/towson/150"
+            }
+          },
+          {
+            "date": "2024-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "New Haven, Conn. (Reese Stadium)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/yale/boxscore/14426",
+              "recap": "https://redstormsports.com/news/2024/8/28/womens-soccer-st-johns-falls-at-yale-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/yale/105"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Saint Joseph's",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/saint-joseph-s/boxscore/14427",
+              "recap": "https://redstormsports.com/news/2024/9/1/womens-soccer-levy-beats-buzzer-as-st-johns-downs-saint-josephs-in-dramatic-fashion-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/saint-josephs/134"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UAlbany",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/ualbany/boxscore/14428",
+              "recap": "https://redstormsports.com/news/2024/9/5/womens-soccer-st-johns-unleashes-37-shots-overwhelms-ualbany-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/ualbany/3"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Monmouth",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/monmouth/boxscore/14429",
+              "recap": "https://redstormsports.com/news/2024/9/8/womens-soccer-st-johns-battles-unbeaten-monmouth-to-scoreless-draw",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/monmouth/306"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/cornell/boxscore/14430",
+              "recap": "https://redstormsports.com/news/2024/9/12/womens-soccer-st-johns-attack-erupts-to-blow-past-cornell-4-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/cornell/29"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa. (Rhodes Field)",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/penn/boxscore/14431",
+              "recap": "https://redstormsports.com/news/2024/9/15/womens-soccer-st-johns-tops-penn-on-the-road-2-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/penn/120"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/uconn/boxscore/14432",
+              "recap": "https://redstormsports.com/news/2024/9/22/womens-soccer-st-johns-battles-uconn-to-3-3-draw-in-shootout-to-open-big-east-play",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/uconn/57"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Providence, R.I. (Chapey Field at Anderson Stadium)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/providence/boxscore/14433",
+              "recap": "https://redstormsports.com/news/2024/9/26/womens-soccer-st-johns-drops-thursday-night-contest-at-providence-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/providence/128"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Seton Hall",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/seton-hall/boxscore/14434",
+              "recap": "https://redstormsports.com/news/2024/9/29/womens-soccer-dejesus-scores-brace-in-draw-with-seton-hall-on-rainy-senior-day-2-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/seton-hall/110"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Marquette",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/marquette/boxscore/14435",
+              "recap": "https://redstormsports.com/news/2024/10/3/womens-soccer-st-johns-falls-to-marquette-on-thursday-night-2-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/marquette/73"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 20 Georgetown",
+            "opponentRank": null,
+            "location": "Washington, D.C. (Shaw Field)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/georgetown/boxscore/14436",
+              "recap": "https://redstormsports.com/news/2024/10/6/womens-soccer-st-johns-drop-contest-at-no-20-georgetown",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/georgetown/1"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Villanova",
+            "opponentRank": null,
+            "location": "Villanova, Pa. (Higgins Soccer Complex)",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/villanova/boxscore/14437",
+              "recap": "https://redstormsports.com/news/2024/10/13/womens-soccer-levy-equalizes-in-final-minute-as-st-johns-rallies-to-draw-villanova-2-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/villanova/96"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 20 Xavier",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/xavier/boxscore/14438",
+              "recap": "https://redstormsports.com/news/2024/10/17/womens-soccer-st-johns-falls-to-no-20-xavier-on-thursday-night",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/xavier/100"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Butler",
+            "opponentRank": null,
+            "location": "Indianapolis, Ind. (Bud and Jackie Sellick Bowl)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/butler/boxscore/14439",
+              "recap": "https://redstormsports.com/news/2024/10/24/womens-soccer-st-johns-falls-at-butler",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/butler/16"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "DePaul",
+            "opponentRank": null,
+            "location": "Chicago, Ill. (Wish Field)",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/depaul/boxscore/14440",
+              "recap": "https://redstormsports.com/news/2024/10/27/womens-soccer-st-johns-falls-at-depaul-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/depaul/32"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Creighton",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2024/creighton/boxscore/14441",
+              "recap": "https://redstormsports.com/news/2024/10/31/womens-soccer-st-johns-downs-creighton-on-halloween-night-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/creighton/30"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "10-6-3",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "FDU",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/fdu/boxscore/13971",
+              "recap": "https://redstormsports.com/news/2023/8/17/womens-soccer-st-johns-wins-12th-straight-home-opener-in-3-0-victory-over-fdu",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/fdu/41"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Navy",
+            "opponentRank": null,
+            "location": "Annapolis, Md. (Glenn Warner Soccer Facility)",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/navy/boxscore/13972",
+              "recap": "https://redstormsports.com/news/2023/8/20/womens-soccer-st-johns-plays-navy-to-scoreless-draw",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/navy/222"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colgate",
+            "opponentRank": null,
+            "location": "Hamilton, N.Y. (Beyer-Small Field)",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/colgate/boxscore/13973",
+              "recap": "https://redstormsports.com/news/2023/8/27/womens-soccer-st-johns-tops-colgate-3-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/colgate/23"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Pennsylvania",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/pennsylvania/boxscore/13974",
+              "recap": "https://redstormsports.com/news/2023/8/31/womens-soccer-garzianos-goal-propels-st-johns-past-penn-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/pennsylvania/120"
+            }
+          },
+          {
+            "date": "2023-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Central Connecticut",
+            "opponentRank": null,
+            "location": "New Britain, Conn. (CCSU Soccer Stadium)",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/central-connecticut/boxscore/13975",
+              "recap": "https://redstormsports.com/news/2023/9/4/womens-soccer-levys-late-game-winner-lifts-st-johns-past-ccsu-2-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/central-connecticut/20"
+            }
+          },
+          {
+            "date": "2023-09-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Lehigh",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "L",
+            "score": "2-4",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/lehigh/boxscore/13976",
+              "recap": "https://redstormsports.com/news/2023/9/9/womens-soccer-st-johns-comeback-falls-short-against-lehigh-4-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/lehigh/61"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/yale/boxscore/13977",
+              "recap": "https://redstormsports.com/news/2023/9/14/womens-soccer-st-johns-rallies-back-to-draw-yale-2-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/yale/105"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "4-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/harvard/boxscore/13978",
+              "recap": "https://redstormsports.com/news/2023/9/17/womens-soccer-st-johns-wins-thriller-against-harvard-4-3-garziano-breaks-assist-record",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/harvard/48"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 17 Georgetown",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/georgetown/boxscore/13979",
+              "recap": "https://redstormsports.com/news/2023/9/21/womens-soccer-st-johns-falls-to-no-17-georgetown-3-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/georgetown/1"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Storrs, Conn. (Morrone Stadium)",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/uconn/boxscore/13980",
+              "recap": "https://redstormsports.com/news/2023/9/24/womens-soccer-st-johns-drops-heartbreaker-at-uconn-2-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/uconn/57"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Seton Hall",
+            "opponentRank": null,
+            "location": "South Orange, N.J. (Owen T. Carroll Field)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/seton-hall/boxscore/13981",
+              "recap": "https://redstormsports.com/news/2023/9/28/womens-soccer-st-johns-falters-at-seton-hall-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/seton-hall/110"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Villanova",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/villanova/boxscore/13982",
+              "recap": "https://redstormsports.com/news/2023/10/1/womens-soccer-st-johns-sinks-villanova-2-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/villanova/96"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Creighton",
+            "opponentRank": null,
+            "location": "Omaha, Neb. (Morrison Stadium)",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/creighton/boxscore/13983",
+              "recap": "https://redstormsports.com/news/2023/10/5/womens-soccer-scomas-late-game-magic-lifts-st-johns-over-creighton-in-thriller-3-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/creighton/30"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/providence/boxscore/13984",
+              "recap": "https://redstormsports.com/news/2023/10/8/womens-soccer-st-johns-nets-late-game-equalizer-to-tie-providence-2-2",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/providence/128"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Butler",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/butler/boxscore/13985",
+              "recap": "https://redstormsports.com/news/2023/10/12/womens-soccer-st-johns-surges-in-second-half-downs-butler-3-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/butler/16"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 19 Xavier",
+            "opponentRank": null,
+            "location": "Cincinnati, Ohio (Corcoran Field)",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/xavier/boxscore/13986",
+              "recap": "https://redstormsports.com/news/2023/10/15/womens-soccer-st-johns-falls-to-no-19-xavier-on-sunday",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/xavier/100"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Marquette",
+            "opponentRank": null,
+            "location": "Milwaukee, Wis. (Valley Fields)",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/marquette/boxscore/13987",
+              "recap": "https://redstormsports.com/news/2023/10/22/womens-soccer-st-johns-dominates-marquette-3-0-clinches-spot-in-big-east-tournament",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/marquette/73"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "DePaul",
+            "opponentRank": null,
+            "location": "Queens, N.Y. (Belson Stadium)",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/depaul/boxscore/13988",
+              "recap": "https://redstormsports.com/news/2023/10/26/womens-soccer-st-johns-moves-past-depaul-in-regular-season-finale-1-0",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/depaul/32"
+            }
+          },
+          {
+            "date": "2023-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://redstormsports.com/sports/womens-soccer/stats/2023/providence/boxscore/14183",
+              "recap": "https://redstormsports.com/news/2023/10/29/womens-soccer-no-5-st-johns-falls-to-no-4-providence-in-big-east-tournament-first-round-3-1",
+              "history": "https://redstormsports.com/sports/wsoc/opponent-history/providence/128"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://redstormsports.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:26:57Z"
+    }
+  },
   "commitments": [
     {
       "id": "gianna-pietrafesa-2026",
@@ -131,7 +3094,7 @@
       "city": "Wynantskill",
       "highSchool": "",
       "college": "st-johns",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -150,7 +3113,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -166,7 +3129,7 @@
       "city": "",
       "highSchool": "Tuscarora",
       "college": "st-johns",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -516,35 +3479,21 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.44,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://redstormsports.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:13:03Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.722523&longitude=-73.796104&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T18:13:00Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

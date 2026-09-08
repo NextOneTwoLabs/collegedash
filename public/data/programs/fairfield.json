@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:02:35Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.157673,
+    "lon": -73.255903,
+    "timezone": "America/New_York",
+    "elevationM": 1.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094702",
+      "name": "BRIDGEPORT SIKORSKY MEM AP",
+      "state": "CT",
+      "distanceKm": 10.6,
+      "elevationM": 1.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 38.4,
+        "tLowF": 24.4,
+        "precipIn": 3.18,
+        "snowIn": 8.5,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 24.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 40.5,
+        "tLowF": 25.7,
+        "precipIn": 3.12,
+        "snowIn": 10.7,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 21.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 47.4,
+        "tLowF": 32.3,
+        "precipIn": 4.09,
+        "snowIn": 7.0,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 15.7
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.3,
+        "tLowF": 41.7,
+        "precipIn": 4.16,
+        "snowIn": 0.9,
+        "wetDays": 6.8,
+        "days90F": 0.0,
+        "daysFreeze": 2.3
+      },
+      {
+        "month": "May",
+        "tHighF": 68.4,
+        "tLowF": 51.7,
+        "precipIn": 3.58,
+        "snowIn": 0.0,
+        "wetDays": 7.2,
+        "days90F": 0.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.7,
+        "tLowF": 61.5,
+        "precipIn": 3.77,
+        "snowIn": 0.0,
+        "wetDays": 6.7,
+        "days90F": 1.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 83.4,
+        "tLowF": 67.9,
+        "precipIn": 3.32,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 4.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.9,
+        "tLowF": 67.0,
+        "precipIn": 3.98,
+        "snowIn": 0.0,
+        "wetDays": 6.1,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 75.4,
+        "tLowF": 59.8,
+        "precipIn": 3.96,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 64.4,
+        "tLowF": 48.3,
+        "precipIn": 3.84,
+        "snowIn": 0.1,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.6,
+        "tLowF": 38.4,
+        "precipIn": 3.11,
+        "snowIn": 0.9,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 7.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 43.8,
+        "tLowF": 30.2,
+        "precipIn": 3.98,
+        "snowIn": 5.5,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 19.9
+      }
+    ],
+    "annualPrecipIn": 44.1,
+    "annualSnowIn": 33.6,
+    "fallSeason": {
+      "avgHighF": 68.8,
+      "avgLowF": 53.4,
+      "precipIn": 14.9,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 83.4°F), coldest Jan (avg low 24.4°F). 44.1 in of rain per year, 33.6 in of snow. Fall season (Aug–Nov): highs around 68.8°F, 14.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094702,USW00054734,USC00067970&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:00Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,8 +228,50 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "David Barrett",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/coaches/david-barrett/1182",
+        "social": {}
+      },
+      {
+        "name": "Corey Holton",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/coaches/corey-holton/1183",
+        "social": {}
+      },
+      {
+        "name": "Chris Flaherty",
+        "title": "Assistant Coach - Goalkeepers",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/coaches/chris-flaherty/1184",
+        "social": {}
+      },
+      {
+        "name": "Reilly Johnson",
+        "title": "Graduate Assistant Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/coaches/reilly-johnson/1195",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Sydney Cox",
+        "title": "Team Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/staff/sydney-cox/80",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +289,1459 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://fairfieldstags.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:05:18Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 32,
+    "players": [
+      {
+        "number": "0",
+        "name": "Marilyn Dixon",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wheaton, Ill. / Wheaton-Warrenville South",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/marilyn-dixon/8072",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Leah Prezenkowski",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "North Royalton, Ohio / North Royalton",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/leah-prezenkowski/8092",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Alyssa Gluting",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Aurora, Ill. / Metea Valley",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/alyssa-gluting/8074",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Mary Grusser",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wyckoff, N.J. / Ramapo",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/mary-grusser/8095",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "3",
+        "name": "Charlyse Berry",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Alamo, Calif. / Monte Vista",
+        "highSchool": "Columbia",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/charlyse-berry/8097",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Bella Bingham",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Walpole, Mass. / Walpole",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/bella-bingham/8090",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Cassidy Clinton",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "West Milford, N.J. / West Milford",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "STA Soccer",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/cassidy-clinton/8068",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Taylor deVos",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "North Easton, Mass. / Oliver Ames",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/taylor-devos/8071",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Ella Pisani",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Wrentham, Mass. / King Philip Regional",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/ella-pisani/8081",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Amelie Stewart",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Berwyn, Pa. / Conestoga",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC DELCO",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/amelie-stewart/8084",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Charlotte Dellin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Winnetka, Ill. / New Trier",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/charlotte-dellin/8069",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Madeline Hargraves",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Fall River, Mass. / Durfee",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/madeline-hargraves/8091",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Ashley McMahon",
+        "pos": "F/M",
+        "posLabel": "F/MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "New City, N.Y. / Albertus Magnus",
+        "highSchool": "James Madison",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/ashley-mcmahon/8077",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Libby Nylen",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Scituate, Mass. / Dexter Southfield",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Select SC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/libby-nylen/8093",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Brooke Kennedy",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wrentham, Mass. / Bishop Feehan High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/brooke-kennedy/8075",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Payton Zaun",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bernardsville, N.J. / Bernards",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/payton-zaun/8089",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Maeve Thomas",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Portland, Ore. / Jesuit",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Portland Thorns Academy",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/maeve-thomas/8096",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Phoebe George",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Austin, Texas / St. Stephen's Episcopal",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/phoebe-george/8073",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Elizabeth George",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Medfield, Mass. / Medfield",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars of Massachusetts",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/elizabeth-george/8094",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Kayleigh Lukasik",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "East Longmeadow, Mass. / East Longmeadow",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/kayleigh-lukasik/8076",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "19",
+        "name": "Kelly O'Connor",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Franklin, Mass. / Franklin",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/kelly-o-connor/8080",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Brooke Walonis",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Walpole, Mass. / Walpole",
+        "highSchool": "UConn",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/brooke-walonis/8087",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Anya Moser",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Boulder, Colo. / Holy Family",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/anya-moser/8079",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Hanah Silva",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Stratford, Conn. / St. Joseph's",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/hanah-silva/8083",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Bridget Dempsey",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Malvern, Pa. / The Episcopal Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/bridget-dempsey/8070",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Krista Tehan",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ashburn, Va. / Briar Woods",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/krista-tehan/8085",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Lindsey Ciss",
+        "pos": "",
+        "posLabel": "B",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Glenview, Ill. / Glenbrook South",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC United Soccer Club",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/lindsey-ciss/8067",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "Ashlyn Walsh",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Pelham, N.H. / Pelham",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/ashlyn-walsh/8088",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Riley Roycroft",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Marshfield, Mass. / Thayer Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/riley-roycroft/8082",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Olivia Wade",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Chalfont, Pa. / Central Bucks South",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/olivia-wade/8086",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Kaitlyn McQueeney",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Coventry, Conn. / Westminster",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FSA FC",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/kaitlyn-mcqueeney/8078",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "33",
+        "name": "Kacie Benn",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Acton, Mass. / Acton Boxborough",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fairfieldstags.com/sports/womens-soccer/roster/kacie-benn/8066",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "SO": 10,
+      "FR": 7,
+      "JR": 8,
+      "GR": 1,
+      "SR": 6
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "?": 2,
+      "M": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://fairfieldstags.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:05:18Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Marilyn Dixon",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Wheaton, Ill. / Wheaton-Warrenville South",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Katie Wright",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Sutton, Mass. / Sutton",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Alyssa Gluting",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Aurora, Ill. / Metea Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Emilie Cook",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Chapel Hill, N.C. / East Chapel Hill",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "4",
+          "name": "Meghan Carragher",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Middletown, N.J. / Middletown High School South",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Cassidy Clinton",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "West Milford, N.J. / West Milford",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Taylor deVos",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "North Easton, Mass. / Oliver Ames",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Ella Pisani",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Wrentham, Mass. / King Philip Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Amelie Stewart",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Berwyn, Pa. / Conestoga",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Charlotte Dellin",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Winnetka, Ill. / New Trier",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Maddy Theriault",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Palmer, Mass. / Palmer",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Ashley McMahon",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "New City, N.Y. / Albertus Magnus",
+          "highSchool": "James Madison"
+        },
+        {
+          "number": "12",
+          "name": "Sam Kersey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mashpee, Mass. / Mashpee",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Brooke Kennedy",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wrentham, Mass. / Bishop Feehan High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Payton Zaun",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bernardsville, N.J. / Bernards",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Jess Lynskey",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Massapequa, N.Y. / Massapequa",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Phoebe George",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Austin, Texas / St. Stephen's Episcopal",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Alex Darcy",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Raleigh, N.C. / Ravenscroft",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kayleigh Lukasik",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "East Longmeadow, Mass. / East Longmeadow",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kelly O'Connor",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Franklin, Mass. / Franklin",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Brooke Walonis",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Walpole, Mass. / Walpole",
+          "highSchool": "UConn"
+        },
+        {
+          "number": "21",
+          "name": "Anya Moser",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Boulder, Colo. / Holy Family",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Hanah Silva",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Stratford, Conn. / St. Joseph's",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Bridget Dempsey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Malvern, Pa. / The Episcopal Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Krista Tehan",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Ashburn, Va. / Briar Woods",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Lindsey Ciss",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Glenview, Ill. / Glenbrook South",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Ashlyn Walsh",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Pelham, N.H. / Pelham",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Riley Roycroft",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Marshfield, Mass. / Thayer Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Olivia Wade",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Chalfont, Pa. / Central Bucks South",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Kaitlyn McQueeney",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Coventry, Conn. / Westminster",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Kacie Benn",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Acton, Mass. / Acton Boxborough",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "alex darcy",
+        "emilie cook",
+        "jess lynskey",
+        "katie wright",
+        "maddy theriault",
+        "meghan carragher",
+        "sam kersey"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Katie Wright",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Sutton, Mass. / Sutton",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Emilie Cook",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Chapel Hill, N.C. / East Chapel Hill",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "3",
+          "name": "Sydney Cox",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Bedford, Mass. / Bedford",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Meghan Carragher",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Middletown, N.J. / Middletown High School South",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Cassidy Clinton",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "West Milford, N.J. / West Milford",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Ella Pisani",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Wrentham, Mass. / King Philip Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Caroline Kelly",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "New City, N.Y. / Clarkstown High School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Charlotte Dellin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Winnetka, Ill. / New Trier",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Maddy Theriault",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Palmer, Mass. / Palmer",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Dana Nadda",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cairo, Egypt / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Sam Kersey",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mashpee, Mass. / Mashpee",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Reagan Klarmann",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Upper Saddle River, N.J. / Northern Highlands Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Sam Erickson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Berkeley Heights, N.J. / Governor Livingson",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Jess Lynskey",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Massapequa, N.Y. / Massapequa",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Phoebe George",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Austin, Texas / St. Stephen's Episcopal",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Alex Darcy",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Raleigh, N.C. / Ravenscroft",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kayleigh Lukasik",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "East Longmeadow, Mass. / East Longmeadow",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Elle Scott",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Ashby, Mass. / Fitchburg High School",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Anya Moser",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Boulder, Colo. / Holy Family",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Hanah Silva",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Stratford, Conn. / St. Joseph's",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Kendall Patten",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "New Canaan, Conn. / New Canaan",
+          "highSchool": "Cornell"
+        },
+        {
+          "number": "25",
+          "name": "Lindsey Ciss",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Glenview, Ill. / Glenbrook South",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Ashlyn Walsh",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pelham, N.H. / Pelham",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Sydney Corbett",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Wenonah, N.J. / Paul VI High School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Allie Kirby",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Long Grove, Ill. / Adlai E. Stevenson High School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Lexi Cosentino",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Middletown, Conn. / Mercy",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Kaitlyn McQueeney",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Coventry, Conn. / Westminster",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Kacie Benn",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Acton, Mass. / Acton Boxborough",
+          "highSchool": ""
+        },
+        {
+          "number": "98",
+          "name": "Alyssa Gluting",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Aurora, Ill. / Metea Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Lindsay Dewar",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Readington N.J. / Hunterdon Central",
+          "highSchool": "Lafayette"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Skylar Ring",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Chantilly, Va. / Lightridge",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Katie Wright",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Sutton, Mass. / Sutton",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Riley Houck",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lancaster, Pa. / Conestoga Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Emilie Cook",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Chapel Hill, N.C. / East Chapel Hill",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "3",
+          "name": "Sydney Cox",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Bedford, Mass. / Bedford",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Meghan Carragher",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Middletown, N.J. / Middletown High School South",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Cassidy Clinton",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "West Milford, N.J. / West Milford",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Tori Sarf",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Manalapan, N.J. / Manalapan",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Ella Pisani",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Wrentham, Mass. / King Philip Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Caroline Kelly",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "New City, N.Y. / Clarkstown High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Maddy Theriault",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Palmer, Mass. / Palmer",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Dana Nadda",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cairo, Egypt / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Sam Kersey",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mashpee, Mass. / Mashpee",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Reagan Klarmann",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Upper Saddle River, N.J. / Northern Highlands Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Sam Erickson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Berkeley Heights, N.J. / Governor Livingson",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Jess Lynskey",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Massapequa, N.Y. / Massapequa",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Angela Filosa",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Ramon, Calif. / California High School",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Alex Darcy",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C. / Ravenscroft",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Maddie Kiely",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Killingworth, Conn. / Haddam Killingworth High School",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Elle Scott",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Ashby, Mass. / Fitchburg High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Aubrey Silverman",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Ocean Township, N.J. / Red Bank Catholic",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Anya Moser",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Boulder, Colo. / Holy Family",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Hanah Silva",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Stratford, Conn. / St. Joseph's",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Arden MacNeil",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Hampton, N.J. / North Hunterdon",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Cailin Panacek",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "North Wales, Pa. / Gwynedd Mercy Academy",
+          "highSchool": "American"
+        },
+        {
+          "number": "27",
+          "name": "Sydney Corbett",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Wenonah, N.J. / Paul VI High School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Allie Kirby",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Long Grove, Ill. / Adlai E. Stevenson High School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Lexi Cosentino",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Middletown, Conn. / Mercy",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Kacie Benn",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Acton, Mass. / Acton Boxborough",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://fairfieldstags.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:05:18Z"
+    }
+  },
   "commitments": [
     {
       "id": "elizabeth-george-2026",
@@ -117,7 +1754,7 @@
       "city": "Medfield",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +1773,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1789,7 @@
       "city": "Walpole",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -196,7 +1833,7 @@
       "city": "",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -240,7 +1877,7 @@
       "city": "",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -259,7 +1896,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -275,7 +1912,7 @@
       "city": "",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -319,7 +1956,7 @@
       "city": "",
       "highSchool": "",
       "college": "fairfield",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -338,7 +1975,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -729,41 +2366,27 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://fairfieldstags.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:03:10Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.157673&longitude=-73.255903&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:03:07Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:03:07Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:05:07Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

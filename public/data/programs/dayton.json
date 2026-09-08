@@ -69,18 +69,217 @@
       "asOf": "2026-09-07T04:59:12Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.739547,
+    "lon": -84.176113,
+    "timezone": "America/New_York",
+    "elevationM": 293.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00053859",
+      "name": "DAYTON WRIGHT BROS AP",
+      "state": "OH",
+      "distanceKm": 16.8,
+      "elevationM": 293.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 39.1,
+        "tLowF": 22.0,
+        "precipIn": 2.91,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 24.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 43.0,
+        "tLowF": 24.6,
+        "precipIn": 2.33,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 21.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 52.6,
+        "tLowF": 32.7,
+        "precipIn": 3.48,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 16.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 65.2,
+        "tLowF": 42.6,
+        "precipIn": 4.37,
+        "snowIn": null,
+        "wetDays": 8.4,
+        "days90F": 0.0,
+        "daysFreeze": 3.8
+      },
+      {
+        "month": "May",
+        "tHighF": 74.8,
+        "tLowF": 53.1,
+        "precipIn": 4.21,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 0.3,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.8,
+        "tLowF": 61.6,
+        "precipIn": 4.9,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.9,
+        "tLowF": 65.0,
+        "precipIn": 3.63,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 6.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.1,
+        "tLowF": 63.3,
+        "precipIn": 2.81,
+        "snowIn": null,
+        "wetDays": 5.3,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 78.8,
+        "tLowF": 56.1,
+        "precipIn": 2.97,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.8,
+        "tLowF": 44.8,
+        "precipIn": 3.02,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.1,
+        "daysFreeze": 1.8
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.8,
+        "tLowF": 34.8,
+        "precipIn": 3.13,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 12.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 42.9,
+        "tLowF": 27.3,
+        "precipIn": 3.21,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 21.8
+      }
+    ],
+    "annualPrecipIn": 41.0,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 71.1,
+      "avgLowF": 49.8,
+      "precipIn": 11.9,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 85.9°F), coldest Jan (avg low 22.0°F). 41.0 in of rain per year. Fall season (Aug–Nov): highs around 71.1°F, 11.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00053859,USW00093815,USC00332067&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:48Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Eric Golz",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/eric-golz/5758",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Eric Golz",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/eric-golz/5758",
+        "social": {}
+      },
+      {
+        "name": "Margaret Saurin",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/margaret-saurin/5759",
+        "social": {}
+      },
+      {
+        "name": "Hailee Fischer",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/hailee-fischer/5806",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Avery Rice",
+        "title": "Graduate Assistant",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/avery-rice/5763",
+        "social": {}
+      },
+      {
+        "name": "Shelbi Bauer",
+        "title": "Assistant Athletic Trainer (ROW, WSOC)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/shelbi-bauer/5764",
+        "social": {}
+      },
+      {
+        "name": "Women's Soccer Recruiting",
+        "title": "Recruiting",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/coaches/womens-soccer-recruiting/5761",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": null,
       "capacity": null
@@ -141,13 +340,1329 @@
         "url": "https://en.wikipedia.org/wiki/Dayton_Flyers_women%27s_soccer",
         "asOf": "2026-09-07T04:59:45Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://daytonflyers.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:04:11Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "0",
+        "name": "Avery Strohecker",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "South Riding, Va. / Freedom",
+        "highSchool": "Seton Hall",
+        "previousSchool": "",
+        "major": "",
+        "club": "TSJ FC Virginia",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/avery-strohecker/16132",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "00",
+        "name": "Kasey Cannistraro",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Oakton, Va. / Oakton",
+        "highSchool": "Iowa State",
+        "previousSchool": "",
+        "major": "",
+        "club": "Alexandria Soccer Academy",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/kasey-cannistraro/16510",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "1",
+        "name": "Avery Vukmanic",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Westerville, Ohio / Westerville Central",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Columbus",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/avery-vukmanic/16131",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "2",
+        "name": "Millie Cluxton",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cincinnati, Ohio / Seton",
+        "highSchool": "College of Charleston",
+        "previousSchool": "",
+        "major": "",
+        "club": "Kings Hammer Academy",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/millie-cluxton/16133",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "3",
+        "name": "Claire Mikola",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Powell, Ohio / Olentangy Liberty",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/claire-mikola/16125",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "4",
+        "name": "Sophia Doumos",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Canberra, Australia /",
+        "highSchool": "Seminole State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/sophia-doumos/16511",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Bre Mendoza",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Knoxville, Tenn. / Bearden",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Alliance",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/bre-mendoza/16124",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Campbell Wood",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Massillon, Ohio / Jackson",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals Soccer Club",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/campbell-wood/16515",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Caroline Schork",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Medina, Ohio / Medina",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/caroline-schork/16129",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "9",
+        "name": "Reese Gallagher",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Copley, Ohio / Archbishop Hoban",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC (OH)",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/reese-gallagher/16513",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Liv Grenda",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Perkasi, Pa. / Pennridge",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Bucks ECNL",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/liv-grenda/16121",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Lauryn Contini",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "New Philadelphia, Ohio / New Philadelphia",
+        "highSchool": "Louisville",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cleveland Force SC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/lauryn-contini/16118",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "13",
+        "name": "Emery Newlin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Monrovia, Ind. / Monrovia",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Pride",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/emery-newlin/16126",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Eva Schreiber",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Nashville, Tenn. / Battle Ground Academy",
+        "highSchool": "Saint Louis",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tennessee Soccer Club",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/eva-schreiber/16134",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "15",
+        "name": "Emery Aschenbrener",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bay Village, Ohio / Bay",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/emery-aschenbrener/16115",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Kelly McCandless",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Burton, Ohio / Berkshire",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ambassadors FC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/kelly-mccandless/16516",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "18",
+        "name": "Delaney Rollins",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dublin, Ohio / Dublin Coffman",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/delaney-rollins/16517",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "19",
+        "name": "Maddie Bowman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Saint Louis, Mo. / St. Joseph's Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "St. Louis Development Academy",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/maddie-bowman/16117",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "20",
+        "name": "Olivia Baca",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Edwardsville, Ill. / Edwardsville",
+        "highSchool": "Xavier",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting STL",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/olivia-baca/16116",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Elise Canter",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Beavercreek, Ohio / Beavercreek",
+        "highSchool": "Wright State",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Galaxies",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/elise-canter/16512",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "22",
+        "name": "Ella Lamb",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Bartlett, Ill. / South Elgin",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sockers FC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/ella-lamb/16123",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "25",
+        "name": "Ky Hau-Golden",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "North Olmsted, Ohio / Western Reserve Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cleveland Force SC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/ky-hau-golden/16122",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "26",
+        "name": "Laney Smith",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fort Thomas, Ky. / Highlands",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Kings Hammer Academy",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/laney-smith/16130",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "27",
+        "name": "Mackenzie Russell",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Rocky River, Ohio / Rocky River",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cleveland Force SC",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/mackenzie-russell/16127",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "28",
+        "name": "Kamryn Hoffman",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Springfield, Ill. / Springfield",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Springfield Area SA (IL)",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/kamryn-hoffman/16514",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "Lauren Fields",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Elite ECNL Soccer",
+        "bioUrl": "https://daytonflyers.com/sports/womens-soccer/roster/lauren-fields/16120",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "JR": 8,
+      "R-JR": 2,
+      "R-SO": 1,
+      "SO": 5,
+      "FR": 5,
+      "SR": 4,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "D": 2,
+      "F": 1,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://daytonflyers.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:04:11Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Batoul Reda",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Dearborn, Mich. / Fordson High School",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Avery Vukmanic",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Westerville, Ohio / Westerville Central",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Claire Mikola",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Powell, Ohio / Olentangy Liberty",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Molly Russell",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Henderson, Nev. / Coronado",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Bre Mendoza",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Knoxville, Tenn. / Bearden",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Emma Gianino",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Saint Louis, Mo. / Nerinx Hall",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Sophie Weeks",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Reston, Va. / St. Paul VI High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Caroline Schork",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Medina, Ohio / Medina",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Ella Raimondi",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Erie, Pa. / Villa Maria Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Amy Angel",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Manassas, Va. / Virginia Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Liv Grenda",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Perkasi, Pa. / Pennridge",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Lauryn Contini",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "New Philadelphia, Ohio / New Philadelphia",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "13",
+          "name": "Emery Newlin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Monrovia, Ind. / Monrovia",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Riley Kerber",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Medina, Ohio / Medina",
+          "highSchool": "Boston College"
+        },
+        {
+          "number": "15",
+          "name": "Emery Aschenbrener",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bay Village, Ohio / Bay",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Morgan Gerak",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Villa Heights, Ky. / Dixie Heights",
+          "highSchool": "Michigan State"
+        },
+        {
+          "number": "18",
+          "name": "Jenna Hallbeck",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dayton, Ohio / Centerville",
+          "highSchool": "Carnegie Mellon"
+        },
+        {
+          "number": "19",
+          "name": "Maddie Bowman",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Saint Louis, Mo. / St. Joseph's Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Olivia Baca",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Edwardsville, Ill. / Edwardsville",
+          "highSchool": "Xavier"
+        },
+        {
+          "number": "21",
+          "name": "Kyra Karfonta",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "South Lyon, Mich. / South Lyon",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Ella Lamb",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bartlett, Ill. / South Elgin",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Naomi Phillips",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Markham, Ontario / Bill Crothers",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ky Hau-Golden",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "North Olmsted, Ohio / Western Reserve Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Laney Smith",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fort Thomas, Ky. / Highlands",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Russell",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Rocky River, Ohio / Rocky River",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Aya Saiki",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Nishinomiya, Japan / Daisho Gakuen",
+          "highSchool": "Barton C.C."
+        },
+        {
+          "number": "33",
+          "name": "Lauren Fields",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Karli Ferguson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Chicago, Ill. / Carl Sandburg",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "amy angel",
+        "aya saiki",
+        "batoul reda",
+        "ella raimondi",
+        "emma gianino",
+        "jenna hallbeck",
+        "karli ferguson",
+        "kyra karfonta",
+        "molly russell",
+        "morgan gerak",
+        "naomi phillips",
+        "riley kerber",
+        "sophie weeks"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Batoul Reda",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Dearborn, Mich. / Fordson High School",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Liv Fain",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Amherst, Ohio / Amherst Steel",
+          "highSchool": "Cleveland State"
+        },
+        {
+          "number": "1",
+          "name": "Avery Vukmanic",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Westerville, Ohio / Westerville Central",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Molly Russell",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Henderson, Nev. / Coronado",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Bre Mendoza",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Knoxville, Tenn. / Bearden",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Emma Gianino",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Saint Louis, Mo. / Nerinx Hall",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Sophie Weeks",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Reston, Va. / St. Paul VI High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Diana Benigno",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Beavercreek, Ohio / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Ella Raimondi",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Erie, Pa. / Villa Maria Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Kennedy Gray",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Grande Prairie, Alberta / Paul Kane",
+          "highSchool": "Miami (Ohio)"
+        },
+        {
+          "number": "11",
+          "name": "Liv Grenda",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Perkasi, Pa. / Pennridge",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Mary Dziuba",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Ada, Mich. / Forest Hills Eastern",
+          "highSchool": "Western Michigan"
+        },
+        {
+          "number": "14",
+          "name": "Riley Kerber",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Medina, Ohio / Medina",
+          "highSchool": "Boston College"
+        },
+        {
+          "number": "15",
+          "name": "Noel Blain",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Canton, Mich. / Canton",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Morgan Gerak",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Villa Heights, Ky. / Dixie Heights",
+          "highSchool": "Michigan State"
+        },
+        {
+          "number": "18",
+          "name": "Jenna Hallbeck",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dayton, Ohio / Centerville",
+          "highSchool": "Carnegie Mellon"
+        },
+        {
+          "number": "19",
+          "name": "Maddie Bowman",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Saint Louis, Mo. / St. Joseph's Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Avery May",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Goshen, Ohio / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kyra Karfonta",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "South Lyon, Mich. / South Lyon",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Ella Lamb",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bartlett, Ill. / South Elgin",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Mairin Wessner",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Northville, Mich. / Northville High School",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Gianna Chrapek",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Glen Allen, Va. / Deep Run",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Laney Smith",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fort Thomas, Ky. / Highlands",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Russell",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Rocky River, Ohio / Rocky River",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kaitlyn Colvert",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lewis Center, Ohio / Olentangy Orange",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Aya Saiki",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Nishinomiya, Japan / Daisho Gakuen",
+          "highSchool": "Barton C.C."
+        },
+        {
+          "number": "33",
+          "name": "Lauren Fields",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Karli Ferguson",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Chicago, Ill. / Carl Sandburg",
+          "highSchool": ""
+        },
+        {
+          "number": "39",
+          "name": "Roisin McGovern",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Dublin, Ireland / Loreto Foxrock",
+          "highSchool": "Temple"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Batoul Reda",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Dearborn, Mich. / Fordson High School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Kayli Farmer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Greenwood, Ind. / Center Grove",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Molly Russell",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Henderson, Nev. / Coronado",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Mackenzie Lutz",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Sylvania, Ohio / Sylvania Northview",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Emma Gianino",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saint Louis, Mo. / Nerinx Hall",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Sophie Weeks",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Reston, Va. / St. Paul VI High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Diana Benigno",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Beavercreek, Ohio / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Ella Raimondi",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Erie, Pa. / Villa Maria Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Kennedy Gray",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Grande Prairie, Alberta / Paul Kane",
+          "highSchool": "Miami (Ohio)"
+        },
+        {
+          "number": "11",
+          "name": "Laney Huber",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Loveland, Ohio / Cincinnati Hills Christian Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Mary Dziuba",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Ada, Mich. / Forest Hills Eastern",
+          "highSchool": "Western Michigan"
+        },
+        {
+          "number": "13",
+          "name": "Maddie Crosbie",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Niagara Falls, Ontario, Canada / AN Myer Secondary",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Madison Wilson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "London, Ontario, Canada / Oakridge Secondary",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Noel Blain",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Canton, Mich. / Canton",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Alicia Donley",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Pickerington, Ohio / Pickerington North",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Morgan Gerak",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Villa Heights, Ky. / Dixie Heights",
+          "highSchool": "Michigan State"
+        },
+        {
+          "number": "18",
+          "name": "Marlee Taylor",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Plymouth, Mich. / Canton",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Maddie Bowman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Saint Louis, Mo. / St. Joseph's Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Elle Lovdal",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / St. Ursula Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kyra Karfonta",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "South Lyon, Mich. / South Lyon",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Ella Lamb",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bartlett, Ill. / South Elgin",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Mairin Wessner",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Northville, Mich. / Northville High School",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kaitlyn Colvert",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lewis Center, Ohio / Olentangy Orange",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Mia Perri",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Roselle, Ill. / Lake Park",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Yaiza Navarro Leon",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Barcelona, Spain / IES Can Puig",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Natalie Hegg",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Columbus, Ohio / Olentangy Berlin",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Lauren Fields",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cincinnati, Ohio / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "37",
+          "name": "Macy Malik",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Shawnee, Kan. / Shawnee Mission Northwest",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Karli Ferguson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Chicago, Ill. / Carl Sandburg",
+          "highSchool": ""
+        },
+        {
+          "number": "39",
+          "name": "Roisin McGovern",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Dublin, Ireland / Loreto Foxrock",
+          "highSchool": "Temple"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://daytonflyers.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:04:11Z"
+    }
+  },
   "commitments": [
     {
       "id": "delaney-rollins-2026",
@@ -160,7 +1675,7 @@
       "city": "Dublin",
       "highSchool": "",
       "college": "dayton",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -179,7 +1694,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -195,7 +1710,7 @@
       "city": "Springfield",
       "highSchool": "",
       "college": "dayton",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -214,7 +1729,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -230,7 +1745,7 @@
       "city": "",
       "highSchool": "",
       "college": "dayton",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -249,7 +1764,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -699,35 +2214,21 @@
     "2028": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://daytonflyers.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T04:59:47Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.739547&longitude=-84.176113&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T04:59:45Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

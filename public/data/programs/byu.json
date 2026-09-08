@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T04:57:09Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.250851,
+    "lon": -111.649281,
+    "timezone": "America/Denver",
+    "elevationM": 1392.9,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USC00427064",
+      "name": "PROVO BYU",
+      "state": "UT",
+      "distanceKm": 0.6,
+      "elevationM": 1392.9
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 41.2,
+        "tLowF": 23.8,
+        "precipIn": 1.95,
+        "snowIn": 12.5,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 26.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 47.6,
+        "tLowF": 27.5,
+        "precipIn": 1.56,
+        "snowIn": 8.7,
+        "wetDays": 4.7,
+        "days90F": 0.0,
+        "daysFreeze": 21.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 58.4,
+        "tLowF": 34.6,
+        "precipIn": 1.55,
+        "snowIn": 4.0,
+        "wetDays": 4.8,
+        "days90F": 0.0,
+        "daysFreeze": 12.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 65.6,
+        "tLowF": 39.7,
+        "precipIn": 1.92,
+        "snowIn": 3.1,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 4.4
+      },
+      {
+        "month": "May",
+        "tHighF": 75.7,
+        "tLowF": 47.4,
+        "precipIn": 2.01,
+        "snowIn": 0.2,
+        "wetDays": 5.1,
+        "days90F": 1.6,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Jun",
+        "tHighF": 87.2,
+        "tLowF": 55.0,
+        "precipIn": 0.93,
+        "snowIn": 0.0,
+        "wetDays": 2.3,
+        "days90F": 13.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 95.2,
+        "tLowF": 62.3,
+        "precipIn": 0.51,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 27.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 92.9,
+        "tLowF": 61.0,
+        "precipIn": 0.73,
+        "snowIn": 0.0,
+        "wetDays": 2.0,
+        "days90F": 24.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 83.1,
+        "tLowF": 52.0,
+        "precipIn": 1.24,
+        "snowIn": 0.0,
+        "wetDays": 3.1,
+        "days90F": 6.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 68.5,
+        "tLowF": 40.9,
+        "precipIn": 1.59,
+        "snowIn": 0.6,
+        "wetDays": 4.1,
+        "days90F": 0.1,
+        "daysFreeze": 3.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.2,
+        "tLowF": 31.6,
+        "precipIn": 1.39,
+        "snowIn": 4.6,
+        "wetDays": 4.0,
+        "days90F": 0.0,
+        "daysFreeze": 16.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 41.4,
+        "tLowF": 24.4,
+        "precipIn": 1.81,
+        "snowIn": 11.2,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 26.1
+      }
+    ],
+    "annualPrecipIn": 17.2,
+    "annualSnowIn": 44.9,
+    "fallSeason": {
+      "avgHighF": 74.4,
+      "avgLowF": 46.4,
+      "precipIn": 5.0,
+      "wetDays": 13.0
+    },
+    "summary": "Hottest month Jul (avg high 95.2°F), coldest Jan (avg low 23.8°F). 17.2 in of rain per year, 44.9 in of snow. Fall season (Aug–Nov): highs around 74.4°F, 5.0 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USC00427064,USC00426538,USC00426919&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:43Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Jennifer Rockwood",
-      "title": null,
+      "title": "Head Coach",
       "since": 1995,
       "seasons": 32,
-      "bioUrl": null,
+      "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/jennifer-rockwood",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Jennifer Rockwood",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/jennifer-rockwood",
+        "social": {}
+      },
+      {
+        "name": "Brent Anderson",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/brent-anderson",
+        "social": {}
+      },
+      {
+        "name": "Steve Magleby",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/steve-magleby",
+        "social": {}
+      },
+      {
+        "name": "Tasha Bell",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/tasha-bell",
+        "social": {}
+      },
+      {
+        "name": "Turreal Moore",
+        "title": "Strength and Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/turreal-moore-1",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Diana Clark",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/diana-clark",
+        "social": {}
+      },
+      {
+        "name": "Rachel Jorgensen",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/season/2026/staff/rachel-jorgensen",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "The Stadium at South Field",
       "capacity": 4200
@@ -172,7 +379,11 @@
         "url": "https://en.wikipedia.org/wiki/BYU_Cougars_women%27s_soccer",
         "asOf": "2026-09-07T04:57:43Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://byucougars.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:03:32Z"
+      }
     }
   },
   "seasons": [
@@ -734,9 +945,1420 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Eva Crane",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/eva-chenn",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Chelsea Peterson",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Orem, Utah",
+        "highSchool": "Utah",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/chelsea-peterson",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Paiton Collins",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Mapleton, Utah",
+        "highSchool": "Maple Mountain High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/paiton-collins",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Halle Dixon",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Carlsbad, California",
+        "highSchool": "Carlsbad High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/halle-dixon",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Ella Rustand-Ford",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Tucson, Arizona",
+        "highSchool": "Sabino High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/ella-rustand",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Avery Frischknecht",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Mapleton, Utah",
+        "highSchool": "Springville High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/avery-frischknecht",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Ella Labrum",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Draper, Utah",
+        "highSchool": "Alta High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/ella-labrum",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Kate Fuller",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Celtic FC",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/kate-fuller",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "7",
+        "name": "Ellie Karl",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Midway, Utah",
+        "highSchool": "Wasatch High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Celtic FC",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/ellie-karl",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Mika Krommenhoek",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Mapleton, Utah",
+        "highSchool": "Maple Mountain High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/mika-krommenhoek",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Emma Neff",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Salt Lake City, Utah",
+        "highSchool": "Olympus High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/emma-neff",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Sophie Sivulich",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "South Weber, Utah",
+        "highSchool": "Northridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/sophie-sivulich",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Anna Neff",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Salt Lake City, Utah",
+        "highSchool": "Olympus High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Celtic FC",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/anna-neff",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "12",
+        "name": "Afton Perry",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Saratoga Springs, Utah",
+        "highSchool": "Westlake High School UT",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/afton-perry",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Emma Hamberlin",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Vienna, Virginia",
+        "highSchool": "James Madison High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/emma-hammberlin",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Ellie Walbruch",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Highland, Utah",
+        "highSchool": "UCLA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/ellie-walbruch",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Sophie Williams",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Anthem, Arizona",
+        "highSchool": "Boulder Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Royals FC - AZ",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/sophie-williams",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Kyleigh Hastings",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Smithfield, Utah",
+        "highSchool": "Green Canyon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/kyleigh-hastings",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Brynnli Tolbert",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Fort Lauderdale, Florida",
+        "highSchool": "Broward High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida United SC",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/brynnli-tolbert",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "20",
+        "name": "Presley Freeman",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Atlanta, Georgia",
+        "highSchool": "West Forsyth High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/presley-freeman",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Mia Goettsche",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Eastvale, California",
+        "highSchool": "Eleanor Roosevelt High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/mia-goettsche",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Camryn Jorgensen",
+        "pos": "M/D",
+        "posLabel": "Midfielder/Defender",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/camryn-jorgensen",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Bella Woods",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Draper, Utah",
+        "highSchool": "University of Utah",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/bella-woods",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Tianna Hunsaker",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Henderson, Nevada",
+        "highSchool": "Foothill High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/tianna-hunsaker",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Sydney Snow",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Kennesaw, Georgia",
+        "highSchool": "Harrison High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tophat SC",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/sydney-snow",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "29",
+        "name": "Diana Tuilevuka",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Oceanside, California",
+        "highSchool": "El Camino High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "San Diego Surf",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/diana-tuilevuka",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "30",
+        "name": "Mattyn Summers-Oviatt",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Saratoga Springs, Utah",
+        "highSchool": "St. Louis University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/mattyn-summers-oviatt",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Sarah Mathis",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "American Fork, Utah",
+        "highSchool": "American Fork HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/sarah-mathis",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Lucy Kesler",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "American Fork, Utah",
+        "highSchool": "American Fork High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://byucougars.com/sports/womens-soccer/roster/player/lucy-kesler",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 5,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "JR": 9,
+      "SR": 7,
+      "FR": 7,
+      "SO": 6
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "D": 3,
+      "F": 2,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://byucougars.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:03:32Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Eva Crane",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak High School"
+        },
+        {
+          "number": "00",
+          "name": "Chelsea Peterson",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Orem, Utah",
+          "highSchool": "Utah"
+        },
+        {
+          "number": "1",
+          "name": "Paiton Collins",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "2",
+          "name": "Halle Dixon",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Carlsbad, California",
+          "highSchool": "Carlsbad High School"
+        },
+        {
+          "number": "3",
+          "name": "Ella Rustand-Ford",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Tucson, Arizona",
+          "highSchool": "Sabino High School"
+        },
+        {
+          "number": "4",
+          "name": "Avery Frischknecht",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "5",
+          "name": "Ella Labrum",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Draper, Utah",
+          "highSchool": "Alta High School"
+        },
+        {
+          "number": "7",
+          "name": "Addie Gardner-Olson",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Highland, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "8",
+          "name": "Mika Krommenhoek",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "9",
+          "name": "Emma Neff",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Olympus High School"
+        },
+        {
+          "number": "10",
+          "name": "Sophie Sivulich",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "South Weber, Utah",
+          "highSchool": "Northridge HS"
+        },
+        {
+          "number": "11",
+          "name": "Kate Denney",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Alpine, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "12",
+          "name": "Afton Perry",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saratoga Springs, Utah",
+          "highSchool": "Westlake High School UT"
+        },
+        {
+          "number": "13",
+          "name": "Ellie Ford",
+          "pos": "M/F",
+          "classCode": "",
+          "hometown": "Provo, Utah",
+          "highSchool": "Timpview High School"
+        },
+        {
+          "number": "14",
+          "name": "Emma Hamberlin",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Vienna, Virginia",
+          "highSchool": "James Madison High School"
+        },
+        {
+          "number": "15",
+          "name": "Ellie Walbruch",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Highland, Utah",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "16",
+          "name": "Abbi Sine",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Coppell, Texas",
+          "highSchool": "Allegiance Academy"
+        },
+        {
+          "number": "18",
+          "name": "Kyleigh Hastings",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Smithfield, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "19",
+          "name": "Mia Lopez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Logan HS"
+        },
+        {
+          "number": "20",
+          "name": "Presley Freeman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Atlanta, Georgia",
+          "highSchool": "West Forsyth High School"
+        },
+        {
+          "number": "21",
+          "name": "Mia Goettsche",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Eastvale, California",
+          "highSchool": "Eleanor Roosevelt High School"
+        },
+        {
+          "number": "22",
+          "name": "Camryn Jorgensen",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak High School"
+        },
+        {
+          "number": "23",
+          "name": "Allie Fryer",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Spanish Fork, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "24",
+          "name": "Izzi Stratton",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Alpine, Utah",
+          "highSchool": "American Heritage School"
+        },
+        {
+          "number": "25",
+          "name": "Tianna Hunsaker",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Henderson, Nevada",
+          "highSchool": "Foothill High School"
+        },
+        {
+          "number": "27",
+          "name": "Cassidy Drago",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Winchester, California",
+          "highSchool": "Temecula Valley HS"
+        },
+        {
+          "number": "30",
+          "name": "Mattyn Summers-Oviatt",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Saratoga Springs, Utah",
+          "highSchool": "St. Louis University"
+        },
+        {
+          "number": "32",
+          "name": "Sarah Mathis",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork HS"
+        },
+        {
+          "number": "33",
+          "name": "Lucy Kesler",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "44",
+          "name": "Mackenzee Vance",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Bluffton, South Carolina",
+          "highSchool": "UCLA"
+        }
+      ],
+      "departed": [
+        "abbi sine",
+        "addie gardner olson",
+        "allie fryer",
+        "cassidy drago",
+        "ellie ford",
+        "izzi stratton",
+        "kate denney",
+        "mackenzee vance",
+        "mia lopez"
+      ]
+    },
+    "2024": {
+      "count": 31,
+      "players": [
+        {
+          "number": "00",
+          "name": "Lynette Bryant",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Corona, California",
+          "highSchool": "Washington State"
+        },
+        {
+          "number": "1",
+          "name": "Paiton Collins",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "2",
+          "name": "Halle Dixon",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Carlsbad, California",
+          "highSchool": "Carlsbad High School"
+        },
+        {
+          "number": "3",
+          "name": "Lytiana Akinaka",
+          "pos": "F/D",
+          "classCode": "JR",
+          "hometown": "Maui, Hawaii",
+          "highSchool": "King Kekaulike High School"
+        },
+        {
+          "number": "4",
+          "name": "Avery Frischknecht",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "5",
+          "name": "Ella Labrum",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Draper, Utah",
+          "highSchool": "Alta High School"
+        },
+        {
+          "number": "6",
+          "name": "Tylie Pratt",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "7",
+          "name": "Erin Bailey",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton High School"
+        },
+        {
+          "number": "8",
+          "name": "Sierra Pennock",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lindon, Utah",
+          "highSchool": "Timpanogos High School"
+        },
+        {
+          "number": "9",
+          "name": "Emma Neff",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Olympus High School"
+        },
+        {
+          "number": "10",
+          "name": "Caroline Stringfellow",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Syracuse, Utah",
+          "highSchool": "Syracuse High School"
+        },
+        {
+          "number": "11",
+          "name": "Addie Gardner-Olson",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "12",
+          "name": "Ella Rustand-Ford",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Tucson, Arizona",
+          "highSchool": "Sabino High School"
+        },
+        {
+          "number": "13",
+          "name": "Ellie Ford",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Provo, Utah",
+          "highSchool": "Timpview High School"
+        },
+        {
+          "number": "14",
+          "name": "Emma Hamberlin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Vienna, Virginia",
+          "highSchool": "James Madison High School"
+        },
+        {
+          "number": "15",
+          "name": "Ellie Walbruch",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Highland, Utah",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "16",
+          "name": "Abbi Sine",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Coppell, Texas",
+          "highSchool": "Allegiance Academy"
+        },
+        {
+          "number": "18",
+          "name": "Mika Krommenhoek",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "19",
+          "name": "Mia Curry",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Claremont McKenna College"
+        },
+        {
+          "number": "20",
+          "name": "Presley Freeman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Atlanta, Georgia",
+          "highSchool": "West Forsyth High School"
+        },
+        {
+          "number": "21",
+          "name": "Tara Warner",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Springville, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "22",
+          "name": "Josie Shepherd",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "23",
+          "name": "Allie Fryer",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Spanish Fork, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "24",
+          "name": "Sommer Nestman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Clovis, California",
+          "highSchool": "Clovis North High School"
+        },
+        {
+          "number": "26",
+          "name": "Savannah Hansen",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Springville, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "27",
+          "name": "Mattyn Summers-Oviatt",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Saratoga Springs, Utah",
+          "highSchool": "St. Louis University"
+        },
+        {
+          "number": "29",
+          "name": "Abbie Kotter",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Providence, Utah",
+          "highSchool": "Ridgeline High School"
+        },
+        {
+          "number": "30",
+          "name": "Jacey Wood",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Desert Oasis High School"
+        },
+        {
+          "number": "32",
+          "name": "Kelsey Hoopes",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Livermore, California",
+          "highSchool": "Livermore High School"
+        },
+        {
+          "number": "33",
+          "name": "Lucy Kesler",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "44",
+          "name": "Mackenzee Vance",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Bluffton, South Carolina",
+          "highSchool": "UCLA"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 32,
+      "players": [
+        {
+          "number": "00",
+          "name": "Lynette Bryant",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Corona, California",
+          "highSchool": "Washington State"
+        },
+        {
+          "number": "1",
+          "name": "Haven Empey",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "2",
+          "name": "Olivia Smith-Griffitts",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Eagle, Idaho",
+          "highSchool": "Eagle High School"
+        },
+        {
+          "number": "3",
+          "name": "Lytiana Akinaka",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Maui, Hawaii",
+          "highSchool": "King Kekaulike High School"
+        },
+        {
+          "number": "4",
+          "name": "Avery Frischknecht",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Mapleton, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "5",
+          "name": "Zoe Jacobs",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Kaysville, Utah",
+          "highSchool": "Davis High School"
+        },
+        {
+          "number": "6",
+          "name": "Tylie Pratt",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "7",
+          "name": "Erin Bailey",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton High School"
+        },
+        {
+          "number": "8",
+          "name": "Sierra Pennock",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lindon, Utah",
+          "highSchool": "Timpanogos High School"
+        },
+        {
+          "number": "9",
+          "name": "Emma Neff",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Olympus High School"
+        },
+        {
+          "number": "10",
+          "name": "Olivia Wade-Katoa",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Kaysville, Utah",
+          "highSchool": "Davis High School"
+        },
+        {
+          "number": "11",
+          "name": "Ellie Boren",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "North Ogden, Utah",
+          "highSchool": "Weber High School"
+        },
+        {
+          "number": "12",
+          "name": "Jamie Shepherd",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "13",
+          "name": "Brecken Mozingo",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Sandy, Utah",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "14",
+          "name": "Ellie Ford",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Provo, Utah",
+          "highSchool": "Timpview High School"
+        },
+        {
+          "number": "15",
+          "name": "Ellie Walbruch",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "16",
+          "name": "Kendell Petersen",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "South Weber, Utah",
+          "highSchool": "Northridge High School"
+        },
+        {
+          "number": "18",
+          "name": "Josie Shepherd",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "19",
+          "name": "Halle Dixon",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Carlsbad, California",
+          "highSchool": "Carlsbad High School"
+        },
+        {
+          "number": "20",
+          "name": "Camryn Jorgensen",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak High School"
+        },
+        {
+          "number": "21",
+          "name": "Tara Warner",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Springville, Utah",
+          "highSchool": "Springville High School"
+        },
+        {
+          "number": "22",
+          "name": "Bella Folino",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Aliso Viejo, California",
+          "highSchool": "Aliso Nigel High School"
+        },
+        {
+          "number": "23",
+          "name": "Allie Fryer",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Spanish Fork, Utah",
+          "highSchool": "Maple Mountain High School"
+        },
+        {
+          "number": "24",
+          "name": "Izzi Stratton",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Alpine, Utah",
+          "highSchool": "American Heritage School"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rustand-Ford",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Tucson, Arizona",
+          "highSchool": "Sabino High School"
+        },
+        {
+          "number": "26",
+          "name": "Laveni Vaka",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Sandy, Utah",
+          "highSchool": "Juan Diego High School"
+        },
+        {
+          "number": "28",
+          "name": "Addie Gardner-Olson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "29",
+          "name": "Caroline Stringfellow",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Syracuse, Utah",
+          "highSchool": "Syracuse High School"
+        },
+        {
+          "number": "30",
+          "name": "Jacey Wood",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Desert Oasis High School"
+        },
+        {
+          "number": "32",
+          "name": "Kelsey Hoopes",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Livermore, California",
+          "highSchool": "Livermore High School"
+        },
+        {
+          "number": "33",
+          "name": "Rachel McCarthy",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        },
+        {
+          "number": "66",
+          "name": "Savanna Mason",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork High School"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://byucougars.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:03:32Z"
+    }
+  },
   "commitments": [
     {
       "id": "anna-neff-2026",
@@ -749,7 +2371,7 @@
       "city": "",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -768,7 +2390,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -784,7 +2406,7 @@
       "city": "Miramar",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -803,7 +2425,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -819,7 +2441,7 @@
       "city": "Lynnwood",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -838,7 +2460,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -854,7 +2476,7 @@
       "city": "Midway",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -873,7 +2495,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -889,7 +2511,7 @@
       "city": "Highland",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -908,7 +2530,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -924,7 +2546,7 @@
       "city": "Phoenix",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -943,7 +2565,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -959,7 +2581,7 @@
       "city": "Kennesaw",
       "highSchool": "",
       "college": "byu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -978,7 +2600,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1353,35 +2975,21 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:49Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://byucougars.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T04:57:44Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.250851&longitude=-111.649281&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FDenver",
-        "at": "2026-09-07T04:57:42Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

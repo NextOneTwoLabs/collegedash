@@ -69,18 +69,201 @@
       "asOf": "2026-09-07T19:06:29Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 31.77015,
+    "lon": -106.504098,
+    "timezone": "America/Chicago",
+    "elevationM": 1194.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00023044",
+      "name": "EL PASO INTL AP",
+      "state": "TX",
+      "distanceKm": 13.0,
+      "elevationM": 1194.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 58.6,
+        "tLowF": 34.5,
+        "precipIn": 0.39,
+        "snowIn": 0.8,
+        "wetDays": 1.4,
+        "days90F": 0.0,
+        "daysFreeze": 14.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 64.1,
+        "tLowF": 38.9,
+        "precipIn": 0.4,
+        "snowIn": 0.2,
+        "wetDays": 1.1,
+        "days90F": 0.0,
+        "daysFreeze": 6.5
+      },
+      {
+        "month": "Mar",
+        "tHighF": 71.9,
+        "tLowF": 45.5,
+        "precipIn": 0.24,
+        "snowIn": 0.0,
+        "wetDays": 0.7,
+        "days90F": 0.1,
+        "daysFreeze": 1.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 80.0,
+        "tLowF": 53.3,
+        "precipIn": 0.17,
+        "snowIn": 0.0,
+        "wetDays": 0.6,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 88.7,
+        "tLowF": 62.1,
+        "precipIn": 0.43,
+        "snowIn": 0.0,
+        "wetDays": 1.1,
+        "days90F": 15.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 97.1,
+        "tLowF": 70.6,
+        "precipIn": 0.73,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 27.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 95.8,
+        "tLowF": 73.0,
+        "precipIn": 1.58,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 27.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 94.0,
+        "tLowF": 71.8,
+        "precipIn": 1.67,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 25.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 88.3,
+        "tLowF": 65.4,
+        "precipIn": 1.52,
+        "snowIn": 0.0,
+        "wetDays": 2.9,
+        "days90F": 15.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 79.4,
+        "tLowF": 54.0,
+        "precipIn": 0.59,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 2.7,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 67.0,
+        "tLowF": 42.0,
+        "precipIn": 0.43,
+        "snowIn": 0.5,
+        "wetDays": 1.3,
+        "days90F": 0.0,
+        "daysFreeze": 4.7
+      },
+      {
+        "month": "Dec",
+        "tHighF": 57.8,
+        "tLowF": 34.4,
+        "precipIn": 0.63,
+        "snowIn": 1.3,
+        "wetDays": 2.0,
+        "days90F": 0.0,
+        "daysFreeze": 14.0
+      }
+    ],
+    "annualPrecipIn": 8.8,
+    "annualSnowIn": 2.8,
+    "fallSeason": {
+      "avgHighF": 82.2,
+      "avgLowF": 58.3,
+      "precipIn": 4.2,
+      "wetDays": 10.0
+    },
+    "summary": "Hottest month Jun (avg high 97.1°F), coldest Dec (avg low 34.4°F). 8.8 in of rain per year, 2.8 in of snow. Fall season (Aug–Nov): highs around 82.2°F, 4.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00023044,USC00298127,USC00414931&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:54Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Gibbs Keeton",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/coaches/gibbs-keeton/3251",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Gibbs Keeton",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/coaches/gibbs-keeton/3251",
+        "social": {}
+      },
+      {
+        "name": "Morgan McDougal",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/coaches/morgan-mcdougal/3252",
+        "social": {}
+      },
+      {
+        "name": "Jared Hallman",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/coaches/jared-hallman/3253",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Taquan Johns",
+        "title": "Assistant Athletic Trainer (Soccer)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/staff/taquan-johns/1211",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +281,1409 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://utepminers.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:28:31Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Brandt, Ava",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Allen, Texas /",
+        "highSchool": "Midland University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/ava-brandt/12305",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Hammond, Jaylyn",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Tulsa, Okla. /",
+        "highSchool": "Grambling State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/jaylyn-hammond/12307",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Finley, Savanah",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Rockwall, Texas / Rockwall-Heath HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/savanah-finley/12242",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Rorabaugh, Ella",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ridgefield, Wash. / Ridgefield HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/ella-rorabaugh/12251",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Lucero, Sasha",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Albuquerque, N.M. / La Cueva HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/sasha-lucero/12247",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Neireiter, Ashlyn",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Beaumont, Texas / West Brook HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/ashlyn-neireiter/12250",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Lawless-Felarca , Alana",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Dallas, Texas /",
+        "highSchool": "East Texas A&M",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/alana-lawless-felarca/12310",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Wilson, Dannique",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Jamaica /",
+        "highSchool": "Hill College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/dannique-wilson/12255",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Lopez, Anai",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-0",
+        "heightIn": 60,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Odessa, Texas / Odessa Permian HS",
+        "highSchool": "Revolution FC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/anai-lopez/12246",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Mora, Ashlee",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Albuquerque, N.M. /",
+        "highSchool": "New Mexico Soccer Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/ashlee-mora/12249",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Agudelo, Valeria",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Medellin, Colombia /",
+        "highSchool": "Heartland Community College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/valeria-agudelo/12303",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Larson, Shawna",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Graham, Wash. /",
+        "highSchool": "Sacramento State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/shawna-larson/12309",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Hudson, Kialie",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Houston, Texas /",
+        "highSchool": "Davidson",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/kialie-hudson/12245",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Wilbur , Gianna",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Prosper, Texas /",
+        "highSchool": "Miami (Ohio)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/gianna-wilbur/12313",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Easley, Avery",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Flower Mound, Texas / Flower Mound HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/avery-easley/12241",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Roskos, Olivia",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Rio Rancho, N.M. / Rio Rancho HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/olivia-roskos/12252",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Daniel, Bethlehem",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wylie, Texas / Wylie HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/bethlehem-daniel/12306",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Alvarez, Kylie",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "El Paso, Texas / El Paso HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/kylie-alvarez/12304",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Grosso, Ava",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Austin, Texas / James Bowie HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/ava-grosso/12244",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Reeves , Nyalah",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Antonio, Texas /",
+        "highSchool": "John Jay HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/nyalah-reeves/12311",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Duntley, Kaitlyn",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "El Paso, Texas / Eastwood HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/kaitlyn-duntley/12240",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Cisneros, Damaris",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "El Paso, Texas / Del Valle HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/damaris-cisneros/12238",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Cisneros, Yesenia",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "El Paso, Texas / Del Valle HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/yesenia-cisneros/12239",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Lancaster, Haylee",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Odessa, Texas / Permian HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/haylee-lancaster/12308",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "McDannels, Zeta",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lubbock, Texas / Frenship HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/zeta-mcdannels/12248",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Williams , Macey",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Castle Rock, Colo. /",
+        "highSchool": "Saint Peter’s University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/macey-williams/12314",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Vitoria, Maya",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Mississauga, Canada / Marcellinus Secondary School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/maya-vitoria/12254",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Tovar, Sophia",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Los Angeles, Calif. / Flintridge Sacred Heart HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/sophia-tovar/12312",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "34",
+        "name": "Garza, Cassie",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lubbock, Texas / Coronado (Lubbock) HS",
+        "highSchool": "Sting West Texas",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utepminers.com/sports/womens-soccer/roster/cassie-garza/12243",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 1,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 2,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 1,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 8,
+      "R-FR": 4,
+      "SR": 5,
+      "JR": 6,
+      "GR": 1,
+      "FR": 5
+    },
+    "graduatingByPos": {
+      "D": 2,
+      "M": 3,
+      "F": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utepminers.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:28:31Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Finley, Savanah",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Rockwall, Texas / Rockwall-Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Gilbert, Alaina",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "San Antonio, Texas / Antonian College Preparatory HS",
+          "highSchool": "UTSA"
+        },
+        {
+          "number": "1",
+          "name": "Dean, Sophia",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Spring, Texas /",
+          "highSchool": "East Texas A&M"
+        },
+        {
+          "number": "2",
+          "name": "Rorabaugh, Ella",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Ridgefield, Wash. / Ridgefield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Rodriguez, Mina",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Diego, Calif. / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Neireiter, Ashlyn",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Beaumont, Texas / West Brook HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Varela, Lauren",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / El Paso HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Wilson, Dannique",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Jamaica /",
+          "highSchool": "Hill College"
+        },
+        {
+          "number": "7",
+          "name": "Lopez, Anai",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Odessa, Texas / Odessa Permian HS",
+          "highSchool": "Revolution FC"
+        },
+        {
+          "number": "8",
+          "name": "Mora, Ashlee",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Albuquerque, N.M. /",
+          "highSchool": "New Mexico Soccer Academy"
+        },
+        {
+          "number": "9",
+          "name": "Quintero, Ana",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Panama City, Panamá /",
+          "highSchool": "Panama City FC"
+        },
+        {
+          "number": "10",
+          "name": "Hill, Marina",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Goodyear, Ariz. / Millennium HS",
+          "highSchool": "Marquette"
+        },
+        {
+          "number": "11",
+          "name": "Hudson, Kialie",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Houston, Texas /",
+          "highSchool": "Davidson"
+        },
+        {
+          "number": "12",
+          "name": "Villa Cuellar, Sarina",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Allen, Texas / Allen HS",
+          "highSchool": "Sting Soccer Club"
+        },
+        {
+          "number": "14",
+          "name": "Easley, Avery",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Flower Mound, Texas / Flower Mound HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Roskos, Olivia",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rio Rancho, N.M. / Rio Rancho HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lucero, Sasha",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Albuquerque, N.M. / La Cueva HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Barry, Eve",
+          "pos": "F/M",
+          "classCode": "R-JR",
+          "hometown": "New Plymouth, New Zealand / New Plymouth Girls' HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Grosso, Ava",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Austin, Texas / James Bowie HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Permanand, Kaia",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Copenhagen, Denmark /",
+          "highSchool": "B.93 U19"
+        },
+        {
+          "number": "20",
+          "name": "Duntley, Kaitlyn",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Eastwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Cisneros, Damaris",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Del Valle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Culver, Grace",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Spring, Texas / Klein Oak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Cisneros, Yesenia",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Del Valle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Blouin, Servane",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Plemet, France /",
+          "highSchool": "Limestone University"
+        },
+        {
+          "number": "26",
+          "name": "McMillan, Hayden",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Fayetteville, N.C. / Franklin HS",
+          "highSchool": "Texas Southern"
+        },
+        {
+          "number": "27",
+          "name": "McDannels, Zeta",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lubbock, Texas / Frenship HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Vitoria, Maya",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mississauga, Canada / Marcellinus Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Garza, Cassie",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lubbock, Texas / Coronado (Lubbock) HS",
+          "highSchool": "Sting West Texas"
+        },
+        {
+          "number": "35",
+          "name": "Hudson, Kaila",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Houston, Texas / Clear Brook HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "barry eve",
+        "blouin servane",
+        "culver grace",
+        "dean sophia",
+        "gilbert alaina",
+        "hill marina",
+        "hudson kaila",
+        "mcmillan hayden",
+        "permanand kaia",
+        "quintero ana",
+        "rodriguez mina",
+        "varela lauren",
+        "villa cuellar sarina"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Taylor, Tionna",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Chandler, Ariz. / Basha HS",
+          "highSchool": "Jackson State"
+        },
+        {
+          "number": "00",
+          "name": "Gilbert, Alaina",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "San Antonio, Texas / Antonian College Preparatory HS",
+          "highSchool": "UTSA"
+        },
+        {
+          "number": "1",
+          "name": "Williams, Sydney",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Allen, Texas / Allen HS",
+          "highSchool": "Renegades SC"
+        },
+        {
+          "number": "2",
+          "name": "Lopez, Anai",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Odessa, Texas / Odessa Permian HS",
+          "highSchool": "Revolution FC"
+        },
+        {
+          "number": "3",
+          "name": "Rodriguez, Mina",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Diego, Calif. / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Neireiter, Ashlyn",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Beaumont, Texas / West Brook HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Stickney, Ally",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Arlington, Wash. / Wylie HS",
+          "highSchool": "Tyler JC"
+        },
+        {
+          "number": "6",
+          "name": "Tovar, Daniele",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "El Paso, Texas / El Dorado HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Patolo, Sheyliene",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Pearl City, Hawaii / Aiea HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Mora, Ashlee",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Albuquerque, N.M. /",
+          "highSchool": "New Mexico Soccer Academy"
+        },
+        {
+          "number": "9",
+          "name": "Quintero, Ana",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Panama City, Panamá /",
+          "highSchool": "Panama City FC"
+        },
+        {
+          "number": "10",
+          "name": "Hill, Marina",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Goodyear, Ariz. / Millennium HS",
+          "highSchool": "Marquette"
+        },
+        {
+          "number": "11",
+          "name": "Lopez, Taya",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Las Cruces, N.M. / Las Cruces HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "12",
+          "name": "Villa Cuellar, Sarina",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Allen, Texas / Allen HS",
+          "highSchool": "Sting Soccer Club"
+        },
+        {
+          "number": "13",
+          "name": "Cook, Emma",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Omaha, Neb. / Millard North HS",
+          "highSchool": "Gretna Elite Academy"
+        },
+        {
+          "number": "14",
+          "name": "Amparano, Angelina",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Tucson, Ariz. / Salpointe Catholic",
+          "highSchool": "Pima CC"
+        },
+        {
+          "number": "15",
+          "name": "Roskos, Olivia",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rio Rancho, N.M. / Rio Rancho HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Gone, Jayde",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "El Paso, Texas / Americas HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Barry, Eve",
+          "pos": "F/M",
+          "classCode": "R-SO",
+          "hometown": "New Plymouth, New Zealand / New Plymouth Girls' HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Morales, Nicole",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "El Paso, Texas / Bel Air HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Barrera, Anessa",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Andress HS",
+          "highSchool": "West Texas Rush"
+        },
+        {
+          "number": "24",
+          "name": "Powers, Lilly",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lubbock, Texas / Coronada (Lubbock) HS",
+          "highSchool": "Sting West Texas"
+        },
+        {
+          "number": "25",
+          "name": "Gutierrez, Leslie",
+          "pos": "F/M",
+          "classCode": "GR",
+          "hometown": "El Paso, Texas / El Dorado HS",
+          "highSchool": "Heartland CC"
+        },
+        {
+          "number": "26",
+          "name": "McMillan, Hayden",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Fayetteville, N.C. / Franklin HS",
+          "highSchool": "Texas Southern"
+        },
+        {
+          "number": "27",
+          "name": "Diaz, Chloe",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Keller, Texas / Timber Creek HS",
+          "highSchool": "LSU Eunice"
+        },
+        {
+          "number": "29",
+          "name": "Vitoria, Maya",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mississauga, Canada / Marcellinus Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Chairez, Anissa",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "El Paso, Texas / San Elizario HS",
+          "highSchool": "Blinn College"
+        },
+        {
+          "number": "34",
+          "name": "Garza, Cassie",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lubbock, Texas / Coronado (Lubbock) HS",
+          "highSchool": "Sting West Texas"
+        },
+        {
+          "number": "35",
+          "name": "Hudson, Kaila",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Houston, Texas / Clear Brook HS",
+          "highSchool": ""
+        },
+        {
+          "number": "40",
+          "name": "Guzman, Danica",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Eastlake HS",
+          "highSchool": "Dallas Surf"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Taylor, Tionna",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Chandler, Ariz. / Basha HS",
+          "highSchool": "Jackson State"
+        },
+        {
+          "number": "00",
+          "name": "Gilbert, Alaina",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "San Antonio, Texas / Antonian College Preparatory HS",
+          "highSchool": "UTSA"
+        },
+        {
+          "number": "1",
+          "name": "Amparano, Angelina",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Tucson, Ariz. / Salpointe Catholic",
+          "highSchool": "Pima CC"
+        },
+        {
+          "number": "3",
+          "name": "Rodriguez, Mina",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "San Diego, Calif. / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Neireiter, Ashlyn",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Beaumont, Texas / West Brook HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Stickney, Ally",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Arlington, Wash. / Wylie HS",
+          "highSchool": "Tyler JC"
+        },
+        {
+          "number": "6",
+          "name": "Tovar, Daniele",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "El Paso, Texas / El Dorado HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Patolo, Sheyliene",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pearl City, Hawaii / Aiea HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Paul, Tori",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Charlotte, N.C. / Olympic HS",
+          "highSchool": "Maryland"
+        },
+        {
+          "number": "10",
+          "name": "Tillotson, Justice",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Rochester, Mich. / Rochester Adams HS",
+          "highSchool": "Michigan State"
+        },
+        {
+          "number": "11",
+          "name": "Lopez, Taya",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Las Cruces, N.M. / Las Cruces HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "13",
+          "name": "Rodriguez, Maia",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Diego, Calif. / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Padilla, Ashley",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Albuquerque, N.M. / Cibola HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Roskos, Olivia",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Rio Rancho, N.M. / Rio Rancho HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Gone, Jayde",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Americas HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Barry, Eve",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "New Plymouth, New Zealand / New Plymouth Girls' HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Tamez, Cayman",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Carlsbad, Calif. / Sage Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Reyes, Emely",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Conroe, Texas / Oak Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Wilcher, Elise",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Chesapeake Beach, Md. /",
+          "highSchool": "USC Upstate"
+        },
+        {
+          "number": "21",
+          "name": "Morales, Nicole",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "El Paso, Texas / Bel Air HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Gutierrez, Clarissa",
+          "pos": "F/D",
+          "classCode": "SO",
+          "hometown": "El Paso, Texas / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Cabello, Vanessa",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Pasadena, Texas / Pasadena HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Gutierrez, Leslie",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "El Paso, Texas / El Dorado HS",
+          "highSchool": "Heartland CC"
+        },
+        {
+          "number": "26",
+          "name": "McMillan, Hayden",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Fayetteville, N.C. / Franklin HS",
+          "highSchool": "Texas Southern"
+        },
+        {
+          "number": "27",
+          "name": "Diaz, Chloe",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Keller, Texas / Timber Creek HS",
+          "highSchool": "LSU Eunice"
+        },
+        {
+          "number": "28",
+          "name": "Kidd, Emerson",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Winnipeg, Canada / Glenlawn Collegiate Institute",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Vitoria, Maya",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mississauga, Canada / Marcellinus Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Chairez, Anissa",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "El Paso, Texas / San Elizario HS",
+          "highSchool": "Blinn College"
+        },
+        {
+          "number": "34",
+          "name": "Tice, Sophia",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Gilbert, Ariz. / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Hudson, Kaila",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Houston, Texas / Clear Brook HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utepminers.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:28:31Z"
+    }
+  },
   "commitments": [
     {
       "id": "betty-daniel-2026",
@@ -409,41 +1988,27 @@
     "2027": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://utepminers.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T19:09:03Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=31.77015&longitude=-106.504098&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T19:09:02Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T19:09:02Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:28:20Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

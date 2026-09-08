@@ -69,17 +69,199 @@
       "asOf": "2026-09-07T15:56:52Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 37.102769,
+    "lon": -113.565903,
+    "timezone": "America/Denver",
+    "elevationM": 870.8,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USC00427516",
+      "name": "ST GEORGE",
+      "state": "UT",
+      "distanceKm": 4.0,
+      "elevationM": 870.8
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 54.0,
+        "tLowF": 28.4,
+        "precipIn": 1.22,
+        "snowIn": 0.5,
+        "wetDays": 2.7,
+        "days90F": 0.0,
+        "daysFreeze": 20.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 59.3,
+        "tLowF": 32.4,
+        "precipIn": 1.38,
+        "snowIn": 0.5,
+        "wetDays": 3.3,
+        "days90F": 0.0,
+        "daysFreeze": 10.4
+      },
+      {
+        "month": "Mar",
+        "tHighF": 67.8,
+        "tLowF": 39.0,
+        "precipIn": 1.02,
+        "snowIn": 0.2,
+        "wetDays": 2.4,
+        "days90F": 0.1,
+        "daysFreeze": 2.1
+      },
+      {
+        "month": "Apr",
+        "tHighF": 75.0,
+        "tLowF": 45.7,
+        "precipIn": 0.66,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 1.8,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "May",
+        "tHighF": 85.4,
+        "tLowF": 55.5,
+        "precipIn": 0.33,
+        "snowIn": 0.0,
+        "wetDays": 1.0,
+        "days90F": 12.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 96.4,
+        "tLowF": 64.5,
+        "precipIn": 0.16,
+        "snowIn": 0.0,
+        "wetDays": 0.4,
+        "days90F": 25.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 101.9,
+        "tLowF": 71.7,
+        "precipIn": 0.5,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 30.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 99.9,
+        "tLowF": 70.3,
+        "precipIn": 1.07,
+        "snowIn": 0.0,
+        "wetDays": 1.5,
+        "days90F": 30.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 92.4,
+        "tLowF": 60.7,
+        "precipIn": 0.67,
+        "snowIn": 0.0,
+        "wetDays": 1.4,
+        "days90F": 22.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 78.8,
+        "tLowF": 47.3,
+        "precipIn": 0.77,
+        "snowIn": 0.0,
+        "wetDays": 1.9,
+        "days90F": 4.1,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Nov",
+        "tHighF": 63.8,
+        "tLowF": 34.7,
+        "precipIn": 0.67,
+        "snowIn": 0.0,
+        "wetDays": 1.4,
+        "days90F": 0.0,
+        "daysFreeze": 8.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 53.0,
+        "tLowF": 27.9,
+        "precipIn": 0.86,
+        "snowIn": 0.0,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 21.5
+      }
+    ],
+    "annualPrecipIn": 9.3,
+    "annualSnowIn": 1.2,
+    "fallSeason": {
+      "avgHighF": 83.7,
+      "avgLowF": 53.2,
+      "precipIn": 3.2,
+      "wetDays": 6.0
+    },
+    "summary": "Hottest month Jul (avg high 101.9°F), coldest Dec (avg low 27.9°F). 9.3 in of rain per year, 1.2 in of snow. Fall season (Aug–Nov): highs around 83.7°F, 3.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USC00427516,USC00423506,USC00424968&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:27Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Lexi Brown",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/coaches/lexi-brown/1295",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Lexi Brown",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/coaches/lexi-brown/1295",
+        "social": {}
+      },
+      {
+        "name": "Tyler Brown",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/coaches/tyler-brown/1296",
+        "social": {}
+      },
+      {
+        "name": "Juli Nield",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/coaches/juli-nield/1297",
+        "social": {}
+      },
+      {
+        "name": "Lauren Towne",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/coaches/lauren-towne/1357",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +280,1477 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://utahtechtrailblazers.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:23:18Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "0",
+        "name": "Elle Rafajko",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Riverton, Utah",
+        "highSchool": "Mountain Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/elle-rafajko/10367",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Brenna Kelleher",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Rf.",
+        "classCode": "",
+        "hometown": "Temecula, Calif.",
+        "highSchool": "Great Oak HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/brenna-kelleher/10385",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Emma McIff",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Pleasant Grove, Utah",
+        "highSchool": "Timpanogos HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/emma-mciff/10388",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Ella Rusick",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Litchfield Park, Ariz.",
+        "highSchool": "Millennium HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/ella-rusick/10393",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Michelle Rodriguez",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "West Valley City, Utah",
+        "highSchool": "East HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/michelle-rodriguez/10391",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Nicole Choren",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Broomfield, Colo.",
+        "highSchool": "Broomfield HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/nicole-choren/10381",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Brooklyn Strange",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Rf.",
+        "classCode": "",
+        "hometown": "Lehi, Utah",
+        "highSchool": "Skyridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/brooklyn-strange/10394",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Bre Koscielski",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Spokane, Wash.",
+        "highSchool": "Mt. Spokane HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/bre-koscielski/10386",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Jocelyn Wright",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Herriman, Utah",
+        "highSchool": "Mountain Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/jocelyn-wright/10396",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Ava Talaeai",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Salt Lake City, Utah",
+        "highSchool": "Murray HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/ava-talaeai/10395",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Taylor Johnson",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Las Vegas, Nev.",
+        "highSchool": "Shadow Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/taylor-johnson/10377",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Bella Gray",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ogden, Utah",
+        "highSchool": "Ogden HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/bella-gray/10378",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Teagan Jaussi",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Frisco, Texas",
+        "highSchool": "Liberty HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/teagan-jaussi/10384",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Mason Morton",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lander, Wyo.",
+        "highSchool": "Lander Valley HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/mason-morton/10668",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Brooke Hendricks",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Alpine, Utah",
+        "highSchool": "Lone Peak HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/brooke-hendricks/10383",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Abby Olsen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "South Weber, Utah",
+        "highSchool": "Northridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/abby-olsen/10390",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Lexi Nelson",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "West Jordan, Utah",
+        "highSchool": "West Jordan HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/lexi-nelson/10389",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Ella Weathers",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Sherwood, Ore.",
+        "highSchool": "Sherwood HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/ella-weathers/10397",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "CC Malohifo'ou",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Saratoga Springs, Utah",
+        "highSchool": "Westlake HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/cc-malohifo-ou/10366",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Riley Rohr",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Rf.",
+        "classCode": "",
+        "hometown": "Las Vegas, Nev.",
+        "highSchool": "Bishop Gorman HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/riley-rohr/10392",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Brie Hilliker",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Brighton, Colo.",
+        "highSchool": "Riverdale Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/brie-hilliker/10364",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Ella Cotter",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "St. George, Utah",
+        "highSchool": "Crimson Cliffs HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/ella-cotter/10382",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Channing Wuest",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Draper, Utah",
+        "highSchool": "Corner Canyon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Avalanche",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/channing-wuest/10370",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Gianna Tomasello",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Henderson, Nev.",
+        "highSchool": "Bishop Gorman HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/gianna-tomasello/10368",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Taylee Hughes",
+        "pos": "F/M",
+        "posLabel": "F/MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Syracuse, Utah",
+        "highSchool": "Syracuse HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/taylee-hughes/10365",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Kate Wood",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cottonwood Heights, Utah",
+        "highSchool": "Brighton HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "La Roca FC",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/kate-wood/10369",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Lataya Brost",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Orem, Utah",
+        "highSchool": "Timpanogos HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/lataya-brost/10379",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Lacy Fox",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://utahtechtrailblazers.com/sports/womens-soccer/roster/lacy-fox/10754",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "JR": 5,
+      "?": 3,
+      "R-SO": 1,
+      "SR": 4,
+      "SO": 6,
+      "FR": 7,
+      "R-JR": 1,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "D": 2,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utahtechtrailblazers.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:23:18Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Brianna Frey",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Skyline HS"
+        },
+        {
+          "number": "00",
+          "name": "Brenna Kelleher",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Temecula, Calif.",
+          "highSchool": "Great Oak HS"
+        },
+        {
+          "number": "1",
+          "name": "Emma McIff",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Pleasant Grove, Utah",
+          "highSchool": "Timpanogos HS"
+        },
+        {
+          "number": "2",
+          "name": "Ella Rusick",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Litchfield Park, Ariz.",
+          "highSchool": "Millennium HS"
+        },
+        {
+          "number": "3",
+          "name": "Michelle Rodriguez",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "West Valley City, Utah",
+          "highSchool": "East HS"
+        },
+        {
+          "number": "4",
+          "name": "Nicole Choren",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Broomfield HS"
+        },
+        {
+          "number": "5",
+          "name": "Liv Leonard",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Taylorsville, Utah",
+          "highSchool": "Skyline HS"
+        },
+        {
+          "number": "6",
+          "name": "Bre Koscielski",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Spokane, Wash.",
+          "highSchool": "Mt. Spokane HS"
+        },
+        {
+          "number": "7",
+          "name": "Tessa Thornton",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Spokane, Wash.",
+          "highSchool": "Snow Canyon"
+        },
+        {
+          "number": "8",
+          "name": "Ava Talaeai",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Murray HS"
+        },
+        {
+          "number": "9",
+          "name": "Indie Winterton",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Pleasant Grove, Utah",
+          "highSchool": "Pleasant Grove HS"
+        },
+        {
+          "number": "10",
+          "name": "Kyah Le",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Spokane, Wash.",
+          "highSchool": "Gonzaga Prep"
+        },
+        {
+          "number": "11",
+          "name": "Teagan Jaussi",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Frisco, Texas",
+          "highSchool": "Liberty HS"
+        },
+        {
+          "number": "12",
+          "name": "Brooklyn Strange",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lehi, Utah",
+          "highSchool": "Skyridge HS"
+        },
+        {
+          "number": "13",
+          "name": "Brooke Hendricks",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Alpine, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "14",
+          "name": "Abby Olsen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "South Weber, Utah",
+          "highSchool": "Northridge HS"
+        },
+        {
+          "number": "15",
+          "name": "Lexi Nelson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "West Jordan, Utah",
+          "highSchool": "West Jordan HS"
+        },
+        {
+          "number": "16",
+          "name": "Rachel Boren",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Lehi, Utah",
+          "highSchool": "Skyridge HS"
+        },
+        {
+          "number": "17",
+          "name": "Riley Rohr",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "Bishop Gorman HS"
+        },
+        {
+          "number": "18",
+          "name": "Emily Blanchard",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "South Jordan, Utah",
+          "highSchool": "Real Salt Lake Academy HS"
+        },
+        {
+          "number": "19",
+          "name": "Lox Neves",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Palmyra, Utah",
+          "highSchool": "Springville HS"
+        },
+        {
+          "number": "20",
+          "name": "Kearney Hoggan",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Eagle, Idaho",
+          "highSchool": "Eagle HS"
+        },
+        {
+          "number": "21",
+          "name": "Ella Cotter",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. George, Utah",
+          "highSchool": "Crimson Cliffs HS"
+        },
+        {
+          "number": "22",
+          "name": "Macie Burton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mountain Green, Utah",
+          "highSchool": "Morgan HS"
+        },
+        {
+          "number": "26",
+          "name": "Jocelyn Wright",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Herriman, Utah",
+          "highSchool": "Mountain Ridge HS"
+        },
+        {
+          "number": "27",
+          "name": "Lataya Brost",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Orem, Utah",
+          "highSchool": "Timpanogos HS"
+        },
+        {
+          "number": "28",
+          "name": "Lacy Fox",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        }
+      ],
+      "departed": [
+        "brianna frey",
+        "emily blanchard",
+        "indie winterton",
+        "kearney hoggan",
+        "kyah le",
+        "liv leonard",
+        "lox neves",
+        "macie burton",
+        "rachel boren",
+        "tessa thornton"
+      ]
+    },
+    "2024": {
+      "count": 37,
+      "players": [
+        {
+          "number": "0",
+          "name": "Brianna Frey",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Salt Lake City, Utah / Skyline HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Parker LaMont",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Palm Springs, Calif. / Palm Desert HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Bryanna Hofheins-Kauffman",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Salem, Utah / Salem Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Ella Rusick",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Litchfield Park, Ariz. / Millennium HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Michelle Rodriguez",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "West Valley City, Utah / East HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Emma Carver",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Herriman, Utah / Herriman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Reagan Flynn",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Cartersville, Ga. / Bonneville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Bre Koscielski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Spokane, Wash. / Mt. Spokane HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Tessa Thornton",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Spokane, Wash. / Snow Canyon",
+          "highSchool": "Utah Valley"
+        },
+        {
+          "number": "8",
+          "name": "Tori Brown",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Gilbert, Ariz. / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Indie Winterton",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Pleasant Grove, Utah / Pleasant Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Kyah Le",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Spokane, Wash. / Gonzaga Prep",
+          "highSchool": "Gonzaga"
+        },
+        {
+          "number": "11",
+          "name": "Rachel Feveryear",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Pleasant Grove, Utah / American Fork HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Lataya Brost",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Orem, Utah / Timpanogos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Tara McDonald",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Los Alamos, N.M. / Los Alamos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Nikkie Scott",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Huntington Beach, Calif. / Edison HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Lexi Nelson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "West Jordan, Utah / West Jordan HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Jordyn Denton",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Spanish Fork, Utah / Maple Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Allison Flies",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Apple Valley, Minn. / Eastview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Emily Blanchard",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "South Jordan, Utah / Real Salt Lake Academy HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kalea Woodyatt",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Layton, Utah / Farmington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kearney Hoggan",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Eagle, Idaho / Eagle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Ella Cotter",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "St. George, Utah / Crimson Cliffs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Gracie Knutzen",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Mapleton, Utah / Maple Mountain HS",
+          "highSchool": "Snow College"
+        },
+        {
+          "number": "23",
+          "name": "Emily Garbett",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lindon, Utah / Pleasant Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Lyv Heistand",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Olympia, Wash. / Olympia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Jenna McDonnell",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Fremont, Calif. / American HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Lacy Fox",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Highland, Utah / Lone Peak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Ali Warner",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fort Collins, Colo. / Rocky Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jantzyn Losee",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "St. George, Utah / Crimson Cliffs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Lox Neves",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Palmyra, Utah / Springville HS",
+          "highSchool": "Abilene Christian"
+        },
+        {
+          "number": "33",
+          "name": "Nicole Choren",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Broomfield, Colo. / Broomfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Brooke Taylor",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Kaysville, Utah / Farmington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Cadie Young",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sandy, Utah / Brighton HS",
+          "highSchool": "Colorado Northwestern CC"
+        },
+        {
+          "number": "36",
+          "name": "Heidi Wilstead",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "St. George, Utah / Snow Canyon HS",
+          "highSchool": "Utah State"
+        },
+        {
+          "number": "37",
+          "name": "Adele Faller",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Orem, Utah / Timpanogos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "40",
+          "name": "Emma McIff",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Pleasant Grove, Utah / Timpanogos HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 37,
+      "players": [
+        {
+          "number": "0",
+          "name": "Brianna Frey",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Salt Lake City, Utah / Skyline HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Parker LaMont",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Palm Springs, Calif. / Palm Desert HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Bryanna Hofheins-Kauffman",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Salem, Utah / Salem Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Z Dickson",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Fort Worth, Texas / Timpanogos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Ally Dahl",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lehi, Utah / Lehi HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Emma Carver",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Herriman, Utah / Herriman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Reagan Flynn",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Cartersville, Ga. / Bonneville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Savannah Hansen",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Springville, Utah / Springville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Tessa Thornton",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Spokane, Wash. / Snow Canyon",
+          "highSchool": "Utah Valley"
+        },
+        {
+          "number": "8",
+          "name": "Tori Brown",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Gilbert, Ariz. / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Indie Winterton",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Pleasant Grove, Utah / Pleasant Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "McKinley Barney",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Mesa, Ariz. / Mountain View HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Mylee Carver",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Meridian, Idaho / Rocky Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Amy Tipper",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Derby, United Kingdom /",
+          "highSchool": "Illinois Central College"
+        },
+        {
+          "number": "14",
+          "name": "Ella Carmody",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Sandy, Utah / Skyline HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Madison Monson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Forest Lake, Minn. / Centennial HS",
+          "highSchool": "Minnesota State"
+        },
+        {
+          "number": "16",
+          "name": "Jordyn Denton",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Spanish Fork, Utah / Maple Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kalea Woodyatt",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Layton, Utah / Farmington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kearney Hoggan",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Eagle, Idaho / Eagle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Karli Heaton",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Highland, Utah / Lone Peak HS",
+          "highSchool": "Utah Valley"
+        },
+        {
+          "number": "22",
+          "name": "Gracie Knutzen",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Mapleton, Utah / Maple Mountain HS",
+          "highSchool": "Snow College"
+        },
+        {
+          "number": "23",
+          "name": "Emily Garbett",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lindon, Utah / Pleasant Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Lyv Heistand",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Olympia, Wash. / Olympia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Ella Rusick",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Litchfield Park, Ariz. / Millennium HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Brynlee Rider",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Layton, Utah / Layton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mauri Ashman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mapleton, Utah / Maple Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Lacy Fox",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Highland, Utah / Lone Peak HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Tara McDonald",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Los Alamos, N.M. / Los Alamos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jantzyn Losee",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. George, Utah / Crimson Cliffs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Hannah Petteys",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Huntington Beach, Calif. / Huntington Beach HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Ella Weathers",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Sherwood, Ore. / Sherwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Nicole Choren",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Broomfield, Colo. / Broomfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Brooke Taylor",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Kaysville, Utah / Farmington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Hanna Carlisle",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Layton, Utah / Northridge HS",
+          "highSchool": "Utah State Eastern"
+        },
+        {
+          "number": "36",
+          "name": "Nikkie Scott",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Huntington Beach, Calif. / Edison HS",
+          "highSchool": ""
+        },
+        {
+          "number": "37",
+          "name": "Rachel Feveryear",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Pleasant Grove, Utah / American Fork HS",
+          "highSchool": ""
+        },
+        {
+          "number": "38",
+          "name": "Michelle Rodriguez",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "West Valley City, Utah / East HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utahtechtrailblazers.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:23:18Z"
+    }
+  },
   "commitments": [
     {
       "id": "aubrielle-hilliker-2026",
@@ -152,7 +1798,7 @@
       "city": "Draper",
       "highSchool": "",
       "college": "utah-tech",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1817,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -222,7 +1868,7 @@
       "city": "",
       "highSchool": "",
       "college": "utah-tech",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -241,7 +1887,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -505,41 +2151,27 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://utahtechtrailblazers.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T15:59:26Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=37.102769&longitude=-113.565903&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FDenver",
-        "at": "2026-09-07T15:59:25Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T15:59:25Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:23:06Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

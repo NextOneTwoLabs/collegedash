@@ -69,17 +69,199 @@
       "asOf": "2026-09-07T19:20:08Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 42.05905,
+    "lon": -71.080632,
+    "timezone": "America/New_York",
+    "elevationM": 15.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00054704",
+      "name": "NORWOOD MEM AP",
+      "state": "MA",
+      "distanceKm": 16.5,
+      "elevationM": 15.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 39.5,
+        "tLowF": 20.6,
+        "precipIn": 3.41,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 27.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 42.3,
+        "tLowF": 21.6,
+        "precipIn": 2.8,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 25.3
+      },
+      {
+        "month": "Mar",
+        "tHighF": 48.9,
+        "tLowF": 29.5,
+        "precipIn": 3.72,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 22.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 61.2,
+        "tLowF": 39.0,
+        "precipIn": 3.96,
+        "snowIn": null,
+        "wetDays": 7.1,
+        "days90F": 0.1,
+        "daysFreeze": 9.5
+      },
+      {
+        "month": "May",
+        "tHighF": 71.3,
+        "tLowF": 47.9,
+        "precipIn": 3.3,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 1.0,
+        "daysFreeze": 1.9
+      },
+      {
+        "month": "Jun",
+        "tHighF": 80.4,
+        "tLowF": 57.3,
+        "precipIn": 3.92,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 2.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.7,
+        "tLowF": 62.8,
+        "precipIn": 3.03,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 6.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.3,
+        "tLowF": 60.6,
+        "precipIn": 3.63,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 4.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 76.8,
+        "tLowF": 52.1,
+        "precipIn": 3.82,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 1.0,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Oct",
+        "tHighF": 65.7,
+        "tLowF": 41.2,
+        "precipIn": 4.54,
+        "snowIn": null,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 8.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 54.6,
+        "tLowF": 33.6,
+        "precipIn": 3.69,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 17.6
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.3,
+        "tLowF": 26.3,
+        "precipIn": 4.09,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 24.9
+      }
+    ],
+    "annualPrecipIn": 43.9,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 70.3,
+      "avgLowF": 46.9,
+      "precipIn": 15.7,
+      "wetDays": 25.0
+    },
+    "summary": "Hottest month Jul (avg high 85.7°F), coldest Jan (avg low 20.6°F). 43.9 in of rain per year. Fall season (Aug–Nov): highs around 70.3°F, 15.7 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00054704,USW00014753,USC00190860&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:58:02Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Alex Wilson",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/coaches/alex-wilson/1419",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Alex Wilson",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/coaches/alex-wilson/1419",
+        "social": {}
+      },
+      {
+        "name": "Michael Galvin",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/coaches/michael-galvin/1420",
+        "social": {}
+      },
+      {
+        "name": "Maddie Robinson",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/coaches/maddie-robinson/1421",
+        "social": {}
+      },
+      {
+        "name": "Roy Barboza",
+        "title": "Goalkeeper Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/coaches/roy-barboza/1528",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +280,1575 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://stonehillskyhawks.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:29:19Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 34,
+    "players": [
+      {
+        "number": "0",
+        "name": "Jenna Hamel",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Simsbury, Conn.",
+        "highSchool": "The Ethel Walker School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/jenna-hamel/10509",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Reese Reustle",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Massapequa Park, N.Y.",
+        "highSchool": "Massapequa",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/reese-reustle/10533",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Allie Sougaris",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Foxborough, Mass.",
+        "highSchool": "Foxborough",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/allie-sougaris/10522",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Casey Rice",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tolland, Conn.",
+        "highSchool": "Ellington",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/casey-rice/10518",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Grace Robison",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Mansfield, Mass.",
+        "highSchool": "Bishop Feehan",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/grace-robison/10519",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Emily Fernandes",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Berkley, Mass.",
+        "highSchool": "Somerset-Berkley",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/emily-fernandes/10529",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Martha Lord",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bedford, N.H.",
+        "highSchool": "Bishop Guertin",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/martha-lord/10512",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Alyson Guerette",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Merrimack, N.H.",
+        "highSchool": "Bishop Guertin",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/alyson-guerette/10508",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Kayla Cassidy",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Whitman, Mass.",
+        "highSchool": "Whitman Hanson Regional",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/kayla-cassidy/10502",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Lily Roslonek",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dedham, Mass.",
+        "highSchool": "Dedham",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lily-roslonek/10520",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Alina St. George",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Milford, N.H.",
+        "highSchool": "Milford",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/alina-st-george/10523",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Sadie O'Toole",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Douglas, Mass.",
+        "highSchool": "Douglas",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/sadie-o-toole/10532",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Maeve Turmel",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "West Springfield, Mass.",
+        "highSchool": "Pope Francis Prep",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/maeve-turmel/10534",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Erin Foley",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Foxborough, Mass.",
+        "highSchool": "Foxborough",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/erin-foley/10507",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Ella Scalisi",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Weymouth, Mass.",
+        "highSchool": "Weymouth",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/ella-scalisi/10521",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Holley MacLellan",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Milton, Vt.",
+        "highSchool": "Milton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/holley-maclellan/10513",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Grace Fitzgerald",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Beverly, Mass.",
+        "highSchool": "Beverly",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/grace-fitzgerald/10506",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Lucy Irwin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Windham, N.H.",
+        "highSchool": "Central Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lucy-irwin/10530",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Anya Zub",
+        "pos": "M",
+        "posLabel": "M/B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Franklin, Mass.",
+        "highSchool": "Franklin",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/anya-zub/10525",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Lisa Kazandjian",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kirkland, Quebec, Canada",
+        "highSchool": "College de Montreal",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lisa-kazandjian/10510",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Emma Cranston",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Pembroke, Mass.",
+        "highSchool": "Pembroke",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/emma-cranston/10503",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Cam Dunn",
+        "pos": "M",
+        "posLabel": "B/M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Lynn, Mass.",
+        "highSchool": "St. Mary's",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/cam-dunn/10528",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Natalie Meighan",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Tampa, Fla.",
+        "highSchool": "H.B. Plant",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/natalie-meighan/10531",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Kira Pomrinke",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dallas, Pa.",
+        "highSchool": "Dallas",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/kira-pomrinke/10516",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Annie Renz",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Milton, Mass.",
+        "highSchool": "Milton Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/annie-renz/10517",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Taylor Sztaba",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Tolland, Conn.",
+        "highSchool": "Tolland",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/taylor-sztaba/10524",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Lily Newell",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Norton, Mass.",
+        "highSchool": "Norton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lily-newell/10514",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Dani Lomuscio",
+        "pos": "M",
+        "posLabel": "B/M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wrentham, Mass.",
+        "highSchool": "King Philip",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/dani-lomuscio/10511",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Lanie Cawley",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Franklin, Mass.",
+        "highSchool": "Bishop Feehan",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lanie-cawley/10526",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Lindsey Brown",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Seabrook, N.H.",
+        "highSchool": "Governor's Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/lindsey-brown/10501",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "31",
+        "name": "Katie Farr",
+        "pos": "F",
+        "posLabel": "B/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Durham, Conn.",
+        "highSchool": "Coginchaug Regional",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/katie-farr/10505",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Madison Oglesby",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ashland, Mass.",
+        "highSchool": "Worcester Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/madison-oglesby/10515",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Meghan Dowd",
+        "pos": "",
+        "posLabel": "B",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Shrewsbury, Mass.",
+        "highSchool": "Shrewsbury",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/meghan-dowd/10504",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "37",
+        "name": "Allyson Cullingford",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Seaford, N.Y.",
+        "highSchool": "Seaford",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://stonehillskyhawks.com/sports/womens-soccer/roster/allyson-cullingford/10527",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 6,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 5,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 4,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 6,
+      "FR": 9,
+      "JR": 7,
+      "SR": 11,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "M": 6,
+      "F": 4,
+      "?": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://stonehillskyhawks.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:29:19Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Jenna Hamel",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Simsbury, Conn.",
+          "highSchool": "The Ethel Walker School"
+        },
+        {
+          "number": "1",
+          "name": "Allie Sougaris",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "2",
+          "name": "Casey Rice",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Tolland, Conn.",
+          "highSchool": "Ellington"
+        },
+        {
+          "number": "3",
+          "name": "Grace Robison",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mansfield, Mass.",
+          "highSchool": "Bishop Feehan"
+        },
+        {
+          "number": "5",
+          "name": "Martha Lord",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Bedford, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "6",
+          "name": "Alyson Guerette",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Merrimack, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "7",
+          "name": "Kayla Cassidy",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Whitman, Mass.",
+          "highSchool": "Whitman Hanson Regional"
+        },
+        {
+          "number": "8",
+          "name": "Lily Roslonek",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Dedham, Mass.",
+          "highSchool": "Dedham"
+        },
+        {
+          "number": "9",
+          "name": "Alina St. George",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Milford, N.H.",
+          "highSchool": "Milford"
+        },
+        {
+          "number": "10",
+          "name": "Hannah Anselmo",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fall River, Mass.",
+          "highSchool": "Bishop Connolly"
+        },
+        {
+          "number": "12",
+          "name": "Olivia Sharkansky",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hingham, Mass.",
+          "highSchool": "Hingham"
+        },
+        {
+          "number": "13",
+          "name": "Erin Foley",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "14",
+          "name": "Ella Scalisi",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Weymouth, Mass.",
+          "highSchool": "Weymouth"
+        },
+        {
+          "number": "15",
+          "name": "Holley MacLellan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Milton, Vt.",
+          "highSchool": "Milton"
+        },
+        {
+          "number": "16",
+          "name": "Grace Fitzgerald",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Beverly, Mass.",
+          "highSchool": "Beverly"
+        },
+        {
+          "number": "17",
+          "name": "Katie Carey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Greenfield, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "18",
+          "name": "Anya Zub",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Franklin, Mass.",
+          "highSchool": "Franklin"
+        },
+        {
+          "number": "19",
+          "name": "Lisa Kazandjian",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Kirkland, Quebec, Canada",
+          "highSchool": "College de Montreal"
+        },
+        {
+          "number": "20",
+          "name": "Emma Cranston",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pembroke, Mass.",
+          "highSchool": "Pembroke"
+        },
+        {
+          "number": "22",
+          "name": "Riley Gulick",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Norwalk, Conn.",
+          "highSchool": "Brien McMahon"
+        },
+        {
+          "number": "23",
+          "name": "Kira Pomrinke",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dallas, Pa.",
+          "highSchool": "Dallas"
+        },
+        {
+          "number": "24",
+          "name": "Annie Renz",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Milton, Mass.",
+          "highSchool": "Milton Academy"
+        },
+        {
+          "number": "25",
+          "name": "Taylor Sztaba",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Tolland, Conn.",
+          "highSchool": "Tolland"
+        },
+        {
+          "number": "26",
+          "name": "Lily Newell",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Norton, Mass.",
+          "highSchool": "Norton"
+        },
+        {
+          "number": "27",
+          "name": "Dani Lomuscio",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wrentham, Mass.",
+          "highSchool": "King Philip"
+        },
+        {
+          "number": "28",
+          "name": "Mackenzie Landers",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Glastonbury, Conn.",
+          "highSchool": "Glastonbury"
+        },
+        {
+          "number": "30",
+          "name": "Lindsey Brown",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Seabrook, N.H.",
+          "highSchool": "Governor's Academy"
+        },
+        {
+          "number": "31",
+          "name": "Katie Farr",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Durham, Conn.",
+          "highSchool": "Coginchaug Regional"
+        },
+        {
+          "number": "32",
+          "name": "Madison Oglesby",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Ashland, Mass.",
+          "highSchool": "Worcester Academy"
+        },
+        {
+          "number": "33",
+          "name": "Meghan Dowd",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Shrewsbury, Mass.",
+          "highSchool": "Shrewsbury"
+        }
+      ],
+      "departed": [
+        "hannah anselmo",
+        "katie carey",
+        "mackenzie landers",
+        "olivia sharkansky",
+        "riley gulick"
+      ]
+    },
+    "2024": {
+      "count": 37,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelsey Bello",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Mason, Ohio",
+          "highSchool": "The Summit Country Day"
+        },
+        {
+          "number": "00",
+          "name": "Allie Sougaris",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "2",
+          "name": "Casey Rice",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tolland, Conn.",
+          "highSchool": "Ellington"
+        },
+        {
+          "number": "3",
+          "name": "Grace Robison",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mansfield, Mass.",
+          "highSchool": "Bishop Feehan"
+        },
+        {
+          "number": "4",
+          "name": "Emmy Dumaresq",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Manchester, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "5",
+          "name": "Martha Lord",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bedford, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "6",
+          "name": "Ashley Kendrigan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Andover, Mass.",
+          "highSchool": "Andover"
+        },
+        {
+          "number": "7",
+          "name": "Meghan Lord",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Bedford, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "8",
+          "name": "Lily Roslonek",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Dedham, Mass.",
+          "highSchool": "Dedham"
+        },
+        {
+          "number": "10",
+          "name": "Hannah Anselmo",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Fall River, Mass.",
+          "highSchool": "Bishop Connolly"
+        },
+        {
+          "number": "11",
+          "name": "Elizabeth Yucius",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Duxbury, Mass.",
+          "highSchool": "Duxbury"
+        },
+        {
+          "number": "12",
+          "name": "Olivia Sharkansky",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Hingham, Mass.",
+          "highSchool": "Hingham"
+        },
+        {
+          "number": "13",
+          "name": "Olivia Webster",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Avon, Conn.",
+          "highSchool": "The Ethel Walker School"
+        },
+        {
+          "number": "14",
+          "name": "Karleigh Schultz",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Litchfield, N.H.",
+          "highSchool": "Campbell"
+        },
+        {
+          "number": "15",
+          "name": "Rebecca Lancaster",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Scotch Plains, N.J.",
+          "highSchool": "Scotch Plains Fanwood"
+        },
+        {
+          "number": "16",
+          "name": "Grace Fitzgerald",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Beverly, Mass.",
+          "highSchool": "Beverly"
+        },
+        {
+          "number": "17",
+          "name": "Katie Carey",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Greenfield, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "18",
+          "name": "Grace Caso",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Ellington, Conn.",
+          "highSchool": "Suffield Academy"
+        },
+        {
+          "number": "19",
+          "name": "Kara Moore",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Harwich, Mass.",
+          "highSchool": "Nauset Regional"
+        },
+        {
+          "number": "20",
+          "name": "Emma Cranston",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Pembroke, Mass.",
+          "highSchool": "Pembroke"
+        },
+        {
+          "number": "21",
+          "name": "Taylor Murray",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Laurel, Md.",
+          "highSchool": "St. Vincent Pallotti"
+        },
+        {
+          "number": "22",
+          "name": "Riley Gulick",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Norwalk, Conn.",
+          "highSchool": "Brien McMahon"
+        },
+        {
+          "number": "23",
+          "name": "Kira Pomrinke",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Dallas, Pa.",
+          "highSchool": "Dallas"
+        },
+        {
+          "number": "24",
+          "name": "Hannah Watson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Wilmington, Mass.",
+          "highSchool": "Central Catholic"
+        },
+        {
+          "number": "25",
+          "name": "Yara Fawaz",
+          "pos": "",
+          "classCode": "GR",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "26",
+          "name": "Lily Newell",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Norton, Mass.",
+          "highSchool": "Norton"
+        },
+        {
+          "number": "27",
+          "name": "Paige Marjanski",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "South Hadley, Mass.",
+          "highSchool": "South Hadley"
+        },
+        {
+          "number": "28",
+          "name": "Mackenzie Landers",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Glastonbury, Conn.",
+          "highSchool": "Glastonbury"
+        },
+        {
+          "number": "29",
+          "name": "Annie Renz",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Milton, Mass.",
+          "highSchool": "Milton Academy"
+        },
+        {
+          "number": "30",
+          "name": "Lindsey Brown",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Seabrook, N.H.",
+          "highSchool": "Governor's Academy"
+        },
+        {
+          "number": "31",
+          "name": "Katie Farr",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Durham, Conn.",
+          "highSchool": "Coginchaug Regional"
+        },
+        {
+          "number": "32",
+          "name": "Erin Foley",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "33",
+          "name": "Meghan Dowd",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Shrewsbury, Mass.",
+          "highSchool": "Shrewsbury"
+        },
+        {
+          "number": "35",
+          "name": "Kayla Cassidy",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Whitman, Mass.",
+          "highSchool": "Whitman Hanson Regional"
+        },
+        {
+          "number": "36",
+          "name": "Alina St. George",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Milford, N.H.",
+          "highSchool": "Milford"
+        },
+        {
+          "number": "37",
+          "name": "Alyson Guerette",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Merrimack, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "38",
+          "name": "Anya Zub",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Franklin, Mass.",
+          "highSchool": "Franklin"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelsey Bello",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Mason, Ohio",
+          "highSchool": "The Summit Country Day"
+        },
+        {
+          "number": "00",
+          "name": "Mia Jackson",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "East Providence, R.I.",
+          "highSchool": "East Providence"
+        },
+        {
+          "number": "1",
+          "name": "Leanne Durham",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Tewksbury, Mass.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "2",
+          "name": "Casey Rice",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tolland, Conn.",
+          "highSchool": "Ellington"
+        },
+        {
+          "number": "3",
+          "name": "Grace Robison",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mansfield, Mass.",
+          "highSchool": "Bishop Feehan"
+        },
+        {
+          "number": "4",
+          "name": "Emmy Dumaresq",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Manchester, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "5",
+          "name": "Taylor Burnham",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bow, N.H.",
+          "highSchool": "Bow"
+        },
+        {
+          "number": "6",
+          "name": "Ashley Kendrigan",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Andover, Mass.",
+          "highSchool": "Andover"
+        },
+        {
+          "number": "7",
+          "name": "Meghan Lord",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bedford, N.H.",
+          "highSchool": "Bishop Guertin"
+        },
+        {
+          "number": "8",
+          "name": "Lily Roslonek",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Dedham, Mass.",
+          "highSchool": "Dedham"
+        },
+        {
+          "number": "9",
+          "name": "Abigail Flynn",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Pembroke, Mass.",
+          "highSchool": "Pembroke"
+        },
+        {
+          "number": "10",
+          "name": "Hannah Anselmo",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Fall River, Mass.",
+          "highSchool": "Bishop Connolly"
+        },
+        {
+          "number": "11",
+          "name": "Elizabeth Yucius",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Duxbury, Mass.",
+          "highSchool": "Duxbury"
+        },
+        {
+          "number": "12",
+          "name": "Olivia Sharkansky",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Hingham, Mass.",
+          "highSchool": "Hingham"
+        },
+        {
+          "number": "13",
+          "name": "Olivia Webster",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Avon, Conn.",
+          "highSchool": "The Ethel Walker School"
+        },
+        {
+          "number": "14",
+          "name": "Karleigh Schultz",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Litchfield, N.H.",
+          "highSchool": "Campbell"
+        },
+        {
+          "number": "15",
+          "name": "Rebecca Lancaster",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Scotch Plains, N.J.",
+          "highSchool": "Scotch Plains Fanwood"
+        },
+        {
+          "number": "16",
+          "name": "Emma Slade",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "West Kingston, R.I.",
+          "highSchool": "The Prout School"
+        },
+        {
+          "number": "17",
+          "name": "Katie Carey",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Greenfield, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "18",
+          "name": "Grace Caso",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Ellington, Conn.",
+          "highSchool": "Suffield Academy"
+        },
+        {
+          "number": "19",
+          "name": "Kara Moore",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Harwich, Mass.",
+          "highSchool": "Nauset Regional"
+        },
+        {
+          "number": "20",
+          "name": "Emma Cranston",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Pembroke, Mass.",
+          "highSchool": "Pembroke"
+        },
+        {
+          "number": "22",
+          "name": "Riley Gulick",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Norwalk, Conn.",
+          "highSchool": "Brien McMahon"
+        },
+        {
+          "number": "23",
+          "name": "Kira Pomrinke",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Dallas, Pa.",
+          "highSchool": "Dallas"
+        },
+        {
+          "number": "24",
+          "name": "Hannah Watson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Wilmington, Mass.",
+          "highSchool": "Central Catholic"
+        },
+        {
+          "number": "25",
+          "name": "Yara Fawaz",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Foxborough, Mass.",
+          "highSchool": "Foxborough"
+        },
+        {
+          "number": "26",
+          "name": "Lily Newell",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Norton, Mass.",
+          "highSchool": "Norton"
+        },
+        {
+          "number": "27",
+          "name": "Paige Marjanski",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "South Hadley, Mass.",
+          "highSchool": "South Hadley"
+        },
+        {
+          "number": "28",
+          "name": "Mackenzie Landers",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Glastonbury, Conn.",
+          "highSchool": "Glastonbury"
+        },
+        {
+          "number": "29",
+          "name": "Grace Fitzgerald",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Beverly, Mass.",
+          "highSchool": "Beverly"
+        },
+        {
+          "number": "30",
+          "name": "Lindsey Brown",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Seabrook, N.H.",
+          "highSchool": "Governor's Academy"
+        },
+        {
+          "number": "31",
+          "name": "Katie Farr",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Durham, Conn.",
+          "highSchool": "Coginchaug Regional"
+        },
+        {
+          "number": "33",
+          "name": "Taylor Murray",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Laurel, Md.",
+          "highSchool": "St. Vincent Pallotti"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://stonehillskyhawks.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:29:19Z"
+    }
+  },
   "commitments": [
     {
       "id": "emily-fernandes-2026",
@@ -117,7 +1861,7 @@
       "city": "",
       "highSchool": "",
       "college": "stonehill",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1880,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1896,7 @@
       "city": "Lutz",
       "highSchool": "",
       "college": "stonehill",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1915,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -428,41 +2172,27 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://stonehillskyhawks.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T19:22:42Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=42.05905&longitude=-71.080632&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York",
-        "at": "2026-09-07T19:22:41Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T19:22:41Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:29:08Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

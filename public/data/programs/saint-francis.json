@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T22:45:00Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.506734,
+    "lon": -78.63904,
+    "timezone": "America/New_York",
+    "elevationM": 696.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00004726",
+      "name": "JOHNSTOWN CAMBRIA CO AP",
+      "state": "PA",
+      "distanceKm": 26.9,
+      "elevationM": 696.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 33.4,
+        "tLowF": 19.2,
+        "precipIn": 2.54,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 26.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 36.3,
+        "tLowF": 21.2,
+        "precipIn": 2.53,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 24.5
+      },
+      {
+        "month": "Mar",
+        "tHighF": 44.7,
+        "tLowF": 28.0,
+        "precipIn": 3.12,
+        "snowIn": null,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 21.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 57.9,
+        "tLowF": 38.4,
+        "precipIn": 3.54,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 0.0,
+        "daysFreeze": 8.8
+      },
+      {
+        "month": "May",
+        "tHighF": 68.2,
+        "tLowF": 48.8,
+        "precipIn": 4.12,
+        "snowIn": null,
+        "wetDays": 10.1,
+        "days90F": 0.0,
+        "daysFreeze": 0.9
+      },
+      {
+        "month": "Jun",
+        "tHighF": 74.9,
+        "tLowF": 57.2,
+        "precipIn": 4.4,
+        "snowIn": null,
+        "wetDays": 9.3,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 78.6,
+        "tLowF": 61.2,
+        "precipIn": 4.22,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 77.1,
+        "tLowF": 60.0,
+        "precipIn": 3.95,
+        "snowIn": null,
+        "wetDays": 7.9,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 70.5,
+        "tLowF": 52.7,
+        "precipIn": 3.99,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 59.4,
+        "tLowF": 42.7,
+        "precipIn": 3.06,
+        "snowIn": null,
+        "wetDays": 7.7,
+        "days90F": 0.0,
+        "daysFreeze": 3.8
+      },
+      {
+        "month": "Nov",
+        "tHighF": 47.4,
+        "tLowF": 32.8,
+        "precipIn": 3.11,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 15.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 37.8,
+        "tLowF": 24.6,
+        "precipIn": 2.68,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 25.1
+      }
+    ],
+    "annualPrecipIn": 41.3,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 63.6,
+      "avgLowF": 47.0,
+      "precipIn": 14.1,
+      "wetDays": 28.0
+    },
+    "summary": "Hottest month Jul (avg high 78.6°F), coldest Jan (avg low 19.2°F). 41.3 in of rain per year. Fall season (Aug–Nov): highs around 63.6°F, 14.1 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00004726,USW00014736,USC00362470&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:59:37Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Brian Diaz",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/coaches/brian-diaz/1758",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Brian Diaz",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/coaches/brian-diaz/1758",
+        "social": {}
+      },
+      {
+        "name": "Clare Crossley",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/coaches/clare-crossley/1760",
+        "social": {}
+      },
+      {
+        "name": "Jordan Jorgenson",
+        "title": "Assistant Coach - Player Development",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/coaches/jordan-jorgenson/1759",
+        "social": {}
+      },
+      {
+        "name": "Hannah Brubaker",
+        "title": "Assistant Coach - Sports Science",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/coaches/hannah-brubaker/1825",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Brendan McWalters",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/staff/brendan-mcwalters/742",
+        "social": {}
+      },
+      {
+        "name": "Amy Hudkins",
+        "title": "Faculty Athletics Mentor",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/staff/amy-hudkins/741",
+        "social": {}
+      },
+      {
+        "name": "Gerald Comedy",
+        "title": "Assistant Director of Athletic Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/staff/gerald-comedy/769",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +305,1067 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://sfuathletics.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:35:04Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 19,
+    "players": [
+      {
+        "number": "0",
+        "name": "Alyssa Walker",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Summerhill, Pa. / Forest Hills",
+        "highSchool": "Indiana University of Pennsylvania",
+        "previousSchool": "",
+        "major": "Health Science/Physical Therapy",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/alyssa-walker/12541",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Katie Drouillard",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bloomfield, Mich. / Seaholm",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/katie-drouillard/12528",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Brianna Cleary",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Leesburg, Va. / Loudoun County",
+        "highSchool": "Hagerstown Community College",
+        "previousSchool": "",
+        "major": "Exercise Physiology",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/brianna-cleary/12529",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Mara Kirkpatrick",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Altoona, Pa. / Bishop Guilfoyle",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Environmental Engineering",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/mara-kirkpatrick/12530",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Juliana Nerney",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Reading, Pa. / Exeter Township",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Occupational Therapy",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/juliana-nerney/12531",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Reagan Truxillo",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Fort Mill, S.C. / Charlotte Catholic",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Nursing",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/reagan-truxillo/12532",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Caterina Schiavo",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sicklerville, N.J. / Winslow Township",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Molecular Biology",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/caterina-schiavo/12514",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Meredith Artz",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Monroe Township, N.J. / Monroe Township",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Political Science Pre-Law",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/meredith-artz/12509",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Ella Gladfelter",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dover, Pa. / Northeastern",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physician Assistant",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/ella-gladfelter/12533",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Marleigh Gray",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Summerhill, Pa. / Forest Hills",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physician Assistant",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/marleigh-gray/12535",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Riley Cerqua",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Pittsburgh, Pa. / North Allegheny",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biology/Pre-Med",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/riley-cerqua/12510",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Morgan Schlegel",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cranberry Township, Pa. / North Catholic",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physician Assistant",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/morgan-schlegel/12536",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Molly Baker",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wexford, Pa. / Pine Richland",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physician Assistant",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/molly-baker/12537",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Ainsley Rutt",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mechanicsburg, Pa. / Cumberland Valley",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Occupational Therapy",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/ainsley-rutt/12538",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Ashlyn Fetterman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hollsopple, Pa. / Conemaugh Township",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/ashlyn-fetterman/12511",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Jacklyn Hajnosz",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Duncansville, Pa. / Hollidaysburg Area",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physical Therapy",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/jacklyn-hajnosz/12512",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Delaney Urban",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Middletown, N.J. / Saint John Vianney",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exercise Physiology/Physical Therapy",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/delaney-urban/12539",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Natalie Kirsch",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Pittsburgh, Pa. / Bishop Canevin High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physician Assistant",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/natalie-kirsch/12540",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Mercedez Paino",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Langhorne, Pa. / Neshaminy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Nursing",
+        "club": "",
+        "bioUrl": "https://sfuathletics.com/sports/womens-soccer/roster/mercedez-paino/12513",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "R-SO": 2,
+      "FR": 7,
+      "SO": 4,
+      "SR": 4,
+      "JR": 2
+    },
+    "graduatingByPos": {
+      "D": 2,
+      "F": 1,
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://sfuathletics.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:35:04Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 20,
+      "players": [
+        {
+          "number": "00",
+          "name": "Emma Sawich",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "McMurray, Pa. / Peters Township",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Izzy Renner",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Wolverine Lake, Mich. / Walled Lake Central",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Hayley Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Bargersville, Ind. / Center Grove",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Kaitlyn Dempster",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Oakland Township, Mich. / Rochester Adams",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Evangelia Barakos",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "York, Pa. / Central York",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Caterina Schiavo",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Sicklerville, N.J. / Winslow Township",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Anouk Landgraff",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Washington Boro, Pa. / Penn Manor",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Lucia Johnson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio / Turpin",
+          "highSchool": "Eastern Michigan"
+        },
+        {
+          "number": "13",
+          "name": "Meredith Artz",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Monroe Township, N.J. / Monroe Township",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Riley Kerr",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Greensburg, Pa. / Greensburg Central Catholic",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Riley Cerqua",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Pittsburgh, Pa. / North Allegheny",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Hayden Barry",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Downingtown, Pa. / Downingtown West",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Maggie Ratchford",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Scranton, Pa. / Abington Heights",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Jacklyn Hajnosz",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Duncansville, Pa. / Hollidaysburg Area",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Ashlyn Fetterman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Hollsopple, Pa. / Conemaugh Township",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Maridza Desir",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "St. Lazare, Quebec / Monteverde Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Lauren Persichetty",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Staten Island, N.Y. / Susan E. Wagner",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Raine Korpics",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Walnutport, Pa. / Northampton Area",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Mercedez Paino",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Langhorne, Pa. / Neshaminy",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Angelina Kasak",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lemont, Pa. / Pennsylvania Charter Cyber",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "angelina kasak",
+        "anouk landgraff",
+        "emma sawich",
+        "evangelia barakos",
+        "hayden barry",
+        "hayley smith",
+        "izzy renner",
+        "kaitlyn dempster",
+        "lauren persichetty",
+        "lucia johnson",
+        "maggie ratchford",
+        "maridza desir",
+        "raine korpics",
+        "riley kerr"
+      ]
+    },
+    "2024": {
+      "count": 25,
+      "players": [
+        {
+          "number": "0",
+          "name": "Aimee Benton",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Adelaide, South Australia",
+          "highSchool": "Grambling State"
+        },
+        {
+          "number": "00",
+          "name": "Emma Sawich",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "McMurray, Pa.",
+          "highSchool": "Peters Township"
+        },
+        {
+          "number": "1",
+          "name": "Sara Csernyik",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Stow, Ohio",
+          "highSchool": "Stow-Munroe Falls"
+        },
+        {
+          "number": "2",
+          "name": "Alyssa Mella",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Oakville, Ontario",
+          "highSchool": "Thomas A. Blakelock High School"
+        },
+        {
+          "number": "3",
+          "name": "Joy Zeeman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Kirkland, Quebec",
+          "highSchool": "Royal West Academy"
+        },
+        {
+          "number": "4",
+          "name": "Bella Pesce",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Hamilton, N.J.",
+          "highSchool": "Notre Dame"
+        },
+        {
+          "number": "6",
+          "name": "Lauren Pyle",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lititz, Pa.",
+          "highSchool": "Warwick"
+        },
+        {
+          "number": "7",
+          "name": "Tomke Dziesiaty",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Tornesch, Germany",
+          "highSchool": "Klaus-Groth-Schule Tornesch"
+        },
+        {
+          "number": "8",
+          "name": "Caterina Schiavo",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Sicklerville, N.J.",
+          "highSchool": "Winslow Township"
+        },
+        {
+          "number": "9",
+          "name": "Daniëlle Goedhart",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Elten, Netherlands",
+          "highSchool": "Ludger College"
+        },
+        {
+          "number": "10",
+          "name": "Anika Berger",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Woodbridge, Va.",
+          "highSchool": "Mount St. Mary's (Md.)"
+        },
+        {
+          "number": "11",
+          "name": "Layna Grassi",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Moatsville, W. Va.",
+          "highSchool": "Philip Barbour"
+        },
+        {
+          "number": "12",
+          "name": "Anouk Landgraff",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Washington Boro, Pa.",
+          "highSchool": "Penn Manor"
+        },
+        {
+          "number": "14",
+          "name": "Evangelia Barakos",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "York, Pa.",
+          "highSchool": "Central York"
+        },
+        {
+          "number": "15",
+          "name": "Riley Cerqua",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "North Allegheny"
+        },
+        {
+          "number": "17",
+          "name": "Maggie Ratchford",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Scranton, Pa.",
+          "highSchool": "Abington Heights"
+        },
+        {
+          "number": "18",
+          "name": "Jacklyn Hajnosz",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Duncansville, Pa.",
+          "highSchool": "Hollidaysburg Area"
+        },
+        {
+          "number": "19",
+          "name": "Lily Cornwell",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Chambersburg, PA",
+          "highSchool": "Chambersburg Area High School"
+        },
+        {
+          "number": "20",
+          "name": "Claire Scarpin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Adelaide, South Australia",
+          "highSchool": "Grand Canyon"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Persichetty",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Staten Island, N.Y.",
+          "highSchool": "Susan E. Wagner"
+        },
+        {
+          "number": "22",
+          "name": "Raine Korpics",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Walnutport, Pa.",
+          "highSchool": "Northampton Area"
+        },
+        {
+          "number": "26",
+          "name": "Mercedez Paino",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Langhorne, Pa.",
+          "highSchool": "Neshaminy"
+        },
+        {
+          "number": "27",
+          "name": "Rita Kendziora",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Duncansville, Pa.",
+          "highSchool": "Hollidaysburg Area"
+        },
+        {
+          "number": "28",
+          "name": "Rory Schaeffer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Buffalo, N.Y.",
+          "highSchool": "Buffalo Academy of the Sacred Heart"
+        },
+        {
+          "number": "34",
+          "name": "Maridza Desir",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "St. Lazare, Quebec",
+          "highSchool": "Monteverde Academy"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Makenzie Van Arsdale",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Washington Crossing, Pa.",
+          "highSchool": "Villa Joseph Marie"
+        },
+        {
+          "number": "00",
+          "name": "Emma Sawich",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "McMurray, Pa.",
+          "highSchool": "Peters Township"
+        },
+        {
+          "number": "1",
+          "name": "Julianna Marshall",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "North Versailles, Pa.",
+          "highSchool": "Serra Catholic"
+        },
+        {
+          "number": "3",
+          "name": "Riley Cerqua",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "North Allegheny"
+        },
+        {
+          "number": "4",
+          "name": "Bella Pesce",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Hamilton, N.J.",
+          "highSchool": "Notre Dame"
+        },
+        {
+          "number": "6",
+          "name": "Lauren Pyle",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Lititz, Pa.",
+          "highSchool": "Warwick"
+        },
+        {
+          "number": "7",
+          "name": "Tomke Dziesiaty",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Tornesch, Germany",
+          "highSchool": "Klaus-Groth-Schule Tornesch"
+        },
+        {
+          "number": "8",
+          "name": "Caterina Schiavo",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Sicklerville, N.J.",
+          "highSchool": "Winslow Township"
+        },
+        {
+          "number": "9",
+          "name": "Cameron Collins",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "Plum"
+        },
+        {
+          "number": "10",
+          "name": "Aixa Helbringer-Escobar",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Santiago, Chile /",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Colletta Ozbey",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "Chartiers Valley"
+        },
+        {
+          "number": "13",
+          "name": "Layla Flores",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Clifton, N.J.",
+          "highSchool": "Clifton"
+        },
+        {
+          "number": "14",
+          "name": "Claire Miko",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Medina, Ohio",
+          "highSchool": "Medina"
+        },
+        {
+          "number": "15",
+          "name": "Daniëlle Goedhart",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Elten, Netherlands",
+          "highSchool": "Ludger College"
+        },
+        {
+          "number": "17",
+          "name": "Paige Theobald",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Tinton Falls, N.J.",
+          "highSchool": "Red Bank Catholic"
+        },
+        {
+          "number": "20",
+          "name": "Savannah Schoonmaker",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "State College, Pa.",
+          "highSchool": "State College Area"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Persichetty",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Staten Island, N.Y.",
+          "highSchool": "Susan E. Wagner"
+        },
+        {
+          "number": "22",
+          "name": "Raine Korpics",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Walnutport, Pa.",
+          "highSchool": "Northampton Area"
+        },
+        {
+          "number": "23",
+          "name": "Noa Dorah",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Takoma Park, Md.",
+          "highSchool": "Montgomery Blair"
+        },
+        {
+          "number": "25",
+          "name": "Sophia Filipowski",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Hockessin, Del.",
+          "highSchool": "Ursuline Academy"
+        },
+        {
+          "number": "26",
+          "name": "Mercedez Paino",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Langhorne, Pa.",
+          "highSchool": "Neshaminy"
+        },
+        {
+          "number": "27",
+          "name": "Rita Kendziora",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Duncansville, Pa.",
+          "highSchool": "Hollidaysburg Area"
+        },
+        {
+          "number": "28",
+          "name": "Rory Schaeffer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Buffalo, N.Y.",
+          "highSchool": "Buffalo Academy of the Sacred Heart"
+        },
+        {
+          "number": "29",
+          "name": "Casey Breier",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "McMurray, Pa.",
+          "highSchool": "Peters Township"
+        },
+        {
+          "number": "31",
+          "name": "Averey Black",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Martinsburg, Pa.",
+          "highSchool": "Central"
+        },
+        {
+          "number": "99",
+          "name": "Sarah McConnon",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Springfield, Pa.",
+          "highSchool": "Lower Merion Club"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://sfuathletics.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:35:04Z"
+    }
+  },
   "commitments": [],
   "news": {
     "recruiting": [],
@@ -179,47 +1440,32 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-08T00:00:14Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:55Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "tds: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://sfuathletics.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T22:47:34Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.506734&longitude=-78.63904&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York",
-        "at": "2026-09-07T22:47:33Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "tds",
-        "error": "tds: no TopDrawerSoccer team id in registry for this program",
-        "at": "2026-09-07T22:47:34Z"
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-08T01:35:04Z"
       },
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T22:47:33Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:34:52Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

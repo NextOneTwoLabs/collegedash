@@ -69,18 +69,249 @@
       "asOf": "2026-09-07T05:36:01Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 29.720393,
+    "lon": -95.343537,
+    "timezone": "America/Chicago",
+    "elevationM": 13.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012918",
+      "name": "HOUSTON HOBBY AP",
+      "state": "TX",
+      "distanceKm": 10.9,
+      "elevationM": 13.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 63.8,
+        "tLowF": 46.1,
+        "precipIn": 4.09,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 2.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 67.6,
+        "tLowF": 50.1,
+        "precipIn": 2.85,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 73.4,
+        "tLowF": 55.9,
+        "precipIn": 3.28,
+        "snowIn": null,
+        "wetDays": 4.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 79.3,
+        "tLowF": 61.8,
+        "precipIn": 4.08,
+        "snowIn": null,
+        "wetDays": 4.2,
+        "days90F": 0.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 85.9,
+        "tLowF": 69.3,
+        "precipIn": 5.42,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 6.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 91.0,
+        "tLowF": 74.9,
+        "precipIn": 6.09,
+        "snowIn": null,
+        "wetDays": 7.2,
+        "days90F": 20.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 92.9,
+        "tLowF": 76.6,
+        "precipIn": 4.59,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 26.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 93.5,
+        "tLowF": 76.7,
+        "precipIn": 5.44,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 26.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 89.3,
+        "tLowF": 72.9,
+        "precipIn": 5.76,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 16.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 82.1,
+        "tLowF": 63.9,
+        "precipIn": 5.78,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 3.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 72.6,
+        "tLowF": 54.0,
+        "precipIn": 3.9,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.1,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 65.7,
+        "tLowF": 48.0,
+        "precipIn": 4.34,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 0.8
+      }
+    ],
+    "annualPrecipIn": 55.6,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 84.4,
+      "avgLowF": 66.9,
+      "precipIn": 20.9,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Aug (avg high 93.5°F), coldest Jan (avg low 46.1°F). 55.6 in of rain per year. Fall season (Aug–Nov): highs around 84.4°F, 20.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012918,USW00012975,USC00414326&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:20Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Ben Williams",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/ben--williams/1842",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Ben Williams",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/ben--williams/1842",
+        "social": {}
+      },
+      {
+        "name": "Peter Mulamba",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/peter-mulamba/1844",
+        "social": {}
+      },
+      {
+        "name": "Izzie Vaccari",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/izzie-vaccari/1843",
+        "social": {}
+      },
+      {
+        "name": "Brooke Bradley",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/brooke-bradley/1845",
+        "social": {}
+      },
+      {
+        "name": "Howard Sturgeon",
+        "title": "Player Development Coordinator",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/coaches/howard-sturgeon/1846",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Brooke Campbell",
+        "title": "Coordinator of Sports Performance (SOC, SB)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/staff/brooke-campbell/956",
+        "social": {}
+      },
+      {
+        "name": "BJ Carden",
+        "title": "Ted Nance Communications Assistant (SOC, TEN)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/staff/bj-carden/946",
+        "social": {}
+      },
+      {
+        "name": "Alexis Reyes",
+        "title": "Assistant Director of Creative Video",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/staff/alexis--reyes/960",
+        "social": {}
+      },
+      {
+        "name": "Lizzy Rodgers, BS, LAT, AT",
+        "title": "Associate Director of Sports Medicine (SOC/TEN)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/staff/lizzy-rodgers-bs-lat-at/945",
+        "social": {}
+      },
+      {
+        "name": "Lori Selzer",
+        "title": "Director of Academic Services",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/staff/lori-selzer/953",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +329,2834 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://uhcougars.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:10:50Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "2-1-3",
+      "wins": 2,
+      "losses": 1,
+      "ties": 3,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Ben Williams"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "7-4-7",
+      "wins": 7,
+      "losses": 4,
+      "ties": 7,
+      "confRecord": "2-4-5",
+      "rpiRank": 86,
+      "rpi": {
+        "rank": 86,
+        "record": "6-4-7",
+        "through": "2025-12-08",
+        "prevRank": 86,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 86,
+            "record": "6-4-7"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "4-12-1",
+      "wins": 4,
+      "losses": 12,
+      "ties": 1,
+      "confRecord": "1-10-0",
+      "rpiRank": 150,
+      "rpi": {
+        "rank": 150,
+        "sosRank": 271,
+        "balancedRank": 138,
+        "kpiRank": 153,
+        "masseyRank": 140,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "8-8-2",
+      "wins": 8,
+      "losses": 8,
+      "ties": 2,
+      "confRecord": "2-7-1",
+      "rpiRank": 182,
+      "rpi": {
+        "rank": 182,
+        "sosRank": 170,
+        "balancedRank": 113,
+        "kpiRank": 193,
+        "masseyRank": 95,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Delilah Burns",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Evans, Ga. / null",
+        "highSchool": "Robinson High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/delilah-burns/10367",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "1",
+        "name": "Molly Wissman",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Santa Fe. N.M. / Denver",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/molly-wissman/10366",
+        "social": {
+          "instagram": "https://www.instagram.com/mollywissman"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kendall Jones",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "San Antonio, Texas / Texas Tech",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/kendall-jones/10355",
+        "social": {
+          "instagram": "https://www.instagram.com/kendall.joneess"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Samira Minor",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Frisco, Texas /",
+        "highSchool": "Lone Star HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Dallas",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/samira-minor/10360",
+        "social": {
+          "x": "https://twitter.com/minor_samira3",
+          "instagram": "https://www.instagram.com/samiraminor34"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Morgan Donohue",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Dallas, Texas / SFA",
+        "highSchool": "Plano West Senior HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Solar",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/morgan-donohue/10351",
+        "social": {
+          "instagram": "https://www.instagram.com/morganedonohue"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "5",
+        "name": "Jocelyn Chinea",
+        "pos": "F/D",
+        "posLabel": "Forward/Defender",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tampa, Fla. / Georgia",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/jocelyn-chinea/10349",
+        "social": {
+          "instagram": "https://www.instagram.com/jocelynchinea"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Ava Shannon",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Atascocita, Texas / SFA",
+        "highSchool": "Atascocita HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Dash",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/ava-shannon/10364",
+        "social": {
+          "instagram": "https://www.instagram.com/ava_r_s"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Danielle Shannon",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Atascocita, Texas / LSU",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Dash",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/danielle-shannon/10365",
+        "social": {
+          "instagram": "https://www.instagram.com/_danielle8_"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Peyton Machado",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Clovis, Calif. /",
+        "highSchool": "Clovis HS",
+        "previousSchool": "",
+        "major": "Retail and Consumer Science",
+        "club": "Clovis Crossfire",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/peyton-machado/10357",
+        "social": {
+          "instagram": "https://www.instagram.com/peyton_machado"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "9",
+        "name": "Blake Hodgson",
+        "pos": "F/D",
+        "posLabel": "Forward/Defender",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Missouri City, Texas / TCU",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/blake-hodgson/10354",
+        "social": {
+          "instagram": "https://www.instagram.com/blake.elizabeth05"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "10",
+        "name": "Madyson Bentil",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Loganville, Ga. /",
+        "highSchool": "Loganville HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Concorde Fire",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/madyson-bentil/10346",
+        "social": {
+          "instagram": "https://www.instagram.com/madysonbentil"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "11",
+        "name": "Skylar Miller",
+        "pos": "M/F",
+        "posLabel": "Midfielder/Forward",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Virginia Beach, Virginia / Tennessee",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/skylar-miller/10370",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Nadia Ortiz",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Trophy Club, Texas /",
+        "highSchool": "Byron Nelson HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Dallas",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/nadia-ortiz/10362",
+        "social": {
+          "instagram": "https://www.instagram.com/nadia._ortiz"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Laney Gonzales",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Magnolia, Texas / LSU",
+        "highSchool": "Magnolia HS",
+        "previousSchool": "",
+        "major": "Integrated Studies",
+        "club": "Dash",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/laney-gonzales/10353",
+        "social": {
+          "instagram": "https://www.instagram.com/laney.gonzales"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "14",
+        "name": "Lewhat Tesfazghi",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Snellville, Ga. /",
+        "highSchool": "Shiloh High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "GSA",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/lewhat-tesfazghi/10372",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Amaris Bumba",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Raleigh, N.C. /",
+        "highSchool": "Thales Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/amaris-bumba/10348",
+        "social": {
+          "instagram": "https://www.instagram.com/amaris.bumba"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Alex Ledbetter",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Houston, Texas /",
+        "highSchool": "Jordan High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/alex-ledbetter/10356",
+        "social": {
+          "instagram": "https://www.instagram.com/Alex08ledbetter"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "18",
+        "name": "Casey Maddox",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Snellville, Ga. / null",
+        "highSchool": "Shiloh H.S.",
+        "previousSchool": "",
+        "major": "Kinesiology",
+        "club": "Concorde Fire",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/casey-maddox/10358",
+        "social": {
+          "instagram": "https://www.instagram.com/_casey.alayna"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "19",
+        "name": "Adelhia Ghonda",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Houston, Texas / Oklahoma State",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/adelhia-ghonda/10352",
+        "social": {
+          "x": "https://twitter.com/adelhiaghonda",
+          "instagram": "https://www.instagram.com/adelhighonda"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "20",
+        "name": "Tristen Yi",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Edmond, Okla. /",
+        "highSchool": "Deek Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Oklahoma Energy FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/tristen-yi/10373",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "21",
+        "name": "Jada Arthurs",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Branford, Ontario / Cincinnati",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/jada-arthurs/10345",
+        "social": {
+          "instagram": "https://www.instagram.com/jada_arthursss"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Addy Cooper",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Antonio, Texas /",
+        "highSchool": "Earl Warren High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "SA City",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/addy-cooper/10350",
+        "social": {
+          "instagram": "https://www.instagram.com/addy._2007"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "24",
+        "name": "Charlotte Richardson",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Missouri City, Texas /",
+        "highSchool": "Ridge Point High School",
+        "previousSchool": "",
+        "major": "Kinesiology, Exercise Science",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/charlotte-richardson/10363",
+        "social": {
+          "x": "https://twitter.com/Crich_0605",
+          "instagram": "https://www.instagram.com/charrr.marie"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "28",
+        "name": "Elle Sloan",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Danville, Calif. / null",
+        "highSchool": "Carondelet High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Bay Area",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/elle-sloan/10371",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "30",
+        "name": "Ella Morgan",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Allen, Texas / SFA",
+        "highSchool": "Allen HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "DKSC",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/ella-morgan/9568",
+        "social": {
+          "instagram": "https://www.instagram.com/ellabmorgan"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "31",
+        "name": "Riley Hewitt",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Keller, Texas /",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Dallas Sting",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/riley-hewitt/10369",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "32",
+        "name": "Sierra McCluer",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Katy, Texas / SFA",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/sierra-mccluer/10359",
+        "social": {
+          "instagram": "https://www.instagram.com/sierra_mcc_6"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Kate Borgmeier",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Salt Lake City, Utah / St. Mary's (CA)",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Soccer Alliance",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/kate-borgmeier/10347",
+        "social": {
+          "instagram": "https://www.instagram.com/kate.borgmeier"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "36",
+        "name": "Bailey Cate",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lubbock, Texas / Texas A&M",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uhcougars.com/sports/womens-soccer/roster/bailey-cate/10368",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 7,
+      "SR": 6,
+      "JR": 6,
+      "SO": 5,
+      "GR": 5
+    },
+    "graduatingByPos": {
+      "GK": 2,
+      "M": 4,
+      "F": 2,
+      "D": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uhcougars.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:10:50Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "1",
+          "name": "Lexi Gonzalez",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "McAllen, Texas / FAU",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Laney Gonzales",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Magnolia, Texas / LSU",
+          "highSchool": "Magnolia HS"
+        },
+        {
+          "number": "3",
+          "name": "Samira Minor",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Frisco, Texas /",
+          "highSchool": "Lone Star HS"
+        },
+        {
+          "number": "4",
+          "name": "Elly Harrington",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Winter Garden, Fla. / TCU",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Jocelyn Chinea",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Tampa, Fla. / Georgia",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ava Shannon",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Atascocita, Texas / SFA",
+          "highSchool": "Atascocita HS"
+        },
+        {
+          "number": "8",
+          "name": "Peyton Machado",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Clovis, Calif. /",
+          "highSchool": "Clovis HS"
+        },
+        {
+          "number": "9",
+          "name": "Blake Hodgson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Missouri City, Texas / TCU",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Madyson Bentil",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Loganville, Ga. /",
+          "highSchool": "Loganville HS"
+        },
+        {
+          "number": "11",
+          "name": "Jada Gibson",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "San Diego, Calif. / Georgia",
+          "highSchool": "Bonita Vista HS"
+        },
+        {
+          "number": "12",
+          "name": "Alex Whitcraft",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Grapevine, Texas / null",
+          "highSchool": "Colleyville Heritage HS"
+        },
+        {
+          "number": "13",
+          "name": "Kyrsten Kizer",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Frisco, Texas /",
+          "highSchool": "Lone Star High School"
+        },
+        {
+          "number": "14",
+          "name": "Morgan Donohue",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dallas, Texas / SFA",
+          "highSchool": "Plano West Senior HS"
+        },
+        {
+          "number": "15",
+          "name": "Amaris Bumba",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Raleigh, N.C. /",
+          "highSchool": "Thales Academy"
+        },
+        {
+          "number": "17",
+          "name": "Savannah Tafireyi",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Forney, Texas / null",
+          "highSchool": "University Prep HS"
+        },
+        {
+          "number": "18",
+          "name": "Casey Maddox",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Snellville, Ga. / null",
+          "highSchool": "Shiloh H.S."
+        },
+        {
+          "number": "19",
+          "name": "Adelhia Ghonda",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Houston, Texas / Oklahoma State",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Sabrina Taber",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "San Antonio, Texas / Cincinnati",
+          "highSchool": "Smithson Valley HS"
+        },
+        {
+          "number": "21",
+          "name": "Nadia Ortiz",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Trophy Club, Texas /",
+          "highSchool": "Byron Nelson HS"
+        },
+        {
+          "number": "22",
+          "name": "Amanda Adams",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Keller, Texas / null",
+          "highSchool": "Homeschooled"
+        },
+        {
+          "number": "23",
+          "name": "Elizabeth Bigala",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Concord, N.C. /",
+          "highSchool": "West Cabarrus HS"
+        },
+        {
+          "number": "24",
+          "name": "Charlotte Richardson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Missouri City, Texas /",
+          "highSchool": "Ridge Point High School"
+        },
+        {
+          "number": "26",
+          "name": "Cameryn Maddox",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Snellville, Ga. / San Diego",
+          "highSchool": "Shiloh HS"
+        },
+        {
+          "number": "29",
+          "name": "Jaden Humbyrd",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Issaquah, Wash. / LSU",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Ella Morgan",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Allen, Texas / SFA",
+          "highSchool": "Allen HS"
+        },
+        {
+          "number": "32",
+          "name": "Logan Pilgreen",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Texarkana, Texas / SFA",
+          "highSchool": "Texas High School"
+        },
+        {
+          "number": "33",
+          "name": "Maggie Manning",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Prosper, Texas / null",
+          "highSchool": "Prosper HS"
+        }
+      ],
+      "departed": [
+        "alex whitcraft",
+        "amanda adams",
+        "cameryn maddox",
+        "elizabeth bigala",
+        "elly harrington",
+        "jada gibson",
+        "jaden humbyrd",
+        "kyrsten kizer",
+        "lexi gonzalez",
+        "logan pilgreen",
+        "maggie manning",
+        "sabrina taber",
+        "savannah tafireyi"
+      ]
+    },
+    "2024": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kylee Williams",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Dallas, Texas / Woodrow Wilson HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Olivia Dietrich",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Broomfield, Colo. / Holy Family HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "2",
+          "name": "Laney Gonzales",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Magnolia, Texas / Magnolia HS",
+          "highSchool": "LSU"
+        },
+        {
+          "number": "3",
+          "name": "Ramsey Davis",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Tulsa, Okla. / IMG Academy",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "4",
+          "name": "Bryn Geppert",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wylie, Texas / Wylie East HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alexis Fowlkes",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "The Woodlands, Texas / Tomball HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "6",
+          "name": "Lillianna Meram",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "La Mesa, California / Valhalla High School",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Aryanna Jimison",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Carrollton, Texas / Hebron HS",
+          "highSchool": "FC Dallas"
+        },
+        {
+          "number": "8",
+          "name": "Peyton Machado",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Clovis, Calif. / Clovis HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jocelyn Alonzo",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Coppell, Texas /",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "10",
+          "name": "Juliet Moore",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dallas, Texas / Ursuline Academy of Dallas",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "11",
+          "name": "Jada Gibson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "San Diego, Calif. / Bonita Vista HS",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "12",
+          "name": "Alex Whitcraft",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Grapevine, Texas / Colleyville Heritage HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Kyrsten Kizer",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Frisco, Texas / Lone Star High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Bri Hilsenteger",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Austin, Texas / Vista Ridge",
+          "highSchool": "Pitt"
+        },
+        {
+          "number": "15",
+          "name": "Kate Burgess",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Houston, Texas / Clear Lake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Anna Reysa",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Allen, Texas / Allen HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Savannah Tafireyi",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Forney, Texas / University Prep HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Casey Maddox",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Snellville, Ga. / Shiloh H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Jordan Johnson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Commerce City, Colo. / Prairie View HS",
+          "highSchool": "LSU"
+        },
+        {
+          "number": "20",
+          "name": "Talia Feigin",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bethesda, Md. / Walt Whitman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Chloe Adams",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Flower Mound, Texas /",
+          "highSchool": "Oklahoma"
+        },
+        {
+          "number": "22",
+          "name": "Amanda Adams",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Keller, Texas / Homeschooled",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Kayla Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lee's Summit, Mo. / Lee's Summit Senior HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Charlotte Richardson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Missouri City, Texas / Ridge Point High School",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Tatum McCasland",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "North Richland, Texas / Birdville High School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Cameryn Maddox",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Snellville, Ga. / Shiloh HS",
+          "highSchool": "San Diego"
+        },
+        {
+          "number": "27",
+          "name": "Sofia Weber",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Andover, N.H. / Hotchkiss School",
+          "highSchool": "UConn"
+        },
+        {
+          "number": "28",
+          "name": "Maddie Khan",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Southlake, Texas / Southlake Carroll HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Elizabeth Bigala",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Concord, N.C. / West Cabarrus HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Maggie Manning",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Prosper, Texas / Prosper HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 34,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kylee Williams",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Dallas, Texas / Woodrow Wilson HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Olivia Dietrich",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Broomfield, Colo. / Holy Family HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "2",
+          "name": "Cordelia Cross",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Granada Hills, Calif. / Granada Hills HS",
+          "highSchool": "Oklahoma"
+        },
+        {
+          "number": "3",
+          "name": "Ramsey Davis",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Tulsa, Okla. / IMG Academy",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "4",
+          "name": "Ella Freebury",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Rancho Palos Verdes, California / Palos Verdes High School",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alexis Fowlkes",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "The Woodlands, Texas / Tomball HS",
+          "highSchool": "Texas Tech"
+        },
+        {
+          "number": "6",
+          "name": "Lillianna Meram",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "La Mesa, California / Valhalla High School",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Nadia Kamassah",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Camarillo, Calif. / Adolfo Camarillo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Peyton Machado",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Clovis, Calif. / Clovis HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Ava Alaniz",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "McAllen, Texas / McAllen HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Juliet Moore",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dallas, Texas / Ursuline Academy of Dallas",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "11",
+          "name": "Caitlyn Matthews",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Flower Mound, Texas / Flower Mound HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Alex Whitcraft",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Grapevine, Texas / Colleyville Heritage HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Kyrsten Kizer",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Frisco, Texas / Lone Star High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Bri Hilsenteger",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Austin, Texas / Vista Ridge",
+          "highSchool": "Pitt"
+        },
+        {
+          "number": "15",
+          "name": "Kate Burgess",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Houston, Texas / Clear Lake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Anna Reysa",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Allen, Texas / Allen HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Aryanna Jimison",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Carrollton, Texas / Hebron HS",
+          "highSchool": "FC Dallas"
+        },
+        {
+          "number": "18",
+          "name": "Maddie Bowers",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lake Jackson, Texas / Brazoswood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Hailey Stodden",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Broomfield, Colo. / Broomfield HS",
+          "highSchool": "Colorado"
+        },
+        {
+          "number": "20",
+          "name": "Talia Feigin",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bethesda, Md. / Walt Whitman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Jaden Masters",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Hamilton, Bermuda / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Amanda Walsh",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Plano, Texas / Plano Senior HS",
+          "highSchool": "Central Arkansas"
+        },
+        {
+          "number": "23",
+          "name": "Kaylee Dressback",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Hoover, Ala. / Vestavia Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Charlotte Richardson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Missouri City, Texas / Ridge Point High School",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Tatum McCasland",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "North Richland, Texas / Birdville High School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Cameryn Maddox",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Snellville, Ga. / Shiloh HS",
+          "highSchool": "San Diego"
+        },
+        {
+          "number": "27",
+          "name": "Sofia Weber",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Andover, N.H. / Hotchkiss School",
+          "highSchool": "UConn"
+        },
+        {
+          "number": "28",
+          "name": "Maddie Khan",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Southlake, Texas / Southlake Carroll HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Allie Byrd",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Kingwood, Texas / Kingwood Park HS",
+          "highSchool": "North Texas"
+        },
+        {
+          "number": "32",
+          "name": "Mikaela Gracia",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Mansfield, Texas / Mansfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Bella Ayers",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Sacramento, California / Elk Grove High School",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Jada Gibson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "San Diego, Calif. / Bonita Vista HS",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "36",
+          "name": "Cassidy Hoang",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Sugar Land, Texas / George Ranch HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 2,
+      "losses": 1,
+      "ties": 3,
+      "text": "2-1-3",
+      "played": 6,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Rice",
+        "opponentRank": null,
+        "location": "Houston, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/rice/1"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "FGCU",
+        "opponentRank": null,
+        "location": "Fort Myers, Florida",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/fgcu/boxscore/16805",
+          "recap": "https://uhcougars.com/news/2026/8/12/soccer-opens-season-with-scoreless-draw",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/fgcu/52"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Northwestern State",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, TX",
+        "result": "W",
+        "score": "5-0",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/northwestern-state/boxscore/16806",
+          "recap": "https://uhcougars.com/news/2026/8/20/soccer-cougars-cruise-past-northwestern-state-in-home-opener",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/northwestern-state/94"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Tarleton State",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, TX",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/tarleton-state/boxscore/16807",
+          "recap": "https://uhcougars.com/news/2026/8/23/soccer-houston-takes-down-tarleton2",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/tarleton-state/127"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "ACU",
+        "opponentRank": null,
+        "location": "Abilene, TX",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/acu/boxscore/16808",
+          "recap": "https://uhcougars.com/news/2026/8/27/soccer-houston-acu-play-to-scoreless-draw",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/acu/221"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Vanderbilt",
+        "opponentRank": 3,
+        "location": "Carl Lewis International Complex, Houston, TX",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/vanderbilt/boxscore/16809",
+          "recap": "https://uhcougars.com/news/2026/8/30/soccer-houston-falls-short-against-3-vanderbilt",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/vanderbilt/153"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Memphis",
+        "opponentRank": 23,
+        "location": "Memphis, TN",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://uhcougars.com/sports/womens-soccer/stats/2026/memphis/boxscore/16810",
+          "recap": "https://uhcougars.com/news/2026/9/3/soccer-ties-23-memphis-on-thursday",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/memphis/13"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Sam Houston",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664643",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/sam-houston/110"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Texas Southern",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664644",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-southern/134"
+        }
+      },
+      {
+        "date": "2026-09-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Kansas State",
+        "opponentRank": null,
+        "location": "Manhattan, KS",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/v/hou/663404",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/kansas-state/73"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Iowa State",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664639",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/iowa-state/5"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Oklahoma State",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664645",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/oklahoma-state/98"
+        }
+      },
+      {
+        "date": "2026-10-02",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "West Virginia",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664646",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/west-virginia/214"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Arizona",
+        "opponentRank": null,
+        "location": "Tucson, AZ",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663814&vislive=hou",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/arizona/25"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Arizona State",
+        "opponentRank": null,
+        "location": "Tempe, AZ",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/v/hou/663865",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/arizona-state/26"
+        }
+      },
+      {
+        "date": "2026-10-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Cincinnati",
+        "opponentRank": null,
+        "location": "Cincinnati OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/v/hou/664099",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/cincinnati/226"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "TCU",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664640",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/tcu/128"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UCF",
+        "opponentRank": null,
+        "location": "Orlando, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/v/hou/666495",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/ucf/146"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Kansas",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664647",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/kansas/72"
+        }
+      },
+      {
+        "date": "2026-11-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Baylor",
+        "opponentRank": null,
+        "location": "Waco, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/v/hou/663934",
+          "history": "https://uhcougars.com/sports/wsoc/opponent-history/baylor/30"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "7-4-7",
+        "games": [
+          {
+            "date": "2025-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/rice/1"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, TX",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/utsa/boxscore/15869",
+              "recap": "https://uhcougars.com/news/2025/8/14/soccer-cougars-end-season-opener-in-scoreless-draw",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/utsa/138"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "St. Mary's University (TX)",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/st-marys-university-tx-/boxscore/15870",
+              "recap": "https://uhcougars.com/news/2025/8/17/soccer-cougars-dominate-st-mary-tx-4-0",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/st-marys-university-tx/124"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Huntsville, TX",
+            "result": null,
+            "score": null,
+            "links": {
+              "recap": "https://uhcougars.com/news/2025/8/21/soccer-at-sam-houston-canceled",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/sam-houston/110"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "rv Texas",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/texas/boxscore/15872",
+              "recap": "https://uhcougars.com/news/2025/8/24/soccer-houston-storms-back-in-second-half-to-top-rv-texas",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas/131"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/ulm/189"
+            }
+          },
+          {
+            "date": "2025-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southern",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/southern/boxscore/15955",
+              "recap": "https://uhcougars.com/news/2025/9/1/soccer-cougars-cruise-to-victory-over-southern",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/southern/120"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "McNeese",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/mcneese/boxscore/15883",
+              "recap": "https://uhcougars.com/news/2025/9/4/soccer-cougars-crush-cowgirls",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/mcneese/12"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "SFA",
+            "opponentRank": null,
+            "location": "Nacogdoches, TX",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/sfa/boxscore/15874",
+              "recap": "https://uhcougars.com/news/2025/9/7/soccer-houston-sfa-end-in-scoreless-draw",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/sfa/125"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/utrgv/boxscore/15876",
+              "recap": "https://uhcougars.com/news/2025/9/11/soccer-houston-closes-non-conference-action-with-win-over-utrgv",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/utrgv/137"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cincinnati",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/cincinnati/boxscore/15772",
+              "recap": "https://uhcougars.com/news/2025/9/18/soccer-houston-opens-big-12-action-with-win-over-cincinnati",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/cincinnati/226"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "rv Texas Tech",
+            "opponentRank": null,
+            "location": "Lubbock, TX",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/texas-tech/boxscore/15773",
+              "recap": "https://uhcougars.com/news/2025/9/25/soccer-houston-rv-texas-tech-end-in-1-1-draw",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-tech/136"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Colorado",
+            "opponentRank": null,
+            "location": "Boulder, CO",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/colorado/boxscore/15774",
+              "recap": "https://uhcougars.com/news/2025/9/28/soccer-falls-at-colorado-1-0",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/colorado/244"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "rv BYU",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/byu/boxscore/15775",
+              "recap": "https://uhcougars.com/news/2025/10/2/soccer-battle-of-the-cougars-end-in-1-1-draw",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/byu/164"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/utah/boxscore/15776",
+              "recap": "https://uhcougars.com/news/2025/10/5/soccer-houston-drops-first-home-match-of-season-to-utah",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/utah/149"
+            }
+          },
+          {
+            "date": "2025-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "West Virginia",
+            "opponentRank": 25,
+            "location": "Morgantown, WV",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/west-virginia/boxscore/15777",
+              "recap": "https://uhcougars.com/news/2025/10/10/soccer-houston-falls-to-25-west-virginia",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/west-virginia/214"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Iowa State",
+            "opponentRank": null,
+            "location": "Ames, IA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/iowa-state/boxscore/15778",
+              "recap": "https://uhcougars.com/news/2025/10/16/soccer-houston-storms-back-against-iowa-state",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/iowa-state/5"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/ucf/boxscore/15779",
+              "recap": "https://uhcougars.com/news/2025/10/19/soccer-houston-opens-homestand-with-draw-against-ucf",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/ucf/146"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kansas State",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/kansas-state/boxscore/15780",
+              "recap": "https://uhcougars.com/news/2025/10/23/soccer-cougars-collect-10th-point-of-the-season",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/kansas-state/73"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Baylor",
+            "opponentRank": 16,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/baylor/boxscore/15781",
+              "recap": "https://uhcougars.com/news/2025/10/26/soccer-houston-ties-16-baylor-adds-critical-point",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/baylor/30"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "TCU",
+            "opponentRank": 5,
+            "location": "Fort Worth, TX",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2025/tcu/boxscore/15782",
+              "recap": "https://uhcougars.com/news/2025/10/30/soccer-drops-season-finale-at-5-tcu",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/tcu/128"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "4-12-1",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas",
+            "opponentRank": 17,
+            "location": "Austin, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/texas/boxscore/15328",
+              "recap": "https://uhcougars.com/news/2024/8/15/soccer-drops-season-opener-to-17-texas",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas/131"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/sam-houston/boxscore/15329",
+              "recap": "https://uhcougars.com/news/2024/8/18/soccer-falls-to-sam-houston-in-home-opener",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/sam-houston/110"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stephen F. Austin",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/stephen-f-austin/boxscore/15330",
+              "recap": "https://uhcougars.com/news/2024/8/22/soccer-cougars-and-ladyjacks-end-in-scoreless-draw",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/stephen-f-austin/125"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Tarleton State",
+            "opponentRank": null,
+            "location": "Stephenville, Texas",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/tarleton-state/boxscore/15331",
+              "recap": "https://uhcougars.com/news/2024/8/25/soccer-houston-takes-down-tarleton-state",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/tarleton-state/127"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/utsa/boxscore/15332",
+              "recap": "https://uhcougars.com/news/2024/8/29/soccer-jimison-records-brace-houston-defeats-utsa",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/utsa/138"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "San Marcos, Texas",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/texas-state/boxscore/15333",
+              "recap": "https://uhcougars.com/news/2024/9/1/soccer-moore-records-hat-trick-houston-wins-third-straight",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-state/135"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Orlando, Fla.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/ucf/boxscore/15277",
+              "recap": "https://uhcougars.com/news/2024/9/12/soccer-houston-falls-to-ucf-in-big-12-opener",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/ucf/146"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arizona State",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/arizona-state/boxscore/15278",
+              "recap": "https://uhcougars.com/news/2024/9/19/soccer-drops-big-12-home-opener-to-arizona-state",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/arizona-state/26"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Baylor",
+            "opponentRank": null,
+            "location": "Waco, Texas",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/baylor/boxscore/15279",
+              "recap": "https://uhcougars.com/news/2024/9/22/soccer-falls-at-baylor",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/baylor/30"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "TCU",
+            "opponentRank": 22,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/tcu/boxscore/15280",
+              "recap": "https://uhcougars.com/news/2024/9/26/soccer-drops-contest-to-22-tcu",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/tcu/128"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Texas Tech",
+            "opponentRank": 25,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/texas-tech/boxscore/15281",
+              "recap": "https://uhcougars.com/news/2024/9/29/soccer-second-half-goals-powers-25-texas-tech-past-houston",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-tech/136"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cincinnati",
+            "opponentRank": null,
+            "location": "Cincinnati, Ohio",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/cincinnati/boxscore/15282",
+              "recap": "https://uhcougars.com/news/2024/10/6/soccer-houston-drops-road-match-against-cincinnati",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/cincinnati/226"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Oklahoma State",
+            "opponentRank": null,
+            "location": "Stillwater, Okla.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/oklahoma-state/boxscore/15283",
+              "recap": "https://uhcougars.com/news/2024/10/10/soccer-falls-at-oklahoma-state",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/oklahoma-state/98"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arizona",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/arizona/boxscore/15284",
+              "recap": "https://uhcougars.com/news/2024/10/13/soccer-claims-conference-win-against-arizona",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/arizona/25"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Salt Lake City, Utah",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/utah/boxscore/15285",
+              "recap": "https://uhcougars.com/news/2024/10/17/soccer-falls-1-0-at-utah",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/utah/149"
+            }
+          },
+          {
+            "date": "2024-10-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "BYU",
+            "opponentRank": null,
+            "location": "Provo, Utah",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/byu/boxscore/15286",
+              "recap": "https://uhcougars.com/news/2024/10/21/soccer-drops-road-finale-at-byu",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/byu/164"
+            }
+          },
+          {
+            "date": "2024-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2024/west-virginia/boxscore/15287",
+              "recap": "https://uhcougars.com/news/2024/10/25/soccer-falls-to-west-virginia-on-senior-night",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/west-virginia/214"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "8-8-2",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Washington",
+            "opponentRank": null,
+            "location": "Seattle, Wash.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/washington/boxscore/12306",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/washington/91"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southeastern Louisiana",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "5-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/southeastern-louisiana/boxscore/12307",
+              "recap": "https://uhcougars.com/news/2023/8/20/soccer-kamassah-brace-propels-cougars-to-home-opener-victory",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/southeastern-louisiana/119"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stephen F. Austin",
+            "opponentRank": null,
+            "location": "Nacogdoches, Texas",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/stephen-f-austin/boxscore/12308",
+              "recap": "https://uhcougars.com/news/2023/8/24/soccer-earns-5-1-road-victory-over-stephen-f-austin",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/stephen-f-austin/125"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Tarleton State",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/tarleton-state/boxscore/12309",
+              "recap": "https://uhcougars.com/news/2023/8/27/soccer-picks-up-home-win-against-tarleton-state-4-1",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/tarleton-state/127"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Houston, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/rice/boxscore/12310",
+              "recap": "https://uhcougars.com/news/2023/8/31/maddox-leads-soccer-to-2-1-victory-against-rice",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/rice/1"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Louisiana Tech",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "7-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/louisiana-tech/boxscore/12311",
+              "recap": "https://uhcougars.com/news/2023/9/3/soccer-takes-down-louisiana-tech-7-1",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/louisiana-tech/7"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Houston Christian",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/houston-christian/boxscore/12312",
+              "recap": "https://uhcougars.com/news/2023/9/7/soccer-wins-sixth-consecutive-game-for-best-start-in-program-history",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/houston-christian/63"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/texas-state/boxscore/12313",
+              "recap": "https://uhcougars.com/news/2023/9/10/soccer-falls-short-against-texas-state-on-senior-night",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-state/135"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "rv Texas Tech",
+            "opponentRank": null,
+            "location": "Lubbock, Texas",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/texas-tech/boxscore/12251",
+              "recap": "https://uhcougars.com/news/2023/9/14/soccer-drops-big-12-conference-opener-against-rv-texas-tech-3-0",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas-tech/136"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "rv UCF",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/ucf/boxscore/13361",
+              "recap": "https://uhcougars.com/news/2023/9/21/soccer-falls-short-against-rv-ucf-1-0",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/ucf/146"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Oklahoma",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/oklahoma/boxscore/12253",
+              "recap": "https://uhcougars.com/news/2023/9/24/soccer-kizer-scores-in-2-1-loss-to-oklahoma",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/oklahoma/97"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Iowa State",
+            "opponentRank": null,
+            "location": "Ames, Iowa",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/iowa-state/boxscore/12254",
+              "recap": "https://uhcougars.com/news/2023/9/28/soccer-drops-road-contest-against-iowa-state-2-1",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/iowa-state/5"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/west-virginia/boxscore/12255",
+              "recap": "https://uhcougars.com/news/2023/10/1/soccer-downs-west-virginia-to-clinch-houstons-first-win-in-big-12-era",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/west-virginia/214"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Kansas State",
+            "opponentRank": null,
+            "location": "Manhattan, Kan.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/kansas-state/boxscore/12256",
+              "recap": "https://uhcougars.com/news/2023/10/5/soccer-falls-at-kansas-state-1-0",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/kansas-state/73"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Kansas",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/kansas/boxscore/12257",
+              "recap": "https://uhcougars.com/news/2023/10/8/soccer-records-2-0-shutout-against-kansas-for-first-big-12-road-win",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/kansas/72"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "TCU",
+            "opponentRank": 21,
+            "location": "Fort Worth, Texas",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/tcu/boxscore/12258",
+              "recap": "https://uhcougars.com/news/2023/10/12/soccers-comeback-earns-2-2-draw-at-21-tcu",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/tcu/128"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "rv Texas",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "1-6",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/texas/boxscore/12259",
+              "recap": "https://uhcougars.com/news/2023/10/15/soccer-drops-home-contest-to-rv-texas",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/texas/131"
+            }
+          },
+          {
+            "date": "2023-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Baylor",
+            "opponentRank": null,
+            "location": "Carl Lewis International Complex, Houston, Texas",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://uhcougars.com/sports/womens-soccer/stats/2023/baylor/boxscore/12260",
+              "recap": "https://uhcougars.com/news/2023/10/23/soccer-falls-in-season-finale-to-baylor",
+              "history": "https://uhcougars.com/sports/wsoc/opponent-history/baylor/30"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uhcougars.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:10:50Z"
+    }
+  },
   "commitments": [
     {
       "id": "adeline-cooper-2026",
@@ -196,7 +3248,7 @@
       "city": "Lakeland",
       "highSchool": "",
       "college": "houston",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -215,7 +3267,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -266,7 +3318,7 @@
       "city": "Diablo",
       "highSchool": "",
       "college": "houston",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -285,7 +3337,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -301,7 +3353,7 @@
       "city": "Snellville",
       "highSchool": "",
       "college": "houston",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -320,7 +3372,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -336,7 +3388,7 @@
       "city": "NRH",
       "highSchool": "Keller",
       "college": "houston",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -380,7 +3432,7 @@
       "city": "Edmond",
       "highSchool": "",
       "college": "houston",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1011,41 +4063,27 @@
     "2028": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://uhcougars.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:36:36Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=29.720393&longitude=-95.343537&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:36:34Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:36:35Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:10:39Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

@@ -69,17 +69,207 @@
       "asOf": "2026-09-07T04:50:33Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 38.958549,
+    "lon": -95.247567,
+    "timezone": "America/Chicago",
+    "elevationM": 253.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00003997",
+      "name": "LAWRENCE MUNI AP",
+      "state": "KS",
+      "distanceKm": 6.3,
+      "elevationM": 253.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 40.7,
+        "tLowF": 17.9,
+        "precipIn": 0.87,
+        "snowIn": null,
+        "wetDays": 2.1,
+        "days90F": 0.0,
+        "daysFreeze": 28.4
+      },
+      {
+        "month": "Feb",
+        "tHighF": 46.3,
+        "tLowF": 22.4,
+        "precipIn": 1.3,
+        "snowIn": null,
+        "wetDays": 3.0,
+        "days90F": 0.0,
+        "daysFreeze": 23.4
+      },
+      {
+        "month": "Mar",
+        "tHighF": 57.8,
+        "tLowF": 32.4,
+        "precipIn": 2.2,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 0.0,
+        "daysFreeze": 16.5
+      },
+      {
+        "month": "Apr",
+        "tHighF": 67.7,
+        "tLowF": 41.8,
+        "precipIn": 4.03,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.2,
+        "daysFreeze": 5.4
+      },
+      {
+        "month": "May",
+        "tHighF": 77.0,
+        "tLowF": 53.4,
+        "precipIn": 4.74,
+        "snowIn": null,
+        "wetDays": 7.7,
+        "days90F": 2.0,
+        "daysFreeze": 0.5
+      },
+      {
+        "month": "Jun",
+        "tHighF": 86.4,
+        "tLowF": 63.7,
+        "precipIn": 4.77,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 10.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 90.6,
+        "tLowF": 67.4,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 17.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 89.9,
+        "tLowF": 65.1,
+        "precipIn": 4.05,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 14.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 81.8,
+        "tLowF": 55.4,
+        "precipIn": 3.57,
+        "snowIn": null,
+        "wetDays": 5.3,
+        "days90F": 5.9,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Oct",
+        "tHighF": 69.4,
+        "tLowF": 43.6,
+        "precipIn": 2.89,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 0.5,
+        "daysFreeze": 4.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.7,
+        "tLowF": 31.2,
+        "precipIn": 1.84,
+        "snowIn": null,
+        "wetDays": 2.8,
+        "days90F": 0.0,
+        "daysFreeze": 16.8
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.4,
+        "tLowF": 22.4,
+        "precipIn": 1.38,
+        "snowIn": null,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 26.9
+      }
+    ],
+    "annualPrecipIn": 35.6,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 74.2,
+      "avgLowF": 48.8,
+      "precipIn": 12.3,
+      "wetDays": 19.0
+    },
+    "summary": "Hottest month Jul (avg high 90.6°F), coldest Jan (avg low 17.9°F). 35.6 in of rain per year. Fall season (Aug–Nov): highs around 74.2°F, 12.3 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00003997,USW00093909,USC00144559&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:19Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Nate Lie",
-      "title": null,
+      "title": "Head Coach",
       "since": 2024,
       "seasons": 3,
-      "bioUrl": null,
+      "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/nate-lie/1138",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Nate Lie",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/nate-lie/1138",
+        "social": {}
+      },
+      {
+        "name": "Tyler Smaha",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/tyler-smaha/1139",
+        "social": {}
+      },
+      {
+        "name": "Tiffany Hansen",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/tiffany-hansen/1140",
+        "social": {}
+      },
+      {
+        "name": "Daniel Baker",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/daniel-baker/1141",
+        "social": {}
+      },
+      {
+        "name": "Bernie Compton",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/coaches/bernie-compton/1142",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": {
       "name": "Rock Chalk Park",
@@ -125,10 +315,25 @@
         "url": "https://en.wikipedia.org/wiki/Kansas_Jayhawks_women%27s_soccer",
         "asOf": "2026-09-07T04:51:07Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://kuathletics.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:01:41Z"
+      }
     }
   },
   "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "5-2-0",
+      "wins": 5,
+      "losses": 2,
+      "ties": 0,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "Nate Lie"
+    },
     {
       "year": 2025,
       "label": "2025",
@@ -687,9 +892,2852 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 31,
+    "players": [
+      {
+        "number": "00",
+        "name": "Sophie Dawe",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Memphis, Tenn.",
+        "highSchool": "Houston HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/sophie-dawe/17985",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Brooklyn Smith",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Denver, Colo.",
+        "highSchool": "Northfield HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Colorado Rapids",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/brooklyn-smith/18000",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "4",
+        "name": "Emma Frey",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Cincinnati, Ohio",
+        "highSchool": "Mount Notre Dame",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/emma-frey/18001",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Olivia Kaiser",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "St. Louis, Mo.",
+        "highSchool": "St. Joseph's Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Lou Fusz Athletic",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/olivia-kaiser/18002",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Chloe Trotter",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Clarkston, Mich.",
+        "highSchool": "Clarkston HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Michigan Hawks",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/chloe-trotter/18003",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "7",
+        "name": "Faith Johnston",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Baton Rouge, La.",
+        "highSchool": "Parkview Baptist School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/faith-johnston/17989",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Kate Langfelder",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Wyckoff, N.J.",
+        "highSchool": "Ramapo HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/kate-langfelder/17990",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Hannah Palmer",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bucyrus, Kan.",
+        "highSchool": "Blue Valley Southwest HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/hannah-palmer/18004",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Jordan Rowan",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Madison, Ohio",
+        "highSchool": "Perry HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jordan-rowan/17996",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Jordan Fjelstad",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Orange County, Calif.",
+        "highSchool": "Tesoro HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jordan-fjelstad/17986",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Marit McLaughlin",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Medina, Ohio",
+        "highSchool": "Highland HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/marit-mclaughlin/17992",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Jennah Black",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Torrance, Calif.",
+        "highSchool": "Torrance HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Beach FC (CA)",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jennah-black/18005",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Lydia Viets",
+        "pos": "M/D",
+        "posLabel": "Midfielder/Defender",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Edmond, Okla.",
+        "highSchool": "Edmond Memorial HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/lydia-viets/17999",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Caroline Castans",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Flower Mound, Texas",
+        "highSchool": "Marcus HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/caroline-castans/17984",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Olivia Joyce",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Carmel, Ind.",
+        "highSchool": "Carmel HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Indy Eleven Pro Academy",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/olivia-joyce/18006",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Emily Tobin",
+        "pos": "M/D",
+        "posLabel": "Midfielder/Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tinley Park, Ill.",
+        "highSchool": "Victor J. Andrew HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/emily-tobin/17998",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Gabby Thompson",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Edwardsville, Ill.",
+        "highSchool": "Edwardsville HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/gabby-thompson/18007",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Mary Sola",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Homer Glen, Ill.",
+        "highSchool": "Lockport Township HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Chicago Inter SC",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/mary-sola/17997",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "20",
+        "name": "Sophia Mir",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Overland Park, Kan.",
+        "highSchool": "Blue Valley HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Kansas City Athletics",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/sophia-mir/17993",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "21",
+        "name": "Sydni Fink",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Naperville, Ill.",
+        "highSchool": "Naperville North HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/sydni-fink/18008",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Clara Roche",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Homer Glen, Ill.",
+        "highSchool": "Lockport Township HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/clara-roche/17995",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Jocelyn Herrema",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Caledonia, Mich.",
+        "highSchool": "Caledonia HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jocelyn-herrema/17988",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Gianna Weiner",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Evergreen, Colo.",
+        "highSchool": "Evergreen Senior HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Real Colorado",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/gianna-weiner/18009",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "London De Fini",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Gretna, Neb.",
+        "highSchool": "Gretna HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/london-de-fini/18010",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Norah Jacomen",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Knoxville, Tenn.",
+        "highSchool": "Hardin Valley Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/norah-jacomen/18011",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Bella Salina",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Berlin, Conn.",
+        "highSchool": "Miss Porter's School",
+        "previousSchool": "",
+        "major": "",
+        "club": "FSA FC",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/bella-salina/18012",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "33",
+        "name": "Maya Mathis",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Acton, Mass.",
+        "highSchool": "Acton-Boxboro Regional HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/maya-mathis/17991",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "34",
+        "name": "Jillian Gregorski",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Wethersfield, Conn.",
+        "highSchool": "Westminster Prep School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jillian-gregorski/17987",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "38",
+        "name": "Jordyn Huggins",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Acworth, Ga.",
+        "highSchool": "North Cobb Christian",
+        "previousSchool": "",
+        "major": "",
+        "club": "Concorde Fire SC",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/jordyn-huggins/18013",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "47",
+        "name": "Sophia Canepa",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Jose, Calif.",
+        "highSchool": "California Online Public School",
+        "previousSchool": "",
+        "major": "",
+        "club": "De Anza Force SC",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/sophia-canepa/18014",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "99",
+        "name": "Livvy Moore",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Deer Park, Wash.",
+        "highSchool": "Deer Park HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://kuathletics.com/sports/womens-soccer/roster/livvy-moore/17994",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 4,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 6,
+      "FR": 10,
+      "GR": 2,
+      "SO": 7,
+      "JR": 6
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 3,
+      "D": 2,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://kuathletics.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:01:41Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sophie Dawe",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Memphis, Tenn.",
+          "highSchool": "Houston HS"
+        },
+        {
+          "number": "2",
+          "name": "Olivia Page",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Shawnee, Kan.",
+          "highSchool": "Mill Valley HS"
+        },
+        {
+          "number": "3",
+          "name": "Brooke Otto",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Centerburg, Ohio",
+          "highSchool": "Centerburg HS"
+        },
+        {
+          "number": "4",
+          "name": "Saige Wimes",
+          "pos": "F/M",
+          "classCode": "R-JR",
+          "hometown": "Kansas City, Mo.",
+          "highSchool": "St. Teresa's Academy"
+        },
+        {
+          "number": "5",
+          "name": "Becca Smith",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "White Bear Lake, Minn.",
+          "highSchool": "White Bear Lake Area HS"
+        },
+        {
+          "number": "6",
+          "name": "Emika Kawagishi",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Osaka, Japan",
+          "highSchool": "Osaka Gakugei HS"
+        },
+        {
+          "number": "7",
+          "name": "Faith Johnston",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Baton Rouge, La.",
+          "highSchool": "Parkview Baptist School"
+        },
+        {
+          "number": "8",
+          "name": "Kate Langfelder",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wyckoff, N.J.",
+          "highSchool": "Ramapo HS"
+        },
+        {
+          "number": "9",
+          "name": "Molly Shepherd",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Oklahoma City, Okla.",
+          "highSchool": "Casady School"
+        },
+        {
+          "number": "10",
+          "name": "Jordan Rowan",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Madison, Ohio",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "11",
+          "name": "Jordan Fjelstad",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Orange County, Calif.",
+          "highSchool": "Tesoro HS"
+        },
+        {
+          "number": "12",
+          "name": "Marit McLaughlin",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Medina, Ohio",
+          "highSchool": "Highland HS"
+        },
+        {
+          "number": "14",
+          "name": "Lydia Viets",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Edmond, Okla.",
+          "highSchool": "Edmond Memorial HS"
+        },
+        {
+          "number": "15",
+          "name": "Caroline Castans",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Marcus HS"
+        },
+        {
+          "number": "17",
+          "name": "Emily Tobin",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Tinley Park, Ill.",
+          "highSchool": "Victor J. Andrew HS"
+        },
+        {
+          "number": "18",
+          "name": "Lexi Watts",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lenexa, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "19",
+          "name": "Mary Sola",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Homer Glen, Ill.",
+          "highSchool": "Lockport Township HS"
+        },
+        {
+          "number": "20",
+          "name": "Sophia Mir",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley HS"
+        },
+        {
+          "number": "22",
+          "name": "Clara Roche",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Homer Glen, Ill.",
+          "highSchool": "Lockport Township HS"
+        },
+        {
+          "number": "23",
+          "name": "Jocelyn Herrema",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Caledonia, Mich.",
+          "highSchool": "Caledonia HS"
+        },
+        {
+          "number": "25",
+          "name": "Mackenzie Hammontree",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Leawood, Kan.",
+          "highSchool": "Blue Valley HS"
+        },
+        {
+          "number": "27",
+          "name": "Avery Rasmussen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Shawnee, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "30",
+          "name": "Emily Minard",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley Southwest HS"
+        },
+        {
+          "number": "31",
+          "name": "Fiona Skwierawski",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Shorewood, Wis.",
+          "highSchool": "Shorewood HS"
+        },
+        {
+          "number": "33",
+          "name": "Maya Mathis",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Acton, Mass.",
+          "highSchool": "Acton-Boxboro Regional HS"
+        },
+        {
+          "number": "34",
+          "name": "Jillian Gregorski",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wethersfield, Conn.",
+          "highSchool": "Westminster Prep School"
+        },
+        {
+          "number": "77",
+          "name": "Addison Tauscher",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Lenexa, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "99",
+          "name": "Livvy Moore",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Deer Park, Wash.",
+          "highSchool": "Deer Park HS"
+        }
+      ],
+      "departed": [
+        "addison tauscher",
+        "avery rasmussen",
+        "becca smith",
+        "brooke otto",
+        "emika kawagishi",
+        "emily minard",
+        "fiona skwierawski",
+        "lexi watts",
+        "mackenzie hammontree",
+        "molly shepherd",
+        "olivia page",
+        "saige wimes"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sophie Dawe",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Memphis, Tenn.",
+          "highSchool": "Houston HS"
+        },
+        {
+          "number": "2",
+          "name": "Olivia Page",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Shawnee, Kan.",
+          "highSchool": "Mill Valley HS"
+        },
+        {
+          "number": "3",
+          "name": "Brooke Otto",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Centerburg, Ohio",
+          "highSchool": "Centerburg HS"
+        },
+        {
+          "number": "4",
+          "name": "Saige Wimes",
+          "pos": "F/M",
+          "classCode": "R-SO",
+          "hometown": "Kansas City, Mo.",
+          "highSchool": "St. Teresa's Academy"
+        },
+        {
+          "number": "5",
+          "name": "Mackenzie Boeve",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southeast HS"
+        },
+        {
+          "number": "6",
+          "name": "Emika Kawagishi",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Osaka, Japan",
+          "highSchool": "Osaka Gakugei HS"
+        },
+        {
+          "number": "7",
+          "name": "Raena Knust",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Grain Valley, Mo.",
+          "highSchool": "Grain Valley HS"
+        },
+        {
+          "number": "8",
+          "name": "Kate Langfelder",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wyckoff, N.J.",
+          "highSchool": "Ramapo HS"
+        },
+        {
+          "number": "9",
+          "name": "Ebba Cronholm",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Ljungby, Sweden",
+          "highSchool": "Kungsmadskolan"
+        },
+        {
+          "number": "10",
+          "name": "Siera Herbert",
+          "pos": "D/F",
+          "classCode": "SO",
+          "hometown": "Gilbert, Ariz.",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "11",
+          "name": "Jordan Fjelstad",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Orange County, Calif.",
+          "highSchool": "Tesoro HS"
+        },
+        {
+          "number": "12",
+          "name": "Makayla Merlo",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Legacy HS"
+        },
+        {
+          "number": "13",
+          "name": "Lauren Wood",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Kansas City, Mo.",
+          "highSchool": "Liberty North HS"
+        },
+        {
+          "number": "15",
+          "name": "Caroline Castans",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Marcus HS"
+        },
+        {
+          "number": "16",
+          "name": "Assa Kante",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Saint Thomas Aquinas HS"
+        },
+        {
+          "number": "17",
+          "name": "Emily Tobin",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Tinley Park, Ill.",
+          "highSchool": "Victor J. Andrew HS"
+        },
+        {
+          "number": "18",
+          "name": "Lexi Watts",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lenexa, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "20",
+          "name": "Graci Jones",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bella Vista, Ark.",
+          "highSchool": "Bentonville HS"
+        },
+        {
+          "number": "21",
+          "name": "Hallie Klanke",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "Lee's Summit, Mo.",
+          "highSchool": "Lee’s Summit West HS"
+        },
+        {
+          "number": "22",
+          "name": "Hayven Harrison",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Schertz, Texas",
+          "highSchool": "Clemens HS"
+        },
+        {
+          "number": "23",
+          "name": "Jocelyn Herrema",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Caledonia, Mich.",
+          "highSchool": "Caledonia HS"
+        },
+        {
+          "number": "24",
+          "name": "Avery Smith",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Elkhorn, Neb.",
+          "highSchool": "Elkhorn South HS"
+        },
+        {
+          "number": "25",
+          "name": "Mackenzie Hammontree",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Leawood, Kan.",
+          "highSchool": "Blue Valley HS"
+        },
+        {
+          "number": "26",
+          "name": "Sophia Nickel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Golden, Colo.",
+          "highSchool": "Golden HS"
+        },
+        {
+          "number": "28",
+          "name": "Karina Da Silva",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Yorba Linda, Calif.",
+          "highSchool": "Yorba Linda HS"
+        },
+        {
+          "number": "30",
+          "name": "Emily Minard",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley Southwest HS"
+        },
+        {
+          "number": "31",
+          "name": "Mikayla Coore-Pascal",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Ajax, Ontario",
+          "highSchool": "Bill Crothers Secondary School"
+        },
+        {
+          "number": "34",
+          "name": "Jillian Gregorski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wethersfield, Conn.",
+          "highSchool": "Westminster Prep School"
+        },
+        {
+          "number": "77",
+          "name": "Addison Tauscher",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lenexa, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "98",
+          "name": "Shea Ryan",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Roseville, Calif.",
+          "highSchool": "Granite Bay HS"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 25,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sophie Dawe",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Memphis, Tenn.",
+          "highSchool": "Houston HS"
+        },
+        {
+          "number": "0",
+          "name": "Gabbie Dawe",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Memphis, Tenn.",
+          "highSchool": "Houston HS"
+        },
+        {
+          "number": "1",
+          "name": "Melania Pasar",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Portoroz, Slovenia",
+          "highSchool": "Ginnasio Antonio Sema Pirano"
+        },
+        {
+          "number": "2",
+          "name": "Olivia Page",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Shawnee, Kan.",
+          "highSchool": "Mill Valley HS"
+        },
+        {
+          "number": "4",
+          "name": "Saige Wimes",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Kansas City, Mo.",
+          "highSchool": "St. Teresa's Academy"
+        },
+        {
+          "number": "5",
+          "name": "Mackenzie Boeve",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southeast HS"
+        },
+        {
+          "number": "6",
+          "name": "Montelene Dymond",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Barrie, Ontario",
+          "highSchool": "St. Joan of Arc Catholic HS"
+        },
+        {
+          "number": "7",
+          "name": "Raena Knust",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Grain Valley, Mo.",
+          "highSchool": "Grain Valley HS"
+        },
+        {
+          "number": "10",
+          "name": "Siera Herbert",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Gilbert, Ariz.",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "11",
+          "name": "Magali Gagné",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Montreal, Québec",
+          "highSchool": "College de Montreal"
+        },
+        {
+          "number": "12",
+          "name": "Brie Severns",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Lee's Summit, Mo.",
+          "highSchool": "Blue Springs South HS"
+        },
+        {
+          "number": "14",
+          "name": "Maree Shinkle",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Olathe, Kan.",
+          "highSchool": "Olathe Northwest HS"
+        },
+        {
+          "number": "15",
+          "name": "Caroline Castans",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Marcus HS"
+        },
+        {
+          "number": "16",
+          "name": "Assa Kante",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Saint Thomas Aquinas HS"
+        },
+        {
+          "number": "17",
+          "name": "Camryn Bliss",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lutz, Fla.",
+          "highSchool": "Freedom HS"
+        },
+        {
+          "number": "18",
+          "name": "Lexi Watts",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Lenexa, Kan.",
+          "highSchool": "St. James Academy"
+        },
+        {
+          "number": "19",
+          "name": "Kate Dreyer",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Tulsa, Okla.",
+          "highSchool": "Cascia Hall Prep"
+        },
+        {
+          "number": "21",
+          "name": "Hallie Klanke",
+          "pos": "M/F",
+          "classCode": "R-JR",
+          "hometown": "Lee's Summit, Mo.",
+          "highSchool": "Lee’s Summit West HS"
+        },
+        {
+          "number": "22",
+          "name": "Hayven Harrison",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Schertz, Texas",
+          "highSchool": "Clemens HS"
+        },
+        {
+          "number": "23",
+          "name": "Jocelyn Herrema",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Caledonia, Mich.",
+          "highSchool": "Caledonia HS"
+        },
+        {
+          "number": "24",
+          "name": "Avery Smith",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Elkhorn, Neb.",
+          "highSchool": "Elkhorn South HS"
+        },
+        {
+          "number": "25",
+          "name": "Mackenzie Hammontree",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Leawood, Kan.",
+          "highSchool": "Blue Valley HS"
+        },
+        {
+          "number": "26",
+          "name": "Moira Kelley",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Saint Thomas Aquinas HS"
+        },
+        {
+          "number": "27",
+          "name": "Shira Elinav",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Mazkeret Batya, Israel",
+          "highSchool": "Shefayim HS"
+        },
+        {
+          "number": "30",
+          "name": "Emily Minard",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley Southwest HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 5,
+      "losses": 2,
+      "ties": 0,
+      "text": "5-2-0",
+      "played": 7,
+      "scheduled": 21,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Iowa",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-exh/889"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Utah State",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/utah-state/boxscore/20645",
+          "recap": "https://kuathletics.com/news/2026/8/12/womens-soccer-no-15-kansas-defeats-utah-state-2-0-in-season-opener"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Missouri State",
+        "opponentRank": null,
+        "location": "Betty and Bobby Allison South Stadium, Springfield, Mo.",
+        "result": "W",
+        "score": "7-0",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/missouri-state/boxscore/20646",
+          "recap": "https://kuathletics.com/news/2026/8/16/womens-soccer-no-15-kansas-ties-program-record-for-goals-scored-in-7-0-win-at-missouri-state",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/missouri-state/790"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Ohio State",
+        "opponentRank": 19,
+        "location": "Jesse Owens Memorial Stadium, Columbus, Ohio",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/ohio-state/boxscore/20647",
+          "recap": "https://kuathletics.com/news/2026/8/20/womens-soccer-no-12-kansas-falls-to-no-19-ohio-state-1-0",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/ohio-state/943"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Kent State",
+        "opponentRank": null,
+        "location": "Zoeller Field at Dix Stadium, Kent, Ohio",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/kent-state/boxscore/20648",
+          "recap": "https://kuathletics.com/news/2026/8/23/womens-soccer-no-12-kansas-strikes-late-to-defeat-kent-state-3-1",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/kent-state/2818"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Utah Valley",
+        "opponentRank": null,
+        "location": "UCCU Stadium, Orem, Utah",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/utah-valley/boxscore/20649",
+          "recap": "https://kuathletics.com/news/2026/8/27/womens-soccer-no-17-kansas-drops-road-match-at-utah-valley",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/utah-valley/2831"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Tulsa",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/tulsa/boxscore/20650",
+          "recap": "https://kuathletics.com/news/2026/8/30/womens-soccer-no-17-kansas-scores-late-to-defeat-tulsa-2-1"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Kansas City",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": "W",
+        "score": "3-0",
+        "links": {
+          "box score": "https://kuathletics.com/sports/womens-soccer/stats/2026/kansas-city/boxscore/20651",
+          "recap": "https://kuathletics.com/news/2026/9/3/womens-soccer-kansas-cruises-to-3-0-win-over-kansas-city",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/kansas-city/3015"
+        }
+      },
+      {
+        "date": "2026-09-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Saint Louis",
+        "opponentRank": null,
+        "location": "Hermann Stadium, St. Louis, Mo.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666136&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/saint-louis/876"
+        }
+      },
+      {
+        "date": "2026-09-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Cincinnati",
+        "opponentRank": null,
+        "location": "Gettler Stadium, Cincinnati, Ohio",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674462&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/cincinnati/807"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Arizona State",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664830",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/arizona-state/926"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Arizona",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=673810",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/arizona/1156"
+        }
+      },
+      {
+        "date": "2026-10-02",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Baylor",
+        "opponentRank": null,
+        "location": "Betty Lou Mays Soccer Field, Waco, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674463&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/baylor/771"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Kansas State",
+        "opponentRank": null,
+        "location": "Buser Family Park, Manhattan, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663406&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/kansas-state/855"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Colorado",
+        "opponentRank": null,
+        "location": "Prentup Field, Boulder, Colo.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664156&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/colorado/1424"
+        }
+      },
+      {
+        "date": "2026-10-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Iowa State",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664831",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-state/2824"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "BYU",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664832",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/byu/765"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "TCU",
+        "opponentRank": null,
+        "location": "Garvey-Rosenthal Soccer Stadium, Fort Worth, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666293&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/tcu/854"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Houston",
+        "opponentRank": null,
+        "location": "Carl Lewis International Complex, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664647&vislive=kan",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/houston/774"
+        }
+      },
+      {
+        "date": "2026-11-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Texas Tech",
+        "opponentRank": null,
+        "location": "Rock Chalk Park, Lawrence, Kan.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664833",
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/texas-tech/2292"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Big 12 Championship",
+        "opponentRank": null,
+        "location": null,
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://kuathletics.com/sports/wsoc/opponent-history/big-12-championship/2201"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "16-6-3",
+        "games": [
+          {
+            "date": "2025-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Iowa",
+            "opponentRank": null,
+            "location": "Iowa Soccer Complex, Iowa City, IA",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-exhibition/3268"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Missouri State",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "5-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/missouri-state/boxscore/20219",
+              "recap": "https://kuathletics.com/news/2025/8/14/womens-soccer-no-25-kansas-claims-season-opener-5-2-against-missouri-state"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Dakota State",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/south-dakota-state/boxscore/20220",
+              "recap": "https://kuathletics.com/news/2025/8/17/womens-soccer-moores-lone-goal-headlines-1-0-shutout-over-jackrabbits"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Utah Valley",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/utah-valley/boxscore/20222",
+              "recap": "https://kuathletics.com/news/2025/8/21/womens-soccer-no-23-kansas-stays-undefeated-battles-to-3-2-win-over-utah-valley"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Utah State",
+            "opponentRank": null,
+            "location": "Chuck & Gloria Bell Soccer Field, Logan, Utah",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/utah-state/boxscore/20223",
+              "recap": "https://kuathletics.com/news/2025/8/24/womens-soccer-no-23-kansas-battles-utah-state-to-0-0-draw",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/utah-state/3214"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida State",
+            "opponentRank": 2,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/florida-state/boxscore/20224",
+              "recap": "https://kuathletics.com/news/2025/8/28/womens-soccer-kansas-pushes-no-2-florida-state-to-the-brink-in-1-1-draw",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/florida-state/2911"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Drake",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/drake/boxscore/20225",
+              "recap": "https://kuathletics.com/news/2025/8/31/womens-soccer-kansas-stays-unbeaten-breaks-out-offensively-to-defeat-drake-3-1-on-sunday"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "Reese Stadium, New Haven, Conn.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/yale/boxscore/20226",
+              "recap": "https://kuathletics.com/news/2025/9/7/womens-soccer-no-22-kansas-stays-unbeaten-with-4-0-shutout-over-yale",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/yale/3209"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Osborne Stadium, Lynchburg, Va.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/liberty/boxscore/20227",
+              "recap": "https://kuathletics.com/news/2025/9/14/womens-soccer-no-21-kansas-completes-non-conference-play-unbeaten-with-3-2-win-at-liberty",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/liberty/3062"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Oklahoma State",
+            "opponentRank": null,
+            "location": "Neal Patterson Stadium, Stillwater, Okla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/oklahoma-state/boxscore/20162",
+              "recap": "https://kuathletics.com/news/2025/9/18/womens-soccer-no-19-kansas-stays-unbeaten-earns-gritty-1-0-shutout-win-at-oklahoma-state-in-big-12-opener",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/oklahoma-state/3020"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Baylor",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/baylor/boxscore/20163",
+              "recap": "https://kuathletics.com/news/2025/9/25/womens-soccer-no-14-kansas-suffers-first-setback-to-baylor-3-0",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/baylor/2919"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "TCU",
+            "opponentRank": 10,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/tcu/boxscore/20164",
+              "recap": "https://kuathletics.com/news/2025/9/28/womens-soccer-no-14-kansas-falls-to-no-10-tcu-3-2",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/tcu/3038"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kansas State",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/kansas-state/boxscore/20165",
+              "recap": "https://kuathletics.com/news/2025/10/2/womens-soccer-kansas-dominates-kansas-state-4-1-in-the-dillons-sunflower-showdown"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas Tech",
+            "opponentRank": 18,
+            "location": "John Walker Soccer Complex, Lubbock, Texas",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/texas-tech/boxscore/20166",
+              "recap": "https://kuathletics.com/news/2025/10/5/womens-soccer-kansas-suffers-2-0-defeat-to-no-18-texas-tech",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/texas-tech/1168"
+            }
+          },
+          {
+            "date": "2025-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Iowa State",
+            "opponentRank": null,
+            "location": "Cyclone Sports Complex, Ames, Iowa",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/iowa-state/boxscore/20167",
+              "recap": "https://kuathletics.com/news/2025/10/10/womens-soccer-jayhawks-roll-to-3-1-victory-at-iowa-state",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-state/2913"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": 24,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/west-virginia/boxscore/20168",
+              "recap": "https://kuathletics.com/news/2025/10/16/womens-soccer-kansas-battles-to-a-2-2-draw-against-no-24-west-virginia"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cincinnati",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/cincinnati/boxscore/20169",
+              "recap": "https://kuathletics.com/news/2025/10/19/womens-soccer-kansas-earns-1-0-shutout-over-cincinnati-on-sunday-afternoon"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "BYU",
+            "opponentRank": null,
+            "location": "South Field, Provo, Utah",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/byu/boxscore/20170",
+              "recap": "https://kuathletics.com/news/2025/10/23/womens-soccer-kansas-picks-up-3-1-road-victory-at-byu",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/byu/2929"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Ute Field, Salt Lake City, Utah",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/utah/boxscore/20171",
+              "recap": "https://kuathletics.com/news/2025/10/26/womens-soccer-kansas-strikes-late-to-defeat-utah-2-0-sunday-afternoon",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/utah/3194"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Colorado",
+            "opponentRank": 11,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/colorado/boxscore/20172",
+              "recap": "https://kuathletics.com/news/2025/10/30/womens-soccer-kansas-drops-regular-season-finale-against-no-11-colorado-2-1"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": 19,
+            "location": "Garvey-Rosenthal Soccer Stadium, Fort Worth, Texas",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/west-virginia/boxscore/20228",
+              "recap": "https://kuathletics.com/news/2025/11/3/womens-soccer-kansas-claims-4-0-victory-against-no-19-west-virginia-in-big-12-quarterfinals"
+            }
+          },
+          {
+            "date": "2025-11-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colorado",
+            "opponentRank": 12,
+            "location": "Garvey-Rosenthal Soccer Stadium, Fort Worth, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/colorado/boxscore/20229",
+              "recap": "https://kuathletics.com/news/2025/11/5/womens-soccer-kansas-heading-back-to-big-12-championship-with-2-1-victory-against-no-12-colorado"
+            }
+          },
+          {
+            "date": "2025-11-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "BYU",
+            "opponentRank": null,
+            "location": "Betty Lou Mays Soccer Field, Waco, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/byu/boxscore/20230",
+              "recap": "https://kuathletics.com/news/2025/11/8/womens-soccer-kansas-falls-1-0-to-byu-in-big-12-tournament-championship"
+            }
+          },
+          {
+            "date": "2025-11-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "California Baptist",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/california-baptist/boxscore/20231",
+              "recap": "https://kuathletics.com/news/2025/11/14/womens-soccer-kansas-advances-to-second-round-of-ncaa-tournament-with-3-1-victory-over-california-baptist"
+            }
+          },
+          {
+            "date": "2025-11-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Louisville",
+            "opponentRank": 20,
+            "location": "Koskinen Stadium, Durham, N.C.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/louisville/boxscore/20232",
+              "recap": "https://kuathletics.com/news/2025/11/20/womens-soccer-kansas-destined-for-sweet-16-with-3-1-victory-against-no-20-louisville"
+            }
+          },
+          {
+            "date": "2025-11-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Duke",
+            "opponentRank": 11,
+            "location": "Koskinen Stadium, Durham, N.C.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2025/duke/boxscore/20233",
+              "recap": "https://kuathletics.com/news/2025/11/23/womens-soccer-kansas-season-comes-to-an-end-with-2-0-defeat-at-no-11-duke"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "13-6-4",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "South Dakota State",
+            "opponentRank": null,
+            "location": "Brookings, S.D.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/south-dakota-state/boxscore/19816",
+              "recap": "https://kuathletics.com/news/2024/8/15/womens-soccer-lie-kansas-earn-first-win-of-2024-season"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Drake",
+            "opponentRank": null,
+            "location": "Des Moines, Iowa",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/drake/boxscore/19817",
+              "recap": "https://kuathletics.com/news/2024/8/18/womens-soccer-kansas-secures-1-0-shutout-at-drake"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/tulsa/boxscore/14679",
+              "recap": "https://kuathletics.com/news/2024/8/22/womens-soccer-kansas-plays-tulsa-to-2-2-draw-in-home-opener"
+            }
+          },
+          {
+            "date": "2024-08-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Brown",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": null,
+            "score": null,
+            "links": {
+              "recap": "https://kuathletics.com/news/2024/8/26/womens-soccer-kansas-brown-ends-in-no-contest-due-to-weather",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/brown/2269"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/south-florida/boxscore/14681",
+              "recap": "https://kuathletics.com/news/2024/8/29/womens-soccer-kansas-remains-unbeaten-after-1-1-draw-to-usf",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/south-florida/3164"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Gonzaga",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/gonzaga/boxscore/14682",
+              "recap": "https://kuathletics.com/news/2024/9/1/womens-soccer-kansas-drops-sunday-match-to-gonzaga-1-0",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/gonzaga/3017"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Vanderbilt",
+            "opponentRank": null,
+            "location": "Nashville, Tenn.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/vanderbilt/boxscore/14683",
+              "recap": "https://kuathletics.com/news/2024/9/5/womens-soccer-kansas-battles-vanderbilt-to-0-0-draw",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/vanderbilt/3196"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Iowa State",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/iowa-state/boxscore/14684",
+              "recap": "https://kuathletics.com/news/2024/9/12/womens-soccer-kansas-drops-big-12-opener-to-iowa-state-1-0",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-state/2913"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Friends University",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/friends-university/boxscore/14685",
+              "recap": "https://kuathletics.com/news/2024/9/15/womens-soccer-gregorskis-hat-trick-leads-kansas-to-5-1-victory-against-friends"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cincinnati",
+            "opponentRank": null,
+            "location": "Cincinnati, Ohio",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/cincinnati/boxscore/14686",
+              "recap": "https://kuathletics.com/news/2024/9/19/womens-soccer-kansas-earns-first-conference-victory-with-1-0-shutout-at-cincinnati",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/cincinnati/2946"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "Morgantown, W.Va.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/west-virginia/boxscore/14687",
+              "recap": "https://kuathletics.com/news/2024/9/22/womens-soccer-kansas-edged-3-2-by-west-virginia-sunday",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/west-virginia/3027"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/ucf/boxscore/14688",
+              "recap": "https://kuathletics.com/news/2024/9/26/womens-soccer-watts-kansas-dominate-ucf-in-4-0-shutout-victory"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Colorado",
+            "opponentRank": 16,
+            "location": "Boulder, Colo.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/-16-colorado/boxscore/14689",
+              "recap": "https://kuathletics.com/news/2024/9/29/womens-soccer-late-goal-lifts-no-16-colorado-past-kansas-1-0",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/16-colorado/2947"
+            }
+          },
+          {
+            "date": "2024-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Oklahoma State",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/oklahoma-state/boxscore/14690",
+              "recap": "https://kuathletics.com/news/2024/10/5/womens-soccer-kansas-soccer-falls-3-0-to-oklahoma-state"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "BYU",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/byu/boxscore/14691",
+              "recap": "https://kuathletics.com/news/2024/10/10/womens-soccer-kansas-soccer-plays-byu-to-2-2-draw",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/byu/2929"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/utah/boxscore/14692",
+              "recap": "https://kuathletics.com/news/2024/10/13/womens-soccer-kansas-blanks-utah-2-0-on-senior-day"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Arizona",
+            "opponentRank": null,
+            "location": "Tucson, Ariz.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/arizona/boxscore/19787",
+              "recap": "https://kuathletics.com/news/2024/10/17/womens-soccer-gregorski-scores-twice-as-kansas-dominates-arizona-4-0"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Arizona State",
+            "opponentRank": null,
+            "location": "Tempe, Ariz.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/arizona-state/boxscore/14694",
+              "recap": "https://kuathletics.com/news/2024/10/20/womens-soccer-kansas-completes-unbeaten-arizona-trip-with-2-1-win-at-arizona-state"
+            }
+          },
+          {
+            "date": "2024-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Kansas State",
+            "opponentRank": null,
+            "location": "Manhattan, Kan.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/kansas-state/boxscore/14695",
+              "recap": "https://kuathletics.com/news/2024/10/25/womens-soccer-kansas-soccer-caps-off-regular-season-with-2-0-victory-at-k-state"
+            }
+          },
+          {
+            "date": "2024-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Arizona State",
+            "opponentRank": null,
+            "location": "CPKC Stadium, Kansas City, Mo.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/arizona-state/boxscore/19912",
+              "recap": "https://kuathletics.com/news/2024/10/30/womens-soccer-kansas-beats-arizona-state-2-1-in-first-round-of-the-big-12-championship"
+            }
+          },
+          {
+            "date": "2024-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "CPKC Stadium, Kansas City, Mo.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/west-virginia/boxscore/19913",
+              "recap": "https://kuathletics.com/news/2024/11/2/womens-soccer-watts-kansas-win-1-0-double-overtime-thriller-over-west-virginia"
+            }
+          },
+          {
+            "date": "2024-11-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas Tech",
+            "opponentRank": 17,
+            "location": "CPKC Stadium, Kansas City, Mo.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/-17-texas-tech/boxscore/19914",
+              "recap": "https://kuathletics.com/news/2024/11/6/womens-soccer-kansas-wins-semifinals-2-1-over-no-17-texas-tech-advances-to-championship-game"
+            }
+          },
+          {
+            "date": "2024-11-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "TCU",
+            "opponentRank": 7,
+            "location": "CPKC Stadium, Kansas City, Mo.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/-7-tcu/boxscore/19915",
+              "recap": "https://kuathletics.com/news/2024/11/9/womens-soccer-kansas-crowned-big-12-champions-with-1-0-victory-against-no-7-tcu"
+            }
+          },
+          {
+            "date": "2024-11-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Saint Louis University",
+            "opponentRank": null,
+            "location": "Saint Louis, MO",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://kuathletics.com/sports/womens-soccer/stats/2024/saint-louis-university/boxscore/20050",
+              "recap": "https://kuathletics.com/news/2024/11/15/womens-soccer-kansas-edged-1-0-by-saint-louis-in-first-round-of-ncaa-tournament"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "4-8-6",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Wisconsin",
+            "opponentRank": null,
+            "location": "McClimon Track/Soccer Complex, Madison, Wisc.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/259497.pdf",
+              "recap": "https://kuathletics.com/news/2023/8/17/kansas-draws-at-wisconsin-in-season-opener",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/wisconsin/3200"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Loyola-Chicago",
+            "opponentRank": null,
+            "location": "Loyola Soccer Park, Chicago, Ill.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/261443.pdf",
+              "recap": "https://kuathletics.com/news/2023/8/20/huge-second-half-propels-kansas-to-4-1-victory-at-loyola-chicago"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Vanderbilt",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/12/261687-1.pdf",
+              "recap": "https://kuathletics.com/news/2023/8/25/kansas-battles-vanderbilt-to-1-1-draw-in-home-opener"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colorado College",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/12/261838-1.pdf",
+              "recap": "https://kuathletics.com/news/2023/8/27/kansas-handles-colorado-college-in-a-6-0-victory-sunday",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/colorado-college/2953"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/262124-1.pdf",
+              "recap": "https://kuathletics.com/news/2023/8/31/kansas-powers-past-arkansas-state-3-0-to-remain-unbeaten"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Missouri",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/262624-1.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/3/kansas-remains-unbeaten-after-sunday-night-draw-with-missouri"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kansas City",
+            "opponentRank": null,
+            "location": "Durwood Soccer Stadium, Kansas City, Mo.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/263166.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/7/francis-coaches-his-500th-game-in-1-1-draw-at-kansas-city"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Washington State",
+            "opponentRank": 15,
+            "location": "Lower Soccer Field, Pullman, Wash.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/263725.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/10/kansas-falls-1-0-at-no-15-washington-state",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/washington-state/3201"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Oklahoma",
+            "opponentRank": null,
+            "location": "John Crain Field, Norman, Okla.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/264144.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/14/kansas-earns-draw-in-conference-opener-at-oklahoma",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/oklahoma/2903"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Oklahoma State",
+            "opponentRank": null,
+            "location": "Neal Patterson Stadium, Stillwater, Okla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/265086.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/21/kansas-falls-at-oklahoma-state-1-0"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "UCF Soccer and Track Complex, Orlando, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/265507.pdf",
+              "recap": "https://kuathletics.com/late-pk-goal-pushes-knights-past-jayhawks/\\"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Baylor",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/266022-1.pdf",
+              "recap": "https://kuathletics.com/news/2023/9/28/kansas-remains-unbeaten-at-home-after-scoreless-draw-against-baylor"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas",
+            "opponentRank": 21,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/266525.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/1/jayhawks-suffer-first-loss-at-home-fall-2-1-to-no-21-texas"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "TCU",
+            "opponentRank": 23,
+            "location": "Garvey-Rosenthal Soccer Stadium, Fort Worth, Texas",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/266918.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/5/kansas-falls-1-0-to-no-23-tcu-in-fort-worth",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/tcu/3038"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Houston",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/267375.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/8/ku-falls-2-0-against-houston-on-sunday"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Iowa State",
+            "opponentRank": null,
+            "location": "ISU Sports Complex, Ames, Iowa",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/267813.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/12/kansas-edged-by-iowa-state-1-0",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/iowa-state/2913"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "West Virginia",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/268313.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/15/jayhawks-come-up-short-sunday-against-west-virginia",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/west-virginia/3027"
+            }
+          },
+          {
+            "date": "2023-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kansas State",
+            "opponentRank": null,
+            "location": "Rock Chalk Park, Lawrence, Kan.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/ukansas.sidearmsports.com/documents/2024/5/9/269377.pdf",
+              "recap": "https://kuathletics.com/news/2023/10/23/kansas-takes-down-k-state-2-1-on-senior-night-in-dillons-sunflower-showdown",
+              "history": "https://kuathletics.com/sports/wsoc/opponent-history/kansas-state/3014"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://kuathletics.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:01:41Z"
+    }
+  },
   "commitments": [
     {
       "id": "brooklyn-smith-2026",
@@ -702,7 +3750,7 @@
       "city": "Denver",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -721,7 +3769,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -737,7 +3785,7 @@
       "city": "",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -825,7 +3873,7 @@
       "city": "Evergreen",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -844,7 +3892,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -862,7 +3910,7 @@
       "city": "Berlin",
       "highSchool": "Miss Porter's School",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -908,7 +3956,7 @@
       "city": "Torrance",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -952,7 +4000,7 @@
       "city": "",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -971,7 +4019,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -987,7 +4035,7 @@
       "city": "Carmel",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1006,7 +4054,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1022,7 +4070,7 @@
       "city": "St. Louis",
       "highSchool": "",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1041,7 +4089,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1057,7 +4105,7 @@
       "city": "San Jose",
       "highSchool": "Connections Academy",
       "college": "kansas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1829,35 +4877,21 @@
     "2028": 8
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:49Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://kuathletics.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T04:51:09Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=38.958549&longitude=-95.247567&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T04:51:06Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

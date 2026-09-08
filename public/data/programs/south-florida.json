@@ -69,18 +69,313 @@
       "asOf": "2026-09-07T05:37:21Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 28.061458,
+    "lon": -82.413232,
+    "timezone": "America/New_York",
+    "elevationM": 5.8,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012842",
+      "name": "TAMPA INTL AP",
+      "state": "FL",
+      "distanceKm": 16.7,
+      "elevationM": 5.8
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 71.3,
+        "tLowF": 52.8,
+        "precipIn": 2.65,
+        "snowIn": 0.0,
+        "wetDays": 4.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 74.0,
+        "tLowF": 55.5,
+        "precipIn": 2.62,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Mar",
+        "tHighF": 77.8,
+        "tLowF": 59.3,
+        "precipIn": 2.52,
+        "snowIn": 0.0,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 83.0,
+        "tLowF": 64.8,
+        "precipIn": 2.55,
+        "snowIn": 0.0,
+        "wetDays": 3.4,
+        "days90F": 1.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 88.3,
+        "tLowF": 70.6,
+        "precipIn": 2.6,
+        "snowIn": 0.0,
+        "wetDays": 3.9,
+        "days90F": 9.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.5,
+        "tLowF": 75.4,
+        "precipIn": 7.37,
+        "snowIn": 0.0,
+        "wetDays": 9.5,
+        "days90F": 18.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.0,
+        "tLowF": 76.6,
+        "precipIn": 7.75,
+        "snowIn": 0.0,
+        "wetDays": 11.2,
+        "days90F": 20.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.2,
+        "tLowF": 76.8,
+        "precipIn": 9.03,
+        "snowIn": 0.0,
+        "wetDays": 11.2,
+        "days90F": 22.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 90.2,
+        "tLowF": 75.3,
+        "precipIn": 6.09,
+        "snowIn": 0.0,
+        "wetDays": 8.2,
+        "days90F": 17.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 85.6,
+        "tLowF": 69.2,
+        "precipIn": 2.34,
+        "snowIn": 0.0,
+        "wetDays": 4.4,
+        "days90F": 4.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 78.9,
+        "tLowF": 60.7,
+        "precipIn": 1.4,
+        "snowIn": 0.0,
+        "wetDays": 2.3,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 73.9,
+        "tLowF": 55.9,
+        "precipIn": 2.56,
+        "snowIn": 0.0,
+        "wetDays": 3.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.1
+      }
+    ],
+    "annualPrecipIn": 49.5,
+    "annualSnowIn": 0.0,
+    "fallSeason": {
+      "avgHighF": 86.5,
+      "avgLowF": 70.5,
+      "precipIn": 18.9,
+      "wetDays": 26.0
+    },
+    "summary": "Hottest month Aug (avg high 91.2°F), coldest Jan (avg low 52.8°F). 49.5 in of rain per year, essentially no snow. Fall season (Aug–Nov): highs around 86.5°F, 18.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012842,USW00012873,USC00083986&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:24Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Chris Brown",
-      "title": null,
+      "title": "Head Coach",
       "since": 2007,
       "seasons": 20,
-      "bioUrl": null,
+      "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/chris-brown/5376",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Chris Brown",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/chris-brown/5376",
+        "social": {}
+      },
+      {
+        "name": "Ashley Meade",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/ashley-meade/5380",
+        "social": {}
+      },
+      {
+        "name": "Jennifer Wandt",
+        "title": "Assistant Coach/Goalkeeper Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/jennifer-wandt/5448",
+        "social": {}
+      },
+      {
+        "name": "Steve Golas",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/steve--golas/5449",
+        "social": {}
+      },
+      {
+        "name": "Daniela Andrade",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/daniela--andrade/5474",
+        "social": {}
+      },
+      {
+        "name": "Emilie Erb",
+        "title": "Student Manager",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/coaches/emilie-erb/5382",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Terrell Elliston",
+        "title": "Assistant Director",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/terrell-elliston/2030",
+        "social": {}
+      },
+      {
+        "name": "Tyler Clark",
+        "title": "Assistant Director of Business Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/tyler-clark/1956",
+        "social": {}
+      },
+      {
+        "name": "Dominik Vega",
+        "title": "Creative Video Coordinator",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/dominik-vega/1812",
+        "social": {}
+      },
+      {
+        "name": "Scott Collins",
+        "title": "Associate AD, Ticketing & Revenue Generation",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/scott-collins/2025",
+        "social": {}
+      },
+      {
+        "name": "Ahmand Faniel",
+        "title": "Equipment",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/ahmand-faniel/2026",
+        "social": {}
+      },
+      {
+        "name": "Joey Giamfortone",
+        "title": "Compliance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/joey--giamfortone/1829",
+        "social": {}
+      },
+      {
+        "name": "Jack Faulkner",
+        "title": "Compliance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/jack-faulkner/1941",
+        "social": {}
+      },
+      {
+        "name": "Mercedes Sapp",
+        "title": "Coordinator/ Student-Athlete Enhancement",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/mercedes--sapp/2022",
+        "social": {}
+      },
+      {
+        "name": "Jordyn Laufenberg",
+        "title": "Director of Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/jordyn-laufenberg/1809",
+        "social": {}
+      },
+      {
+        "name": "Tyler Hunter",
+        "title": "Assistant Director of Event Management",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/tyler-hunter/1686",
+        "social": {}
+      },
+      {
+        "name": "Tiffany Jacobs",
+        "title": "Assistant Director, Communications",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/tiffany-jacobs/2064",
+        "social": {}
+      },
+      {
+        "name": "Delaney Ryan",
+        "title": "Vice President of Student-Athlete Development/SWA",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/staff/delaney-ryan/1807",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Corbett Stadium",
       "capacity": 4000
@@ -126,10 +421,68 @@
         "url": "https://en.wikipedia.org/wiki/South_Florida_Bulls_women%27s_soccer",
         "asOf": "2026-09-07T05:37:55Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gousfbulls.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:11:14Z"
+      }
     }
   },
   "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "2-4-0",
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Chris Brown"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "9-8-3",
+      "wins": 9,
+      "losses": 8,
+      "ties": 3,
+      "confRecord": "4-4-2",
+      "rpiRank": 88,
+      "rpi": {
+        "rank": 88,
+        "record": "9-8-3",
+        "through": "2025-12-08",
+        "prevRank": 87,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 88,
+            "record": "9-8-3"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "12-2-5",
+      "wins": 12,
+      "losses": 2,
+      "ties": 5,
+      "confRecord": "6-1-3",
+      "rpiRank": 44,
+      "rpi": {
+        "rank": 44,
+        "sosRank": 29,
+        "balancedRank": 65,
+        "kpiRank": 41,
+        "masseyRank": 67,
+        "ncaaSeed": 7,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
     {
       "year": 2023,
       "label": "2023",
@@ -639,9 +992,2777 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "1",
+        "name": "Sophia Thomas",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Muscatine, Iowa / Muscatine",
+        "highSchool": "Iowa State University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/sophia-thomas/16460",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kenza Brown",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lutz, Fla. / Steinbrenner HS",
+        "highSchool": "Kennesaw State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/kenza-brown/16079",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Gaby Rourke",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Jacksonville, Fla. / Atlantic Coast HS",
+        "highSchool": "Kentucky",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/gaby-rourke/16089",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "McKenna Battilla",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Auburndale, Fla. / Polk State Lakeland Collegiate High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/mckenna-battilla/16463",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Maria Bulis",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Yorba Linda, Calif. / Yorba Linda HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/maria-bulis/16080",
+        "social": {
+          "instagram": "https://www.instagram.com/mariabulis"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Ellie Pitts",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Sugar Land, Texas / Elkins HS",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/ellie-pitts/16094",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Joelle Stinson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Loveland, Ohio / Milford HS",
+        "highSchool": "UT-Martin",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/joelle-stinson/16095",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Elyse Thornton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Odessa, Fla. / Steinbrenner HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/elyse-thornton/16093",
+        "social": {
+          "instagram": "https://www.instagram.com/elysethorntonn"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Anita Quintero",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Panama City, Panamá / Panama City FC",
+        "highSchool": "UTEP",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/anita-quintero/16097",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Ava Plezia",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Buffalo, N.Y. / Williamsville South HS",
+        "highSchool": "Kentucky",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/ava-plezia/16099",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Nailani Solomon",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Portland, OR / Grant High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Oregon Surf",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/nailani-solomon/16466",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "12",
+        "name": "Reese Rupe",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Spring, Texas / Grand Oaks HS",
+        "highSchool": "Texas A&M",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/reese-rupe/16096",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Sophia Cabral",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cambridge, Ontario, Canada / Monsignor Doyle Catholic Secondary School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/sophia-cabral/16081",
+        "social": {
+          "instagram": "https://www.instagram.com/sophiaacabralll"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Ava Rightmire",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Downingtown, Pa. / Downingtown West HS",
+        "highSchool": "Penn State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/ava-rightmire/16088",
+        "social": {
+          "instagram": "https://www.instagram.com/avarightmire"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Amelia Malkin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sarasota, Fla. / IMG Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/amelia-malkin/16453",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Ainsley Ewasiuk",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Langley, BC, Canada",
+        "highSchool": "Nevada",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/ainsley-ewasiuk/16255",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Delaney Tellex",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Rochester, NY / Penfield H.S.",
+        "highSchool": "Florida",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/delaney-tellex/16254",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Regan Kelly",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Bradenton, Fla. / Lakewood Ranch HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/regan-kelly/16084",
+        "social": {
+          "instagram": "https://www.instagram.com/regan.kelly21"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Marilia Nieves-Melchor",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Clover, S.C. / Clover HS",
+        "highSchool": "University of Kentucky",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/marilia-nievesmelchor/16300",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Yui Suetsugu",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Saga, Japan",
+        "highSchool": "Arizona Western",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/yui-suetsugu/16091",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Dora Szabo",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mako, Hungary / International School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/dora-szabo/16461",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Audrey Buck",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Melbourne Beach, Fla. / Melbourne HS",
+        "highSchool": "UCF",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/audrey-buck/16098",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Avril Clark",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Gulf Breeze, Fla. / Gulf Breeze",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/avril-clark/16464",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Jada Alexander",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Royal Palm Beach, Fla. / Cardinal Newman",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/jada-alexander/16462",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Maya Hindson",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Ottawa, Ontario, Canada / Nepean HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/maya-hindson/16083",
+        "social": {
+          "instagram": "https://www.instagram.com/maya.hindson"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Brooke Fabri",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Phoenix, Ariz. / Pinnacle HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/brooke-fabri/16082",
+        "social": {
+          "instagram": "https://www.instagram.com/brookefabri"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "31",
+        "name": "Kylie Sandulak",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Delta, BC, Canada / Burnaby Central Secondary School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Vancouver Rise",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/kylie-sandulak/16465",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "99",
+        "name": "Marely Fonseca",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "San José, Costa Rica / CTP General Viejo",
+        "highSchool": "John Brown University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gousfbulls.com/sports/womens-soccer/roster/marely-fonseca/16299",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 1,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "GR": 3,
+      "SR": 7,
+      "R-SO": 2,
+      "FR": 6,
+      "JR": 6,
+      "SO": 2,
+      "R-JR": 2
+    },
+    "graduatingByPos": {
+      "M": 3,
+      "D": 5,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gousfbulls.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:11:14Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Logan McGruder",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Palm Beach Gardens, Fla. / The Benjamin School",
+          "highSchool": "Arizona"
+        },
+        {
+          "number": "1",
+          "name": "Skylar Alonso",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "New Port Richey, Fla. / River Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Kenza Brown",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lutz, Fla. / Steinbrenner HS",
+          "highSchool": "Kennesaw State"
+        },
+        {
+          "number": "3",
+          "name": "Gaby Rourke",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Jacksonville, Fla. / Atlantic Coast HS",
+          "highSchool": "Kentucky"
+        },
+        {
+          "number": "4",
+          "name": "Selma Åström",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Luleå, Sweden / Luleå Gymnasieskola",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Maria Bulis",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Yorba Linda, Calif. / Yorba Linda HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Maliya Maldonado",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "St. Petersburg, Fla. / Land O' Lakes HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Noelle Sather",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Port Coquitlam, British Columbia, Canada / Burnaby Central Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Elyse Thornton",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Odessa, Fla. / Steinbrenner HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Emily Lemke",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Nordenham, Germany / Potsdam Turbine",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Gentiana Fetaj",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Minden, Germany / Kurt-Tucholsky Gesamtschule",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Hedda Ornberg",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Gothenburg, Sweden / Hvitfeldtska",
+          "highSchool": "Morehead State"
+        },
+        {
+          "number": "12",
+          "name": "Sadie Sider-Echenberg",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "University of Ottawa"
+        },
+        {
+          "number": "13",
+          "name": "Sophia Cabral",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cambridge, Ontario, Canada / Monsignor Doyle Catholic Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Ava Rightmire",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Downingtown, Pa. / Downingtown West HS",
+          "highSchool": "Penn State"
+        },
+        {
+          "number": "15",
+          "name": "Caroline Pelkofski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cape Coral, Fla. / Bishop Verot HS",
+          "highSchool": "Florida Premier FC"
+        },
+        {
+          "number": "16",
+          "name": "Gianna Reich",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Coral Springs, Fla. / Marjory Stoneman Douglas",
+          "highSchool": "Florida United"
+        },
+        {
+          "number": "17",
+          "name": "Mia Rodach",
+          "pos": "D/F",
+          "classCode": "FR",
+          "hometown": "Frankfurt, Germany / Eintracht Frankfurt",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Regan Kelly",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Bradenton, Fla. / Lakewood Ranch HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Linnea Nestor",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Tampa, Fla. / Academy of the Holy Names",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Keito Ido",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Tokyo, Japan / Josai HS",
+          "highSchool": "Tennessee Southern"
+        },
+        {
+          "number": "21",
+          "name": "Macy Felton",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Medina, Ohio / Strongsville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Yui Suetsugu",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Saga, Japan",
+          "highSchool": "Arizona Western"
+        },
+        {
+          "number": "24",
+          "name": "Gaby Sussman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Weston, Fla. / Cypress Bay HS",
+          "highSchool": "Supreme FC"
+        },
+        {
+          "number": "28",
+          "name": "Maya Hindson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Ottawa, Ontario, Canada / Nepean HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Brooke Fabri",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Phoenix, Ariz. / Pinnacle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Leire Herraez Gallach",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Valencia, Spain / IES Jose Ballester Gozalvo",
+          "highSchool": "University of Valencia"
+        },
+        {
+          "number": "36",
+          "name": "Sofie Zoëga",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Kolding, Denmark / Munkensdam Gymnasium",
+          "highSchool": "Varde IF"
+        },
+        {
+          "number": "77",
+          "name": "Micahela Hill",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Palm Harbor, Fla. / East Lake HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "caroline pelkofski",
+        "emily lemke",
+        "gaby sussman",
+        "gentiana fetaj",
+        "gianna reich",
+        "hedda ornberg",
+        "keito ido",
+        "leire herraez gallach",
+        "linnea nestor",
+        "logan mcgruder",
+        "macy felton",
+        "maliya maldonado",
+        "mia rodach",
+        "micahela hill",
+        "noelle sather",
+        "sadie sider echenberg",
+        "selma astrom",
+        "skylar alonso",
+        "sofie zoega"
+      ]
+    },
+    "2024": {
+      "count": 35,
+      "players": [
+        {
+          "number": "0",
+          "name": "Sydney Schwarz",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Carrollton, Va. / Smithfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Logan McGruder",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Palm Beach Gardens, Fla. / The Benjamin School",
+          "highSchool": "Arizona"
+        },
+        {
+          "number": "2",
+          "name": "Macy Lutz",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Sylvania, Ohio / Sylvania Northview",
+          "highSchool": "Saint Louis"
+        },
+        {
+          "number": "3",
+          "name": "Sarah Brunner",
+          "pos": "F/M",
+          "classCode": "GR",
+          "hometown": "Jacksonville, Fla. / Mandarin HS",
+          "highSchool": "Virginia"
+        },
+        {
+          "number": "4",
+          "name": "Ava Rightmire",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Downingtown, Pa. / Downingtown West HS",
+          "highSchool": "Penn State"
+        },
+        {
+          "number": "5",
+          "name": "Maria Bulis",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Yorba Linda, Calif. / Yorba Linda HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ella Shapiro",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Ponte Vedra Beach, Fla. / Ponte Vedra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Noelle Sather",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Port Coquitlam, British Columbia, Canada / Burnaby Central Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Elyse Thornton",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Odessa, Fla. / Steinbrenner HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Cordelia \"CeCe\" Cross",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Granada Hills, Calif. / Granada Hills HS",
+          "highSchool": "Houston"
+        },
+        {
+          "number": "10",
+          "name": "Gentiana Fetaj",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Minden, Germany / Kurt-Tucholsky Gesamtschule",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Madeleine Penman-Derstine",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Toronto, Ontario, Canada / École Secondaire Toronto Ouest",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Sadie Sider-Echenberg",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "University of Ottawa"
+        },
+        {
+          "number": "13",
+          "name": "Sophia Cabral",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cambridge, Ontario, Canada / Monsignor Doyle Catholic Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Serita Thurton",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Ajax, Ontario, Canada / Markham SC",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Georgia Brown",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Highworth, England / Oxford HS",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "16",
+          "name": "Kat Burnell",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Keller, Texas / Keller",
+          "highSchool": "North Texas"
+        },
+        {
+          "number": "17",
+          "name": "Anna Sutter",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Herisau, Switzerland",
+          "highSchool": "UTSA"
+        },
+        {
+          "number": "18",
+          "name": "Regan Kelly",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Bradenton, Fla. / Lakewood Ranch HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Linnea Nestor",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Academy of the Holy Names",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Mia Fairchild",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Academy of the Holy Names",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Macy Felton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Medina, Ohio / Strongsville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Peyton Felton",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Medina, Ohio / Strongsville HS",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "23",
+          "name": "Alexa De Barros",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bridgewater, N.J. / Rutgers Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Michaela Carter",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pembroke Pines, Fla. / Archbishop E McCarthy HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Joy Kimwemwe",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Vancouver, British Columbia, Canada / Burnaby Central Secondary School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Julianna Bivona",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Rockville Centre, N.Y. / Sacred Heart Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Maya Hindson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Ottawa, Ontario, Canada / Nepean HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Brooke Fabri",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Phoenix, Ariz. / Pinnacle HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Leire Herraez Gallach",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Valencia, Spain / IES Jose Ballester Gozalvo",
+          "highSchool": "University of Valencia"
+        },
+        {
+          "number": "32",
+          "name": "Reagan Miller",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Bradenton, Fla. / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Amaris Hamilton-Grein",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Freedom HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Sammi Jo Payne",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Clarence, N.Y. / Clarence Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Audrey Johnson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Ponte Vedra, Fla. / Ponte Vedra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Micahela Hill",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Palm Harbor, Fla. / East Lake HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Madison Holcombe",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Wesley Chapel, Fla. / Wesley Chapel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "Sydney Schwarz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Carrollton, Va. / Smithfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Arden La-Rose",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Toronto, Canada / Leaside High School",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Signe Markvardsen",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Roskilde, Denmark / Roskilde Katedralskole",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Olivia Mancini",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Toronto, Canada / Loretto Abbey Catholic SS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Vivianne Bessette",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Montreal, Quebec, Canada / Monteverde Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Maria Bulis",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Yorba Linda, Calif. / Yorba Linda HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ella Shapiro",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Ponte Vedra Beach, Fla. / Ponte Vedra HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Kendall Kiefer",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Wake Forest, N.C. / Heritage HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Elyse Thornton",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Odessa, Fla. / Steinbrenner HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Kendall Lincoln",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Stephens City, Va. / Sherando HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Gentiana Fetaj",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Minden, Germany / Kurt-Tucholsky Gesamtschule",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Kouri Peace",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Chalfont, Pa.",
+          "highSchool": "Florida"
+        },
+        {
+          "number": "11",
+          "name": "Madeleine Penman-Derstine",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Toronto, Ontario, Canada / École Secondaire Toronto Ouest",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Sadie Sider-Echenberg",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "University of Ottawa"
+        },
+        {
+          "number": "14",
+          "name": "Serita Thurton",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Ajax, Ontario, Canada / Markham SC",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Georgia Brown",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Highworth, England / Oxford HS",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "17",
+          "name": "Anna Sutter",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Herisau, Switzerland",
+          "highSchool": "UTSA"
+        },
+        {
+          "number": "18",
+          "name": "Regan Kelly",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Bradenton, Fla. / Lakewood Ranch HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Linnea Nestor",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Academy of the Holy Names",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Mia Fairchild",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Academy of the Holy Names",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Peyton Felton",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Medina, Ohio / Strongsville HS",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "23",
+          "name": "Alexa De Barros",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bridgewater, N.J. / Rutgers Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Peyton Vincze",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Wichita, Kan.",
+          "highSchool": "Oklahoma State"
+        },
+        {
+          "number": "28",
+          "name": "Madison Schwartzenberger",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Neptune Beach, Fla. / Fletcher HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Leire Herraez Gallach",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Valencia, Spain / IES Jose Ballester Gozalvo",
+          "highSchool": "University of Valencia"
+        },
+        {
+          "number": "32",
+          "name": "Reagan Miller",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Bradenton, Fla. / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Amaris Hamilton-Grein",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Freedom HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Jaide Simone Prejean",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Missouri City, Texas / St. Agnes Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "77",
+          "name": "Micahela Hill",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Palm Harbor, Fla. / East Lake HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "text": "2-4-0",
+      "played": 6,
+      "scheduled": 19,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "FIU",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/fiu-exh/1"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Gonzaga",
+        "opponentRank": null,
+        "location": "Spokane, Wash.",
+        "result": "L",
+        "score": "1-5",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/gonzaga/boxscore/14424",
+          "recap": "https://gousfbulls.com/news/2026/8/13/womens-soccer-south-florida-womens-soccer-falls-to-gonzaga-on-the-road",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/gonzaga/1416"
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Washington State",
+        "opponentRank": null,
+        "location": "Pullman, Wash.",
+        "result": "L",
+        "score": "1-4",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/washington-state/boxscore/14425",
+          "recap": "https://gousfbulls.com/news/2026/8/15/womens-soccer-south-florida-womens-soccer-drops-road-match-to-washington-state",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/washington-state/1320"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UCF",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": "L",
+        "score": "0-2",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/ucf/boxscore/14426",
+          "recap": "https://gousfbulls.com/news/2026/8/23/womens-soccer-south-florida-womens-soccer-battles-ucf-in-home-opener",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/ucf/34"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Stetson",
+        "opponentRank": null,
+        "location": "DeLand, Fla.",
+        "result": "W",
+        "score": "3-0",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/stetson/boxscore/14427",
+          "recap": "https://gousfbulls.com/news/2026/8/30/womens-soccer-south-florida-womens-soccer-earns-first-win-of-season-with-3-0-shutout-at-stetson-sophia-cabrals-two-goal-performance-marked-the-first-time-a-bull-scored-twice-in-amatch-since-hedda-ornberg-on-sept-14-2025",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/stetson/180"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Wake Forest",
+        "opponentRank": 5,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": "L",
+        "score": "0-3",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/wake-forest/boxscore/14428",
+          "recap": "https://gousfbulls.com/news/2026/9/3/womens-soccer-south-florida-womens-soccer-falls-to-no-5-wake-forest",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/wake-forest/211"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Youngstown State",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2026/youngstown-state/boxscore/14429",
+          "recap": "https://gousfbulls.com/news/2026/9/6/womens-soccer-south-florida-womens-soccer-earns-senior-day-victory-over-youngstown-state",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/youngstown-state/285"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Mercer",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662514",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/mercer/111"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "North Texas",
+        "opponentRank": null,
+        "location": "Denton, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662515&vislive=sfla",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/north-texas/302"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Memphis",
+        "opponentRank": 24,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662516",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/memphis/110"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Florida Atlantic",
+        "opponentRank": null,
+        "location": "Boca Raton, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662517",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/florida-atlantic/62"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UTSA",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662518",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/utsa/189"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Temple",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662519",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/temple/225"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Charlotte",
+        "opponentRank": null,
+        "location": "Charlotte, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662520&vislive=sfla",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/charlotte/303"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Rice",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662521",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/rice/155"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Tulsa",
+        "opponentRank": null,
+        "location": "Tulsa, Okla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662522",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/tulsa/193"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UAB",
+        "opponentRank": null,
+        "location": "Corbett Stadium, Tampa, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "http://stats.statbroadcast.com/broadcast/?id=662523",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/uab/194"
+        }
+      },
+      {
+        "date": "2026-11-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "East Carolina",
+        "opponentRank": null,
+        "location": "Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662524",
+          "history": "https://gousfbulls.com/sports/wsoc/opponent-history/east-carolina/53"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "American Conference",
+        "opponentRank": null,
+        "location": "Lakewood Ranch, Fla.",
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "9-8-3",
+        "games": [
+          {
+            "date": "2025-08-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/florida-exh/64"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Furman",
+            "opponentRank": null,
+            "location": "Greenville, S.C.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/furman/boxscore/13875",
+              "recap": "https://gousfbulls.com/news/2025/8/14/womens-soccer-usf-womens-soccer-opens-the-2025-season-with-a-road-victory-against-furman"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "South Carolina",
+            "opponentRank": 21,
+            "location": "Columbia, S.C.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/south-carolina/boxscore/13876",
+              "recap": "https://gousfbulls.com/news/2025/8/17/womens-soccer-usf-womens-soccer-falls-to-no-21-south-carolina-in-a-90-minute-battle"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Orlando, Fla.",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/ucf/boxscore/13877",
+              "recap": "https://gousfbulls.com/news/2025/8/22/womens-soccer-usf-womens-soccer-falls-to-ucf-in-orlando"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colorado State",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/colorado-state/boxscore/13878",
+              "recap": "https://gousfbulls.com/news/2025/8/24/womens-soccer-usf-womens-soccer-drops-a-heartbreaker-against-colorado-state"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": 19,
+            "location": "Winston-Salem, N.C.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/wake-forest/boxscore/13879",
+              "recap": "https://gousfbulls.com/news/2025/8/29/womens-soccer-usf-womens-soccer-falls-in-90-minute-battle-at-no-19-wake-forest"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNC Greensboro",
+            "opponentRank": null,
+            "location": "Greensboro, N.C.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/unc-greensboro/boxscore/13880",
+              "recap": "https://gousfbulls.com/news/2025/8/31/womens-soccer-usf-womens-soccer-secures-a-wire-to-wire-victory-at-unc-greensboro"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stetson",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/stetson/boxscore/13881",
+              "recap": "https://gousfbulls.com/news/2025/9/7/womens-soccer-usf-womens-soccer-nets-three-goals-in-a-shutout-victory-against-stetson"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": "W",
+            "score": "4-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/temple/boxscore/13882",
+              "recap": "https://gousfbulls.com/news/2025/9/11/womens-soccer-usf-womens-soccer-dominates-temple-in-first-conference-game"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Grambling State",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/grambling-state/boxscore/13883",
+              "recap": "https://gousfbulls.com/news/2025/9/14/womens-soccer-usf-womens-soccer-scores-six-in-victory-over-grambling-state"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/east-carolina/boxscore/13884",
+              "recap": "https://gousfbulls.com/news/2025/9/18/womens-soccer-usf-womens-soccer-wins-fifth-match-in-a-row"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Memphis",
+            "opponentRank": 11,
+            "location": "Memphis, Tenn.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/memphis/boxscore/13885",
+              "recap": "https://gousfbulls.com/news/2025/9/25/womens-soccer-usf-womens-soccer-falls-to-no-11-memphis-on-the-road"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/tulsa/boxscore/13886",
+              "recap": "https://gousfbulls.com/news/2025/9/28/womens-soccer-usf-womens-soccer-ties-tulsa-at-home-in-a-90-minute-battle"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, Texas",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/utsa/boxscore/13887",
+              "recap": "https://gousfbulls.com/news/2025/10/9/womens-soccer-usf-womens-soccer-falls-to-utsa-on-the-road"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Houston, Texas",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/rice/boxscore/13888",
+              "recap": "https://gousfbulls.com/news/2025/10/12/womens-soccer-usf-womens-soccer-drops-road-match-against-rice"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/charlotte/boxscore/13889",
+              "recap": "https://gousfbulls.com/news/2025/10/19/womens-soccer-usf-womens-soccer-earns-300th-program-win-at-home-against-charlotte"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/north-texas/boxscore/13890",
+              "recap": "https://gousfbulls.com/news/2025/10/23/womens-soccer-usf-womens-soccer-draws-match-against-north-texas"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, Ala.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/uab/boxscore/13891",
+              "recap": "https://gousfbulls.com/news/2025/10/26/womens-soccer-usf-womens-soccer-falls-to-uab-on-the-road"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/florida-atlantic/boxscore/13892",
+              "recap": "https://gousfbulls.com/news/2025/10/30/womens-soccer-usf-womens-soccer-clinches-american-conference-tournament-bid-with-win-over-fau"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": 2,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/charlotte/boxscore/13893",
+              "recap": "https://gousfbulls.com/news/2025/11/3/womens-soccer-usf-womens-soccer-wins-quarterfinal-matchup-against-charlotte-in-american-conference-championship"
+            }
+          },
+          {
+            "date": "2025-11-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": 6,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2025/rice/boxscore/13936",
+              "recap": "https://gousfbulls.com/news/2025/11/6/womens-soccer-usf-womens-soccer-falls-in-semifinals-to-rice-in-penalty-shootout"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "12-2-5",
+        "games": [
+          {
+            "date": "2024-08-03",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/florida-exh/64"
+            }
+          },
+          {
+            "date": "2024-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Tampa Bay Sun",
+            "opponentRank": null,
+            "location": "Tampa, Fla.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/tampa-bay-sun-exh/1424"
+            }
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida State",
+            "opponentRank": 1,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/florida-state/boxscore/13355",
+              "recap": "https://gousfbulls.com/news/2024/8/15/womens-soccer-south-florida-falls-to-no-1-florida-state-in-season-opener"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Jacksonville",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/jacksonville/boxscore/13415",
+              "recap": "https://gousfbulls.com/news/2024/8/18/womens-soccer-brown-nets-brace-south-florida-defeats-jacksonville-5-1-for-chris-browns-first-victory"
+            }
+          },
+          {
+            "date": "2024-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southern",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/southern/boxscore/13416",
+              "recap": "https://gousfbulls.com/news/2024/8/21/womens-soccer-sutter-nets-brace-as-south-florida-defeats-southern-5-0"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "FGCU",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/fgcu/boxscore/13417",
+              "recap": "https://gousfbulls.com/news/2024/8/25/womens-soccer-explosive-second-half-leads-to-4-0-victory-for-south-florida"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kansas",
+            "opponentRank": null,
+            "location": "Lawrence, Kan.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/kansas/boxscore/13418",
+              "recap": "https://gousfbulls.com/news/2024/8/29/womens-soccer-browns-late-goal-led-to-south-florida-draw-against-kansas"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/ucf/boxscore/13419",
+              "recap": "https://gousfbulls.com/news/2024/9/5/womens-soccer-bulls-unhorse-knights-as-thornton-nets-match-winner"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Charlotte, N.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/charlotte/boxscore/13420",
+              "recap": "https://gousfbulls.com/news/2024/9/12/womens-soccer-south-florida-battled-charlotte-to-draw-to-open-aac-play"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stetson",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/stetson/boxscore/13421",
+              "recap": "https://gousfbulls.com/news/2024/9/15/womens-soccer-south-florida-tops-stetson-to-close-out-non-conference-schedule"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/rice/boxscore/13422",
+              "recap": "https://gousfbulls.com/news/2024/9/19/womens-soccer-south-florida-downed-rice-2-1-on-thursday"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Boca Raton, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/florida-atlantic/boxscore/13423",
+              "recap": "https://gousfbulls.com/news/2024/9/26/womens-soccer-south-florida-battled-high-winds-and-florida-atlantic-to-draw"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Memphis",
+            "opponentRank": 17,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/memphis/boxscore/13424",
+              "recap": "https://gousfbulls.com/news/2024/9/29/womens-soccer-bulls-fall-in-heartbreaker-to-no-17-tigers"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/uab/boxscore/13425",
+              "recap": "https://gousfbulls.com/news/2024/10/3/womens-soccer-offensive-outburst-leads-to-4-0-victory-for-south-florida-against-uab"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Greenville, N.C.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/east-carolina/boxscore/13426",
+              "recap": "https://gousfbulls.com/news/2024/10/10/womens-soccer-south-florida-nets-three-goals-in-win-against-east-carolina"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/temple/boxscore/13427",
+              "recap": "https://gousfbulls.com/news/2024/10/17/womens-soccer-fetajs-snipe-on-a-free-kick-propels-bulls-over-owls"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Denton, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/north-texas/boxscore/13428",
+              "recap": "https://gousfbulls.com/news/2024/10/20/womens-soccer-sider-echenberg-nets-brace-as-south-florida-takes-down-north-texas"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/utsa/boxscore/13429",
+              "recap": "https://gousfbulls.com/news/2024/10/24/womens-soccer-sider-echenberg-delivers-another-winner-south-florida-moves-into-first-place"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Tulsa, Okla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/tulsa/boxscore/13430",
+              "recap": "https://gousfbulls.com/news/2024/10/27/womens-soccer-usf-womens-soccer-ends-regular-season-finale-in-draw-at-tulsa"
+            }
+          },
+          {
+            "date": "2024-11-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla. / Premier Sports Campus",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/north-texas/boxscore/13431",
+              "recap": "https://gousfbulls.com/news/2024/11/4/womens-soccer-usf-womens-soccer-blanks-unt-advances-to-aac-championship-semifinals"
+            }
+          },
+          {
+            "date": "2024-11-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla. / Premier Sports Campus",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2024/east-carolina/boxscore/13682",
+              "recap": "https://gousfbulls.com/news/2024/11/7/womens-soccer-south-florida-falls-in-heartbreaking-battle-against-east-carolina"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "12-6-2",
+        "games": [
+          {
+            "date": "2023-08-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Jacksonville",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/jacksonville-exh/92"
+            }
+          },
+          {
+            "date": "2023-08-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stetson",
+            "opponentRank": null,
+            "location": "DeLand, Fla.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/stetson-exh/180"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "LSU",
+            "opponentRank": null,
+            "location": "Baton Rouge, La.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/lsu/boxscore/12943",
+              "recap": "https://gousfbulls.com/news/2023/8/17/womens-soccer-south-florida-womens-soccer-opens-season-with-road-win-at-lsu",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/lsu/104"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Lafayette, La.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/louisiana/boxscore/12944",
+              "recap": "https://gousfbulls.com/news/2023/8/20/womens-soccer-bulls-topped-by-ragin-cajuns-in-road-trip-finale",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/louisiana/259"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Alabama A&M",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/alabama-am/boxscore/12945",
+              "recap": "https://gousfbulls.com/news/2023/8/24/womens-soccer-sutter-nets-brace-as-bulls-roll-to-victory-in-home-opener"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "FGCU",
+            "opponentRank": null,
+            "location": "Fort Myers, Fla.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/fgcu/boxscore/12946",
+              "recap": "https://gousfbulls.com/news/2023/8/27/womens-soccer-the-bulls-fall-in-hard-fought-battle-against-the-eagles",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/fgcu/63"
+            }
+          },
+          {
+            "date": "2023-08-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Saint Leo",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/saint-leo/159"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "FSU",
+            "opponentRank": 2,
+            "location": "Tallahassee, Fla.",
+            "result": "L",
+            "score": "1-5",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/fsu/boxscore/12947",
+              "recap": "https://gousfbulls.com/news/2023/9/3/womens-soccer-usf-falls-to-no-2-fsu-in-tallahassee"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida College",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "13-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/florida-college/boxscore/13056",
+              "recap": "https://gousfbulls.com/news/2023/9/7/womens-soccer-brown-ties-program-record-for-goals-as-usf-scores-13-against-florida-college"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Orlando, Fla.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/ucf/boxscore/12948",
+              "recap": "https://gousfbulls.com/news/2023/9/10/womens-soccer-bulls-fall-to-knights-in-rivalry-match"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/temple/boxscore/12949",
+              "recap": "https://gousfbulls.com/news/2023/9/14/womens-soccer-bulls-ground-owls-in-american-athletic-conference-opener"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/charlotte/boxscore/12950",
+              "recap": "https://gousfbulls.com/news/2023/9/21/womens-soccer-south-florida-charlotte-draw-in-physical-90-minutes"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Gonzaga",
+            "opponentRank": 21,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/gonzaga/boxscore/12951",
+              "recap": "https://gousfbulls.com/news/2023/9/24/womens-soccer-bulls-leash-bulldogs-in-thrilling-upset"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "ECU",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/ecu/boxscore/12952",
+              "recap": "https://gousfbulls.com/news/2023/9/28/womens-soccer-south-florida-falls-in-first-AAC-match-against-east-carolina",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/ecu/53"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, Ala.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/uab/boxscore/12953",
+              "recap": "https://gousfbulls.com/news/2023/10/5/womens-soccer-usf-cools-off-blazers-in-road-victory",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/uab/194"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/north-texas/boxscore/12954",
+              "recap": "https://gousfbulls.com/news/2023/10/12/womens-soccer-markvardsen-strikes-again-as-south-florida-takes-down-north-texas"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/smu/boxscore/12955",
+              "recap": "https://gousfbulls.com/news/2023/10/15/womens-soccer-bulls-saddle-mustangs-in-shutout-on-sunday"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/rice/boxscore/12956",
+              "recap": "https://gousfbulls.com/news/2023/10/19/womens-soccer-south-florida-draws-with-rice-on-thursday",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/rice/155"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, Texas",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/utsa/boxscore/12957",
+              "recap": "https://gousfbulls.com/news/2023/10/22/womens-soccer-bulls-slow-down-roadrunners-in-sunday-victory",
+              "history": "https://gousfbulls.com/sports/wsoc/opponent-history/utsa/189"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Corbett Stadium, Tampa, Fla.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/12958",
+              "recap": "https://gousfbulls.com/news/2023/10/26/womens-soccer-bulls-win-on-senior-night-claim-aac-east-title"
+            }
+          },
+          {
+            "date": "2023-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla. / Premier Sports Campus, |",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gousfbulls.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/13027",
+              "recap": "https://gousfbulls.com/news/2023/10/31/womens-soccer-south-florida-drops-heartbreaker-to-florida-atlantic-in-aac-first-round"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gousfbulls.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:11:14Z"
+    }
+  },
   "commitments": [
     {
       "id": "kylie-sandulak-2026",
@@ -654,7 +3775,7 @@
       "city": "",
       "highSchool": "",
       "college": "south-florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -673,7 +3794,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -689,7 +3810,7 @@
       "city": "",
       "highSchool": "",
       "college": "south-florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -708,7 +3829,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1160,35 +4281,21 @@
     "2028": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gousfbulls.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:37:57Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=28.061458&longitude=-82.413232&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:37:54Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

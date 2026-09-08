@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://buffalobulls.com/sports/womens-soccer",
-    "roster": "https://buffalobulls.com/sports/womens-soccer/roster",
-    "schedule": "https://buffalobulls.com/sports/womens-soccer/schedule",
-    "news": "https://buffalobulls.com/sports/womens-soccer/news",
+    "athletics": "https://ubbulls.com/sports/womens-soccer",
+    "roster": "https://ubbulls.com/sports/womens-soccer/roster",
+    "schedule": "https://ubbulls.com/sports/womens-soccer/schedule",
+    "news": "https://ubbulls.com/sports/womens-soccer/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/buffalo/clgid-440",
     "wikipedia": null,
     "x": null,
@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T05:22:49Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 43.000942,
+    "lon": -78.789458,
+    "timezone": "America/New_York",
+    "elevationM": 211.2,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014733",
+      "name": "BUFFALO",
+      "state": "NY",
+      "distanceKm": 7.2,
+      "elevationM": 211.2
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 32.1,
+        "tLowF": 19.0,
+        "precipIn": 3.35,
+        "snowIn": 26.7,
+        "wetDays": 9.1,
+        "days90F": 0.0,
+        "daysFreeze": 27.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 33.3,
+        "tLowF": 19.5,
+        "precipIn": 2.49,
+        "snowIn": 18.1,
+        "wetDays": 7.2,
+        "days90F": 0.0,
+        "daysFreeze": 25.3
+      },
+      {
+        "month": "Mar",
+        "tHighF": 41.8,
+        "tLowF": 26.4,
+        "precipIn": 2.89,
+        "snowIn": 14.1,
+        "wetDays": 7.9,
+        "days90F": 0.0,
+        "daysFreeze": 22.7
+      },
+      {
+        "month": "Apr",
+        "tHighF": 54.7,
+        "tLowF": 36.5,
+        "precipIn": 3.37,
+        "snowIn": 2.5,
+        "wetDays": 8.2,
+        "days90F": 0.0,
+        "daysFreeze": 9.3
+      },
+      {
+        "month": "May",
+        "tHighF": 67.4,
+        "tLowF": 48.3,
+        "precipIn": 3.37,
+        "snowIn": 0.0,
+        "wetDays": 7.6,
+        "days90F": 0.2,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 75.6,
+        "tLowF": 58.1,
+        "precipIn": 3.37,
+        "snowIn": 0.0,
+        "wetDays": 7.7,
+        "days90F": 0.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 80.2,
+        "tLowF": 63.1,
+        "precipIn": 3.23,
+        "snowIn": 0.0,
+        "wetDays": 6.1,
+        "days90F": 1.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 79.0,
+        "tLowF": 61.7,
+        "precipIn": 3.23,
+        "snowIn": 0.0,
+        "wetDays": 6.2,
+        "days90F": 0.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 72.3,
+        "tLowF": 54.5,
+        "precipIn": 4.1,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 59.6,
+        "tLowF": 43.9,
+        "precipIn": 4.03,
+        "snowIn": 0.9,
+        "wetDays": 9.0,
+        "days90F": 0.0,
+        "daysFreeze": 2.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 47.8,
+        "tLowF": 34.2,
+        "precipIn": 3.5,
+        "snowIn": 7.8,
+        "wetDays": 8.4,
+        "days90F": 0.0,
+        "daysFreeze": 13.1
+      },
+      {
+        "month": "Dec",
+        "tHighF": 37.2,
+        "tLowF": 25.6,
+        "precipIn": 3.75,
+        "snowIn": 25.3,
+        "wetDays": 9.7,
+        "days90F": 0.0,
+        "daysFreeze": 24.0
+      }
+    ],
+    "annualPrecipIn": 40.7,
+    "annualSnowIn": 95.4,
+    "fallSeason": {
+      "avgHighF": 64.7,
+      "avgLowF": 48.6,
+      "precipIn": 14.9,
+      "wetDays": 30.0
+    },
+    "summary": "Hottest month Jul (avg high 80.2°F), coldest Jan (avg low 19.0°F). 40.7 in of rain per year, 95.4 in of snow. Fall season (Aug–Nov): highs around 64.7°F, 14.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014733,USW00004724,USC00306047&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:52Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Shawn Burke",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/coaches/shawn-burke/741",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Shawn Burke",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/coaches/shawn-burke/741",
+        "social": {}
+      },
+      {
+        "name": "Emily Kelly",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/coaches/emily-kelly/744",
+        "social": {}
+      },
+      {
+        "name": "Victoria Caruso",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/coaches/victoria-caruso/803",
+        "social": {}
+      },
+      {
+        "name": "Paul Loweecey",
+        "title": "Volunteer Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/coaches/paul--loweecey/806",
+        "social": {}
+      },
+      {
+        "name": "Haley Abrams",
+        "title": "Sports Performance Coach (Women's Basketball & Women's Soccer)",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/staff/haley-abrams/515",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "John Ward, MS, ATC",
+        "title": "Athletic Trainer (Women's Soccer, Swimming & Diving)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/staff/john-ward-ms-atc/476",
+        "social": {}
+      },
+      {
+        "name": "Sarah Tranelli",
+        "title": "Assistant Director (Soccer, Women's Basketball, Men's & Women's Tennis)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/staff/sarah-tranelli/513",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +305,2607 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ubbulls.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:08:36Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "3-2-1",
+      "wins": 3,
+      "losses": 2,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Shawn Burke"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "12-5-2",
+      "wins": 12,
+      "losses": 5,
+      "ties": 2,
+      "confRecord": "8-3-1",
+      "rpiRank": 69,
+      "rpi": {
+        "rank": 69,
+        "record": "12-5-2",
+        "through": "2025-12-08",
+        "prevRank": 72,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 69,
+            "record": "12-5-2"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "11-2-7",
+      "wins": 11,
+      "losses": 2,
+      "ties": 7,
+      "confRecord": "5-1-5",
+      "rpiRank": 58,
+      "rpi": {
+        "rank": 58,
+        "sosRank": 56,
+        "balancedRank": 85,
+        "kpiRank": 48,
+        "masseyRank": 91,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "7-5-6",
+      "wins": 7,
+      "losses": 5,
+      "ties": 6,
+      "confRecord": "4-4-3",
+      "rpiRank": 159,
+      "rpi": {
+        "rank": 159,
+        "sosRank": 147,
+        "balancedRank": 155,
+        "kpiRank": 141,
+        "masseyRank": 151,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "00",
+        "name": "Taylor Mileti",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Hauppauge, NY / Hauppauge",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Human Health",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/taylor-mileti/8970",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Lexie Thompson",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Levittown, NY / General Douglas MacArthur",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/lexie-thompson/8812",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Gabriella Capra",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hopewell Junction, NY / John Jay East Fishkill",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/gabriella-capra/8798",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Sofia Mastracci",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Richmond Hill, Ontario / Bill Crothers Secondary School",
+        "highSchool": "South Alabama",
+        "previousSchool": "",
+        "major": "Business Administration",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/sofia-mastracci/8935",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Maya Bright",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Philadelphia, PA / Episcopal Academy",
+        "highSchool": "Pittsburgh",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/maya-bright/8974",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Bella Danise",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Nazareth, PA / Nazareth",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "Match Fit Academy FC",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/bella-danise/8967",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Ella McDonald",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Clifton Park, NY / Shenendehowa",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/ella-mcdonald/8806",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Jayda Schoburgh",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Whitby, Ontario / Donald A Wilson",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/jayda-schoburgh/8811",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Stephanie Tator",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Holtsville, NY / Sachem East",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Pharmacy",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/stephanie-tator/8973",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Lily Iozzia",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Elma, NY / St. Mary's",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Management Information Systems",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/lily-iozzia/8933",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Kelly-Ann Prince",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Sherbrooke, Quebec / Ecole Secondaire du Triolet",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/kellyann-prince/8809",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Alexis Kochan",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Clifton, NJ / DePaul Catholic",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biomedical Science",
+        "club": "Match Fit Academy FC",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/alexis-kochan/8968",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "12",
+        "name": "Maddy Lahullier",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Hasbrouck Heights, NJ / Hasbrouck",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "World Class FC",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/maddy-lahullier/8969",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Adriana Victoriano",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Setauket, NY / Ward Melville",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "SUSA Academy",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/adriana-victoriano/8813",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Laiken Kiser",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sherrill, NY / Vernon Verona Sherrill",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "Syracuse Development Academy",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/laiken-kiser/8803",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "15",
+        "name": "Maddy Murphy",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lansdale, PA / North Penn",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/maddy-murphy/8807",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Maya Galko",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Ottawa, Ontario / NDC Ontario",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Communication",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/maya-galko/8799",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Maya Ikewood",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Macedon, NY / Palmyra-Macedon",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Western New York Flash (WNY)",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/maya-ikewood/8801",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "18",
+        "name": "Julia Rocky",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Strongsville, OH / Strongsville",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/julia-rocky/8810",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Talia Vitullo",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "New Hartford, NY / New Hartford",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/talia-vitullo/8814",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Emma Patti",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Nottingham, MD / McDonogh School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pipeline SC (MD)",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/emma-patti/8971",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Eva Blatz",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Bethel Park, PA / Bethel Park",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/eva-blatz/8797",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Eva Poissant",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Camillus, NY / West Genesee",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Administration",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/eva-poissant/8808",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Mae Hunt",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Staines-Upon-Thames, England / John Madejski Academy",
+        "highSchool": "South Alabama",
+        "previousSchool": "",
+        "major": "Communication",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/mae-hunt/8934",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Amelia Layden",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Pearl River, NY / Pearl River",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/amelia-layden/8804",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Kayla Pardini",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Smithtown, NY / Smithtown West",
+        "highSchool": "Illinois",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/kayla-pardini/8936",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Jessie Bernabe",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Furlong, PA / Central Bucks East",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ubbulls.com/sports/womens-soccer/roster/jessie-bernabe/8796",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 5,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 7,
+      "SR": 6,
+      "SO": 10,
+      "JR": 4
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 2,
+      "D": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ubbulls.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:08:36Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Isabella Simoncelli",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Hamburg, NY / Nichols School",
+          "highSchool": "Dayton"
+        },
+        {
+          "number": "1",
+          "name": "Lexie Thompson",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Levittown, NY / General Douglas MacArthur",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Gabriella Capra",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Hopewell Junction, NY / John Jay East Fishkill",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Ellie Simmons",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Arlington, VA / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sarah Woods",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lewiston, NY / Lewiston Porter",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Frederique St.-Jean",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Montreal, Quebec / College Francais",
+          "highSchool": "St. John's"
+        },
+        {
+          "number": "7",
+          "name": "Jayda Schoburgh",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Whitby, Ontario / Donald A Wilson",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Ella McDonald",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Clifton Park, NY / Shenendehowa",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jasmine Guerber",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Montreal, Quebec / Lester B Pearson",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "10",
+          "name": "Kelly-Ann Prince",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Sherbrooke, Quebec / Ecole Secondaire du Triolet",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Marissa Foster",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Wappingers Falls, NY / Arlington",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ashley Reyes",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Port Chester, NY / Port Chester",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Adriana Victoriano",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Setauket, NY / Ward Melville",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Laiken Kiser",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sherrill, NY / Vernon Verona Sherrill",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Maddy Murphy",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lansdale, PA / North Penn",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Maya Galko",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ottawa, Ontario / NDC Ontario",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Maya Ikewood",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Macedon, NY / Palmyra-Macedon",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Julia Rocky",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Strongsville, OH / Strongsville",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Talia Vitullo",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "New Hartford, NY / New Hartford",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carolyn Hinkle",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Millersville, PA / Penn Manor",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Koby Commandant",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Rockwood, Ontario / John F. Ross",
+          "highSchool": "Oklahoma/Syracuse"
+        },
+        {
+          "number": "22",
+          "name": "Eva Blatz",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Bethel Park, PA / Bethel Park",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Eva Poissant",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Camillus, NY / West Genesee",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Liv Johnsen",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Croton-on-Hudson, NY / Hendrick Hudson",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Amelia Layden",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pearl River, NY / Pearl River",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Casey Loughran",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Highlands Ranch, CO / Mountain Vista",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Jessie Bernabe",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Furlong, PA / Central Bucks East",
+          "highSchool": ""
+        },
+        {
+          "number": "",
+          "name": "Sarah Reid",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Clarence, NY / Ledgeview Elementary",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "ashley reyes",
+        "carolyn hinkle",
+        "casey loughran",
+        "ellie simmons",
+        "frederique st jean",
+        "isabella simoncelli",
+        "jasmine guerber",
+        "koby commandant",
+        "liv johnsen",
+        "marissa foster",
+        "sarah reid",
+        "sarah woods"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Isabella Simoncelli",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Hamburg, NY / Nichols School",
+          "highSchool": "Dayton"
+        },
+        {
+          "number": "1",
+          "name": "Lexie Thompson",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Levittown, NY / General Douglas MacArthur",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Kelly Severini",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Union, NJ / Union",
+          "highSchool": "Michigan State"
+        },
+        {
+          "number": "3",
+          "name": "Ellie Simmons",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Arlington, VA / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sarah Woods",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lewiston, NY / Lewiston Porter",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Frederique St.-Jean",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Montreal, Quebec / College Francais",
+          "highSchool": "St. John's"
+        },
+        {
+          "number": "6",
+          "name": "Alex Bova",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pittsford, NY / Pittsford Sutherland",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Arianna Zumpano",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Niagara Falls, ON, Canada / A.N Myer Secondary",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Ella McDonald",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Clifton Park, NY / Shenendehowa",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jasmine Guerber",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Montreal, Quebec / Lester B Pearson",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "10",
+          "name": "Olivia Bizzoni",
+          "pos": "D/M",
+          "classCode": "GR",
+          "hometown": "Brampton, ON, Canada / St. Thomas Aquinas",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Marissa Foster",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Wappingers Falls, NY / Arlington",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ashley Reyes",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Port Chester, NY / Port Chester",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Laiken Kiser",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Sherrill, NY / Vernon Verona Sherrill",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Maya Galko",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Ottawa, Ontario / NDC Ontario",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Maya Ikewood",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Macedon, NY / Palmyra-Macedon",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Julia Rocky",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Strongsville, OH / Strongsville",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Talia Vitullo",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "New Hartford, NY / New Hartford",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carolyn Hinkle",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Millersville, PA / Penn Manor",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kaylin Ricci",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Massapequa, NY / Massapequa",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Eva Blatz",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Bethel Park, PA / Bethel Park",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Eva Poissant",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Camillus, NY / West Genesee",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Kaya Schultz",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "West Orange, NJ / West Orange",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Moa Andersson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Valbo, Sweden / Borgarskolan Gävle",
+          "highSchool": "Temple"
+        },
+        {
+          "number": "27",
+          "name": "Rebecca Winslow",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Cherry Hill, NJ / Cherry Hill East",
+          "highSchool": "Monmouth"
+        },
+        {
+          "number": "29",
+          "name": "Ashleigh Fortunate",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Briarcliff Manor, NY / Briarcliff",
+          "highSchool": ""
+        },
+        {
+          "number": "",
+          "name": "Sarah Reid",
+          "pos": "",
+          "classCode": "SR",
+          "hometown": "Clarence, NY / Ledgeview Elementary",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Hanna Johnson",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Jamestown, NY / Southwestern (Monroe CC)",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Lexie Thompson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Levittown, NY / General Douglas MacArthur",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Laura Bogner",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Hamburg, NY / Hamburg",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Ellie Simmons",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Arlington, VA / Yorktown",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sarah Woods",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lewiston, NY / Lewiston Porter",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Emily Lazenby",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Richmond Hill, ON, Canada / Alexander Mackenzie HS",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "6",
+          "name": "Katie Krohn",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Schoharie, NY / Schoharie",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Arianna Zumpano",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Niagara Falls, ON, Canada / A.N Myer Secondary",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Leah Wengender",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Rochester, NY / Spencerport",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jasmine Guerber",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Montreal, Quebec / Lester B Pearson",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "10",
+          "name": "Olivia Bizzoni",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Brampton, ON, Canada / St. Thomas Aquinas",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Marissa Foster",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wappingers Falls, NY / Arlington",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ashley Reyes",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Port Chester, NY / Port Chester",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Ava Maldonado",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "McDonough, GA / Union Grove",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Laiken Kiser",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Sherrill, NY / Vernon Verona Sherrill",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Mika Marolly",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Ile Bizard, Quebec / Ecole Secondaire Des Sources",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Maya Galko",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Ottawa, Ontario / NDC Ontario",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Ashlyn O'Shea",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Lakewood Ranch, FL / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Talia Vitullo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "New Hartford, NY / New Hartford",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Kaylin Ricci",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Massapequa, NY / Massapequa",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Eva Blatz",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Bethel Park, PA / Bethel Park",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Eva Poissant",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Camillus, NY / West Genesee",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Kaya Schultz",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "West Orange, NJ / West Orange",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Moa Andersson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Valbo, Sweden / Borgarskolan Gävle",
+          "highSchool": "Temple"
+        },
+        {
+          "number": "27",
+          "name": "Rebecca Winslow",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Cherry Hill, NJ / Cherry Hill East",
+          "highSchool": "Monmouth"
+        },
+        {
+          "number": "28",
+          "name": "Emma Anderson",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Niskayuna, NY / Niskayuna",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Ashleigh Fortunate",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Briarcliff Manor, NY / Briarcliff",
+          "highSchool": ""
+        },
+        {
+          "number": "",
+          "name": "Sarah Reid",
+          "pos": "",
+          "classCode": "R-SR",
+          "hometown": "Clarence, NY / Ledgeview Elementary",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 3,
+      "losses": 2,
+      "ties": 1,
+      "text": "3-2-1",
+      "played": 6,
+      "scheduled": 19,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Niagara",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/niagara/boxscore/8375",
+          "recap": "https://ubbulls.com/news/2026/8/12/womens-soccer-bulls-shutout-niagara-in-season-opener"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Mercyhurst",
+        "opponentRank": null,
+        "location": "Erie, PA",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/mercyhurst/boxscore/8376",
+          "recap": "https://ubbulls.com/news/2026/8/16/womens-soccer-bulls-defeat-mercyhurst-2-0-on-sunday"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Grand Canyon",
+        "opponentRank": null,
+        "location": "Phoenix, AZ",
+        "result": "L",
+        "score": "0-2",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/grand-canyon/boxscore/8377",
+          "recap": "https://ubbulls.com/news/2026/8/21/womens-soccer-bulls-drop-contest-at-grand-canyon-on-thursday"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Arizona State",
+        "opponentRank": null,
+        "location": "Tempe, AZ",
+        "result": "L",
+        "score": "0-5",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/arizona-state/boxscore/8378",
+          "recap": "https://ubbulls.com/news/2026/8/23/womens-soccer-bulls-fall-at-arizona-state-on-sunday"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Binghamton",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/binghamton/boxscore/8379",
+          "recap": "https://ubbulls.com/news/2026/8/30/womens-soccer-bulls-play-to-scoreless-draw-with-binghamton-on-sunday"
+        }
+      },
+      {
+        "date": "2026-09-02",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Canisius",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://ubbulls.com/sports/womens-soccer/stats/2026/canisius/boxscore/8380",
+          "recap": "https://ubbulls.com/news/2026/9/2/womens-soccer-bulls-defeat-canisius-2-1-on-wednesday"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Lafayette",
+        "opponentRank": null,
+        "location": "Easton, PA",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/eventCalendarId/401886717?gameId=401886717&sourceLang=en&om-navmethod=espn:globalsearch:results",
+          "live stats": "https://goleopards.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Central Michigan",
+        "opponentRank": null,
+        "location": "Mount Pleasant, MI",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://cmuchippewas.com/sidearmstats/wsoc/media"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Toledo",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.youtube.com/live/EOY4v7q3Hgk",
+          "live stats": "https://ubbulls.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Eastern Michigan",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.youtube.com/live/Avs-Ol83GAc",
+          "live stats": "https://ubbulls.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Miami (OH)",
+        "opponentRank": null,
+        "location": "Oxford, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://miamiredhawks.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Ohio",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ubbulls.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Western Michigan",
+        "opponentRank": null,
+        "location": "Kalamazoo, MI",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Massachusetts",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ubbulls.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Akron",
+        "opponentRank": null,
+        "location": "Akron, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://gozips.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Bowling Green",
+        "opponentRank": null,
+        "location": "Bowling Green, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.youtube.com/live/NzPzAyLr_vI",
+          "live stats": "https://bgsufalcons.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-29",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Kent State",
+        "opponentRank": null,
+        "location": "Buffalo, NY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ubbulls.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Ball State",
+        "opponentRank": null,
+        "location": "Muncie, IN",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://ballstatesports.com/watch/?Live=2152&type=Live",
+          "live stats": "https://stats.statbroadcast.com/statmonitr/?id=663910"
+        }
+      },
+      {
+        "date": "2026-11-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "MAC Tournament",
+        "opponentRank": null,
+        "location": "Columbus, OH (Historic Crew Stadium)",
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "12-5-2",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Canisius",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/canisius/boxscore/6540",
+              "recap": "https://ubbulls.com/news/2025/8/14/womens-soccer-burke-makes-history-bulls-open-season-with-3-0-win-at-canisius"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colgate",
+            "opponentRank": null,
+            "location": "Hamilton, NY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/colgate/boxscore/6541",
+              "recap": "https://ubbulls.com/news/2025/8/17/womens-soccer-bulls-play-to-draw-at-colgate-on-sunday"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colorado College",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/colorado-college/boxscore/6542",
+              "recap": "https://ubbulls.com/news/2025/8/21/womens-soccer-bulls-defeat-colorado-college-1-0-in-home-opener"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Michigan State",
+            "opponentRank": 17,
+            "location": "East Lansing, MI",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/-17-michigan-state/boxscore/6543",
+              "recap": "https://ubbulls.com/news/2025/8/28/womens-soccer-bulls-fall-at-17-michigan-state-on-thursday"
+            }
+          },
+          {
+            "date": "2025-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Niagara",
+            "opponentRank": null,
+            "location": "Niagara Falls, NY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/niagara/boxscore/6544",
+              "recap": "https://ubbulls.com/news/2025/9/3/womens-soccer-bulls-soar-past-niagara-with-2-0-win-on-thursday"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Mercyhurst",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/mercyhurst/boxscore/6545",
+              "recap": "https://ubbulls.com/news/2025/9/11/womens-soccer-bulls-defeat-mercyhurst-4-1-in-non-conference-finale"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Eastern Michigan",
+            "opponentRank": null,
+            "location": "Ypsilanti, MI",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/eastern-michigan/boxscore/6546",
+              "recap": "https://ubbulls.com/news/2025/9/18/womens-soccer-bulls-drop-contest-at-eastern-michigan-to-open-mac-play"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Miami (OH)",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/miami-oh-/boxscore/6547",
+              "recap": "https://ubbulls.com/news/2025/9/21/womens-soccer-bulls-leave-miami-oh-seeing-red-in-3-0-win-on-sunday"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Ball State",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/ball-state/boxscore/6548",
+              "recap": "https://ubbulls.com/news/2025/9/25/womens-soccer-bulls-defeat-ball-state-2-1-on-thursday"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Kent State",
+            "opponentRank": null,
+            "location": "Kent, OH",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/kent-state/boxscore/6549",
+              "recap": "https://ubbulls.com/news/2025/9/28/womens-soccer-bulls-battle-to-1-0-win-at-kent-state-on-sunday"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Akron",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/akron/boxscore/6550",
+              "recap": "https://ubbulls.com/news/2025/10/2/womens-soccer-bulls-blank-zips-on-thursday-night"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Northern Illinois",
+            "opponentRank": null,
+            "location": "DeKalb, IL",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/northern-illinois/boxscore/6551",
+              "recap": "https://ubbulls.com/news/2025/10/5/womens-soccer-offense-explodes-foster-records-hat-trick-as-bulls-dominate-northern-illinois-on-sunday"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Massachusetts",
+            "opponentRank": null,
+            "location": "Amherst, MA",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/massachusetts/boxscore/6552",
+              "recap": "https://ubbulls.com/news/2025/10/9/womens-soccer-bulls-drop-contest-at-umass-on-thursday"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/central-michigan/boxscore/6553",
+              "recap": "https://ubbulls.com/news/2025/10/12/womens-soccer-bulls-defeat-central-michigan-on-senior-day"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Athens, OH",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/ohio/boxscore/6554",
+              "recap": "https://ubbulls.com/news/2025/10/16/womens-soccer-bulls-pick-up-road-victory-at-ohio-on-thursday"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Bowling Green",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/bowling-green/boxscore/6555",
+              "recap": "https://ubbulls.com/news/2025/10/23/womens-soccer-bulls-play-to-draw-with-bowling-green"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Toledo",
+            "opponentRank": null,
+            "location": "Toledo, OH",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/toledo/boxscore/6556",
+              "recap": "https://ubbulls.com/news/2025/10/26/womens-soccer-late-game-heroics-lift-bulls-to-win-at-toledo-on-sunday"
+            }
+          },
+          {
+            "date": "2025-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Western Michigan",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/western-michigan/boxscore/6557",
+              "recap": "https://ubbulls.com/news/2025/10/29/womens-soccer-bulls-fall-to-western-michigan-in-regular-season-finale"
+            }
+          },
+          {
+            "date": "2025-11-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 6 Bowling Green",
+            "opponentRank": null,
+            "location": "Columbus, OH (Historic Crew Stadium)",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2025/no-6-bowling-green/boxscore/6558",
+              "recap": "https://ubbulls.com/news/2025/11/1/womens-soccer-bulls-fall-to-bowling-green-in-mac-tournament-quarterfinals"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "11-2-7",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "St. Bonaventure",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/st-bonaventure/boxscore/6164",
+              "recap": "https://ubbulls.com/news/2024/8/15/womens-soccer-bulls-defeat-st-bonaventure-1-0-in-season-opener"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 7 Pittsburgh",
+            "opponentRank": null,
+            "location": "Pittsburgh, PA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/no-7-pittsburgh/boxscore/6165",
+              "recap": "https://ubbulls.com/news/2024/8/22/womens-soccer-bulls-amake-statement-with-historic-win-at-no-7-pitt"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Ithaca, NY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/cornell/boxscore/6166",
+              "recap": "https://ubbulls.com/news/2024/8/29/womens-soccer-guerbers-late-goal-leads-bulls-to-draw-at-cornell"
+            }
+          },
+          {
+            "date": "2024-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Canisius",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/canisius/boxscore/6167",
+              "recap": "https://ubbulls.com/news/2024/9/4/womens-soccer-galkos-late-strike-leads-bulls-to-win-over-canisius"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colgate",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/colgate/boxscore/6168",
+              "recap": "https://ubbulls.com/news/2024/9/8/womens-soccer-bulls-cruise-to-3-0-win-over-colgate-on-senior-day"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colorado College",
+            "opponentRank": null,
+            "location": "Colorado Springs, CO",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/colorado-college/boxscore/6169",
+              "recap": "https://ubbulls.com/news/2024/9/12/womens-soccer-bizzonis-second-half-goal-leads-bulls-to-draw-at-colorado-college"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northern Colorado",
+            "opponentRank": null,
+            "location": "Greeley, CO",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/northern-colorado/boxscore/6170",
+              "recap": "https://ubbulls.com/news/2024/9/15/womens-soccer-bulls-defeat-northern-colorado-2-0-in-non-conference-finale"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Akron",
+            "opponentRank": null,
+            "location": "Akron, OH",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/akron/boxscore/6171",
+              "recap": "https://ubbulls.com/news/2024/9/19/womens-soccer-second-half-spark-leads-bulls-to-2-0-win-at-akron-in-mac-opener"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Eastern Michigan",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/eastern-michigan/boxscore/6172",
+              "recap": "https://ubbulls.com/news/2024/9/22/womens-soccer-bulls-defeat-eastern-michigan-1-0-on-sunday"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Western Michigan",
+            "opponentRank": null,
+            "location": "Kalamazoo, MI",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/western-michigan/boxscore/6173",
+              "recap": "https://ubbulls.com/news/2024/9/26/womens-soccer-bulls-fall-at-western-michigan-on-thursday"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Northern Illinois",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/northern-illinois/boxscore/6174",
+              "recap": "https://ubbulls.com/news/2024/9/29/womens-soccer-balanced-attack-leads-bulls-to-3-0-win-over-northern-illinois"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Ball State",
+            "opponentRank": null,
+            "location": "Muncie, IN",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/ball-state/boxscore/6175",
+              "recap": "https://ubbulls.com/news/2024/10/6/womens-soccer-bulls-play-to-scoreless-draw-at-ball-state"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Toledo",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/toledo/boxscore/6176",
+              "recap": "https://ubbulls.com/news/2024/10/10/womens-soccer-second-half-spark-leads-bulls-to-2-0-win-over-toledo"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Bowling Green",
+            "opponentRank": null,
+            "location": "Bowling Green, OH",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/bowling-green/boxscore/6177",
+              "recap": "https://ubbulls.com/news/2024/10/13/womens-soccer-bulls-play-to-draw-at-bowling-green"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kent State",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/kent-state/boxscore/6178",
+              "recap": "https://ubbulls.com/news/2024/10/17/womens-soccer-bulls-play-to-draw-with-kent-state-on-thursday"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/ohio/boxscore/6179",
+              "recap": "https://ubbulls.com/news/2024/10/24/womens-soccer-bulls-dominant-in-2-0-win-over-ohio"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Miami (OH)",
+            "opponentRank": null,
+            "location": "Oxford, OH",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/miami-oh-/boxscore/6180",
+              "recap": "https://ubbulls.com/news/2024/10/27/womens-soccer-bulls-clinch-mac-tournament-berth-with-draw-at-miami-oh"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Mount Pleasant, MI",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/central-michigan/boxscore/6181",
+              "recap": "https://ubbulls.com/news/2024/10/31/womens-soccer-bulls-clinch-no-2-seed-in-mac-tournament-with-a-draw-at-central-michigan"
+            }
+          },
+          {
+            "date": "2024-11-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 3 Ohio",
+            "opponentRank": null,
+            "location": "Kalamazoo, MI",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/no-3-ohio/boxscore/6183",
+              "recap": "https://ubbulls.com/news/2024/11/7/womens-soccer-bulls-advance-to-mac-championship-game-with-2-1-win-over-ohio"
+            }
+          },
+          {
+            "date": "2024-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 1 Western Michigan",
+            "opponentRank": null,
+            "location": "Kalamazoo, MI",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2024/no-1-western-michigan/boxscore/6184",
+              "recap": "https://ubbulls.com/news/2024/11/10/womens-soccer-bulls-fall-to-western-michigan-in-mac-championship-game"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "7-5-6",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 14 Pittsburgh",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/no-14-pittsburgh/boxscore/5791",
+              "recap": "https://ubbulls.com/news/2023/8/17/womens-soccer-bulls-fight-hard-fall-to-pitt-2-1-in-season-opener"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ohio State",
+            "opponentRank": null,
+            "location": "Columbus, OH",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/ohio-state/boxscore/5792",
+              "recap": "https://ubbulls.com/news/2023/8/20/womens-soccer-bulls-earn-statement-win-defeat-ohio-state-2-1-on-sunday"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colgate",
+            "opponentRank": null,
+            "location": "Hamilton, NY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/colgate/boxscore/5793",
+              "recap": "https://ubbulls.com/news/2023/8/24/womens-soccer-bulls-defeat-colgate-1-0-on-thursday"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Canisius",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/canisius/boxscore/5794",
+              "recap": "https://ubbulls.com/news/2023/8/31/womens-soccer-bulls-play-to-scoreless-draw-at-canisius-on-thursday"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Niagara",
+            "opponentRank": null,
+            "location": "Niagara Falls, NY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/niagara/boxscore/5795",
+              "recap": "https://ubbulls.com/news/2023/9/3/womens-soccer-bulls-soar-past-niagara-2-0-on-sunday"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/cornell/boxscore/5796",
+              "recap": "https://ubbulls.com/news/2023/9/10/womens-soccer-bulls-play-to-1-1-draw-with-cornell-on-sunday"
+            }
+          },
+          {
+            "date": "2023-09-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Storrs, CT",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/uconn/boxscore/5797",
+              "recap": "https://ubbulls.com/news/2023/9/16/womens-soccer-bulls-close-non-conference-slate-with-draw-at-uconn"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Akron",
+            "opponentRank": null,
+            "location": "Akron, OH",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/akron/boxscore/5798",
+              "recap": "https://ubbulls.com/news/2023/9/21/womens-soccer-krohn-shines-in-2-0-win-at-akron-to-open-mac-play"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Ohio",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/ohio/boxscore/5799",
+              "recap": "https://ubbulls.com/news/2023/9/24/womens-soccer-bulls-drop-heartbreaker-to-ohio-on-sunday"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Miami (OH)",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/miami-oh-/boxscore/5800",
+              "recap": "https://ubbulls.com/news/2023/9/28/womens-soccer-shawn-burke-earns-100th-career-victory-as-bulls-defeat-miami-oh-2-0"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Eastern Michigan",
+            "opponentRank": null,
+            "location": "Ypsilanti, MI",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/eastern-michigan/boxscore/5801",
+              "recap": "https://ubbulls.com/news/2023/10/1/womens-soccer-bulls-play-to-draw-at-eastern-michigan-on-sunday"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Mount Pleasant, MI",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/central-michigan/boxscore/5802",
+              "recap": "https://ubbulls.com/news/2023/10/5/womens-soccer-bulls-score-late-draw-at-central-michigan"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Ball State",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/ball-state/boxscore/5803",
+              "recap": "https://ubbulls.com/news/2023/10/8/womens-soccer-bulls-fall-to-ball-state-on-sunday"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Northern Illinois",
+            "opponentRank": null,
+            "location": "DeKalb, IL",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/northern-illinois/boxscore/5804",
+              "recap": "https://ubbulls.com/news/2023/10/12/womens-soccer-bulls-take-down-northern-illinois-2-0-on-thursday"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Bowling Green",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/bowling-green/boxscore/5805",
+              "recap": "https://ubbulls.com/news/2023/10/15/womens-soccer-bulls-draw-with-bowling-green-on-senior-day"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Toledo",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/toledo/boxscore/5806",
+              "recap": "https://ubbulls.com/news/2023/10/19/womens-soccer-bulls-dominant-in-3-0-win-over-toledo"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Western Michigan",
+            "opponentRank": null,
+            "location": "Kalamazoo, MI",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/western-michigan/boxscore/5807",
+              "recap": "https://ubbulls.com/news/2023/10/22/womens-soccer-bulls-fall-at-western-michigan-on-sunday"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kent State",
+            "opponentRank": null,
+            "location": "Buffalo, NY",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ubbulls.com/sports/womens-soccer/stats/2023/kent-state/boxscore/5808",
+              "recap": "https://ubbulls.com/news/2023/10/26/womens-soccer-bulls-fall-to-kent-state-in-season-finale"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ubbulls.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:08:36Z"
+    }
+  },
   "commitments": [
     {
       "id": "alexis-kochan-2026",
@@ -117,7 +2918,7 @@
       "city": "Wayne",
       "highSchool": "",
       "college": "buffalo",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +2962,7 @@
       "city": "",
       "highSchool": "",
       "college": "buffalo",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -180,7 +2981,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -196,7 +2997,7 @@
       "city": "Nazareth",
       "highSchool": "",
       "college": "buffalo",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -215,7 +3016,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -231,7 +3032,7 @@
       "city": "Hasbrouck Heights",
       "highSchool": "",
       "college": "buffalo",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -250,7 +3051,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -466,7 +3267,119 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [
+      {
+        "title": "UB Athletics Hall of Fame Class of 2026 Announced",
+        "url": "https://ubbulls.com/news/2026/9/1/football-ub-athletics-hall-of-fame-class-of-2026-announced",
+        "date": "2026-09-01",
+        "recruiting": true
+      },
+      {
+        "title": "Women’s Soccer Adds Pitt Transfer Maya Bright",
+        "url": "https://ubbulls.com/news/2026/5/12/womens-soccer-womens-soccer-adds-pitt-transfer-maya-bright",
+        "date": "2026-05-12",
+        "recruiting": true
+      },
+      {
+        "title": "Women’s Soccer Adds South Alabama Transfer Mae Hunt",
+        "url": "https://ubbulls.com/news/2025/12/12/womens-soccer-womens-soccer-adds-south-alabama-transfer-mae-hunt",
+        "date": "2025-12-12",
+        "recruiting": true
+      },
+      {
+        "title": "Women’s Soccer Signs Pair of Transfers",
+        "url": "https://ubbulls.com/news/2025/12/4/womens-soccer-womens-soccer-signs-pair-of-transfers",
+        "date": "2025-12-04",
+        "recruiting": true
+      },
+      {
+        "title": "Women’s Soccer Announces 2026 Signing Class",
+        "url": "https://ubbulls.com/news/2025/11/12/womens-soccer-womens-soccer-announces-2026-signing-class",
+        "date": "2025-11-12",
+        "recruiting": true
+      }
+    ],
+    "latest": [
+      {
+        "title": "Bulls Defeat Canisius 2-1 on Wednesday",
+        "url": "https://ubbulls.com/news/2026/9/2/womens-soccer-bulls-defeat-canisius-2-1-on-wednesday",
+        "date": "2026-09-02",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Host Crosstown Rival Canisius on Wednesday",
+        "url": "https://ubbulls.com/news/2026/9/1/womens-soccer-bulls-host-crosstown-rival-canisius-on-wednesday",
+        "date": "2026-09-01",
+        "recruiting": false
+      },
+      {
+        "title": "UB Athletics Hall of Fame Class of 2026 Announced",
+        "url": "https://ubbulls.com/news/2026/9/1/football-ub-athletics-hall-of-fame-class-of-2026-announced",
+        "date": "2026-09-01",
+        "recruiting": true
+      },
+      {
+        "title": "Bulls Play to Scoreless Draw With Binghamton on Sunday",
+        "url": "https://ubbulls.com/news/2026/8/30/womens-soccer-bulls-play-to-scoreless-draw-with-binghamton-on-sunday",
+        "date": "2026-08-30",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Battle Binghamton on Sunday",
+        "url": "https://ubbulls.com/news/2026/8/28/womens-soccer-bulls-battle-binghamton-on-sunday",
+        "date": "2026-08-28",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Fall at Arizona State on Sunday",
+        "url": "https://ubbulls.com/news/2026/8/23/womens-soccer-bulls-fall-at-arizona-state-on-sunday",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Drop Contest at Grand Canyon on Thursday",
+        "url": "https://ubbulls.com/news/2026/8/21/womens-soccer-bulls-drop-contest-at-grand-canyon-on-thursday",
+        "date": "2026-08-21",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Head West for Two-Game Swing in Arizona",
+        "url": "https://ubbulls.com/news/2026/8/19/womens-soccer-bulls-head-west-for-two-game-swing-in-arizona",
+        "date": "2026-08-19",
+        "recruiting": false
+      },
+      {
+        "title": "Blatz, Thompson Named MAC Players of the Week",
+        "url": "https://ubbulls.com/news/2026/8/18/womens-soccer-blatz-thompson-named-mac-players-of-the-week",
+        "date": "2026-08-18",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Defeat Mercyhurst 2-0 on Sunday",
+        "url": "https://ubbulls.com/news/2026/8/16/womens-soccer-bulls-defeat-mercyhurst-2-0-on-sunday",
+        "date": "2026-08-16",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Travel to Mercyhurst on Sunday",
+        "url": "https://ubbulls.com/news/2026/8/15/womens-soccer-bulls-travel-to-mercyhurst-on-sunday",
+        "date": "2026-08-15",
+        "recruiting": false
+      },
+      {
+        "title": "Bulls Shutout Niagara in Season Opener",
+        "url": "https://ubbulls.com/news/2026/8/12/womens-soccer-bulls-shutout-niagara-in-season-opener",
+        "date": "2026-08-12",
+        "recruiting": false
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://ubbulls.com/sports/womens-soccer/archives",
+      "asOf": "2026-09-08T01:08:38Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 4,
@@ -474,47 +3387,27 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://buffalobulls.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:23:22Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=43.000942&longitude=-78.789458&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:23:22Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T05:23:27Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:23:22Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:08:19Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

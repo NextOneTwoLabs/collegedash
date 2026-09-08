@@ -69,18 +69,225 @@
       "asOf": "2026-09-07T06:12:17Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.715959,
+    "lon": -73.60078,
+    "timezone": "America/New_York",
+    "elevationM": 24.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00054787",
+      "name": "FARMINGDALE AP",
+      "state": "NY",
+      "distanceKm": 15.6,
+      "elevationM": 24.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 38.9,
+        "tLowF": 25.1,
+        "precipIn": 2.69,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 23.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 41.3,
+        "tLowF": 26.4,
+        "precipIn": 2.03,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 0.0,
+        "daysFreeze": 21.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 48.1,
+        "tLowF": 32.7,
+        "precipIn": 3.46,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 14.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.4,
+        "tLowF": 41.9,
+        "precipIn": 3.61,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 1.9
+      },
+      {
+        "month": "May",
+        "tHighF": 68.1,
+        "tLowF": 51.4,
+        "precipIn": 3.18,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.2,
+        "tLowF": 61.1,
+        "precipIn": 3.45,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 1.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 82.8,
+        "tLowF": 67.8,
+        "precipIn": 3.05,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 4.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.5,
+        "tLowF": 66.7,
+        "precipIn": 3.25,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 2.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 74.8,
+        "tLowF": 59.6,
+        "precipIn": 3.66,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 63.9,
+        "tLowF": 48.3,
+        "precipIn": 3.37,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.4,
+        "tLowF": 38.4,
+        "precipIn": 2.93,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 6.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.2,
+        "tLowF": 30.8,
+        "precipIn": 3.6,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 18.9
+      }
+    ],
+    "annualPrecipIn": 38.3,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 68.4,
+      "avgLowF": 53.2,
+      "precipIn": 13.2,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 82.8°F), coldest Jan (avg low 25.1°F). 38.3 in of rain per year. Fall season (Aug–Nov): highs around 68.4°F, 13.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00054787,USW00094789,USC00305377&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:28Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Simon Riddiough",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/simon-riddiough/2638",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Simon Riddiough",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/simon-riddiough/2638",
+        "social": {}
+      },
+      {
+        "name": "Kelsey Hauser",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/kelsey-hauser/2639",
+        "social": {}
+      },
+      {
+        "name": "Gerry Lucey",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/gerry-lucey/2646",
+        "social": {}
+      },
+      {
+        "name": "Scott Leamey",
+        "title": "Volunteer Assistant Coach Trainee",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/scott-leamey/2643",
+        "social": {}
+      },
+      {
+        "name": "Watson Berreman",
+        "title": "Assistant Strength and Conditioning Coach (WSOC, BASE, WLAX)",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/watson-berreman/2644",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Stephanie Cerniglia",
+        "title": "Assistant Athletic Trainer (WSOC, BASE)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/stephanie-cerniglia/2642",
+        "social": {}
+      },
+      {
+        "name": "Rich Wisor",
+        "title": "Assistant Director of Athletics for Compliance & Student-Athlete Success",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/coaches/rich-wisor/2641",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +305,1322 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gohofstra.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:15:46Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "0",
+        "name": "Lilly Bailey",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Perth, Australia",
+        "highSchool": "Shenton College/Morehead State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/lilly-bailey/17111",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kendyl Peterson",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kingston, MA",
+        "highSchool": "Silver Lake Regional",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/kendyl-peterson/17122",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Olivia Jungkunst",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Farmingdale, NY",
+        "highSchool": "Kellenberg Memorial/Army West Point",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/olivia-jungkunst/17198",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Marika Svensson",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Jaegerspris, Denmark",
+        "highSchool": "Frederikssund Gymnasium/Concord",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/marika-svensson/17124",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Chloe Letocart",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dury, France",
+        "highSchool": "Lycee Louis Thuillier",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/chloe-letocart/17200",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Ellie McGilvray",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Arnold, MD",
+        "highSchool": "McDonogh",
+        "previousSchool": "",
+        "major": "",
+        "club": "Maryland United FC",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/ellie-mcgilvray/17201",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "7",
+        "name": "Ryann Zydor",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oceanside, NY",
+        "highSchool": "Oceanside",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/ryann-zydor/17204",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Maggie Peterson",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Malvern, PA",
+        "highSchool": "Great Valley",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/maggie-peterson/17123",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Carly-Ann Dziewirz",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Châteauguay, Quebec",
+        "highSchool": "Howard S. Billings Regional/Dawson College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/carly-ann-dziewirz/17115",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Amy Meadows",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Cheshire, England",
+        "highSchool": "St. Chad's",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/amy-meadows/17120",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Samantha Brett",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wall Township, NJ",
+        "highSchool": "Wall/Binghamton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/samantha-brett/17193",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Briana Ciccone",
+        "pos": "F/D",
+        "posLabel": "F/D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Garden City, NY",
+        "highSchool": "Garden City",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/briana-ciccone/17192",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Alexia Bromfield",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Grand Cayman, Cayman Islands",
+        "highSchool": "Cayman International School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/alexia-bromfield/17112",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Daniek Tiemersma",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oegstgeest, The Netherlands",
+        "highSchool": "Thorbecke Talentschool Rotterdam",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/daniek-tiemersma/17194",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Ciara Whyte",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Dundalk, Ireland",
+        "highSchool": "St. Louis Dundalk/Dundalk Institute of Technology",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/ciara-whyte/17202",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Audrey Rogan",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Richboro, PA",
+        "highSchool": "Council Rock North",
+        "previousSchool": "",
+        "major": "",
+        "club": "HEX FC",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/audrey-rogan/17196",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "19",
+        "name": "Sasha McTiffin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Manchester, England",
+        "highSchool": "Manchester High School for Girls",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/sasha-mctiffin/17119",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Mia Claro",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bayside, NY",
+        "highSchool": "Kellenberg Memorial",
+        "previousSchool": "",
+        "major": "",
+        "club": "SUSA FC Academy",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/mia-claro/17195",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Hailey Moschitta",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Farmingville, NY",
+        "highSchool": "Sachem East",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/hailey-moschitta/17121",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Jessica Martin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Deer Park, NY",
+        "highSchool": "Deer Park",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/jessica-martin/17118",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Karina Goetter",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Olyphant, PA",
+        "highSchool": "Mid Valley Secondary Center",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/karina-goetter/17197",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Marisa Dambach",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Milford, PA",
+        "highSchool": "Delaware Valley",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/marisa-dambach/17203",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Jadyn Hsu",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Plainview, NY",
+        "highSchool": "Bethpage",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/jadyn-hsu/17116",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Alexia Des Croisselles",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Boucherville, Quebec",
+        "highSchool": "É.S. De Mortagne/Champlain College Saint-Lambert/Jacksonville State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/alexia-des-croisselles/17114",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "34",
+        "name": "Jill Conlon",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Merrick, NY",
+        "highSchool": "Calhoun",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/jill-conlon/17113",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "38",
+        "name": "Jaylene Rondon",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bardonia, NY",
+        "highSchool": "Immaculate Heart Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "New York SC",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/jaylene-rondon/17199",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "40",
+        "name": "Emma Johnson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Redondo Beach, CA",
+        "highSchool": "Redondo Union",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gohofstra.com/sports/womens-soccer/roster/emma-johnson/17117",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "JR": 5,
+      "SR": 5,
+      "SO": 5,
+      "FR": 9,
+      "GR": 3
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "M": 2,
+      "D": 3,
+      "GK": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gohofstra.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:15:46Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Lilly Bailey",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Perth, Australia",
+          "highSchool": "Shenton College/Morehead State"
+        },
+        {
+          "number": "1",
+          "name": "Carly Travers",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Manorville, NY",
+          "highSchool": "Eastport South Manor/Rhode Island"
+        },
+        {
+          "number": "2",
+          "name": "Kendyl Peterson",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Kingston, MA",
+          "highSchool": "Silver Lake Regional"
+        },
+        {
+          "number": "3",
+          "name": "Ava Lanfredi",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "East Greenwich, RI",
+          "highSchool": "East Greenwich"
+        },
+        {
+          "number": "4",
+          "name": "Gabriella Marte",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Middletown, DE",
+          "highSchool": "Caravel Academy"
+        },
+        {
+          "number": "5",
+          "name": "Millie Davies",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Manchester, England",
+          "highSchool": "St. Mary's"
+        },
+        {
+          "number": "6",
+          "name": "Ava Pickard",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Huddersfield, England",
+          "highSchool": "Brooksbank School"
+        },
+        {
+          "number": "7",
+          "name": "Mathilde Braithwaite",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Esbjerg, Denmark",
+          "highSchool": "Vitaskolen and Rybners Gymnasium"
+        },
+        {
+          "number": "8",
+          "name": "Maggie Peterson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Malvern, PA",
+          "highSchool": "Great Valley"
+        },
+        {
+          "number": "9",
+          "name": "Carly-Ann Dziewirz",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Châteauguay, Quebec",
+          "highSchool": "Howard S. Billings Regional/Dawson College"
+        },
+        {
+          "number": "10",
+          "name": "Amy Meadows",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cheshire, England",
+          "highSchool": "St. Chad's"
+        },
+        {
+          "number": "11",
+          "name": "Polly Watson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Manchester, England",
+          "highSchool": "Chorlton/Central Florida"
+        },
+        {
+          "number": "12",
+          "name": "Manon Lebargy",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Lille, France",
+          "highSchool": "Lycée Jean Perrin/MTSU"
+        },
+        {
+          "number": "13",
+          "name": "Alexia Bromfield",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Grand Cayman, Cayman Islands",
+          "highSchool": "Cayman International School"
+        },
+        {
+          "number": "14",
+          "name": "Hailey Moschitta",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Farmingville, NY",
+          "highSchool": "Sachem East"
+        },
+        {
+          "number": "15",
+          "name": "Olivia Pearse",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Seaford, NY",
+          "highSchool": "Seaford"
+        },
+        {
+          "number": "16",
+          "name": "Aimee Hodgson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Carnforth, England",
+          "highSchool": "Lancaster Girls"
+        },
+        {
+          "number": "17",
+          "name": "Thorhildur Thorhallsdottir",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Reykjavik, Iceland",
+          "highSchool": "Verzlunarskoli Islands"
+        },
+        {
+          "number": "19",
+          "name": "Sasha McTiffin",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Manchester, England",
+          "highSchool": "Manchester High School for Girls"
+        },
+        {
+          "number": "22",
+          "name": "Eila Wennerholm",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Örebro, Sweden",
+          "highSchool": "Virginska Idrottsgymnasiet"
+        },
+        {
+          "number": "23",
+          "name": "Jessica Martin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Deer Park, NY",
+          "highSchool": "Deer Park"
+        },
+        {
+          "number": "27",
+          "name": "Marisa Dambach",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Milford, PA",
+          "highSchool": "Delaware Valley"
+        },
+        {
+          "number": "28",
+          "name": "Jadyn Hsu",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Plainview, NY",
+          "highSchool": "Bethpage"
+        },
+        {
+          "number": "33",
+          "name": "Alexia Des Croisselles",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Boucherville, Quebec",
+          "highSchool": "É.S. De Mortagne/Champlain College Saint-Lambert/Jacksonville State"
+        },
+        {
+          "number": "34",
+          "name": "Jill Conlon",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Merrick, NY",
+          "highSchool": "Calhoun"
+        },
+        {
+          "number": "40",
+          "name": "Emma Johnson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Redondo Beach, CA",
+          "highSchool": "Redondo Union"
+        }
+      ],
+      "departed": [
+        "aimee hodgson",
+        "ava lanfredi",
+        "ava pickard",
+        "carly travers",
+        "eila wennerholm",
+        "gabriella marte",
+        "manon lebargy",
+        "mathilde braithwaite",
+        "millie davies",
+        "olivia pearse",
+        "polly watson",
+        "thorhildur thorhallsdottir"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Synne Danielsen",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Kopervik, Norway",
+          "highSchool": "Kopervik Videregående Skole"
+        },
+        {
+          "number": "1",
+          "name": "Carly Travers",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Manorville, NY",
+          "highSchool": "Eastport South Manor/Rhode Island"
+        },
+        {
+          "number": "2",
+          "name": "Kendyl Peterson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kingston, MA",
+          "highSchool": "Silver Lake Regional"
+        },
+        {
+          "number": "3",
+          "name": "Ava Lanfredi",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "East Greenwich, RI",
+          "highSchool": "East Greenwich"
+        },
+        {
+          "number": "4",
+          "name": "Gabriella Marte",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Middletown, DE",
+          "highSchool": "Caravel Academy"
+        },
+        {
+          "number": "5",
+          "name": "Millie Davies",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Manchester, England",
+          "highSchool": "St. Mary's"
+        },
+        {
+          "number": "6",
+          "name": "Thea Bergsten",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Skellefteå, Sweden",
+          "highSchool": "Anderstorpsgymnasiet"
+        },
+        {
+          "number": "7",
+          "name": "Mathilde Braithwaite",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Esbjerg, Denmark",
+          "highSchool": "Vitaskolen and Rybners Gymnasium"
+        },
+        {
+          "number": "8",
+          "name": "Maggie Peterson",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Malvern, PA",
+          "highSchool": "Great Valley"
+        },
+        {
+          "number": "9",
+          "name": "Carly-Ann Dziewirz",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Châteauguay, Quebec",
+          "highSchool": "Howard S. Billings Regional/Dawson College"
+        },
+        {
+          "number": "10",
+          "name": "Amy Meadows",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cheshire, England",
+          "highSchool": "St. Chad's"
+        },
+        {
+          "number": "11",
+          "name": "Matilda Liljefors",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Malmo, Sweden",
+          "highSchool": "Malmo Idrottsgymnasium/Kentucky"
+        },
+        {
+          "number": "12",
+          "name": "Louise Hayden",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Bjäerred, Sweden",
+          "highSchool": "Polhemskolan"
+        },
+        {
+          "number": "13",
+          "name": "Alexia Bromfield",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Grand Cayman, Cayman Islands",
+          "highSchool": "Cayman International School"
+        },
+        {
+          "number": "14",
+          "name": "Hailey Moschitta",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Farmingville, NY",
+          "highSchool": "Sachem East"
+        },
+        {
+          "number": "15",
+          "name": "Olivia Pearse",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Seaford, NY",
+          "highSchool": "Seaford"
+        },
+        {
+          "number": "16",
+          "name": "Aimee Hodgson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Carnforth, England",
+          "highSchool": "Lancaster Girls"
+        },
+        {
+          "number": "17",
+          "name": "Thorhildur Thorhallsdottir",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Reykjavik, Iceland",
+          "highSchool": "Verzlunarskoli Islands"
+        },
+        {
+          "number": "19",
+          "name": "Sasha McTiffin",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Manchester, England",
+          "highSchool": "Manchester High School for Girls"
+        },
+        {
+          "number": "21",
+          "name": "Victoria-Carolina Velazquez",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mooresville, NC",
+          "highSchool": "Trinity Christian Academy"
+        },
+        {
+          "number": "22",
+          "name": "Eila Wennerholm",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Örebro, Sweden",
+          "highSchool": "Virginska Idrottsgymnasiet"
+        },
+        {
+          "number": "24",
+          "name": "Dagny Run Petursdottir",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Kópavogur, Iceland",
+          "highSchool": "Menntaskólinn í Kópavogi"
+        },
+        {
+          "number": "26",
+          "name": "Ava Pickard",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Huddersfield, England",
+          "highSchool": "Brooksbank School"
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Sullivan",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Peoria, AZ",
+          "highSchool": "Sunrise Mountain"
+        },
+        {
+          "number": "30",
+          "name": "Nayelle Heredia",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Plainville, CT",
+          "highSchool": "Plainville/South Carolina State"
+        },
+        {
+          "number": "31",
+          "name": "Riley Ledet",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lutherville, MD",
+          "highSchool": "St. Timothy's"
+        },
+        {
+          "number": "32",
+          "name": "Ellie Gough",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "Bedford, England",
+          "highSchool": "Redborne Upper School/Middle Tennessee State"
+        },
+        {
+          "number": "34",
+          "name": "Jill Conlon",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Merrick, NY",
+          "highSchool": "Calhoun"
+        },
+        {
+          "number": "38",
+          "name": "Emma Cameron",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Rockland, MA",
+          "highSchool": "Rockland"
+        },
+        {
+          "number": "40",
+          "name": "Emma Johnson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Redondo Beach, CA",
+          "highSchool": "Redondo Union"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "1",
+          "name": "Skylar Kuzmich",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Abington, MA",
+          "highSchool": "Whitman Hanson Regional"
+        },
+        {
+          "number": "2",
+          "name": "Kendyl Peterson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kingston, MA",
+          "highSchool": "Silver Lake Regional"
+        },
+        {
+          "number": "3",
+          "name": "Ava Lanfredi",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "East Greenwich, RI",
+          "highSchool": "East Greenwich"
+        },
+        {
+          "number": "4",
+          "name": "Gabriella Marte",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Middletown, DE",
+          "highSchool": "Caravel Academy"
+        },
+        {
+          "number": "5",
+          "name": "Millie Davies",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Manchester, England",
+          "highSchool": "St. Mary's"
+        },
+        {
+          "number": "6",
+          "name": "Thea Bergsten",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Skellefteå, Sweden",
+          "highSchool": "Anderstorpsgymnasiet"
+        },
+        {
+          "number": "7",
+          "name": "Mathilde Braithwaite",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Esbjerg, Denmark",
+          "highSchool": "Vitaskolen and Rybners Gymnasium"
+        },
+        {
+          "number": "8",
+          "name": "Maggie Peterson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Malvern, PA",
+          "highSchool": "Great Valley"
+        },
+        {
+          "number": "9",
+          "name": "Wiktoria Fronc",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "London, England",
+          "highSchool": "St. Angela's Ursuline"
+        },
+        {
+          "number": "10",
+          "name": "Amy Meadows",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cheshire, England",
+          "highSchool": "St. Chad's"
+        },
+        {
+          "number": "11",
+          "name": "Matilda Liljefors",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Malmo, Sweden",
+          "highSchool": "Malmo Idrottsgymnasium/Kentucky"
+        },
+        {
+          "number": "12",
+          "name": "Louise Hayden",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Bjäerred, Sweden",
+          "highSchool": "Polhemskolan"
+        },
+        {
+          "number": "13",
+          "name": "Alexia Bromfield",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Grand Cayman, Cayman Islands",
+          "highSchool": "Cayman International School"
+        },
+        {
+          "number": "14",
+          "name": "Chloe Deters",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Vail, CO",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "15",
+          "name": "Olivia Pearse",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Seaford, NY",
+          "highSchool": "Seaford"
+        },
+        {
+          "number": "16",
+          "name": "Aimee Hodgson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Carnforth, England",
+          "highSchool": "Lancaster Girls"
+        },
+        {
+          "number": "17",
+          "name": "Thorhildur Thorhallsdottir",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Reykjavik, Iceland",
+          "highSchool": "Verzlunarskoli Islands"
+        },
+        {
+          "number": "19",
+          "name": "Sasha McTiffin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Manchester, England",
+          "highSchool": "Manchester High School for Girls"
+        },
+        {
+          "number": "21",
+          "name": "Victoria-Carolina Velazquez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mooresville, NC",
+          "highSchool": "Trinity Christian Academy"
+        },
+        {
+          "number": "22",
+          "name": "Eila Wennerholm",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Örebro, Sweden",
+          "highSchool": "Virginska Idrottsgymnasiet"
+        },
+        {
+          "number": "24",
+          "name": "Dagny Run Petursdottir",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Kópavogur, Iceland",
+          "highSchool": "Menntaskólinn í Kópavogi"
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Sullivan",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Peoria, AZ",
+          "highSchool": "Sunrise Mountain"
+        },
+        {
+          "number": "29",
+          "name": "Avery Holden",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Wallingford, CT",
+          "highSchool": "Mark T. Sheehan"
+        },
+        {
+          "number": "30",
+          "name": "Allison Mendes",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Mineola, NY",
+          "highSchool": "Mineola"
+        },
+        {
+          "number": "31",
+          "name": "Zoe Fuentes",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "El Segundo, CA",
+          "highSchool": "El Segundo"
+        },
+        {
+          "number": "34",
+          "name": "Jill Conlon",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Merrick, NY",
+          "highSchool": "Calhoun"
+        },
+        {
+          "number": "35",
+          "name": "Cailey Welch",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Glen Head, NY",
+          "highSchool": "North Shore"
+        },
+        {
+          "number": "38",
+          "name": "Emma Cameron",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Rockland, MA",
+          "highSchool": "Rockland"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gohofstra.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:15:46Z"
+    }
+  },
   "commitments": [
     {
       "id": "audrey-rogan-2026",
@@ -117,7 +1633,7 @@
       "city": "Richboro",
       "highSchool": "",
       "college": "hofstra",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +1652,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1668,7 @@
       "city": "Arnold",
       "highSchool": "",
       "college": "hofstra",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -171,7 +1687,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -187,7 +1703,7 @@
       "city": "",
       "highSchool": "",
       "college": "hofstra",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -231,7 +1747,7 @@
       "city": "",
       "highSchool": "",
       "college": "hofstra",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -417,41 +1933,27 @@
     "2027": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gohofstra.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:12:52Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.715959&longitude=-73.60078&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York",
-        "at": "2026-09-07T06:12:50Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:12:50Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:15:36Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

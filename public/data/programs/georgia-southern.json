@@ -69,18 +69,241 @@
       "asOf": "2026-09-07T15:54:10Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 32.426153,
+    "lon": -81.784045,
+    "timezone": "America/New_York",
+    "elevationM": 54.9,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USC00091266",
+      "name": "BROOKLET 1 W",
+      "state": "GA",
+      "distanceKm": 11.7,
+      "elevationM": 54.9
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 60.7,
+        "tLowF": 37.5,
+        "precipIn": 3.6,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 10.6
+      },
+      {
+        "month": "Feb",
+        "tHighF": 64.2,
+        "tLowF": 40.2,
+        "precipIn": 3.77,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 5.4
+      },
+      {
+        "month": "Mar",
+        "tHighF": 71.0,
+        "tLowF": 46.0,
+        "precipIn": 3.72,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 2.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 78.5,
+        "tLowF": 52.8,
+        "precipIn": 3.27,
+        "snowIn": null,
+        "wetDays": 4.8,
+        "days90F": 1.1,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "May",
+        "tHighF": 85.9,
+        "tLowF": 61.5,
+        "precipIn": 3.18,
+        "snowIn": null,
+        "wetDays": 5.3,
+        "days90F": 8.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.6,
+        "tLowF": 69.2,
+        "precipIn": 5.62,
+        "snowIn": null,
+        "wetDays": 8.4,
+        "days90F": 17.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 92.8,
+        "tLowF": 71.6,
+        "precipIn": 4.75,
+        "snowIn": null,
+        "wetDays": 8.0,
+        "days90F": 24.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.7,
+        "tLowF": 70.9,
+        "precipIn": 6.33,
+        "snowIn": null,
+        "wetDays": 8.4,
+        "days90F": 19.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 86.8,
+        "tLowF": 66.3,
+        "precipIn": 4.05,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 9.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 79.4,
+        "tLowF": 55.5,
+        "precipIn": 2.64,
+        "snowIn": null,
+        "wetDays": 4.1,
+        "days90F": 0.8,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 70.0,
+        "tLowF": 45.1,
+        "precipIn": 2.66,
+        "snowIn": null,
+        "wetDays": 4.1,
+        "days90F": 0.0,
+        "daysFreeze": 2.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 62.8,
+        "tLowF": 40.0,
+        "precipIn": 3.39,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 7.3
+      }
+    ],
+    "annualPrecipIn": 47.0,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 82.0,
+      "avgLowF": 59.5,
+      "precipIn": 15.7,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 92.8°F), coldest Jan (avg low 37.5°F). 47.0 in of rain per year. Fall season (Aug–Nov): highs around 82.0°F, 15.7 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USC00091266,USC00097528,USC00095811&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:25Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Chris Adams",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/coaches/chris-adams/1783",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Chris Adams",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/coaches/chris-adams/1783",
+        "social": {}
+      },
+      {
+        "name": "Avram Allen",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/coaches/avram-allen/1785",
+        "social": {}
+      },
+      {
+        "name": "Brianna Sroka",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/coaches/brianna-sroka/1784",
+        "social": {}
+      },
+      {
+        "name": "Abbey Brosnihan",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/coaches/abbey-brosnihan/1842",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Cole Eakin",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/staff/cole-eakin/893",
+        "social": {}
+      },
+      {
+        "name": "Rebekah Leger",
+        "title": "Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/staff/rebekah-leger/863",
+        "social": {}
+      },
+      {
+        "name": "Hannah Dettmann",
+        "title": "Strength & Conditioning",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/staff/hannah-dettmann/869",
+        "social": {}
+      },
+      {
+        "name": "Skylar Clement",
+        "title": "Academic Advisor",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/staff/skylar-clement/825",
+        "social": {}
+      },
+      {
+        "name": "Chad Jackson",
+        "title": "Athletics Communications",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/staff/chad-jackson/830",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +321,2841 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gseagles.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:23:06Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "5-2-3",
+      "wins": 5,
+      "losses": 2,
+      "ties": 3,
+      "inProgress": true,
+      "gamesPlayed": 10,
+      "headCoach": "Chris Adams"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "3-11-6",
+      "wins": 3,
+      "losses": 11,
+      "ties": 6,
+      "confRecord": "0-5-5",
+      "rpiRank": 213,
+      "rpi": {
+        "rank": 213,
+        "record": "2-10-6",
+        "through": "2025-12-08",
+        "prevRank": 207,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 213,
+            "record": "2-10-6"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "6-11-3",
+      "wins": 6,
+      "losses": 11,
+      "ties": 3,
+      "confRecord": "3-6-1",
+      "rpiRank": 184,
+      "rpi": {
+        "rank": 184,
+        "sosRank": 227,
+        "balancedRank": 206,
+        "kpiRank": 183,
+        "masseyRank": 197,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "13-6-2",
+      "wins": 13,
+      "losses": 6,
+      "ties": 2,
+      "confRecord": "7-3-0",
+      "rpiRank": 51,
+      "rpi": {
+        "rank": 51,
+        "sosRank": 52,
+        "balancedRank": 72,
+        "kpiRank": 57,
+        "masseyRank": 95,
+        "ncaaSeed": 7,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "0",
+        "name": "Quinn Wilson",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "4th Year",
+        "classCode": "",
+        "hometown": "Beaufort, S.C.",
+        "highSchool": "Beaufort HS",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "None",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/quinn-wilson/7864",
+        "social": {
+          "x": "https://twitter.com/quinnwilson00",
+          "instagram": "https://www.instagram.com/quinnwilson00"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "1",
+        "name": "Addison Daughtry",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Marietta, Ga.",
+        "highSchool": "Pope HS",
+        "previousSchool": "",
+        "major": "Finance",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/addison-daughtry/7854",
+        "social": {
+          "x": "https://twitter.com/addie_daughtry",
+          "instagram": "https://www.instagram.com/addie_e.d"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "2",
+        "name": "Caitlin Conroy",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "4th Year",
+        "classCode": "",
+        "hometown": "Warrington, England",
+        "highSchool": "Penketh High School",
+        "previousSchool": "",
+        "major": "Multimedia Journalism",
+        "club": "Liverpool WFC",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/caitlin-conroy/7852",
+        "social": {
+          "x": "https://twitter.com/caitlinconroy02",
+          "instagram": "https://www.instagram.com/_caitlinconroy"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "3",
+        "name": "Meredith Pugh",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "4th Year",
+        "classCode": "",
+        "hometown": "Gulf Breeze, Fla.",
+        "highSchool": "Gulf Breeze HS",
+        "previousSchool": "",
+        "major": "Marketing",
+        "club": "Pensacola Futbol Club",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/meredith-pugh/7861",
+        "social": {
+          "instagram": "https://www.instagram.com/meredithepugh"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "4",
+        "name": "Maya Zmistowski",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Braselton, Ga.",
+        "highSchool": "Mill Creek HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "Gwinnett Soccer Academy (GSA)",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/maya-zmistowski/7866",
+        "social": {
+          "x": "https://twitter.com/mayaz4_6",
+          "instagram": "https://www.instagram.com/mayazmistowski"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "5",
+        "name": "Kaitlin Cook",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Flowery Branch, Ga.",
+        "highSchool": "Cherokee Bluff HS",
+        "previousSchool": "",
+        "major": "Engineering/Spanish",
+        "club": "Atlanta Fire United",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/kaitlin-cook/7853",
+        "social": {
+          "x": "https://twitter.com/kaitlincook_45",
+          "instagram": "https://www.instagram.com/kaitlincook_45"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "6",
+        "name": "Emma McRae",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "1st Year",
+        "classCode": "",
+        "hometown": "Canton, Ga.",
+        "highSchool": "Creekview HS",
+        "previousSchool": "",
+        "major": "Undecided",
+        "club": "UFA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/emma-mcrae/7867",
+        "social": {
+          "x": "https://twitter.com/emcrae_soccer",
+          "instagram": "https://www.instagram.com/emcrae_soccer"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Kendall Wilson",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th Year",
+        "classCode": "GR",
+        "hometown": "Fort Walton Beach, Fla.",
+        "highSchool": "Choctawhatchee HS",
+        "previousSchool": "",
+        "major": "Psychology",
+        "club": "Concorde Fire South",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/kendall-wilson/7863",
+        "social": {
+          "x": "https://twitter.com/kwilson1379",
+          "instagram": "https://www.instagram.com/kwilson1379"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Maryann Beach",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Roswell, Ga.",
+        "highSchool": "Ole Miss",
+        "previousSchool": "",
+        "major": "Accounting",
+        "club": "Concorde Fire",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/maryann-beach/7846",
+        "social": {
+          "x": "https://twitter.com/beachmaryann9",
+          "instagram": "https://www.instagram.com/maryannbeachh"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "9",
+        "name": "Aaliyah Mohammed",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Lawrenceville, Ga.",
+        "highSchool": "Dacula HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/aaliyah-mohammed/7859",
+        "social": {
+          "instagram": "https://www.instagram.com/Aaliyah.mohammedd"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "10",
+        "name": "Natalie Heckathorn",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Evans, Ga.",
+        "highSchool": "Greenbrier HS",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "Bulls Soccer Club",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/natalie-heckathorn/7858",
+        "social": {
+          "x": "https://twitter.com/natheckathorn25",
+          "instagram": "https://www.instagram.com/natalie.heckathorn"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "11",
+        "name": "Emma Chapman",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Decatur, Ga.",
+        "highSchool": "Georgia State",
+        "previousSchool": "",
+        "major": "Economics",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/emma-chapman/7849",
+        "social": {
+          "instagram": "https://www.instagram.com/emmachapmann_"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Hailey Esser",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Holly Springs, N.C.",
+        "highSchool": "Middle Creek HS",
+        "previousSchool": "",
+        "major": "Marketing",
+        "club": "North Carolina FC Youth",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/hailey-esser/7855",
+        "social": {
+          "x": "https://twitter.com/Hailey_Esser",
+          "instagram": "https://www.instagram.com/Hailey.esser"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Kelly Walsh",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Alpharetta, Ga.",
+        "highSchool": "Lambert HS",
+        "previousSchool": "",
+        "major": "Marketing",
+        "club": "UFA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/kelly-walsh/7862",
+        "social": {
+          "x": "https://twitter.com/walsh_kel33862",
+          "instagram": "https://www.instagram.com/kelly_walsh04"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "14",
+        "name": "Abby Sealy",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "1st Year",
+        "classCode": "",
+        "hometown": "Rolesville, N.C.",
+        "highSchool": "Wake Forest HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "NCFC",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/abby-sealy/7868",
+        "social": {
+          "x": "https://twitter.com/abbysealy2026",
+          "instagram": "https://www.instagram.com/abby_elizabeth11"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Paisley Cathey",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Cleveland, Ga.",
+        "highSchool": "Habersham Central HS",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "UFA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/paisley-cathey/7848",
+        "social": {
+          "x": "https://twitter.com/PaisleyCathey25",
+          "instagram": "https://www.instagram.com/paisleyy.catheyy"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "16",
+        "name": "Libby Wooffindin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Featherstone, England",
+        "highSchool": "Loughborough",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "Leicester City WFC",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/libby-wooffindin/7865",
+        "social": {
+          "x": "https://twitter.com/libbywooffindin",
+          "instagram": "https://www.instagram.com/libbywooffindin"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "17",
+        "name": "Kira Kim",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'1\"",
+        "heightIn": 61,
+        "classLabel": "1st Year",
+        "classCode": "",
+        "hometown": "Cumming, Ga.",
+        "highSchool": "Forsyth Central HS",
+        "previousSchool": "",
+        "major": "Finance",
+        "club": "Concorde Fire SC",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/kira-kim/7869",
+        "social": {
+          "instagram": "https://www.instagram.com/kira.kim17"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Olivia Golden",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Peachtree City, Ga.",
+        "highSchool": "McIntosh HS",
+        "previousSchool": "",
+        "major": "Mechanical Engineering",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/olivia-golden/7857",
+        "social": {
+          "x": "https://twitter.com/olivia_golden18",
+          "instagram": "https://www.instagram.com/olivia.goldennnn"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "19",
+        "name": "Claire Casey",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Williamston, Mich.",
+        "highSchool": "Williamston HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "Michigan Jaguars",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/claire-casey/7847",
+        "social": {
+          "x": "https://twitter.com/Clairecasey2024",
+          "instagram": "https://www.instagram.com/clairecasey10"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "20",
+        "name": "Addison Comer",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "4th Year",
+        "classCode": "",
+        "hometown": "Jackson, Miss.",
+        "highSchool": "Jackson Academy",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "Mississippi Rush United",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/addison-comer/7850",
+        "social": {
+          "x": "https://twitter.com/addison_comer27",
+          "instagram": "https://www.instagram.com/addison_comer"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Lauren Connelly",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "4th Year",
+        "classCode": "",
+        "hometown": "Roswell, Ga.",
+        "highSchool": "Roswell HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "Roswell Santos",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/lauren-connelly/7851",
+        "social": {
+          "instagram": "https://www.instagram.com/Laurenconnellyyy"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "24",
+        "name": "Keeva Mitchell",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "1st Year",
+        "classCode": "",
+        "hometown": "Suwanee, Ga.",
+        "highSchool": "Lambert HS",
+        "previousSchool": "",
+        "major": "Undecided",
+        "club": "Concorde Fire",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/keeva-mitchell/7870",
+        "social": {
+          "instagram": "https://www.instagram.com/keevamitchell_"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "25",
+        "name": "Peyton Free",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "3rd Year",
+        "classCode": "",
+        "hometown": "Madison, Ala.",
+        "highSchool": "Bob Jones HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "Alabama FC",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/peyton-free/7856",
+        "social": {
+          "x": "https://twitter.com/Peytonrfree",
+          "instagram": "https://www.instagram.com/Peytonrfree"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "28",
+        "name": "Katie Oakley",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "5th Year",
+        "classCode": "GR",
+        "hometown": "Covington, Ga.",
+        "highSchool": "Eastside HS",
+        "previousSchool": "",
+        "major": "Mechanical Engineering",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/katie-oakley/7860",
+        "social": {
+          "instagram": "https://www.instagram.com/katie_oakley28"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "29",
+        "name": "Anna Braziunas",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "1st Year",
+        "classCode": "",
+        "hometown": "Lilburn, Ga.",
+        "highSchool": "Parkview HS",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "GSA",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/anna-braziunas/7871",
+        "social": {
+          "x": "https://twitter.com/annabraziunas",
+          "instagram": "https://www.instagram.com/annabraz.07"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "33",
+        "name": "Scarlett Hirschy",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "2nd Year",
+        "classCode": "",
+        "hometown": "Canton, Ga.",
+        "highSchool": "Young Harris",
+        "previousSchool": "",
+        "major": "Exercise Science",
+        "club": "Georgia Impact",
+        "bioUrl": "https://gseagles.com/sports/womens-soccer/roster/scarlett-hirschy/7872",
+        "social": {
+          "instagram": "https://www.instagram.com/scarletth3317"
+        },
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "?": 25,
+      "GR": 2
+    },
+    "graduatingByPos": {
+      "M": 1,
+      "GK": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gseagles.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:23:06Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Quinn Wilson",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Beaufort, S.C.",
+          "highSchool": "Beaufort HS"
+        },
+        {
+          "number": "1",
+          "name": "Addison Daughtry",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Marietta, Ga.",
+          "highSchool": "Pope HS"
+        },
+        {
+          "number": "2",
+          "name": "Caitlin Conroy",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Warrington, England",
+          "highSchool": "Penketh High School"
+        },
+        {
+          "number": "3",
+          "name": "Meredith Pugh",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Gulf Breeze, Fla.",
+          "highSchool": "Gulf Breeze HS"
+        },
+        {
+          "number": "4",
+          "name": "Maya Zmistowski",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Braselton, Ga.",
+          "highSchool": "Mill Creek HS"
+        },
+        {
+          "number": "5",
+          "name": "Kaitlin Cook",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Flowery Branch, Ga.",
+          "highSchool": "Cherokee Bluff HS"
+        },
+        {
+          "number": "6",
+          "name": "Bri Conley",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Midland, Ga.",
+          "highSchool": "Northside HS"
+        },
+        {
+          "number": "7",
+          "name": "Kendall Wilson",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Fort Walton Beach, Fla.",
+          "highSchool": "Choctawhatchee HS"
+        },
+        {
+          "number": "8",
+          "name": "Maryann Beach",
+          "pos": "D/M",
+          "classCode": "R-FR",
+          "hometown": "Roswell, Ga.",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "9",
+          "name": "Aaliyah Mohammed",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lawrenceville, Ga.",
+          "highSchool": "Dacula HS"
+        },
+        {
+          "number": "10",
+          "name": "Natalie Heckathorn",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Evans, Ga.",
+          "highSchool": "Greenbrier HS"
+        },
+        {
+          "number": "11",
+          "name": "Emma Chapman",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Decatur, Ga.",
+          "highSchool": "Georgia State"
+        },
+        {
+          "number": "12",
+          "name": "Hailey Esser",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Holly Springs, N.C.",
+          "highSchool": "Middle Creek HS"
+        },
+        {
+          "number": "13",
+          "name": "Kelly Walsh",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Alpharetta, Ga.",
+          "highSchool": "Lambert HS"
+        },
+        {
+          "number": "14",
+          "name": "Carley Borgelt",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Buford HS"
+        },
+        {
+          "number": "15",
+          "name": "Paisley Cathey",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cleveland, Ga.",
+          "highSchool": "Habersham Central HS"
+        },
+        {
+          "number": "16",
+          "name": "Libby Wooffindin",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Featherstone, England",
+          "highSchool": "Loughborough"
+        },
+        {
+          "number": "18",
+          "name": "Olivia Golden",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Peachtree City, Ga.",
+          "highSchool": "McIntosh HS"
+        },
+        {
+          "number": "19",
+          "name": "Claire Casey",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Williamston, Mich.",
+          "highSchool": "Williamston HS"
+        },
+        {
+          "number": "20",
+          "name": "Addison Comer",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Jackson, Miss.",
+          "highSchool": "Jackson Academy"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Connelly",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Roswell, Ga.",
+          "highSchool": "Roswell HS"
+        },
+        {
+          "number": "23",
+          "name": "Alixandria Fletcher",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saint John's, Fla.",
+          "highSchool": "Bartram Trail HS"
+        },
+        {
+          "number": "24",
+          "name": "Erin Wilkins",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Tacoma, Wash.",
+          "highSchool": "Bellarmine Preparatory"
+        },
+        {
+          "number": "25",
+          "name": "Peyton Free",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Madison, Ala.",
+          "highSchool": "Bob Jones HS"
+        },
+        {
+          "number": "28",
+          "name": "Katie Oakley",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Covington, Ga.",
+          "highSchool": "Eastside HS"
+        },
+        {
+          "number": "34",
+          "name": "Mia Glisson",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Milledgeville, Ga.",
+          "highSchool": "John Milledge Academy"
+        }
+      ],
+      "departed": [
+        "alixandria fletcher",
+        "bri conley",
+        "carley borgelt",
+        "erin wilkins",
+        "mia glisson"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Quinn Wilson",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Beaufort, S.C.",
+          "highSchool": "Beaufort HS"
+        },
+        {
+          "number": "2",
+          "name": "Caitlin Conroy",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Warrington, England",
+          "highSchool": "Penketh High School"
+        },
+        {
+          "number": "3",
+          "name": "Meredith Pugh",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gulf Breeze, Fla.",
+          "highSchool": "Gulf Breeze HS"
+        },
+        {
+          "number": "4",
+          "name": "Maya Zmistowski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Braselton, Ga.",
+          "highSchool": "Mill Creek HS"
+        },
+        {
+          "number": "5",
+          "name": "Kaitlin Cook",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Flowery Branch, Ga.",
+          "highSchool": "Cherokee Bluff HS"
+        },
+        {
+          "number": "6",
+          "name": "Bri Conley",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Midland, Ga.",
+          "highSchool": "Northside HS"
+        },
+        {
+          "number": "7",
+          "name": "Kendall Wilson",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Fort Walton Beach, Fla.",
+          "highSchool": "Choctawhatchee HS"
+        },
+        {
+          "number": "8",
+          "name": "Ellie McIntyre",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Buford, Ga.",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "9",
+          "name": "Millie Perry",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Warrington, England",
+          "highSchool": "Great Sankey HS"
+        },
+        {
+          "number": "10",
+          "name": "Faith Phillips",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "McDonough, Ga.",
+          "highSchool": "UAB"
+        },
+        {
+          "number": "11",
+          "name": "Kyleigh Drew",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Gainesville, Ga.",
+          "highSchool": "Chestatee HS"
+        },
+        {
+          "number": "12",
+          "name": "Hailey Esser",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Holly Springs, N.C.",
+          "highSchool": "Middle Creek HS"
+        },
+        {
+          "number": "13",
+          "name": "Smith Cathey",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Madison, Ga.",
+          "highSchool": "Paragon Academy"
+        },
+        {
+          "number": "14",
+          "name": "Carley Borgelt",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Buford HS"
+        },
+        {
+          "number": "16",
+          "name": "Libby Wooffindin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Featherstone, England",
+          "highSchool": "Loughborough"
+        },
+        {
+          "number": "17",
+          "name": "Gwenna Townsend",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Bluffton, S.C.",
+          "highSchool": "Bluffton HS"
+        },
+        {
+          "number": "18",
+          "name": "Olivia Golden",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Peachtree City, Ga.",
+          "highSchool": "McIntosh HS"
+        },
+        {
+          "number": "19",
+          "name": "Claire Casey",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Williamston, Mich.",
+          "highSchool": "Williamston HS"
+        },
+        {
+          "number": "20",
+          "name": "Addison Comer",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Jackson, Miss.",
+          "highSchool": "Jackson Academy"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Connelly",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Roswell, Ga.",
+          "highSchool": "Roswell HS"
+        },
+        {
+          "number": "23",
+          "name": "Larsyn Reid",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Flowery Branch, Ga.",
+          "highSchool": "Flowery Branch HS"
+        },
+        {
+          "number": "24",
+          "name": "Erin Wilkins",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Tacoma, Wash.",
+          "highSchool": "Bellarmine Preparatory"
+        },
+        {
+          "number": "25",
+          "name": "Peyton Free",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Madison, Ala.",
+          "highSchool": "Bob Jones HS"
+        },
+        {
+          "number": "27",
+          "name": "Maya Zovko",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Waite Hill, Ohio",
+          "highSchool": "Kirtland HS"
+        },
+        {
+          "number": "28",
+          "name": "Katie Oakley",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Covington, Ga.",
+          "highSchool": "Eastside HS"
+        },
+        {
+          "number": "29",
+          "name": "Anna Wheatley",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Madison, Miss.",
+          "highSchool": "Madison Central HS"
+        },
+        {
+          "number": "30",
+          "name": "Ansleigh Crenshaw",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Savannah, Ga.",
+          "highSchool": "Palm Beach Atlantic"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Quinn Wilson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Beaufort, S.C.",
+          "highSchool": "Beaufort HS"
+        },
+        {
+          "number": "1",
+          "name": "Michaela Mikko",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Newnan, Ga.",
+          "highSchool": "The Heritage School"
+        },
+        {
+          "number": "2",
+          "name": "Caitlin Conroy",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Warrington, England",
+          "highSchool": "Penketh High School"
+        },
+        {
+          "number": "3",
+          "name": "Kamryn Nobles",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Augusta, Ga.",
+          "highSchool": "Coastal Carolina"
+        },
+        {
+          "number": "4",
+          "name": "Megan Przybysz",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Ada, Michigan",
+          "highSchool": "Forest Hills Eastern HS"
+        },
+        {
+          "number": "5",
+          "name": "Millie Perry",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Warrington, England",
+          "highSchool": "Great Sankey HS"
+        },
+        {
+          "number": "6",
+          "name": "Bri Conley",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Midland, Ga.",
+          "highSchool": "Northside HS"
+        },
+        {
+          "number": "7",
+          "name": "Kendall Wilson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fort Walton Beach, Fla.",
+          "highSchool": "Choctawhatchee HS"
+        },
+        {
+          "number": "8",
+          "name": "Ellie McIntyre",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Buford, Ga.",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "9",
+          "name": "Elis Nemtsov",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Bradford, Ontario",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "10",
+          "name": "Faith Phillips",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "McDonough, Ga.",
+          "highSchool": "UAB"
+        },
+        {
+          "number": "11",
+          "name": "Kyleigh Drew",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Gainesville, Ga.",
+          "highSchool": "Chestatee HS"
+        },
+        {
+          "number": "12",
+          "name": "Simone Timm",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Toronto, Ontario",
+          "highSchool": "Newtonbrook Secondary School"
+        },
+        {
+          "number": "13",
+          "name": "Smith Cathey",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Madison, Ga.",
+          "highSchool": "Paragon Academy"
+        },
+        {
+          "number": "14",
+          "name": "Carley Borgelt",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Buford HS"
+        },
+        {
+          "number": "15",
+          "name": "Emma Armstrong",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Cumming, Ga.",
+          "highSchool": "West Forsyth HS"
+        },
+        {
+          "number": "16",
+          "name": "Deborah Ruiz",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Loganville, Ga.",
+          "highSchool": "Loganville HS"
+        },
+        {
+          "number": "17",
+          "name": "Gwenna Townsend",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bluffton, S.C.",
+          "highSchool": "Bluffton HS"
+        },
+        {
+          "number": "19",
+          "name": "Meredith Pugh",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gulf Breeze, Fla.",
+          "highSchool": "Gulf Breeze HS"
+        },
+        {
+          "number": "20",
+          "name": "Addison Comer",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Jackson, Miss.",
+          "highSchool": "Jackson Academy"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Connelly",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Roswell, Ga.",
+          "highSchool": "Roswell HS"
+        },
+        {
+          "number": "22",
+          "name": "Jhenesis Ellerbe",
+          "pos": "D/M",
+          "classCode": "GR",
+          "hometown": "Powder Springs, Ga.",
+          "highSchool": "Young Harris"
+        },
+        {
+          "number": "23",
+          "name": "Larsyn Reid",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Flowery Branch, Ga.",
+          "highSchool": "Flowery Branch HS"
+        },
+        {
+          "number": "24",
+          "name": "Erin Wilkins",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Tacoma, Wash.",
+          "highSchool": "Bellarmine Preparatory"
+        },
+        {
+          "number": "25",
+          "name": "Sade Heinrichs",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Monchengladbach, Germany",
+          "highSchool": "Gymnasium an der Gartenstrasse"
+        },
+        {
+          "number": "26",
+          "name": "Isabel Kopp",
+          "pos": "D/M",
+          "classCode": "GR",
+          "hometown": "Haarlem, The Netherlands",
+          "highSchool": "Tyler JC"
+        },
+        {
+          "number": "27",
+          "name": "Maya Zovko",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Waite Hill, Ohio",
+          "highSchool": "Kirtland HS"
+        },
+        {
+          "number": "28",
+          "name": "Katie Oakley",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Covington, Ga.",
+          "highSchool": "Eastside HS"
+        },
+        {
+          "number": "29",
+          "name": "Anna Wheatley",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Madison, Miss.",
+          "highSchool": "Madison Central HS"
+        },
+        {
+          "number": "30",
+          "name": "Ansleigh Crenshaw",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Savannah, Ga.",
+          "highSchool": "Palm Beach Atlantic"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 5,
+      "losses": 2,
+      "ties": 3,
+      "text": "5-2-3",
+      "played": 10,
+      "scheduled": 21,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Wofford",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/wofford-exh/3"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Auburn",
+        "opponentRank": null,
+        "location": "Auburn, AL",
+        "result": "L",
+        "score": "0-3",
+        "links": {
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/auburn-exh/13"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "North Florida",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/north-florida/boxscore/17441",
+          "recap": "https://gseagles.com/news/2026/8/12/womens-soccer-eagles-notch-season-opening-2-1-win-over-north-florida",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/north-florida/4"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "FGCU",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/fgcu/boxscore/17442",
+          "recap": "https://gseagles.com/news/2026/8/16/womens-soccer-eagles-blank-fgcu-2-0-on-sunday",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/fgcu/71"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Jacksonville",
+        "opponentRank": null,
+        "location": "Jacksonville, FL",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/jacksonville/boxscore/17443",
+          "recap": "https://gseagles.com/news/2026/8/20/womens-soccer-eagles-earn-0-0-draw-at-jacksonville-on-thursday",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/jacksonville/17"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UNCW",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/uncw/boxscore/17444",
+          "recap": "https://gseagles.com/news/2026/8/23/womens-soccer-eagles-draw-with-uncw-1-1-on-sunday",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/uncw/128"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Mercer",
+        "opponentRank": null,
+        "location": "Macon, GA",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/mercer/boxscore/17445",
+          "recap": "https://gseagles.com/news/2026/8/28/womens-soccer-eagles-outlast-delays-mercer-in-4-1-win-in-macon",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/mercer/18"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Murray State",
+        "opponentRank": null,
+        "location": "Murray, KY",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/murray-state/boxscore/17446",
+          "recap": "https://gseagles.com/news/2026/8/30/womens-soccer-eagles-match-second-best-start-with-1-0-win-at-murray-state",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/murray-state/324"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Michigan",
+        "opponentRank": null,
+        "location": "Ann Arbor, MI",
+        "result": "L",
+        "score": "0-3",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/michigan/boxscore/17447",
+          "recap": "https://gseagles.com/news/2026/9/3/womens-soccer-michigan-downs-eagles-3-0-on-thursday",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/michigan/1472"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Toledo",
+        "opponentRank": null,
+        "location": "Toledo, OH",
+        "result": "W",
+        "score": "3-2",
+        "links": {
+          "box score": "https://gseagles.com/sports/womens-soccer/stats/2026/toledo/boxscore/17448",
+          "recap": "https://gseagles.com/news/2026/9/6/womens-soccer-braziunas-brace-leads-eagles-past-toledo-3-2-on-sunday",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/toledo/190"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Arkansas State",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/52736198-0905-4587-ac90-c59f8395b521",
+          "live stats": "http://statb.us/b/662108",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/arkansas-state/35"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Georgia State",
+        "opponentRank": null,
+        "location": "Atlanta, Ga.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/aef8c7b7-19b1-4776-a3c3-b303ac49f523",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664557&vislive=geos",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/georgia-state/31"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Coastal Carolina",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/662109",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/coastal-carolina/67"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Marshall",
+        "opponentRank": null,
+        "location": "Huntington, WV",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662965&vislive=geos",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/marshall/233"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "App State",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/662110",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/app-state/11"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "South Alabama",
+        "opponentRank": null,
+        "location": "Mobile, AL",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665849&vislive=geos",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/south-alabama/42"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Old Dominion",
+        "opponentRank": null,
+        "location": "Norfolk, VA",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665570&vislive=geos",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/old-dominion/89"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Troy",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/662105",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/troy/49"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Southern Miss",
+        "opponentRank": null,
+        "location": "Hattiesburg, MS",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666052&vislive=geos",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/southern-miss/187"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "James Madison",
+        "opponentRank": null,
+        "location": "Bo Pitts Field, Statesboro",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/662111",
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/james-madison/63"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Sun Belt Conference Championships",
+        "opponentRank": null,
+        "location": "Foley, Ala.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gseagles.com/sports/wsoc/opponent-history/sun-belt-conference-championships/245"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "3-11-6",
+        "games": [
+          {
+            "date": "2025-08-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Auburn (Exhi.)",
+            "opponentRank": null,
+            "location": "Auburn, AL",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "recap": "https://gseagles.com/news/2025/8/2/womens-soccer-opens-play-with-exhibition-at-auburn",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/auburn-exhi/13"
+            }
+          },
+          {
+            "date": "2025-08-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Wofford (Exhi.)",
+            "opponentRank": null,
+            "location": "Spartanburg, SC",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "recap": "https://gseagles.com/news/2025/8/7/womens-soccer-completes-exhibition-play-with-contest-at-wofford",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/wofford-exhi/3"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Samford",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/samford/boxscore/16888",
+              "recap": "https://gseagles.com/news/2025/8/14/womens-soccer-eagles-open-year-with-big-3-2-win-over-samford",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/samford/6"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Jacksonville",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/jacksonville/boxscore/16889",
+              "recap": "https://gseagles.com/news/2025/8/17/womens-soccer-jacksonville-takes-4-1-win-over-eagles-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/jacksonville/17"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Cullowhee, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/western-carolina/boxscore/16890",
+              "recap": "https://gseagles.com/news/2025/8/21/womens-soccer-catheys-tally-leads-eagles-past-western-carolina-1-0",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/western-carolina/10"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 13 Arkansas",
+            "opponentRank": null,
+            "location": "Fayetteville, AR",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/arkansas/boxscore/16891",
+              "recap": "https://gseagles.com/news/2025/8/24/womens-soccer-eagles-battle-no-13-arkansas-on-sunday-fall-2-0",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/arkansas/225"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNCW",
+            "opponentRank": null,
+            "location": "Wilmington, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/uncw/boxscore/16916",
+              "recap": "https://gseagles.com/news/2025/8/31/womens-soccer-seahawks-edge-eagles-1-0-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/uncw/128"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Jacksonville, FL",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/north-florida/boxscore/16892",
+              "recap": "https://gseagles.com/news/2025/9/4/womens-soccer-ospreys-clip-eagles-3-2-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/north-florida/4"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 2 Tennessee",
+            "opponentRank": null,
+            "location": "Knoxville, TN",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/tennessee/boxscore/16893",
+              "recap": "https://gseagles.com/news/2025/9/7/womens-soccer-eagles-take-no-2-tennessee-to-the-wire-in-1-0-loss",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/tennessee/146"
+            }
+          },
+          {
+            "date": "2025-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Kennesaw, GA",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/kennesaw-state/boxscore/16894",
+              "recap": "https://gseagles.com/news/2025/9/10/womens-soccer-eagles-play-kennesaw-state-to-0-0-draw-on-wednesday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/kennesaw-state/32"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/marshall/boxscore/16895",
+              "recap": "https://gseagles.com/news/2025/9/14/womens-soccer-eagles-open-sun-belt-play-draw-1-1-with-marshall-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/marshall/233"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/texas-state/boxscore/16896",
+              "recap": "https://gseagles.com/news/2025/9/18/womens-soccer-texas-state-slips-past-georgia-southern-1-0-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/texas-state/43"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Harrisonburg, VA",
+            "result": "L",
+            "score": "1-5",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/james-madison/boxscore/16897",
+              "recap": "https://gseagles.com/news/2025/9/21/womens-soccer-second-half-flurry-leads-jmu-past-eagles-5-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/james-madison/63"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Lafayette, LA",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/louisiana/boxscore/16898",
+              "recap": "https://gseagles.com/news/2025/9/28/womens-soccer-draws-louisiana-1-1-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/louisiana/39"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/georgia-state/boxscore/16899",
+              "recap": "https://gseagles.com/news/2025/10/2/womens-soccer-georgia-state-claims-2-1-sun-belt-win-over-eagles-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/georgia-state/31"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Troy, AL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/troy/boxscore/16900",
+              "recap": "https://gseagles.com/news/2025/10/5/womens-soccer-eagles-battle-for-1-1-draw-at-troy-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/troy/49"
+            }
+          },
+          {
+            "date": "2025-10-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/old-dominion/boxscore/16901",
+              "recap": "https://gseagles.com/news/2025/10/11/womens-soccer-odu-strikes-twice-in-second-half-for-2-1-win-over-eagles",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/old-dominion/89"
+            }
+          },
+          {
+            "date": "2025-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Conway, SC",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/coastal-carolina/boxscore/16902",
+              "recap": "https://gseagles.com/news/2025/10/18/womens-soccer-eagles-draw-at-coastal-carolina-2-2-on-saturday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/coastal-carolina/67"
+            }
+          },
+          {
+            "date": "2025-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/ulm/boxscore/16903",
+              "recap": "https://gseagles.com/news/2025/10/24/womens-soccer-eagles-earn-2-2-draw-with-ulm-on-senior-night-friday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/ulm/40"
+            }
+          },
+          {
+            "date": "2025-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Appalachian State",
+            "opponentRank": null,
+            "location": "Boone, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2025/appalachian-state/boxscore/16904",
+              "recap": "https://gseagles.com/news/2025/10/29/womens-soccer-eagles-close-2025-fall-campaign-with-1-0-loss-at-app-state",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/appalachian-state/11"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "6-11-3",
+        "games": [
+          {
+            "date": "2024-08-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida",
+            "opponentRank": null,
+            "location": "Tormenta Stadium, Statesboro",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "recap": "https://gseagles.com/news/2024/8/10/eagles-draw-exhibition-saturday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/florida-exh/21"
+            }
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Hawai'i",
+            "opponentRank": null,
+            "location": "Honolulu, HI",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/hawai-i/boxscore/16430",
+              "recap": "https://gseagles.com/news/2024/8/16/gs-recap-hawaii",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/hawaii/120"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Pepperdine",
+            "opponentRank": null,
+            "location": "Honolulu, HI",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/pepperdine/boxscore/16431",
+              "recap": "https://gseagles.com/news/2024/8/18/wsoc-recap-pepperdine",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/pepperdine/212"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Tormenta Stadium, Statesboro",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/kennesaw-state/boxscore/16432",
+              "recap": "https://gseagles.com/news/2024/8/22/gs-kennesaw-final",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/kennesaw-state/32"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Mercer",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/mercer/boxscore/16433",
+              "recap": "https://gseagles.com/news/2024/8/29/womens-soccer-eagles-draw-mercer-2-2-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/mercer/18"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Furman",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/furman/boxscore/16434",
+              "recap": "https://gseagles.com/news/2024/9/1/ws-furman-2024",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/furman/2"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/north-florida/boxscore/16435",
+              "recap": "https://gseagles.com/news/2024/9/5/ws-northflorida-2024",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/north-florida/4"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Jacksonville State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/jacksonville-state/boxscore/16436",
+              "recap": "https://gseagles.com/news/2024/9/8/ws-jaxstate-recap",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/jacksonville-state/15"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Washington State",
+            "opponentRank": null,
+            "location": "Athens, GA",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/washington-state/boxscore/16437",
+              "recap": "https://gseagles.com/news/2024/9/12/ws-washingtonstate-recap-2024",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/washington-state/307"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Samford",
+            "opponentRank": null,
+            "location": "Birmingham, AL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/samford/boxscore/16438",
+              "recap": "https://gseagles.com/news/2024/9/15/ws-samford-recap",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/samford/6"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Appalachian State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/appalachian-state/boxscore/16439",
+              "recap": "https://gseagles.com/news/2024/9/22/ws-app-recap-2024",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/appalachian-state/11"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "Jonesboro, AR",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/arkansas-state/boxscore/16440",
+              "recap": "https://gseagles.com/news/2024/9/26/womens-soccer-eagles-strike-early-for-2-0-win-at-arkansas-state",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/arkansas-state/35"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/coastal-carolina/boxscore/16441",
+              "recap": "https://gseagles.com/news/2024/10/3/womens-soccer-chanticleers-nip-eagles-2-1-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/coastal-carolina/67"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Huntington, WV",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/marshall/boxscore/16442",
+              "recap": "https://gseagles.com/news/2024/10/6/womens-soccer-opportunistic-eagles-blank-marshall-1-0-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/marshall/233"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Norfolk, VA",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/old-dominion/boxscore/16443",
+              "recap": "https://gseagles.com/news/2024/10/10/womens-soccer-monarchs-tally-early-goal-to-edge-eagles-1-0",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/old-dominion/89"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/james-madison/boxscore/16444",
+              "recap": "https://gseagles.com/news/2024/10/13/womens-soccer-jmu-downs-eagles-3-1-in-kick-cancer-game-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/james-madison/63"
+            }
+          },
+          {
+            "date": "2024-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/south-alabama/boxscore/16445",
+              "recap": "https://gseagles.com/news/2024/10/18/womens-soccer-eagles-notch-key-2-1-win-over-south-alabama-friday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/south-alabama/42"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Atlanta, Ga.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/georgia-state/boxscore/16446",
+              "recap": "https://gseagles.com/news/2024/10/24/womens-soccer-late-goal-sends-panthers-past-eagles-2-1-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/georgia-state/31"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/southern-miss/boxscore/16447",
+              "recap": "https://gseagles.com/news/2024/10/27/womens-soccer-second-half-surge-gives-eagles-a-2-2-draw-with-southern-miss-on-senior-day",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/southern-miss/187"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "San Marcos, TX",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2024/texas-state/boxscore/16448",
+              "recap": "https://gseagles.com/news/2024/10/31/womens-soccer-texas-state-ends-eagles-season-with-3-0-win-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/texas-state/43"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "13-6-2",
+        "games": [
+          {
+            "date": "2023-08-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "recap": "https://gseagles.com/news/2023/8/6/womens-soccer-eagles-and-gators-draw-1-1-in-exhibition-contest-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/florida-exh/21"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "recap": "https://gseagles.com/news/2023/8/12/womens-soccer-eagles-blank-owls-in-final-exhibition-match",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/kennesaw-state-exh/32"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, AL",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/uab/boxscore/14045",
+              "recap": "https://gseagles.com/news/2023/8/17/womens-soccer-eagles-open-season-with-2-0-win-over-blazers",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/uab/72"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Furman",
+            "opponentRank": null,
+            "location": "Greenville, SC",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/furman/boxscore/14046",
+              "recap": "https://gseagles.com/news/2023/8/20/womens-soccer-comeback-falls-short-as-eagles-fall-to-furman-2-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/furman/2"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/north-florida/boxscore/14047",
+              "recap": "https://gseagles.com/news/2023/8/24/womens-soccer-eagles-fly-past-ospreys-in-home-opener-4-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/north-florida/4"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Miami",
+            "opponentRank": null,
+            "location": "Coral Gables, FL",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/miami/boxscore/14048",
+              "recap": "https://gseagles.com/news/2023/8/27/womens-soccer-notches-2-1-win-at-miami-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/miami/123"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "College of Charleston",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/college-of-charleston/boxscore/14049",
+              "recap": "https://gseagles.com/news/2023/9/3/womens-soccer-eagles-win-third-straight-defeat-college-of-charleston-3-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/college-of-charleston/28"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Georgia",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/georgia/boxscore/14050",
+              "recap": "https://gseagles.com/news/2023/9/7/georgia-edges-womens-soccer-1-0-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/georgia/1"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Montana",
+            "opponentRank": null,
+            "location": "Missoula, Mont.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/montana/boxscore/14051",
+              "recap": "https://gseagles.com/news/2023/9/10/womens-soccer-heinrichs-strike-gives-eagles-a-1-0-win-at-montana",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/montana/169"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Mobile, AL",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/south-alabama/boxscore/14053",
+              "recap": "https://gseagles.com/news/2023/9/21/womens-soccer-south-alabama-clips-eagles-2-1-on-thursday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/south-alabama/42"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/old-dominion/boxscore/14054",
+              "recap": "https://gseagles.com/news/2023/9/24/womens-soccer-old-dominion-collects-2-1-win-over-eagles-on-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/old-dominion/89"
+            }
+          },
+          {
+            "date": "2023-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Appalachian State",
+            "opponentRank": null,
+            "location": "Boone, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/appalachian-state/boxscore/14055",
+              "recap": "https://gseagles.com/news/2023/9/29/womens-soccer-mountaineers-hand-eagles-1-0-defeat-on-friday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/appalachian-state/11"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/louisiana/boxscore/14056",
+              "recap": "https://gseagles.com/news/2023/10/5/womens-soccer-second-half-goal-flurry-sends-eagles-past-louisiana-3-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/louisiana/39"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Conway, SC",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/coastal-carolina/boxscore/14057",
+              "recap": "https://gseagles.com/news/2023/10/8/womens-soccer-claims-2-1-win-at-coastal-carolina-sunday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/coastal-carolina/67"
+            }
+          },
+          {
+            "date": "2023-10-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/georgia-state/boxscore/14052",
+              "recap": "https://gseagles.com/news/2023/10/11/womens-soccer-eagles-notch-third-straight-win-defeat-georgia-state-2-1",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/georgia-state/31"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Hattiesburg, MS",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/southern-miss/boxscore/14058",
+              "recap": "https://gseagles.com/news/2023/10/15/womens-soccer-eagles-strike-late-down-southern-miss-2-1-for-fourth-straight-win",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/southern-miss/187"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/marshall/boxscore/14059",
+              "recap": "https://gseagles.com/news/2023/10/19/womens-soccer-first-half-goal-flurry-sends-eagles-to-fifth-straight-win",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/marshall/233"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Harrisonburg, VA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/james-madison/boxscore/14060",
+              "recap": "https://gseagles.com/news/2023/10/22/womens-soccer-eagles-defeat-dukes-2-1-for-sixth-straight-win",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/james-madison/63"
+            }
+          },
+          {
+            "date": "2023-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Bo Pitts Field, Statesboro",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/troy/boxscore/14061",
+              "recap": "https://gseagles.com/news/2023/10/25/womens-soccer-eagles-persevere-on-senior-night-clip-troy-3-2",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/troy/49"
+            }
+          },
+          {
+            "date": "2023-11-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Seed ULM",
+            "opponentRank": 6,
+            "location": "Foley, Ala.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/ulm/boxscore/16123",
+              "recap": "https://gseagles.com/news/2023/11/1/womens-soccer-eagles-advance-past-ulm-into-sun-belt-tournament-semifinals",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/ulm/40"
+            }
+          },
+          {
+            "date": "2023-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Seed Old Dominion",
+            "opponentRank": 2,
+            "location": "Foley, Ala.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gseagles.com/sports/womens-soccer/stats/2023/old-dominion/boxscore/16129",
+              "recap": "https://gseagles.com/news/2023/11/3/womens-soccer-eagles-fall-to-monarchs-in-sun-belt-semifinals-friday",
+              "history": "https://gseagles.com/sports/wsoc/opponent-history/old-dominion/89"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gseagles.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:23:06Z"
+    }
+  },
   "commitments": [
     {
       "id": "abby-sealy-2026",
@@ -117,7 +3168,7 @@
       "city": "Wake Forest",
       "highSchool": "",
       "college": "georgia-southern",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +3187,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +3203,7 @@
       "city": "",
       "highSchool": "",
       "college": "georgia-southern",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +3222,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -351,41 +3402,27 @@
     "2027": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gseagles.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T15:56:45Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=32.426153&longitude=-81.784045&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T15:56:43Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T15:56:43Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:22:53Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

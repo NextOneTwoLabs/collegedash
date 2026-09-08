@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T18:27:04Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 42.863832,
+    "lon": -112.432312,
+    "timezone": "America/Boise",
+    "elevationM": 1364.9,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00024156",
+      "name": "POCATELLO RGNL AP",
+      "state": "ID",
+      "distanceKm": 12.9,
+      "elevationM": 1364.9
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 34.2,
+        "tLowF": 17.1,
+        "precipIn": 1.11,
+        "snowIn": 8.5,
+        "wetDays": 3.8,
+        "days90F": 0.0,
+        "daysFreeze": 29.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 39.0,
+        "tLowF": 20.3,
+        "precipIn": 0.97,
+        "snowIn": 7.6,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 24.8
+      },
+      {
+        "month": "Mar",
+        "tHighF": 50.5,
+        "tLowF": 27.8,
+        "precipIn": 1.21,
+        "snowIn": 4.1,
+        "wetDays": 3.7,
+        "days90F": 0.0,
+        "daysFreeze": 23.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.6,
+        "tLowF": 32.8,
+        "precipIn": 1.2,
+        "snowIn": 2.6,
+        "wetDays": 3.9,
+        "days90F": 0.0,
+        "daysFreeze": 14.4
+      },
+      {
+        "month": "May",
+        "tHighF": 68.7,
+        "tLowF": 39.7,
+        "precipIn": 1.4,
+        "snowIn": 0.4,
+        "wetDays": 4.4,
+        "days90F": 0.4,
+        "daysFreeze": 4.4
+      },
+      {
+        "month": "Jun",
+        "tHighF": 78.5,
+        "tLowF": 46.0,
+        "precipIn": 0.93,
+        "snowIn": 0.0,
+        "wetDays": 2.5,
+        "days90F": 4.0,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Jul",
+        "tHighF": 89.3,
+        "tLowF": 52.3,
+        "precipIn": 0.51,
+        "snowIn": 0.0,
+        "wetDays": 1.7,
+        "days90F": 16.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 88.1,
+        "tLowF": 50.5,
+        "precipIn": 0.53,
+        "snowIn": 0.0,
+        "wetDays": 1.9,
+        "days90F": 15.3,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Sep",
+        "tHighF": 77.2,
+        "tLowF": 42.2,
+        "precipIn": 0.89,
+        "snowIn": 0.0,
+        "wetDays": 2.7,
+        "days90F": 2.6,
+        "daysFreeze": 2.9
+      },
+      {
+        "month": "Oct",
+        "tHighF": 61.5,
+        "tLowF": 32.8,
+        "precipIn": 0.99,
+        "snowIn": 1.2,
+        "wetDays": 3.3,
+        "days90F": 0.1,
+        "daysFreeze": 14.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 46.1,
+        "tLowF": 23.8,
+        "precipIn": 0.95,
+        "snowIn": 4.0,
+        "wetDays": 3.0,
+        "days90F": 0.0,
+        "daysFreeze": 25.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 34.3,
+        "tLowF": 17.3,
+        "precipIn": 1.13,
+        "snowIn": 10.1,
+        "wetDays": 3.6,
+        "days90F": 0.0,
+        "daysFreeze": 28.5
+      }
+    ],
+    "annualPrecipIn": 11.8,
+    "annualSnowIn": 38.5,
+    "fallSeason": {
+      "avgHighF": 68.2,
+      "avgLowF": 37.3,
+      "precipIn": 3.4,
+      "wetDays": 11.0
+    },
+    "summary": "Hottest month Jul (avg high 89.3°F), coldest Jan (avg low 17.1°F). 11.8 in of rain per year, 38.5 in of snow. Fall season (Aug–Nov): highs around 68.2°F, 3.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00024156,USC00107210,USC00107208&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:36Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,8 +228,42 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Dustin Downey",
+        "title": "Head Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/coaches/dustin-downey/1842",
+        "social": {}
+      },
+      {
+        "name": "Summer Miles",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/coaches/summer-miles/1882",
+        "social": {}
+      },
+      {
+        "name": "Makena Honda",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/coaches/makena-honda/1846",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Emma Hrivnak",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/staff/emma-hrivnak/182",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +281,1345 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://www.isubengals.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:27:30Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "0",
+        "name": "Talon Bennett",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Tempe, AZ",
+        "highSchool": "Yavapai College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/talon-bennett/9492",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Hannah Wieler",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Simi Valley, CA",
+        "highSchool": "LAFC So Cal ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "LAFC So Cal Youth",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/hannah-wieler/9329",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Saydree Cooke",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Pocatello, ID",
+        "highSchool": "Weber State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/saydree-cooke/9313",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Lucia Stritzke",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Berlin, Germany",
+        "highSchool": "Turbine Potsdam",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/lucia-stritzke/9513",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Devree Bell",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Pocatello, ID",
+        "highSchool": "CGA Academy SC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/devree-bell/9493",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Emma Casenave",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Razac sur l’Isle, France",
+        "highSchool": "Garden City Community College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/emma-casenave/9311",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Laura Gabona",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dunaharaszti, Hungary",
+        "highSchool": "Szekszard UFC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/laura-gabona/9494",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Bella Nunez",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Long Beach, CA",
+        "highSchool": "Slammers FC",
+        "previousSchool": "",
+        "major": "",
+        "club": "Slammers FC",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/bella-nunez/9495",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "7",
+        "name": "Kellie Christensen",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Pocatello, ID",
+        "highSchool": "College of Southern Idaho",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/kellie-christensen/9496",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Lena Bonnard",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Malbuisson, France",
+        "highSchool": "Yverdon Sport FC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/lena-bonnard/9497",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Laila Magaña Carter",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Santa Fe, NM",
+        "highSchool": "University of New Mexico",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/laila-maga-a-carter/9498",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Faith Hughes",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Anchorage, AK",
+        "highSchool": "Cook Inlet SC Elite",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/faith-hughes/9321",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Syleena Hogan",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Poulsbo, WA",
+        "highSchool": "Pacific Northwest Football Club",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/syleena-hogan/9499",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Quincie Knudson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Layton, UT",
+        "highSchool": "Snow College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/quincie-knudson/9500",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Amanda Brayton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "-",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Diego, CA",
+        "highSchool": "San Diego Surf ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "San Diego Surf",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/amanda-brayton/9501",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Nolyn Cromie",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Boise, ID",
+        "highSchool": "Boise Thorns ECNL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/nolyn-cromie/9315",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Lacie Poll",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Morgan, UT",
+        "highSchool": "Wasatch SC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/lacie-poll/9323",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Victoria Choren",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Broomfield, CO",
+        "highSchool": "Broomfield GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/victoria-choren/9312",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Samantha Fenske",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Petaluma, CA",
+        "highSchool": "Saint Mary's College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/samantha-fenske/9319",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Samantha Esparza",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Huntington Beach, CA",
+        "highSchool": "Pateadores ECRL",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/samantha-esparza/9318",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Stephanie Roper",
+        "pos": "F",
+        "posLabel": "FWD",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lehi, UT",
+        "highSchool": "Southern Utah University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/stephanie-roper/9325",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Parker Sullivan",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Anchorage, AK",
+        "highSchool": "Cook Inlet SC Elite",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/parker-sullivan/9327",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Daphne Egelhoff",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Henderson, NV",
+        "highSchool": "Albion SC LV GA",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/daphne-egelhoff/9316",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Gracie East",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Ogden, UT",
+        "highSchool": "Westminster",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/gracie-east/9502",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Aliya Garrett",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6-1",
+        "heightIn": 73,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Canmore, Alberta, Canada",
+        "highSchool": "University of San Diego",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/aliya-garrett/9503",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Sofia Wolf",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Gerstetten, Germany",
+        "highSchool": "1. FC Donzdorf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.isubengals.com/sports/womens-soccer/roster/sofia-wolf/9331",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 5,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "JR": 2,
+      "SO": 9,
+      "GR": 2,
+      "FR": 7,
+      "SR": 6
+    },
+    "graduatingByPos": {
+      "M": 2,
+      "D": 3,
+      "F": 2,
+      "GK": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.isubengals.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:27:30Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "00",
+          "name": "Hannah Wieler",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Simi Valley, CA",
+          "highSchool": "LAFC So Cal ECNL"
+        },
+        {
+          "number": "1",
+          "name": "Saydree Cooke",
+          "pos": "M/F",
+          "classCode": "R-JR",
+          "hometown": "Pocatello, ID",
+          "highSchool": "Weber State"
+        },
+        {
+          "number": "2",
+          "name": "Camille Kollar",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Littleton, CO",
+          "highSchool": "Colorado Rush GA"
+        },
+        {
+          "number": "3",
+          "name": "Emma Casenave",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Razac sur l’Isle, France",
+          "highSchool": "Garden City Community College"
+        },
+        {
+          "number": "4",
+          "name": "Mady Za",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fairfax, VA",
+          "highSchool": "University of South Dakota"
+        },
+        {
+          "number": "5",
+          "name": "Payton Reed",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Arvada, CO",
+          "highSchool": "Broomfield SC GA"
+        },
+        {
+          "number": "6",
+          "name": "Isabella Winton",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Englewood, CO",
+          "highSchool": "Colorado Rush GA"
+        },
+        {
+          "number": "7",
+          "name": "Emily Frost",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Long Beach, CA",
+          "highSchool": "Slammers FC"
+        },
+        {
+          "number": "8",
+          "name": "Laney Erickson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Highlands Ranch, CO",
+          "highSchool": "Real Colorado ECNL"
+        },
+        {
+          "number": "9",
+          "name": "Madelyn McQueen",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Twins Falls, ID",
+          "highSchool": "Snow College"
+        },
+        {
+          "number": "10",
+          "name": "Faith Hughes",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Anchorage, AK",
+          "highSchool": "Cook Inlet SC Elite"
+        },
+        {
+          "number": "11",
+          "name": "Madison Culp",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Dana Point, CA",
+          "highSchool": "West Coast FC GA"
+        },
+        {
+          "number": "12",
+          "name": "Talia Coury",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Phoenix, AZ",
+          "highSchool": "Phoenix Rising ECNL"
+        },
+        {
+          "number": "13",
+          "name": "Paige Harris",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Phoenix, AZ",
+          "highSchool": "SC del Sol GA"
+        },
+        {
+          "number": "14",
+          "name": "Nolyn Cromie",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Boise, ID",
+          "highSchool": "Boise Thorns ECNL"
+        },
+        {
+          "number": "15",
+          "name": "Mary Za",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Fairfax, VA",
+          "highSchool": "Metro United DA/GA"
+        },
+        {
+          "number": "16",
+          "name": "Lacie Poll",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Morgan, UT",
+          "highSchool": "Wasatch SC"
+        },
+        {
+          "number": "17",
+          "name": "Samantha Steele",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Solana Beach, CA",
+          "highSchool": "Albion SC San Diego GA"
+        },
+        {
+          "number": "18",
+          "name": "Victoria Choren",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Broomfield, CO",
+          "highSchool": "Broomfield GA"
+        },
+        {
+          "number": "19",
+          "name": "Samantha Fenske",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Petaluma, CA",
+          "highSchool": "Saint Mary's College"
+        },
+        {
+          "number": "20",
+          "name": "Samantha Esparza",
+          "pos": "M/F",
+          "classCode": "R-SO",
+          "hometown": "Huntington Beach, CA",
+          "highSchool": "Pateadores ECRL"
+        },
+        {
+          "number": "21",
+          "name": "Stephanie Roper",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lehi, UT",
+          "highSchool": "Southern Utah University"
+        },
+        {
+          "number": "22",
+          "name": "Parker Sullivan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Anchorage, AK",
+          "highSchool": "Cook Inlet SC Elite"
+        },
+        {
+          "number": "23",
+          "name": "Daphne Egelhoff",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Henderson, NV",
+          "highSchool": "Albion SC LV GA"
+        },
+        {
+          "number": "24",
+          "name": "Tess Livingston",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pleasant Grove, UT",
+          "highSchool": "La Roca Academy"
+        },
+        {
+          "number": "26",
+          "name": "Landyn Twitchell",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Rexburg, ID",
+          "highSchool": "Idaho Falls Futbol Club"
+        },
+        {
+          "number": "28",
+          "name": "Sofia Wolf",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Gerstetten, Germany",
+          "highSchool": "1. FC Donzdorf"
+        }
+      ],
+      "departed": [
+        "camille kollar",
+        "emily frost",
+        "isabella winton",
+        "landyn twitchell",
+        "laney erickson",
+        "madelyn mcqueen",
+        "madison culp",
+        "mady za",
+        "mary za",
+        "paige harris",
+        "payton reed",
+        "samantha steele",
+        "talia coury",
+        "tess livingston"
+      ]
+    },
+    "2024": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Trinity Hale",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Murrieta, CA",
+          "highSchool": "Legends FC ECNL"
+        },
+        {
+          "number": "1",
+          "name": "Saydree Cooke",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Pocatello, ID",
+          "highSchool": "Weber State"
+        },
+        {
+          "number": "2",
+          "name": "Camille Kollar",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Littleton, CO",
+          "highSchool": "Colorado Rush GA"
+        },
+        {
+          "number": "3",
+          "name": "Ashlee Leonetti",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Modesto, CA",
+          "highSchool": "Manteca Futbol Club"
+        },
+        {
+          "number": "4",
+          "name": "Kylee Hennesay",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rancho Cucamonga, CA",
+          "highSchool": "Legends FC"
+        },
+        {
+          "number": "5",
+          "name": "Payton Reed",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Arvada, CO",
+          "highSchool": "Broomfield SC GA"
+        },
+        {
+          "number": "6",
+          "name": "Isabella Winton",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Englewood, CO",
+          "highSchool": "Colorado Rush GA"
+        },
+        {
+          "number": "8",
+          "name": "Alyson Starbuck",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Murray, UT",
+          "highSchool": "Salt Lake Community College"
+        },
+        {
+          "number": "9",
+          "name": "Madelyn McQueen",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Twins Falls, ID",
+          "highSchool": "Snow College"
+        },
+        {
+          "number": "10",
+          "name": "Zoe Dejardin",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Soumagne, Belgium",
+          "highSchool": "RFC Liege"
+        },
+        {
+          "number": "11",
+          "name": "Madison Culp",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Dana Point, CA",
+          "highSchool": "West Coast FC GA"
+        },
+        {
+          "number": "12",
+          "name": "Talia Coury",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Phoenix, AZ",
+          "highSchool": "Phoenix Rising ECNL"
+        },
+        {
+          "number": "13",
+          "name": "Paige Harris",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Phoenix, AZ",
+          "highSchool": "SC del Sol GA"
+        },
+        {
+          "number": "14",
+          "name": "Peyton Dion",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Nampa, ID",
+          "highSchool": "Idaho Rush"
+        },
+        {
+          "number": "15",
+          "name": "Mary Za",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Fairfax, VA",
+          "highSchool": "Metro United DA/GA"
+        },
+        {
+          "number": "17",
+          "name": "Samantha Steele",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Solana Beach, CA",
+          "highSchool": "Albion SC San Diego GA"
+        },
+        {
+          "number": "18",
+          "name": "Sienna Latta",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Apple Valley, MN",
+          "highSchool": "Tonka Fusion GA"
+        },
+        {
+          "number": "19",
+          "name": "Taylin Butterbaugh",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ventura, CA",
+          "highSchool": "Eagles SC ECNL"
+        },
+        {
+          "number": "20",
+          "name": "Samantha Esparza",
+          "pos": "M/F",
+          "classCode": "R-FR",
+          "hometown": "Huntington Beach, CA",
+          "highSchool": "Pateadores ECRL"
+        },
+        {
+          "number": "21",
+          "name": "Rachel Fullmer",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "Pleasant Grove, UT",
+          "highSchool": "Minot State"
+        },
+        {
+          "number": "22",
+          "name": "Virginia Wallace",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "West Point, UT",
+          "highSchool": "SWAT Crush"
+        },
+        {
+          "number": "23",
+          "name": "Daphne Egelhoff",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Henderson, NV",
+          "highSchool": "Albion SC LV GA"
+        },
+        {
+          "number": "24",
+          "name": "Rylee Lewis",
+          "pos": "M/F",
+          "classCode": "R-FR",
+          "hometown": "Orange, CA",
+          "highSchool": "Legends FC ECNL"
+        },
+        {
+          "number": "25",
+          "name": "Megan Charley",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Eastvale, CA",
+          "highSchool": "Ontario Christian HS"
+        },
+        {
+          "number": "28",
+          "name": "Sofia Wolf",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Gerstetten, Germany",
+          "highSchool": "1. FC Donzdorf"
+        },
+        {
+          "number": "30",
+          "name": "Marta Nieto",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Candas Asturias, Spain",
+          "highSchool": "Real Sporting de Gijon"
+        },
+        {
+          "number": "31",
+          "name": "Sarah Maxfield",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Salt Lake City, UT",
+          "highSchool": "7 Elite Academy"
+        },
+        {
+          "number": "99",
+          "name": "Lydia Keller",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Idaho Falls, ID",
+          "highSchool": "Idaho Falls FC"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 34,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelsey Jargstorf",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Meridian, Idaho /",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Trinity Hale",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Murrieta, CA",
+          "highSchool": "Legends FC ECNL"
+        },
+        {
+          "number": "1",
+          "name": "Saydree Cooke",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Pocatello, ID",
+          "highSchool": "Weber State"
+        },
+        {
+          "number": "2",
+          "name": "Aisley Allen",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Missoula, Mont.",
+          "highSchool": "Sentinel HS"
+        },
+        {
+          "number": "3",
+          "name": "Bella Anderson",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Tigard, Oregon",
+          "highSchool": "Jesuit High School"
+        },
+        {
+          "number": "4",
+          "name": "Meagan Tamashiro",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mililani, Hawaii",
+          "highSchool": "Mililani HS"
+        },
+        {
+          "number": "5",
+          "name": "Sophie Spencer-Webb",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Chatham, England",
+          "highSchool": "Rainham Sixth"
+        },
+        {
+          "number": "6",
+          "name": "Isabella Winton",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Englewood, CO",
+          "highSchool": "Colorado Rush GA"
+        },
+        {
+          "number": "7",
+          "name": "Nicolette Scarduzio",
+          "pos": "",
+          "classCode": "JR",
+          "hometown": "Vorhees, New Jersey /",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Alyson Starbuck",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Murray, UT",
+          "highSchool": "Salt Lake Community College"
+        },
+        {
+          "number": "9",
+          "name": "Jordyn Roth",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "American Fork, Utah",
+          "highSchool": "American Fork HS"
+        },
+        {
+          "number": "10",
+          "name": "Zoe Dejardin",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Soumagne, Belgium",
+          "highSchool": "RFC Liege"
+        },
+        {
+          "number": "11",
+          "name": "Brooklyn Kouns",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Klein, TX",
+          "highSchool": "Baylor University"
+        },
+        {
+          "number": "12",
+          "name": "Callie Kitagawa-Mullen",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Pearl City, Hawaii",
+          "highSchool": "Mililani HS"
+        },
+        {
+          "number": "13",
+          "name": "Kaylyn Buchanan",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lakewood, Colo.",
+          "highSchool": "Lakewood HS"
+        },
+        {
+          "number": "14",
+          "name": "Peyton Dion",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Nampa, ID",
+          "highSchool": "Idaho Rush"
+        },
+        {
+          "number": "15",
+          "name": "Mary Za",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fairfax, VA",
+          "highSchool": "Metro United DA/GA"
+        },
+        {
+          "number": "16",
+          "name": "Tryne Tamminga",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Meridian, ID /",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Samantha Steele",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Solana Beach, CA",
+          "highSchool": "Albion SC San Diego GA"
+        },
+        {
+          "number": "18",
+          "name": "Emerson Grafton",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Camas, Wash. /",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Taylin Butterbaugh",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Ventura, CA",
+          "highSchool": "Eagles SC ECNL"
+        },
+        {
+          "number": "20",
+          "name": "Payton Reed",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Arvada, CO",
+          "highSchool": "Broomfield SC GA"
+        },
+        {
+          "number": "21",
+          "name": "Rachel Fullmer",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Pleasant Grove, UT",
+          "highSchool": "Minot State"
+        },
+        {
+          "number": "22",
+          "name": "Virginia Wallace",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "West Point, UT",
+          "highSchool": "SWAT Crush"
+        },
+        {
+          "number": "23",
+          "name": "Daphne Egelhoff",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Henderson, NV",
+          "highSchool": "Albion SC LV GA"
+        },
+        {
+          "number": "24",
+          "name": "Rylee Lewis",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Orange, CA",
+          "highSchool": "Legends FC ECNL"
+        },
+        {
+          "number": "25",
+          "name": "Kylee Hennesay",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Rancho Cucamonga, CA",
+          "highSchool": "Legends FC"
+        },
+        {
+          "number": "26",
+          "name": "Jayden Hannesson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Vancouver, British Columbia, Canada",
+          "highSchool": "Surrey United"
+        },
+        {
+          "number": "28",
+          "name": "Samantha Esparza",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Huntington Beach, CA",
+          "highSchool": "Pateadores ECRL"
+        },
+        {
+          "number": "29",
+          "name": "Sienna Latta",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Apple Valley, MN",
+          "highSchool": "Tonka Fusion GA"
+        },
+        {
+          "number": "30",
+          "name": "Marta Nieto",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Candas Asturias, Spain",
+          "highSchool": "Real Sporting de Gijon"
+        },
+        {
+          "number": "31",
+          "name": "Chelsea Radicia",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Meridian, Idaho /",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Ashlee Leonetti",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Modesto, CA",
+          "highSchool": "Manteca Futbol Club"
+        },
+        {
+          "number": "99",
+          "name": "Lydia Keller",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Idaho Falls, ID",
+          "highSchool": "Idaho Falls FC"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.isubengals.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:27:30Z"
+    }
+  },
   "commitments": [
     {
       "id": "amanda-brayton-2026",
@@ -117,7 +1632,7 @@
       "city": "San Diego",
       "highSchool": "",
       "college": "idaho-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -161,7 +1676,7 @@
       "city": "",
       "highSchool": "",
       "college": "idaho-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -180,7 +1695,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -516,41 +2031,27 @@
     "2027": 7
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://www.isubengals.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:29:38Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=42.863832&longitude=-112.432312&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FBoise:",
-        "at": "2026-09-07T18:29:36Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T18:29:37Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:27:20Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

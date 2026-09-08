@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://huskers.com/sports/womens-soccer",
-    "roster": "https://huskers.com/sports/womens-soccer/roster",
-    "schedule": "https://huskers.com/sports/womens-soccer/schedule",
-    "news": "https://huskers.com/sports/womens-soccer/news",
+    "athletics": "https://huskers.com/sports/soccer",
+    "roster": "https://huskers.com/sports/soccer/roster",
+    "schedule": "https://huskers.com/sports/soccer/schedule",
+    "news": "https://huskers.com/sports/soccer/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/nebraska/clgid-213",
     "wikipedia": "https://en.wikipedia.org/wiki/Nebraska_Cornhuskers_women%27s_soccer",
     "x": null,
@@ -69,18 +69,297 @@
       "asOf": "2026-09-07T05:36:43Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.817598,
+    "lon": -96.700508,
+    "timezone": "America/Chicago",
+    "elevationM": 362.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014939",
+      "name": "LINCOLN MUNI AP",
+      "state": "NE",
+      "distanceKm": 5.4,
+      "elevationM": 362.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 35.6,
+        "tLowF": 14.4,
+        "precipIn": 0.73,
+        "snowIn": 6.5,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 30.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 40.6,
+        "tLowF": 18.4,
+        "precipIn": 0.89,
+        "snowIn": 7.1,
+        "wetDays": 2.5,
+        "days90F": 0.0,
+        "daysFreeze": 25.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 53.6,
+        "tLowF": 28.7,
+        "precipIn": 1.55,
+        "snowIn": 3.4,
+        "wetDays": 3.9,
+        "days90F": 0.1,
+        "daysFreeze": 20.8
+      },
+      {
+        "month": "Apr",
+        "tHighF": 64.8,
+        "tLowF": 39.2,
+        "precipIn": 2.69,
+        "snowIn": 1.2,
+        "wetDays": 5.2,
+        "days90F": 0.4,
+        "daysFreeze": 7.9
+      },
+      {
+        "month": "May",
+        "tHighF": 75.0,
+        "tLowF": 51.2,
+        "precipIn": 4.91,
+        "snowIn": 0.1,
+        "wetDays": 7.6,
+        "days90F": 2.0,
+        "daysFreeze": 0.5
+      },
+      {
+        "month": "Jun",
+        "tHighF": 85.2,
+        "tLowF": 62.1,
+        "precipIn": 4.48,
+        "snowIn": 0.0,
+        "wetDays": 6.9,
+        "days90F": 8.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 89.4,
+        "tLowF": 66.7,
+        "precipIn": 3.25,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 14.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 87.2,
+        "tLowF": 64.1,
+        "precipIn": 3.32,
+        "snowIn": 0.0,
+        "wetDays": 5.9,
+        "days90F": 11.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 80.1,
+        "tLowF": 54.3,
+        "precipIn": 2.9,
+        "snowIn": 0.0,
+        "wetDays": 4.7,
+        "days90F": 5.0,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.6,
+        "tLowF": 41.0,
+        "precipIn": 2.14,
+        "snowIn": 0.9,
+        "wetDays": 4.3,
+        "days90F": 0.5,
+        "daysFreeze": 6.8
+      },
+      {
+        "month": "Nov",
+        "tHighF": 51.7,
+        "tLowF": 28.0,
+        "precipIn": 1.3,
+        "snowIn": 1.5,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 21.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 39.4,
+        "tLowF": 18.2,
+        "precipIn": 1.18,
+        "snowIn": 5.3,
+        "wetDays": 2.8,
+        "days90F": 0.0,
+        "daysFreeze": 29.4
+      }
+    ],
+    "annualPrecipIn": 29.3,
+    "annualSnowIn": 26.0,
+    "fallSeason": {
+      "avgHighF": 71.4,
+      "avgLowF": 46.8,
+      "precipIn": 9.7,
+      "wetDays": 17.0
+    },
+    "summary": "Hottest month Jul (avg high 89.4°F), coldest Jan (avg low 14.4°F). 29.3 in of rain per year, 26.0 in of snow. Fall season (Aug–Nov): highs around 71.4°F, 9.7 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014939,USW00094995,USC00257055&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:22Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "John Walker",
-      "title": null,
+      "title": "Head Coach",
       "since": 1994,
       "seasons": 33,
-      "bioUrl": null,
+      "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/john-walker",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "John Walker",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/john-walker",
+        "social": {}
+      },
+      {
+        "name": "Ian Bridge",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/ian-bridge",
+        "social": {}
+      },
+      {
+        "name": "Savanah Anderson-Baer",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/savanah-anderson-baer",
+        "social": {}
+      },
+      {
+        "name": "Austen Parker",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/austen-parker",
+        "social": {}
+      },
+      {
+        "name": "Hayden Jones",
+        "title": "Assistant Strength & Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/hayden-jones",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Sami Reinhard",
+        "title": "Director of Player Care",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/sami-reinhard",
+        "social": {}
+      },
+      {
+        "name": "Lisa Loewenstein",
+        "title": "Associate Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/lisa-loewenstein",
+        "social": {}
+      },
+      {
+        "name": "Jonathan Bateman",
+        "title": "Associate AD - Administration",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/jonathan-bateman",
+        "social": {}
+      },
+      {
+        "name": "Alli Wroblewski",
+        "title": "Academic Counselor",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/alli-wroblewski",
+        "social": {}
+      },
+      {
+        "name": "Stacey Burling",
+        "title": "Director of Education & Engagement Programs",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/stacey-burling",
+        "social": {}
+      },
+      {
+        "name": "Elise Nelson",
+        "title": "Sport Psychologist",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/elise-nelson",
+        "social": {}
+      },
+      {
+        "name": "Ryan Yetts",
+        "title": "Equipment Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/ryan-yetts",
+        "social": {}
+      },
+      {
+        "name": "Nolan Brinegar",
+        "title": "Student Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/nolan-brinegar",
+        "social": {}
+      },
+      {
+        "name": "Rylea Denneson",
+        "title": "Student Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/rylea-denneson",
+        "social": {}
+      },
+      {
+        "name": "Caleb Howard",
+        "title": "Student Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/caleb-howard",
+        "social": {}
+      },
+      {
+        "name": "Max Kalkowski",
+        "title": "Student Manager (Analytics)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://huskers.com/sports/soccer/roster/season/2026/staff/max-kalkowski",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Barbara Hibner Soccer Stadium",
       "capacity": 2500
@@ -139,7 +418,11 @@
         "url": "https://en.wikipedia.org/wiki/Nebraska_Cornhuskers_women%27s_soccer",
         "asOf": "2026-09-07T05:37:17Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://huskers.com/sports/soccer/roster",
+        "asOf": "2026-09-08T01:11:02Z"
+      }
     }
   },
   "seasons": [
@@ -686,9 +969,1295 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "0",
+        "name": "Avery Gillahan",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Strongsville, Ohio",
+        "highSchool": "Strongsville High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/avery-gillahan",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Ava Makovicka",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Gretna, Neb.",
+        "highSchool": "Gretna",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/ava-makovicka",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Karli Williams",
+        "pos": "M/D",
+        "posLabel": "Midfielder/Defender",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Gretna, Neb.",
+        "highSchool": "Gretna East",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/karli-williams",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Ella Guyott",
+        "pos": "M/F",
+        "posLabel": "Midfielder/Forward",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Papillion, Neb.",
+        "highSchool": "Papillion La Vista",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/ella-guyott",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Sadie Sant",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Overland Park, Kan.",
+        "highSchool": "Blue Valley Southwest",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Blue Valley",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/sadie-sant",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Emma Reda",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Toronto, Ontario, Canada",
+        "highSchool": "Holy Cross Catholic Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "NDC-Ontario",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/emma-reda",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Reese Borer",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Lincoln, Neb.",
+        "highSchool": "Norris",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gretna Elite Academy",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/reese-borer",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Alessandra Geraneo",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Markham, Ontario, Canada",
+        "highSchool": "Bill Crothers Secondary",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/alessandra-geraneo",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Emma Donnelly",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Toronto, Ontario, Canada",
+        "highSchool": "Bill Crothers Secondary",
+        "previousSchool": "",
+        "major": "",
+        "club": "NDC-Ontario",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/emma-donnelly",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Maggie Drozda",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "St. Louis, Mo.",
+        "highSchool": "St. Joseph's Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "SLSG-MO",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/maggie-drozda",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "12",
+        "name": "Rin Sato",
+        "pos": "M/D",
+        "posLabel": "Midfielder/Defender",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "Asaka-Shi, Japan",
+        "highSchool": "Barton CC/Sakuchosei",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/rin-sato",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Paige Miller",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Elkhorn, Neb.",
+        "highSchool": "Marian High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gretna Elite Academy",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/paige-miller",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Alexa Gobel",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Lincoln, Neb.",
+        "highSchool": "Lincoln Southwest",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/alexa-gobel",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Jo Sees",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Highlands Ranch, Colo.",
+        "highSchool": "Valor Christian",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/jo-sees",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Reese Snowden",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Manhattan, Kan.",
+        "highSchool": "Manhattan",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/reese-snowden",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Emma Prososki",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Omaha, Neb.",
+        "highSchool": "Marian",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/emma-prososki",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Isabel Kiser",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Lincoln, Neb.",
+        "highSchool": "Lincoln Southwest",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gretna Elite Academy",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/isabel-kiser",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Carson Bohonek",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Bettendorf, Iowa",
+        "highSchool": "Bettendorf",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/carson-bohonek",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Maddy Osborn",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "Elkhorn, Wis.",
+        "highSchool": "Elkhorn Area",
+        "previousSchool": "",
+        "major": "",
+        "club": "SC Wave",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/maddy-osborn",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "25",
+        "name": "Ella Rudney",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Grand Island, N.Y.",
+        "highSchool": "Grand Island Senior",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/ella-rudney",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Addison Jones",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "St. Charles, Mo.",
+        "highSchool": "Francis Howell North",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/addison-jones",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Nathalie Lewis",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Queen Creek, Ariz.",
+        "highSchool": "Casteel High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/nathalie-lewis",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Kayma Carpenter",
+        "pos": "F/D",
+        "posLabel": "Forward/Defender",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "Lincoln, Neb.",
+        "highSchool": "Lincoln East",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/kayma-carpenter",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Mia Cairone",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Newtown, Pa.",
+        "highSchool": "Council Rock North",
+        "previousSchool": "",
+        "major": "",
+        "club": "Players Development Academy (PDA)",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/mia-cairone",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "55",
+        "name": "Kate Eggett",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "Lincoln, Neb.",
+        "highSchool": "Lincoln East",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gretna Elite Academy",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/kate-eggett",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "98",
+        "name": "Charlie Wistrom",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "Springfield, Mo.",
+        "highSchool": "Glendale",
+        "previousSchool": "",
+        "major": "",
+        "club": "Lou Fusz Athletic",
+        "bioUrl": "https://huskers.com/sports/soccer/roster/player/charlie-wistrom",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 8,
+      "JR": 4,
+      "SO": 6,
+      "FR": 7,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 4,
+      "D": 2,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://huskers.com/sports/soccer/roster",
+      "asOf": "2026-09-08T01:11:02Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "00",
+          "name": "Cece Villa",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Altoona, Iowa",
+          "highSchool": "Dowling Catholic"
+        },
+        {
+          "number": "1",
+          "name": "Ava Makovicka",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna"
+        },
+        {
+          "number": "2",
+          "name": "Alyse Then",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Port Jefferson Station, N.Y.",
+          "highSchool": "Comsewogue High School"
+        },
+        {
+          "number": "4",
+          "name": "Karli Williams",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna East"
+        },
+        {
+          "number": "5",
+          "name": "Ella Guyott",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Papillion, Neb.",
+          "highSchool": "Papillion La Vista"
+        },
+        {
+          "number": "6",
+          "name": "Sadie Sant",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley Southwest"
+        },
+        {
+          "number": "7",
+          "name": "Reagan Raabe",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Millard West"
+        },
+        {
+          "number": "8",
+          "name": "Reese Borer",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Norris"
+        },
+        {
+          "number": "9",
+          "name": "Alessandra Geraneo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Markham, Ontario, Canada",
+          "highSchool": "Bill Crothers Secondary"
+        },
+        {
+          "number": "10",
+          "name": "Ángela Moreno",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Madrid, Spain",
+          "highSchool": "IES Salvador Dali"
+        },
+        {
+          "number": "11",
+          "name": "Sadie Waite",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "St. Thomas, Ontario, Canada",
+          "highSchool": "Parkside Collegiate Institute"
+        },
+        {
+          "number": "12",
+          "name": "Rin Sato",
+          "pos": "M/D",
+          "classCode": "R-JR",
+          "hometown": "Asaka-Shi, Japan",
+          "highSchool": "Barton CC/Sakuchosei"
+        },
+        {
+          "number": "13",
+          "name": "Mia Cairone",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Newtown, Pa.",
+          "highSchool": "Council Rock North"
+        },
+        {
+          "number": "14",
+          "name": "Mila Brach",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Los Angeles, Calif.",
+          "highSchool": "Notre Dame High School"
+        },
+        {
+          "number": "15",
+          "name": "Alexa Gobel",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southwest"
+        },
+        {
+          "number": "16",
+          "name": "Matigann Vixayvong",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lakeville, Minn.",
+          "highSchool": "Academy of Holy Angels"
+        },
+        {
+          "number": "17",
+          "name": "Jo Sees",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Highlands Ranch, Colo.",
+          "highSchool": "Valor Christian"
+        },
+        {
+          "number": "18",
+          "name": "Reese Snowden",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Manhattan, Kan.",
+          "highSchool": "Manhattan"
+        },
+        {
+          "number": "19",
+          "name": "Kianna Perez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southwest"
+        },
+        {
+          "number": "20",
+          "name": "Emma Prososki",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "21",
+          "name": "Lauryn Anglim",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "La Vista, Neb.",
+          "highSchool": "Papillion-La Vista"
+        },
+        {
+          "number": "22",
+          "name": "Carson Bohonek",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bettendorf, Iowa",
+          "highSchool": "Bettendorf"
+        },
+        {
+          "number": "23",
+          "name": "Greer Kice",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Wichita, Kan.",
+          "highSchool": "Classical School of Wichita"
+        },
+        {
+          "number": "24",
+          "name": "Maddy Osborn",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Elkhorn, Wis.",
+          "highSchool": "Elkhorn Area"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rudney",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Grand Island, N.Y.",
+          "highSchool": "Grand Island Senior"
+        },
+        {
+          "number": "29",
+          "name": "Kayma Carpenter",
+          "pos": "F/D",
+          "classCode": "JR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "33",
+          "name": "Taylor Yablonski",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Celina, Texas",
+          "highSchool": "Laurel Springs School"
+        },
+        {
+          "number": "74",
+          "name": "Ellie Felt",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Portland, Ore.",
+          "highSchool": "Sunset High School"
+        },
+        {
+          "number": "98",
+          "name": "Charlie Wistrom",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Springfield, Mo.",
+          "highSchool": "Glendale"
+        }
+      ],
+      "departed": [
+        "alyse then",
+        "angela moreno",
+        "cece villa",
+        "ellie felt",
+        "greer kice",
+        "kianna perez",
+        "lauryn anglim",
+        "matigann vixayvong",
+        "mila brach",
+        "reagan raabe",
+        "sadie waite",
+        "taylor yablonski"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "00",
+          "name": "Cece Villa",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Altoona, Iowa",
+          "highSchool": "Dowling Catholic"
+        },
+        {
+          "number": "1",
+          "name": "Ava Makovicka",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna"
+        },
+        {
+          "number": "2",
+          "name": "Haley Peterson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "4",
+          "name": "Nicola Hauk",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Heidelberg, Germany",
+          "highSchool": "Delta State/Kurfurst-Friedrich"
+        },
+        {
+          "number": "5",
+          "name": "Ella Guyott",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Papillion, Neb.",
+          "highSchool": "Papillion La Vista"
+        },
+        {
+          "number": "6",
+          "name": "Abbey Schwarz",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Bennington, Neb.",
+          "highSchool": "Roncalli Catholic"
+        },
+        {
+          "number": "7",
+          "name": "Reagan Raabe",
+          "pos": "M/F",
+          "classCode": "GR",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Millard West"
+        },
+        {
+          "number": "8",
+          "name": "Reese Borer",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Norris"
+        },
+        {
+          "number": "10",
+          "name": "Florence Belzile",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Montreal, Quebec, Canada",
+          "highSchool": "Bill Crothers Secondary School"
+        },
+        {
+          "number": "11",
+          "name": "Sadie Waite",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "St. Thomas, Ontario, Canada",
+          "highSchool": "Parkside Collegiate Institute"
+        },
+        {
+          "number": "12",
+          "name": "Rin Sato",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Asaka-Shi, Japan",
+          "highSchool": "Barton CC/Sakuchosei"
+        },
+        {
+          "number": "15",
+          "name": "Alexa Gobel",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southwest"
+        },
+        {
+          "number": "16",
+          "name": "Audra Clark",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Medina Valley"
+        },
+        {
+          "number": "17",
+          "name": "Lucy McCabe",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Maryville/Lincoln Pius X"
+        },
+        {
+          "number": "18",
+          "name": "Reese Snowden",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Manhattan, Kan.",
+          "highSchool": "Manhattan"
+        },
+        {
+          "number": "20",
+          "name": "Emma Prososki",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "21",
+          "name": "Lauryn Anglim",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "La Vista, Neb.",
+          "highSchool": "Papillion-La Vista"
+        },
+        {
+          "number": "22",
+          "name": "Abby Vacek",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Pius X"
+        },
+        {
+          "number": "23",
+          "name": "Gwen Lane",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Southwest"
+        },
+        {
+          "number": "24",
+          "name": "Maddy Osborn",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Elkhorn, Wis.",
+          "highSchool": "Elkhorn Area"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rudney",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Grand Island, N.Y.",
+          "highSchool": "Grand Island Senior"
+        },
+        {
+          "number": "26",
+          "name": "Anya McKay",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mount Horeb, Wis.",
+          "highSchool": "Mount Horeb"
+        },
+        {
+          "number": "29",
+          "name": "Kayma Carpenter",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "37",
+          "name": "Jordan Zade",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Olathe, Kan.",
+          "highSchool": "De Soto"
+        },
+        {
+          "number": "42",
+          "name": "Sarah Weber",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna"
+        },
+        {
+          "number": "44",
+          "name": "Lauren Buzzell",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "St. Francis, Minn.",
+          "highSchool": "St. Francis"
+        },
+        {
+          "number": "91",
+          "name": "Sami Hauk",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Argyle, Texas",
+          "highSchool": "Arizona/Denton Guyer"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Cece Villa",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Altoona, Iowa",
+          "highSchool": "Dowling Catholic"
+        },
+        {
+          "number": "1",
+          "name": "Ava Makovicka",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna"
+        },
+        {
+          "number": "2",
+          "name": "Haley Peterson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "4",
+          "name": "Nicola Hauk",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Heidelberg, Germany",
+          "highSchool": "Delta State/Kurfurst-Friedrich"
+        },
+        {
+          "number": "5",
+          "name": "Ella Guyott",
+          "pos": "D/M",
+          "classCode": "R-FR",
+          "hometown": "Papillion, Neb.",
+          "highSchool": "Papillion La Vista"
+        },
+        {
+          "number": "6",
+          "name": "Abbey Schwarz",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Bennington, Neb.",
+          "highSchool": "Roncalli Catholic"
+        },
+        {
+          "number": "7",
+          "name": "Reagan Raabe",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Millard West"
+        },
+        {
+          "number": "8",
+          "name": "Reese Borer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Norris"
+        },
+        {
+          "number": "9",
+          "name": "Eleanor Dale",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Billingham, England",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Florence Belzile",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Montreal, Quebec, Canada",
+          "highSchool": "Bill Crothers Secondary School"
+        },
+        {
+          "number": "11",
+          "name": "Sadie Waite",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "St. Thomas, Ontario, Canada",
+          "highSchool": "Parkside Collegiate Institute"
+        },
+        {
+          "number": "15",
+          "name": "Alexa Gobel",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Southwest"
+        },
+        {
+          "number": "16",
+          "name": "Audra Clark",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Medina Valley"
+        },
+        {
+          "number": "17",
+          "name": "Marissa Popoola",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Overland Park, Kan.",
+          "highSchool": "Blue Valley West"
+        },
+        {
+          "number": "19",
+          "name": "Samantha Corrie",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Winchester, England",
+          "highSchool": "Peter Symonds College"
+        },
+        {
+          "number": "20",
+          "name": "Emma Prososki",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Omaha, Neb.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "21",
+          "name": "Lauryn Anglim",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "La Vista, Neb.",
+          "highSchool": "Papillion-La Vista"
+        },
+        {
+          "number": "22",
+          "name": "Abby Vacek",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln Pius X"
+        },
+        {
+          "number": "23",
+          "name": "Gwen Lane",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Southwest"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rudney",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Grand Island, N.Y.",
+          "highSchool": "Grand Island Senior"
+        },
+        {
+          "number": "29",
+          "name": "Kayma Carpenter",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "34",
+          "name": "Allie Napora",
+          "pos": "M/F",
+          "classCode": "R-SO",
+          "hometown": "Papillion, Neb.",
+          "highSchool": "Papillion La-Vista South"
+        },
+        {
+          "number": "37",
+          "name": "Jordan Zade",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Olathe, Kan.",
+          "highSchool": "De Soto"
+        },
+        {
+          "number": "42",
+          "name": "Sarah Weber",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Gretna, Neb.",
+          "highSchool": "Gretna"
+        },
+        {
+          "number": "44",
+          "name": "Lauren Buzzell",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "St. Francis, Minn.",
+          "highSchool": "St. Francis"
+        },
+        {
+          "number": "48",
+          "name": "Maggie Altman",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Francisco, Calif.",
+          "highSchool": "Sacred Heart Cathedral Prep"
+        },
+        {
+          "number": "74",
+          "name": "Briley Hill",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lincoln, Neb.",
+          "highSchool": "Lincoln East"
+        },
+        {
+          "number": "91",
+          "name": "Sami Hauk",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Argyle, Texas",
+          "highSchool": "Arizona/Denton Guyer"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://huskers.com/sports/soccer/schedule",
+      "asOf": "2026-09-08T01:11:02Z"
+    }
+  },
   "commitments": [
     {
       "id": "addy-jones-2026",
@@ -736,7 +2305,7 @@
       "city": "Toronto",
       "highSchool": "",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -755,7 +2324,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -771,7 +2340,7 @@
       "city": "Toronto",
       "highSchool": "",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -790,7 +2359,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -806,7 +2375,7 @@
       "city": "Lincoln",
       "highSchool": "",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -825,7 +2394,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -841,7 +2410,7 @@
       "city": "Gretna",
       "highSchool": "",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -885,7 +2454,7 @@
       "city": "",
       "highSchool": "",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -929,7 +2498,7 @@
       "city": "Elkhorn",
       "highSchool": "Omaha Marian",
       "college": "nebraska",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1358,7 +2927,88 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [],
+    "latest": [
+      {
+        "title": "Nebraska Works Scoreless Draw at Kansas State",
+        "url": "https://huskers.com/news/2026/08/31/nebraska-works-scoreless-draw-at-kansas-state",
+        "date": "2026-08-30",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Blank Mavericks, 3-0",
+        "url": "https://huskers.com/news/2026/08/28/huskers-blank-mavericks-3-0",
+        "date": "2026-08-27",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Wrap Up Non-Conference Play Against Omaha, Kansas State",
+        "url": "https://huskers.com/news/2026/08/25/huskers-wrap-up-non-conference-play-against-omaha-kansas-state",
+        "date": "2026-08-25",
+        "recruiting": false
+      },
+      {
+        "title": "Nebraska Falls to No. 18 Alabama on Sunday",
+        "url": "https://huskers.com/news/2026/08/23/nebraska-falls-to-no-18-alabama-on-sunday",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Battle to 1-1 Draw Against No. 8 Notre Dame",
+        "url": "https://huskers.com/news/2026/08/21/huskers-battle-to-1-1-draw-against-no-8-notre-dame",
+        "date": "2026-08-20",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Host Two Ranked Teams This Week",
+        "url": "https://huskers.com/news/2026/08/18/huskers-host-two-ranked-teams-this-week",
+        "date": "2026-08-18",
+        "recruiting": false
+      },
+      {
+        "title": "Time Changed For Soccer Game Sunday",
+        "url": "https://huskers.com/news/2026/08/17/time-changed-for-soccer-game-sunday",
+        "date": "2026-08-17",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Draw Coyotes, 1-1",
+        "url": "https://huskers.com/news/2026/08/16/huskers-draw-coyotes-1-1",
+        "date": "2026-08-16",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Kick Off Homestand Against South Dakota",
+        "url": "https://huskers.com/news/2026/08/14/huskers-kick-off-homestand-against-south-dakota",
+        "date": "2026-08-14",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Grab Road Win at Louisville",
+        "url": "https://huskers.com/news/2026/08/13/huskers-grab-road-win-at-louisville",
+        "date": "2026-08-12",
+        "recruiting": false
+      },
+      {
+        "title": "Huskers Head to Louisville to Kick Off Regular Season",
+        "url": "https://huskers.com/news/2026/08/10/huskers-head-to-louisville-to-kick-off-regular-season",
+        "date": "2026-08-10",
+        "recruiting": false
+      },
+      {
+        "title": "Two Soccer Matches Selected for Big Ten Network",
+        "url": "https://huskers.com/news/2026/08/6/two-soccer-matches-selected-for-big-ten-network",
+        "date": "2026-08-06",
+        "recruiting": false
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://huskers.com/sports/soccer/news",
+      "asOf": "2026-09-08T01:11:04Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 7,
@@ -1366,41 +3016,21 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.56,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://huskers.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:37:17Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.817598&longitude=-96.700508&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:37:16Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T05:37:21Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

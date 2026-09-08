@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://gamecocksonline.com/sports/womens-soccer",
-    "roster": "https://gamecocksonline.com/sports/womens-soccer/roster",
-    "schedule": "https://gamecocksonline.com/sports/womens-soccer/schedule",
-    "news": "https://gamecocksonline.com/sports/womens-soccer/news",
+    "athletics": "https://gamecocksonline.com/sports/wsoc",
+    "roster": "https://gamecocksonline.com/sports/wsoc/roster",
+    "schedule": "https://gamecocksonline.com/sports/wsoc/schedule",
+    "news": "https://gamecocksonline.com/sports/wsoc/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/south-carolina/clgid-276",
     "wikipedia": "https://en.wikipedia.org/wiki/South_Carolina_Gamecocks_women%27s_soccer",
     "x": null,
@@ -69,17 +69,191 @@
       "asOf": "2026-09-07T05:04:33Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 33.996788,
+    "lon": -81.026935,
+    "timezone": "America/New_York",
+    "elevationM": 64.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00053867",
+      "name": "COLUMBIA OWENS DWTN AP",
+      "state": "SC",
+      "distanceKm": 4.1,
+      "elevationM": 64.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 57.2,
+        "tLowF": 37.0,
+        "precipIn": 3.41,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 12.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 61.0,
+        "tLowF": 39.6,
+        "precipIn": 3.27,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 6.8
+      },
+      {
+        "month": "Mar",
+        "tHighF": 68.8,
+        "tLowF": 45.6,
+        "precipIn": 3.48,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 3.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 77.2,
+        "tLowF": 53.4,
+        "precipIn": 2.7,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 1.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 84.1,
+        "tLowF": 62.1,
+        "precipIn": 2.95,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 7.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.1,
+        "tLowF": 69.9,
+        "precipIn": 4.77,
+        "snowIn": null,
+        "wetDays": 8.0,
+        "days90F": 18.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 93.2,
+        "tLowF": 73.3,
+        "precipIn": 4.8,
+        "snowIn": null,
+        "wetDays": 7.4,
+        "days90F": 23.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.3,
+        "tLowF": 72.3,
+        "precipIn": 4.65,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 21.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 86.2,
+        "tLowF": 67.4,
+        "precipIn": 4.33,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 10.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 77.0,
+        "tLowF": 55.5,
+        "precipIn": 3.07,
+        "snowIn": null,
+        "wetDays": 4.0,
+        "days90F": 0.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 67.0,
+        "tLowF": 43.9,
+        "precipIn": 2.78,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 0.0,
+        "daysFreeze": 2.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 59.5,
+        "tLowF": 39.1,
+        "precipIn": 3.47,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 9.0
+      }
+    ],
+    "annualPrecipIn": 43.7,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 80.4,
+      "avgLowF": 59.8,
+      "precipIn": 14.8,
+      "wetDays": 20.0
+    },
+    "summary": "Hottest month Jul (avg high 93.2°F), coldest Jan (avg low 37.0°F). 43.7 in of rain per year. Fall season (Aug–Nov): highs around 80.4°F, 14.8 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00053867,USW00013883,USC00381944&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:08Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Shelley Smith",
-      "title": null,
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/coach/shelley-smith/",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Shelley Smith",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/coach/shelley-smith/",
+        "social": {}
+      },
+      {
+        "name": "Jamie Smith",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/coach/jamie-smith/",
+        "social": {}
+      },
+      {
+        "name": "Marnie Merritt",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/coach/marnie-merritt/",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": {
       "name": "Eugene E. Stone III Stadium",
@@ -139,7 +313,11 @@
         "url": "https://en.wikipedia.org/wiki/South_Carolina_Gamecocks_women%27s_soccer",
         "asOf": "2026-09-07T05:05:07Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gamecocksonline.com/sports/wsoc/roster",
+        "asOf": "2026-09-08T01:05:56Z"
+      }
     }
   },
   "seasons": [
@@ -254,9 +432,1434 @@
       }
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "1",
+        "name": "Emma Kirlin",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/emma-kirlin/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Maggie Taitano",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/maggie-taitano/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Sophie Johnson",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "The St. James FC",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/sophie-johnson/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Maryn Wolf",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/maryn-wolf/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Dempsey McMahon",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/dempsey-mcmahon/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Amanda Patrick",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Real Colorado",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/amanda-patrick/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Ava Tutas",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/ava-tutas/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "8",
+        "name": "Mackenzie Johnson",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Oakwood Soccer Club",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/mackenzie-johnson/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Reagan Schubach",
+        "pos": "D/M",
+        "posLabel": "Defender/Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Players Development Academy (PDA)",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/reagan-schubach/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Helen Ghertner",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/helen-ghertner/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Kinley Brown",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/kinley-brown/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Reese Slater",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/reese-slater/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Katie Russo",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/katie-russo/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Taylor Bloom",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/taylor-bloom/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Ashley Connolly",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/ashley-connolly/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Autumn Cayelli",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Carolina Elite Soccer Academy (CESA)",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/autumn-cayelli/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Wynn Generally",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sporting Blue Valley SC",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/wynn-generally/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Harper Donovan",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sophomore",
+        "classCode": "SO",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Courage Academy",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/harper-donovan/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "19",
+        "name": "Emily Walne",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/emily-walne/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Avery Galante",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/avery-galante/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "22",
+        "name": "Sydney Middaugh",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/sydney-middaugh/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Laney Keith",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Freshman",
+        "classCode": "FR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Carolina Elite Soccer Academy",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/laney-keith/",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "25",
+        "name": "Micah Bryant",
+        "pos": "D/F",
+        "posLabel": "Defender/Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/micah-bryant/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Emilie Castagna",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfielder",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/emilie-castagna/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Jyvanna Harris",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Junior",
+        "classCode": "JR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Players Development Academy (PDA)",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/jyvanna-harris/",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "32",
+        "name": "Cuyler Zulauf",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Senior",
+        "classCode": "SR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/cuyler-zulaf/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "44",
+        "name": "Maria Kemp",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/maria-kemp/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "71",
+        "name": "Christina Tsaousis",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/christina-tsaousis/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "99",
+        "name": "Dubem Dike",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fifth Year",
+        "classCode": "GR",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gamecocksonline.com/sports/wsoc/roster/player/dubem-dike/",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 2
+      }
+    },
+    "byClass": {
+      "JR": 3,
+      "SR": 9,
+      "FR": 4,
+      "SO": 6,
+      "GR": 7
+    },
+    "graduatingByPos": {
+      "M": 4,
+      "D": 5,
+      "F": 5,
+      "GK": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gamecocksonline.com/sports/wsoc/roster",
+      "asOf": "2026-09-08T01:05:56Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "1",
+          "name": "Emma Kirlin",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Maggie Taitano",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Sophie Johnson",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Katie Shea Collins",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Kylie Cino",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Amanda Patrick",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Ava Tutas",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Mackenzie Johnson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Reagan Schubach",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Helen Ghertner",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Kinley Brown",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Micah Bryant",
+          "pos": "D/F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Katie Russo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Taylor Bloom",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ashley Connolly",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Autumn Cayelli",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Harper Donovan",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Avery Galante",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Alexa Pino",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Anna Young",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emilie Castagna",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jyvanna Harris",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Cuyler Zulauf",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Madden McDonald",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "44",
+          "name": "Maria Kemp",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "66",
+          "name": "Gracie Falla",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "71",
+          "name": "Christina Tsaousis",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Dubem Dike",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "alexa pino",
+        "anna young",
+        "gracie falla",
+        "katie shea collins",
+        "kylie cino",
+        "madden mcdonald"
+      ]
+    },
+    "2024": {
+      "count": 34,
+      "players": [
+        {
+          "number": "0",
+          "name": "Taylor Fox",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Jenna Hall",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Dru Drake",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Sophie Johnson",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Katie Shea Collins",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Kylie Cino",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Amanda Patrick",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Brinley Murphy",
+          "pos": "F/D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Hallie Meadows",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Reagan Schubach",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Catherine Barry",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Kinley Brown",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Micah Bryant",
+          "pos": "D/F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Megan Spiehs",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Brianna Behm",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Zoe Morris",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Autumn Cayelli",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Camryn Szotak",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Emma Misal",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Corinna Zullo",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Avery Galante",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Emily Chico",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Bri Pinasco",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Anna Young",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Lily Render",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Maggie Taitano",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emma Bucci",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jyvanna Harris",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Cuyler Zulauf",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Madden McDonald",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "44",
+          "name": "Maria Kemp",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "66",
+          "name": "Gracie Falla",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "71",
+          "name": "Christina Tsaousis",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Dubem Dike",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Taylor Fox",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Heather Hinz",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Dru Drake",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Sophie Johnson",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Shae O'Rourke",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Camryn Dixon",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Brinley Murphy",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Hallie Meadows",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Reagan Schubach",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Catherine Barry",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Kinley Brown",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Micah Bryant",
+          "pos": "D/F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Megan Spiehs",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Brianna Behm",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Zoe Morris",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Autumn Cayelli",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Caitlyn Leffler",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Brigitte Bussiere",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Amanda Patrick",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Corinna Zullo",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Taylor Jacobson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Emily Chico",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Bri Pinasco",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Hollyn Torres",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Lily Render",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emma Bucci",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Rylee Forster",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Cuyler Zulauf",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Kayla Magee",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "44",
+          "name": "Maria Kemp",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "66",
+          "name": "Gracie Falla",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "71",
+          "name": "Christina Tsaousis",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Dubem Dike",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gamecocksonline.com/sports/wsoc/schedule",
+      "asOf": "2026-09-08T01:05:56Z"
+    }
+  },
   "commitments": [
     {
       "id": "dempsey-mcmahon-2026",
@@ -269,7 +1872,7 @@
       "city": "Charlotte",
       "highSchool": "Charlotte Latin",
       "college": "south-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -313,7 +1916,7 @@
       "city": "Greenville",
       "highSchool": "",
       "college": "south-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -332,7 +1935,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -348,7 +1951,7 @@
       "city": "",
       "highSchool": "St Teresa’s Academy",
       "college": "south-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -794,7 +2397,15 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [],
+    "latest": [],
+    "_meta": {
+      "source": "news",
+      "url": "https://gamecocksonline.com/sports/wsoc/news",
+      "asOf": "2026-09-08T01:05:57Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 3,
@@ -802,41 +2413,21 @@
     "2028": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.56,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://gamecocksonline.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:05:08Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=33.996788&longitude=-81.026935&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:05:06Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T05:05:14Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

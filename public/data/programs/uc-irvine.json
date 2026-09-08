@@ -69,18 +69,209 @@
       "asOf": "2026-09-07T06:26:49Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 33.648434,
+    "lon": -117.841248,
+    "timezone": "America/Los_Angeles",
+    "elevationM": 16.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093184",
+      "name": "SANTA ANA JOHN WAYNE AP",
+      "state": "CA",
+      "distanceKm": 4.2,
+      "elevationM": 16.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 67.0,
+        "tLowF": 48.6,
+        "precipIn": 2.59,
+        "snowIn": null,
+        "wetDays": 3.2,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 66.7,
+        "tLowF": 50.1,
+        "precipIn": 2.64,
+        "snowIn": null,
+        "wetDays": 4.5,
+        "days90F": 0.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 67.7,
+        "tLowF": 52.3,
+        "precipIn": 1.62,
+        "snowIn": null,
+        "wetDays": 2.4,
+        "days90F": 0.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 70.2,
+        "tLowF": 54.9,
+        "precipIn": 0.52,
+        "snowIn": null,
+        "wetDays": 1.4,
+        "days90F": 0.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 71.3,
+        "tLowF": 59.3,
+        "precipIn": 0.27,
+        "snowIn": null,
+        "wetDays": 0.6,
+        "days90F": 0.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 74.1,
+        "tLowF": 62.6,
+        "precipIn": 0.01,
+        "snowIn": null,
+        "wetDays": 0.0,
+        "days90F": 0.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 78.9,
+        "tLowF": 66.2,
+        "precipIn": 0.04,
+        "snowIn": null,
+        "wetDays": 0.2,
+        "days90F": 0.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 80.4,
+        "tLowF": 67.1,
+        "precipIn": 0.01,
+        "snowIn": null,
+        "wetDays": 0.0,
+        "days90F": 2.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.9,
+        "tLowF": 65.0,
+        "precipIn": 0.1,
+        "snowIn": null,
+        "wetDays": 0.2,
+        "days90F": 3.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 76.5,
+        "tLowF": 59.2,
+        "precipIn": 0.54,
+        "snowIn": null,
+        "wetDays": 1.2,
+        "days90F": 2.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 71.9,
+        "tLowF": 53.3,
+        "precipIn": 0.8,
+        "snowIn": null,
+        "wetDays": 1.9,
+        "days90F": 1.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 66.5,
+        "tLowF": 48.3,
+        "precipIn": 2.04,
+        "snowIn": null,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      }
+    ],
+    "annualPrecipIn": 11.2,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 77.2,
+      "avgLowF": 61.1,
+      "precipIn": 1.5,
+      "wetDays": 3.0
+    },
+    "summary": "Hottest month Aug (avg high 80.4°F), coldest Dec (avg low 48.3°F). 11.2 in of rain per year. Fall season (Aug–Nov): highs around 77.2°F, 1.5 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093184,USW00003166,USC00046175&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:54Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Scott Juniper",
-      "title": null,
+      "title": "Head Coach",
       "since": 2007,
       "seasons": 20,
-      "bioUrl": null,
+      "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/coaches/scott-juniper/1221",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Scott Juniper",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/coaches/scott-juniper/1221",
+        "social": {}
+      },
+      {
+        "name": "P.J. Woolridge",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/coaches/pj-woolridge/1222",
+        "social": {}
+      },
+      {
+        "name": "Wendy Espejel",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/coaches/wendy-espejel/1224",
+        "social": {}
+      },
+      {
+        "name": "Holly Bosley",
+        "title": "Sports Performance Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/staff/holly-bosley/274",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Connie Kuei",
+        "title": "Certified Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/staff/connie-kuei/248",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Anteater Stadium",
       "capacity": 2500
@@ -126,10 +317,25 @@
         "url": "https://en.wikipedia.org/wiki/UC_Irvine_Anteaters_women%27s_soccer",
         "asOf": "2026-09-07T06:27:24Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ucirvinesports.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:17:18Z"
+      }
     }
   },
   "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "1-2-2",
+      "wins": 1,
+      "losses": 2,
+      "ties": 2,
+      "inProgress": true,
+      "gamesPlayed": 5,
+      "headCoach": "Scott Juniper"
+    },
     {
       "year": 2025,
       "label": "2025",
@@ -820,9 +1026,2921 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 32,
+    "players": [
+      {
+        "number": "00",
+        "name": "Avery Gleason",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oakdale, Calif. / Oakdale HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Film and Media Studies",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/avery-gleason/7703",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "0",
+        "name": "Sara Paul",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Woodland Hills, Calif / El Camino Real Charter HS",
+        "highSchool": "Cal State Bakersfield",
+        "previousSchool": "",
+        "major": "Digital Marketing and Communications",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/sara-paul/7715",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Savanna Arruda",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physiology and Exercise Sciences",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/savanna-arruda/7671",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Malaina Duro",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Laguna Beach, Calif. / Crean Lutheran HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Public Health Policy",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/malaina-duro/7678",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Hailey Clingan",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Huntington Beach, Calif. / Edison HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Economics",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/hailey-clingan/7672",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Elizabeth Hayes",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Gig Harbor, Wash. / Gig Harbor HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Public Health Sciences",
+        "club": "Washington Premier FC",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/elizabeth-hayes/7705",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Mimi Dominguez",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Covina, Calif. / Bishop Amat HS",
+        "highSchool": "University of Kentucky",
+        "previousSchool": "",
+        "major": "Psychology",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/mimi-dominguez/7717",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Ella Brinkerhoff",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mission Viejo, Calif. / Capistrano Valley HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "Pateadores SC",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/ella-brinkerhoff/7706",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "7",
+        "name": "Clara Samson",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Kendal, England / Kirkbie Kendal School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Social Ecology",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/clara-samson/7689",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Mattie Gillaspy",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Lake Tapps, Wash. / Sumner HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Public Health Sciences",
+        "club": "Washington Premier FC",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/mattie-gillaspy/7711",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "9",
+        "name": "Mia Rodriguez",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Santa Clarita, Calif. / Hart HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/mia-rodriguez/7688",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Fiona Shin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hermosa Beach, Calif. / Mira Costa HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/fiona-shin/7691",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Oona Hartman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Los Angeles, Calif. / Marlborough HS",
+        "highSchool": "Arizona State",
+        "previousSchool": "",
+        "major": "Political Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/oona-hartman/7699",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Keira Baranski",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "El Cajon, Calif. / Mater Dei Catholic HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Criminology, Law, & Society",
+        "club": "Rebels Soccer Club",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/keira-baranski/7709",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Mimi Yamamoto",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Jose, Calif. / Mountain View HS",
+        "highSchool": "University of Utah",
+        "previousSchool": "",
+        "major": "Electrical Engineering",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/mimi-yamamoto/7714",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Samara Maldonado",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Chula Vista, Calif. / Eastlake HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "Rebels Soccer Club",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/samara-maldonado/7713",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Mara Cochon",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Elk Grove, Calif. / Franklin HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Political Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/mara-cochon/7673",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Olivia Stark",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Las Vegas, Nev. / Faith Lutheran HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Criminology, Law, & Society",
+        "club": "ALBION SC Las Vegas",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/olivia-stark/7712",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Chifumi Sasaki",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Tokyo, Japan / Soka HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Comparative Literature",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/chifumi-sasaki/7690",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Cam LawsonKitchen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oak Hills, Calif. / Oak Hills HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Nursing",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/cam-lawsonkitchen/7704",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Sophia Speziale",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Diego, Calif. / Francis Parker HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/sophia-speziale/7692",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Ariane Haysman Boaler",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Stanford, Calif. / Notre Dame HS",
+        "highSchool": "University of Oregon",
+        "previousSchool": "",
+        "major": "Political Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/ariane-haysman-boaler/7681",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Lianna Tsabur",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Apple Valley, Calif. / Granite Hills HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/lianna-tsabur/7710",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Kelsey Swyney",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Carlsbad, Calif. / Carlsbad HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Psychological Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/kelsey-swyney/7693",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Iriana Griffin",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Chula Vista, Calif. / Mater Dei Catholic HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Rebels Soccer Club",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/iriana-griffin/7707",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "25",
+        "name": "Jasmyne Wheeler",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Campbell, Calif. / Archbishop Mitty HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/jasmyne-wheeler/7695",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Allison Rabe",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Las Vegas, Nev. / Faith Lutheran HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biomedical Engineering",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/allison-rabe/7702",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Gianna Costello",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Santa Clarita, Calif. / Hart HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Administration",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/gianna-costello/7676",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Isabella Meric",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Benicia, Calif. / Benicia HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Public Health Sciences",
+        "club": "Mustang SC",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/isabella-meric/7708",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "32",
+        "name": "Taylor Esparza",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Undeclared",
+        "club": "Legends FC",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/taylor-esparza/7698",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "39",
+        "name": "Jenika Davis",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Encinitas, Calif. / Canyon Crest Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Criminology, Law, & Society and Psychological Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/jenika-davis/7677",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "99",
+        "name": "Kamilah Jones",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "La Mesa, Calif. / Helix HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Physical Science",
+        "club": "",
+        "bioUrl": "https://ucirvinesports.com/sports/womens-soccer/roster/kamilah-jones/7683",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 6,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "FR": 13,
+      "GR": 3,
+      "SO": 10,
+      "JR": 5,
+      "SR": 1
+    },
+    "graduatingByPos": {
+      "GK": 2,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ucirvinesports.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:17:18Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 31,
+      "players": [
+        {
+          "number": "00",
+          "name": "Laurynn Ziller",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Westminster, Calif. / Fountain Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "Gabby Nelms",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Carlsbad, Calif. / Carlsbad HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Savanna Arruda",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Mirayah Villalpando",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bonita, Calif. / Bonita Vista HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Mia Colombini",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Ella Colombini",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Suus de Bakker",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Amsterdam, Netherlands / International School of Hilversum",
+          "highSchool": "SC Buitenveldert"
+        },
+        {
+          "number": "6",
+          "name": "Ivy Williams",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Thousand Oaks, Calif. / Thousand Oaks HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Clara Samson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kendal, England / Kirkbie Kendal School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Alissey Fang",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Long Beach, Calif. / Millikan HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Fiona Shin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Hermosa Beach, Calif. / Mira Costa HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Trinity Morales",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Tucson, Ariz. / Salpointe HS",
+          "highSchool": "University of Oregon"
+        },
+        {
+          "number": "13",
+          "name": "Kori Pickelle",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "San Jose, Calif. / Santa Teresa HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Amelia Sitton",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Chandler, Ariz. / Hamilton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Gracie Haley",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Mission Viejo, Calif. / Capistrano Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Chifumi Sasaki",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tokyo, Japan / Soka HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Aislynn Crowder",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Mililani, Hawai'i / Mililani HS",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "19",
+          "name": "Sophia Speziale",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif. / Francis Parker HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Ariane Haysman Boaler",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Stanford, Calif. / Notre Dame HS",
+          "highSchool": "University of Oregon"
+        },
+        {
+          "number": "21",
+          "name": "Mihaela Perez",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Tustin, Calif. / Santiago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kelsey Swyney",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Carlsbad, Calif. / Carlsbad HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Malaina Duro",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Laguna Beach, Calif. / Crean Lutheran HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Jasmyne Wheeler",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Campbell, Calif. / Archbishop Mitty HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Mia Rodriguez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Santa Clarita, Calif. / Hart HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kamryn Taylor",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Elk Grove, Calif. / Franklin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Gianna Costello",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Santa Clarita, Calif. / Hart HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Mara Cochon",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Elk Grove, Calif. / Franklin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Milan Heisdorf",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Irvine, Calif. / Woodbridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Hailey Clingan",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Huntington Beach, Calif. / Edison HS",
+          "highSchool": ""
+        },
+        {
+          "number": "39",
+          "name": "Jenika Davis",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Encinitas, Calif. / Canyon Crest Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Kamilah Jones",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "La Mesa, Calif. / Helix HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "aislynn crowder",
+        "alissey fang",
+        "amelia sitton",
+        "ella colombini",
+        "gabby nelms",
+        "gracie haley",
+        "ivy williams",
+        "kamryn taylor",
+        "kori pickelle",
+        "laurynn ziller",
+        "mia colombini",
+        "mihaela perez",
+        "milan heisdorf",
+        "mirayah villalpando",
+        "suus de bakker",
+        "trinity morales"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "00",
+          "name": "Laurynn Ziller",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Westminster, Calif. / Fountain Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "Alexa Peterson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif. / West Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Savanna Arruda",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Mirayah Villalpando",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bonita, Calif. / Bonita Vista HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Desiree Mendoza",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Costa Mesa, Calif. / Estancia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Ella Colombini",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Suus de Bakker",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Amsterdam, Netherlands / International School of Hilversum",
+          "highSchool": "SC Buitenveldert"
+        },
+        {
+          "number": "6",
+          "name": "Ivy Williams",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Thousand Oaks, Calif. / Thousand Oaks HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Emilie Castagna",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Bournemouth, England / Bournemouth School for Girls",
+          "highSchool": "Southampton FC"
+        },
+        {
+          "number": "8",
+          "name": "Aveka Singh",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "New Delhi, India / Step by Step School",
+          "highSchool": "Hans Women's Football Club"
+        },
+        {
+          "number": "9",
+          "name": "Laila El Behery",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Cairo, Egypt / Canadian International School of Egypt",
+          "highSchool": "El Gouna FC"
+        },
+        {
+          "number": "11",
+          "name": "Alyssa Wheeler",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Clovis, Calif. / Clovis North Education Center",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Kiera Smeenge",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "La Mesa, Calif. / Grossmont HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Amelia Sitton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Chandler, Ariz. / Hamilton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Gracie Haley",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Mission Viejo, Calif. / Capistrano Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Alissey Fang",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Long Beach, Calif. / Millikan HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Kaitlyn Paculba",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Huntington Beach, Calif. / Marina HS",
+          "highSchool": "University of Oregon"
+        },
+        {
+          "number": "18",
+          "name": "Aislynn Crowder",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Mililani, Hawai'i / Mililani HS",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "20",
+          "name": "Lawson Willis",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Centennial, Colo. / Cherry Creek HS",
+          "highSchool": "University of Colorado"
+        },
+        {
+          "number": "21",
+          "name": "Mihaela Perez",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Tustin, Calif. / Santiago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kelsey Swyney",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Carlsbad, Calif. / Carlsbad HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Clara Samson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kendal, England / Kirkbie Kendal School",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Mia Colombini",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Alana Odom",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "La Mesa, Calif. / Helix HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Autumn Thompkins",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Corona, Calif. / Santiago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kamryn Taylor",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Elk Grove, Calif. / Franklin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Chifumi Sasaki",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tokyo, Japan / Soka HS",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Kori Pickelle",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "San Jose, Calif. / Santa Teresa HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Chloe Ragon",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Milan Heisdorf",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Irvine, Calif. / Woodbridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "36",
+          "name": "Hailey Clingan",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Huntington Beach, Calif. / Edison HS",
+          "highSchool": ""
+        },
+        {
+          "number": "39",
+          "name": "Jenika Davis",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Encinitas, Calif. / Canyon Crest Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "89",
+          "name": "Ashley Naylor",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Manhattan Beach, Calif. / Mira Costa HS",
+          "highSchool": "University of Notre Dame"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 34,
+      "players": [
+        {
+          "number": "0",
+          "name": "Gabby Nelms",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Carlsbad, Calif. / Carlsbad HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Laurynn Ziller",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Westminster, Calif. / Fountain Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Savanna Arruda",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Mirayah Villalpando",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bonita, Calif. / Bonita Vista HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Desiree Mendoza",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Costa Mesa, Calif. / Estancia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Ella Colombini",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Suus de Bakker",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Amsterdam, Netherlands / International School of Hilversum",
+          "highSchool": "SC Buitenveldert"
+        },
+        {
+          "number": "6",
+          "name": "Aveka Singh",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "New Delhi, India / Step by Step School",
+          "highSchool": "Hans Women's Football Club"
+        },
+        {
+          "number": "7",
+          "name": "Sophie Gillies",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Petrockstowe, England / King's College",
+          "highSchool": "Exeter City FC"
+        },
+        {
+          "number": "8",
+          "name": "Marissa LeVine",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Murrieta, Calif. / Vista Murrieta HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Laila El Behery",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Cairo, Egypt / Canadian International School of Egypt",
+          "highSchool": "El Gouna FC"
+        },
+        {
+          "number": "10",
+          "name": "Tati Fung",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Fullerton, Calif. / Sunny Hills HS",
+          "highSchool": "University of Texas"
+        },
+        {
+          "number": "11",
+          "name": "Alyssa Wheeler",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Clovis, Calif. / Clovis North Education Center",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Kiera Smeenge",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "La Mesa, Calif. / Grossmont HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Madison Goerlinger",
+          "pos": "M/D",
+          "classCode": "GR",
+          "hometown": "Orange, Calif. / Villa Park HS",
+          "highSchool": "University of Arizona"
+        },
+        {
+          "number": "14",
+          "name": "Lilli Rask",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Tustin, Calif. / Beckman HS",
+          "highSchool": "University of Oregon"
+        },
+        {
+          "number": "15",
+          "name": "Gracie Haley",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mission Viejo, Calif. / Capistrano Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Alyssa Moore",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Menifee, Calif. / Paloma Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Halli Stewart",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Arroyo Grande, Calif. / Vista del Lago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Aislynn Crowder",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Mililani, Hawai'i / Mililani HS",
+          "highSchool": "UCLA"
+        },
+        {
+          "number": "20",
+          "name": "Erin Covey",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mihaela Perez",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Tustin, Calif. / Santiago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kelsey Swyney",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Carlsbad, Calif. / Carlsbad HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Gianna Creighton",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "San Diego, Calif. / West Hills HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Mia Colombini",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Moraga, Calif. / Campolindo HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Autumn Thompkins",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Corona, Calif. / Santiago HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Alana Odom",
+          "pos": "F/D",
+          "classCode": "SO",
+          "hometown": "La Mesa, Calif. / Helix HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emilie Castagna",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Bournemouth, England / Bournemouth School for Girls",
+          "highSchool": "Southampton FC"
+        },
+        {
+          "number": "29",
+          "name": "Niko Hadzibabic",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "San Diego, Calif. / Torrey Pines HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alena Garcia",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Union City, Calif. / James Logan HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Chloe Ragon",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Rancho Cucamonga, Calif. / Los Osos HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Glo Hinojosa",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Chula Vista, Calif. / Eastlake HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Kori Pickelle",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "San Jose, Calif. / Santa Teresa HS",
+          "highSchool": ""
+        },
+        {
+          "number": "39",
+          "name": "Jenika Davis",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Encinitas, Calif. / Canyon Crest Academy",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 1,
+      "losses": 2,
+      "ties": 2,
+      "text": "1-2-2",
+      "played": 5,
+      "scheduled": 23,
+      "confText": "0-0-0",
+      "exhibitions": 2
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Arizona",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "recap": "https://ucirvinesports.com/news/2026/8/5/womens-soccer-eaters-draw-with-arizona-in-exhibition"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Utah Tech",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2026/utah-tech/boxscore/14277",
+          "recap": "https://ucirvinesports.com/news/2026/8/12/womens-soccer-eaters-start-season-with-1-1-draw"
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Concordia Irvine",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": "W",
+        "score": "5-1",
+        "links": {
+          "recap": "https://ucirvinesports.com/news/2026/8/15/womens-soccer-uci-scores-5-1-exhibition-win-over-concordia"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Stanford",
+        "opponentRank": 1,
+        "location": "Stanford, Calif.",
+        "result": "L",
+        "score": "0-6",
+        "links": {
+          "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2026/stanford/boxscore/14279",
+          "recap": "https://ucirvinesports.com/news/2026/8/23/womens-soccer-eaters-fall-at-no-1-stanford"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Washington State",
+        "opponentRank": null,
+        "location": "Pullman, Wash.",
+        "result": "L",
+        "score": "0-2",
+        "links": {
+          "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2026/washington-state/boxscore/14280",
+          "recap": "https://ucirvinesports.com/news/2026/8/27/womens-soccer-anteaters-drop-match-at-washington-state-2-0"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Grand Canyon",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2026/grand-canyon/boxscore/14281",
+          "recap": "https://ucirvinesports.com/news/2026/8/30/womens-soccer-sasakis-screamer-gives-uc-irvine-1-1-draw"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Southern Utah",
+        "opponentRank": null,
+        "location": "Cedar City, Utah",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2026/southern-utah/boxscore/14282",
+          "recap": "https://ucirvinesports.com/news/2026/9/3/womens-soccer-dominguez-serves-up-86th-minute-winner-1-0"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "San Diego",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/6d44db72-148b-4b11-8aa6-dc42021c9eea",
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Fresno State",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/736ec3d1-4b2d-43c7-917c-b71b440189cd",
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Sacramento State",
+        "opponentRank": null,
+        "location": "Sacramento, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/cca5dcf2-1ace-469e-912f-c44b299ccdca",
+          "live stats": "http://statb.us/b/664220"
+        }
+      },
+      {
+        "date": "2026-09-26",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Cal State Bakersfield",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Utah Valley",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UC Riverside",
+        "opponentRank": null,
+        "location": "Riverside, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://sidearmstats.com/ucr/wsoc/"
+        }
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "CSUN",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UC Santa Barbara",
+        "opponentRank": null,
+        "location": "Santa Barbara, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/661645"
+        }
+      },
+      {
+        "date": "2026-10-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Long Beach State",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-21",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "California Baptist",
+        "opponentRank": null,
+        "location": "Riverside, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664013"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Cal Poly",
+        "opponentRank": null,
+        "location": "San Luis Obispo, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "http://statb.us/b/664210"
+        }
+      },
+      {
+        "date": "2026-10-28",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Cal State Fullerton",
+        "opponentRank": null,
+        "location": "Anteater Stadium, Irvine, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UC San Diego",
+        "opponentRank": null,
+        "location": "San Diego, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ucirvinesports.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-11-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "Big West First Round",
+        "opponentRank": null,
+        "location": "TBD",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-11-07",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "Big West Semifinal",
+        "opponentRank": null,
+        "location": "TBD",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "Big West Final",
+        "opponentRank": null,
+        "location": "TBD",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-11-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "NCAA Tournament",
+        "opponentRank": null,
+        "location": "TBD",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-12-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "NCAA College Cup",
+        "opponentRank": null,
+        "location": "Cary, N.C.",
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "8-5-7",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Grand Canyon",
+            "opponentRank": null,
+            "location": "Phoenix, Ariz.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/grand-canyon/boxscore/13547",
+              "recap": "https://ucirvinesports.com/news/2025/8/14/womens-soccer-eaters-hot-second-half-leads-to-4-1-win-at-gcu"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Arizona",
+            "opponentRank": null,
+            "location": "Tucson, Ariz.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/arizona/boxscore/13548",
+              "recap": "https://ucirvinesports.com/news/2025/8/17/womens-soccer-late-score-drops-eaters-at-arizona-1-0"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "San Diego",
+            "opponentRank": null,
+            "location": "San Diego, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/san-diego/boxscore/13549",
+              "recap": "https://ucirvinesports.com/news/2025/8/21/womens-soccer-anteaters-draw-0-0-at-san-diego"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Washington",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/washington/boxscore/13550",
+              "recap": "https://ucirvinesports.com/news/2025/8/24/womens-soccer-eaters-draw-level-with-washington-1-1"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Sacramento State",
+            "opponentRank": null,
+            "location": "Sacramento, Calif.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/sacramento-state/boxscore/13551",
+              "recap": "https://ucirvinesports.com/news/2025/8/28/womens-soccer-colombini-pickelle-pace-scoring-attack-in-4-0-win"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "San Francisco",
+            "opponentRank": null,
+            "location": "San Francisco, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/san-francisco/boxscore/13552",
+              "recap": "https://ucirvinesports.com/news/2025/8/31/womens-soccer-uc-irvine-san-francisco-play-to-0-0-draw"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Northern Arizona",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/northern-arizona/boxscore/13553",
+              "recap": "https://ucirvinesports.com/news/2025/9/7/womens-soccer-anteaters-return-home-to-0-0-draw-with-nau"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Santa Clara",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/santa-clara/boxscore/13554",
+              "recap": "https://ucirvinesports.com/news/2025/9/11/womens-soccer-eaters-lose-tussle-with-santa-clara-1-0"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Washington State",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/washington-state/boxscore/13555",
+              "recap": "https://ucirvinesports.com/news/2025/9/14/womens-soccer-eaters-celebrate-senior-day-with-2-0-win"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Riverside",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/uc-riverside/boxscore/13556",
+              "recap": "https://ucirvinesports.com/news/2025/9/21/womens-soccer-anteaters-take-3-1-win-in-big-west-opener"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "CSUN",
+            "opponentRank": null,
+            "location": "Northridge, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/csun/boxscore/13557",
+              "recap": "https://ucirvinesports.com/news/2025/9/25/womens-soccer-eaters-drop-first-big-west-match-1-0"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cal State Bakersfield",
+            "opponentRank": null,
+            "location": "Bakersfield, Calif.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/cal-state-bakersfield/boxscore/13558",
+              "recap": "https://ucirvinesports.com/news/2025/9/28/womens-soccer-anteaters-get-the-win-at-cal-state-bakersfield"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Davis",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/uc-davis/boxscore/13559",
+              "recap": "https://ucirvinesports.com/news/2025/10/2/womens-soccer-de-bakker-doubles-down-for-2-0-win"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Long Beach State",
+            "opponentRank": null,
+            "location": "Long Beach, Calif.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/long-beach-state/boxscore/13560",
+              "recap": "https://ucirvinesports.com/news/2025/10/5/womens-soccer-rivalry-matchup-ends-in-1-1-draw"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Santa Barbara",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/uc-santa-barbara/boxscore/13561",
+              "recap": "https://ucirvinesports.com/news/2025/10/16/womens-soccer-uc-irvine-climbs-big-west-standings-with-2-0-win"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cal Poly",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/cal-poly/boxscore/13562",
+              "recap": "https://ucirvinesports.com/news/2025/10/19/womens-soccer-eaters-fall-to-cal-poly-2-1"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cal State Fullerton",
+            "opponentRank": null,
+            "location": "Fullerton, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/cal-state-fullerton/boxscore/13563",
+              "recap": "https://ucirvinesports.com/news/2025/10/23/womens-soccer-eaters-draw-0-0-at-cal-state-fullerton"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC San Diego",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/uc-san-diego/boxscore/13564",
+              "recap": "https://ucirvinesports.com/news/2025/10/26/womens-soccer-anteaters-draw-1-1-in-home-finale"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Hawai'i",
+            "opponentRank": null,
+            "location": "Waipahu, O’ahu",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/hawai-i/boxscore/13565",
+              "recap": "https://ucirvinesports.com/news/2025/10/31/womens-soccer-eaters-triumph-in-hawai-i-2-0"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "[5] UC Santa Barbara",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2025/uc-santa-barbara/boxscore/13566",
+              "recap": "https://ucirvinesports.com/news/2025/11/2/womens-soccer-falls-in-big-west-first-round"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "6-7-6",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Saint Mary's",
+            "opponentRank": null,
+            "location": "Moraga, Calif.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/saint-mary-s/boxscore/12775",
+              "recap": "https://ucirvinesports.com/news/2024/8/15/womens-soccer-new-eaters-propel-3-0-win-in-opener"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stanford",
+            "opponentRank": 2,
+            "location": "Stanford, Calif.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/stanford/boxscore/12776",
+              "recap": "https://ucirvinesports.com/news/2024/8/18/womens-soccer-eaters-fall-to-no-2-stanford"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "San Diego",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/san-diego/boxscore/12777",
+              "recap": "https://ucirvinesports.com/news/2024/8/22/womens-soccer-eaters-draw-1-1-in-home-opener"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Washington",
+            "opponentRank": null,
+            "location": "Seattle, Wash.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/washington/boxscore/12778",
+              "recap": "https://ucirvinesports.com/news/2024/8/25/womens-soccer-anteaters-fall-to-washington-2-0"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "San Francisco",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/san-francisco/boxscore/12779",
+              "recap": "https://ucirvinesports.com/news/2024/8/29/womens-soccer-eaters-upended-in-final-minute-vs-san-francisco"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Arizona",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/arizona/boxscore/12780",
+              "recap": "https://ucirvinesports.com/news/2024/9/1/womens-soccer-eaters-fall-to-arizona-in-jenika-davis-return"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Washington State",
+            "opponentRank": null,
+            "location": "Pullman, Wash.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/washington-state/boxscore/12781",
+              "recap": "https://ucirvinesports.com/news/2024/9/5/womens-soccer-anteaters-draw-at-cougars-1-1"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Pacific",
+            "opponentRank": null,
+            "location": "Stockton, Calif.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/pacific/boxscore/12782",
+              "recap": "https://ucirvinesports.com/news/2024/9/12/womens-soccer-el-beherys-brace-delivers-win-at-pacific"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UC San Diego",
+            "opponentRank": null,
+            "location": "La Jolla, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/uc-san-diego/boxscore/12783",
+              "recap": "https://ucirvinesports.com/news/2024/9/19/womens-soccer-scoreless-draw-opens-big-west-season-at-ucsd"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "CSUN",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/csun/boxscore/12784",
+              "recap": "https://ucirvinesports.com/news/2024/9/29/womens-soccer-naylor-saves-the-day-on-senior-day"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cal Poly",
+            "opponentRank": null,
+            "location": "San Luis Obispo, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/cal-poly/boxscore/12785",
+              "recap": "https://ucirvinesports.com/news/2024/10/3/womens-soccer-anteaters-corners-head-home-2-0-victory"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UC Santa Barbara",
+            "opponentRank": null,
+            "location": "Santa Barbara, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/uc-santa-barbara/boxscore/12786",
+              "recap": "https://ucirvinesports.com/news/2024/10/6/womens-soccer-uc-irvine-falls-1-0-at-uc-santa-barbara"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cal State Bakersfield",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/cal-state-bakersfield/boxscore/12787",
+              "recap": "https://ucirvinesports.com/news/2024/10/10/womens-soccer-eaters-defeated-by-csub-1-0"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Hawai'i",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/hawai-i/boxscore/12788",
+              "recap": "https://ucirvinesports.com/news/2024/10/13/womens-soccer-eaters-slow-hawai-is-streak-with-0-0-draw"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cal State Fullerton",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/cal-state-fullerton/boxscore/12789",
+              "recap": "https://ucirvinesports.com/news/2024/10/17/womens-soccer-castagna-perez-highlight-3-1-win-over-cal-state-fullerton"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UC Davis",
+            "opponentRank": null,
+            "location": "Davis, Calif.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/uc-davis/boxscore/12790",
+              "recap": "https://ucirvinesports.com/news/2024/10/20/womens-soccer-comeback-earns-2-2-draw-at-uc-davis"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Long Beach State",
+            "opponentRank": null,
+            "location": "Anteater Aquatics Complex, Irvine, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/long-beach-state/boxscore/12791",
+              "recap": "https://ucirvinesports.com/news/2024/10/27/womens-soccer-eaters-draw-0-0-in-rivalry-match"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UC Riverside",
+            "opponentRank": null,
+            "location": "Riverside, Calif.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/uc-riverside/boxscore/12792",
+              "recap": "https://ucirvinesports.com/news/2024/10/31/womens-soccer-anteaters-win-1-0-to-extend-season"
+            }
+          },
+          {
+            "date": "2024-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "[5] Cal State Bakersfield",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2024/cal-state-bakersfield/boxscore/12859",
+              "recap": "https://ucirvinesports.com/news/2024/11/3/womens-soccer-eaters-fall-1-0-in-big-west-first-round"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "10-8-6",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Saint Mary's",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/saint-mary-s/boxscore/12123",
+              "recap": "https://ucirvinesports.com/news/2023/8/17/womens-soccer-eaters-fight-back-for-opening-day-win-2-1"
+            }
+          },
+          {
+            "date": "2023-08-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stanford",
+            "opponentRank": 11,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/stanford/boxscore/12124",
+              "recap": "https://ucirvinesports.com/news/2023/8/19/womens-soccer-eaters-gritty-in-2-1-defeat-to-no-11-stanford"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Pacific",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/pacific/boxscore/12125",
+              "recap": "https://ucirvinesports.com/news/2023/8/24/womens-soccer-eaters-score-2-0-shutout-over-pacific"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UCLA",
+            "opponentRank": 1,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/ucla/boxscore/12126",
+              "recap": "https://ucirvinesports.com/news/2023/8/27/womens-soccer-eaters-fall-to-no-1-ucla"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "San Jose State",
+            "opponentRank": null,
+            "location": "San Jose, Calif.",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/san-jose-state/boxscore/12127",
+              "recap": "https://ucirvinesports.com/news/2023/8/31/womens-soccer-eaters-spartans-joust-to-3-3-draw"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Sacramento State",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/sacramento-state/boxscore/12186",
+              "recap": "https://ucirvinesports.com/news/2023/9/3/womens-soccer-anteaters-net-clean-victory-over-sac-state-2-0"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Oregon State",
+            "opponentRank": null,
+            "location": "Corvallis, Ore.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/oregon-state/boxscore/12128",
+              "recap": "https://ucirvinesports.com/news/2023/9/7/womens-soccer-moores-brace-not-enough-to-tame-oregon-state"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Portland",
+            "opponentRank": null,
+            "location": "Portland, Ore.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/portland/boxscore/12129",
+              "recap": "https://ucirvinesports.com/news/2023/9/10/womens-soccer-eaters-stifled-at-portland-in-1-0-defeat"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Long Beach State",
+            "opponentRank": null,
+            "location": "Long Beach, Calif.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/long-beach-state/boxscore/12130",
+              "recap": "https://ucirvinesports.com/news/2023/9/14/womens-soccer-eaters-beach-draw-1-1-to-open-big-west"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Santa Barbara",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/uc-santa-barbara/boxscore/12131",
+              "recap": "https://ucirvinesports.com/news/2023/9/21/womens-soccer-anteaters-tie-2-2-with-uc-santa-barbara"
+            }
+          },
+          {
+            "date": "2023-10-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Hawai'i",
+            "opponentRank": null,
+            "location": "Honolulu. O'ahu",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/hawai-i/boxscore/12132",
+              "recap": "https://ucirvinesports.com/news/2023/10/1/womens-soccer-el-beherys-goal-lifts-anteaters-over-hawai-i"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cal State Fullerton",
+            "opponentRank": null,
+            "location": "Fullerton, Calif.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/cal-state-fullerton/boxscore/12133",
+              "recap": "https://ucirvinesports.com/news/2023/10/5/womens-soccer-hinojosas-big-night-not-enough-in-2-0-loss"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cal Poly",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/cal-poly/boxscore/12134",
+              "recap": "https://ucirvinesports.com/news/2023/10/8/womens-soccer-uc-irvine-upended-by-cal-poly-2-1"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC San Diego",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/uc-san-diego/boxscore/12135",
+              "recap": "https://ucirvinesports.com/news/2023/10/12/womens-soccer-eaters-tritons-settle-for-0-0-draw"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Riverside",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/uc-riverside/boxscore/12136",
+              "recap": "https://ucirvinesports.com/news/2023/10/15/womens-soccer-eaters-jump-into-big-west-race-with-2-0-win"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cal State Bakersfield",
+            "opponentRank": null,
+            "location": "Bakersfield, Calif.",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/cal-state-bakersfield/boxscore/12137",
+              "recap": "https://ucirvinesports.com/news/2023/10/19/womens-soccer-offense-erupts-to-5-1-win-at-cal-state-bakersfield"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "CSUN",
+            "opponentRank": null,
+            "location": "Northridge, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/csun/boxscore/12138",
+              "recap": "https://ucirvinesports.com/news/2023/10/22/womens-soccer-eaters-draw-0-0-in-final-road-match"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UC Davis",
+            "opponentRank": null,
+            "location": "Anteater Stadium, Irvine, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/uc-davis/boxscore/12139",
+              "recap": "https://ucirvinesports.com/news/2023/10/26/womens-soccer-anteaters-drop-home-finale-1-0"
+            }
+          },
+          {
+            "date": "2023-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "[4] Long Beach State",
+            "opponentRank": null,
+            "location": "Long Beach, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/long-beach-state/boxscore/12140",
+              "recap": "https://ucirvinesports.com/news/2023/10/29/womens-soccer-eaters-end-lbsus-season-in-penalty-kicks"
+            }
+          },
+          {
+            "date": "2023-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "[1] Cal State Fullerton",
+            "opponentRank": null,
+            "location": "Fullerton, Calif.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/cal-state-fullerton/boxscore/12141",
+              "recap": "https://ucirvinesports.com/news/2023/11/2/womens-soccer-anteaters-topple-no-1-cal-state-fullerton-in-big-west-semis"
+            }
+          },
+          {
+            "date": "2023-11-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "[3] Cal Poly",
+            "opponentRank": null,
+            "location": "Fullerton, Calif.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/cal-poly/boxscore/12142",
+              "recap": "https://ucirvinesports.com/news/2023/11/5/womens-soccer-completes-three-peat"
+            }
+          },
+          {
+            "date": "2023-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "(1) UCLA",
+            "opponentRank": null,
+            "location": "Los Angeles, Calif.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/ucla/boxscore/12143",
+              "recap": "https://ucirvinesports.com/news/2023/11/10/womens-soccer-eaters-knock-off-no-1-ucla-1-0"
+            }
+          },
+          {
+            "date": "2023-11-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "(8) Gonzaga",
+            "opponentRank": null,
+            "location": "Lincoln, Neb.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/gonzaga/boxscore/12576",
+              "recap": "https://ucirvinesports.com/news/2023/11/17/womens-soccer-anteaters-reach-sweet-sixteen-with-2-1-win"
+            }
+          },
+          {
+            "date": "2023-11-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "(5) Nebraska",
+            "opponentRank": null,
+            "location": "Lincoln, Neb.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://ucirvinesports.com/sports/womens-soccer/stats/2023/nebraska/boxscore/12577",
+              "recap": "https://ucirvinesports.com/news/2023/11/19/historic-season-ends-in-ncaa-third-round-for-womens-soccer"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ucirvinesports.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:17:18Z"
+    }
+  },
   "commitments": [
     {
       "id": "allie-rabe-2026",
@@ -870,7 +3988,7 @@
       "city": "Gig Harbor",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-04-27",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -912,7 +4030,7 @@
       "city": "Costa Mesa",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-04-17",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -954,7 +4072,7 @@
       "city": "Chula Vista",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -973,7 +4091,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -989,7 +4107,7 @@
       "city": "Benicia",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-05-12",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -1031,7 +4149,7 @@
       "city": "El Cajon",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1050,7 +4168,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1066,7 +4184,7 @@
       "city": "Lake Tapps",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-05-01",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -1108,7 +4226,7 @@
       "city": "Las Vegas",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-04-21",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -1150,7 +4268,7 @@
       "city": "Chula Vista",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "signed",
+      "status": "enrolled",
       "announced": "2026-04-14",
       "announcedSource": "press_release",
       "firstSeen": "2026-09-06",
@@ -1192,7 +4310,7 @@
       "city": "Rancho Cucamonga",
       "highSchool": "",
       "college": "uc-irvine",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1211,7 +4329,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1636,35 +4754,21 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://ucirvinesports.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:27:25Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=33.648434&longitude=-117.841248&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FLos_An",
-        "at": "2026-09-07T06:27:22Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

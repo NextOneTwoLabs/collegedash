@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T17:00:34Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 34.723254,
+    "lon": -92.339778,
+    "timezone": "America/Chicago",
+    "elevationM": 78.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013963",
+      "name": "LITTLE ROCK AP ADAMS FLD",
+      "state": "AR",
+      "distanceKm": 9.2,
+      "elevationM": 78.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 50.5,
+        "tLowF": 30.9,
+        "precipIn": 3.5,
+        "snowIn": 1.1,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 16.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 55.2,
+        "tLowF": 34.2,
+        "precipIn": 3.97,
+        "snowIn": 1.6,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 10.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 63.7,
+        "tLowF": 41.8,
+        "precipIn": 4.96,
+        "snowIn": 0.5,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 3.8
+      },
+      {
+        "month": "Apr",
+        "tHighF": 72.8,
+        "tLowF": 50.1,
+        "precipIn": 5.59,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 0.1,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "May",
+        "tHighF": 80.5,
+        "tLowF": 59.3,
+        "precipIn": 5.08,
+        "snowIn": 0.0,
+        "wetDays": 7.4,
+        "days90F": 3.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 88.2,
+        "tLowF": 67.7,
+        "precipIn": 3.55,
+        "snowIn": 0.0,
+        "wetDays": 5.5,
+        "days90F": 15.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.7,
+        "tLowF": 71.2,
+        "precipIn": 3.33,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 23.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.5,
+        "tLowF": 70.1,
+        "precipIn": 3.16,
+        "snowIn": 0.0,
+        "wetDays": 4.5,
+        "days90F": 22.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 85.1,
+        "tLowF": 62.9,
+        "precipIn": 3.01,
+        "snowIn": 0.0,
+        "wetDays": 4.4,
+        "days90F": 10.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 74.2,
+        "tLowF": 50.9,
+        "precipIn": 4.47,
+        "snowIn": 0.0,
+        "wetDays": 5.9,
+        "days90F": 0.8,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 61.9,
+        "tLowF": 40.2,
+        "precipIn": 4.72,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 5.1
+      },
+      {
+        "month": "Dec",
+        "tHighF": 52.6,
+        "tLowF": 33.3,
+        "precipIn": 5.08,
+        "snowIn": 0.6,
+        "wetDays": 6.4,
+        "days90F": 0.0,
+        "daysFreeze": 13.4
+      }
+    ],
+    "annualPrecipIn": 50.4,
+    "annualSnowIn": 3.8,
+    "fallSeason": {
+      "avgHighF": 78.2,
+      "avgLowF": 56.0,
+      "precipIn": 15.4,
+      "wetDays": 20.0
+    },
+    "summary": "Hottest month Jul (avg high 91.7°F), coldest Jan (avg low 30.9°F). 50.4 in of rain per year, 3.8 in of snow. Fall season (Aug–Nov): highs around 78.2°F, 15.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013963,USW00003952,USC00031750&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:53Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Kelly Farrell",
@@ -1504,11 +1653,11 @@
     "2026": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": false,
       "rpi": false,
@@ -1517,22 +1666,14 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=34.723254&longitude=-92.339778&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T17:03:07Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T17:03:07Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:24:39Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

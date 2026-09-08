@@ -69,18 +69,257 @@
       "asOf": "2026-09-07T05:29:23Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.82617,
+    "lon": -71.40385,
+    "timezone": "America/New_York",
+    "elevationM": 18.3,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014765",
+      "name": "PROVIDENCE T F GREEN AP",
+      "state": "RI",
+      "distanceKm": 11.8,
+      "elevationM": 18.3
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 38.3,
+        "tLowF": 22.1,
+        "precipIn": 3.96,
+        "snowIn": 10.3,
+        "wetDays": 6.8,
+        "days90F": 0.0,
+        "daysFreeze": 26.2
+      },
+      {
+        "month": "Feb",
+        "tHighF": 40.5,
+        "tLowF": 23.5,
+        "precipIn": 3.44,
+        "snowIn": 10.5,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 24.0
+      },
+      {
+        "month": "Mar",
+        "tHighF": 47.7,
+        "tLowF": 30.2,
+        "precipIn": 4.9,
+        "snowIn": 6.4,
+        "wetDays": 7.2,
+        "days90F": 0.0,
+        "daysFreeze": 19.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.9,
+        "tLowF": 39.6,
+        "precipIn": 4.29,
+        "snowIn": 0.6,
+        "wetDays": 7.1,
+        "days90F": 0.1,
+        "daysFreeze": 4.1
+      },
+      {
+        "month": "May",
+        "tHighF": 68.9,
+        "tLowF": 49.2,
+        "precipIn": 3.37,
+        "snowIn": 0.0,
+        "wetDays": 7.1,
+        "days90F": 0.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.7,
+        "tLowF": 58.8,
+        "precipIn": 3.81,
+        "snowIn": 0.0,
+        "wetDays": 6.4,
+        "days90F": 1.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 83.6,
+        "tLowF": 65.2,
+        "precipIn": 2.91,
+        "snowIn": 0.0,
+        "wetDays": 5.5,
+        "days90F": 5.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 82.2,
+        "tLowF": 63.9,
+        "precipIn": 3.59,
+        "snowIn": 0.0,
+        "wetDays": 5.8,
+        "days90F": 3.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 74.8,
+        "tLowF": 56.5,
+        "precipIn": 4.17,
+        "snowIn": 0.0,
+        "wetDays": 6.0,
+        "days90F": 0.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 63.8,
+        "tLowF": 45.1,
+        "precipIn": 4.18,
+        "snowIn": 0.2,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 1.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.2,
+        "tLowF": 35.8,
+        "precipIn": 4.27,
+        "snowIn": 1.0,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 11.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 43.4,
+        "tLowF": 27.6,
+        "precipIn": 4.65,
+        "snowIn": 7.6,
+        "wetDays": 7.7,
+        "days90F": 0.0,
+        "daysFreeze": 22.8
+      }
+    ],
+    "annualPrecipIn": 47.5,
+    "annualSnowIn": 36.6,
+    "fallSeason": {
+      "avgHighF": 68.5,
+      "avgLowF": 50.3,
+      "precipIn": 16.2,
+      "wetDays": 25.0
+    },
+    "summary": "Hottest month Jul (avg high 83.6°F), coldest Jan (avg low 22.1°F). 47.5 in of rain per year, 36.6 in of snow. Fall season (Aug–Nov): highs around 68.5°F, 16.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014765,USW00054777,USC00379423&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:09Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Kia McNeill",
+      "title": "Messing Family Head Coach for Brown Varsity Women's Soccer",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/kia-mcneill/8072",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Kia McNeill",
+        "title": "Messing Family Head Coach for Brown Varsity Women's Soccer",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/kia-mcneill/8072",
+        "social": {}
+      },
+      {
+        "name": "Andre Reis",
+        "title": "Associate Head Coach & Recruiting Coordinator",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/andre-reis/8073",
+        "social": {}
+      },
+      {
+        "name": "Hogan Vivier '16",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/hogan-vivier-/8074",
+        "social": {}
+      },
+      {
+        "name": "Jake Castro",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/jake-castro/8076",
+        "social": {}
+      },
+      {
+        "name": "Justine Stoner",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/coaches/justine-stoner/8075",
+        "social": {}
+      },
+      {
+        "name": "Jamie Bartosh",
+        "title": "Sports Performance Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/jamie-bartosh/2495",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Beth Conroy",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/beth-conroy/2574",
+        "social": {}
+      },
+      {
+        "name": "Emily Tessier, RDN, LDN",
+        "title": "Nutritionist",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/emily-tessier-rdn-ldn/2563",
+        "social": {}
+      },
+      {
+        "name": "Brittan Davis, Ph.D.",
+        "title": "Sport Psychologist",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/brittan-davis-phd/2504",
+        "social": {}
+      },
+      {
+        "name": "Hung Le, M.D.",
+        "title": "Chief Medical Officer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/hung-le-md/2505",
+        "social": {}
+      },
+      {
+        "name": "Jen Miller-McEachern",
+        "title": "Academic Liaison",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/staff/jen-millermceachern-/2506",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +337,2681 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://brownbears.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:10:03Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "4-2-0",
+      "wins": 4,
+      "losses": 2,
+      "ties": 0,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Kia McNeill"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "9-4-4",
+      "wins": 9,
+      "losses": 4,
+      "ties": 4,
+      "confRecord": "3-2-2",
+      "rpiRank": 79,
+      "rpi": {
+        "rank": 79,
+        "record": "9-4-4",
+        "through": "2025-12-08",
+        "prevRank": 80,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 79,
+            "record": "9-4-4"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "7-5-5",
+      "wins": 7,
+      "losses": 5,
+      "ties": 5,
+      "confRecord": "3-2-2",
+      "rpiRank": 107,
+      "rpi": {
+        "rank": 107,
+        "sosRank": 131,
+        "balancedRank": 89,
+        "kpiRank": 99,
+        "masseyRank": 74,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "12-3-2",
+      "wins": 12,
+      "losses": 3,
+      "ties": 2,
+      "confRecord": "7-0-0",
+      "rpiRank": 7,
+      "rpi": {
+        "rank": 7,
+        "sosRank": 10,
+        "balancedRank": 22,
+        "kpiRank": 10,
+        "masseyRank": 38,
+        "ncaaSeed": 3,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 31,
+    "players": [
+      {
+        "number": "0",
+        "name": "Charlie Banbury",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Montreal, Quebec",
+        "highSchool": "Milton Academy (Mass.)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/charlie-banbury/23908",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Gurleen Toor",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Stuffville, Ontario",
+        "highSchool": "Bill Hogarth Secondary School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/gurleen-toor/23805",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Hasti Gholami",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lower Saxony, Germany",
+        "highSchool": "German International School Abu Dhabi",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/hasti-gholami/23791",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Audrey Lam",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Piedmont, Calif.",
+        "highSchool": "Piedmont",
+        "previousSchool": "",
+        "major": "",
+        "club": "Lamorinda Soccer Club",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/audrey-lam/23795",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Corine Gregory",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Pawleys Island, S.C.",
+        "highSchool": "Waccamaw",
+        "previousSchool": "",
+        "major": "",
+        "club": "Wilmington Hammerheads Youth FC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/corine-gregory/23792",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "5",
+        "name": "Danielle Bobowski",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Clarkston, Mich.",
+        "highSchool": "Flint Powers Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "Michigan Hawks",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/danielle-bobowski/23909",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Nadja Meite",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Yopougon, Côte D'Ivoire",
+        "highSchool": "Suffield Academy (Conn.)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/nadja-meite/23796",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Maja Cenanovic",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Toronto, Ontario",
+        "highSchool": "Ursula Franklin Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Woodbridge SC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/maja-cenanovic/23910",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Aleysia Welch",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mesquite, Texas",
+        "highSchool": "Dr. John D. Horn",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/aleysia-welch/23810",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Rylee Keeley",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Wake Forest, N.C.",
+        "highSchool": "Crossroads Flex",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/rylee-keeley/23794",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Joy Okonye",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lagos, Nigeria",
+        "highSchool": "Canterbury School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Black Rock FC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/joy-okonye/23798",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "11",
+        "name": "Claire Silverman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Boulder, Colo.",
+        "highSchool": "Fairview",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/claire-silverman/23803",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Kyra Treanor",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "St. Charles, Ill.",
+        "highSchool": "St. Charles North",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sockers FC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/kyra-treanor/23806",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Addison Etter",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Riegelsville, Pa.",
+        "highSchool": "Moravian Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Penn Fusion",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/addison-etter/23790",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Chloe Shin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Honolulu, Hawaii",
+        "highSchool": "Iolani School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Hawaii Rush",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/chloe-shin/23916",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Jael-Marie Guy",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Point, N.Y.",
+        "highSchool": "James I. O'Neill",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/jaelmarie-guy/23793",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "16",
+        "name": "Hannah Schapiro",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Pleasantville, N.Y.",
+        "highSchool": "The Masters School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/hannah-schapiro/23801",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Georgia Steinbach",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Chico, Calif.",
+        "highSchool": "IMG Academy (Fla.)",
+        "previousSchool": "",
+        "major": "",
+        "club": "IMG Academy",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/georgia-steinbach/23915",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Anya Tansil",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Manchester, Conn.",
+        "highSchool": "East Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "Scorpions SC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/anya-tansil/23917",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "19",
+        "name": "Chesney Robinson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bowie, Md.",
+        "highSchool": "Our Lady of Good Counsel",
+        "previousSchool": "",
+        "major": "",
+        "club": "Bethesda SC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/chesney-robinson/23799",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "20",
+        "name": "Naomi Nnewihe",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Egg Harbor Township, N.J.",
+        "highSchool": "Ocean City",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/naomi-nnewihe/23797",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Ayla Sahin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Barrington, R.I.",
+        "highSchool": "Tabor Academy (Mass.)",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/ayla-sahin/23800",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "22",
+        "name": "Brooke Birtwistle",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Hopkinton, Mass.",
+        "highSchool": "Hopkinton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/brooke-birtwistle/23789",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Taylor Green",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Piscataway, N.J.",
+        "highSchool": "The Wardlaw + Hartridge",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Copa",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/taylor-green/23912",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "25",
+        "name": "Sydney Dunn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Coronado, Calif.",
+        "highSchool": "Coronado",
+        "previousSchool": "",
+        "major": "",
+        "club": "Legends FC San Diego",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/sydney-dunn/23911",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "29",
+        "name": "Tomai Triplett",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Fort Worth, Texas",
+        "highSchool": "Timber Creek",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/tomai-triplett/23807",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Bianca Putanec",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Atherton, Calif.",
+        "highSchool": "Menlo School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Mtn. View Los Altos SC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/bianca-putanec/23914",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "35",
+        "name": "Madison Malek",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Byron Center, Mich.",
+        "highSchool": "Byron Center",
+        "previousSchool": "",
+        "major": "",
+        "club": "Midwest United FC",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/madison-malek/23913",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "36",
+        "name": "Ella Weil",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "6'1\"",
+        "heightIn": 73,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Culver City, Calif.",
+        "highSchool": "Culver City",
+        "previousSchool": "",
+        "major": "",
+        "club": "Beach Futbol Club (CA)",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/ella-weil/23809",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "40",
+        "name": "Angelina Vargas",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Edison, N.J.",
+        "highSchool": "The Wardlaw + Hartridge",
+        "previousSchool": "",
+        "major": "",
+        "club": "Players Development Academy (PDA)",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/angelina-vargas/23808",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "77",
+        "name": "Deze Scott",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Frisco, Texas",
+        "highSchool": "Reedy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://brownbears.com/sports/womens-soccer/roster/deze-scott/23802",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 10,
+      "SR": 8,
+      "JR": 8,
+      "SO": 5
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "D": 1,
+      "M": 3,
+      "F": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://brownbears.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:10:03Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Shoshana Gevelber",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Palo Alto, Calif.",
+          "highSchool": "Castilleja School"
+        },
+        {
+          "number": "1",
+          "name": "Bella Schopp",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Hinsdale, Ill.",
+          "highSchool": "Hinsdale Central"
+        },
+        {
+          "number": "2",
+          "name": "Hasti Gholami",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lower Saxony, Germany",
+          "highSchool": "German International School Abu Dhabi"
+        },
+        {
+          "number": "3",
+          "name": "Audrey Lam",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Piedmont, Calif.",
+          "highSchool": "Piedmont"
+        },
+        {
+          "number": "4",
+          "name": "Corine Gregory",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Pawleys Island, S.C.",
+          "highSchool": "Waccamaw"
+        },
+        {
+          "number": "6",
+          "name": "Nadja Meite",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Yopougon, Côte D'Ivoire",
+          "highSchool": "Suffield Academy (Conn.)"
+        },
+        {
+          "number": "7",
+          "name": "Naya Cardoza",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ajax, Ontario",
+          "highSchool": "Pickering"
+        },
+        {
+          "number": "8",
+          "name": "Aleysia Welch",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Mesquite, Texas",
+          "highSchool": "Dr. John D. Horn"
+        },
+        {
+          "number": "9",
+          "name": "Rylee Keeley",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": "Crossroads Flex"
+        },
+        {
+          "number": "10",
+          "name": "Joy Okonye",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lagos, Nigeria",
+          "highSchool": "Canterbury School"
+        },
+        {
+          "number": "11",
+          "name": "Claire Silverman",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Boulder, Colo.",
+          "highSchool": "Fairview"
+        },
+        {
+          "number": "12",
+          "name": "Kyra Treanor",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "St. Charles, Ill.",
+          "highSchool": "St. Charles North"
+        },
+        {
+          "number": "13",
+          "name": "Addison Etter",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Riegelsville, Pa.",
+          "highSchool": "Moravian Academy"
+        },
+        {
+          "number": "14",
+          "name": "Layla Shell",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Midlothian, Va.",
+          "highSchool": "Midlothian"
+        },
+        {
+          "number": "15",
+          "name": "Jael-Marie Guy",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "West Point, N.Y.",
+          "highSchool": "James I. O'Neill"
+        },
+        {
+          "number": "16",
+          "name": "Hannah Schapiro",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pleasantville, N.Y.",
+          "highSchool": "The Masters School"
+        },
+        {
+          "number": "18",
+          "name": "Hayley Houston",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Douglas, Mass.",
+          "highSchool": "Saint Paul"
+        },
+        {
+          "number": "19",
+          "name": "Chesney Robinson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Bowie, Md.",
+          "highSchool": "Our Lady of Good Counsel"
+        },
+        {
+          "number": "20",
+          "name": "Naomi Nnewihe",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Egg Harbor Township, N.J.",
+          "highSchool": "Ocean City"
+        },
+        {
+          "number": "21",
+          "name": "Ayla Sahin",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Barrington, R.I.",
+          "highSchool": "Tabor Academy (Mass.)"
+        },
+        {
+          "number": "22",
+          "name": "Brooke Birtwistle",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Hopkinton, Mass.",
+          "highSchool": "Hopkinton"
+        },
+        {
+          "number": "24",
+          "name": "Maddie Templeton",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Winston-Salem, N.C.",
+          "highSchool": "Forsyth Country Day School"
+        },
+        {
+          "number": "26",
+          "name": "Olivia Hall",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Overland Park, Kansas",
+          "highSchool": "Blue Valley Southwest"
+        },
+        {
+          "number": "29",
+          "name": "Tomai Triplett",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fort Worth, Texas",
+          "highSchool": "Timber Creek"
+        },
+        {
+          "number": "30",
+          "name": "Gurleen Toor",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Stuffville, Ontario",
+          "highSchool": "Bill Hogarth Secondary School"
+        },
+        {
+          "number": "36",
+          "name": "Ella Weil",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Culver City, Calif.",
+          "highSchool": "Culver City"
+        },
+        {
+          "number": "40",
+          "name": "Angelina Vargas",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Edison, N.J.",
+          "highSchool": "The Wardlaw + Hartridge"
+        },
+        {
+          "number": "77",
+          "name": "Deze Scott",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Frisco, Texas",
+          "highSchool": "Reedy"
+        }
+      ],
+      "departed": [
+        "bella schopp",
+        "hayley houston",
+        "layla shell",
+        "maddie templeton",
+        "naya cardoza",
+        "olivia hall",
+        "shoshana gevelber"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Shoshana Gevelber",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Palo Alto, Calif.",
+          "highSchool": "Castilleja School"
+        },
+        {
+          "number": "1",
+          "name": "Bella Schopp",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Hinsdale, Ill.",
+          "highSchool": "Hinsdale Central"
+        },
+        {
+          "number": "2",
+          "name": "Hasti Gholami",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lower Saxony, Germany",
+          "highSchool": "German International School Abu Dhabi"
+        },
+        {
+          "number": "3",
+          "name": "Katie Park",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Weston, Conn.",
+          "highSchool": "Hopkins School"
+        },
+        {
+          "number": "4",
+          "name": "Kira Maguire",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hingham, Mass.",
+          "highSchool": "Hingham"
+        },
+        {
+          "number": "5",
+          "name": "Audrey Lam",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Piedmont, Calif.",
+          "highSchool": "Piedmont"
+        },
+        {
+          "number": "6",
+          "name": "Nadja Meite",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Yopougon, Côte D'Ivoire",
+          "highSchool": "Suffield Academy (Conn.)"
+        },
+        {
+          "number": "7",
+          "name": "Naya Cardoza",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ajax, Ontario",
+          "highSchool": "Pickering"
+        },
+        {
+          "number": "8",
+          "name": "Aleysia Welch",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Mesquite, Texas",
+          "highSchool": "Dr. John D. Horn"
+        },
+        {
+          "number": "9",
+          "name": "Olivia Hall",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Overland Park, Kansas",
+          "highSchool": "Blue Valley Southwest"
+        },
+        {
+          "number": "10",
+          "name": "Joy Okonye",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lagos, Nigeria",
+          "highSchool": "Canterbury School"
+        },
+        {
+          "number": "11",
+          "name": "Claire Silverman",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Boulder, Colo.",
+          "highSchool": "Fairview"
+        },
+        {
+          "number": "14",
+          "name": "Layla Shell",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Midlothian, Va.",
+          "highSchool": "Midlothian"
+        },
+        {
+          "number": "15",
+          "name": "Corine Gregory",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Pawleys Island, S.C.",
+          "highSchool": "Waccamaw"
+        },
+        {
+          "number": "17",
+          "name": "Isabelle Chukwu",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Ottawa, Ontario, Canada",
+          "highSchool": "Bill Crothers Secondary School"
+        },
+        {
+          "number": "18",
+          "name": "Hayley Houston",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Douglas, Mass.",
+          "highSchool": "Saint Paul"
+        },
+        {
+          "number": "19",
+          "name": "Chesney Robinson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Bowie, Md.",
+          "highSchool": "Our Lady of Good Counsel"
+        },
+        {
+          "number": "20",
+          "name": "Gianna De Priest",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Long Beach, Calif.",
+          "highSchool": "Millikan"
+        },
+        {
+          "number": "21",
+          "name": "Ayla Sahin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Barrington, R.I.",
+          "highSchool": "Tabor Academy (Mass.)"
+        },
+        {
+          "number": "22",
+          "name": "Brooke Birtwistle",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Hopkinton, Mass.",
+          "highSchool": "Hopkinton"
+        },
+        {
+          "number": "23",
+          "name": "Lindsay Gould",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Miami Beach, Fla.",
+          "highSchool": "Ransom Everglades School"
+        },
+        {
+          "number": "24",
+          "name": "Maddie Templeton",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Winston-Salem, N.C.",
+          "highSchool": "Forsyth Country Day School"
+        },
+        {
+          "number": "27",
+          "name": "Kyra Treanor",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "St. Charles, Ill.",
+          "highSchool": "St. Charles North"
+        },
+        {
+          "number": "30",
+          "name": "Gurleen Toor",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Stuffville, Ontario",
+          "highSchool": "Bill Hogarth Secondary School"
+        },
+        {
+          "number": "33",
+          "name": "Lexi Quinn",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Menlo Park, Calif.",
+          "highSchool": "Menlo-Atherton"
+        },
+        {
+          "number": "36",
+          "name": "Ella Weil",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Culver City, Calif.",
+          "highSchool": "Culver City"
+        },
+        {
+          "number": "37",
+          "name": "Karlie Schlosser",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cooper City, Fla.",
+          "highSchool": "Cooper City"
+        },
+        {
+          "number": "40",
+          "name": "Angelina Vargas",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Edison, N.J.",
+          "highSchool": "The Wardlaw + Hartridge"
+        },
+        {
+          "number": "99",
+          "name": "Miya Grant-Clavijo",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Toronto, Ontario",
+          "highSchool": "Bill Crothers Secondary School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Shoshana Gevelber",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Palo Alto, Calif.",
+          "highSchool": "Castilleja School"
+        },
+        {
+          "number": "1",
+          "name": "Bella Schopp",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Hinsdale, Ill.",
+          "highSchool": "Hinsdale Central"
+        },
+        {
+          "number": "2",
+          "name": "Naomi Ferguson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "St. Louis, Mo.",
+          "highSchool": "MICDS"
+        },
+        {
+          "number": "3",
+          "name": "Katie Park",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Weston, Conn.",
+          "highSchool": "Hopkins School"
+        },
+        {
+          "number": "4",
+          "name": "Kira Maguire",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hingham, Mass.",
+          "highSchool": "Hingham"
+        },
+        {
+          "number": "5",
+          "name": "Audrey Lam",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Piedmont, Calif.",
+          "highSchool": "Piedmont"
+        },
+        {
+          "number": "6",
+          "name": "Courtney Cummings",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Long Beach, Calif.",
+          "highSchool": "Millikan"
+        },
+        {
+          "number": "7",
+          "name": "Naya Cardoza",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Ajax, Ontario",
+          "highSchool": "Pickering"
+        },
+        {
+          "number": "8",
+          "name": "Sheyenne Allen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bear, Del.",
+          "highSchool": "Cab Calloway School of the Arts"
+        },
+        {
+          "number": "9",
+          "name": "Lindsay Gould",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Miami Beach, Fla.",
+          "highSchool": "Ransom Everglades School"
+        },
+        {
+          "number": "10",
+          "name": "Brittany Raphino",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Randolph, Mass.",
+          "highSchool": "Thayer Academy"
+        },
+        {
+          "number": "11",
+          "name": "Ava Seelenfreund",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Truckee, Calif.",
+          "highSchool": "Truckee"
+        },
+        {
+          "number": "12",
+          "name": "Aminata Davis",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Arlington, Va.",
+          "highSchool": "Yorktown"
+        },
+        {
+          "number": "13",
+          "name": "Clare Gagne",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Orono, Minn.",
+          "highSchool": "Orono"
+        },
+        {
+          "number": "14",
+          "name": "Layla Shell",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Midlothian, Va.",
+          "highSchool": "Midlothian"
+        },
+        {
+          "number": "15",
+          "name": "Corine Gregory",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pawleys Island, S.C.",
+          "highSchool": "Waccamaw"
+        },
+        {
+          "number": "17",
+          "name": "Joy Okonye",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lagos, Nigeria",
+          "highSchool": "Canterbury School"
+        },
+        {
+          "number": "18",
+          "name": "Hayley Houston",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Douglas, Mass.",
+          "highSchool": "Saint Paul"
+        },
+        {
+          "number": "19",
+          "name": "Kiera Fullick",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Orland Park, Ill.",
+          "highSchool": "Carl Sandburg"
+        },
+        {
+          "number": "20",
+          "name": "Gianna De Priest",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Long Beach, Calif.",
+          "highSchool": "Millikan"
+        },
+        {
+          "number": "21",
+          "name": "Jessica Hinton",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Middletown, Conn.",
+          "highSchool": "Loomis Chaffee School"
+        },
+        {
+          "number": "22",
+          "name": "Evelyn Calhoon",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Menlo Park, Calif.",
+          "highSchool": "Menlo-Atherton"
+        },
+        {
+          "number": "23",
+          "name": "Kaitlyn Williams",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Peachtree Corners, Ga.",
+          "highSchool": "Greater Atlanta Christian School"
+        },
+        {
+          "number": "25",
+          "name": "Hasti Gholami",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lower Saxony, Germany",
+          "highSchool": "German International School Abu Dhabi"
+        },
+        {
+          "number": "27",
+          "name": "Claire Silverman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Boulder, Colo.",
+          "highSchool": "Fairview"
+        },
+        {
+          "number": "28",
+          "name": "Lucinda Anderson",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "San Francisco, Calif.",
+          "highSchool": "Marin Academy"
+        },
+        {
+          "number": "30",
+          "name": "Gurleen Toor",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Stuffville, Ontario",
+          "highSchool": "Bill Hogarth Secondary School"
+        },
+        {
+          "number": "32",
+          "name": "Adriana Ruiz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Milton, Mass.",
+          "highSchool": "Milton Academy"
+        },
+        {
+          "number": "33",
+          "name": "Lexi Quinn",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Menlo Park, Calif.",
+          "highSchool": "Menlo-Atherton"
+        },
+        {
+          "number": "37",
+          "name": "Karlie Schlosser",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cooper City, Fla.",
+          "highSchool": "Cooper City"
+        },
+        {
+          "number": "40",
+          "name": "Angelina Vargas",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Edison, N.J.",
+          "highSchool": "The Wardlaw + Hartridge"
+        },
+        {
+          "number": "99",
+          "name": "Miya Grant-Clavijo",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Toronto, Ontario",
+          "highSchool": "Bill Crothers Secondary School"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 4,
+      "losses": 2,
+      "ties": 0,
+      "text": "4-2-0",
+      "played": 6,
+      "scheduled": 16,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "New Haven",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": "W",
+        "score": "4-0",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/new-haven/boxscore/20893",
+          "recap": "https://brownbears.com/news/2026/8/20/womens-soccer-womens-soccer-earns-4-0-season-opening-win-over-new-haven"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Holy Cross",
+        "opponentRank": null,
+        "location": "Linda Johnson Smith Soccer Stadium, Worcester, Mass.",
+        "result": "L",
+        "score": "0-1",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/holy-cross/boxscore/20894",
+          "recap": "https://brownbears.com/news/2026/8/23/womens-soccer-womens-soccer-falls-at-holy-cross-in-first-road-match-1-0",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/holy-cross/77"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UConn",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/uconn/boxscore/20895",
+          "recap": "https://brownbears.com/news/2026/8/27/womens-soccer-vargas-game-winner-lifts-womens-soccer-over-uconn-1-0"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Penn State",
+        "opponentRank": null,
+        "location": "Jeffrey Field, University Park, Pa.",
+        "result": "L",
+        "score": "0-6",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/penn-state/boxscore/20896",
+          "recap": "https://brownbears.com/news/2026/8/30/womens-soccer-womens-soccer-falls-at-penn-state-6-0",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/penn-state/108"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UMass",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/umass/boxscore/20897",
+          "recap": "https://brownbears.com/news/2026/9/3/womens-soccer-sahins-brace-leads-womens-soccer-past-umass-4-1"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "No. 13 UCF",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": "W",
+        "score": "7-0",
+        "links": {
+          "box score": "https://brownbears.com/sports/womens-soccer/stats/2026/ucf/boxscore/20898",
+          "recap": "https://brownbears.com/news/2026/9/6/womens-soccer-womens-soccer-powers-past-no-13-ucf-7-0"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Rhode Island",
+        "opponentRank": null,
+        "location": "URI Soccer Complex, Kingston, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/33cff072-39e1-4d9b-be97-3277dfbc70d1",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666579",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/rhode-island/113"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Hofstra",
+        "opponentRank": null,
+        "location": "Hofstra Soccer Stadium, Hempstead, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://go.flocollege.com/teams/caa-hofstra?utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=hofstra",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664628",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/hofstra/76"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Providence",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/c0dcfa70-7d9c-4aeb-80e4-950b36a2738f",
+          "live stats": "https://brownbears.com/sidearmstats/wsoc/media",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/providence/104"
+        }
+      },
+      {
+        "date": "2026-09-26",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Columbia",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://brownbears.com/sidearmstats/wsoc/media",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/columbia/53"
+        }
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Penn",
+        "opponentRank": null,
+        "location": "Rhodes Field, Philadelphia, Penn.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665670",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/penn/109"
+        }
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Yale",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://brownbears.com/sidearmstats/wsoc/media",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/yale/114"
+        }
+      },
+      {
+        "date": "2026-10-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Dartmouth",
+        "opponentRank": null,
+        "location": "Burnham Field, Hanover, N.H.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://dartmouthsports.com/sidearmstats/wsoc/summary",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/dartmouth/57"
+        }
+      },
+      {
+        "date": "2026-10-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Harvard",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://brownbears.com/sidearmstats/wsoc/media",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/harvard/72"
+        }
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Cornell",
+        "opponentRank": null,
+        "location": "Stevenson-Pincince Field, Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://brownbears.com/sidearmstats/wsoc/media",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/cornell/56"
+        }
+      },
+      {
+        "date": "2026-11-07",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Princeton",
+        "opponentRank": null,
+        "location": "Myslik Field at Roberts Stadium, Princeton, N.J.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/search/_/q/brown/o/watch/appearance",
+          "live stats": "https://goprincetontigers.com/sidearmstats/wsoc/summary",
+          "history": "https://brownbears.com/sports/wsoc/opponent-history/princeton/105"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "9-4-4",
+        "games": [
+          {
+            "date": "2025-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "New Haven",
+            "opponentRank": null,
+            "location": "West Haven, Conn.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/new-haven/boxscore/17699",
+              "recap": "https://brownbears.com/news/2025/8/22/womens-soccer-wins-first-game-of-the-season-at-new-haven",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/new-haven/1502"
+            }
+          },
+          {
+            "date": "2025-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rhode Island",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/rhode-island/boxscore/17700",
+              "recap": "https://brownbears.com/news/2025/8/25/womens-soccer-womens-soccer-defeats-rhode-island-in-home-opener"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UConn",
+            "opponentRank": null,
+            "location": "Storrs, Conn.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/uconn/boxscore/17701",
+              "recap": "https://brownbears.com/news/2025/8/28/womens-soccer-womens-soccer-defeats-uconn-to-remain-undefeated",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/uconn/55"
+            }
+          },
+          {
+            "date": "2025-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Minnesota",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/minnesota/boxscore/17702",
+              "recap": "https://brownbears.com/news/2025/9/1/womens-soccer-womens-soccer-suffers-first-loss-to-minnesota",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/minnesota/97"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Northeastern",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/northeastern/boxscore/17703",
+              "recap": "https://brownbears.com/news/2025/9/4/womens-soccer-womens-soccer-defeats-northeastern-2-0-on-thursday",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/northeastern/89"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": 17,
+            "location": "Winston-Salem, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/wake-forest/boxscore/17704",
+              "recap": "https://brownbears.com/news/2025/9/7/womens-soccer-womens-soccer-ties-17th-ranked-wake-forest-on-the-road",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/wake-forest/182"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/hofstra/boxscore/17705",
+              "recap": "https://brownbears.com/news/2025/9/11/womens-soccer-scores-late-to-tie-hofstra",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/hofstra/76"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Central Connecticut State",
+            "opponentRank": null,
+            "location": "New Britain, Conn.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/central-connecticut-state/boxscore/17706",
+              "recap": "https://brownbears.com/news/2025/9/14/womens-soccer-womens-soccer-defeats-central-connecticut-state-4-0",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/central-connecticut-state/46"
+            }
+          },
+          {
+            "date": "2025-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/providence/boxscore/17707",
+              "recap": "https://brownbears.com/news/2025/9/17/womens-soccer-womens-soccer-defeats-providence-4-0-in-final-non-conference-game",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/providence/104"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "New Haven, Conn.",
+            "result": "W",
+            "score": "5-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/yale/boxscore/17708",
+              "recap": "https://brownbears.com/news/2025/9/21/womens-soccer-womens-soccer-defeats-yale-5-2-to-open-ivy-league-play",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/yale/114"
+            }
+          },
+          {
+            "date": "2025-09-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Columbia",
+            "opponentRank": null,
+            "location": "New York, N.Y.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/columbia/boxscore/17709",
+              "recap": "https://brownbears.com/news/2025/9/27/womens-soccer-drops-first-ivy-contest-2-1-to-columbia",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/columbia/53"
+            }
+          },
+          {
+            "date": "2025-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/penn/boxscore/17710",
+              "recap": "https://brownbears.com/news/2025/10/4/womens-soccer-womens-soccer-defeats-penn-4-0-at-home",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/penn/109"
+            }
+          },
+          {
+            "date": "2025-10-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/dartmouth/boxscore/17711",
+              "recap": "https://brownbears.com/news/2025/10/11/womens-soccer-womens-soccer-plays-to-0-0-draw-against-dartmouth",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/dartmouth/57"
+            }
+          },
+          {
+            "date": "2025-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Cambridge, Mass.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/harvard/boxscore/17712",
+              "recap": "https://brownbears.com/news/2025/10/18/womens-soccer-womens-soccer-plays-to-a-2-2-draw-at-harvard",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/harvard/72"
+            }
+          },
+          {
+            "date": "2025-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Ithaca, N.Y.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/cornell/boxscore/17713",
+              "recap": "https://brownbears.com/news/2025/10/25/womens-soccer-womens-soccer-blanks-cornell-for-ivy-league-win",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/cornell/56"
+            }
+          },
+          {
+            "date": "2025-11-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Princeton",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/princeton/boxscore/17714",
+              "recap": "https://brownbears.com/news/2025/11/1/womens-soccer-womens-soccer-falls-to-princeton-on-senior-day-will-rematch-tigers-in-ivy-league-tournament",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/princeton/105"
+            }
+          },
+          {
+            "date": "2025-11-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "(1) Princeton",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2025/princeton/boxscore/20397",
+              "recap": "https://brownbears.com/news/2025/11/6/no-1-princeton-defeats-no-4-womens-soccer-3-0-in-ivy-tournament-semifinals",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/princeton/105"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "7-5-5",
+        "games": [
+          {
+            "date": "2024-08-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Rhode Island",
+            "opponentRank": null,
+            "location": "Kingston, R.I.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/rhode-island/boxscore/16292",
+              "recap": "https://brownbears.com/news/2024/8/23/womens-soccer-womens-soccer-drops-season-opener-at-rhode-island",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/rhode-island/113"
+            }
+          },
+          {
+            "date": "2024-08-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kansas",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/kansas/1542"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "Hempstead, N.Y.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/hofstra/boxscore/16294",
+              "recap": "https://brownbears.com/news/2024/8/29/womens-soccer-late-goal-from-kira-maguire-gives-womens-soccer-1-1-tie-at-hofstra",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/hofstra/76"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Indiana",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/indiana/boxscore/16295",
+              "recap": "https://brownbears.com/news/2024/9/1/womens-soccer-womens-soccer-earns-1-1-draw-against-indiana",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/indiana/337"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Central Connecticut State",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/central-connecticut-state/boxscore/16296",
+              "recap": "https://brownbears.com/news/2024/9/5/womens-soccer-womens-soccer-captures-2-0-win-over-central-connecticut-state",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/central-connecticut-state/46"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Minnesota",
+            "opponentRank": null,
+            "location": "St. Paul, Minn.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/minnesota/boxscore/16297",
+              "recap": "https://brownbears.com/news/2024/9/8/womens-soccer-late-goal-from-naya-cardoza-gives-womens-soccer-1-1-draw-at-minnesota",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/minnesota/97"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/providence/boxscore/16298",
+              "recap": "https://brownbears.com/news/2024/9/12/womens-soccer-womens-soccer-reclaims-crosstown-cup-with-2-0-win-over-providence",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/providence/104"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ohio State",
+            "opponentRank": 20,
+            "location": "Columbus, Ohio",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/ohio-state/boxscore/16299",
+              "recap": "https://brownbears.com/news/2024/9/15/womens-soccer-womens-soccer-suffers-2-0-defeat-at-no-20-ohio-state",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/ohio-state/285"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northeastern",
+            "opponentRank": null,
+            "location": "Boston, Mass.",
+            "result": "W",
+            "score": "6-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/northeastern/boxscore/16300",
+              "recap": "https://brownbears.com/news/2024/9/19/womens-soccer-womens-soccer-cruises-to-6-1-win-at-northeastern",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/northeastern/89"
+            }
+          },
+          {
+            "date": "2024-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "#RV Harvard",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/harvard/boxscore/16301",
+              "recap": "https://brownbears.com/news/2024/9/28/womens-soccer-ella-weils-game-winning-goal-gives-womens-soccer-2-1-win-over-harvard-in-ivy-league-opener",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/harvard/72"
+            }
+          },
+          {
+            "date": "2024-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Princeton",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "0-8",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/princeton/boxscore/16302",
+              "recap": "https://brownbears.com/news/2024/10/5/womens-soccer-womens-soccer-drops-conference-contest-at-princeton",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/princeton/105"
+            }
+          },
+          {
+            "date": "2024-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/yale/boxscore/16303",
+              "recap": "https://brownbears.com/news/2024/10/9/womens-soccer-womens-soccer-earns-2-0-win-over-yale",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/yale/114"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/penn/boxscore/16304",
+              "recap": "https://brownbears.com/news/2024/10/13/womens-soccer-womens-soccer-plays-to-scoreless-draw-at-penn",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/penn/109"
+            }
+          },
+          {
+            "date": "2024-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Columbia",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/columbia/boxscore/16305",
+              "recap": "https://brownbears.com/news/2024/10/19/womens-soccer-womens-soccer-earns-1-1-draw-with-columbia",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/columbia/53"
+            }
+          },
+          {
+            "date": "2024-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/cornell/boxscore/16306",
+              "recap": "https://brownbears.com/news/2024/10/26/womens-soccer-womens-soccer-earns-ivy-league-tournament-berth-with-1-0-win-over-cornell",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/cornell/56"
+            }
+          },
+          {
+            "date": "2024-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Hanover, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/dartmouth/boxscore/16307",
+              "recap": "https://brownbears.com/news/2024/11/2/womens-soccer-womens-soccer-concludes-regular-season-with-1-0-loss-at-dartmouth",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/dartmouth/57"
+            }
+          },
+          {
+            "date": "2024-11-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "(2) Columbia",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/columbia/boxscore/16308",
+              "recap": "https://brownbears.com/news/2024/11/8/womens-soccer-womens-soccer-advances-to-ivy-league-championship-game-with-2-1-win-over-columbia"
+            }
+          },
+          {
+            "date": "2024-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "(1) Princeton",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2024/princeton/boxscore/16796",
+              "recap": "https://brownbears.com/news/2024/11/10/womens-soccer-womens-soccer-suffers-2-0-loss-to-princeton-in-ivy-league-championship-game"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "12-3-2",
+        "games": [
+          {
+            "date": "2023-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UAlbany",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/ualbany/boxscore/14321",
+              "recap": "https://brownbears.com/news/2023/8/25/womens-soccer-dominates-in-season-opener",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/ualbany/33"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Central Connecticut State",
+            "opponentRank": null,
+            "location": "New Britain, Conn.",
+            "result": "W",
+            "score": "4-3",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/central-connecticut-state/boxscore/14322",
+              "recap": "https://brownbears.com/news/2023/8/27/womens-soccer-stages-late-comeback-to-take-down-ccsu",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/central-connecticut-state/46"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/providence/boxscore/14323",
+              "recap": "https://brownbears.com/news/2023/8/31/womens-soccer-falls-at-providence",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/providence/104"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UC San Diego",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/uc-san-diego/boxscore/14324",
+              "recap": "https://brownbears.com/news/2023/9/3/womens-soccer-blanks-uc-san-diego-2-0",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/uc-san-diego/375"
+            }
+          },
+          {
+            "date": "2023-09-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "#RV/21 Saint Louis",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/saint-louis/boxscore/14325",
+              "recap": "https://brownbears.com/news/2023/9/6/womens-soccer-earns-1-1-draw-with-no-21-saint-louis",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/saint-louis/1481"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "#RV Wake Forest",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/wake-forest/182"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Portland",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/portland/boxscore/14327",
+              "recap": "https://brownbears.com/news/2023/9/14/womens-soccer-battles-to-scoreless-draw-with-portland",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/portland/278"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rhode Island",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/rhode-island/boxscore/14328",
+              "recap": "https://brownbears.com/news/2023/9/17/late-goal-lifts-womens-soccer-to-victory-over-rhode-island",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/rhode-island/113"
+            }
+          },
+          {
+            "date": "2023-09-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Cambridge, Mass.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/harvard/boxscore/14329",
+              "recap": "https://brownbears.com/news/2023/9/23/womens-soccer-allens-second-half-goals-send-womens-soccer-past-harvard-2-0",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/harvard/72"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "#13/15 Princeton",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/princeton/boxscore/14330",
+              "recap": "https://brownbears.com/news/2023/9/30/raphino-powers-womens-soccer-to-victory-over-13-15-princeton",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/princeton/105"
+            }
+          },
+          {
+            "date": "2023-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "New Haven, Conn.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/yale/boxscore/14331",
+              "recap": "https://brownbears.com/news/2023/10/4/raphinos-hat-trick-leads-womens-soccer-to-convincing-win-at-yale",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/yale/114"
+            }
+          },
+          {
+            "date": "2023-10-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/penn/boxscore/14332",
+              "recap": "https://brownbears.com/news/2023/10/7/goals-by-seelenfreund-raphino-lift-womens-soccer-to-victory-over-penn",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/penn/109"
+            }
+          },
+          {
+            "date": "2023-10-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Columbia",
+            "opponentRank": null,
+            "location": "New York, N.Y.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/columbia/boxscore/14333",
+              "recap": "https://brownbears.com/news/2023/10/14/womens-soccer-brown-clinches-ivy-league-tournament-berth-improve-to-5-0-in-league-play",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/columbia/53"
+            }
+          },
+          {
+            "date": "2023-10-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Ithaca, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/cornell/boxscore/14334",
+              "recap": "https://brownbears.com/news/2023/10/21/womens-soccer-womens-soccer-wins-fourth-consecutive-ivy-league-title-will-host-ivy-tournament",
+              "history": "https://brownbears.com/sports/wsoc/opponent-history/cornell/56"
+            }
+          },
+          {
+            "date": "2023-10-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/dartmouth/boxscore/14335",
+              "recap": "https://brownbears.com/news/2023/10/28/womens-soccer-womens-soccer-blanks-dartmouth-2-0-ends-regular-season-7-0-in-ivy-play"
+            }
+          },
+          {
+            "date": "2023-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "(4) Columbia",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/columbia/boxscore/14336",
+              "recap": "https://brownbears.com/news/2023/11/3/womens-soccer-falls-to-columbia-in-overtime-in-ivy-league-semifinals"
+            }
+          },
+          {
+            "date": "2023-11-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Quinnipiac",
+            "opponentRank": null,
+            "location": "Stevenson-Pincince Field, Providence, R.I.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/quinnipiac/boxscore/14753",
+              "recap": "https://brownbears.com/news/2023/11/11/womens-soccer-third-seeded-womens-soccer-dominates-in-3-0-ncaa-opening-round-victory"
+            }
+          },
+          {
+            "date": "2023-11-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Mississippi State",
+            "opponentRank": 18,
+            "location": "Stanford, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://brownbears.com/sports/womens-soccer/stats/2023/mississippi-state/boxscore/14755",
+              "recap": "https://brownbears.com/news/2023/11/17/womens-soccer-womens-soccer-falls-in-tight-ncaa-round-of-32-contest-2-1"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://brownbears.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:10:03Z"
+    }
+  },
   "commitments": [
     {
       "id": "anya-tansil-2026",
@@ -117,7 +3024,7 @@
       "city": "",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +3068,7 @@
       "city": "San Francisco",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -180,7 +3087,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -240,7 +3147,7 @@
       "city": "Honolulu",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -259,7 +3166,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -275,7 +3182,7 @@
       "city": "Clarkston",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -294,7 +3201,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -310,7 +3217,7 @@
       "city": "",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -354,7 +3261,7 @@
       "city": "Byron Center",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -398,7 +3305,7 @@
       "city": "Toronto",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -417,7 +3324,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -433,7 +3340,7 @@
       "city": "",
       "highSchool": "",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -477,7 +3384,7 @@
       "city": "",
       "highSchool": "Wardlaw-Hartridge",
       "college": "brown",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1187,41 +4094,27 @@
     "2028": 6
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://brownbears.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:29:58Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.82617&longitude=-71.40385&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York:",
-        "at": "2026-09-07T05:29:56Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:29:56Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:09:51Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

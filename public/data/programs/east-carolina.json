@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T06:22:47Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 35.607186,
+    "lon": -77.368291,
+    "timezone": "America/New_York",
+    "elevationM": 48.8,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093759",
+      "name": "ROCKY MT WILSON AP",
+      "state": "NC",
+      "distanceKm": 54.8,
+      "elevationM": 48.8
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 51.8,
+        "tLowF": 30.8,
+        "precipIn": 3.51,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 18.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 55.3,
+        "tLowF": 32.6,
+        "precipIn": 2.87,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 15.1
+      },
+      {
+        "month": "Mar",
+        "tHighF": 63.2,
+        "tLowF": 38.7,
+        "precipIn": 3.97,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 8.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 72.5,
+        "tLowF": 47.5,
+        "precipIn": 3.61,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.3,
+        "daysFreeze": 1.0
+      },
+      {
+        "month": "May",
+        "tHighF": 79.9,
+        "tLowF": 56.4,
+        "precipIn": 2.92,
+        "snowIn": null,
+        "wetDays": 6.4,
+        "days90F": 3.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 86.9,
+        "tLowF": 64.8,
+        "precipIn": 3.9,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 11.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 90.5,
+        "tLowF": 69.0,
+        "precipIn": 4.59,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 18.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 88.3,
+        "tLowF": 67.7,
+        "precipIn": 4.92,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 14.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 82.5,
+        "tLowF": 61.9,
+        "precipIn": 4.91,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 4.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 73.1,
+        "tLowF": 49.9,
+        "precipIn": 3.16,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.4,
+        "daysFreeze": 0.9
+      },
+      {
+        "month": "Nov",
+        "tHighF": 62.8,
+        "tLowF": 39.0,
+        "precipIn": 3.09,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 8.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 54.7,
+        "tLowF": 33.5,
+        "precipIn": 2.93,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 16.3
+      }
+    ],
+    "annualPrecipIn": 44.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 76.7,
+      "avgLowF": 54.6,
+      "precipIn": 16.1,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 90.5°F), coldest Jan (avg low 30.8°F). 44.4 in of rain per year. Fall season (Aug–Nov): highs around 76.7°F, 16.1 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093759,USC00313638,USC00319100&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:48Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Emily Buccilla",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/coaches/emily-buccilla/4330",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Emily Buccilla",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/coaches/emily-buccilla/4330",
+        "social": {}
+      },
+      {
+        "name": "Jake Dowiak",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/coaches/jake-dowiak/4333",
+        "social": {}
+      },
+      {
+        "name": "Sydney Hall",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/coaches/sydney-hall/4331",
+        "social": {}
+      },
+      {
+        "name": "Carter Sadin",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/coaches/carter-sadin/4332",
+        "social": {}
+      },
+      {
+        "name": "Natalie Kopchak",
+        "title": "Assistant Strength & Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/staff/natalie-kopchak/480",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Lindsey DeHaven",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/staff/lindsey-dehaven/481",
+        "social": {}
+      },
+      {
+        "name": "Courtney Sipes",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/staff/courtney-sipes/478",
+        "social": {}
+      },
+      {
+        "name": "Patrick Rider",
+        "title": "Sport Scientist",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/staff/patrick-rider/479",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +313,2720 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ecupirates.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:17:07Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "1-2-4",
+      "wins": 1,
+      "losses": 2,
+      "ties": 4,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "Emily Buccilla"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "6-8-4",
+      "wins": 6,
+      "losses": 8,
+      "ties": 4,
+      "confRecord": "4-5-2",
+      "rpiRank": 145,
+      "rpi": {
+        "rank": 145,
+        "record": "6-8-4",
+        "through": "2025-12-08",
+        "prevRank": 143,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 145,
+            "record": "6-8-4"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "10-4-7",
+      "wins": 10,
+      "losses": 4,
+      "ties": 7,
+      "confRecord": "5-2-3",
+      "rpiRank": 68,
+      "rpi": {
+        "rank": 68,
+        "sosRank": 72,
+        "balancedRank": 88,
+        "kpiRank": 74,
+        "masseyRank": 87,
+        "ncaaSeed": 5,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "9-5-5",
+      "wins": 9,
+      "losses": 5,
+      "ties": 5,
+      "confRecord": "4-3-3",
+      "rpiRank": 111,
+      "rpi": {
+        "rank": 111,
+        "sosRank": 110,
+        "balancedRank": 101,
+        "kpiRank": 90,
+        "masseyRank": 81,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "00",
+        "name": "Kayce Taylor",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "Troutman / Statesville Christian School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/kayce-taylor/14477",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Olivia Dietrich",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "4th YR",
+        "classCode": "",
+        "hometown": "Broomfield, Colo. / Holy Family HS",
+        "highSchool": "Houston",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/olivia-dietrich/14465",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Emma Fuchs",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Churchville, Md. / The John Carroll School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pipeline SC (MD)",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/emma-fuchs/14484",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "3",
+        "name": "Gia Spinetti",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Winter Springs, Fla. / Winter Springs HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/gia-spinetti/14475",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Lilly Zanfini",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Old Bridge, N.J. / Old Bridge HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cedar Stars Academy - Bergen",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/lilly-zanfini/14479",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "5",
+        "name": "Ireland Baity",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "McKinney, Texas / Texas Tech K-12",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Dallas",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/ireland-baity/14480",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Isabella Gutiérrez",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "5th YR",
+        "classCode": "GR",
+        "hometown": "Guadalajara, Mexico",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/isabella-gutirrez/14468",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Laney Clements",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Ellicott City, Md. / Maryvale Prep",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/laney-clements/14482",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Alyssa Tucker",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "4th YR",
+        "classCode": "",
+        "hometown": "Raleigh / Grace Christian School",
+        "highSchool": "Campbell",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/alyssa-tucker/14478",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Olivia Trick",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Cincinnati, Ohio / Mount Notre Dame HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Elite Soccer Academy",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/olivia-trick/14490",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Caitlen-Star Dolan Boodram",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "London, England / High Mowing School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/caitlenstar-dolan-boodram/14466",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Lily Ridge",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Garner / Garner Magnet HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/lily-ridge/14473",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Kenzie Mentzer",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Reading, Pa. / Exeter Township HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/kenzie-mentzer/14486",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Lexi McGinnis",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Eldersburg, Md. / Century HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pipeline SC",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/lexi-mcginnis/14471",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Ella Steck",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "4th YR",
+        "classCode": "",
+        "hometown": "Forest Hill, Md. / The John Carroll School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/ella-steck/14476",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Emery Ludlam",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Tampa, Fla. / Alonso HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/emery-ludlam/14485",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Piper Farris",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "New Richmond, Ohio / Cincinnati Country Day",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/piper-farris/14467",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Lauryn Taylor",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "Greenville / J.H. Rose",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/lauryn-taylor/14489",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Anna Miotto",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "4th YR",
+        "classCode": "",
+        "hometown": "Riehen, Switzerland / Gymnasium Bäumlihof",
+        "highSchool": "Minot State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/anna-miotto/14487",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Sydney Cox",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "4th YR",
+        "classCode": "",
+        "hometown": "Chapel Hill / Northwood HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/sydney-cox/14464",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Isabella Boyce",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "York, Pa. / Central York HS",
+        "highSchool": "Kentucky",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/isabella-boyce/14481",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Alyssa Frazier",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Lexington, S.C. / Lexington HS",
+        "highSchool": "Memphis",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/alyssa-frazier/14483",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Izzy O'Connor",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "2nd YR",
+        "classCode": "",
+        "hometown": "Liverpool, England",
+        "highSchool": "Liverpool U21",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/izzy-oconnor/14472",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Amy Mason",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "Raleigh / North Raleigh Christian Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/amy-mason/14469",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Kyleen Bents",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "Fort Mill, S.C. / Catawba Ridge HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/kyleen-bents/14463",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Sydney Steinberg",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "1st YR",
+        "classCode": "",
+        "hometown": "Tampa, Fla. / Wharton HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Premier FC",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/sydney-steinberg/14488",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "AJ Mayock",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "3rd YR",
+        "classCode": "",
+        "hometown": "Round Rock, Texas / Round Rock HS",
+        "highSchool": "Illinois",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ecupirates.com/sports/womens-soccer/roster/aj-mayock/14470",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "?": 26,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "M": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ecupirates.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:17:07Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "00",
+          "name": "Kayce Taylor",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Troutman / Statesville Christian School",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "McKayla Wetsel",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Cedar Hills, Utah / Lone Peak",
+          "highSchool": "Idaho State"
+        },
+        {
+          "number": "1",
+          "name": "Olivia Dietrich",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Broomfield, Colo. / Holy Family HS",
+          "highSchool": "Houston"
+        },
+        {
+          "number": "2",
+          "name": "Sofia Serrano",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Henderson, Nev. / Green Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Gia Spinetti",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Winter Springs, Fla. / Winter Springs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Lilly Zanfini",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Old Bridge, N.J. / Old Bridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Molly Thomas",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Schwenksville, Pa. / Spring-Ford",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Isabella Gutiérrez",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Guadalajara, Mexico",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Juliana Viera",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Montevideo, Uruguay /",
+          "highSchool": "Oklahoma Wesleyan"
+        },
+        {
+          "number": "8",
+          "name": "Alyssa Tucker",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Raleigh / Grace Christian School",
+          "highSchool": "Campbell"
+        },
+        {
+          "number": "9",
+          "name": "Emma Sheehan",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Argyle, Texas / Argyle HS",
+          "highSchool": "Seton Hall"
+        },
+        {
+          "number": "10",
+          "name": "Caitlen-Star Dolan Boodram",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "London, England / High Mowing School",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Lily Ridge",
+          "pos": "M/F",
+          "classCode": "",
+          "hometown": "Garner / Garner Magnet HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Lexi McGinnis",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Eldersburg, Md. / Century HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Maddie Milliron",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Harrisburg, N.C. / Hickory Ridge",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ella Steck",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Forest Hill, Md. / The John Carroll School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Piper Farris",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "New Richmond, Ohio / Cincinnati Country Day",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Sydney Cox",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Chapel Hill / Northwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Mackenna Gregory",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Jacksonville, Fla. / Bishop Kenny",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Izzy O'Connor",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Liverpool, England",
+          "highSchool": "Liverpool U21"
+        },
+        {
+          "number": "23",
+          "name": "McCarthy Spencer",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Greensboro / Page HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Jenny Hill",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Sydney, Australia /",
+          "highSchool": "University of Sydney"
+        },
+        {
+          "number": "25",
+          "name": "Amy Mason",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Raleigh / North Raleigh Christian Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kyleen Bents",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Fort Mill, S.C. / Catawba Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Holly Schlagel",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Centennial, Colo. / Smoky Hill",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "AJ Mayock",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Round Rock, Texas / Round Rock HS",
+          "highSchool": "Illinois"
+        }
+      ],
+      "departed": [
+        "emma sheehan",
+        "holly schlagel",
+        "jenny hill",
+        "juliana viera",
+        "mackenna gregory",
+        "maddie milliron",
+        "mccarthy spencer",
+        "mckayla wetsel",
+        "molly thomas",
+        "sofia serrano"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Kayce Taylor",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Troutman / Statesville Christian School",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "McKayla Wetsel",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Cedar Hills, Utah / Lone Peak",
+          "highSchool": "Idaho State"
+        },
+        {
+          "number": "2",
+          "name": "Sofia Serrano",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Henderson, Nev. / Green Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Samantha Moxie",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Edison, N.J. / Edison",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Molly Thomas",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Schwenksville, Pa. / Spring-Ford",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Isabella Gutiérrez",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Guadalajara, Mexico",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Juliana Viera",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Montevideo, Uruguay /",
+          "highSchool": "Oklahoma Wesleyan"
+        },
+        {
+          "number": "8",
+          "name": "Abby Sowa",
+          "pos": "D/M",
+          "classCode": "",
+          "hometown": "Southington, Conn. / Southington",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Emma Sheehan",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Argyle, Texas / Argyle HS",
+          "highSchool": "Seton Hall"
+        },
+        {
+          "number": "10",
+          "name": "Caitlen-Star Dolan Boodram",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "London, England / High Mowing School",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Annabelle Abbott",
+          "pos": "D/F",
+          "classCode": "GR",
+          "hometown": "Holly Springs, N.C. / Holly Spring",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Lucy Fazackerley",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Wigan, England / Oaklands College",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Erica Roberts",
+          "pos": "M/F",
+          "classCode": "",
+          "hometown": "St. Petersburg, Florida / Northside Christian High School",
+          "highSchool": "Florida"
+        },
+        {
+          "number": "14",
+          "name": "Maddie Milliron",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Harrisburg, N.C. / Hickory Ridge",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ella Steck",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Forest Hill, Md. / The John Carroll School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Piper Farris",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "New Richmond, Ohio / Cincinnati Country Day",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Kylie Alvarez",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Lorton, Va. / South County",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Elsa Stedman",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Waunakee, Wisc. / Montverde Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Sydney Cox",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Chapel Hill / Northwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Mackenna Gregory",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Jacksonville, Fla. / Bishop Kenny",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Lindsey Aiken",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Macungie, Pa. / Emmaus",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Sydney Schnell",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Kent Island, Md. / Loudoun County",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "McCarthy Spencer",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Greensboro / Page HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Sierra Lowery",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Wake Forest / Wakefield",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Amy Mason",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Raleigh / North Raleigh Christian Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Smith",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Leicester, England /",
+          "highSchool": "NC State"
+        },
+        {
+          "number": "28",
+          "name": "Kyleen Bents",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Fort Mill, S.C. / Catawba Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Holly Schlagel",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Centennial, Colo. / Smoky Hill",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Maeve English",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Greenville, N.C. / D.H. Conley",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Keyera Wynn",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Greensboro, N.C. / Page HS",
+          "highSchool": "Maryland"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "McKayla Wetsel",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Cedar Hills, Utah / Lone Peak",
+          "highSchool": "Idaho State"
+        },
+        {
+          "number": "2",
+          "name": "Sofia Serrano",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Henderson, Nev. / Green Valley",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Samantha Moxie",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Edison, N.J. / Edison",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Molly Thomas",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Schwenksville, Pa. / Spring-Ford",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Isabella Gutiérrez",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Guadalajara, Mexico",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Catherine Holbrook",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Cary / Green Hope",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Abby Sowa",
+          "pos": "D/M",
+          "classCode": "",
+          "hometown": "Southington, Conn. / Southington",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Emma Sheehan",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Argyle, Texas / Argyle HS",
+          "highSchool": "Seton Hall"
+        },
+        {
+          "number": "10",
+          "name": "Juliana Viera",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Montevideo, Uruguay /",
+          "highSchool": "Oklahoma Wesleyan"
+        },
+        {
+          "number": "11",
+          "name": "Annabelle Abbott",
+          "pos": "D/F",
+          "classCode": "",
+          "hometown": "Holly Springs, N.C. / Holly Spring",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Lucy Fazackerley",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Wigan, England / Oaklands College",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Brooke Burzynski",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Stafford, Va. / Mountain View",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Maddie Milliron",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Harrisburg, N.C. / Hickory Ridge",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ella Steck",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Forest Hill, Md. / The John Carroll School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Jazmin Ferguson",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Conyers, Ga. / Heritage",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Kylie Alvarez",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Lorton, Va. / South County",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Elsa Stedman",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Waunakee, Wisc. / Montverde Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Sydney Cox",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Chapel Hill / Northwood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Mackenna Gregory",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Jacksonville, Fla. / Bishop Kenny",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Lindsey Aiken",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Macungie, Pa. / Emmaus",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Sydney Schnell",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Kent Island, Md. / Loudoun County",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Rachael Wilsynski",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Baltimore, Md. / Perry Hall",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Sierra Lowery",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Wake Forest / Wakefield",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Adison May",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Wake Forest, N.C. / Heritage",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Holly Schlagel",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Centennial, Colo. / Smoky Hill",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Maeve English",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Greenville, N.C. / D.H. Conley",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Keyera Wynn",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Greensboro, N.C. / Page HS",
+          "highSchool": "Maryland"
+        },
+        {
+          "number": "34",
+          "name": "Maggie Leland",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Buford, Ga. / Buford",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 1,
+      "losses": 2,
+      "ties": 4,
+      "text": "1-2-4",
+      "played": 7,
+      "scheduled": 21,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "NC State",
+        "opponentRank": null,
+        "location": "Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-08-09",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Richmond",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Liberty",
+        "opponentRank": null,
+        "location": "Lynchburg, Va.",
+        "result": "L",
+        "score": "0-2",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/liberty/boxscore/14245",
+          "recap": "https://ecupirates.com/news/2026/8/13/soccer-pirates-drop-season-opener-at-liberty-2-0"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "UNCG",
+        "opponentRank": null,
+        "location": "Greensboro, N.C.",
+        "result": "T",
+        "score": "2-2",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/uncg/boxscore/14246",
+          "recap": "https://ecupirates.com/news/2026/8/16/soccer-pirates-force-2-2-draw-at-uncg"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Campbell",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/campbell/boxscore/14247",
+          "recap": "https://ecupirates.com/news/2026/8/20/soccer-pirates-battle-campbell-to-scoreless-draw"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "High Point",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": "T",
+        "score": "2-2",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/high-point/boxscore/14248",
+          "recap": "https://ecupirates.com/news/2026/8/23/soccer-pirates-battle-back-to-force-2-2-draw-against-high-point"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "App State",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": "L",
+        "score": "0-4",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/app-state/boxscore/14249",
+          "recap": "https://ecupirates.com/news/2026/8/27/soccer-pirates-fall-4-0-to-app-state-on-senior-night"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Western Carolina",
+        "opponentRank": null,
+        "location": "Cullowhee, N.C.",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/western-carolina/boxscore/14250",
+          "recap": "https://ecupirates.com/news/2026/8/30/soccer-mayock-miotto-score-as-pirates-defeat-western-carolina-2-0-sunday"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "UNCW",
+        "opponentRank": null,
+        "location": "Wilmington, N.C.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://ecupirates.com/sports/womens-soccer/stats/2026/uncw/boxscore/14251",
+          "recap": "https://ecupirates.com/news/2026/9/3/soccer-pirates-battle-uncw-to-scoreless-draw-on-thursday-night"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "VCU",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/d2979915-76ce-4161-825b-5ded76408fa2",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664323"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Tulsa",
+        "opponentRank": null,
+        "location": "Tulsa, Okla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/e024e1f8-3a99-4f0a-a737-9b2c3c4cd551",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666402&vislive=ecu"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UTSA",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664324"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UAB",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664325"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Temple",
+        "opponentRank": null,
+        "location": "Philadelphia, Pa.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666310&vislive=ecu"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Charlotte",
+        "opponentRank": null,
+        "location": "Charlotte, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665298&vislive=ecu"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Rice",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664326"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Florida Atlantic",
+        "opponentRank": null,
+        "location": "Boca Raton, Fla.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "North Texas",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664327"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Memphis",
+        "opponentRank": null,
+        "location": "Memphis, Tenn.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665120&vislive=ecu"
+        }
+      },
+      {
+        "date": "2026-11-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "South Florida",
+        "opponentRank": null,
+        "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662524"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "American Conference Championship",
+        "opponentRank": null,
+        "location": "TBA",
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "6-8-4",
+        "games": [
+          {
+            "date": "2025-08-06",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Norfolk, Va.",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2025-08-09",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Hampton",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/liberty/boxscore/13854",
+              "recap": "https://ecupirates.com/news/2025/8/14/soccer-pirates-fall-to-liberty-in-season-opener-3-1"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "NC State",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/nc-state/boxscore/13855",
+              "recap": "https://ecupirates.com/news/2025/8/17/soccer-pirates-settle-for-draw-in-rivalry-match-with-nc-state-1-1"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Richmond",
+            "opponentRank": null,
+            "location": "Richmond, Va.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/richmond/boxscore/13856",
+              "recap": "https://ecupirates.com/news/2025/8/21/soccer-pirates-stumped-by-richmond-1-0"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "VCU",
+            "opponentRank": null,
+            "location": "Richmond, VA",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/vcu/boxscore/13857",
+              "recap": "https://ecupirates.com/news/2025/8/24/soccer-dolan-boodram-masterclass-keys-pirates-in-blowout-win-over-vcu-4-0"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UNCW",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/uncw/boxscore/13858",
+              "recap": "https://ecupirates.com/news/2025/8/28/soccer-pirates-concede-90th-minute-pk-to-settle-for-1-1-draw-with-uncw"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Boone, N.C.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/app-state/boxscore/13859",
+              "recap": "https://ecupirates.com/news/2025/9/4/soccer-pirates-secure-1-0-result-at-app-state"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Conway, S.C.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/coastal-carolina/boxscore/13860",
+              "recap": "https://ecupirates.com/news/2025/9/7/soccer-pirates-fall-short-at-coastal-carolina-2-1"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/tulsa/boxscore/13861",
+              "recap": "https://ecupirates.com/news/2025/9/11/soccer-pirates-kick-off-league-play-with-2-0-win-over-tulsa"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/south-florida/boxscore/13862",
+              "recap": "https://ecupirates.com/news/2025/9/18/soccer-pirates-fall-at-south-florida-1-0"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Denton, Texas",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/north-texas/boxscore/13863",
+              "recap": "https://ecupirates.com/news/2025/9/28/soccer-pirates-beat-north-texas-for-conference-road-win-2-0"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/florida-atlantic/boxscore/13864",
+              "recap": "https://ecupirates.com/news/2025/10/2/soccer-pirates-erase-two-goal-deficit-late-for-2-2-draw-with-florida-atlantic"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/temple/boxscore/13865",
+              "recap": "https://ecupirates.com/news/2025/10/9/soccer-pirates-overwhelm-temple-for-2-0-win"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, Ala.",
+            "result": "L",
+            "score": "2-5",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/uab/boxscore/13866",
+              "recap": "https://ecupirates.com/news/2025/10/12/soccer-pirates-struggle-at-uab-in-5-2-loss"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 6 Memphis",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/memphis/boxscore/13867",
+              "recap": "https://ecupirates.com/news/2025/10/19/soccer-pirates-fall-to-no-6-memphis-5-0"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/rice/boxscore/13868",
+              "recap": "https://ecupirates.com/news/2025/10/23/soccer-pirates-settle-for-draw-in-eventful-entanglement-with-rice-1-1"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/utsa/boxscore/13869",
+              "recap": "https://ecupirates.com/news/2025/10/26/soccer-pirates-clinch-american-tournament-berth-with-2-1-win-over-utsa"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/charlotte/boxscore/13870",
+              "recap": "https://ecupirates.com/news/2025/10/30/soccer-pirates-fall-to-charlotte-in-regular-season-finale-1-0"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 3 Memphis",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2025/memphis/boxscore/13871",
+              "recap": "https://ecupirates.com/news/2025/11/3/soccer-pirates-take-no-3-memphis-to-the-wire-in-1-0-quarterfinal-loss"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "10-4-7",
+        "games": [
+          {
+            "date": "2024-08-07",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "NC State",
+            "opponentRank": null,
+            "location": "Raleigh, N.C.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/nc-state/boxscore/13396",
+              "recap": "https://ecupirates.com/news/2024/8/18/soccer-sowa-sends-pirates-past-nc-state"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UNC Greensboro",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/unc-greensboro/boxscore/13397",
+              "recap": "https://ecupirates.com/news/2024/8/22/soccer-pirates-rally-for-victory-over-unc-greensboro-2-1"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/campbell/boxscore/13398",
+              "recap": "https://ecupirates.com/news/2024/8/25/pirates-camels-battle-to-scoreless-draw"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/coastal-carolina/boxscore/13399",
+              "recap": "https://ecupirates.com/news/2024/8/29/soccer-pirates-play-to-0-0-draw-with-coastal-carolina"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNCW",
+            "opponentRank": null,
+            "location": "Wilmington, N.C.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/uncw/boxscore/13400",
+              "recap": "https://ecupirates.com/news/2024/9/1/pirates-use-joyful-performance-to-stifle-uncw"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/western-carolina/boxscore/13401",
+              "recap": "https://ecupirates.com/news/2024/9/8/pirates-remain-unbeaten-with-0-0-result-against-western-carolina"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/temple/boxscore/13402",
+              "recap": "https://ecupirates.com/news/2024/9/12/soccer-pirates-hold-off-temple-for-2-1-win-in-conference-opener"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "JMU",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/jmu/boxscore/13403",
+              "recap": "https://ecupirates.com/news/2024/9/15/jmu-deals-pirates-first-loss-of-2024"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/utsa/boxscore/13404",
+              "recap": "https://ecupirates.com/news/2024/9/19/soccer-pirates-stumped-by-utsa-2-0"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Charlotte, N.C.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/charlotte/boxscore/13405",
+              "recap": "https://ecupirates.com/news/2024/9/26/soccer-pirates-split-the-points-with-charlotte-2-2"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/north-texas/boxscore/13406",
+              "recap": "https://ecupirates.com/news/2024/9/29/soccer-pirates-topple-north-texas-3-0"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Tulsa, Okla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/tulsa/boxscore/13407",
+              "recap": "https://ecupirates.com/news/2024/10/3/soccer-fazackerley-goal-sends-pirates-past-tulsa-1-0"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/south-florida/boxscore/13408",
+              "recap": "https://ecupirates.com/news/2024/10/10/soccer-pirates-suffer-hiccup-against-south-florida-3-0"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 16 Memphis",
+            "opponentRank": null,
+            "location": "Memphis, Tenn.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/memphis/boxscore/13409",
+              "recap": "https://ecupirates.com/news/2024/10/13/soccer-pirates-snap-no-16-memphis-home-win-streak-with-1-1-draw"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/uab/boxscore/13410",
+              "recap": "https://ecupirates.com/news/2024/10/20/soccer-guti-rrez-strike-snags-point-for-pirates-against-uab-2-2"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Boca Raton, Fla.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/florida-atlantic/boxscore/13411",
+              "recap": "https://ecupirates.com/news/2024/10/27/soccer-pirates-secure-first-ever-unbeaten-road-record-defeat-florida-atlantic-2-0"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/rice/boxscore/13412",
+              "recap": "https://ecupirates.com/news/2024/10/31/soccer-scintillating-seniors-help-pirates-supplant-rice-for-aac-third-seed-2-1"
+            }
+          },
+          {
+            "date": "2024-11-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": 6,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/charlotte/boxscore/13537",
+              "recap": "https://ecupirates.com/news/2024/11/4/soccer-erica-roberts-golden-goal-sends-pirates-past-charlotte-1-0"
+            }
+          },
+          {
+            "date": "2024-11-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": 2,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/south-florida/boxscore/13652",
+              "recap": "https://ecupirates.com/news/2024/11/7/soccer-pirates-down-2-south-florida-on-pks-to-advance-to-american-title-game"
+            }
+          },
+          {
+            "date": "2024-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Memphis",
+            "opponentRank": 1,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/memphis/boxscore/13653",
+              "recap": "https://ecupirates.com/news/2024/11/10/soccer-pirates-stun-memphis-for-2024-american-athletic-conference-championship"
+            }
+          },
+          {
+            "date": "2024-11-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "South Carolina",
+            "opponentRank": 3,
+            "location": "Columbia, SC",
+            "result": "L",
+            "score": "0-6",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2024/south-carolina/boxscore/13655",
+              "recap": "https://ecupirates.com/news/2024/11/15/soccer-pirates-magical-season-ends-in-ncaa-tournament-at-no-14-18-south-carolina-6-0"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "9-5-5",
+        "games": [
+          {
+            "date": "2023-08-07",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Elon",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/elon-exhibition-/boxscore/12938",
+              "recap": "https://ecupirates.com/news/2023/8/7/soccer-pirates-come-back-defeat-elon-in-preseason-opener"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Carolina",
+            "opponentRank": null,
+            "location": "Chapel Hill, NC",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/north-carolina-exhibition-/boxscore/12939",
+              "recap": "https://ecupirates.com/news/2023/8/12/pirates-battle-no-2-north-carolina-in-final-soccer-exhibition"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/florida/boxscore/12940",
+              "recap": "https://ecupirates.com/news/2023/8/17/soccer-pirates-fall-at-florida-2-0"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Jacksonville, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/north-florida/boxscore/12941",
+              "recap": "https://ecupirates.com/news/2023/8/20/soccer-pirates-compete-to-0-0-draw-with-north-florida"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "George Mason",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/george-mason/boxscore/12942",
+              "recap": "https://ecupirates.com/news/2023/8/24/soccer-pirates-blank-george-mason-4-0"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Buies Creek, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/campbell/boxscore/12943",
+              "recap": "https://ecupirates.com/news/2023/8/27/soccer-fazackerley-header-downs-campbell-1-0"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UNCW",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/uncw/boxscore/12945",
+              "recap": "https://ecupirates.com/news/2023/8/31/soccer-pirates-score-early-and-late-defeat-uncw-2-0"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "High Point",
+            "opponentRank": null,
+            "location": "High Point, NC",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/high-point/boxscore/12946",
+              "recap": "https://ecupirates.com/news/2023/9/3/soccer-pirates-power-past-high-point-3-1"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 14 Duke",
+            "opponentRank": null,
+            "location": "Durham, NC",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/duke/boxscore/12947",
+              "recap": "https://ecupirates.com/news/2023/9/7/soccer-pirates-stumped-by-no-14-duke-2-0"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Cullowhee, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/western-carolina/boxscore/12948",
+              "recap": "https://ecupirates.com/news/2023/9/10/soccer-pirates-draw-western-carolina-1-1"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/12949",
+              "recap": "https://ecupirates.com/news/2023/9/14/soccer-pirates-silence-owls-to-open-conference-play"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNC Greensboro",
+            "opponentRank": null,
+            "location": "Greensboro, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/unc-greensboro/boxscore/12950",
+              "recap": "https://ecupirates.com/news/2023/9/17/soccer-schnell-strike-downs-unc-greensboro-1-0"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, AL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/uab/boxscore/12951",
+              "recap": "https://ecupirates.com/news/2023/9/21/soccer-pirates-draw-uab-1-1"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, FL",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/south-florida/boxscore/12952",
+              "recap": "https://ecupirates.com/news/2023/9/28/soccer-pirates-earn-monumental-victory-at-south-florida"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/temple/boxscore/12953",
+              "recap": "https://ecupirates.com/news/2023/10/5/soccer-pirates-use-second-half-onslaught-to-fly-by-owls-4-0"
+            }
+          },
+          {
+            "date": "2023-10-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 9 Memphis",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/memphis/boxscore/12954",
+              "recap": "https://ecupirates.com/news/2023/10/11/soccer-pirates-fall-to-no-9-memphis-1-0"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/tulsa/boxscore/12955",
+              "recap": "https://ecupirates.com/news/2023/10/15/soccer-pirates-steal-a-point-from-the-jaws-of-defeat-with-2-2-draw-with-tulsa"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Dallas, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/smu/boxscore/12956",
+              "recap": "https://ecupirates.com/news/2023/10/19/soccer-pirates-clinch-aac-tournament-berth-with-1-0-win-at-smu"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Denton, TX",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/north-texas/boxscore/12957",
+              "recap": "https://ecupirates.com/news/2023/10/22/soccer-pirates-score-two-second-half-goals-draw-north-texas-2-2"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Bill Clark Homes Field at Johnson Stadium, Greenville, N.C.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/charlotte/boxscore/12958",
+              "recap": "https://ecupirates.com/news/2023/10/26/soccer-pirates-drop-home-finale-to-charlotte-3-1"
+            }
+          },
+          {
+            "date": "2023-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": 5,
+            "location": "Premier Sports Complex, Lakewood Ranch, Fla.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://ecupirates.com/sports/womens-soccer/stats/2023/charlotte/boxscore/12959",
+              "recap": "https://ecupirates.com/news/2023/10/31/soccer-pirates-fall-to-charlotte-to-conclude-season-5-0"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ecupirates.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:17:07Z"
+    }
+  },
   "commitments": [
     {
       "id": "emery-ludlam-2026",
@@ -117,7 +3039,7 @@
       "city": "Tampa",
       "highSchool": "Braulio Alonso",
       "college": "east-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +3083,7 @@
       "city": "",
       "highSchool": "",
       "college": "east-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -180,7 +3102,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -196,7 +3118,7 @@
       "city": "",
       "highSchool": "",
       "college": "east-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -284,7 +3206,7 @@
       "city": "",
       "highSchool": "",
       "college": "east-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -303,7 +3225,7 @@
         "date": "2025-01-24",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -319,7 +3241,7 @@
       "city": "",
       "highSchool": "",
       "college": "east-carolina",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -723,41 +3645,27 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://ecupirates.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:23:22Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=35.607186&longitude=-77.368291&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T06:23:20Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:23:20Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:16:54Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

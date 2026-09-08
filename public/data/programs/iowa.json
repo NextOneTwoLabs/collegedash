@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://hawkeyesports.com/sports/womens-soccer",
-    "roster": "https://hawkeyesports.com/sports/womens-soccer/roster",
-    "schedule": "https://hawkeyesports.com/sports/womens-soccer/schedule",
-    "news": "https://hawkeyesports.com/sports/womens-soccer/news",
+    "athletics": "https://hawkeyesports.com/sports/wsoc",
+    "roster": "https://hawkeyesports.com/sports/wsoc/roster",
+    "schedule": "https://hawkeyesports.com/sports/wsoc/schedule",
+    "news": "https://hawkeyesports.com/sports/wsoc/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/iowa/clgid-500",
     "wikipedia": null,
     "x": null,
@@ -69,18 +69,249 @@
       "asOf": "2026-09-07T04:56:31Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.661935,
+    "lon": -91.536425,
+    "timezone": "America/Chicago",
+    "elevationM": 198.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014937",
+      "name": "IOWA CITY MUNI AP",
+      "state": "IA",
+      "distanceKm": 3.3,
+      "elevationM": 198.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 30.9,
+        "tLowF": 14.6,
+        "precipIn": 1.04,
+        "snowIn": null,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 29.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 35.5,
+        "tLowF": 18.5,
+        "precipIn": 1.21,
+        "snowIn": null,
+        "wetDays": 3.0,
+        "days90F": 0.0,
+        "daysFreeze": 25.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 49.5,
+        "tLowF": 29.5,
+        "precipIn": 2.21,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 21.1
+      },
+      {
+        "month": "Apr",
+        "tHighF": 62.6,
+        "tLowF": 40.1,
+        "precipIn": 3.76,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 6.7
+      },
+      {
+        "month": "May",
+        "tHighF": 73.4,
+        "tLowF": 51.7,
+        "precipIn": 4.48,
+        "snowIn": null,
+        "wetDays": 7.9,
+        "days90F": 1.0,
+        "daysFreeze": 0.5
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.6,
+        "tLowF": 62.1,
+        "precipIn": 5.29,
+        "snowIn": null,
+        "wetDays": 8.2,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.8,
+        "tLowF": 65.8,
+        "precipIn": 3.91,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 7.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 83.8,
+        "tLowF": 63.3,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 4.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 77.5,
+        "tLowF": 54.2,
+        "precipIn": 3.24,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 2.4,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Oct",
+        "tHighF": 64.1,
+        "tLowF": 42.1,
+        "precipIn": 2.98,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 0.1,
+        "daysFreeze": 5.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 49.2,
+        "tLowF": 30.4,
+        "precipIn": 2.17,
+        "snowIn": null,
+        "wetDays": 3.8,
+        "days90F": 0.0,
+        "daysFreeze": 19.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 36.3,
+        "tLowF": 20.1,
+        "precipIn": 1.45,
+        "snowIn": null,
+        "wetDays": 3.4,
+        "days90F": 0.0,
+        "daysFreeze": 27.5
+      }
+    ],
+    "annualPrecipIn": 35.7,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 68.7,
+      "avgLowF": 47.5,
+      "precipIn": 12.3,
+      "wetDays": 21.0
+    },
+    "summary": "Hottest month Jul (avg high 85.8°F), coldest Jan (avg low 14.6°F). 35.7 in of rain per year. Fall season (Aug–Nov): highs around 68.7°F, 12.3 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014937,USW00014990,USC00134101&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:40Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Dean Ward",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/dean-ward",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Dean Ward",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/dean-ward",
+        "social": {}
+      },
+      {
+        "name": "Kelly Altman",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/kelly-altman",
+        "social": {}
+      },
+      {
+        "name": "Meghan Gill",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/meghan-gill",
+        "social": {}
+      },
+      {
+        "name": "Noah Smith",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/noah-smith",
+        "social": {}
+      },
+      {
+        "name": "Mariah Cook",
+        "title": "Assistant Athletic Performance Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/mariah-cook",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Josie Durr",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/josie-durr",
+        "social": {}
+      },
+      {
+        "name": "Jessica Amoruso",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/jessica-amoruso",
+        "social": {}
+      },
+      {
+        "name": "Aubrette Kinne",
+        "title": "Associate Director, Sports Psychology & SA Mental Health",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/aubrette-kinne",
+        "social": {}
+      },
+      {
+        "name": "Kira Blum",
+        "title": "Director of Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/kira-blum",
+        "social": {}
+      },
+      {
+        "name": "Bella Tafolla",
+        "title": "Student Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/season/2026-27/staff/bella-tafolla",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +329,649 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://hawkeyesports.com/sports/wsoc/roster",
+        "asOf": "2026-09-08T01:03:19Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "",
+        "name": "Lexi Baldwin",
+        "pos": "GK",
+        "posLabel": "Gk",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/lexi-baldwin",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Caroline Ready",
+        "pos": "GK",
+        "posLabel": "Gk",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/caroline-ready",
+        "social": {
+          "x": "https://twitter.com/@caroline_ready",
+          "instagram": "https://www.instagram.com/caroline_ready2025"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Braelynn Galt",
+        "pos": "GK",
+        "posLabel": "Gk",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/braelynn-galt",
+        "social": {},
+        "bio": {},
+        "club": "Florida Premier FC",
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "",
+        "name": "Berit Parten",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/berit-parten",
+        "social": {
+          "x": "https://twitter.com/beritparten",
+          "instagram": "https://www.instagram.com/beritparten"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Sammy Reimer",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/sammy-reimer",
+        "social": {
+          "instagram": "https://www.instagram.com/sammy.reimer"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Lucia Englund",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/lucia-englund",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Sofia Bush",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/sofia-bush",
+        "social": {
+          "instagram": "https://www.instagram.com/_sofiabush"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Josie Jones",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/josie-jones",
+        "social": {
+          "x": "https://twitter.com/josiejones06",
+          "instagram": "https://www.instagram.com/josiejones0"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Lexy Griffin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/alexia-griffin",
+        "social": {
+          "instagram": "https://www.instagram.com/lexygriffinn"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Julia Freed",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/julia-freed",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Elle Wildman",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/elle-wildman",
+        "social": {
+          "x": "https://twitter.com/elle_wildman",
+          "instagram": "https://www.instagram.com/ellewildman"
+        },
+        "bio": {},
+        "club": "Salvo Soccer Club",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Léa Larouche",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/lea-larouche",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Iba Oching",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/iba-oching",
+        "social": {
+          "x": "https://twitter.com/IbaOching",
+          "instagram": "https://www.instagram.com/iba.oching"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Charlotte Bien",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/charlotte-bien",
+        "social": {
+          "instagram": "https://www.instagram.com/charlotte.bien13"
+        },
+        "bio": {},
+        "club": "Nationals SC",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Meike Ingles",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/meike-ingles",
+        "social": {
+          "instagram": "https://www.instagram.com/meike.ingles",
+          "x": "https://twitter.com/meikeCingles"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Kylie Cino",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/kylie-cino",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Reilly Heman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/reilly-heman",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Emma Stannard",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/emma-stannard",
+        "social": {},
+        "bio": {},
+        "club": "Ohio Premier",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Berkley Binggeli",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/berkely-binggeli",
+        "social": {
+          "instagram": "https://www.instagram.com/berkleybinggeli"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Sara Batchadji",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/sara-batchadji",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Liana Tarasco",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/liana-tarasco",
+        "social": {
+          "instagram": "https://www.instagram.com/lianatarasco"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Savannah Hutchins",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/savannah-hutchins",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Alli Macke",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/alli-macke",
+        "social": {
+          "x": "https://twitter.com/alli_macke",
+          "instagram": "https://www.instagram.com/allimacke"
+        },
+        "bio": {},
+        "club": "Sporting Iowa",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Jada Grove",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/jada-grove",
+        "social": {},
+        "bio": {},
+        "club": "VSA Rush",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Abby Warner",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/abby-warner",
+        "social": {
+          "x": "https://twitter.com/Abby_Warner10",
+          "instagram": "https://www.instagram.com/abby_warner6416"
+        },
+        "bio": {},
+        "club": "Vision Soccer Academy",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "",
+        "name": "Millie Greer",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/millie-greer",
+        "social": {
+          "instagram": "https://www.instagram.com/milliegreerr"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Abby Skiff",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/abby-skiff",
+        "social": {
+          "instagram": "https://www.instagram.com/abbyskiff"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "",
+        "name": "Olivia Lebdaoui",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "",
+        "classCode": "",
+        "hometown": "",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "bioUrl": "https://hawkeyesports.com/sports/wsoc/roster/player/olivia-lebdaoui",
+        "social": {
+          "instagram": "https://www.instagram.com/livleb"
+        },
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "?": 28
+    },
+    "graduatingByPos": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://hawkeyesports.com/sports/wsoc/roster",
+      "asOf": "2026-09-08T01:03:19Z"
+    }
+  },
   "rosterHistory": {},
-  "schedule": null,
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://hawkeyesports.com/sports/wsoc/schedule",
+      "asOf": "2026-09-08T01:03:19Z"
+    }
+  },
   "commitments": [
     {
       "id": "braelynn-galt-2026",
@@ -117,7 +984,7 @@
       "city": "Channahon",
       "highSchool": "Acellus Academy",
       "college": "iowa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +1028,7 @@
       "city": "",
       "highSchool": "",
       "college": "iowa",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -180,7 +1047,7 @@
         "date": "2025-02-18",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -747,7 +1614,88 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [],
+    "latest": [
+      {
+        "title": "Hawkeyes Blank Bears to Wrap Nonconference Play",
+        "url": "https://hawkeyesports.com/news/2026/09/6/hawkeyes-blank-bears-to-wrap-nonconference-play",
+        "date": "2026-09-06",
+        "recruiting": false
+      },
+      {
+        "title": "Iowa Draws 1-1 Against Kansas State",
+        "url": "https://hawkeyesports.com/news/2026/09/4/iowa-draws-1-1-against-kansas-state",
+        "date": "2026-09-03",
+        "recruiting": false
+      },
+      {
+        "title": "Iowa Athletics Announces Event Time Changes",
+        "url": "https://hawkeyesports.com/news/2026/09/3/iowa-athletics-announces-event-time-changes",
+        "date": "2026-09-03",
+        "recruiting": false
+      },
+      {
+        "title": "Hawkeyes Host Kansas State, Missouri State",
+        "url": "https://hawkeyesports.com/news/2026/09/2/hawkeyes-host-kansas-state-missouri-state",
+        "date": "2026-09-02",
+        "recruiting": false
+      },
+      {
+        "title": "Iowa Defeats Iowa State 2-0",
+        "url": "https://hawkeyesports.com/news/2026/08/28/iowa-defeats-iowa-state-2-0-to-improve-to-4-1",
+        "date": "2026-08-27",
+        "recruiting": false
+      },
+      {
+        "title": "Bush, Greer Named to MAC Herman Trophy Watch List",
+        "url": "https://hawkeyesports.com/news/2026/08/27/bush-greer-named-to-mac-herman-trophy-watch-list",
+        "date": "2026-08-27",
+        "recruiting": false
+      },
+      {
+        "title": "Hawkeyes Travel to Face Iowa State",
+        "url": "https://hawkeyesports.com/news/2026/08/26/hawkeyes-travel-to-face-iowa-state",
+        "date": "2026-08-26",
+        "recruiting": false
+      },
+      {
+        "title": "Oching, Tarasco, Larouche Selected to Canada’s U-20 World Cup Squad",
+        "url": "https://hawkeyesports.com/news/2026/08/24/oching-tarasco-larouche-selected-to-canadas-u-20-world-cup-squad",
+        "date": "2026-08-24",
+        "recruiting": false
+      },
+      {
+        "title": "Hawkeyes Overwhelm Spartans",
+        "url": "https://hawkeyesports.com/news/2026/08/23/hawkeyes-overwhelm-spartans",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Hawkeyes Fall to No. 11 Wake Forest",
+        "url": "https://hawkeyesports.com/news/2026/08/21/hawkeyes-fall-to-no-11-wake-forest",
+        "date": "2026-08-20",
+        "recruiting": false
+      },
+      {
+        "title": "Hawkeyes Travel to Face No.11 Wake Forest, UNC Greensboro",
+        "url": "https://hawkeyesports.com/news/2026/08/19/hawkeyes-travel-to-face-11-wake-forest-unc-greensboro",
+        "date": "2026-08-19",
+        "recruiting": false
+      },
+      {
+        "title": "Iowa Routs Loyola to Improve to 2-0",
+        "url": "https://hawkeyesports.com/news/2026/08/16/iowa-routs-loyola-to-improve-to-2-0",
+        "date": "2026-08-15",
+        "recruiting": false
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://hawkeyesports.com/sports/wsoc/news",
+      "asOf": "2026-09-08T01:03:21Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 4,
@@ -755,47 +1703,27 @@
     "2028": 7
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:49Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://hawkeyesports.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T04:57:05Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.661935&longitude=-91.536425&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T04:57:04Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T04:57:09Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T04:57:04Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:03:09Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

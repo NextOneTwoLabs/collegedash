@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T17:13:45Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.897209,
+    "lon": -74.028986,
+    "timezone": "America/New_York",
+    "elevationM": 2.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094741",
+      "name": "TETERBORO AP",
+      "state": "NJ",
+      "distanceKm": 5.9,
+      "elevationM": 2.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 39.9,
+        "tLowF": 25.7,
+        "precipIn": 3.28,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 23.6
+      },
+      {
+        "month": "Feb",
+        "tHighF": 42.8,
+        "tLowF": 27.0,
+        "precipIn": 2.82,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 21.1
+      },
+      {
+        "month": "Mar",
+        "tHighF": 50.6,
+        "tLowF": 34.0,
+        "precipIn": 4.09,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 0.0,
+        "daysFreeze": 14.1
+      },
+      {
+        "month": "Apr",
+        "tHighF": 62.5,
+        "tLowF": 43.7,
+        "precipIn": 3.97,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.3,
+        "daysFreeze": 2.0
+      },
+      {
+        "month": "May",
+        "tHighF": 73.1,
+        "tLowF": 53.3,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 1.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.0,
+        "tLowF": 63.1,
+        "precipIn": 4.25,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 5.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 87.0,
+        "tLowF": 68.9,
+        "precipIn": 4.45,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 11.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.1,
+        "tLowF": 67.3,
+        "precipIn": 4.25,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 7.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 78.4,
+        "tLowF": 59.9,
+        "precipIn": 4.11,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 2.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.8,
+        "tLowF": 47.9,
+        "precipIn": 3.73,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.2,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.5,
+        "tLowF": 38.3,
+        "precipIn": 3.3,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 7.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.9,
+        "tLowF": 30.8,
+        "precipIn": 4.1,
+        "snowIn": null,
+        "wetDays": 7.0,
+        "days90F": 0.0,
+        "daysFreeze": 20.2
+      }
+    ],
+    "annualPrecipIn": 46.3,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 71.5,
+      "avgLowF": 53.3,
+      "precipIn": 15.4,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 87.0°F), coldest Jan (avg low 25.7°F). 46.3 in of rain per year. Fall season (Aug–Nov): highs around 71.5°F, 15.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094741,USW00094728,USC00286146&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:00Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -1796,11 +1945,11 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.56,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
@@ -1809,22 +1958,14 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.897209&longitude=-74.028986&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T17:16:19Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T17:16:19Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:25:02Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

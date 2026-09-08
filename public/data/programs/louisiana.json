@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T14:38:29Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 30.212191,
+    "lon": -92.020165,
+    "timezone": "America/Chicago",
+    "elevationM": 11.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013976",
+      "name": "LAFAYETTE RGNL AP",
+      "state": "LA",
+      "distanceKm": 3.2,
+      "elevationM": 11.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 62.2,
+        "tLowF": 43.5,
+        "precipIn": 5.92,
+        "snowIn": null,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 5.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 66.1,
+        "tLowF": 47.4,
+        "precipIn": 4.07,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 1.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 72.6,
+        "tLowF": 53.3,
+        "precipIn": 3.72,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "Apr",
+        "tHighF": 79.0,
+        "tLowF": 59.3,
+        "precipIn": 4.91,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 0.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 85.9,
+        "tLowF": 67.2,
+        "precipIn": 5.44,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 6.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.2,
+        "tLowF": 73.1,
+        "precipIn": 7.09,
+        "snowIn": null,
+        "wetDays": 8.4,
+        "days90F": 18.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.5,
+        "tLowF": 75.1,
+        "precipIn": 6.27,
+        "snowIn": null,
+        "wetDays": 9.5,
+        "days90F": 23.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 92.3,
+        "tLowF": 74.7,
+        "precipIn": 6.26,
+        "snowIn": null,
+        "wetDays": 8.3,
+        "days90F": 24.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 89.0,
+        "tLowF": 70.4,
+        "precipIn": 5.02,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 15.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 81.3,
+        "tLowF": 60.1,
+        "precipIn": 4.76,
+        "snowIn": null,
+        "wetDays": 4.8,
+        "days90F": 2.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 71.5,
+        "tLowF": 50.2,
+        "precipIn": 4.39,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.9
+      },
+      {
+        "month": "Dec",
+        "tHighF": 64.4,
+        "tLowF": 45.3,
+        "precipIn": 4.96,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 3.0
+      }
+    ],
+    "annualPrecipIn": 62.8,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 83.5,
+      "avgLowF": 63.9,
+      "precipIn": 20.4,
+      "wetDays": 25.0
+    },
+    "summary": "Hottest month Aug (avg high 92.3°F), coldest Jan (avg low 43.5°F). 62.8 in of rain per year. Fall season (Aug–Nov): highs around 83.5°F, 20.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013976,USW00053960,USC00165021&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:55:26Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Chris McBride",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/coaches/chris-mcbride/1904",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Chris McBride",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/coaches/chris-mcbride/1904",
+        "social": {}
+      },
+      {
+        "name": "Tom Cosgrave",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/coaches/tom-cosgrave/1905",
+        "social": {}
+      },
+      {
+        "name": "Ellie Russell",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/coaches/ellie-russell/1906",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Trevor Starcher",
+        "title": "Sport Program Administrator",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/staff/trevor-starcher/719",
+        "social": {}
+      },
+      {
+        "name": "Terry Latiolais",
+        "title": "Student-Athlete Academic Services",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/staff/terry-latiolais/703",
+        "social": {}
+      },
+      {
+        "name": "Eddie Avak",
+        "title": "Athletic Training",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/staff/eddie--avak/741",
+        "social": {}
+      },
+      {
+        "name": "James Lang",
+        "title": "Athletic Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/staff/james-lang/659",
+        "social": {}
+      },
+      {
+        "name": "Jennie Gary",
+        "title": "Administrative Assistant",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/staff/jennie-gary/742",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +313,2675 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ragincajuns.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:19:50Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "4-2-1",
+      "wins": 4,
+      "losses": 2,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "Chris McBride"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "7-6-5",
+      "wins": 7,
+      "losses": 6,
+      "ties": 5,
+      "confRecord": "4-3-3",
+      "rpiRank": 174,
+      "rpi": {
+        "rank": 174,
+        "record": "7-6-5",
+        "through": "2025-12-08",
+        "prevRank": 172,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 174,
+            "record": "7-6-5"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "7-5-8",
+      "wins": 7,
+      "losses": 5,
+      "ties": 8,
+      "confRecord": "2-4-4",
+      "rpiRank": 205,
+      "rpi": {
+        "rank": 205,
+        "sosRank": 165,
+        "balancedRank": 215,
+        "kpiRank": 186,
+        "masseyRank": 205,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "7-9-2",
+      "wins": 7,
+      "losses": 9,
+      "ties": 2,
+      "confRecord": "4-6-0",
+      "rpiRank": 120,
+      "rpi": {
+        "rank": 120,
+        "sosRank": 173,
+        "balancedRank": 152,
+        "kpiRank": 117,
+        "masseyRank": 199,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 24,
+    "players": [
+      {
+        "number": "0",
+        "name": "Natalie Mayes",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lantana, Texas",
+        "highSchool": "Denton Guyer",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/natalie-mayes/10701",
+        "social": {
+          "x": "https://twitter.com/NatalieMayes23",
+          "instagram": "https://www.instagram.com/_NatalieMayes"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Ally Allen",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Houston, Texas",
+        "highSchool": "Duchesne Academy of the Sacred Heart",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/ally-allen/10708",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Kendal Green",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Assumption",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/kendal-green/10697",
+        "social": {
+          "x": "https://twitter.com/kendal_green_",
+          "instagram": "https://www.instagram.com/kendalgreenn"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Madelyn Linenkugel",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cincinnati, Ohio",
+        "highSchool": "Oak Hills",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/madelyn-linenkugel/10709",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Charlotte Hinchey",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "6'1\"",
+        "heightIn": 73,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wolfeboro, N.H.",
+        "highSchool": "Brewster Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/charlotte-hinchey/10699",
+        "social": {
+          "instagram": "https://www.instagram.com/charhinchey"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Salma Elhaimer",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tomball, Texas",
+        "highSchool": "Tomball Memorial",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/salma-elhaimer/10695",
+        "social": {
+          "x": "https://twitter.com/salmaelhaimerr",
+          "instagram": "https://www.instagram.com/salma.isabellaa"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Claire Brophy",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Laguna Beach, Calif.",
+        "highSchool": "San Clemente",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/claire-brophy/10710",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Adeline Nemeth",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cleveland, Ohio",
+        "highSchool": "Gilmour Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/adeline-nemeth/10705",
+        "social": {
+          "instagram": "https://www.instagram.com/adelinenemeth"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Maria Reyes",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Georgetown, Texas",
+        "highSchool": "Rouse",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/maria-reyes/10711",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Liv Harding",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "West Valley City, Utah",
+        "highSchool": "Hunter",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/liv-harding/10698",
+        "social": {
+          "instagram": "https://www.instagram.com/_livharding"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Miku Kurihara",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Chigasaki, Japan",
+        "highSchool": "Universal School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/miku-kurihara/10700",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Cadence Carlson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Austin, Texas",
+        "highSchool": "Westlake",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/cadence-carlson/10714",
+        "social": {
+          "instagram": "https://www.instagram.com/cadencee_c11"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Sophia Moore",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Trophy Club, Texas",
+        "highSchool": "Byron Nelson",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Soccer",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/sophia-moore/10703",
+        "social": {
+          "x": "https://twitter.com/SophiaMoore2025",
+          "instagram": "https://www.instagram.com/sophiacmoore"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Lily Parker",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Austin, Texas",
+        "highSchool": "McCallum",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/lily-parker/10183",
+        "social": {
+          "x": "https://twitter.com/lilyparrker",
+          "instagram": "https://www.instagram.com/lilyparrker"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Lanie Benoit",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Lafayette, La.",
+        "highSchool": "Teurlings Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/lanie-benoit/10692",
+        "social": {
+          "x": "https://twitter.com/laniesoccer2025",
+          "instagram": "https://www.instagram.com/lanie.benoit"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Alexa Ferraro",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Mission Viejo, Calif.",
+        "highSchool": "Mission Viejo",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/alexa-ferraro/10715",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Maiya Clark",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lexington, Ky.",
+        "highSchool": "Tates Creek",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/maiya-clark/10694",
+        "social": {
+          "x": "https://twitter.com/ClarkMaiya",
+          "instagram": "https://www.instagram.com/maiya__clark"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Alina Ong",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Arcadia, Calif.",
+        "highSchool": "Arcadia",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/alina-ong/10712",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Sydney Byrnes",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Orange, Calif.",
+        "highSchool": "Villa Park",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/sydney-byrnes/10693",
+        "social": {
+          "instagram": "https://www.instagram.com/sydneybyrness"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Chloe Mueller",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Jupiter, Fla.",
+        "highSchool": "William T. Dwyer",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/chloe-mueller/10704",
+        "social": {
+          "x": "https://twitter.com/chloemuellerr",
+          "instagram": "https://www.instagram.com/chloe_muellerr"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Ryan Fox",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Sugar Land, Texas",
+        "highSchool": "Episcopal",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC (TX)",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/ryan-fox/10713",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "26",
+        "name": "Addison Soehn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Blaine, Minn.",
+        "highSchool": "Spain Park (Ala.)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/addison-soehn/10707",
+        "social": {
+          "instagram": "https://www.instagram.com/a_soehn6"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "31",
+        "name": "Laine Minich",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Birmingham, Ala.",
+        "highSchool": "Mountain Brook",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/laine-minich/10702",
+        "social": {
+          "x": "https://twitter.com/LaineMinich2025",
+          "instagram": "https://www.instagram.com/laine_m18"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Carson Glenn",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Lewisville, Texas",
+        "highSchool": "Lewisville",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ragincajuns.com/sports/womens-soccer/roster/carson-glenn/10696",
+        "social": {
+          "x": "https://twitter.com/carson0533",
+          "instagram": "https://www.instagram.com/Carson.g_3"
+        },
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 1,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 1,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 1,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 1,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 4,
+      "FR": 6,
+      "SO": 5,
+      "JR": 3,
+      "R-JR": 1,
+      "R-FR": 3,
+      "R-SR": 1,
+      "R-SO": 1
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "M": 1,
+      "F": 2,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ragincajuns.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:19:50Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Natalie Mayes",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "2",
+          "name": "Kendal Green",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "3",
+          "name": "Denver Barnes",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Keller, Texas",
+          "highSchool": "Keller Central"
+        },
+        {
+          "number": "4",
+          "name": "Charlotte Hinchey",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wolfeboro, N.H.",
+          "highSchool": "Brewster Academy"
+        },
+        {
+          "number": "5",
+          "name": "Salma Elhaimer",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Tomball, Texas",
+          "highSchool": "Tomball Memorial"
+        },
+        {
+          "number": "6",
+          "name": "Anna Darling",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Boerne"
+        },
+        {
+          "number": "7",
+          "name": "Adeline Nemeth",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cleveland, Ohio",
+          "highSchool": "Gilmour Academy"
+        },
+        {
+          "number": "8",
+          "name": "Raegan Latiolais",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lafayette, Louisiana",
+          "highSchool": "St. Thomas More Catholic"
+        },
+        {
+          "number": "9",
+          "name": "Liv Harding",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "West Valley City, Utah",
+          "highSchool": "Hunter"
+        },
+        {
+          "number": "10",
+          "name": "Aila Swinton",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Gulf Breeze, Fla.",
+          "highSchool": "Gulf Breeze"
+        },
+        {
+          "number": "11",
+          "name": "Briana Henry",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hamilton, Ontario, Canada",
+          "highSchool": "St. Jean de Brefeuf"
+        },
+        {
+          "number": "12",
+          "name": "Sophia Moore",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Trophy Club, Texas",
+          "highSchool": "Byron Nelson"
+        },
+        {
+          "number": "13",
+          "name": "Lily Parker",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Austin, Texas",
+          "highSchool": "McCallum"
+        },
+        {
+          "number": "14",
+          "name": "Tori Bockstadter",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "O'Fallon, Mo.",
+          "highSchool": "Fort Zumwalt West"
+        },
+        {
+          "number": "15",
+          "name": "Lanie Benoit",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lafayette, La.",
+          "highSchool": "Teurlings Catholic"
+        },
+        {
+          "number": "16",
+          "name": "Sisley Stephens",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "17",
+          "name": "Maiya Clark",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lexington, Ky.",
+          "highSchool": "Tates Creek"
+        },
+        {
+          "number": "18",
+          "name": "Amelia Majtczak",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Konstantynow Lodzki, Poland",
+          "highSchool": "Szkola Mistrzostwa Sportowego"
+        },
+        {
+          "number": "19",
+          "name": "Sydney Byrnes",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Orange, Calif.",
+          "highSchool": "Villa Park"
+        },
+        {
+          "number": "20",
+          "name": "Chloe Mueller",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Jupiter, Fla.",
+          "highSchool": "William T. Dwyer"
+        },
+        {
+          "number": "21",
+          "name": "Sienna Hurrell",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "London, England",
+          "highSchool": "Oakland's College"
+        },
+        {
+          "number": "22",
+          "name": "Riley Sims",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Harker Heights, Texas",
+          "highSchool": "Ellison"
+        },
+        {
+          "number": "23",
+          "name": "Liberty Plasek",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound"
+        },
+        {
+          "number": "24",
+          "name": "Olivia Orellana",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Katy, Texas",
+          "highSchool": "Seven Lakes"
+        },
+        {
+          "number": "25",
+          "name": "Pailynn Pine",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Boulder, Colorado",
+          "highSchool": "Fairview"
+        },
+        {
+          "number": "26",
+          "name": "Addison Soehn",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Blaine, Minn.",
+          "highSchool": "Spain Park (Ala.)"
+        },
+        {
+          "number": "27",
+          "name": "Miku Kurihara",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Chigasaki, Japan",
+          "highSchool": "Universal School"
+        },
+        {
+          "number": "31",
+          "name": "Laine Minich",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Birmingham, Ala.",
+          "highSchool": "Mountain Brook"
+        },
+        {
+          "number": "33",
+          "name": "Carson Glenn",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Lewisville, Texas",
+          "highSchool": "Lewisville"
+        }
+      ],
+      "departed": [
+        "aila swinton",
+        "amelia majtczak",
+        "anna darling",
+        "briana henry",
+        "denver barnes",
+        "liberty plasek",
+        "olivia orellana",
+        "pailynn pine",
+        "raegan latiolais",
+        "riley sims",
+        "sienna hurrell",
+        "sisley stephens",
+        "tori bockstadter"
+      ]
+    },
+    "2024": {
+      "count": 31,
+      "players": [
+        {
+          "number": "0",
+          "name": "Natalie Mayes",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "00",
+          "name": "Kristen Rudge",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Prairieville, La.",
+          "highSchool": "St. Michael the Archangel"
+        },
+        {
+          "number": "1",
+          "name": "Makenna Garcia",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Pflugerville, Texas",
+          "highSchool": "Hendrickson"
+        },
+        {
+          "number": "2",
+          "name": "Cassandra Decombe",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Brossard, Quebec, Canada",
+          "highSchool": "Champlain College"
+        },
+        {
+          "number": "3",
+          "name": "Tatum Beck",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound"
+        },
+        {
+          "number": "4",
+          "name": "Ellie Pierce",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Baton Rouge, La.",
+          "highSchool": "St. Joseph's Academy"
+        },
+        {
+          "number": "5",
+          "name": "Brynn Dunbar",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Highland Village, Texas",
+          "highSchool": "Marcus"
+        },
+        {
+          "number": "6",
+          "name": "Lucy Ortiz",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Round Rock, Texas",
+          "highSchool": "Round Rock"
+        },
+        {
+          "number": "7",
+          "name": "Adeline Nemeth",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cleveland, Ohio",
+          "highSchool": "Gilmour Academy"
+        },
+        {
+          "number": "8",
+          "name": "Bailey Giddings",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Broomfield"
+        },
+        {
+          "number": "9",
+          "name": "Kylar Coffman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mansfield, Texas",
+          "highSchool": "Mansfield"
+        },
+        {
+          "number": "10",
+          "name": "Aila Swinton",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Gulf Breeze, Fla.",
+          "highSchool": "Gulf Breeze"
+        },
+        {
+          "number": "11",
+          "name": "Briana Henry",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Hamilton, Ontario, Canada",
+          "highSchool": "St. Jean de Brefeuf"
+        },
+        {
+          "number": "12",
+          "name": "Hailly Waterhouse",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mandeville, La.",
+          "highSchool": "St. Scholastica Academy"
+        },
+        {
+          "number": "13",
+          "name": "Lily Parker",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Austin, Texas",
+          "highSchool": "McCallum"
+        },
+        {
+          "number": "14",
+          "name": "Tori Bockstadter",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "O'Fallon, Mo.",
+          "highSchool": "Fort Zumwalt West"
+        },
+        {
+          "number": "15",
+          "name": "Mackenzie Winters",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ocean Springs, Miss.",
+          "highSchool": "Ocean Springs"
+        },
+        {
+          "number": "16",
+          "name": "Sisley Stephens",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "17",
+          "name": "Megan Bradley",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Macclesfield, England",
+          "highSchool": "Fallibroome Academy"
+        },
+        {
+          "number": "18",
+          "name": "Amelia Majtczak",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Konstantynow Lodzki, Poland",
+          "highSchool": "Szkola Mistrzostwa Sportowego"
+        },
+        {
+          "number": "19",
+          "name": "Sydney Byrnes",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Orange, Calif.",
+          "highSchool": "Villa Park"
+        },
+        {
+          "number": "20",
+          "name": "Chloe Mueller",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Jupiter, Fla.",
+          "highSchool": "William T. Dwyer"
+        },
+        {
+          "number": "21",
+          "name": "Sienna Hurrell",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "London, England",
+          "highSchool": "Oakland's College"
+        },
+        {
+          "number": "22",
+          "name": "Riley Sims",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Harker Heights, Texas",
+          "highSchool": "Ellison"
+        },
+        {
+          "number": "23",
+          "name": "Liberty Plasek",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound"
+        },
+        {
+          "number": "24",
+          "name": "Alyssa Cox",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Plano, Texas",
+          "highSchool": "Plano Senior"
+        },
+        {
+          "number": "25",
+          "name": "Sophie Placke",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Argyle, Texas",
+          "highSchool": "Argyle"
+        },
+        {
+          "number": "26",
+          "name": "Mariella Stephens",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "27",
+          "name": "Lauren Bennett",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Long Beach, Miss.",
+          "highSchool": "Long Beach"
+        },
+        {
+          "number": "28",
+          "name": "Penelope Montenegro",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Houston, Texas",
+          "highSchool": "Cy Falls"
+        },
+        {
+          "number": "33",
+          "name": "Carson Glenn",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lewisville, Texas",
+          "highSchool": "Lewisville"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Natalie Mayes",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "1",
+          "name": "Makenna Garcia",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Pflugerville, Texas",
+          "highSchool": "Hendrickson"
+        },
+        {
+          "number": "2",
+          "name": "Cassandra Decombe",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Brossard, Quebec, Canada",
+          "highSchool": "Champlain College"
+        },
+        {
+          "number": "3",
+          "name": "Tatum Beck",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound"
+        },
+        {
+          "number": "4",
+          "name": "Emma Bates",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Central Coast, NSW, Australia",
+          "highSchool": "Wadalba Community School"
+        },
+        {
+          "number": "5",
+          "name": "Brynn Dunbar",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Highland Village, Texas",
+          "highSchool": "Marcus"
+        },
+        {
+          "number": "6",
+          "name": "Lucy Ortiz",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Round Rock, Texas",
+          "highSchool": "Round Rock"
+        },
+        {
+          "number": "7",
+          "name": "Mya Smith",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Spring, Texas",
+          "highSchool": "Klein Oak"
+        },
+        {
+          "number": "8",
+          "name": "Bailey Giddings",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Broomfield"
+        },
+        {
+          "number": "9",
+          "name": "Kylar Coffman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mansfield, Texas",
+          "highSchool": "Mansfield"
+        },
+        {
+          "number": "11",
+          "name": "Briana Henry",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Hamilton, Ontario, Canada",
+          "highSchool": "St. Jean de Brefeuf"
+        },
+        {
+          "number": "12",
+          "name": "Hailly Waterhouse",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mandeville, La.",
+          "highSchool": "St. Scholastica Academy"
+        },
+        {
+          "number": "13",
+          "name": "Lily Parker",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Austin, Texas",
+          "highSchool": "McCallum"
+        },
+        {
+          "number": "14",
+          "name": "Laura Hansen",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Middelfart, Denmark",
+          "highSchool": "Middelfart Gymnasium"
+        },
+        {
+          "number": "16",
+          "name": "Sisley Stephens",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "17",
+          "name": "Megan Bradley",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Macclesfield, England",
+          "highSchool": "Fallibroome Academy"
+        },
+        {
+          "number": "18",
+          "name": "Gabi Placke",
+          "pos": "D/M",
+          "classCode": "R-FR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "19",
+          "name": "Alyssa Abbott",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Prairieville, La.",
+          "highSchool": "Dutchtown"
+        },
+        {
+          "number": "21",
+          "name": "Alex Folchert",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Madrid, Spain",
+          "highSchool": "Atlético de Madrid"
+        },
+        {
+          "number": "22",
+          "name": "Mary Mueth",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fairview, Texas",
+          "highSchool": "Lovejoy"
+        },
+        {
+          "number": "23",
+          "name": "Liberty Plasek",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound"
+        },
+        {
+          "number": "24",
+          "name": "Anneliese Switzer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Houston, Texas",
+          "highSchool": "Bellaire"
+        },
+        {
+          "number": "25",
+          "name": "Sophie Placke",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Argyle, Texas",
+          "highSchool": "Argyle"
+        },
+        {
+          "number": "26",
+          "name": "Mariella Stephens",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Lantana, Texas",
+          "highSchool": "Denton Guyer"
+        },
+        {
+          "number": "27",
+          "name": "Lauren Bennett",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Long Beach, Miss.",
+          "highSchool": "Long Beach"
+        },
+        {
+          "number": "28",
+          "name": "Penelope Montenegro",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Houston, Texas",
+          "highSchool": "Cy Falls"
+        },
+        {
+          "number": "30",
+          "name": "Gabby Felix",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Scott, La.",
+          "highSchool": "Acadiana"
+        },
+        {
+          "number": "33",
+          "name": "Karleen Bedre",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Norco, Calif.",
+          "highSchool": "Norco"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 4,
+      "losses": 2,
+      "ties": 1,
+      "text": "4-2-1",
+      "played": 7,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Southeastern Louisiana",
+        "opponentRank": null,
+        "location": "Strawberry Stadium, Hammond, La.",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/southeastern-louisiana/boxscore/15410",
+          "recap": "https://ragincajuns.com/news/2026/8/13/louisiana-powers-past-slu-in-2026-soccer-opener-4-1"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Ole Miss",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/ole-miss/boxscore/15411",
+          "recap": "https://ragincajuns.com/news/2026/8/16/soccer-quick-goals-lift-ole-miss-past-louisiana-2-1"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "East Texas A&M",
+        "opponentRank": null,
+        "location": "Lion Soccer Field, Commerce, Texas",
+        "result": "T",
+        "score": "3-3",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/east-texas-am/boxscore/15412",
+          "recap": "https://ragincajuns.com/news/2026/8/20/soccer-cajuns-fight-back-from-two-goal-deficit-to-earn-3-3-draw-at-east-texas-am"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Northwestern State",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/northwestern-state/boxscore/15413",
+          "recap": "https://ragincajuns.com/news/2026/8/23/louisiana-gets-past-northwestern-state-in-soccer-4-1"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Nicholls",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/nicholls/boxscore/15414",
+          "recap": "https://ragincajuns.com/news/2026/8/27/soccer-parker-reyes-help-lead-louisiana-past-nicholls-2-0"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "McNeese",
+        "opponentRank": null,
+        "location": "Cowgirl Field, Lake Charles, La.",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/mcneese/boxscore/15415",
+          "recap": "https://ragincajuns.com/news/2026/8/30/soccer-quick-strike-cajuns-cruise-past-mcneese-4-1"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Mississippi State",
+        "opponentRank": null,
+        "location": "MSU Soccer Field, Starkville, Miss.",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2026/mississippi-state/boxscore/15416",
+          "recap": "https://ragincajuns.com/news/2026/9/3/louisiana-falls-at-unbeaten-mississippi-state-in-soccer-2-1"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "(21) Texas State",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/texas-state/91"
+        }
+      },
+      {
+        "date": "2026-09-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Southern",
+        "opponentRank": null,
+        "location": "A.W. Mumford Stadium, Baton Rouge, La.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/southern/44"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Coastal Carolina",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/coastal-carolina/62"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Old Dominion",
+        "opponentRank": null,
+        "location": "ODU Soccer Stadium, Norfolk, Va.",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/00d65edc-c2ed-4318-ba3f-e17791ef32b2",
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/old-dominion/129"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Troy",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/af780ec1-4bab-431b-adfd-d9e1a78d1c57",
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/troy/25"
+        }
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Southern Miss",
+        "opponentRank": null,
+        "location": "Marshall Bell Track & Field/Soccer Complex, Hattiesburg, Miss.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/southern-miss/22"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "South Alabama",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/south-alabama/11"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Georgia State",
+        "opponentRank": null,
+        "location": "GSU Soccer Complex, Atlanta, Ga.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/georgia-state/72"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Marshall",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/marshall/186"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "ULM",
+        "opponentRank": null,
+        "location": "Brown Stadium, Monroe, La.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/ulm/10"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Louisiana Tech",
+        "opponentRank": null,
+        "location": "Home Bank Soccer & Track Complex, Lafayette",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/louisiana-tech/42"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Arkansas State",
+        "opponentRank": null,
+        "location": "A-State Soccer Park, Jonesboro, Ark.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/arkansas-state/12"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "SBC Championships",
+        "opponentRank": null,
+        "location": "Foley Sports Tourism Complex, Foley, Ala.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://ragincajuns.com/sports/wsoc/opponent-history/sbc-championships/179"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "7-6-5",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Lamar",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/lamar/boxscore/15038",
+              "recap": "https://ragincajuns.com/news/2025/8/14/soccer-cajun-offense-comes-out-on-fire-in-season-opening-4-1-win-over-lamar"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Louisiana Tech",
+            "opponentRank": null,
+            "location": "Ruston, LA",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/louisiana-tech/boxscore/15039",
+              "recap": "https://ragincajuns.com/news/2025/8/21/soccer-louisiana-falls-in-first-road-test-to-louisiana-tech"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "McNeese",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/mcneese/boxscore/15041",
+              "recap": "https://ragincajuns.com/news/2025/8/24/soccer-cajuns-pull-away-late-in-3-0-win-over-mcneese"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Edinburg, TX",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/utrgv/boxscore/15042",
+              "recap": "https://ragincajuns.com/news/2025/8/28/soccer-louisiana-scores-twice-in-final-minutes-to-earn-road-win",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/utrgv/57"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/rice/boxscore/15040",
+              "recap": "https://ragincajuns.com/news/2025/8/31/soccer-louisiana-falls-in-back-and-forth-battle-against-rice"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ole Miss",
+            "opponentRank": null,
+            "location": "Oxford, Miss",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/ole-miss/boxscore/15043",
+              "recap": "https://ragincajuns.com/news/2025/9/4/soccer-cajuns-battle-rebels-down-to-the-wire-in-1-0-contest"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northwestern State",
+            "opponentRank": null,
+            "location": "Natchitoches, LA",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/northwestern-state/boxscore/15044",
+              "recap": "https://ragincajuns.com/news/2025/9/7/soccer-kuriharas-late-goal-leads-louisiana-to-road-draw"
+            }
+          },
+          {
+            "date": "2025-09-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Mobile, AL",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/south-alabama/boxscore/15045",
+              "recap": "https://ragincajuns.com/news/2025/9/13/soccer-cajuns-downed-in-sbc-opener-at-south-alabama"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/arkansas-state/boxscore/15046",
+              "recap": "https://ragincajuns.com/news/2025/9/18/soccer-cajuns-and-red-wolves-battle-to-1-1-draw"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Boone, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/app-state/boxscore/15047",
+              "recap": "https://ragincajuns.com/news/2025/9/21/soccer-mayes-ties-program-shutout-record-in-1-0-win-over-app-state",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/app-state/321"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia Southern",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/georgia-southern/boxscore/15048",
+              "recap": "https://ragincajuns.com/news/2025/9/28/soccer-elhaimer-scores-third-goal-as-cajuns-play-eagles-to-1-1-draw-on-sunday"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/southern-miss/boxscore/15050",
+              "recap": "https://ragincajuns.com/news/2025/10/2/soccer-mayes-sets-school-shutouts-record-offense-breaks-out-in-5-0-win-over-usm"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "San Marcos, TX",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/texas-state/boxscore/15051",
+              "recap": "https://ragincajuns.com/news/2025/10/5/soccer-ragin-cajuns-bobcats-battle-to-1-1-draw"
+            }
+          },
+          {
+            "date": "2025-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Harrisonburg, VA",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/james-madison/boxscore/15052",
+              "recap": "https://ragincajuns.com/news/2025/10/10/soccer-late-penalty-kick-lifts-dukes-past-ragin-cajuns-3-2",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/james-madison/298"
+            }
+          },
+          {
+            "date": "2025-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/old-dominion/boxscore/15053",
+              "recap": "https://ragincajuns.com/news/2025/10/17/soccer-glenns-goal-helps-louisiana-topple-monarchs-2-1"
+            }
+          },
+          {
+            "date": "2025-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Troy, AL",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/troy/boxscore/15054",
+              "recap": "https://ragincajuns.com/news/2025/10/24/soccer-kuriharas-historic-hat-trick-leads-louisiana-past-troy-8-0",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/troy/25"
+            }
+          },
+          {
+            "date": "2025-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/ulm/boxscore/15055",
+              "recap": "https://ragincajuns.com/news/2025/10/29/soccer-late-goals-lifts-ulm-past-louisiana-2-1"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Foley Sports Tourism Complex, Foley, Ala.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2025/south-alabama/boxscore/15246",
+              "recap": "https://ragincajuns.com/news/2025/11/3/soccer-herculean-effort-falls-short-for-short-handed-cajuns-on-penalty-kicks"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "7-5-8",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "McNeese",
+            "opponentRank": null,
+            "location": "Cowgirl Field, Lake Charles, La.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/mcneese/boxscore/14600",
+              "recap": "https://ragincajuns.com/news/2024/8/15/soccer-cajuns-control-pace-in-season-opening-win-over-mcneese"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Louisiana Tech",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/louisiana-tech/boxscore/14601",
+              "recap": "https://ragincajuns.com/news/2024/8/18/soccer-louisiana-battles-to-scoreless-draw-in-home-opener"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Middle Tennessee",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/middle-tennessee/boxscore/14602",
+              "recap": "https://ragincajuns.com/news/2024/8/22/soccer-cajuns-dominate-from-start-to-finish-in-5-1-win-over-mtsu"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/florida-atlantic/boxscore/14603",
+              "recap": "https://ragincajuns.com/news/2024/8/25/soccer-cajun-defense-stingy-in-sunday-draw"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Northwestern State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/northwestern-state/boxscore/14604",
+              "recap": "https://ragincajuns.com/news/2024/8/29/soccer-louisiana-stays-unbeaten-with-1-0-win-over-northwestern-state"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Grambling",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/grambling/boxscore/14605",
+              "recap": "https://ragincajuns.com/news/2024/9/1/soccer-cajuns-continue-hot-start-in-shutout-win-over-grambling"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/rice/boxscore/14606",
+              "recap": "https://ragincajuns.com/news/2024/9/5/soccer-historic-run-continues-with-2-2-draw-at-rice"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "LSU",
+            "opponentRank": null,
+            "location": "LSU Soccer Stadium, Baton Rouge, La.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/lsu/boxscore/14607",
+              "recap": "https://ragincajuns.com/news/2024/9/8/soccer-ortizs-goal-not-enough-as-cajuns-fall-for-the-first-time-in-2024"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Lamar",
+            "opponentRank": null,
+            "location": "LU Soccer Complex, Beaumont, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/lamar/boxscore/14608",
+              "recap": "https://ragincajuns.com/news/2024/9/12/soccer-late-goal-leads-louisiana-to-1-1-draw-at-lamar"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/utrgv/boxscore/14609",
+              "recap": "https://ragincajuns.com/news/2024/9/15/soccer-huge-second-half-leads-louisiana-to-4-0-win-over-utrgv"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/texas-state/boxscore/14572",
+              "recap": "https://ragincajuns.com/news/2024/9/22/soccer-louisiana-plays-texas-state-to-1-1-draw-in-sbc-opener"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Appalachian State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/appalachian-state/boxscore/14573",
+              "recap": "https://ragincajuns.com/news/2024/9/26/soccer-cajuns-fall-for-first-time-at-home-in-sbc-battle-with-app-state"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Brown Stadium, Monroe, La.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/ulm/boxscore/14574",
+              "recap": "https://ragincajuns.com/news/2024/9/29/soccer-louisiana-plays-to-a-2-2-draw-at-ulm-on-sunday"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/troy/boxscore/14575",
+              "recap": "https://ragincajuns.com/news/2024/10/6/soccer-becks-goal-leads-louisiana-to-1-0-win-over-troy"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/south-alabama/boxscore/14576",
+              "recap": "https://ragincajuns.com/news/2024/10/10/soccer-louisiana-falls-to-south-alabama-in-front-of-record-setting-crowd"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "CCU Soccer Stadium, Conway, S.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/coastal-carolina/boxscore/14577",
+              "recap": "https://ragincajuns.com/news/2024/10/13/soccer-hurrell-scores-as-cajuns-earn-a-point-at-coastal-carolina"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "A-State Soccer Park, Jonesboro, Ark.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/arkansas-state/boxscore/14578",
+              "recap": "https://ragincajuns.com/news/2024/10/17/soccer-mayes-earns-seventh-shutout-of-the-season-at-arkansas-state"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Marshall Bell Track & Field/Soccer Complex, Hattiesburg, Miss.",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/southern-miss/boxscore/14579",
+              "recap": "https://ragincajuns.com/news/2024/10/24/soccer-henry-scores-as-louisiana-falls-in-southern-miss"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/georgia-state/boxscore/14580",
+              "recap": "https://ragincajuns.com/news/2024/10/27/soccer-louisiana-falls-to-georgia-state-on-senior-day"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Hoops Family Field, Huntington, W.Va.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2024/marshall/boxscore/14581",
+              "recap": "https://ragincajuns.com/news/2024/10/31/soccer-becks-game-winner-leads-louisiana-in-season-finale"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "7-9-2",
+        "games": [
+          {
+            "date": "2023-08-09",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "McNeese",
+            "opponentRank": null,
+            "location": "Cowgirl Field, Lake Charles, La.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "recap": "https://ragincajuns.com/news/2023/8/9/soccer-louisiana-tops-mcneese-in-exhibition-opener-2-1",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/mcneese/18"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northwestern State",
+            "opponentRank": null,
+            "location": "Lady Demon Soccer Complex, Natchitoches, La.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "recap": "https://ragincajuns.com/news/2023/8/12/soccer-montenegros-goal-carries-louisiana-past-northwestern-state-1-0",
+              "history": "https://ragincajuns.com/sports/wsoc/opponent-history/northwestern-state/17"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Middle Tennessee",
+            "opponentRank": null,
+            "location": "Dean A. Hayes Track and Soccer Stadium, Murfreesboro, Tenn.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/middle-tennessee/boxscore/12483",
+              "recap": "https://ragincajuns.com/news/2023/8/17/soccer-ragin-cajuns-blue-raiders-battle-to-1-1-draw-in-season-opener"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "USF",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/usf/boxscore/12484",
+              "recap": "https://ragincajuns.com/news/2023/8/20/soccer-hot-ragin-cajuns-blank-south-florida-in-home-opener-2-0"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Grambling",
+            "opponentRank": null,
+            "location": "GSU Soccer Complex, Grambling, La.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/grambling/boxscore/12485",
+              "recap": "https://ragincajuns.com/news/2023/8/24/soccer-freshmen-lead-ragin-cajuns-past-grambling-3-0"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stephen F. Austin",
+            "opponentRank": null,
+            "location": "SFA Soccer Field, Nacogdoches, Texas",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/stephen-f-austin/boxscore/12486",
+              "recap": "https://ragincajuns.com/news/2023/8/27/soccer-stephens-garcia-lead-louisiana-past-sfa-1-0"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "FAU Soccer Stadium, Boca Raton, Fla.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/12487",
+              "recap": "https://ragincajuns.com/news/2023/8/31/soccer-slow-start-not-enough-for-cajuns-at-fau-2-1"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "FIU",
+            "opponentRank": null,
+            "location": "FIU Soccer Stadium, Miami, Fla.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/fiu/boxscore/12488",
+              "recap": "https://ragincajuns.com/news/2023/9/3/soccer-louisiana-wraps-up-road-trip-with-2-2-draw-at-fiu"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Lamar",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/lamar/boxscore/12490",
+              "recap": "https://ragincajuns.com/news/2023/9/10/soccer-louisiana-comes-up-short-in-sunday-action"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "Bobcat Soccer Complex, San Marcos, Texas",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/texas-state/boxscore/12491",
+              "recap": "https://ragincajuns.com/news/2023/9/17/soccer-cajuns-drop-sbc-opener-at-texas-state-3-0"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Old Dominion",
+            "opponentRank": null,
+            "location": "ODU Soccer Stadium, Norfolk, Va.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/old-dominion/boxscore/12492",
+              "recap": "https://ragincajuns.com/news/2023/9/21/soccer-becks-goal-helps-louisiana-blank-odu-1-0"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/ulm/boxscore/12493",
+              "recap": "https://ragincajuns.com/news/2023/9/24/soccer-cajuns-drop-sbc-home-opener-to-ulm-1-0"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/james-madison/boxscore/12494",
+              "recap": "https://ragincajuns.com/news/2023/9/30/soccer-louisiana-falls-to-jmu-in-saturday-action"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia Southern",
+            "opponentRank": null,
+            "location": "Eagle Field at Erk Park, Statesboro, Ga.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/georgia-southern/boxscore/12495",
+              "recap": "https://ragincajuns.com/news/2023/10/5/quick-scores-help-eagles-defeat-louisiana-in-sbc-soccer-3-1"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Southern Miss",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/southern-miss/boxscore/12496",
+              "recap": "https://ragincajuns.com/news/2023/10/8/soccer-great-team-performance-leads-louisiana-past-usm-2-1"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Alabama",
+            "opponentRank": null,
+            "location": "The Cage, Mobile, Ala.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/south-alabama/boxscore/12497",
+              "recap": "https://ragincajuns.com/news/2023/10/15/soccer-louisiana-falls-in-sbc-action-to-unbeaten-jags-5-0"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arkansas State",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/arkansas-state/boxscore/12498",
+              "recap": "https://ragincajuns.com/news/2023/10/19/ragin-cajuns-surge-past-a-state-in-sbc-soccer-3-1"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Troy",
+            "opponentRank": null,
+            "location": "Troy Soccer Complex, Troy, Ala.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/troy/boxscore/12499",
+              "recap": "https://ragincajuns.com/news/2023/10/22/soccer-first-half-goal-lifts-trojans-past-louisiana-1-0"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Home Bank Soccer & Track Complex, Lafayette, La.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/marshall/boxscore/12500",
+              "recap": "https://ragincajuns.com/news/2023/10/26/soccer-cajuns-punch-their-ticket-to-foley-with-1-0-win-over-marshall"
+            }
+          },
+          {
+            "date": "2023-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "(8) Texas State",
+            "opponentRank": null,
+            "location": "Foley Sports Tourism Complex, Foley, Ala.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://ragincajuns.com/sports/womens-soccer/stats/2023/texas-state/boxscore/12561",
+              "recap": "https://ragincajuns.com/news/2023/10/30/soccer-gritty-effort-falls-short-for-cajuns-in-sbc-championships-2-1"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ragincajuns.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:19:50Z"
+    }
+  },
   "commitments": [
     {
       "id": "quinn-miller-2026",
@@ -152,7 +3029,7 @@
       "city": "Sugar Land",
       "highSchool": "",
       "college": "louisiana",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -456,41 +3333,27 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://ragincajuns.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T14:41:03Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=30.212191&longitude=-92.020165&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T14:41:01Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T14:41:01Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:19:38Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

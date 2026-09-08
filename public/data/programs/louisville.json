@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://uoflsports.com/sports/womens-soccer",
-    "roster": "https://uoflsports.com/sports/womens-soccer/roster",
-    "schedule": "https://uoflsports.com/sports/womens-soccer/schedule",
-    "news": "https://uoflsports.com/sports/womens-soccer/news",
+    "athletics": "https://gocards.com/sports/womens-soccer",
+    "roster": "https://gocards.com/sports/womens-soccer/roster",
+    "schedule": "https://gocards.com/sports/womens-soccer/schedule",
+    "news": "https://gocards.com/sports/womens-soccer/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/louisville/clgid-527",
     "wikipedia": "https://en.wikipedia.org/wiki/Louisville_Cardinals_women%27s_soccer",
     "x": null,
@@ -69,17 +69,207 @@
       "asOf": "2026-09-07T04:55:40Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 38.216862,
+    "lon": -85.760412,
+    "timezone": "America/New_York",
+    "elevationM": 148.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093821",
+      "name": "LOUISVILLE INTL AP",
+      "state": "KY",
+      "distanceKm": 4.4,
+      "elevationM": 148.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 43.6,
+        "tLowF": 27.8,
+        "precipIn": 3.39,
+        "snowIn": 4.5,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 21.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 48.3,
+        "tLowF": 30.7,
+        "precipIn": 3.41,
+        "snowIn": 4.1,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 16.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 58.1,
+        "tLowF": 38.6,
+        "precipIn": 4.6,
+        "snowIn": 2.1,
+        "wetDays": 7.9,
+        "days90F": 0.0,
+        "daysFreeze": 9.5
+      },
+      {
+        "month": "Apr",
+        "tHighF": 69.6,
+        "tLowF": 48.5,
+        "precipIn": 4.8,
+        "snowIn": 0.1,
+        "wetDays": 7.9,
+        "days90F": 0.0,
+        "daysFreeze": 1.2
+      },
+      {
+        "month": "May",
+        "tHighF": 77.8,
+        "tLowF": 58.7,
+        "precipIn": 5.18,
+        "snowIn": 0.0,
+        "wetDays": 8.2,
+        "days90F": 1.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 85.7,
+        "tLowF": 67.2,
+        "precipIn": 4.27,
+        "snowIn": 0.0,
+        "wetDays": 7.6,
+        "days90F": 8.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 89.0,
+        "tLowF": 70.8,
+        "precipIn": 4.05,
+        "snowIn": 0.0,
+        "wetDays": 7.0,
+        "days90F": 14.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 88.4,
+        "tLowF": 69.5,
+        "precipIn": 3.71,
+        "snowIn": 0.0,
+        "wetDays": 5.4,
+        "days90F": 12.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 82.2,
+        "tLowF": 61.9,
+        "precipIn": 3.66,
+        "snowIn": 0.0,
+        "wetDays": 4.7,
+        "days90F": 5.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 70.5,
+        "tLowF": 50.1,
+        "precipIn": 3.72,
+        "snowIn": 0.1,
+        "wetDays": 5.3,
+        "days90F": 0.4,
+        "daysFreeze": 0.5
+      },
+      {
+        "month": "Nov",
+        "tHighF": 57.6,
+        "tLowF": 39.4,
+        "precipIn": 3.42,
+        "snowIn": 0.3,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 8.1
+      },
+      {
+        "month": "Dec",
+        "tHighF": 47.2,
+        "tLowF": 32.1,
+        "precipIn": 4.13,
+        "snowIn": 2.2,
+        "wetDays": 7.2,
+        "days90F": 0.0,
+        "daysFreeze": 16.8
+      }
+    ],
+    "annualPrecipIn": 48.3,
+    "annualSnowIn": 13.4,
+    "fallSeason": {
+      "avgHighF": 74.7,
+      "avgLowF": 55.2,
+      "precipIn": 14.5,
+      "wetDays": 21.0
+    },
+    "summary": "Hottest month Jul (avg high 89.0°F), coldest Jan (avg low 27.8°F). 48.3 in of rain per year, 13.4 in of snow. Fall season (Aug–Nov): highs around 74.7°F, 14.5 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093821,USW00013810,USC00154955&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:51:39Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": "Karen Ferguson-Dayes",
-      "title": null,
-      "since": 2000,
-      "seasons": 27,
-      "bioUrl": null,
+      "name": "Hunter Norton",
+      "title": "Head Coach",
+      "since": null,
+      "seasons": null,
+      "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/hunter-norton/3211",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Hunter Norton",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/hunter-norton/3211",
+        "social": {}
+      },
+      {
+        "name": "Olivia Mills",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/olivia-mills/3212",
+        "social": {}
+      },
+      {
+        "name": "Mitch Hepburn",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/mitch-hepburn/3213",
+        "social": {}
+      },
+      {
+        "name": "Corinne Dente",
+        "title": "Program Assistant",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/corinne-dente/3214",
+        "social": {}
+      },
+      {
+        "name": "Jing Hughley",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/coaches/jing-hughley/3210",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": {
       "name": "Lynn Stadium",
@@ -115,10 +305,25 @@
         "url": "https://en.wikipedia.org/wiki/Louisville_Cardinals_women%27s_soccer",
         "asOf": "2026-09-07T04:56:14Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gocards.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:03:07Z"
+      }
     }
   },
   "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "7-1-1",
+      "wins": 7,
+      "losses": 1,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 9,
+      "headCoach": "Hunter Norton"
+    },
     {
       "year": 2025,
       "label": "2025",
@@ -797,9 +1002,2516 @@
       "ncaaResult": "NCAA No Conference"
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 25,
+    "players": [
+      {
+        "number": "0",
+        "name": "Brielle Baker",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hillsborough, N.J.",
+        "highSchool": "Rutgers Preparatory School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/brielle-baker/18050",
+        "social": {
+          "instagram": "https://www.instagram.com/briellebakerr"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Suzie Roginski",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Hilliard, Ohio",
+        "highSchool": "Bishop Watterson",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/suzie-roginski/18072",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "2",
+        "name": "Betsy Huckaby",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Crestwood, Ky.",
+        "highSchool": "South Oldham High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/betsy-huckaby/18054",
+        "social": {
+          "instagram": "https://www.instagram.com/betsy.huckaby"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Norah Roush",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dublin, Ohio",
+        "highSchool": "Dublin Coffman",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/norah-roush/18066",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Liza Suydam",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lancaster, Pa.",
+        "highSchool": "Manheim Township",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/liza-suydam/18063",
+        "social": {
+          "instagram": "https://www.instagram.com/lizasuydam"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Grace Maddox",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Statham, Ga.",
+        "highSchool": "North Oconee",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gwinnett Soccer Academy (GSA)",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/grace-maddox/18058",
+        "social": {
+          "instagram": "https://www.instagram.com/maddox_grace5"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Taylor Wilson",
+        "pos": "D/M",
+        "posLabel": "D/M",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Germantown, Md.",
+        "highSchool": "Northwest",
+        "previousSchool": "",
+        "major": "",
+        "club": "Northern Virginia Alliance",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/taylor-wilson/18065",
+        "social": {
+          "instagram": "https://www.instagram.com/taylor_wiilson"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Nicole Jodoin",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Boylston, Mass.",
+        "highSchool": "South High Community School",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/nicole-jodoin/18056",
+        "social": {
+          "instagram": "https://www.instagram.com/nicolejod0in"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "8",
+        "name": "Abby Cox",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "North Plains, Ore.",
+        "highSchool": "Jesuit",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/abby-cox/18068",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Karina Peat",
+        "pos": "F/M",
+        "posLabel": "F/MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wilmington, N.C.",
+        "highSchool": "Eugene Ashley",
+        "previousSchool": "",
+        "major": "",
+        "club": "Wilmington Hammerheads Youth FC",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/karina-peat/18061",
+        "social": {
+          "x": "https://twitter.com/karina_peat",
+          "instagram": "https://www.instagram.com/karina_peat_"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "11",
+        "name": "Amelia Swinarski",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Madison, Ohio",
+        "highSchool": "Madison",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/amelia-swinarski/18064",
+        "social": {
+          "instagram": "https://www.instagram.com/amelia.swinarski"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Kiley Peat",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wilmington, N.C.",
+        "highSchool": "Eugene Ashley",
+        "previousSchool": "",
+        "major": "",
+        "club": "Wilmington Hammerheads Youth FC",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/kiley-peat/18062",
+        "social": {
+          "x": "https://twitter.com/kiley.peat",
+          "instagram": "https://www.instagram.com/kiley_peat"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Liz Eddy",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "McKinney, Texas",
+        "highSchool": "McKinney Boyd",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/liz-eddy/18067",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Lilia Work",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Sacred Heart Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville FC Academy",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/lilia-work/18073",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Avery George",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bexley, Ohio",
+        "highSchool": "Bexley",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/avery-george/18071",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Brooklyn Lee",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Tacoma, Wash.",
+        "highSchool": "Stadium",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/brooklyn-lee/18057",
+        "social": {
+          "instagram": "https://www.instagram.com/brooklynlee25"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Fina Davy",
+        "pos": "F/M",
+        "posLabel": "F/MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Delaware, Ohio",
+        "highSchool": "Olentangy Berlin",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/fina-davy/18052",
+        "social": {
+          "instagram": "https://www.instagram.com/fina.davy"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Ella Bard",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wadsworth, Ohio",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/ella-bard/18051",
+        "social": {
+          "instagram": "https://www.instagram.com/ellabard21"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "McKalie Ball",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Knoxville, Tenn.",
+        "highSchool": "Webb School of Knoxville",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Alliance (TN)",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/mckalie-ball/18069",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Cate Cantu",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Ardmore, Pa.",
+        "highSchool": "Lower Merion",
+        "previousSchool": "",
+        "major": "",
+        "club": "Penn Fusion",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/cate-cantu/18070",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "24",
+        "name": "AG Gibson",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Assumption",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville Academy/LouCity Academy",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/ag-gibson/18053",
+        "social": {
+          "instagram": "https://www.instagram.com/ag.gibson05"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "25",
+        "name": "Ashlyn Huie",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Roswell, Ga.",
+        "highSchool": "Lassiter",
+        "previousSchool": "",
+        "major": "",
+        "club": "Atlanta Fire United",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/ashlyn-huie/18055",
+        "social": {
+          "x": "https://twitter.com/ashlynhuie2025",
+          "instagram": "https://www.instagram.com/ashlynhuie"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "Eefje Bötjer",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Schiffdorf, Germany",
+        "highSchool": "Gymnasium Wesermunde",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/eefje-btjer/18074",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "68",
+        "name": "Trista Morris",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "J. Graham Brown School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville Academy/LouCity Academy",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/trista-morris/18060",
+        "social": {
+          "x": "https://twitter.com/tristamorris08",
+          "instagram": "https://www.instagram.com/trista.morris68"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "86",
+        "name": "Taylor Morris",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "J. Graham Brown School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville Academy/LouCity Academy",
+        "bioUrl": "https://gocards.com/sports/womens-soccer/roster/taylor-morris/18059",
+        "social": {
+          "x": "https://twitter.com/tay_morris19",
+          "instagram": "https://www.instagram.com/tay_morris19"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 9,
+      "FR": 5,
+      "SR": 3,
+      "JR": 8
+    },
+    "graduatingByPos": {
+      "M": 2,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocards.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:03:07Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 25,
+      "players": [
+        {
+          "number": "0",
+          "name": "Brielle Baker",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Hillsborough, N.J.",
+          "highSchool": "Rutgers Preparatory School"
+        },
+        {
+          "number": "1",
+          "name": "Kailey Kimball",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Danville, Calif.",
+          "highSchool": "San Ramon Valley"
+        },
+        {
+          "number": "2",
+          "name": "Betsy Huckaby",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham High School"
+        },
+        {
+          "number": "3",
+          "name": "Mackenzie Geigle",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Crossroads Flex"
+        },
+        {
+          "number": "4",
+          "name": "Liza Suydam",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lancaster, Pa.",
+          "highSchool": "Manheim Township"
+        },
+        {
+          "number": "5",
+          "name": "Grace Maddox",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Statham, Ga.",
+          "highSchool": "North Oconee"
+        },
+        {
+          "number": "6",
+          "name": "Taylor Wilson",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Germantown, Md.",
+          "highSchool": "Northwest"
+        },
+        {
+          "number": "7",
+          "name": "Nicole Jodoin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "West Boylston, Mass.",
+          "highSchool": "South High Community School"
+        },
+        {
+          "number": "9",
+          "name": "Ellie Hill",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "St. Leon, Ind.",
+          "highSchool": "East Central"
+        },
+        {
+          "number": "10",
+          "name": "Karina Peat",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": "Eugene Ashley"
+        },
+        {
+          "number": "11",
+          "name": "Amelia Swinarski",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Madison, Ohio",
+          "highSchool": "Madison"
+        },
+        {
+          "number": "13",
+          "name": "Kiley Peat",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": "Eugene Ashley"
+        },
+        {
+          "number": "14",
+          "name": "Lizzie Sexton",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Mercy McAuley"
+        },
+        {
+          "number": "17",
+          "name": "Brooklyn Lee",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Tacoma, Wash.",
+          "highSchool": "Stadium"
+        },
+        {
+          "number": "20",
+          "name": "Fina Davy",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Delaware, Ohio",
+          "highSchool": "Olentangy Berlin"
+        },
+        {
+          "number": "21",
+          "name": "Ella Bard",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wadsworth, Ohio",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Karsyn Cherry",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lafayette, Ind.",
+          "highSchool": "Lafayette Central Catholic"
+        },
+        {
+          "number": "24",
+          "name": "AG Gibson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "25",
+          "name": "Hadley Snyder",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "26",
+          "name": "Emma Kate Schroll",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Mill Creek"
+        },
+        {
+          "number": "27",
+          "name": "Emersen Jennings",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Noblesville, Ind.",
+          "highSchool": "Guerin Catholic"
+        },
+        {
+          "number": "28",
+          "name": "Ashlyn Huie",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Roswell, Ga.",
+          "highSchool": "Lassiter"
+        },
+        {
+          "number": "30",
+          "name": "Erynn Floyd",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Wilton, Conn.",
+          "highSchool": "Wilton"
+        },
+        {
+          "number": "68",
+          "name": "Trista Morris",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "J. Graham Brown School"
+        },
+        {
+          "number": "86",
+          "name": "Taylor Morris",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "J. Graham Brown School"
+        }
+      ],
+      "departed": [
+        "ellie hill",
+        "emersen jennings",
+        "emma kate schroll",
+        "erynn floyd",
+        "hadley snyder",
+        "kailey kimball",
+        "karsyn cherry",
+        "lizzie sexton",
+        "mackenzie geigle"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "1",
+          "name": "Kailey Kimball",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Danville, Calif.",
+          "highSchool": "San Ramon Valley"
+        },
+        {
+          "number": "2",
+          "name": "Betsy Huckaby",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham High School"
+        },
+        {
+          "number": "3",
+          "name": "Mackenzie Geigle",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Crossroads Flex"
+        },
+        {
+          "number": "4",
+          "name": "Jolie St. Louis",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Atlanta, Ga.",
+          "highSchool": "Dunwoody"
+        },
+        {
+          "number": "5",
+          "name": "Grace Maddox",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Statham, Ga.",
+          "highSchool": "North Oconee"
+        },
+        {
+          "number": "6",
+          "name": "Piper Davidson",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Wenatchee, Wash.",
+          "highSchool": "Wenatchee"
+        },
+        {
+          "number": "7",
+          "name": "Amber Jackson",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Janesville, Calif.",
+          "highSchool": "Forest Lake Christian"
+        },
+        {
+          "number": "8",
+          "name": "Maya Maxwell",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Ballard"
+        },
+        {
+          "number": "9",
+          "name": "Molly Cochran",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Madeira, Ohio",
+          "highSchool": "Madeira"
+        },
+        {
+          "number": "10",
+          "name": "Lauryn Contini",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "New Philadelphia, Ohio",
+          "highSchool": "New Philadelphia"
+        },
+        {
+          "number": "11",
+          "name": "Amelia Swinarski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Madison, Ohio",
+          "highSchool": "Madison"
+        },
+        {
+          "number": "12",
+          "name": "Avery Oergel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fulton, Md.",
+          "highSchool": "Reservoir"
+        },
+        {
+          "number": "13",
+          "name": "Ava Nielsen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Malverne, N.Y.",
+          "highSchool": "St. Anthony’s"
+        },
+        {
+          "number": "14",
+          "name": "Lizzie Sexton",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Mercy McAuley"
+        },
+        {
+          "number": "15",
+          "name": "Berkley Patterson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Austin, Texas",
+          "highSchool": "Lake Travis"
+        },
+        {
+          "number": "17",
+          "name": "Brooklyn Lee",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Tacoma, Wash.",
+          "highSchool": "Stadium"
+        },
+        {
+          "number": "18",
+          "name": "Viktoria Wik",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Roskilde, Denmark",
+          "highSchool": "HB Køge"
+        },
+        {
+          "number": "20",
+          "name": "Fina Davy",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Delaware, Ohio",
+          "highSchool": "Olentangy Berlin"
+        },
+        {
+          "number": "21",
+          "name": "Gianna Angelillo",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Glastonbury, Conn.",
+          "highSchool": "Glastonbury"
+        },
+        {
+          "number": "22",
+          "name": "Karsyn Cherry",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lafayette, Ind.",
+          "highSchool": "Lafayette Central Catholic"
+        },
+        {
+          "number": "23",
+          "name": "Ella Kane",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Macomb, Mich.",
+          "highSchool": "Eisenhower"
+        },
+        {
+          "number": "24",
+          "name": "AG Gibson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "25",
+          "name": "Hadley Snyder",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "26",
+          "name": "Emma Kate Schroll",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Mill Creek"
+        },
+        {
+          "number": "27",
+          "name": "Emersen Jennings",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Noblesville, Ind.",
+          "highSchool": "Guerin Catholic"
+        },
+        {
+          "number": "28",
+          "name": "Brooke Dardano",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham"
+        },
+        {
+          "number": "30",
+          "name": "Erynn Floyd",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Wilton, Conn.",
+          "highSchool": "Wilton"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Malene Nielsen",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Juelsminde, Denmark",
+          "highSchool": "Ikast-Brande Gymnasium"
+        },
+        {
+          "number": "1",
+          "name": "Alyssa Zalac",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Montreal, Canada",
+          "highSchool": "Vanier College"
+        },
+        {
+          "number": "2",
+          "name": "Betsy Huckaby",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham High School"
+        },
+        {
+          "number": "3",
+          "name": "Mackenzie Geigle",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Crossroads Flex"
+        },
+        {
+          "number": "4",
+          "name": "Emma Hiscock",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fenton, Mich.",
+          "highSchool": "Fenton"
+        },
+        {
+          "number": "5",
+          "name": "Ravin Alexander",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Summit Country Day"
+        },
+        {
+          "number": "6",
+          "name": "Lucy Roberts",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Cheshire, England",
+          "highSchool": "Bridgewater"
+        },
+        {
+          "number": "7",
+          "name": "Amber Jackson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Janesville, Calif.",
+          "highSchool": "Forest Lake Christian"
+        },
+        {
+          "number": "8",
+          "name": "Maya Maxwell",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Ballard"
+        },
+        {
+          "number": "9",
+          "name": "Molly Cochran",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Madeira, Ohio",
+          "highSchool": "Madeira"
+        },
+        {
+          "number": "10",
+          "name": "Autumn Weeks",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "East Peoria, Ill.",
+          "highSchool": "Peoria Notre Dame"
+        },
+        {
+          "number": "11",
+          "name": "Addie Chester",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Muncie, Ind.",
+          "highSchool": "Delta"
+        },
+        {
+          "number": "13",
+          "name": "Ava Nielsen",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Malverne, N.Y.",
+          "highSchool": "St. Anthony’s"
+        },
+        {
+          "number": "14",
+          "name": "Lizzie Sexton",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Mercy McAuley"
+        },
+        {
+          "number": "15",
+          "name": "Hayley Howard",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Brentwood, Tenn.",
+          "highSchool": "Brentwood"
+        },
+        {
+          "number": "18",
+          "name": "Viktoria Wik",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Roskilde, Denmark",
+          "highSchool": "HB Køge"
+        },
+        {
+          "number": "19",
+          "name": "Fiona Gaißer",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Munich, Germany",
+          "highSchool": "Bayern Munich II"
+        },
+        {
+          "number": "20",
+          "name": "Savina Zamborini",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "DuPont Manual"
+        },
+        {
+          "number": "22",
+          "name": "Karsyn Cherry",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lafayette, Ind.",
+          "highSchool": "Lafayette Central Catholic"
+        },
+        {
+          "number": "23",
+          "name": "Morgan Bentley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Atlanta, Ga.",
+          "highSchool": "Brookwood"
+        },
+        {
+          "number": "25",
+          "name": "Hadley Snyder",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Assumption"
+        },
+        {
+          "number": "26",
+          "name": "Emma Kate Schroll",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Dacula, Ga.",
+          "highSchool": "Mill Creek"
+        },
+        {
+          "number": "27",
+          "name": "Emersen Jennings",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Noblesville, Ind.",
+          "highSchool": "Guerin Catholic"
+        },
+        {
+          "number": "28",
+          "name": "Brooke Dardano",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham"
+        },
+        {
+          "number": "30",
+          "name": "Erynn Floyd",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Wilton, Conn.",
+          "highSchool": "Wilton"
+        },
+        {
+          "number": "32",
+          "name": "Maddy Ellsworth",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Hillsboro, Ore.",
+          "highSchool": "Hillsboro"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 7,
+      "losses": 1,
+      "ties": 1,
+      "text": "7-1-1",
+      "played": 9,
+      "scheduled": 19,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Indiana",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "W",
+        "score": "4-2",
+        "links": {
+          "history": "https://gocards.com/sports/wsoc/opponent-history/indiana-exh/17"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Ohio State",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "T",
+        "score": "2-2",
+        "links": {
+          "history": "https://gocards.com/sports/wsoc/opponent-history/ohio-state-exh/33"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Nebraska",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "L",
+        "score": "1-3",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/nebraska/boxscore/26323",
+          "recap": "https://gocards.com/news/2026/8/12/womens-soccer-louisville-drops-season-opener-to-nebraska",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/nebraska/343"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "IU Indy",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "W",
+        "score": "5-1",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/iu-indy/boxscore/26324",
+          "recap": "https://gocards.com/news/2026/8/17/womens-soccer-cards-earn-first-victory-of-the-season"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Belmont",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "W",
+        "score": "5-0",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/belmont/boxscore/26325",
+          "recap": "https://gocards.com/news/2026/8/23/womens-soccer-cards-produce-clean-sheet-in-win-over-belmont"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Dayton",
+        "opponentRank": null,
+        "location": "Dayton, OH",
+        "result": "W",
+        "score": "4-2",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/dayton/boxscore/26326",
+          "recap": "https://gocards.com/news/2026/8/27/womens-soccer-louisville-outlasts-dayton-for-first-road-victory",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/dayton/79"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Akron",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "W",
+        "score": "5-0",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/akron/boxscore/26327",
+          "recap": "https://gocards.com/news/2026/8/30/womens-soccer-cards-defeat-akron-in-dominant-fashion"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Kentucky",
+        "opponentRank": null,
+        "location": "Lexington, KY",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/kentucky/boxscore/26328",
+          "recap": "https://gocards.com/news/2026/9/4/womens-soccer-louisville-reigns-victorious-in-battle-of-the-bluegrass"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Mercyhurst",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://gocards.com/sports/womens-soccer/stats/2026/mercyhurst/boxscore/26329",
+          "recap": "https://gocards.com/news/2026/9/6/womens-soccer-cards-down-mercyhurst-for-fifth-straight-wi"
+        }
+      },
+      {
+        "date": "2026-09-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Pitt",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/6f193907-9873-434b-9b0f-b9d738c2714b",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664915",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/pitt/287"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Stanford",
+        "opponentRank": null,
+        "location": "Stanford, CA",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666087&vislive=lou",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/stanford/155"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "California",
+        "opponentRank": null,
+        "location": "Berkeley, CA",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gocards.com/sports/wsoc/opponent-history/california/261"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Florida State",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674099",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/florida-state/108"
+        }
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Virginia Tech",
+        "opponentRank": null,
+        "location": "Blacksburg, VA",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666744&vislive=lou",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/virginia-tech/16"
+        }
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Clemson",
+        "opponentRank": null,
+        "location": "Clemson, SC",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662500&vislive=lou",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/clemson/113"
+        }
+      },
+      {
+        "date": "2026-10-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Syracuse",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664914",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/syracuse/295"
+        }
+      },
+      {
+        "date": "2026-10-29",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Virginia",
+        "opponentRank": null,
+        "location": "Charlottesville, VA",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gocards.com/sports/wsoc/opponent-history/virginia/131"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Boston College",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664917",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/boston-college/101"
+        }
+      },
+      {
+        "date": "2026-11-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "North Carolina",
+        "opponentRank": null,
+        "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674097",
+          "history": "https://gocards.com/sports/wsoc/opponent-history/north-carolina/293"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "13-5-3",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Auburn",
+            "opponentRank": null,
+            "location": "Auburn, AL",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/auburn/boxscore/25653",
+              "recap": "https://gocards.com/news/2025/8/14/womens-soccer-cardinals-take-down-auburn-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/auburn/189"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Vanderbilt",
+            "opponentRank": 17,
+            "location": "Nashville, TN",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/-17-vanderbilt/boxscore/25654",
+              "recap": "https://gocards.com/news/2025/8/17/womens-soccer-cardinals-drop-road-contest-to-no-17-vanderbilt"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Detroit Mercy",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/detroit-mercy/boxscore/25655",
+              "recap": "https://gocards.com/news/2025/8/21/womens-soccer-cardinals-blank-detroit-mercy-8-0"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Wright State",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "7-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/wright-state/boxscore/25656",
+              "recap": "https://gocards.com/news/2025/8/24/womens-soccer-cardinals-roll-past-raiders-7-2"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "USC Upstate",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "9-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/usc-upstate/boxscore/25657",
+              "recap": "https://gocards.com/news/2025/8/28/womens-soccer-cards-offense-shines-in-9-0-victory-over-usc-upstate"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Coastal Carolina",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/coastal-carolina/boxscore/25658",
+              "recap": "https://gocards.com/news/2025/8/31/womens-soccer-cardinals-top-chanticleers-2-0"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kent State",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/kent-state/boxscore/25659",
+              "recap": "https://gocards.com/news/2025/9/4/womens-soccer-swinarskis-hat-trick-leads-cards-over-kent-state-8-0"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/dayton/boxscore/25660",
+              "recap": "https://gocards.com/news/2025/9/7/womens-soccer-cardinals-blank-dayton-2-0"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida State",
+            "opponentRank": 7,
+            "location": "Tallahassee, FL",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/-7-florida-state/boxscore/25661",
+              "recap": "https://gocards.com/news/2025/9/11/womens-soccer-cardinals-edged-by-no-7-florida-state-2-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/7-florida-state/108"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Virginia Tech",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/virginia-tech/boxscore/25662",
+              "recap": "https://gocards.com/news/2025/9/14/womens-soccer-jennings-late-goal-lifts-cards-over-hokies-1-0"
+            }
+          },
+          {
+            "date": "2025-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Clemson",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/clemson/boxscore/25663",
+              "recap": "https://gocards.com/news/2025/9/19/womens-soccer-cardinals-blank-clemson-second-straight-acc-victory"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Miami",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/miami/boxscore/25664",
+              "recap": "https://gocards.com/news/2025/9/25/womens-soccer-cardinals-tame-hurricanes-2-0"
+            }
+          },
+          {
+            "date": "2025-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Notre Dame",
+            "opponentRank": 2,
+            "location": "South Bend, Ind.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/-2-notre-dame/boxscore/25665",
+              "recap": "https://gocards.com/news/2025/10/3/womens-soccer-no-23-louisville-clipped-by-no-2-notre-dame-3-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/2-notre-dame/14"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": 13,
+            "location": "Winston-Salem, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/-13-wake-forest/boxscore/25666",
+              "recap": "https://gocards.com/news/2025/10/9/womens-soccer-cards-earn-a-1-1-draw-at-no-13-wake-forest",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/13-wake-forest/92"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Chestnut Hill, MA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/boston-college/boxscore/25667",
+              "recap": "https://gocards.com/news/2025/10/12/womens-soccer-cardinals-blank-boston-college-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/boston-college/101"
+            }
+          },
+          {
+            "date": "2025-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Virginia",
+            "opponentRank": 3,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/-3-virginia/boxscore/25668",
+              "recap": "https://gocards.com/news/2025/10/18/womens-soccer-cardinals-draw-with-no-3-virginia",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/3-virginia/131"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "NC State",
+            "opponentRank": null,
+            "location": "Raleigh, NC",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/nc-state/boxscore/25669",
+              "recap": "https://gocards.com/news/2025/10/23/womens-soccer-cards-take-down-nc-state-3-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/nc-state/289"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/smu/boxscore/25670",
+              "recap": "https://gocards.com/news/2025/10/30/womens-soccer-the-cardinals-advance-to-acc-tournament-with-3-0-win-over-smu"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 3 Duke",
+            "opponentRank": null,
+            "location": "Durham, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/no-3-duke/boxscore/25973",
+              "recap": "https://gocards.com/news/2025/11/2/womens-soccer-no-21-cards-fall-in-acc-quarterfinals-to-no-10-duke-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/no-3-duke/93"
+            }
+          },
+          {
+            "date": "2025-11-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kentucky",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/kentucky/boxscore/26035",
+              "recap": "https://gocards.com/news/2025/11/15/womens-soccer-no-6-louisville-takes-down-kentucky-in-penalty-kicks-5-4"
+            }
+          },
+          {
+            "date": "2025-11-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 3 Kansas",
+            "opponentRank": null,
+            "location": "Durham, NC",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2025/no-3-kansas/boxscore/26078",
+              "recap": "https://gocards.com/news/2025/11/20/womens-soccer-cardinals-fall-in-the-second-round-to-kansas-3-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/no-3-kansas/141"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "7-6-5",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Bellarmine",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "7-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/bellarmine/boxscore/25065",
+              "recap": "https://gocards.com/news/2024/8/15/womens-soccer-offensive-outburst-lifts-cards-over-knights-7-0"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/uab/boxscore/25078",
+              "recap": "https://gocards.com/news/2024/8/18/womens-soccer-offense-leads-cards-over-blazers-3-1"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "New Hampshire",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/new-hampshire/boxscore/25079",
+              "recap": "https://gocards.com/news/2024/8/22/womens-soccer-cardinals-and-wildcats-end-in-1-1-draw"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northern Kentucky",
+            "opponentRank": null,
+            "location": "Highland Heights, KY",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/northern-kentucky/boxscore/25080",
+              "recap": "https://gocards.com/news/2024/8/25/womens-soccer-cardinals-push-past-norse-2-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/northern-kentucky/166"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Cincinnati",
+            "opponentRank": null,
+            "location": "Cincinnati OH",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/cincinnati/boxscore/25081",
+              "recap": "https://gocards.com/news/2024/8/29/womens-soccer-cardinals-and-bearcats-play-to-1-1-draw",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/cincinnati/302"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Evansville",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/evansville/boxscore/25082",
+              "recap": "https://gocards.com/news/2024/9/1/womens-soccer-cardinals-blank-aces-3-0"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UT Martin",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/ut-martin/boxscore/25083",
+              "recap": "https://gocards.com/news/2024/9/5/womens-soccer-cards-remain-unbeaten-with-2-0-win-over-ut-martin"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/dayton/boxscore/25084",
+              "recap": "https://gocards.com/news/2024/9/8/womens-soccer-cardinals-stumble-to-dayton-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/dayton/79"
+            }
+          },
+          {
+            "date": "2024-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Pitt",
+            "opponentRank": null,
+            "location": "Pittsburgh, PA",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/pitt/boxscore/25085",
+              "recap": "https://gocards.com/news/2024/9/14/womens-soccer-cards-fall-on-the-road-to-pitt-3-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/pitt/287"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Virginia Tech",
+            "opponentRank": null,
+            "location": "Blacksburg, VA",
+            "result": "L",
+            "score": "1-5",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/virginia-tech/boxscore/25086",
+              "recap": "https://gocards.com/news/2024/9/26/womens-soccer-cards-fall-on-the-road-to-virginia-tech-5-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/virginia-tech/16"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "NC State",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/nc-state/boxscore/25087",
+              "recap": "https://gocards.com/news/2024/9/29/womens-soccer-cards-shutout-nc-state-1-0"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Carolina",
+            "opponentRank": 3,
+            "location": "Chapel Hill, NC",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/-3-north-carolina/boxscore/25088",
+              "recap": "https://gocards.com/news/2024/10/3/womens-soccer-cardinals-fall-to-no-3-north-carolina-5-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/3-north-carolina/293"
+            }
+          },
+          {
+            "date": "2024-10-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Duke",
+            "opponentRank": 2,
+            "location": "Durham, NC",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/-2-duke/boxscore/25089",
+              "recap": "https://gocards.com/news/2024/10/6/womens-soccer-cards-drop-road-contest-to-no-2-duke-3-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/2-duke/93"
+            }
+          },
+          {
+            "date": "2024-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Notre Dame",
+            "opponentRank": 13,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/-13-notre-dame/boxscore/25090",
+              "recap": "https://gocards.com/news/2024/10/12/womens-soccer-cardinals-earn-hard-fought-draw-against-no-13-notre-dame-0-0"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Stanford",
+            "opponentRank": 6,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/-6-stanford/boxscore/25091",
+              "recap": "https://gocards.com/news/2024/10/17/womens-soccer-cardinals-drop-heartbreaker-to-no-6-stanford-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/6-stanford/155"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cal",
+            "opponentRank": 25,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/-25-cal/boxscore/25092",
+              "recap": "https://gocards.com/news/2024/10/20/womens-soccer-cards-knock-off-no-25-cal-2-1"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/boston-college/boxscore/25093",
+              "recap": "https://gocards.com/news/2024/10/24/womens-soccer-cardinals-draw-with-boston-college-0-0"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Clemson",
+            "opponentRank": null,
+            "location": "Clemson, SC",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2024/clemson/boxscore/25094",
+              "recap": "https://gocards.com/news/2024/10/31/womens-soccer-cardinals-draw-with-clemson-0-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/clemson/113"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "4-9-5",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Indiana State",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/indiana-state/boxscore/24456",
+              "recap": "https://gocards.com/news/2023/8/17/womens-soccer-the-cardinals-draw-with-indiana-state-0-0"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Xavier",
+            "opponentRank": null,
+            "location": "Cincinnati, OH",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/xavier/boxscore/24457",
+              "recap": "https://gocards.com/news/2023/8/20/womens-soccer-louisville-falls-on-the-road-to-xavier-2-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/xavier/5"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Dayton, OH",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/dayton/boxscore/24458",
+              "recap": "https://gocards.com/news/2023/8/24/womens-soccer-cardinals-drop-road-tilt-to-dayton-2-1",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/dayton/79"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Northern Kentucky",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/northern-kentucky/boxscore/24459",
+              "recap": "https://gocards.com/news/2023/8/27/womens-soccer-cardinals-and-norse-finish-in-scoreless-draw"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Illinois",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/illinois/boxscore/24460",
+              "recap": "https://gocards.com/news/2023/8/31/womens-soccer-cards-comeback-fall-short-against-illinois-2-1"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/central-michigan/boxscore/24461",
+              "recap": "https://gocards.com/news/2023/9/3/womens-soccer-cochrans-brace-leads-cards-over-chippewas-3-0"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Indiana",
+            "opponentRank": null,
+            "location": "Bloomington, IN",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/indiana/boxscore/24462",
+              "recap": "https://gocards.com/news/2023/9/7/womens-soccer-cards-drop-road-test-to-hoosiers-2-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/indiana/17"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Wyoming",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/wyoming/boxscore/24463",
+              "recap": "https://gocards.com/news/2023/9/10/womens-soccer-cards-end-in-2-2-draw-with-wyoming"
+            }
+          },
+          {
+            "date": "2023-09-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Virginia",
+            "opponentRank": 20,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/-20-virginia/boxscore/24464",
+              "recap": "https://gocards.com/news/2023/9/16/womens-soccer-cardinals-battle-to-1-1-draw-against-no-20-virginia"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Pitt",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/pitt/boxscore/24465",
+              "recap": "https://gocards.com/news/2023/9/21/womens-soccer-cardinals-take-down-pitt-3-2"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Miami",
+            "opponentRank": null,
+            "location": "Coral Gables, FL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/miami/boxscore/24466",
+              "recap": "https://gocards.com/news/2023/9/24/womens-soccer-cardinals-lose-heartbreaker-to-miami-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/miami/283"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Notre Dame",
+            "opponentRank": 10,
+            "location": "South Bend, Ind.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/-10-notre-dame/boxscore/24467",
+              "recap": "https://gocards.com/news/2023/9/30/womens-soccer-cardinals-can-t-overcome-no-10-notre-dame-3-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/10-notre-dame/14"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida State",
+            "opponentRank": 2,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/-2-florida-state/boxscore/24468",
+              "recap": "https://gocards.com/news/2023/10/5/womens-soccer-cardinals-bested-by-no-2-florida-state-2-0"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Syracuse",
+            "opponentRank": null,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/syracuse/boxscore/24469",
+              "recap": "https://gocards.com/news/2023/10/8/womens-soccer-cards-win-on-senior-day-2-1"
+            }
+          },
+          {
+            "date": "2023-10-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Chestnut Hill, MA",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/boston-college/boxscore/24470",
+              "recap": "https://gocards.com/news/2023/10/14/womens-soccer-late-equalizer-gives-cardinals-a-1-1-draw-at-bc"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Clemson",
+            "opponentRank": 8,
+            "location": "Clemson, SC",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/-8-clemson/boxscore/24471",
+              "recap": "https://gocards.com/news/2023/10/19/womens-soccer-cardinals-drop-road-results-to-no-8-clemson-3-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/8-clemson/113"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": null,
+            "location": "Winston-Salem, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/wake-forest/boxscore/24472",
+              "recap": "https://gocards.com/news/2023/10/22/womens-soccer-cardinals-drop-road-contest-to-wake-forest-1-0",
+              "history": "https://gocards.com/sports/wsoc/opponent-history/wake-forest/92"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Duke",
+            "opponentRank": 25,
+            "location": "Dr. Mark & Cindy Lynn Stadium, LOUISVILLE, KY",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocards.com/sports/womens-soccer/stats/2023/-25-duke/boxscore/24473",
+              "recap": "https://gocards.com/news/2023/10/26/womens-soccer-cardinals-knock-off-no-25-duke-1-0"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocards.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:03:07Z"
+    }
+  },
   "commitments": [
     {
       "id": "avery-george-2026",
@@ -812,7 +3524,7 @@
       "city": "Bexley",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -831,7 +3543,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -847,7 +3559,7 @@
       "city": "",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -891,7 +3603,7 @@
       "city": "Prospect",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -910,7 +3622,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -926,7 +3638,7 @@
       "city": "Knoxville",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -970,7 +3682,7 @@
       "city": "",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1014,7 +3726,7 @@
       "city": "",
       "highSchool": "J. Graham Brown School",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1033,7 +3745,7 @@
         "date": "2025-06-02",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -1049,7 +3761,7 @@
       "city": "",
       "highSchool": "",
       "college": "louisville",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1068,7 +3780,7 @@
         "date": "2025-05-10",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -1619,7 +4331,107 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [
+      {
+        "title": "Louisville Welcomes Mercyhurst for Sunday Matchup",
+        "url": "https://gocards.com/news/2026/9/5/womens-soccer-louisville-welcomes-mercyhurst-for-sunday-matchup",
+        "date": "2026-09-05",
+        "recruiting": true
+      },
+      {
+        "title": "Erynn Floyd Signs with Racing Louisville FC",
+        "url": "https://gocards.com/news/2026/3/27/womens-soccer-erynn-floyd-signs-with-racing-louisville-fc",
+        "date": "2026-03-27",
+        "recruiting": true
+      },
+      {
+        "title": "Karsyn Cherry Signs with Angel City FC",
+        "url": "https://gocards.com/news/2026/1/7/womens-soccer-karsyn-cherry-signs-with-angel-city-fc",
+        "date": "2026-01-07",
+        "recruiting": true
+      }
+    ],
+    "latest": [
+      {
+        "title": "Cards Down Mercyhurst for Sixth Straight Win",
+        "url": "https://gocards.com/news/2026/9/6/womens-soccer-cards-down-mercyhurst-for-fifth-straight-wi",
+        "date": "2026-09-06",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Welcomes Mercyhurst for Sunday Matchup",
+        "url": "https://gocards.com/news/2026/9/5/womens-soccer-louisville-welcomes-mercyhurst-for-sunday-matchup",
+        "date": "2026-09-05",
+        "recruiting": true
+      },
+      {
+        "title": "Louisville Reigns Victorious in Battle of the Bluegrass",
+        "url": "https://gocards.com/news/2026/9/4/womens-soccer-louisville-reigns-victorious-in-battle-of-the-bluegrass",
+        "date": "2026-09-04",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Slated for Return of the Battle of the Bluegrass",
+        "url": "https://gocards.com/news/2026/9/2/womens-soccer-louisville-slated-for-return-of-the-battle-of-the-bluegrass",
+        "date": "2026-09-02",
+        "recruiting": false
+      },
+      {
+        "title": "Cards Defeat Akron in Dominant Fashion",
+        "url": "https://gocards.com/news/2026/8/30/womens-soccer-cards-defeat-akron-in-dominant-fashion",
+        "date": "2026-08-30",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Returns Home for Match Against Akron",
+        "url": "https://gocards.com/news/2026/8/29/womens-soccer-louisville-returns-home-for-match-against-akron",
+        "date": "2026-08-29",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Outlasts Dayton for First Road Victory",
+        "url": "https://gocards.com/news/2026/8/27/womens-soccer-louisville-outlasts-dayton-for-first-road-victory",
+        "date": "2026-08-27",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Heads North for First Road Match",
+        "url": "https://gocards.com/news/2026/8/26/womens-soccer-louisville-heads-north-for-first-road-match",
+        "date": "2026-08-26",
+        "recruiting": false
+      },
+      {
+        "title": "Cards Produce Clean Sheet in Win over Belmont",
+        "url": "https://gocards.com/news/2026/8/23/womens-soccer-cards-produce-clean-sheet-in-win-over-belmont",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Louisville Closes Out Homestand with Belmont",
+        "url": "https://gocards.com/news/2026/8/21/womens-soccer-louisville-closes-out-homestand-with-belmont",
+        "date": "2026-08-21",
+        "recruiting": false
+      },
+      {
+        "title": "Ella Bard Earns Spot on the U.S. U-20 World Cup Roster",
+        "url": "https://gocards.com/news/2026/8/19/womens-soccer-ella-bard-earns-spot-on-the-us-u-20-world-cup-roster",
+        "date": "2026-08-19",
+        "recruiting": false
+      },
+      {
+        "title": "Cards Earn First Victory of the Season",
+        "url": "https://gocards.com/news/2026/8/17/womens-soccer-cards-earn-first-victory-of-the-season",
+        "date": "2026-08-17",
+        "recruiting": false
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://gocards.com/sports/womens-soccer/archives",
+      "asOf": "2026-09-08T01:03:09Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 7,
@@ -1627,41 +4439,21 @@
     "2028": 6
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.56,
+    "builtAt": "2026-09-08T01:35:49Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "giving up on https://uoflsports.com/sports/womens-soccer/roster: HTTPSConnectionPool(host='uoflsports.com', port=443): Max retries exceeded with url: /sports/womens-soccer/roster (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mis",
-        "at": "2026-09-07T04:56:27Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=38.216862&longitude=-85.760412&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T04:56:13Z"
-      },
-      {
-        "collector": "news",
-        "error": "No module named 'collect.adapters.auto'",
-        "at": "2026-09-07T04:56:31Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

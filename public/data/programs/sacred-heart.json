@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T06:13:00Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.220893,
+    "lon": -73.243332,
+    "timezone": "America/New_York",
+    "elevationM": 1.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094702",
+      "name": "BRIDGEPORT SIKORSKY MEM AP",
+      "state": "CT",
+      "distanceKm": 11.8,
+      "elevationM": 1.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 38.4,
+        "tLowF": 24.4,
+        "precipIn": 3.18,
+        "snowIn": 8.5,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 24.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 40.5,
+        "tLowF": 25.7,
+        "precipIn": 3.12,
+        "snowIn": 10.7,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 21.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 47.4,
+        "tLowF": 32.3,
+        "precipIn": 4.09,
+        "snowIn": 7.0,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 15.7
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.3,
+        "tLowF": 41.7,
+        "precipIn": 4.16,
+        "snowIn": 0.9,
+        "wetDays": 6.8,
+        "days90F": 0.0,
+        "daysFreeze": 2.3
+      },
+      {
+        "month": "May",
+        "tHighF": 68.4,
+        "tLowF": 51.7,
+        "precipIn": 3.58,
+        "snowIn": 0.0,
+        "wetDays": 7.2,
+        "days90F": 0.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.7,
+        "tLowF": 61.5,
+        "precipIn": 3.77,
+        "snowIn": 0.0,
+        "wetDays": 6.7,
+        "days90F": 1.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 83.4,
+        "tLowF": 67.9,
+        "precipIn": 3.32,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 4.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.9,
+        "tLowF": 67.0,
+        "precipIn": 3.98,
+        "snowIn": 0.0,
+        "wetDays": 6.1,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 75.4,
+        "tLowF": 59.8,
+        "precipIn": 3.96,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 64.4,
+        "tLowF": 48.3,
+        "precipIn": 3.84,
+        "snowIn": 0.1,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.6,
+        "tLowF": 38.4,
+        "precipIn": 3.11,
+        "snowIn": 0.9,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 7.4
+      },
+      {
+        "month": "Dec",
+        "tHighF": 43.8,
+        "tLowF": 30.2,
+        "precipIn": 3.98,
+        "snowIn": 5.5,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 19.9
+      }
+    ],
+    "annualPrecipIn": 44.1,
+    "annualSnowIn": 33.6,
+    "fallSeason": {
+      "avgHighF": 68.8,
+      "avgLowF": 53.4,
+      "precipIn": 14.9,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 83.4°F), coldest Jan (avg low 24.4°F). 44.1 in of rain per year, 33.6 in of snow. Fall season (Aug–Nov): highs around 68.8°F, 14.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094702,USW00054734,USC00068065&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:30Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Matt Micros",
@@ -3722,11 +3871,11 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.89,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
@@ -3735,16 +3884,8 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.220893&longitude=-73.243332&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T06:13:32Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

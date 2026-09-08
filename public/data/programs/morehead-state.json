@@ -69,18 +69,185 @@
       "asOf": "2026-09-07T21:03:18Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 38.186768,
+    "lon": -83.434021,
+    "timezone": "America/New_York",
+    "elevationM": 256.0,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USC00152791",
+      "name": "CAVE RUN LAKE",
+      "state": "KY",
+      "distanceKm": 11.2,
+      "elevationM": 256.0
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 41.3,
+        "tLowF": 24.5,
+        "precipIn": 3.56,
+        "snowIn": 4.3,
+        "wetDays": 7.7,
+        "days90F": 0.0,
+        "daysFreeze": 23.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 45.5,
+        "tLowF": 26.5,
+        "precipIn": 3.56,
+        "snowIn": 3.4,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 20.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 55.1,
+        "tLowF": 33.3,
+        "precipIn": 4.6,
+        "snowIn": 2.0,
+        "wetDays": 8.7,
+        "days90F": 0.0,
+        "daysFreeze": 15.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 67.2,
+        "tLowF": 42.4,
+        "precipIn": 4.69,
+        "snowIn": 0.0,
+        "wetDays": 9.0,
+        "days90F": 0.2,
+        "daysFreeze": 5.0
+      },
+      {
+        "month": "May",
+        "tHighF": 74.8,
+        "tLowF": 52.2,
+        "precipIn": 5.17,
+        "snowIn": 0.0,
+        "wetDays": 9.0,
+        "days90F": 1.0,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.3,
+        "tLowF": 60.5,
+        "precipIn": 4.81,
+        "snowIn": 0.0,
+        "wetDays": 8.1,
+        "days90F": 5.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.5,
+        "tLowF": 64.5,
+        "precipIn": 5.92,
+        "snowIn": 0.0,
+        "wetDays": 9.0,
+        "days90F": 10.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.8,
+        "tLowF": 62.7,
+        "precipIn": 3.87,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 9.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.2,
+        "tLowF": 56.0,
+        "precipIn": 3.89,
+        "snowIn": 0.0,
+        "wetDays": 5.4,
+        "days90F": 3.8,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Oct",
+        "tHighF": 68.2,
+        "tLowF": 44.5,
+        "precipIn": 3.41,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 0.3,
+        "daysFreeze": 3.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 56.0,
+        "tLowF": 34.7,
+        "precipIn": 3.23,
+        "snowIn": 0.2,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 13.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 45.4,
+        "tLowF": 29.0,
+        "precipIn": 4.08,
+        "snowIn": 2.4,
+        "wetDays": 7.9,
+        "days90F": 0.0,
+        "daysFreeze": 20.4
+      }
+    ],
+    "annualPrecipIn": 50.8,
+    "annualSnowIn": 12.3,
+    "fallSeason": {
+      "avgHighF": 72.0,
+      "avgLowF": 49.5,
+      "precipIn": 14.4,
+      "wetDays": 26.0
+    },
+    "summary": "Hottest month Jul (avg high 85.5°F), coldest Jan (avg low 24.5°F). 50.8 in of rain per year, 12.3 in of snow. Fall season (Aug–Nov): highs around 72.0°F, 14.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USC00155559,USC00152791,USC00153230&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:58:58Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Paul Cox",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/coaches/paul-cox/1331",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Paul Cox",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/coaches/paul-cox/1331",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Brett Ekperuoh",
+        "title": "Assistant",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/coaches/brett-ekperuoh/1332",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +265,1300 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://msueagles.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:32:56Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "0",
+        "name": "Amira Hendrick",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Sacred Heart Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville FC",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/amira-hendrick/9117",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "00",
+        "name": "Hannah Sullivan",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Eastern HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville FC",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/hannah-sullivan/9110",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "1",
+        "name": "Allie Lammers",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Cincinnati, Ohio",
+        "highSchool": "Mount Notre Dame HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Elite",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/allie-lammers/9120",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "2",
+        "name": "Natalie Lentine",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Fraser, Mich.",
+        "highSchool": "Regina HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Nationals",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/natalie-lentine/9104",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "3",
+        "name": "Aniya Harriott",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Davie, Fla.",
+        "highSchool": "St. Thomas Aquinas HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "AC Florida",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/aniya-harriott/9116",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "4",
+        "name": "Ava Peck",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Vandalia, Ohio",
+        "highSchool": "Chaminade Julienne HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cincinnati United Premier",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/ava-peck/9106",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "5",
+        "name": "Olivia Lowe",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Nottingham, England",
+        "highSchool": "Nottinghamshire",
+        "previousSchool": "",
+        "major": "",
+        "club": "Aston Villa",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/olivia-lowe/9105",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "6",
+        "name": "Molly Tapak",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Greenwood, Ind.",
+        "highSchool": "Center Grove HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Indy Premier United",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/molly-tapak/9111",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Keara Chaffee",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Blair, Neb.",
+        "highSchool": "Blair HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Gretna Elite",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/keara-chaffee/9100",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Hailey Repreza",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Huntington Park, Calif.",
+        "highSchool": "Warren HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FRAM",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/hailey-repreza/9109",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "9",
+        "name": "Carly Gilbert",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Decatur, Ind.",
+        "highSchool": "Bellmont HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Pride",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/carly-gilbert/9101",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Gaia Fubelli",
+        "pos": "F/M",
+        "posLabel": "F/MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Culver City, Calif.",
+        "highSchool": "DaVinci HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Fram Soccer Club",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/gaia-fubelli/9115",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Charlotte Lee",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Nottingham, England",
+        "highSchool": "Sutton HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Aston Villa",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/charlotte-lee/9103",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Hannah Burke",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Warrington, England",
+        "highSchool": "Priestley College",
+        "previousSchool": "",
+        "major": "",
+        "club": "Manchester City F.C.",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/hannah-burke/9098",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "13",
+        "name": "Joni Bandi",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Bern, Switzerland",
+        "highSchool": "Gymnasium Neufeld Berne",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Thun Berner-Oberland",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/joni-bandi/9096",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "14",
+        "name": "Ashton Lynam",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Henderson, Ky.",
+        "highSchool": "Henderson HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Indiana Fire Academy South",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/ashton-lynam/9121",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "15",
+        "name": "Hannah Carter",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Bowling Green, Ky.",
+        "highSchool": "Greenwood HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Nashville United",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/hannah-carter/9099",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "19",
+        "name": "Jade Walton",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Arlington, Texas",
+        "highSchool": "Mansfield Timberview HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "DKSC",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/jade-walton/9112",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "20",
+        "name": "Kennedy Harmon",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Georgetown, Ky.",
+        "highSchool": "Scott County HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Lexington Sporting Club",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/kennedy-harmon/9118",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Aynslea Ulschmid",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mahtomedi, Minn.",
+        "highSchool": "Mahtomedi HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Salvo SC",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/aynslea-ulschmid/9119",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "22",
+        "name": "Ashlyn Francis",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Evansville, Ind.",
+        "highSchool": "Castle HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Pride",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/ashlyn-francis/9114",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Faith Peper",
+        "pos": "F/D",
+        "posLabel": "F/D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mahtomedi, Minn.",
+        "highSchool": "Mahtomedi HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tonka-Fusion Elite",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/faith-peper/9107",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "25",
+        "name": "Alyssa Brians",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Saint Leon, Ind.",
+        "highSchool": "East Central HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Elite",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/alyssa-brians/9097",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "26",
+        "name": "Addison Petry",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Louisville, Ky.",
+        "highSchool": "Sacred Heart Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Racing Louisville FC",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/addison-petry/9108",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "27",
+        "name": "Gwen Ladd",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "New Market, Md.",
+        "highSchool": "Oakdale HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Baltimore Armour Girls Academy",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/gwen-ladd/9102",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "30",
+        "name": "Kendall Anderson",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Winfield, W. Va.",
+        "highSchool": "Hurricane HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Eastern Elite",
+        "bioUrl": "https://msueagles.com/sports/womens-soccer/roster/kendall-anderson/9113",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 1,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 6,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 1,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 5,
+      "R-FR": 2,
+      "R-SO": 1,
+      "SO": 10,
+      "JR": 3,
+      "SR": 3,
+      "R-JR": 2
+    },
+    "graduatingByPos": {
+      "M": 2,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://msueagles.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:32:56Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Sofia Rodriguez",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Taylor Mill, Ky.",
+          "highSchool": "Newport Central Catholic HS"
+        },
+        {
+          "number": "00",
+          "name": "Hannah Sullivan",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Eastern HS"
+        },
+        {
+          "number": "1",
+          "name": "Claire Cress",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Berea, Ky.",
+          "highSchool": "Madison Southern HS"
+        },
+        {
+          "number": "2",
+          "name": "Natalie Lentine",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Fraser, Mich.",
+          "highSchool": "Regina HS"
+        },
+        {
+          "number": "3",
+          "name": "Karissa Vela",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Chino Hills, Calif.",
+          "highSchool": "Chino Hills HS"
+        },
+        {
+          "number": "4",
+          "name": "Ava Peck",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Vandalia, Ohio",
+          "highSchool": "Chaminade Julienne HS"
+        },
+        {
+          "number": "5",
+          "name": "Olivia Lowe",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Nottingham, England",
+          "highSchool": "Nottinghamshire"
+        },
+        {
+          "number": "6",
+          "name": "Molly Tapak",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Greenwood, Ind.",
+          "highSchool": "Center Grove HS"
+        },
+        {
+          "number": "7",
+          "name": "Keara Chaffee",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Blair, Neb.",
+          "highSchool": "Blair HS"
+        },
+        {
+          "number": "8",
+          "name": "Hailey Repreza",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Huntington Park, Calif.",
+          "highSchool": "Warren HS"
+        },
+        {
+          "number": "9",
+          "name": "Carly Gilbert",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Decatur, Ind.",
+          "highSchool": "Bellmont HS"
+        },
+        {
+          "number": "10",
+          "name": "Kennedy Baquero",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Montgomery, Texas",
+          "highSchool": "Texas Connections Academy"
+        },
+        {
+          "number": "11",
+          "name": "Charlotte Lee",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Nottingham, England",
+          "highSchool": "Sutton HS"
+        },
+        {
+          "number": "12",
+          "name": "Hannah Burke",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Warrington, England",
+          "highSchool": "Priestley College"
+        },
+        {
+          "number": "13",
+          "name": "Joni Bandi",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bern, Switzerland",
+          "highSchool": "Gymnasium Neufeld Berne"
+        },
+        {
+          "number": "14",
+          "name": "Kamryn Baquero",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Montgomery, Texas",
+          "highSchool": "Texas Connections Academy"
+        },
+        {
+          "number": "15",
+          "name": "Hannah Carter",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bowling Green, Ky.",
+          "highSchool": "Greenwood HS"
+        },
+        {
+          "number": "16",
+          "name": "Elena Scianna",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gainesville, Va.",
+          "highSchool": "Patriot HS"
+        },
+        {
+          "number": "17",
+          "name": "Lily Burt",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Voorhees, N.J.",
+          "highSchool": "Eastern Regional HS"
+        },
+        {
+          "number": "18",
+          "name": "BB Bonzheim",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Bradenton, Fla.",
+          "highSchool": "Parrish Community HS"
+        },
+        {
+          "number": "19",
+          "name": "Jade Walton",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Arlington, Texas",
+          "highSchool": "Mansfield Timberview HS"
+        },
+        {
+          "number": "20",
+          "name": "Carlie Thurmond",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Bardstown, Ky.",
+          "highSchool": "Bethlehem HS"
+        },
+        {
+          "number": "23",
+          "name": "Faith Peper",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mahtomedi, Minn.",
+          "highSchool": "Mahtomedi HS"
+        },
+        {
+          "number": "25",
+          "name": "Alyssa Brians",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saint Leon, Ind.",
+          "highSchool": "East Central HS"
+        },
+        {
+          "number": "26",
+          "name": "Addison Petry",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Sacred Heart Academy"
+        },
+        {
+          "number": "27",
+          "name": "Gwen Ladd",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "New Market, Md.",
+          "highSchool": "Oakdale HS"
+        }
+      ],
+      "departed": [
+        "bb bonzheim",
+        "carlie thurmond",
+        "claire cress",
+        "elena scianna",
+        "kamryn baquero",
+        "karissa vela",
+        "kennedy baquero",
+        "lily burt",
+        "sofia rodriguez"
+      ]
+    },
+    "2024": {
+      "count": 26,
+      "players": [
+        {
+          "number": "0",
+          "name": "Lilly Bailey",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Perth, Australia",
+          "highSchool": "Shenton College"
+        },
+        {
+          "number": "00",
+          "name": "Claire Cress",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Berea, Ky.",
+          "highSchool": "Madison Southern HS"
+        },
+        {
+          "number": "1",
+          "name": "Reegan Garrity",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Kentucky Wesleyan"
+        },
+        {
+          "number": "2",
+          "name": "Brylie Tavares-Bright",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "Spring Valley HS"
+        },
+        {
+          "number": "3",
+          "name": "Erin Fite",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Arkansas-Pine Bluff"
+        },
+        {
+          "number": "4",
+          "name": "Ava Peck",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Vandalia, Ohio",
+          "highSchool": "Chaminade Julienne HS"
+        },
+        {
+          "number": "5",
+          "name": "Anna Lohrer",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "St. Ursula Academy"
+        },
+        {
+          "number": "6",
+          "name": "Gracen Houck",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Leonardtown, Md.",
+          "highSchool": "High Point"
+        },
+        {
+          "number": "7",
+          "name": "Jade Perrin",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "L'Hôpital-du-Grosbois, France",
+          "highSchool": "Central Methodist (Mo.)"
+        },
+        {
+          "number": "8",
+          "name": "Mary Trudeau",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Philadelphia, Pa.",
+          "highSchool": "Springside Chesnut Hill Academy"
+        },
+        {
+          "number": "9",
+          "name": "Carly Gilbert",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Decatur, Ind.",
+          "highSchool": "Bellmont HS"
+        },
+        {
+          "number": "10",
+          "name": "Kennedy Baquero",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Montgomery, Texas",
+          "highSchool": "Texas Connections Academy"
+        },
+        {
+          "number": "11",
+          "name": "Hedda Ornberg",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Gothenburg, Sweden",
+          "highSchool": "Hvitfeldtska"
+        },
+        {
+          "number": "12",
+          "name": "Hannah Burke",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Warrington, England",
+          "highSchool": "Priestley College"
+        },
+        {
+          "number": "13",
+          "name": "Ella Fuller",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Dublin, Ohio",
+          "highSchool": "Jerome HS"
+        },
+        {
+          "number": "14",
+          "name": "Kamryn Baquero",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Montgomery, Texas",
+          "highSchool": "Texas Connections Academy"
+        },
+        {
+          "number": "15",
+          "name": "Natasha Tanner",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Perth, Australia",
+          "highSchool": "Woodvale Secondary College"
+        },
+        {
+          "number": "16",
+          "name": "Elena Scianna",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gainesville, Va.",
+          "highSchool": "Patriot HS"
+        },
+        {
+          "number": "18",
+          "name": "BB Bonzheim",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bradenton, Fla.",
+          "highSchool": "Parrish Community HS"
+        },
+        {
+          "number": "19",
+          "name": "Marinna Campos",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Leawood, Kan.",
+          "highSchool": "Shawnee Mission South HS"
+        },
+        {
+          "number": "20",
+          "name": "Carlie Thurmond",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Bardstown, Ky.",
+          "highSchool": "Bethlehem HS"
+        },
+        {
+          "number": "21",
+          "name": "Madison Feldhaus",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Columbus, Ohio",
+          "highSchool": "Kilbourne HS"
+        },
+        {
+          "number": "22",
+          "name": "Colletta Hardman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Newnan, Ga.",
+          "highSchool": "Northgate HS"
+        },
+        {
+          "number": "24",
+          "name": "McKenna Young",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Point Pleasant, W.Va.",
+          "highSchool": "Point Pleasant HS"
+        },
+        {
+          "number": "26",
+          "name": "Kylie Bender",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Bridgeport, W.Va.",
+          "highSchool": "Bridgeport HS"
+        },
+        {
+          "number": "27",
+          "name": "Gwen Ladd",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "New Market, Md.",
+          "highSchool": "Oakdale HS"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Erin Gibbs",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Mesa, Ariz.",
+          "highSchool": "Desert Ridge HS"
+        },
+        {
+          "number": "00",
+          "name": "Michelle Jerantowski",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Lemont, Ill.",
+          "highSchool": "Jacksonville"
+        },
+        {
+          "number": "1",
+          "name": "Reegan Garrity",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Kentucky Wesleyan"
+        },
+        {
+          "number": "2",
+          "name": "Nicole Fiantaco",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Sterling Heights, Mich.",
+          "highSchool": "Henry Ford II HS"
+        },
+        {
+          "number": "3",
+          "name": "Erin Fite",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Arkansas-Pine Bluff"
+        },
+        {
+          "number": "4",
+          "name": "Natalie Ledin",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Stockholm, Sweden",
+          "highSchool": "Carson-Newman (Tenn.)"
+        },
+        {
+          "number": "5",
+          "name": "Anna Lohrer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "St. Ursula Academy"
+        },
+        {
+          "number": "6",
+          "name": "Gracen Houck",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Leonardtown, Md.",
+          "highSchool": "High Point"
+        },
+        {
+          "number": "7",
+          "name": "Christa Palla",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Apollo, Pa.",
+          "highSchool": "Kiski Area HS"
+        },
+        {
+          "number": "8",
+          "name": "Sidney Palla",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Apollo, Pa.",
+          "highSchool": "Kiski Area HS"
+        },
+        {
+          "number": "9",
+          "name": "Abby Wesselkamper",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio",
+          "highSchool": "Archbishop McNicholas HS"
+        },
+        {
+          "number": "10",
+          "name": "Kate Larbes",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Liberty Township, Ohio",
+          "highSchool": "Lakota East HS"
+        },
+        {
+          "number": "11",
+          "name": "Hedda Ornberg",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Gothenburg, Sweden",
+          "highSchool": "Hvitfeldtska"
+        },
+        {
+          "number": "12",
+          "name": "Hannah Burke",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Warrington, England",
+          "highSchool": "Priestley College"
+        },
+        {
+          "number": "13",
+          "name": "Chelsea Elmore",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Middleburg, Ky.",
+          "highSchool": "Boyle County HS"
+        },
+        {
+          "number": "14",
+          "name": "Eli Söderberg",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Stockholm, Sweden",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Natasha Tanner",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Perth, Australia",
+          "highSchool": "Woodvale Secondary College"
+        },
+        {
+          "number": "16",
+          "name": "Mary Trudeau",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Philadelphia, Pa.",
+          "highSchool": "Springside Chesnut Hill Academy"
+        },
+        {
+          "number": "17",
+          "name": "Rachel Chin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev.",
+          "highSchool": "Northwest Career and Tech Academy"
+        },
+        {
+          "number": "18",
+          "name": "Madelyn Mozeleski",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Springboro, Ohio",
+          "highSchool": "Springboro HS"
+        },
+        {
+          "number": "19",
+          "name": "Colleen Swift",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Loveland, Ohio",
+          "highSchool": "Loveland HS"
+        },
+        {
+          "number": "20",
+          "name": "Jade Perrin",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "L'Hôpital-du-Grosbois, France",
+          "highSchool": "Central Methodist (Mo.)"
+        },
+        {
+          "number": "21",
+          "name": "Madison Feldhaus",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Columbus, Ohio",
+          "highSchool": "Kilbourne HS"
+        },
+        {
+          "number": "22",
+          "name": "Sarah Faloon",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Macomb, Mich.",
+          "highSchool": "Eisenhower HS"
+        },
+        {
+          "number": "23",
+          "name": "Sejla Podzic",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Carlisle, Pa.",
+          "highSchool": "Carlisle HS"
+        },
+        {
+          "number": "24",
+          "name": "Kylie Bender",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Bridgeport, W.Va.",
+          "highSchool": "Bridgeport HS"
+        },
+        {
+          "number": "26",
+          "name": "Michelle Hochstadt",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Frankfurt, Germany",
+          "highSchool": "Carl-von-Weinberg Schule"
+        },
+        {
+          "number": "27",
+          "name": "Gwen Ladd",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "New Market, Md.",
+          "highSchool": "Oakdale HS"
+        },
+        {
+          "number": "28",
+          "name": "Ella Quinlan",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Covington, La.",
+          "highSchool": "Christ Episcopal School"
+        },
+        {
+          "number": "30",
+          "name": "Hadley Cytron",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Creve Coeur, MO",
+          "highSchool": "Saint Louis"
+        },
+        {
+          "number": "31",
+          "name": "Nancy Soccio",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Carlisle, Pa.",
+          "highSchool": "Big Spring HS"
+        },
+        {
+          "number": "33",
+          "name": "Avery Redmon",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky.",
+          "highSchool": "Eastern HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://msueagles.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:32:56Z"
+    }
+  },
   "commitments": [
     {
       "id": "aniya-harriott-2026",
@@ -117,7 +1571,7 @@
       "city": "Ft. Lauderdale",
       "highSchool": "",
       "college": "morehead-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1590,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1606,7 @@
       "city": "",
       "highSchool": "",
       "college": "morehead-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1625,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -187,7 +1641,7 @@
       "city": "Culver City",
       "highSchool": "",
       "college": "morehead-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -206,7 +1660,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -323,41 +1777,27 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:55Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://msueagles.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T21:05:52Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=38.186768&longitude=-83.434021&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T21:05:51Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T21:05:51Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:32:45Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:23:27Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 32.843612,
+    "lon": -96.783365,
+    "timezone": "America/Chicago",
+    "elevationM": 134.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013960",
+      "name": "DALLAS LOVE FLD",
+      "state": "TX",
+      "distanceKm": 6.8,
+      "elevationM": 134.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 57.7,
+        "tLowF": 37.9,
+        "precipIn": 2.59,
+        "snowIn": 0.1,
+        "wetDays": 4.0,
+        "days90F": 0.0,
+        "daysFreeze": 8.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 62.0,
+        "tLowF": 41.9,
+        "precipIn": 2.78,
+        "snowIn": 0.9,
+        "wetDays": 4.2,
+        "days90F": 0.1,
+        "daysFreeze": 4.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 69.9,
+        "tLowF": 49.4,
+        "precipIn": 3.45,
+        "snowIn": 0.3,
+        "wetDays": 4.7,
+        "days90F": 0.2,
+        "daysFreeze": 1.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 77.4,
+        "tLowF": 56.8,
+        "precipIn": 3.15,
+        "snowIn": 0.0,
+        "wetDays": 4.5,
+        "days90F": 0.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 84.9,
+        "tLowF": 66.0,
+        "precipIn": 4.57,
+        "snowIn": 0.0,
+        "wetDays": 6.3,
+        "days90F": 7.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 92.7,
+        "tLowF": 73.8,
+        "precipIn": 3.83,
+        "snowIn": 0.0,
+        "wetDays": 5.2,
+        "days90F": 22.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 96.9,
+        "tLowF": 77.7,
+        "precipIn": 1.71,
+        "snowIn": 0.0,
+        "wetDays": 3.0,
+        "days90F": 28.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 97.1,
+        "tLowF": 77.4,
+        "precipIn": 2.19,
+        "snowIn": 0.0,
+        "wetDays": 3.5,
+        "days90F": 27.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 90.0,
+        "tLowF": 70.1,
+        "precipIn": 3.1,
+        "snowIn": 0.0,
+        "wetDays": 3.8,
+        "days90F": 16.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 79.5,
+        "tLowF": 58.7,
+        "precipIn": 4.79,
+        "snowIn": 0.0,
+        "wetDays": 4.9,
+        "days90F": 3.7,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 67.8,
+        "tLowF": 47.8,
+        "precipIn": 2.93,
+        "snowIn": 0.1,
+        "wetDays": 4.1,
+        "days90F": 0.1,
+        "daysFreeze": 1.7
+      },
+      {
+        "month": "Dec",
+        "tHighF": 59.2,
+        "tLowF": 39.8,
+        "precipIn": 3.23,
+        "snowIn": 0.3,
+        "wetDays": 4.1,
+        "days90F": 0.0,
+        "daysFreeze": 6.5
+      }
+    ],
+    "annualPrecipIn": 38.3,
+    "annualSnowIn": 1.7,
+    "fallSeason": {
+      "avgHighF": 83.6,
+      "avgLowF": 63.5,
+      "precipIn": 13.0,
+      "wetDays": 16.0
+    },
+    "summary": "Hottest month Aug (avg high 97.1°F), coldest Jan (avg low 37.9°F). 38.3 in of rain per year, 1.7 in of snow. Fall season (Aug–Nov): highs around 83.6°F, 13.0 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013960,USW00003971,USC00417588&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:55Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Nicole Nelson",
@@ -2965,11 +3114,11 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.89,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
@@ -2978,16 +3127,8 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=32.843612&longitude=-96.783365&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:24:00Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

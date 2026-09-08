@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:17:45Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 32.527748,
+    "lon": -92.07374,
+    "timezone": "America/Chicago",
+    "elevationM": 24.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013942",
+      "name": "MONROE RGNL AP",
+      "state": "LA",
+      "distanceKm": 3.4,
+      "elevationM": 24.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 57.0,
+        "tLowF": 36.7,
+        "precipIn": 5.15,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 0.0,
+        "daysFreeze": 11.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 61.1,
+        "tLowF": 40.2,
+        "precipIn": 4.65,
+        "snowIn": null,
+        "wetDays": 6.4,
+        "days90F": 0.0,
+        "daysFreeze": 6.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 69.1,
+        "tLowF": 47.2,
+        "precipIn": 5.21,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 1.6
+      },
+      {
+        "month": "Apr",
+        "tHighF": 76.8,
+        "tLowF": 54.2,
+        "precipIn": 5.83,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 0.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 84.4,
+        "tLowF": 63.1,
+        "precipIn": 4.43,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 7.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.5,
+        "tLowF": 70.1,
+        "precipIn": 4.45,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 19.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 93.2,
+        "tLowF": 72.5,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 26.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 93.6,
+        "tLowF": 71.4,
+        "precipIn": 3.56,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 25.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 88.7,
+        "tLowF": 65.5,
+        "precipIn": 3.55,
+        "snowIn": null,
+        "wetDays": 3.9,
+        "days90F": 15.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 78.8,
+        "tLowF": 53.7,
+        "precipIn": 4.95,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 2.5,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 67.3,
+        "tLowF": 43.9,
+        "precipIn": 4.16,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 3.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 59.0,
+        "tLowF": 38.6,
+        "precipIn": 5.22,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.0,
+        "daysFreeze": 9.6
+      }
+    ],
+    "annualPrecipIn": 55.1,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 82.1,
+      "avgLowF": 58.6,
+      "precipIn": 16.2,
+      "wetDays": 19.0
+    },
+    "summary": "Hottest month Aug (avg high 93.6°F), coldest Jan (avg low 36.7°F). 55.1 in of rain per year. Fall season (Aug–Nov): highs around 82.1°F, 16.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013942,USW00053961,USC00166314&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:52:40Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Sean Fraser",
@@ -105,7 +254,11 @@
         "url": "https://en.wikipedia.org/wiki/Louisiana%E2%80%93Monroe_Warhawks_women%27s_soccer",
         "asOf": "2026-09-07T05:18:19Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://ulmwarhawks.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:07:31Z"
+      }
     }
   },
   "seasons": [
@@ -504,9 +657,1187 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 23,
+    "players": [
+      {
+        "number": "1",
+        "name": "Jen Handy",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "3rd",
+        "classCode": "",
+        "hometown": "Barnsley, England",
+        "highSchool": "Astrea Academy Dearne",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/jen-handy/7976",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Teresa Jacobsen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Hoyvík, The Faroe Islands",
+        "highSchool": "Glasir",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/teresa-jacobsen/8582",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Anna Roldaan",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Liverpool, England",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/anna-roldaan/7981",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Maria Torres",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Barcelona, Spain",
+        "highSchool": "LLeo XIII",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/maria-torres/8576",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Beth Strutton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "3rd",
+        "classCode": "",
+        "hometown": "Thornton-Cleveleys, United Kingdom",
+        "highSchool": "Rossall School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/beth-strutton/7984",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Georgie Knott",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Plymouth, England",
+        "highSchool": "Mount Kelly",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/georgie-knott/8579",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Angela Moreno",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Madrid, Spain",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/angela-moreno/8583",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Amy Sharkey",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Glasgow, Scotland",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/amy-sharkey/7982",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Bernadett Stefan",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Budapest, Hungary",
+        "highSchool": "Budapest VI. Kerületi Kölcsey Ferenc Gimnázium",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/bernadett-stefan/7983",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Ines de Lope Casanova",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Madrid, Spain",
+        "highSchool": "Madrid CFF",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/ines-de-lope-casanova/7972",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Kelly Rodman",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Woodstock, Ga.",
+        "highSchool": "Fellowship Christian School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/kelly-rodman/8584",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Taylor O'Rear",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Tupelo, Miss.",
+        "highSchool": "Tupelo HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/taylor-o-rear/8578",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Victoria Vinals",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Parsippany, N.J.",
+        "highSchool": "Parsippany Hills HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "PDA",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/victoria-vinals/8580",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Lucia Gomez",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Las Rozas de Madrid, Spain",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/lucia-gomez/7974",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Jade Bowé",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-0",
+        "heightIn": 60,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Mazamet, France",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/jade-bow-/8577",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Jenni Huttunen",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "4th",
+        "classCode": "",
+        "hometown": "Tuusula, Finland",
+        "highSchool": "Mäkelänrinne",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/jenni-huttunen/8586",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Maria Thania Gealon",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Fredrikstad, Norway",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/maria-thania-gealon/7973",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Sophie Alderman",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Buffalo, Minn.",
+        "highSchool": "Buffalo HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tonka-Fusion Elite (TFE)",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/sophie-alderman/8581",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Charli Harris",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Frisco, Texas",
+        "highSchool": "Independence HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Dallas Sting",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/charli-harris/8573",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "24",
+        "name": "Luena Ferreira",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "1st",
+        "classCode": "",
+        "hometown": "Lisbon, Portugal",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/luena-ferreira/8575",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Maria Heuman",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "4th",
+        "classCode": "",
+        "hometown": "Green Ridge, Mo.",
+        "highSchool": "Green Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/maria-heuman/8585",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Stacey Qosja",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "4th",
+        "classCode": "",
+        "hometown": "London, United Kingdom",
+        "highSchool": "John Madejski Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/stacey-qosja/7979",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Rylee Methvin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "2nd",
+        "classCode": "",
+        "hometown": "Thibodaux, La.",
+        "highSchool": "E.D. White Catholic HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://ulmwarhawks.com/sports/womens-soccer/roster/rylee-methvin/7978",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 2
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "?": 20,
+      "GR": 3
+    },
+    "graduatingByPos": {
+      "M": 2,
+      "F": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ulmwarhawks.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:07:31Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 24,
+      "players": [
+        {
+          "number": "1",
+          "name": "Jen Handy",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Barnsley, England",
+          "highSchool": "Astrea Academy Dearne"
+        },
+        {
+          "number": "2",
+          "name": "Ally Richardson",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound HS"
+        },
+        {
+          "number": "3",
+          "name": "Anna Roldaan",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Liverpool, England",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Janne Van Brummelen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Teteringen, Netherlands",
+          "highSchool": "Newmancollege"
+        },
+        {
+          "number": "5",
+          "name": "Beth Strutton",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Thornton-Cleveleys, United Kingdom",
+          "highSchool": "Rossall School"
+        },
+        {
+          "number": "6",
+          "name": "Libby Holmes",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Shefford, England",
+          "highSchool": "Samuel Whitbread Academy"
+        },
+        {
+          "number": "7",
+          "name": "Ava Goodman",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Pottsville, Pa.",
+          "highSchool": "Pottsville Area HS"
+        },
+        {
+          "number": "8",
+          "name": "Skylar Blaise",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Saint Francis HS"
+        },
+        {
+          "number": "9",
+          "name": "Amy Sharkey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Glasgow, Scotland",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Margret Edda Bjarnadottir",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Reykjavík, Iceland",
+          "highSchool": "KR"
+        },
+        {
+          "number": "11",
+          "name": "Ines de Lope Casanova",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Madrid, Spain",
+          "highSchool": "Madrid CFF"
+        },
+        {
+          "number": "12",
+          "name": "Leane Commaret",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Nantes, France",
+          "highSchool": "Lycée Brequigny HS"
+        },
+        {
+          "number": "14",
+          "name": "Giulia Franco",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Santos, Brazil",
+          "highSchool": "Colégio Objetivo"
+        },
+        {
+          "number": "15",
+          "name": "Jaden Masters",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Hamilton, Bermuda",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "16",
+          "name": "Lucia Gomez",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Las Rozas de Madrid, Spain",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Bernadett Stefan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Budapest, Hungary",
+          "highSchool": "Budapest VI. Kerületi Kölcsey Ferenc Gimnázium"
+        },
+        {
+          "number": "19",
+          "name": "Maria Thania Gealon",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fredrikstad, Norway",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Marisol Gomez",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Aguascalientes, Mexico",
+          "highSchool": "Colegio de Bachilleres"
+        },
+        {
+          "number": "22",
+          "name": "Vienna Tokam",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Northampton, England",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Kaisa Vale",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Vinje, Norway",
+          "highSchool": "Telemark Toppidretts Gymnas"
+        },
+        {
+          "number": "26",
+          "name": "Stacey Qosja",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "London, United Kingdom",
+          "highSchool": "John Madejski Academy"
+        },
+        {
+          "number": "28",
+          "name": "Sophia Youngman",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Johnson City, Tennessee",
+          "highSchool": "Science Hill HS"
+        },
+        {
+          "number": "29",
+          "name": "Rylee Methvin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Thibodaux, La.",
+          "highSchool": "E.D. White Catholic HS"
+        },
+        {
+          "number": "30",
+          "name": "Maddox Dolly",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Florence, Alabama",
+          "highSchool": "Florence HS"
+        }
+      ],
+      "departed": [
+        "ally richardson",
+        "ava goodman",
+        "giulia franco",
+        "jaden masters",
+        "janne van brummelen",
+        "kaisa vale",
+        "leane commaret",
+        "libby holmes",
+        "maddox dolly",
+        "margret edda bjarnadottir",
+        "marisol gomez",
+        "skylar blaise",
+        "sophia youngman",
+        "vienna tokam"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "1",
+          "name": "Jen Handy",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Barnsley, England",
+          "highSchool": "Astrea Academy Dearne"
+        },
+        {
+          "number": "2",
+          "name": "Ally Richardson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "Flower Mound HS"
+        },
+        {
+          "number": "3",
+          "name": "Sandra Walbeck",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Moenchengladbach, Germany",
+          "highSchool": "Rhein-Maas Berufskolleg"
+        },
+        {
+          "number": "4",
+          "name": "Janne Van Brummelen",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Teteringen, Netherlands",
+          "highSchool": "Newmancollege"
+        },
+        {
+          "number": "5",
+          "name": "Beth Strutton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Thornton-Cleveleys, United Kingdom",
+          "highSchool": "Rossall School"
+        },
+        {
+          "number": "6",
+          "name": "Libby Holmes",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Shefford, England",
+          "highSchool": "Samuel Whitbread Academy"
+        },
+        {
+          "number": "7",
+          "name": "Vanessa Praher",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Wolfsburg, Germany",
+          "highSchool": "Eichendorffschule Wolfsburg"
+        },
+        {
+          "number": "8",
+          "name": "Skylar Blaise",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Saint Francis HS"
+        },
+        {
+          "number": "9",
+          "name": "Kai Douglas",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Scarborough, Canada",
+          "highSchool": "Bill Crothers Secondary School"
+        },
+        {
+          "number": "10",
+          "name": "Emelie Kobler",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Eugendorf, Salzburg, Austria",
+          "highSchool": "Bundesgymnasium Seekirchen"
+        },
+        {
+          "number": "11",
+          "name": "Eleonora Franco",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Verona, Italy",
+          "highSchool": "Sacra Famiglia"
+        },
+        {
+          "number": "12",
+          "name": "Leane Commaret",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Nantes, France",
+          "highSchool": "Lycée Brequigny HS"
+        },
+        {
+          "number": "14",
+          "name": "Giulia Franco",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Santos, Brazil",
+          "highSchool": "Colégio Objetivo"
+        },
+        {
+          "number": "15",
+          "name": "Jaden Masters",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hamilton, Bermuda",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "16",
+          "name": "Sara Navarro",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Belton, Texas",
+          "highSchool": "Belton HS"
+        },
+        {
+          "number": "17",
+          "name": "Jensyn Lins",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Bellevue, Wash.",
+          "highSchool": "Issaquah HS"
+        },
+        {
+          "number": "18",
+          "name": "Bernadett Stefan",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Budapest, Hungary",
+          "highSchool": "Budapest VI. Kerületi Kölcsey Ferenc Gimnázium"
+        },
+        {
+          "number": "19",
+          "name": "Peyton Pipes",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Bossier City, La.",
+          "highSchool": "Parkway HS"
+        },
+        {
+          "number": "20",
+          "name": "Marisol Gomez",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Aguascalientes, Mexico",
+          "highSchool": "Colegio de Bachilleres"
+        },
+        {
+          "number": "21",
+          "name": "Emerson Roberts",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Shreveport, Louisiana",
+          "highSchool": "C.E. Byrd HS"
+        },
+        {
+          "number": "22",
+          "name": "Ashley Washburn",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "The Woodlands, Texas",
+          "highSchool": "College Park HS"
+        },
+        {
+          "number": "23",
+          "name": "Mara Grutkamp",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mülheim an der Ruhr, Germany",
+          "highSchool": "Luisenschule"
+        },
+        {
+          "number": "24",
+          "name": "Odessa Barattieri",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Tucson, Ariz.",
+          "highSchool": "Salpointe Catholic HS"
+        },
+        {
+          "number": "25",
+          "name": "Kaisa Vale",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Vinje, Norway",
+          "highSchool": "Telemark Toppidretts Gymnas"
+        },
+        {
+          "number": "26",
+          "name": "Stacey Qosja",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "London, United Kingdom",
+          "highSchool": "John Madejski Academy"
+        },
+        {
+          "number": "27",
+          "name": "Sky Hull",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Andover, United Kingdom",
+          "highSchool": "Hartpury College"
+        },
+        {
+          "number": "28",
+          "name": "Sophia Youngman",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Johnson City, Tennessee",
+          "highSchool": "Science Hill HS"
+        },
+        {
+          "number": "29",
+          "name": "Chloe Robbins",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Gonzales, Louisiana",
+          "highSchool": "Ascension Christian HS"
+        },
+        {
+          "number": "30",
+          "name": "Maddox Dolly",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Florence, Alabama",
+          "highSchool": "Florence HS"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 25,
+      "players": [
+        {
+          "number": "1",
+          "name": "Alexa Castro",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Tachira, Venezuela",
+          "highSchool": "Albany State"
+        },
+        {
+          "number": "2",
+          "name": "Ally Richardson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Flower Mound, Texas",
+          "highSchool": "TCU"
+        },
+        {
+          "number": "3",
+          "name": "Emelie Lauren",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Sigtuna, Sweden",
+          "highSchool": "Sigtuna Skolans Humanistiska Iäroverk"
+        },
+        {
+          "number": "4",
+          "name": "Janne Van Brummelen",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Teteringen, Netherlands /",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Lena Göppel",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Schaan, Liechtenstein",
+          "highSchool": "Liechtensteinisches Gymnasium"
+        },
+        {
+          "number": "6",
+          "name": "Libby Holmes",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Shefford, England /",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Vanessa Praher",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wolfsburg, Germany /",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Skylar Blaise",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Lake Tahoe CC"
+        },
+        {
+          "number": "9",
+          "name": "Janet Stopka",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Waldbrol, Germany",
+          "highSchool": "Kaufmannisches Berufskolleg Oberberg"
+        },
+        {
+          "number": "10",
+          "name": "Emelie Kobler",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Eugendorf, Salzburg, Austria",
+          "highSchool": "Alabama"
+        },
+        {
+          "number": "11",
+          "name": "Eleonora Franco",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Verona, Italy",
+          "highSchool": "Franklin Pierce"
+        },
+        {
+          "number": "14",
+          "name": "Inge Konst",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Balk, Netherlands",
+          "highSchool": "Friesland College"
+        },
+        {
+          "number": "15",
+          "name": "Gabriela Gracia",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Johnson City, Tennessee",
+          "highSchool": "Science Hill HS"
+        },
+        {
+          "number": "16",
+          "name": "Sara Navarro",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Belton, Texas /",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Santana Pressley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Marietta, Georgia",
+          "highSchool": "Coastal Carolina"
+        },
+        {
+          "number": "18",
+          "name": "Samantha Maudsley",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Upper Iowa"
+        },
+        {
+          "number": "19",
+          "name": "Peyton Pipes",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Bossier City, La. /",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Emerson Roberts",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Shreveport, Louisiana /",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Lucia Lobato",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Galway, Ireland",
+          "highSchool": "Akron"
+        },
+        {
+          "number": "23",
+          "name": "Mara Grutkamp",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mülheim an der Ruhr, Germany /",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Chloe Robbins",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gonzales, Louisiana /",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Mickaela Leal",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Rockwall, TX",
+          "highSchool": "Rockwall HS"
+        },
+        {
+          "number": "26",
+          "name": "Eve Blakey",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Newcastle, England",
+          "highSchool": "Academy of Sport, Gateshead"
+        },
+        {
+          "number": "28",
+          "name": "Sophia Youngman",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Johnson City, Tennessee /",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Maddox Dolly",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Florence, Alabama /",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://ulmwarhawks.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:07:31Z"
+    }
+  },
   "commitments": [
     {
       "id": "charli-harris-2026",
@@ -519,7 +1850,7 @@
       "city": "Frisco",
       "highSchool": "",
       "college": "louisiana-monroe",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -538,7 +1869,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -589,7 +1920,7 @@
       "city": "Buffalo",
       "highSchool": "",
       "college": "louisiana-monroe",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -608,7 +1939,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -624,7 +1955,7 @@
       "city": "Morris Plains",
       "highSchool": "",
       "college": "louisiana-monroe",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -643,7 +1974,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -724,35 +2055,21 @@
     "2026": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:50Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://ulmwarhawks.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:18:20Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=32.527748&longitude=-92.07374&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago:",
-        "at": "2026-09-07T05:18:18Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

@@ -69,17 +69,191 @@
       "asOf": "2026-09-07T18:41:13Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.933869,
+    "lon": -88.766428,
+    "timezone": "America/Chicago",
+    "elevationM": 262.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00054811",
+      "name": "SHABBONA 5 NNE",
+      "state": "IL",
+      "distanceKm": 12.3,
+      "elevationM": 262.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 28.3,
+        "tLowF": 13.4,
+        "precipIn": 1.67,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 29.2
+      },
+      {
+        "month": "Feb",
+        "tHighF": 32.4,
+        "tLowF": 17.0,
+        "precipIn": 1.92,
+        "snowIn": null,
+        "wetDays": 4.5,
+        "days90F": 0.0,
+        "daysFreeze": 26.5
+      },
+      {
+        "month": "Mar",
+        "tHighF": 45.5,
+        "tLowF": 27.0,
+        "precipIn": 2.48,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 22.0
+      },
+      {
+        "month": "Apr",
+        "tHighF": 59.0,
+        "tLowF": 36.5,
+        "precipIn": 3.62,
+        "snowIn": null,
+        "wetDays": 7.2,
+        "days90F": 0.0,
+        "daysFreeze": 10.1
+      },
+      {
+        "month": "May",
+        "tHighF": 70.4,
+        "tLowF": 47.9,
+        "precipIn": 4.59,
+        "snowIn": null,
+        "wetDays": 8.5,
+        "days90F": 1.0,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Jun",
+        "tHighF": 79.5,
+        "tLowF": 57.8,
+        "precipIn": 4.54,
+        "snowIn": null,
+        "wetDays": 8.0,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 81.5,
+        "tLowF": 60.5,
+        "precipIn": 3.77,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 2.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 79.5,
+        "tLowF": 58.1,
+        "precipIn": 4.08,
+        "snowIn": null,
+        "wetDays": 5.9,
+        "days90F": 1.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 74.4,
+        "tLowF": 50.3,
+        "precipIn": 3.42,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.9,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Oct",
+        "tHighF": 61.8,
+        "tLowF": 39.0,
+        "precipIn": 2.98,
+        "snowIn": null,
+        "wetDays": 6.4,
+        "days90F": 0.0,
+        "daysFreeze": 7.9
+      },
+      {
+        "month": "Nov",
+        "tHighF": 46.3,
+        "tLowF": 28.6,
+        "precipIn": 2.29,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 19.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 33.4,
+        "tLowF": 19.0,
+        "precipIn": 2.05,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 27.6
+      }
+    ],
+    "annualPrecipIn": 37.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 65.5,
+      "avgLowF": 44.0,
+      "precipIn": 12.8,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 81.5°F), coldest Jan (avg low 13.4°F). 37.4 in of rain per year. Fall season (Aug–Nov): highs around 65.5°F, 12.8 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00054811,USW00004808,USC00112223&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:43Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": "Michael O’Neill",
-      "title": null,
+      "name": "Michael O'Neill",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/coaches/michael-o-neill/2653",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Michael O'Neill",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/coaches/michael-o-neill/2653",
+        "social": {}
+      },
+      {
+        "name": "Luke Aspinall-Stanton",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/coaches/luke-aspinall-stanton/2654",
+        "social": {}
+      },
+      {
+        "name": "Gabi McAlpine",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/coaches/gabi-mcalpine/2655",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": {
       "name": "NIU Soccer Complex",
@@ -114,13 +288,1341 @@
         "url": "https://en.wikipedia.org/wiki/Northern_Illinois_Huskies_women%27s_soccer",
         "asOf": "2026-09-07T18:43:47Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://www.niuhuskies.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:27:59Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "0",
+        "name": "Alexandra Devory",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Ruckersville, Va.",
+        "highSchool": "William Monroe",
+        "previousSchool": "",
+        "major": "",
+        "club": "Skyline Elite SC",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/alexandra-devory/18450",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "00",
+        "name": "Morgan Lucich",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Rancho Santa Margarita, Calif.",
+        "highSchool": "Trabuco Hills",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/morgan-lucich/18440",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Lauren Pearson",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Muskego, Wis.",
+        "highSchool": "Muskego",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/lauren-pearson/18445",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Mya Newcombe",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Carlisle, Ontario",
+        "highSchool": "Waterdown District",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/mya-newcombe/18444",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Mckayla Harsley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Union, Ky.",
+        "highSchool": "Randall K. Cooper",
+        "previousSchool": "",
+        "major": "",
+        "club": "Indy Premier",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/mckayla-harsley/18437",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Genevieve Wilson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lake Geneva, Wis.",
+        "highSchool": "Badger",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/genevieve-wilson/18451",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Peyton Cornejo",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Normal, Ill.",
+        "highSchool": "Normal West",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/peyton-cornejo/18452",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Taite DeLange",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Thornton, Colo.",
+        "highSchool": "Horizon",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/taite-delange/18453",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Brianna Gutierrez",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Addison, Ill.",
+        "highSchool": "Addison Trail",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/brianna-gutierrez/18454",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Angelina Briggs",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Commerce, Mich.",
+        "highSchool": "Marian",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/angelina-briggs/18434",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Monica Correa",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Des Plaines, Ill.",
+        "highSchool": "Saint Viator",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/monica-correa/18436",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Abby Foulk",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Westfield, Ind.",
+        "highSchool": "Westfield",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/abby-foulk/18455",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Abbey Kijewski",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Nobleton, Ontario",
+        "highSchool": "Brill Crothers Secondary",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/abbey-kijewski/18456",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Zoe Mclauchlan",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Gatineau, Quebec",
+        "highSchool": "Collège Nouvelles Frontières",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/zoe-mclauchlan/18441",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Lyndsey Miller",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Alton, Ill.",
+        "highSchool": "Alton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/lyndsey-miller/18442",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Elle Wainscott",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Oswego, Ill.",
+        "highSchool": "Saint Francis HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/elle-wainscott/18449",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Laurina Bilombo-Bemba",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Laval, Quebec",
+        "highSchool": "Antoine de Saint-Exupéry",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/laurina-bilombo-bemba/18433",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Maddy Sheppard",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cincinnati, Ohio",
+        "highSchool": "Roger Bacon",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cincinnati United Soccer Club",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/maddy-sheppard/18458",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "19",
+        "name": "Rowan Moore",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Granger, Ind.",
+        "highSchool": "Penn",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/rowan-moore/18457",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Lauren Mrugala",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Plainfield, Ill.",
+        "highSchool": "Plainfield North",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/lauren-mrugala/18443",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Jordin Kadiri",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Evanston, Ill.",
+        "highSchool": "Evanston Township",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/jordin-kadiri/18439",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Julianna Hill",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Burlington, Iowa",
+        "highSchool": "West Burlington",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/julianna-hill/18438",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Isabel Struble",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Mount Pleasant, Mich.",
+        "highSchool": "Mount Pleasant",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/isabel-struble/18448",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Dahlia Rodriguez",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Round Lake, Ill.",
+        "highSchool": "Grayslake Central",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/dahlia-rodriguez/18446",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Lola Zarate",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oak Park, Ill.",
+        "highSchool": "Oak Park River Forest",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC United (IL)",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/lola-zarate/18459",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "30",
+        "name": "Mckenna Campbell-Turkalj",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Kitchener, Ontario",
+        "highSchool": "Resurrection Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/mckenna-campbell-turkalj/18435",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "32",
+        "name": "Sarah Roy",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Saint-Julie, Quebec",
+        "highSchool": "College de Montreal",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.niuhuskies.com/sports/womens-soccer/roster/sarah-roy/18447",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 1,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 6,
+      "GR": 2,
+      "R-SO": 2,
+      "SO": 9,
+      "JR": 3,
+      "SR": 3,
+      "R-FR": 1,
+      "R-JR": 1
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "F": 1,
+      "D": 1,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.niuhuskies.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:27:59Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Amy Stineman",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Archbishop Mitty"
+        },
+        {
+          "number": "00",
+          "name": "Morgan Lucich",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Rancho Santa Margarita, Calif.",
+          "highSchool": "Trabuco Hills"
+        },
+        {
+          "number": "1",
+          "name": "Lauren Pearson",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Muskego, Wis.",
+          "highSchool": "Muskego"
+        },
+        {
+          "number": "2",
+          "name": "Mya Newcombe",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Carlisle, Ontario",
+          "highSchool": "Waterdown District"
+        },
+        {
+          "number": "3",
+          "name": "Mckayla Harsley",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Union, Ky.",
+          "highSchool": "Randall K. Cooper"
+        },
+        {
+          "number": "4",
+          "name": "Kelsi McLaughlin",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Greenfield, Ind.",
+          "highSchool": "Greenfield Central"
+        },
+        {
+          "number": "6",
+          "name": "Amber Best",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Southfield, Mich.",
+          "highSchool": "Mercy"
+        },
+        {
+          "number": "7",
+          "name": "Aubrey Robertson",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Fishers, Ind.",
+          "highSchool": "Fishers"
+        },
+        {
+          "number": "8",
+          "name": "Katie Bennett",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Carmel Sixth Form"
+        },
+        {
+          "number": "9",
+          "name": "Angelina Briggs",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Commerce, Mich.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "10",
+          "name": "Monica Correa",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Des Plaines, Ill.",
+          "highSchool": "Saint Viator"
+        },
+        {
+          "number": "11",
+          "name": "Madeline Lewis",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Barrington, Ill.",
+          "highSchool": "Barrington"
+        },
+        {
+          "number": "12",
+          "name": "Alyssa Stephenson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Oakville, Ontario",
+          "highSchool": "St. Ignatius of Loyola"
+        },
+        {
+          "number": "13",
+          "name": "Zoe Mclauchlan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gatineau, Quebec",
+          "highSchool": "Collège Nouvelles Frontières"
+        },
+        {
+          "number": "14",
+          "name": "Lyndsey Miller",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Alton, Ill.",
+          "highSchool": "Alton"
+        },
+        {
+          "number": "15",
+          "name": "Elle Wainscott",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Oswego, Ill.",
+          "highSchool": "Saint Francis HS"
+        },
+        {
+          "number": "16",
+          "name": "Jordyn Saddler",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Brooklyn Park, Minn.",
+          "highSchool": "Robbinsdale Cooper"
+        },
+        {
+          "number": "17",
+          "name": "Sophia White",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Fort Wayne, Ind.",
+          "highSchool": "Homestead"
+        },
+        {
+          "number": "18",
+          "name": "Tyra King",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Menifee, Calif.",
+          "highSchool": "Metea Valley"
+        },
+        {
+          "number": "20",
+          "name": "Julianna Hill",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Burlington, Iowa",
+          "highSchool": "West Burlington"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Mrugala",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Plainfield, Ill.",
+          "highSchool": "Plainfield North"
+        },
+        {
+          "number": "22",
+          "name": "Jordin Kadiri",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Evanston, Ill.",
+          "highSchool": "Evanston Township"
+        },
+        {
+          "number": "23",
+          "name": "Alyssun Janzen",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saint-Marthe-Sur Le-Lac, Quebec",
+          "highSchool": "Saint Gabriel"
+        },
+        {
+          "number": "24",
+          "name": "Isabel Struble",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mount Pleasant, Mich.",
+          "highSchool": "Mount Pleasant"
+        },
+        {
+          "number": "25",
+          "name": "Dahlia Rodriguez",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Round Lake, Ill.",
+          "highSchool": "Grayslake Central"
+        },
+        {
+          "number": "27",
+          "name": "Mikayla Rivera",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Plainfield, Ill.",
+          "highSchool": "Plainfield North"
+        },
+        {
+          "number": "29",
+          "name": "Laurina Bilombo-Bemba",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Laval, Quebec",
+          "highSchool": "Antoine de Saint-Exupéry"
+        },
+        {
+          "number": "30",
+          "name": "Mckenna Campbell-Turkalj",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Kitchener, Ontario",
+          "highSchool": "Resurrection Catholic"
+        },
+        {
+          "number": "32",
+          "name": "Sarah Roy",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Saint-Julie, Quebec",
+          "highSchool": "College de Montreal"
+        }
+      ],
+      "departed": [
+        "alyssa stephenson",
+        "alyssun janzen",
+        "amber best",
+        "amy stineman",
+        "aubrey robertson",
+        "jordyn saddler",
+        "katie bennett",
+        "kelsi mclaughlin",
+        "madeline lewis",
+        "mikayla rivera",
+        "sophia white",
+        "tyra king"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Amy Stineman",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Archbishop Mitty"
+        },
+        {
+          "number": "00",
+          "name": "Ary Purifoy",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Machesney Park, Ill.",
+          "highSchool": "Harlem"
+        },
+        {
+          "number": "1",
+          "name": "Lauren Pearson",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Muskego, Wis.",
+          "highSchool": "Muskego"
+        },
+        {
+          "number": "2",
+          "name": "Chantelle Parker",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Milton, Ontario",
+          "highSchool": "Bishop P.F. Reding Catholic"
+        },
+        {
+          "number": "3",
+          "name": "Maddie Macon",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Freeport, Ill.",
+          "highSchool": "Freeport"
+        },
+        {
+          "number": "4",
+          "name": "Kelsi McLaughlin",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Greenfield, Ind.",
+          "highSchool": "Greenfield Central"
+        },
+        {
+          "number": "5",
+          "name": "Tyra King",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Menifee, Calif.",
+          "highSchool": "Metea Valley"
+        },
+        {
+          "number": "6",
+          "name": "Amber Best",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Southfield, Mich.",
+          "highSchool": "Mercy"
+        },
+        {
+          "number": "7",
+          "name": "Aubrey Robertson",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Fishers, Ind.",
+          "highSchool": "Fishers"
+        },
+        {
+          "number": "8",
+          "name": "Katie Bennett",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Carmel Sixth Form"
+        },
+        {
+          "number": "9",
+          "name": "Angelina Briggs",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Commerce, Mich.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "10",
+          "name": "Edith Delgado",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Aurora, Ill.",
+          "highSchool": "East Aurora"
+        },
+        {
+          "number": "11",
+          "name": "Lea Gruennagel",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Homburg, Germany",
+          "highSchool": "Intergrierte Gesamtschule Contwig"
+        },
+        {
+          "number": "12",
+          "name": "Alyssa Stephenson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Oakville, Ontario",
+          "highSchool": "St. Ignatius of Loyola"
+        },
+        {
+          "number": "13",
+          "name": "Reegan Kingpavong",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Rockford, Ill.",
+          "highSchool": "Guilford"
+        },
+        {
+          "number": "15",
+          "name": "Abby Zipse",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Batavia, Ill.",
+          "highSchool": "Batavia"
+        },
+        {
+          "number": "16",
+          "name": "Jordyn Saddler",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Brooklyn Park, Minn.",
+          "highSchool": "Robbinsdale Cooper"
+        },
+        {
+          "number": "17",
+          "name": "Sophia White",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Fort Wayne, Ind.",
+          "highSchool": "Homestead"
+        },
+        {
+          "number": "20",
+          "name": "Julianna Hill",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Burlington, Iowa",
+          "highSchool": "West Burlington"
+        },
+        {
+          "number": "21",
+          "name": "Lauren Mrugala",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Plainfield, Ill.",
+          "highSchool": "Plainfield North"
+        },
+        {
+          "number": "22",
+          "name": "Cydnie Bayless",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Aurora, Ill.",
+          "highSchool": "Matea Valley"
+        },
+        {
+          "number": "23",
+          "name": "Kara Machala",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. Charles, Ill.",
+          "highSchool": "St. Charles East"
+        },
+        {
+          "number": "24",
+          "name": "Isabel Struble",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Mount Pleasant, Mich.",
+          "highSchool": "Mount Pleasant"
+        },
+        {
+          "number": "27",
+          "name": "Mikayla Rivera",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Plainfield, Ill.",
+          "highSchool": "Plainfield North"
+        },
+        {
+          "number": "30",
+          "name": "Mckenna Campbell-Turkalj",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Kitchener, Ontario",
+          "highSchool": "Resurrection Catholic"
+        },
+        {
+          "number": "32",
+          "name": "Sarah Roy",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Saint-Julie, Quebec",
+          "highSchool": "College de Montreal"
+        },
+        {
+          "number": "40",
+          "name": "Abi Dolding",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Hastings, Egland",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Sadie McGill",
+          "pos": "GK",
+          "classCode": "R-SR",
+          "hometown": "Fort Worth, Texas",
+          "highSchool": "L.D. Bell"
+        },
+        {
+          "number": "00",
+          "name": "Marianna Neau",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Douglasville, Ga.",
+          "highSchool": "Alexander"
+        },
+        {
+          "number": "1",
+          "name": "Deighton Wamer",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Oregon, Ohio",
+          "highSchool": "Clay"
+        },
+        {
+          "number": "2",
+          "name": "Chantelle Parker",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Milton, Ontario",
+          "highSchool": "Bishop P.F. Reding Catholic"
+        },
+        {
+          "number": "3",
+          "name": "Maddie Macon",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Freeport, Ill.",
+          "highSchool": "Freeport"
+        },
+        {
+          "number": "4",
+          "name": "Jamie Ward",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cherry Valley, Ill.",
+          "highSchool": "Rockford East"
+        },
+        {
+          "number": "5",
+          "name": "Tyra King",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Menifee, Calif.",
+          "highSchool": "Metea Valley"
+        },
+        {
+          "number": "6",
+          "name": "Amber Best",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Southfield, Mich.",
+          "highSchool": "Mercy"
+        },
+        {
+          "number": "7",
+          "name": "Aubrey Robertson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Fishers, Ind.",
+          "highSchool": "Fishers"
+        },
+        {
+          "number": "8",
+          "name": "Katie Bennett",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Carmel Sixth Form"
+        },
+        {
+          "number": "9",
+          "name": "Angelina Briggs",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Commerce, Mich.",
+          "highSchool": "Marian"
+        },
+        {
+          "number": "10",
+          "name": "Madison Frazer",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Oswego, Ill.",
+          "highSchool": "Oswego East"
+        },
+        {
+          "number": "11",
+          "name": "Lea Gruennagel",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Homburg, Germany",
+          "highSchool": "Intergrierte Gesamtschule Contwig"
+        },
+        {
+          "number": "12",
+          "name": "Madison Looby",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Saginaw, Mich.",
+          "highSchool": "Nouvel Catholic Central"
+        },
+        {
+          "number": "13",
+          "name": "Reegan Kingpavong",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Rockford, Ill.",
+          "highSchool": "Guilford"
+        },
+        {
+          "number": "14",
+          "name": "Amara Thompkins",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Racine, Wis.",
+          "highSchool": "Indian Trail"
+        },
+        {
+          "number": "15",
+          "name": "Abby Zipse",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Batavia, Ill.",
+          "highSchool": "Batavia"
+        },
+        {
+          "number": "16",
+          "name": "Jordyn Saddler",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Brooklyn Park, Minn.",
+          "highSchool": "Robbinsdale Cooper"
+        },
+        {
+          "number": "17",
+          "name": "Sophia White",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Fort Wayne, Ind.",
+          "highSchool": "Homestead"
+        },
+        {
+          "number": "18",
+          "name": "Zoe Paxton",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Zion, Ill.",
+          "highSchool": "Zion-Benton Township"
+        },
+        {
+          "number": "20",
+          "name": "Abby Adams",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Fort Wayne, Ind.",
+          "highSchool": "Homestead"
+        },
+        {
+          "number": "21",
+          "name": "Abby McHugh",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Wauconda, Ill.",
+          "highSchool": "Wauconda"
+        },
+        {
+          "number": "22",
+          "name": "Sahara Zingano",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Grimsby, Ontario",
+          "highSchool": "Grimsby Secondary"
+        },
+        {
+          "number": "23",
+          "name": "Kara Machala",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "St. Charles, Ill.",
+          "highSchool": "St. Charles East"
+        },
+        {
+          "number": "24",
+          "name": "Isabel Struble",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Mount Pleasant, Mich.",
+          "highSchool": "Mount Pleasant"
+        },
+        {
+          "number": "26",
+          "name": "Kierah Meier",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Sycamore, Ill.",
+          "highSchool": "Sycamore"
+        },
+        {
+          "number": "27",
+          "name": "Mikayla Rivera",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Plainfield, Ill.",
+          "highSchool": "Plainfield North"
+        },
+        {
+          "number": "28",
+          "name": "Lauren Richards",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Elmhurst, Ill.",
+          "highSchool": "York"
+        },
+        {
+          "number": "30",
+          "name": "Edith Delgado",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Aurora, Ill.",
+          "highSchool": "East Aurora"
+        },
+        {
+          "number": "32",
+          "name": "Sarah Roy",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Saint-Julie, Quebec",
+          "highSchool": "College de Montreal"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.niuhuskies.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:27:59Z"
+    }
+  },
   "commitments": [
     {
       "id": "alexandra-devory-2026",
@@ -133,7 +1635,7 @@
       "city": "",
       "highSchool": "William Monroe",
       "college": "northern-illinois",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -152,7 +1654,7 @@
         "date": "2025-05-27",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -168,7 +1670,7 @@
       "city": "Oak Park",
       "highSchool": "",
       "college": "northern-illinois",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -187,7 +1689,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -203,7 +1705,7 @@
       "city": "Cincinnati",
       "highSchool": "",
       "college": "northern-illinois",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -222,7 +1724,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -339,35 +1841,21 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.44,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://www.niuhuskies.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:43:49Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.933869&longitude=-88.766428&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T18:43:46Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

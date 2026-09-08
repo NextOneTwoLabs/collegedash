@@ -23,10 +23,10 @@
     "instagram": null
   },
   "links": {
-    "athletics": "https://golobos.com/sports/womens-soccer",
-    "roster": "https://golobos.com/sports/womens-soccer/roster",
-    "schedule": "https://golobos.com/sports/womens-soccer/schedule",
-    "news": "https://golobos.com/sports/womens-soccer/news",
+    "athletics": "https://golobos.com/sports/wsoc",
+    "roster": "https://golobos.com/sports/wsoc/roster",
+    "schedule": "https://golobos.com/sports/wsoc/schedule",
+    "news": "https://golobos.com/sports/wsoc/news",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/new-mexico/clgid-248",
     "wikipedia": null,
     "x": null,
@@ -69,17 +69,199 @@
       "asOf": "2026-09-07T14:55:44Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 35.083868,
+    "lon": -106.620155,
+    "timezone": "America/Denver",
+    "elevationM": 1618.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00023050",
+      "name": "ALBUQUERQUE INTL AP",
+      "state": "NM",
+      "distanceKm": 4.7,
+      "elevationM": 1618.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 48.4,
+        "tLowF": 26.4,
+        "precipIn": 0.36,
+        "snowIn": 1.4,
+        "wetDays": 1.4,
+        "days90F": 0.0,
+        "daysFreeze": 26.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 54.1,
+        "tLowF": 29.8,
+        "precipIn": 0.43,
+        "snowIn": 1.5,
+        "wetDays": 1.3,
+        "days90F": 0.0,
+        "daysFreeze": 18.2
+      },
+      {
+        "month": "Mar",
+        "tHighF": 62.8,
+        "tLowF": 36.2,
+        "precipIn": 0.46,
+        "snowIn": 0.7,
+        "wetDays": 1.4,
+        "days90F": 0.0,
+        "daysFreeze": 8.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 70.3,
+        "tLowF": 43.2,
+        "precipIn": 0.51,
+        "snowIn": 0.3,
+        "wetDays": 1.5,
+        "days90F": 0.0,
+        "daysFreeze": 1.6
+      },
+      {
+        "month": "May",
+        "tHighF": 79.9,
+        "tLowF": 52.4,
+        "precipIn": 0.44,
+        "snowIn": 0.0,
+        "wetDays": 1.4,
+        "days90F": 2.9,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.4,
+        "tLowF": 61.9,
+        "precipIn": 0.57,
+        "snowIn": 0.0,
+        "wetDays": 1.5,
+        "days90F": 19.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.2,
+        "tLowF": 66.5,
+        "precipIn": 1.64,
+        "snowIn": 0.0,
+        "wetDays": 4.1,
+        "days90F": 22.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 88.8,
+        "tLowF": 64.9,
+        "precipIn": 1.31,
+        "snowIn": 0.0,
+        "wetDays": 3.7,
+        "days90F": 16.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 82.5,
+        "tLowF": 58.1,
+        "precipIn": 1.15,
+        "snowIn": 0.0,
+        "wetDays": 2.5,
+        "days90F": 3.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 70.6,
+        "tLowF": 46.1,
+        "precipIn": 0.87,
+        "snowIn": 0.3,
+        "wetDays": 2.3,
+        "days90F": 0.0,
+        "daysFreeze": 1.2
+      },
+      {
+        "month": "Nov",
+        "tHighF": 57.3,
+        "tLowF": 34.1,
+        "precipIn": 0.57,
+        "snowIn": 0.9,
+        "wetDays": 1.7,
+        "days90F": 0.0,
+        "daysFreeze": 11.7
+      },
+      {
+        "month": "Dec",
+        "tHighF": 47.3,
+        "tLowF": 26.6,
+        "precipIn": 0.53,
+        "snowIn": 2.8,
+        "wetDays": 1.7,
+        "days90F": 0.0,
+        "daysFreeze": 25.7
+      }
+    ],
+    "annualPrecipIn": 8.8,
+    "annualSnowIn": 7.9,
+    "fallSeason": {
+      "avgHighF": 74.8,
+      "avgLowF": 50.8,
+      "precipIn": 3.9,
+      "wetDays": 10.0
+    },
+    "summary": "Hottest month Jul (avg high 91.2°F), coldest Jan (avg low 26.4°F). 8.8 in of rain per year, 7.9 in of snow. Fall season (Aug–Nov): highs around 74.8°F, 3.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00023050,USC00297461,USC00290231&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:55:36Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Karley Nelson",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://golobos.com/sports/wsoc/roster/season/2026-27/staff/karley-nelson",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Karley Nelson",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/season/2026-27/staff/karley-nelson",
+        "social": {}
+      },
+      {
+        "name": "Paul Maestas",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/season/2026-27/staff/paul-maestas",
+        "social": {}
+      },
+      {
+        "name": "Tom Hurdle",
+        "title": "Recruiting Coordinator/ Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/season/2026-27/staff/tom-hurdle",
+        "social": {}
+      },
+      {
+        "name": "Carmen Esnal",
+        "title": "Assistant Coach/ Goalkeeper Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/season/2026-27/staff/carmen-esnal",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +280,628 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://golobos.com/sports/wsoc/roster",
+        "asOf": "2026-09-08T01:20:00Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Callie Droitsch",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Holladay, Utah",
+        "highSchool": "",
+        "previousSchool": "Olympus HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/callie-droitsch",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Alyson Campbell",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Boulder, Colo.",
+        "highSchool": "",
+        "previousSchool": "LSU",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/alyson-campbell",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Morgan Juran",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Littleton, Colo.",
+        "highSchool": "",
+        "previousSchool": "Elon",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/morgan-juran",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Fiona Jenkins",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Fort Collins, Colo.",
+        "highSchool": "",
+        "previousSchool": "Rocky Mountain HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/fiona-jenkins",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Nicole Anderson",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "San Diego, Calif.",
+        "highSchool": "",
+        "previousSchool": "Del Norte HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/nicole-anderson",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Ayla Dils",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Albuquerque, N.M.",
+        "highSchool": "",
+        "previousSchool": "Sandia HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/ayla-dils",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Angelina Moschetti",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Irvine, Calif.",
+        "highSchool": "",
+        "previousSchool": "Baylor",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/angelina-moschetti",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Mia Barela",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "2nd year",
+        "classCode": "",
+        "hometown": "Las Cruces, N.M.",
+        "highSchool": "",
+        "previousSchool": "Las Cruces HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/laila-magana-carter",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Analyse Healy",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "1st year",
+        "classCode": "",
+        "hometown": "Farmington, N.M.",
+        "highSchool": "",
+        "previousSchool": "Piedra Vista HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/analyse-healy",
+        "social": {},
+        "bio": {},
+        "club": "Rio Rapids SC",
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "9",
+        "name": "Savanah Sanchez",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Albuquerque, N.M.",
+        "highSchool": "",
+        "previousSchool": "Hope Christian",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/savanah-sanchez",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Macie Harris",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Snoqualmie, Wash.",
+        "highSchool": "",
+        "previousSchool": "Mount Si HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/macie-harris",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Kennedy Brown",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "5th year",
+        "classCode": "GR",
+        "hometown": "Albuquerque, N.M.",
+        "highSchool": "",
+        "previousSchool": "Volcano Vista HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/kennedy-brown",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Samantha Corrie",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Winchester, England",
+        "highSchool": "",
+        "previousSchool": "Nebraska",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/samantha-corrie",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Celina Frenz",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "2nd year",
+        "classCode": "",
+        "hometown": "Littleton, Colo.",
+        "highSchool": "",
+        "previousSchool": "Colorado Academy",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/celina-frenz",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Alysa Whelchel",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Torrance, Calif.",
+        "highSchool": "",
+        "previousSchool": "Redondo Union HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/alysa-whelchel",
+        "social": {},
+        "bio": {},
+        "club": "Slammers HB Køge",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "15",
+        "name": "Jessica Darby",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "1st year",
+        "classCode": "",
+        "hometown": "Toronto, Canada",
+        "highSchool": "",
+        "previousSchool": "Northern Secondary School",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/jessica-darby",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Mackie McNulty",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Seattle, Wash.",
+        "highSchool": "",
+        "previousSchool": "Nathan Hale HiS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/mackie-mcnulty",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Emory Villacorta",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "1st year",
+        "classCode": "",
+        "hometown": "Puyallup, Wash.",
+        "highSchool": "",
+        "previousSchool": "Puyallup HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/emory-villacorta",
+        "social": {},
+        "bio": {},
+        "club": "Seattle Reign Academy",
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Gabby Beaudry",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Castle Pines, Colo.",
+        "highSchool": "",
+        "previousSchool": "Rock Canyon HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/gabby-beaudry",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Jasmin Gonzalez-Rutt",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Santa Fe, N.M.",
+        "highSchool": "",
+        "previousSchool": "Mandela International Magnet School",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/jasmin-gonzalez-rutt",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Laiken van Rooyen",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "1st year",
+        "classCode": "",
+        "hometown": "Surrey, British Columbia, Canada",
+        "highSchool": "",
+        "previousSchool": "Burnsview Secondary",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/laiken-van-rooyen",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Claire Roybal",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "2nd year",
+        "classCode": "",
+        "hometown": "Yucaipa, Calif.",
+        "highSchool": "",
+        "previousSchool": "Yucaipa HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/claire-roybal",
+        "social": {},
+        "bio": {},
+        "club": "Legends FC",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "23",
+        "name": "Presley Devey",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th year",
+        "classCode": "GR",
+        "hometown": "Eagle Mountain, Utah",
+        "highSchool": "",
+        "previousSchool": "Cedar Valley HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/presley-devey",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Alison Peralta",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "Uruapan, Michoacán, Mexico",
+        "highSchool": "",
+        "previousSchool": "Arizona Western",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/alison-peralta",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Alexa Campos",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "2nd year",
+        "classCode": "",
+        "hometown": "Pasco, Wash.",
+        "highSchool": "",
+        "previousSchool": "Chiawana HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/alexa-campos",
+        "social": {},
+        "bio": {},
+        "club": "Eastside FC Premier Soccer",
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "27",
+        "name": "Allie Anderson",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "4th year",
+        "classCode": "",
+        "hometown": "San Diego, Calif.",
+        "highSchool": "",
+        "previousSchool": "Del Norte HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/allie-anderson",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Sherry Diep",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "3rd year",
+        "classCode": "",
+        "hometown": "Cerritos, Calif.",
+        "highSchool": "",
+        "previousSchool": "Rosary Academy",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/sherry-diep",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Madison London",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "2nd year",
+        "classCode": "",
+        "hometown": "Limehouse, Ontario, Canada",
+        "highSchool": "",
+        "previousSchool": "Creighton",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/madison-london",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Kylee Mackey",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "1st year",
+        "classCode": "",
+        "hometown": "Las Vegas, Nev.",
+        "highSchool": "",
+        "previousSchool": "Desert Oasis HS",
+        "major": "",
+        "bioUrl": "https://golobos.com/sports/wsoc/roster/player/kylee-mackey",
+        "social": {},
+        "bio": {},
+        "club": "ALBION SC Las Vegas",
+        "clubSource": "TopDrawerSoccer"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "?": 27,
+      "GR": 2
+    },
+    "graduatingByPos": {
+      "M": 1,
+      "F": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://golobos.com/sports/wsoc/roster",
+      "asOf": "2026-09-08T01:20:00Z"
+    }
+  },
   "rosterHistory": {},
-  "schedule": null,
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://golobos.com/sports/wsoc/schedule",
+      "asOf": "2026-09-08T01:20:00Z"
+    }
+  },
   "commitments": [
     {
       "id": "analyse-healy-2026",
@@ -117,7 +914,7 @@
       "city": "Farmington",
       "highSchool": "",
       "college": "new-mexico",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +933,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +949,7 @@
       "city": "Seattle",
       "highSchool": "Puyallup",
       "college": "new-mexico",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -196,7 +993,7 @@
       "city": "",
       "highSchool": "",
       "college": "new-mexico",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -405,7 +1202,95 @@
       ]
     }
   ],
-  "news": null,
+  "news": {
+    "recruiting": [
+      {
+        "title": "Lobo Soccer Signs Two for 2026",
+        "url": "https://golobos.com/news/2026/05/29/lobo-soccer-signs-two-for-2026",
+        "date": "2026-05-29",
+        "recruiting": true
+      }
+    ],
+    "latest": [
+      {
+        "title": "Strong Second Half Secures Road Win for Lobos Over Bears",
+        "url": "https://golobos.com/news/2026/09/6/strong-second-half-secures-road-win-for-lobos-over-bears",
+        "date": "2026-09-06",
+        "recruiting": false
+      },
+      {
+        "title": "Lobos Face Bears on the Road Sunday",
+        "url": "https://golobos.com/news/2026/09/5/lobos-face-bears-on-the-road-sunday",
+        "date": "2026-09-05",
+        "recruiting": false
+      },
+      {
+        "title": "Campbell Makes Career-High 10 Saves in Loss at No. 24 Colorado",
+        "url": "https://golobos.com/news/2026/09/4/campbell-makes-career-high-10-saves-in-loss-at-no-24-colorado",
+        "date": "2026-09-03",
+        "recruiting": false
+      },
+      {
+        "title": "Lobos Travel to Colorado Thursday",
+        "url": "https://golobos.com/news/2026/09/2/lobos-travel-to-colorado-thursday",
+        "date": "2026-09-02",
+        "recruiting": false
+      },
+      {
+        "title": "Anderson Brace and Whelchel Assists Lead Lobos Past Matadors",
+        "url": "https://golobos.com/news/2026/08/30/anderson-brace-and-whelchel-assists-lead-lobos-past-matadors",
+        "date": "2026-08-30",
+        "recruiting": false
+      },
+      {
+        "title": "UNM Hosts CSUN Sunday",
+        "url": "https://golobos.com/news/2026/08/28/unm-hosts-csun-sunday",
+        "date": "2026-08-28",
+        "recruiting": false
+      },
+      {
+        "title": "Jenkins Scores in Lobo Loss to Gonzaga",
+        "url": "https://golobos.com/news/2026/08/23/jenkins-scores-in-lobo-loss-to-gonzaga",
+        "date": "2026-08-23",
+        "recruiting": false
+      },
+      {
+        "title": "Lobos Host Gonzaga Sunday",
+        "url": "https://golobos.com/news/2026/08/22/lobos-host-gonzaga-sunday",
+        "date": "2026-08-22",
+        "recruiting": false
+      },
+      {
+        "title": "Lobos Shutout Lumberjacks to Secure Nelson's First Win",
+        "url": "https://golobos.com/news/2026/08/21/lobos-shutout-lumberjacks-to-secure-nelsons-first-win",
+        "date": "2026-08-21",
+        "recruiting": false
+      },
+      {
+        "title": "Lobo Soccer Opens 2026 Season Hosting NAU",
+        "url": "https://golobos.com/news/2026/08/19/lobo-soccer-opens-2026-season-hosting-nau",
+        "date": "2026-08-19",
+        "recruiting": false
+      },
+      {
+        "title": "Lobos Picked Third in MW Preseason Poll, Three Named to MW Preseason Watch List",
+        "url": "https://golobos.com/news/2026/08/5/lobos-picked-third-in-mw-preseason-poll-three-named-to-mw-preseason-watch-list",
+        "date": "2026-08-05",
+        "recruiting": false
+      },
+      {
+        "title": "Lobo Soccer Signs Two for 2026",
+        "url": "https://golobos.com/news/2026/05/29/lobo-soccer-signs-two-for-2026",
+        "date": "2026-05-29",
+        "recruiting": true
+      }
+    ],
+    "_meta": {
+      "source": "news",
+      "url": "https://golobos.com/sports/wsoc/news",
+      "asOf": "2026-09-08T01:20:01Z"
+    }
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 3,
@@ -413,47 +1298,27 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
-      "news": false
+      "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "HTTP 404 for https://golobos.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T14:58:18Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=35.083868&longitude=-106.620155&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FDenver",
-        "at": "2026-09-07T14:58:17Z"
-      },
-      {
-        "collector": "news",
-        "error": "news: athletics platform unknown (athletics collector has not succeeded yet)",
-        "at": "2026-09-07T14:58:23Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T14:58:17Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:19:50Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

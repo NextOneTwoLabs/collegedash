@@ -69,17 +69,191 @@
       "asOf": "2026-09-07T18:13:13Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.780634,
+    "lon": -84.064881,
+    "timezone": "America/New_York",
+    "elevationM": 304.8,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093815",
+      "name": "DAYTON INTL AP",
+      "state": "OH",
+      "distanceKm": 19.2,
+      "elevationM": 304.8
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 37.1,
+        "tLowF": 21.8,
+        "precipIn": 3.08,
+        "snowIn": 8.3,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 25.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 41.2,
+        "tLowF": 24.5,
+        "precipIn": 2.35,
+        "snowIn": 6.6,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 22.5
+      },
+      {
+        "month": "Mar",
+        "tHighF": 51.5,
+        "tLowF": 32.7,
+        "precipIn": 3.5,
+        "snowIn": 3.9,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 17.3
+      },
+      {
+        "month": "Apr",
+        "tHighF": 64.5,
+        "tLowF": 42.9,
+        "precipIn": 4.46,
+        "snowIn": 0.4,
+        "wetDays": 8.5,
+        "days90F": 0.0,
+        "daysFreeze": 5.0
+      },
+      {
+        "month": "May",
+        "tHighF": 74.2,
+        "tLowF": 53.8,
+        "precipIn": 4.51,
+        "snowIn": 0.0,
+        "wetDays": 9.1,
+        "days90F": 0.2,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Jun",
+        "tHighF": 82.6,
+        "tLowF": 62.7,
+        "precipIn": 4.14,
+        "snowIn": 0.0,
+        "wetDays": 7.2,
+        "days90F": 3.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 85.9,
+        "tLowF": 66.1,
+        "precipIn": 3.95,
+        "snowIn": 0.0,
+        "wetDays": 7.2,
+        "days90F": 6.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 84.6,
+        "tLowF": 64.3,
+        "precipIn": 2.96,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 78.6,
+        "tLowF": 56.8,
+        "precipIn": 3.31,
+        "snowIn": 0.0,
+        "wetDays": 5.1,
+        "days90F": 2.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 66.2,
+        "tLowF": 45.9,
+        "precipIn": 2.95,
+        "snowIn": 0.2,
+        "wetDays": 5.7,
+        "days90F": 0.1,
+        "daysFreeze": 1.9
+      },
+      {
+        "month": "Nov",
+        "tHighF": 52.7,
+        "tLowF": 35.4,
+        "precipIn": 3.07,
+        "snowIn": 0.8,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 13.8
+      },
+      {
+        "month": "Dec",
+        "tHighF": 41.5,
+        "tLowF": 27.1,
+        "precipIn": 3.05,
+        "snowIn": 4.8,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 23.3
+      }
+    ],
+    "annualPrecipIn": 41.3,
+    "annualSnowIn": 25.0,
+    "fallSeason": {
+      "avgHighF": 70.5,
+      "avgLowF": 50.6,
+      "precipIn": 12.3,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 85.9°F), coldest Jan (avg low 21.8°F). 41.3 in of rain per year, 25.0 in of snow. Fall season (Aug–Nov): highs around 70.5°F, 12.3 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093815,USW00053859,USC00332067&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:57:29Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Travis Sobers",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/coaches/travis-sobers/2053",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Travis Sobers",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/coaches/travis-sobers/2053",
+        "social": {}
+      },
+      {
+        "name": "Haley (DD) Shelton",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/coaches/-haley-dd-shelton/2058",
+        "social": {}
+      },
+      {
+        "name": "Neil Daniels",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/coaches/neil-daniels/2054",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +272,2765 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://wsuraiders.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:27:09Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "2-3-1",
+      "wins": 2,
+      "losses": 3,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Travis Sobers"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "7-7-5",
+      "wins": 7,
+      "losses": 7,
+      "ties": 5,
+      "confRecord": "4-1-5",
+      "rpiRank": 257,
+      "rpi": {
+        "rank": 257,
+        "record": "6-7-5",
+        "through": "2025-12-08",
+        "prevRank": 257,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 257,
+            "record": "6-7-5"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "5-10-2",
+      "wins": 5,
+      "losses": 10,
+      "ties": 2,
+      "confRecord": "3-5-2",
+      "rpiRank": 308,
+      "rpi": {
+        "rank": 308,
+        "sosRank": 280,
+        "balancedRank": 293,
+        "kpiRank": 310,
+        "masseyRank": 286,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "6-7-5",
+      "wins": 6,
+      "losses": 7,
+      "ties": 5,
+      "confRecord": "4-3-3",
+      "rpiRank": 183,
+      "rpi": {
+        "rank": 183,
+        "sosRank": 189,
+        "balancedRank": 234,
+        "kpiRank": 200,
+        "masseyRank": 246,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "00",
+        "name": "Leigha Lauer",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Marietta, OH / Marietta",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/leigha-lauer/6811",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Jordan Frantz",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bellbrook, OH / Bellbrook",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Club Ohio",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/jordan-frantz/6807",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "2",
+        "name": "Alyssa Peh",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bellbrook, OH / Bellbrook",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/alyssa-peh/6815",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Kylie Krynzel",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dayton, OH / Archbishop Alter",
+        "highSchool": "Marshall",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/kylie-krynzel/6810",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Eva Snyder",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Carroll, OH / Carroll",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/eva-snyder/6886",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Alea Cook",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Beavercreek, OH / Beavercreek",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/alea-cook/6802",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Carleigh King",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Brandon, MS / Brandon",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/carleigh-king/6887",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Addy Canter",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Beavercreek, OH / Beavercreek",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/addy-canter/6798",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Ryleigh Deards",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Springfield, OH / Northwestern",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/ryleigh-deards/6888",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Ayla Washburn",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Vandalia, OH / Butler",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/ayla-washburn/6819",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Ella Boettcher",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Centerville, OH / Centerville",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/ella-boettcher/6892",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Makenzie Chinn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tipp City, OH / Tippecanoe",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/makenzie-chinn/6801",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Ruby Dunlevy",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cold Spring, KY / Campbell County",
+        "highSchool": "Eastern Kentucky",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/ruby-dunlevy/6803",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Chloe Dunford",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Waynesville, OH / Waynesville",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/chloe-dunford/6889",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Kyra Posey",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cincinnati, OH / Fairfield",
+        "highSchool": "Purdue Fort Wayne",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/kyra-posey/6820",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Kaitlyn Eyink",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Findlay, OH / Liberty Benton",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/kaitlyn-eyink/6804",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Megan Gregory",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Miamisburg, OH / Miamisburg",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/megan-gregory/6809",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Shai-Lee Glaun",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Or Yehuda, Israel / Yuvalim",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/shailee-glaun/6890",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Mia Fiore",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, OH / Indian Hill",
+        "highSchool": "Xavier",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/mia-fiore/6806",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Ava Pultz",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Canton, OH / GlenOak",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ambassadors FC (OH)",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/ava-pultz/6891",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Zara Graff",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, OH / New Richmond",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/zara-graff/6808",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Aerial Fast",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Saint Marys, OH / Memorial",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/aerial-fast/6805",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Taliah Pellizzari",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Guelph, Ontario, Canada / Centennial Collegiate Vocational Institute",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/taliah-pellizzari/6816",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Olivia Stroud",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fairfield, OH / Fairfield",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/olivia-stroud/6818",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Macey Moore",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kankakee, IL / Herscher",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/macey-moore/6813",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Caitlin Burger",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, OH / Stephen T. Badin",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://wsuraiders.com/sports/womens-soccer/roster/caitlin-burger/6797",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 5,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 6,
+      "JR": 3,
+      "SR": 10,
+      "FR": 7
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "M": 5,
+      "D": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://wsuraiders.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:27:09Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 34,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kiera Sarka",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Twinsburg, OH / Walsh Jesuit",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Leigha Lauer",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Marietta, OH / Marietta",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Jordan Frantz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Bellbrook, OH / Bellbrook",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Alyssa Peh",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bellbrook, OH / Bellbrook",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Kylie Krynzel",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Dayton, OH / Archbishop Alter",
+          "highSchool": "Marshall"
+        },
+        {
+          "number": "4",
+          "name": "Katie McGuinness",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Xenia, OH / Clinton-Massie",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Mariella Hartmann",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Freiburg, Germany / Berthold-Gymnasium Freiburg",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Marina Ruthsatz",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Edgewood, KY / Notre Dame Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Addy Canter",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Tamara Smith",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Carmel, IN / Carmel",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Ayla Washburn",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Vandalia, OH / Butler",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Samara Nunn",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Parkersburg, WV / Parkersburg South",
+          "highSchool": "Alcorn State"
+        },
+        {
+          "number": "11",
+          "name": "Amber Branum",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lakeside Park, KY / Notre Dame Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ainsley Terada",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Meridian, ID / Rocky Mountain",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Elise Canter",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kaylee Pham",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Springboro, OH / Springboro",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ashley Vaughn",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Ruby Dunlevy",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Cold Spring, KY / Campbell County",
+          "highSchool": "Eastern Kentucky"
+        },
+        {
+          "number": "17",
+          "name": "Kaitlyn Eyink",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Findlay, OH / Liberty Benton",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Megan Gregory",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Miamisburg, OH / Miamisburg",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Makenzie Chinn",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Tipp City, OH / Tippecanoe",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mia Fiore",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Cincinnati, OH / Indian Hill",
+          "highSchool": "Xavier"
+        },
+        {
+          "number": "22",
+          "name": "Julie Bergan",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lakeville, MN / Lakeville South",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Zara Graff",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Cincinnati, OH / New Richmond",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "RJ Marques",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Alea Cook",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Kenley Minch",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Taliah Pellizzari",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Guelph, Ontario, Canada / Centennial Collegiate Vocational Institute",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Olivia Stroud",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fairfield, OH / Fairfield",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Macey Moore",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Kankakee, IL / Herscher",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Danielle Charleston",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cincinnati, OH / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Caitlin Burger",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cincinnati, OH / Stephen T. Badin",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Aubrey Murphy",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Troy, OH / Troy",
+          "highSchool": ""
+        },
+        {
+          "number": "51",
+          "name": "Aerial Fast",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Saint Marys, OH / Memorial",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "ainsley terada",
+        "amber branum",
+        "ashley vaughn",
+        "aubrey murphy",
+        "danielle charleston",
+        "elise canter",
+        "julie bergan",
+        "katie mcguinness",
+        "kaylee pham",
+        "kenley minch",
+        "kiera sarka",
+        "mariella hartmann",
+        "marina ruthsatz",
+        "rj marques",
+        "samara nunn",
+        "tamara smith"
+      ]
+    },
+    "2024": {
+      "count": 35,
+      "players": [
+        {
+          "number": "00",
+          "name": "Hanna Hargrave",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Louisville, KY / Louisville Male",
+          "highSchool": ""
+        },
+        {
+          "number": "0",
+          "name": "Kiera Sarka",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Twinsburg, OH / Walsh Jesuit",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Erin Baker",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Carmel, IN / Carmel",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Annika Samborski",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Centerville, OH / Centerville",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Alyssa Peh",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bellbrook, OH / Bellbrook",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Katie McGuinness",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Xenia, OH / Clinton-Massie",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Mariella Hartmann",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Freiburg, Germany / Berthold-Gymnasium Freiburg",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Marina Ruthsatz",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Edgewood, KY / Notre Dame Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Addy Canter",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Tamara Smith",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Carmel, IN / Carmel",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Heidi Orloff",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Samara Nunn",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Parkersburg, WV / Parkersburg South",
+          "highSchool": "Alcorn State"
+        },
+        {
+          "number": "11",
+          "name": "Amber Branum",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lakeside Park, KY / Notre Dame Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ainsley Terada",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Meridian, ID / Rocky Mountain",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Elise Canter",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kaylee Pham",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Springboro, OH / Springboro",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Ashley Vaughn",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Beavercreek, OH / Beavercreek",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Ruby Dunlevy",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cold Spring, KY / Campbell County",
+          "highSchool": "Eastern Kentucky"
+        },
+        {
+          "number": "17",
+          "name": "Kaitlyn Eyink",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Findlay, OH / Liberty Benton",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Mylee Sturkey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "San Diego, CA / Steele Canyon",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Megan Gregory",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Miamisburg, OH / Miamisburg",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Makenzie Chinn",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Tipp City, OH / Tippecanoe",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Allie Freese",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Waynesville, OH / Waynesville",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Julie Bergan",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lakeville, MN / Lakeville South",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Zara Graff",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Cincinnati, OH / New Richmond",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Alyssa Thomas",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Waunakee, WI / Waunakee",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Olivia Mace",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Centerville, OH / Centerville",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kylie Krynzel",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Dayton, OH / Archbishop Alter",
+          "highSchool": "Marshall"
+        },
+        {
+          "number": "29",
+          "name": "Olivia Stroud",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fairfield, OH / Fairfield",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Macey Moore",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kankakee, IL / Herscher",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Allison Charleston",
+          "pos": "",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Danielle Charleston",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH / Mount Notre Dame",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Caitlin Burger",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Cincinnati, OH / Stephen T. Badin",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Aubrey Murphy",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Troy, OH / Troy",
+          "highSchool": ""
+        },
+        {
+          "number": "51",
+          "name": "Aerial Fast",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Saint Marys, OH / Memorial",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 29,
+      "players": [
+        {
+          "number": "00",
+          "name": "Hanna Hargrave",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Louisville, KY",
+          "highSchool": "Louisville Male"
+        },
+        {
+          "number": "0",
+          "name": "Kiera Sarka",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Twinsburg, OH",
+          "highSchool": "Walsh Jesuit"
+        },
+        {
+          "number": "1",
+          "name": "Erin Baker",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Carmel, IN",
+          "highSchool": "Carmel"
+        },
+        {
+          "number": "2",
+          "name": "Annika Samborski",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Centerville, OH",
+          "highSchool": "Centerville"
+        },
+        {
+          "number": "3",
+          "name": "Brandi Greenlee",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Centerville, OH",
+          "highSchool": "Centerville"
+        },
+        {
+          "number": "4",
+          "name": "Katie McGuinness",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Xenia, OH",
+          "highSchool": "Clinton-Massie"
+        },
+        {
+          "number": "5",
+          "name": "Mariella Hartmann",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Freiburg, Germany",
+          "highSchool": "Berthold-Gymnasium Freiburg"
+        },
+        {
+          "number": "6",
+          "name": "Marina Ruthsatz",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Edgewood, KY",
+          "highSchool": "Notre Dame Academy"
+        },
+        {
+          "number": "7",
+          "name": "Addy Canter",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Beavercreek, OH",
+          "highSchool": "Beavercreek"
+        },
+        {
+          "number": "8",
+          "name": "Tamara Smith",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Carmel, IN",
+          "highSchool": "Carmel"
+        },
+        {
+          "number": "9",
+          "name": "Heidi Orloff",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Beavercreek, OH",
+          "highSchool": "Beavercreek"
+        },
+        {
+          "number": "10",
+          "name": "Sophia Kuerze",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH",
+          "highSchool": "Oak Hills"
+        },
+        {
+          "number": "11",
+          "name": "Amber Branum",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lakeside Park, KY",
+          "highSchool": "Notre Dame Academy"
+        },
+        {
+          "number": "12",
+          "name": "Ainsley Terada",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Meridian, ID",
+          "highSchool": "Rocky Mountain"
+        },
+        {
+          "number": "13",
+          "name": "Elise Canter",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Beavercreek, OH",
+          "highSchool": "Beavercreek"
+        },
+        {
+          "number": "14",
+          "name": "Kaylee Pham",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Springboro, OH",
+          "highSchool": "Springboro"
+        },
+        {
+          "number": "15",
+          "name": "Ashley Vaughn",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Beavercreek, OH",
+          "highSchool": "Beavercreek"
+        },
+        {
+          "number": "16",
+          "name": "Lauren Borchert",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Richfield, OH",
+          "highSchool": "Holy Name"
+        },
+        {
+          "number": "17",
+          "name": "Kaitlyn Eyink",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Findlay, OH",
+          "highSchool": "Liberty Benton"
+        },
+        {
+          "number": "18",
+          "name": "Marcella Sizer",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Waynesville, OH",
+          "highSchool": "Waynesville"
+        },
+        {
+          "number": "19",
+          "name": "Megan Gregory",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Miamisburg, OH",
+          "highSchool": "Miamisburg"
+        },
+        {
+          "number": "21",
+          "name": "Allie Freese",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Waynesville, OH",
+          "highSchool": "Waynesville"
+        },
+        {
+          "number": "22",
+          "name": "Kaylin Helinski",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Bellville, OH",
+          "highSchool": "Clear Fork"
+        },
+        {
+          "number": "23",
+          "name": "Zara Graff",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH",
+          "highSchool": "New Richmond"
+        },
+        {
+          "number": "25",
+          "name": "Makenzie Chinn",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Tipp City, OH",
+          "highSchool": "Tippecanoe"
+        },
+        {
+          "number": "27",
+          "name": "Olivia Mace",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Centerville, OH",
+          "highSchool": "Centerville"
+        },
+        {
+          "number": "28",
+          "name": "Elise Kukuck",
+          "pos": "D/M",
+          "classCode": "FR",
+          "hometown": "Kankakee, IL",
+          "highSchool": "Herscher"
+        },
+        {
+          "number": "30",
+          "name": "Macey Moore",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kankakee, IL",
+          "highSchool": "Herscher"
+        },
+        {
+          "number": "33",
+          "name": "Caitlin Burger",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cincinnati, OH",
+          "highSchool": "Stephen T. Badin"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 2,
+      "losses": 3,
+      "ties": 1,
+      "text": "2-3-1",
+      "played": 6,
+      "scheduled": 21,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Western Carolina (EX)",
+        "opponentRank": null,
+        "location": "Cullowhee, NC",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Southern Indiana",
+        "opponentRank": null,
+        "location": "Evansville, IN",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/southern-indiana/boxscore/10548",
+          "recap": "https://wsuraiders.com/news/2026/8/13/womens-soccer-raiders-and-screaming-eagles-play-to-a-scoreless-draw-in-season-opener"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Butler",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/butler/boxscore/10549",
+          "recap": "https://wsuraiders.com/news/2026/8/16/womens-soccer-a-pair-of-first-collegiate-goals-propel-raiders-over-butler-sunday"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "IU Pennsylvania",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": "W",
+        "score": "5-1",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/iu-pennsylvania/boxscore/10550",
+          "recap": "https://wsuraiders.com/news/2026/8/20/womens-soccer-raiders-remain-unbeaten-with-five-goals-thursday-night"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Marshall",
+        "opponentRank": null,
+        "location": "Huntington, WV",
+        "result": "L",
+        "score": "2-3",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/marshall/boxscore/10551",
+          "recap": "https://wsuraiders.com/news/2026/8/23/womens-soccer-cook-and-burger-score-as-raiders-fall-at-marshall"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Kentucky",
+        "opponentRank": null,
+        "location": "Lexington, KY",
+        "result": "L",
+        "score": "1-9",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/kentucky/boxscore/10552",
+          "recap": "https://wsuraiders.com/news/2026/8/30/womens-soccer-raiders-fall-at-kentucky-on-sunday"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Dayton",
+        "opponentRank": null,
+        "location": "Dayton, OH",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2026/dayton/boxscore/10553",
+          "recap": "https://wsuraiders.com/news/2026/9/3/womens-soccer-raiders-come-up-short-at-dayton-thursday"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Bellarmine",
+        "opponentRank": null,
+        "location": "Louisville, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://athletics.bellarmine.edu/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Indiana State",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-19",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Robert Morris",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "IU Indy",
+        "opponentRank": null,
+        "location": "Indianapolis, IN",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://iuindyjags.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Northern Illinois",
+        "opponentRank": null,
+        "location": "DeKalb, IL",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://niuhuskies.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Green Bay",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Milwaukee",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Youngstown State",
+        "opponentRank": null,
+        "location": "Youngstown, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://ysusports.com/sidearmstats/wsoc/"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Purdue Fort Wayne",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Cleveland State",
+        "opponentRank": null,
+        "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://wsuraiders.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Oakland",
+        "opponentRank": null,
+        "location": "Rochester, MI",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://goldengrizzlies.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Detroit Mercy",
+        "opponentRank": null,
+        "location": "Detroit, MI",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Northern Kentucky",
+        "opponentRank": null,
+        "location": "Highland Heights, KY",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://nkunorse.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Horizon League Championship",
+        "opponentRank": null,
+        "location": null,
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "7-7-5",
+        "games": [
+          {
+            "date": "2025-08-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNC Asheville (EX)",
+            "opponentRank": null,
+            "location": "Asheville, NC / Greenwood Soccer Field",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2025-08-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Ball State (EX)",
+            "opponentRank": null,
+            "location": "Muncie, IN / Briner Sports Complex",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/dayton/boxscore/10215",
+              "recap": "https://wsuraiders.com/news/2025/8/14/womens-soccer-sarka-turns-away-14-shots-in-season-opener"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Fairmont State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/fairmont-state/boxscore/10216",
+              "recap": "https://wsuraiders.com/news/2025/8/17/womens-soccer-womens-soccer-rolls-to-sunday-afternoon-win"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Louisville",
+            "opponentRank": null,
+            "location": "Louisville, KY / Dr. Mark & Cindy Lynn Stadium",
+            "result": "L",
+            "score": "2-7",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/louisville/boxscore/10217",
+              "recap": "https://wsuraiders.com/news/2025/8/24/womens-soccer-raiders-fall-to-louisville"
+            }
+          },
+          {
+            "date": "2025-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Marshall",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/marshall/boxscore/10218",
+              "recap": "https://wsuraiders.com/news/2025/8/27/womens-soccer-raiders-come-up-short-of-marshall-wednesday-night"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Valparaiso",
+            "opponentRank": null,
+            "location": "Valparaiso, IN / Brown Field",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/valparaiso/boxscore/10219",
+              "recap": "https://wsuraiders.com/news/2025/8/31/womens-soccer-pellizzari-nets-first-collegiate-goal-as-raiders-fall-to-valpo"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Bellarmine",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/bellarmine/boxscore/10220",
+              "recap": "https://wsuraiders.com/news/2025/9/4/womens-soccer-nunn-scores-as-raiders-fall-to-bellarmine"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Chicago State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/chicago-state/boxscore/10221",
+              "recap": "https://wsuraiders.com/news/2025/9/7/womens-soccer-raiders-shutout-chicago-state-sunday-afternoon"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Mount Pleasant, MI / CMU Soccer/Lacrosse Complex",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/central-michigan/boxscore/10222",
+              "recap": "https://wsuraiders.com/news/2025/9/11/womens-soccer-raiders-wrap-up-non-con-with-second-straight-shutout"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Purdue Fort Wayne",
+            "opponentRank": null,
+            "location": "Fort Wayne, IN / Hefner Soccer Complex",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/purdue-fort-wayne/boxscore/10223",
+              "recap": "https://wsuraiders.com/news/2025/9/18/womens-soccer-raiders-record-third-straight-shutout"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Detroit Mercy",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/detroit-mercy/boxscore/10224",
+              "recap": "https://wsuraiders.com/news/2025/9/21/womens-soccer-raiders-roll-to-fourth-straight-shutout"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "IU Indy",
+            "opponentRank": null,
+            "location": "Indianapolis, IN / Michael A. Carroll Stadium",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/iu-indy/boxscore/10225",
+              "recap": "https://wsuraiders.com/news/2025/9/25/womens-soccer-vaughns-late-goal-propels-raiders-past-jaguars"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Oakland",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/oakland/boxscore/10226",
+              "recap": "https://wsuraiders.com/news/2025/9/28/womens-soccer-raiders-remain-undefeated-in-horizon-league-play"
+            }
+          },
+          {
+            "date": "2025-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Youngstown State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/youngstown-state/boxscore/10227",
+              "recap": "https://wsuraiders.com/news/2025/10/4/womens-soccer-raiders-draw-with-ysu-to-remain-undefeated-in-conference-play"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cleveland State",
+            "opponentRank": null,
+            "location": "Cleveland, OH / Krenzler Field",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/cleveland-state/boxscore/10228",
+              "recap": "https://wsuraiders.com/news/2025/10/12/raiders-and-vikings-play-to-0-0-draw"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Green Bay",
+            "opponentRank": null,
+            "location": "Green Bay, WI / Festival Foods Field at Aldo Santaga Stadium",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/green-bay/boxscore/10229",
+              "recap": "https://wsuraiders.com/news/2025/10/16/womens-soccer-raiders-come-up-just-short-thursday-evening-at-green-bay"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Milwaukee",
+            "opponentRank": null,
+            "location": "Milwaukee, WI / Engelmann Stadium",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/milwaukee/boxscore/10230",
+              "recap": "https://wsuraiders.com/news/2025/10/19/womens-soccer-strouds-last-second-goal-earns-raiders-tough-fought-draw-at-milwaukee"
+            }
+          },
+          {
+            "date": "2025-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Robert Morris",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/robert-morris/boxscore/10231",
+              "recap": "https://wsuraiders.com/news/2025/10/25/womens-soccer-raiders-score-three-unanswered-goals-to-comeback-and-stun-robert-morris"
+            }
+          },
+          {
+            "date": "2025-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Northern Kentucky",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/northern-kentucky/boxscore/10233",
+              "recap": "https://wsuraiders.com/news/2025/10/29/womens-soccer-hartmann-scores-brace-as-raiders-draw-with-northern-kentucky"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Green Bay",
+            "opponentRank": 5,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2025/green-bay/boxscore/10364",
+              "recap": "https://wsuraiders.com/news/2025/11/2/womens-soccer-raiders-fall-to-green-bay-in-the-horizon-league-championship-quarterfinal"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "5-10-2",
+        "games": [
+          {
+            "date": "2024-08-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Toledo (EX)",
+            "opponentRank": null,
+            "location": "Toledo, OH",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2024-08-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Miami (OH) (EX)",
+            "opponentRank": null,
+            "location": "Oxford, OH",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Illinois",
+            "opponentRank": null,
+            "location": "Champaign, IL",
+            "result": "L",
+            "score": "0-6",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/illinois/boxscore/9893",
+              "recap": "https://wsuraiders.com/news/2024/8/15/womens-soccer-raiders-fall-short-in-season-opener-at-illinois"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Akron",
+            "opponentRank": null,
+            "location": "Akron, OH",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/akron/boxscore/9896",
+              "recap": "https://wsuraiders.com/news/2024/8/25/womens-soccer-baker-tallies-four-saves-in-season-debut-at-akron"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Indiana",
+            "opponentRank": null,
+            "location": "Bloomington, IN",
+            "result": "L",
+            "score": "0-6",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/indiana/boxscore/9897",
+              "recap": "https://wsuraiders.com/news/2024/8/29/womens-soccer-raiders-slip-at-indiana-thursday-night"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Southern Indiana",
+            "opponentRank": null,
+            "location": "Evansville, IN",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/southern-indiana/boxscore/9898",
+              "recap": "https://wsuraiders.com/news/2024/9/1/womens-soccer-womens-soccer-adds-first-win-of-the-season-at-southern-indiana"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Morehead State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/morehead-state/boxscore/9899",
+              "recap": "https://wsuraiders.com/news/2024/9/5/womens-soccer-stroud-tallies-two-goals-in-home-opener-shutout-win-against-morehead"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Valparaiso",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/valparaiso/boxscore/9900",
+              "recap": "https://wsuraiders.com/news/2024/9/8/womens-soccer-hartmann-scores-first-career-goal-against-valparaiso"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Dayton, OH",
+            "result": "L",
+            "score": "1-5",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/dayton/boxscore/9902",
+              "recap": "https://wsuraiders.com/news/2024/9/12/womens-soccer-womens-soccer-falls-to-dayton"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Green Bay",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/green-bay/boxscore/9903",
+              "recap": "https://wsuraiders.com/news/2024/9/19/womens-soccer-womens-soccer-ties-with-green-bay-in-conference-opener"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Milwaukee",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/milwaukee/boxscore/9905",
+              "recap": "https://wsuraiders.com/news/2024/9/22/womens-soccer-sarka-matches-season-best-in-loss-to-milwaukee"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cleveland State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/cleveland-state/boxscore/9906",
+              "recap": "https://wsuraiders.com/news/2024/9/29/womens-soccer-womens-soccer-has-second-half-comeback-against-cleveland-state"
+            }
+          },
+          {
+            "date": "2024-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Youngstown State",
+            "opponentRank": null,
+            "location": "Youngstown, OH",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/youngstown-state/boxscore/9907",
+              "recap": "https://wsuraiders.com/news/2024/10/5/womens-soccer-pham-sets-career-high-in-loss-at-youngstown"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Detroit Mercy",
+            "opponentRank": null,
+            "location": "Detroit, MI",
+            "result": "L",
+            "score": "3-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/detroit-mercy/boxscore/9908",
+              "recap": "https://wsuraiders.com/news/2024/10/10/womens-soccer-dunlevy-adds-two-goals-in-loss-at-detroit-mercy"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Oakland",
+            "opponentRank": null,
+            "location": "Rochester, MI",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/oakland/boxscore/9909",
+              "recap": "https://wsuraiders.com/news/2024/10/13/womens-soccer-womens-soccer-has-3-0-shutout-at-oakland"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "IU Indy",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/iu-indy/boxscore/9910",
+              "recap": "https://wsuraiders.com/news/2024/10/17/womens-soccer-womens-soccer-ties-with-iu-indy"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Purdue Fort Wayne",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/purdue-fort-wayne/boxscore/9911",
+              "recap": "https://wsuraiders.com/news/2024/10/20/womens-soccer-womens-soccer-has-senior-day-shutout-win-against-purdue-fort-wayne"
+            }
+          },
+          {
+            "date": "2024-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Robert Morris",
+            "opponentRank": null,
+            "location": "Moon Township, PA",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/robert-morris/boxscore/9913",
+              "recap": "https://wsuraiders.com/news/2024/10/26/womens-soccer-samborski-sinks-first-season-goal-at-robert-morris"
+            }
+          },
+          {
+            "date": "2024-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Northern Kentucky",
+            "opponentRank": null,
+            "location": "Highland Heights, KY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2024/northern-kentucky/boxscore/9914",
+              "recap": "https://wsuraiders.com/news/2024/10/30/womens-soccer-womens-soccer-ends-season-at-northern-kentucky"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "6-7-5",
+        "games": [
+          {
+            "date": "2023-08-06",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Toledo",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2023-08-10",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Western Michigan",
+            "opponentRank": null,
+            "location": "Kalamazoo, MI / WMU Soccer Complex",
+            "result": null,
+            "score": null,
+            "links": {}
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Arizona State",
+            "opponentRank": null,
+            "location": "Tempe, AZ / Sun Devil Soccer/Lacrosse Stadium",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/arizona-state/boxscore/9507",
+              "recap": "https://wsuraiders.com/news/2023/8/18/womens-soccer-sarka-records-a-career-high-five-saves-in-season-opening-loss-to-arizona-state"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Grand Canyon",
+            "opponentRank": null,
+            "location": "Phoenix, AZ / GCU Stadium",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/grand-canyon/boxscore/9508",
+              "recap": "https://wsuraiders.com/news/2023/8/21/womens-soccer-raiders-close-road-trip-with-loss-to-grand-canyon"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southern Indiana",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/southern-indiana/boxscore/9509",
+              "recap": "https://wsuraiders.com/news/2023/8/24/womens-soccer-raiders-down-southern-indiana-2-1-in-home-opener"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Central Michigan",
+            "opponentRank": null,
+            "location": "Mount Pleasant, MI / Central Michigan Soccer/Lacrosse Complex",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/central-michigan/boxscore/9510",
+              "recap": "https://wsuraiders.com/news/2023/8/27/womens-soccer-sarka-posts-first-collegiate-shutout-in-tie-at-cmu"
+            }
+          },
+          {
+            "date": "2023-08-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Morehead State",
+            "opponentRank": null,
+            "location": "Morehead, KY / Jayne Stadium",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/morehead-state/boxscore/9544",
+              "recap": "https://wsuraiders.com/news/2023/8/30/womens-soccer-raiders-post-second-consecutive-shutout-in-scoreless-draw-at-morehead-state"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Dayton",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/dayton/boxscore/9512",
+              "recap": "https://wsuraiders.com/news/2023/9/3/womens-soccer-sarkas-career-night-not-enough-in-loss-to-dayton"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Akron",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/akron/boxscore/9513",
+              "recap": "https://wsuraiders.com/news/2023/9/10/womens-soccer-kuerze-and-sizer-tally-goals-in-2-1-win-over-akron"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Green Bay",
+            "opponentRank": null,
+            "location": "Green Bay, WI / Aldo Santaga Stadium",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/green-bay/boxscore/9514",
+              "recap": "https://wsuraiders.com/news/2023/9/14/womens-soccer-raiders-pick-up-shutout-win-at-green-bay"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Youngstown State",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/youngstown-state/boxscore/9515",
+              "recap": "https://wsuraiders.com/news/2023/9/21/womens-soccer-raiders-defeat-youngstown-state-3-2-for-third-consecutive-victory"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Robert Morris",
+            "opponentRank": null,
+            "location": "Moon Township, PA / North Athletic Complex",
+            "result": "L",
+            "score": "2-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/robert-morris/boxscore/9516",
+              "recap": "https://wsuraiders.com/news/2023/9/24/womens-soccer-burger-and-helinski-tally-goals-in-loss-at-rmu"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Oakland",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/oakland/boxscore/9517",
+              "recap": "https://wsuraiders.com/news/2023/9/30/womens-soccer-raiders-earn-shutout-victory-over-oakland-on-senior-day"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "IUPUI",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/iupui/boxscore/9518",
+              "recap": "https://wsuraiders.com/news/2023/10/5/womens-soccer-raiders-battle-iupui-to-scoreless-draw"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Milwaukee",
+            "opponentRank": null,
+            "location": "Milwaukee, WI / Engelmann Stadium",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/milwaukee/boxscore/9519",
+              "recap": "https://wsuraiders.com/news/2023/10/8/womens-soccer-wright-state-drops-road-matchup-at-milwaukee"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Detroit Mercy",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/detroit-mercy/boxscore/9520",
+              "recap": "https://wsuraiders.com/news/2023/10/12/womens-soccer-helinski-nets-second-half-goal-in-win-over-udm"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Purdue Fort Wayne",
+            "opponentRank": null,
+            "location": "Fort Wayne, IN / Hefner Soccer Complex",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/purdue-fort-wayne/boxscore/9521",
+              "recap": "https://wsuraiders.com/news/2023/10/15/womens-soccer-mace-nets-equalizer-in-1-1-draw-at-pfw"
+            }
+          },
+          {
+            "date": "2023-10-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cleveland State",
+            "opponentRank": null,
+            "location": "Cleveland, OH / Krenzler Field",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/cleveland-state/boxscore/9522",
+              "recap": "https://wsuraiders.com/news/2023/10/21/womens-soccer-raiders-drop-regular-season-road-finale-at-csu"
+            }
+          },
+          {
+            "date": "2023-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Northern Kentucky",
+            "opponentRank": null,
+            "location": "Alumni Field at Rinzler Student Sports Complex, Dayton, OH",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/northern-kentucky/boxscore/9523",
+              "recap": "https://wsuraiders.com/news/2023/10/25/womens-soccer-womens-soccer-battles-nku-to-scoreless-draw-in-regular-season-finale"
+            }
+          },
+          {
+            "date": "2023-10-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 4 Robert Morris",
+            "opponentRank": null,
+            "location": "Moon Township, PA",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://wsuraiders.com/sports/womens-soccer/stats/2023/no-4-robert-morris/boxscore/9545",
+              "recap": "https://wsuraiders.com/news/2023/10/29/womens-soccer-womens-soccer-falls-to-rmu-in-tournament-quarterfinals"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://wsuraiders.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:27:09Z"
+    }
+  },
   "commitments": [
     {
       "id": "ava-pultz-2026",
@@ -117,7 +3043,7 @@
       "city": "Canton",
       "highSchool": "",
       "college": "wright-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +3062,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -300,41 +3226,27 @@
     "2027": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:54Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://wsuraiders.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T18:15:48Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.780634&longitude=-84.064881&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T18:15:46Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T18:15:46Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:26:57Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

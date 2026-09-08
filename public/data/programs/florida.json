@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:31:39Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 29.64629,
+    "lon": -82.347911,
+    "timezone": "America/New_York",
+    "elevationM": 37.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012816",
+      "name": "GAINESVILLE RGNL AP",
+      "state": "FL",
+      "distanceKm": 8.6,
+      "elevationM": 37.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 67.1,
+        "tLowF": 42.6,
+        "precipIn": 3.29,
+        "snowIn": 0.0,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 6.2
+      },
+      {
+        "month": "Feb",
+        "tHighF": 70.9,
+        "tLowF": 45.9,
+        "precipIn": 2.67,
+        "snowIn": 0.0,
+        "wetDays": 4.1,
+        "days90F": 0.0,
+        "daysFreeze": 2.8
+      },
+      {
+        "month": "Mar",
+        "tHighF": 75.8,
+        "tLowF": 49.7,
+        "precipIn": 3.49,
+        "snowIn": 0.0,
+        "wetDays": 5.3,
+        "days90F": 0.1,
+        "daysFreeze": 1.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 81.5,
+        "tLowF": 55.5,
+        "precipIn": 2.74,
+        "snowIn": 0.0,
+        "wetDays": 3.8,
+        "days90F": 2.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 87.4,
+        "tLowF": 62.6,
+        "precipIn": 3.08,
+        "snowIn": 0.0,
+        "wetDays": 4.5,
+        "days90F": 11.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.3,
+        "tLowF": 69.5,
+        "precipIn": 7.56,
+        "snowIn": 0.0,
+        "wetDays": 11.0,
+        "days90F": 18.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.1,
+        "tLowF": 71.6,
+        "precipIn": 6.68,
+        "snowIn": 0.0,
+        "wetDays": 10.5,
+        "days90F": 23.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 90.5,
+        "tLowF": 72.0,
+        "precipIn": 6.4,
+        "snowIn": 0.0,
+        "wetDays": 10.4,
+        "days90F": 20.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 88.1,
+        "tLowF": 69.4,
+        "precipIn": 5.05,
+        "snowIn": 0.0,
+        "wetDays": 6.9,
+        "days90F": 12.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 82.1,
+        "tLowF": 60.6,
+        "precipIn": 2.68,
+        "snowIn": 0.0,
+        "wetDays": 4.0,
+        "days90F": 1.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 74.7,
+        "tLowF": 50.6,
+        "precipIn": 1.79,
+        "snowIn": 0.0,
+        "wetDays": 3.0,
+        "days90F": 0.0,
+        "daysFreeze": 1.0
+      },
+      {
+        "month": "Dec",
+        "tHighF": 69.3,
+        "tLowF": 45.2,
+        "precipIn": 2.88,
+        "snowIn": 0.0,
+        "wetDays": 4.5,
+        "days90F": 0.0,
+        "daysFreeze": 3.7
+      }
+    ],
+    "annualPrecipIn": 48.3,
+    "annualSnowIn": 0.0,
+    "fallSeason": {
+      "avgHighF": 83.8,
+      "avgLowF": 63.2,
+      "precipIn": 15.9,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 91.1°F), coldest Jan (avg low 42.6°F). 48.3 in of rain per year, essentially no snow. Fall season (Aug–Nov): highs around 83.8°F, 15.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012816,USC00083322,USC00083956&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:13Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Nick Zimmerman",
@@ -79,8 +228,98 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Nick Zimmerman",
+        "title": "Head Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/coaches/nick-zimmerman/2157",
+        "social": {}
+      },
+      {
+        "name": "Jonathan Garbar",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/coaches/jonathan--garbar/2158",
+        "social": {}
+      },
+      {
+        "name": "Kerri Hanks Petersen",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/coaches/kerri-hanks-petersen/2167",
+        "social": {}
+      },
+      {
+        "name": "David Styles",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/coaches/david-styles/2168",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Ellie McIntyre",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/ellie-mcintyre/1018",
+        "social": {}
+      },
+      {
+        "name": "Connie Andrews",
+        "title": "Assistant Director - Sports Health Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/connie-andrews/995",
+        "social": {}
+      },
+      {
+        "name": "Mackenzie Modica",
+        "title": "Assistant Athletic Trainer (Lacrosse & Soccer)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/mackenzie-modica/1125",
+        "social": {}
+      },
+      {
+        "name": "Katelyn Kight",
+        "title": "Assistant Director, Athletic Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/katelyn-kight/1178",
+        "social": {}
+      },
+      {
+        "name": "Victor Hoffmann",
+        "title": "Director of Applied Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/victor-hoffmann/1020",
+        "social": {}
+      },
+      {
+        "name": "Mike Childs",
+        "title": "Associate Director Olympic Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/mike-childs/1181",
+        "social": {}
+      },
+      {
+        "name": "Aidan Jones",
+        "title": "Video Analyst",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/staff/aidan-jones/1021",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Donald R. Dizney Stadium",
       "capacity": 1500
@@ -160,7 +399,11 @@
         "url": "https://en.wikipedia.org/wiki/Florida_Gators_women%27s_soccer",
         "asOf": "2026-09-07T05:32:12Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://floridagators.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:10:27Z"
+      }
     }
   },
   "seasons": [
@@ -168,13 +411,15 @@
       "year": 2026,
       "label": "2026",
       "headCoach": "Nick Zimmerman",
-      "record": null,
-      "wins": null,
-      "losses": null,
-      "ties": null,
+      "record": "4-2-1",
+      "wins": 4,
+      "losses": 2,
+      "ties": 1,
       "confRecord": null,
       "confFinish": null,
-      "ncaaResult": null
+      "ncaaResult": null,
+      "inProgress": true,
+      "gamesPlayed": 7
     },
     {
       "year": 2025,
@@ -734,9 +979,2813 @@
       "ncaaResult": null
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Paloma Peña",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Miramar, Fla. / McCarthy H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/paloma-pea/18212",
+        "social": {
+          "x": "https://x.com/palomap379",
+          "instagram": "https://www.instagram.com/paloma.pena1"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Jayden Emmanuel",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Indian Trail, N.C. / Sun Valley H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/jayden-emmanuel/18200",
+        "social": {
+          "x": "https://x.com/jaysave01",
+          "instagram": "https://www.instagram.com/jaysave1"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "2",
+        "name": "Ella Petersen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Orlando, Fla. / The Geneva School",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Kyra Taylor",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Longview, Texas / Longview H.S.",
+        "highSchool": "Mississippi State",
+        "previousSchool": "Louisiana Tech",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Addison Dean",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "San Diego, Calif. / Cathedral Catholic H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "San Diego Surf",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/addison-dean/18409",
+        "social": {
+          "x": "https://x.com/AddyDean04",
+          "instagram": "https://www.instagram.com/addy_dean4"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Mia Gray",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Rochester, N.Y. / Byron-Bergen H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "WNY Flash",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Avery Upton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Jacksonville, Fla. / Creekside H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/avery-upton/18216",
+        "social": {
+          "x": "https://x.com/AveryUpton1",
+          "instagram": "https://www.instagram.com/averyupton_"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Zoe Main",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Missouri City, Texas / Ridge Point H.S.",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Breahn Fisher",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Franklin, Tenn. / The Ensworth School",
+        "highSchool": "TCU",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/breahn-fisher/18407",
+        "social": {
+          "x": "https://x.com/Brea__Z",
+          "instagram": "https://www.instagram.com/breahn_.fisher"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Addy Hess",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "South Riding, Va. / Freedom H.S.",
+        "highSchool": "Penn State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/addy-hess/18178",
+        "social": {
+          "x": "https://x.com/addy47345365939",
+          "instagram": "https://www.instagram.com/addyhess"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Adia Symmonds",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Tampa, Fla. / Sunlake H.S.",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Hannah Jibril",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Glyndon, Md. / Western School of Technology & Environmental Science",
+        "highSchool": "Mississippi State",
+        "previousSchool": "NC State",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Charlotte Grim",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Hilltown, Pa. / IMG Academy",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Emma Duval",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Naperville, Ill. / Plainfield North H.S.",
+        "highSchool": "Tennessee",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/emma-duval/18199",
+        "social": {
+          "x": "https://x.com/emma_duval3",
+          "instagram": "https://www.instagram.com/emmaduval3"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Tatum Borman",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Georgetown, Ky. / Scott County H.S.",
+        "highSchool": "Mississippi State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Conamora Ndana",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Warren, Mich. / Warren Mott H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Nationals",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/conamora-ndana/18411",
+        "social": {
+          "x": "https://x.com/cabn_9",
+          "instagram": "https://www.instagram.com/ndanamores"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Courtney Hogan",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Camarillo, Calif. / Rancho Campana H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Eagles SC (CA)",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Sophia Sindelar",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cleveland, Ohio / Rocky River H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/sophia-sindelar/18213",
+        "social": {
+          "x": "https://x.com/SindelarSophia",
+          "instagram": "https://www.instagram.com/sophia.sindelar"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "18",
+        "name": "Kelsey Smith",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Elkridge, Md. / McDonogh School",
+        "highSchool": "Maryland",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/kelsey-smith/18408",
+        "social": {
+          "instagram": "https://www.instagram.com/kelsey_smith_"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Lael Hill",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Windermere, Fla. / Lake Highland Prep",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Orlando City Youth Soccer",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/lael-hill/18410",
+        "social": {
+          "instagram": "https://www.instagram.com/reallaelhill"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Montelene Dymond",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Toronto, Ontario / St. Joan of Arc Catholic H.S.",
+        "highSchool": "Kansas",
+        "previousSchool": "FIU",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/montelene-dymond/18413",
+        "social": {
+          "instagram": "https://www.instagram.com/montelenedymond"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Iori Watanabe",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Osaka, Japan / Miyagi Prefecture Sendai Daisan H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/iori-watanabe/18424",
+        "social": {
+          "instagram": "https://www.instagram.com/20.iori_o7"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Norah Abbott",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Florence, SC / IMG Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "IMG Academy",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/norah-abbott/18170",
+        "social": {
+          "x": "https://x.com/_NorahAbbott",
+          "instagram": "https://www.instagram.com/norah.abbott"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "28",
+        "name": "Carlota Martins",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'1\"",
+        "heightIn": 61,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Granollers, Spain / Institut Carles Vallbona",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/carlota-martins/18415",
+        "social": {
+          "instagram": "https://www.instagram.com/carlotaamartiins"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Lena Bailey",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Tampa, Fla. / Tampa Catholic H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Tampa Bay United",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/lena-bailey/18196",
+        "social": {
+          "x": "https://x.com/LenaBailey_",
+          "instagram": "https://www.instagram.com/lenabailey_"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "31",
+        "name": "Paris Bice",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Flagler Beach, Fla. / Alachua eSchool",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/paris-bice/18198",
+        "social": {
+          "instagram": "https://www.instagram.com/paris.bice"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "32",
+        "name": "Nylah Norris",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "St. Cloud, Fla. / Homeschool",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Kraze/Krush",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/nylah-norris/18412",
+        "social": {
+          "instagram": "https://www.instagram.com/nylah_norrisss"
+        },
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "Skye Barnes",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Oviedo, Fla. / Hagerty H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Kraze Krush",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/skye-barnes/18197",
+        "social": {
+          "x": "https://x.com/Barnes15Skye",
+          "instagram": "https://www.instagram.com/skyee.barnes"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "99",
+        "name": "Katie Johnston",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Edmond, Okla. / Bishop McGuinness H.S.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Oklahoma Energy FC",
+        "bioUrl": "https://floridagators.com/sports/womens-soccer/roster/katie-johnston/18181",
+        "social": {
+          "x": "https://x.com/realKatieJ",
+          "instagram": "https://www.instagram.com/katie.b.johnston"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 1,
+        "GR": 0
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 2,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 4,
+        "R-SR": 1,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "R-JR": 3,
+      "R-SR": 2,
+      "SO": 6,
+      "SR": 6,
+      "FR": 8,
+      "R-SO": 3,
+      "JR": 1
+    },
+    "graduatingByPos": {
+      "GK": 2,
+      "F": 5,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://floridagators.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:10:27Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Paloma Peña",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Miramar, Fla. / McCarthy H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Jayden Emmanuel",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Indian Trail, N.C. / Sun Valley H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Kai Tsakiris",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Newport Beach, Calif. / Corona del Mar H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Tatum O'Coyne",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Rancho Sante Fe, Calif. / Torrey Pines H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Megan Hinnenkamp",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Kearney, Mo. / Liberty North H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Emilia Eriksen",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Los Gatos, Calif / IMG Academy",
+          "highSchool": "Clemson"
+        },
+        {
+          "number": "6",
+          "name": "Avery Upton",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Jacksonville, Fla. / Creekside H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Lauren McCloskey",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Canton, Ga. / Blessed Trinity Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Charlotte McClure",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Ridgeland, S.C. / Ridgeland-Hardeeville H.S.",
+          "highSchool": "Virginia"
+        },
+        {
+          "number": "9",
+          "name": "Addy Hess",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "South Riding, Va. / Freedom H.S.",
+          "highSchool": "Penn State"
+        },
+        {
+          "number": "10",
+          "name": "Madison Jones",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Longwood, Fla. / Lake Brantley H.S.",
+          "highSchool": "Kentucky"
+        },
+        {
+          "number": "12",
+          "name": "Ryleigh Acosta",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Cape Coral, Fla. / Mariner H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Njeri Butts",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lawrenceville, Ga. / Grayson H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Addy Lang",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Overland Park, Kan. / Blue Valley Southwest H.S.",
+          "highSchool": "St. Louis"
+        },
+        {
+          "number": "16",
+          "name": "Brinley Murphy",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Knoxville, Tenn. / Bearden H.S.",
+          "highSchool": "South Carolina"
+        },
+        {
+          "number": "17",
+          "name": "Delaney Tellex",
+          "pos": "F/D",
+          "classCode": "JR",
+          "hometown": "Rochester, NY / Penfield H.S.",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "18",
+          "name": "Ava Paolini",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif. / San Marcos H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Abby Gemma",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Flemington, N.J. / IMG Academy",
+          "highSchool": "Notre Dame"
+        },
+        {
+          "number": "26",
+          "name": "Sophia Sindelar",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cleveland, Ohio / Rocky River H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Norah Abbott",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Florence, SC / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emma Duval",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Naperville, Ill. / Plainfield North H.S.",
+          "highSchool": "Tennessee"
+        },
+        {
+          "number": "29",
+          "name": "Lena Bailey",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Tampa, Fla. / Tampa Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Amelia Malkin",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sarasota, Fla. / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Paris Bice",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Flagler Beach, Fla. / Alachua eSchool",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Victoria Madison",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Hillsborough H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Skye Barnes",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Oviedo, Fla. / Hagerty H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Lily Holden",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Jacksonville, Fla. / Bartram Trail H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Katie Johnston",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Edmond, Okla. / Bishop McGuinness H.S.",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "abby gemma",
+        "addy lang",
+        "amelia malkin",
+        "ava paolini",
+        "brinley murphy",
+        "charlotte mcclure",
+        "delaney tellex",
+        "emilia eriksen",
+        "kai tsakiris",
+        "lauren mccloskey",
+        "lily holden",
+        "madison jones",
+        "megan hinnenkamp",
+        "njeri butts",
+        "ryleigh acosta",
+        "tatum ocoyne",
+        "victoria madison"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Paloma Peña",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Miramar, Fla. / McCarthy H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Jayden Emmanuel",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Indian Trail, N.C. / Sun Valley H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Elyse Campbell",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gainesville, Fla. / Olympia H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Tatum O'Coyne",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Rancho Sante Fe, Calif. / Torrey Pines H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Megan Hinnenkamp",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kearney, Mo. / Liberty North H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alexa Goldberg",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "St. Petersburg, Fla. / St. Petersburg H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Avery Upton",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Jacksonville, Fla. / Creekside H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Lauren McCloskey",
+          "pos": "D/F",
+          "classCode": "JR",
+          "hometown": "Canton, Ga. / Blessed Trinity Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Charlotte McClure",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Ridgeland, S.C. / Ridgeland-Hardeeville H.S.",
+          "highSchool": "Virginia"
+        },
+        {
+          "number": "9",
+          "name": "Josie Curtis",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Bradenton, Fla. / Lakewood Ranch H.S.",
+          "highSchool": "FGCU"
+        },
+        {
+          "number": "10",
+          "name": "Madison Jones",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Longwood, Fla. / Lake Brantley H.S.",
+          "highSchool": "Kentucky"
+        },
+        {
+          "number": "11",
+          "name": "Sophie White",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Herriman, Utah / Mountain Ridge H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Ryleigh Acosta",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Cape Coral, Fla. / Mariner H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Vera Blom",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Spånga, Sweden / Bromma Gymnasium",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Njeri Butts",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Lawrenceville, Ga. / Grayson H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Lauren Donovan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Loveland, Ohio / Loveland H.S.",
+          "highSchool": "Minnesota"
+        },
+        {
+          "number": "16",
+          "name": "Emilee Hauser",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Cape Coral, Fla. / North Fort Myers H.S.",
+          "highSchool": "Arkansas"
+        },
+        {
+          "number": "17",
+          "name": "Delaney Tellex",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Rochester, NY / Penfield H.S.",
+          "highSchool": "Memphis"
+        },
+        {
+          "number": "18",
+          "name": "Liwa Nilsson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Västerås, Sweden / Widenska Gymnasiet",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kaela Standish",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Danville, Calif. / Monte Vista H.S.",
+          "highSchool": "Utah"
+        },
+        {
+          "number": "20",
+          "name": "Anna DeLeon",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Rancho Palos Verdes, Calif. / Palos Verdes H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Madison Young",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ft. Lauderdale, Fla. / Cardinal Gibbons H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Oakley Rasmussen",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Millville, Utah / Ridgeline H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Daviana Vaka",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Sandy, Utah / Juan Diego Catholic H.S.",
+          "highSchool": "BYU"
+        },
+        {
+          "number": "24",
+          "name": "Lucy Froitzheim",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Naples, Fla. / Naples H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Delaney Tauzel",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "St. Johns, Fla. / Creekside H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Norah Abbott",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Florence, SC / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Emma Duval",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Naperville, Ill. / Plainfield North H.S.",
+          "highSchool": "Tennessee"
+        },
+        {
+          "number": "29",
+          "name": "Lena Bailey",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Tampa Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Amelia Malkin",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Sarasota, Fla. / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Paris Bice",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Flagler Beach, Fla. / Alachua eSchool",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Zamiyah Hill",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Panama City, Fla. / Mosley H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Skye Barnes",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Oviedo, Fla. / Hagerty H.S.",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 36,
+      "players": [
+        {
+          "number": "0",
+          "name": "Paloma Peña",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Miramar, Fla. / McCarthy H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Jayden Emmanuel",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Indian Trail, N.C. / Sun Valley H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Elyse Campbell",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gainesville, Fla. / Olympia H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Tori Grambo",
+          "pos": "D/F",
+          "classCode": "R-JR",
+          "hometown": "St. Johns, Fla. / Bartram Trail H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Megan Hinnenkamp",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kearney, Mo. / Liberty North H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alexa Goldberg",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "St. Petersburg, Fla. / St. Petersburg H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Erica Roberts",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "St. Petersburg, Fla. / Northside Christian H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Lauren McCloskey",
+          "pos": "D/F",
+          "classCode": "SO",
+          "hometown": "Canton, Ga. / Blessed Trinity Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Tessa Barton",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Littleton, Colo. / Columbine H.S.",
+          "highSchool": "Colorado"
+        },
+        {
+          "number": "9",
+          "name": "Josie Curtis",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Bradenton, Fla. / Lakewood Ranch H.S.",
+          "highSchool": "FGCU"
+        },
+        {
+          "number": "10",
+          "name": "Emily Yaple",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Erie, Pa. / Fort LeBoeuf H.S.",
+          "highSchool": "Pittsburgh"
+        },
+        {
+          "number": "11",
+          "name": "Sophie White",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Herriman, Utah / Mountain Ridge H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Maddy Rhodes",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "Vero Beach, Fla. / Vero Beach H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Tatum O'Coyne",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Rancho Sante Fe, Calif. / Torrey Pines H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Njeri Butts",
+          "pos": "D/M",
+          "classCode": "SO",
+          "hometown": "Lawrenceville, Ga. / Grayson H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Lauren Donovan",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Loveland, Ohio / Loveland H.S.",
+          "highSchool": "Minnesota"
+        },
+        {
+          "number": "16",
+          "name": "Ashley Tutas",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Palm Harbor, Fla. / Palm Harbor University H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Liwa Nilsson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Västerås, Sweden / Widenska Gymnasiet",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Madeline Pirrello",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Harrison, N.Y. / Harrison H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Anna DeLeon",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Rancho Palos Verdes, Calif. / Palos Verdes H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Madison Young",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ft. Lauderdale, Fla. / Cardinal Gibbons H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Oakley Rasmussen",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Millville, Utah / Ridgeline H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Daviana Vaka",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Sandy, Utah / Juan Diego Catholic H.S.",
+          "highSchool": "BYU"
+        },
+        {
+          "number": "24",
+          "name": "Lucy Froitzheim",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Naples, Fla. / Naples H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Delaney Tauzel",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "St. Johns, Fla. / Creekside H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Molly Grant",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Plainfield, Ill. / Plainfield North H.S.",
+          "highSchool": "Lipscomb"
+        },
+        {
+          "number": "27",
+          "name": "Thai Quallich",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Largo, Fla. / U.S. Performance Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Charlotte McClure",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Ridgeland, S.C. / Ridgeland-Hardeeville H.S.",
+          "highSchool": "Virginia"
+        },
+        {
+          "number": "29",
+          "name": "Lena Bailey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Tampa Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Amelia Malkin",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Sarasota, Fla. / IMG Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "31",
+          "name": "Paris Bice",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Flagler Beach, Fla. / Alachua eSchool",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Sami Fisher",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Scottsdale, Ariz. / Chaparral H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Madison Jones",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Longwood, Fla. / Lake Brantley H.S.",
+          "highSchool": "Kentucky"
+        },
+        {
+          "number": "34",
+          "name": "Avery Upton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Jacksonville, Fla. / Creekside H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "40",
+          "name": "Mary Martin Hampton",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lexington, Ky. / Lexington Catholic H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "99",
+          "name": "Julianne Leskauskas",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Manasquan, N.J. / Saint Rose H.S.",
+          "highSchool": "Rutgers"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 4,
+      "losses": 2,
+      "ties": 1,
+      "text": "4-2-1",
+      "played": 7,
+      "scheduled": 17,
+      "confText": "0-0-0",
+      "exhibitions": 2
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Miami",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "recap": "https://floridagators.com/news/2026/8/5/soccer-florida-and-miami-exhibition-wednesday",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/miami-exhibition/39"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Florida International",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "W",
+        "score": "7-1",
+        "links": {
+          "recap": "https://floridagators.com/news/2026/8/8/soccer-florida-wins-7-1-over-fiu-to-close-exhibition-action",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/florida-international-exhibition/123"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "UCF",
+        "opponentRank": null,
+        "location": "Orlando, FL",
+        "result": "L",
+        "score": "3-4",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/ucf/boxscore/28001",
+          "recap": "https://floridagators.com/news/2026/8/13/florida-soccer-drops-opener-4-3-at-ucf",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/ucf/53"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Coastal Carolina",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "W",
+        "score": "3-2",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/coastal-carolina/boxscore/28002",
+          "recap": "https://floridagators.com/news/2026/8/20/soccer-johnstons-strike-lifts-florida-past-coastal-carolina-in-home-opener",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/coastal-carolina/197"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "#T3 Florida State",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/florida-state/boxscore/28003",
+          "recap": "https://floridagators.com/news/2026/8/24/soccer-harry-fodder-feel-good-fsu-win-long-time-coming-aug-23-2026"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Jacksonville",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "W",
+        "score": "6-0",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/jacksonville/boxscore/28004",
+          "recap": "https://floridagators.com/news/2026/8/27/no-20-florida-soccer-rolls-past-jacksonville-6-0"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Florida Atlantic",
+        "opponentRank": null,
+        "location": "Boca Raton, FL",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/florida-atlantic/boxscore/28005",
+          "recap": "https://floridagators.com/news/2026/8/30/soccer-no-20-florida-and-florida-atlantic-tie-1-1",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/florida-atlantic/15"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Youngstown State",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/youngstown-state/boxscore/28006",
+          "recap": "https://floridagators.com/news/2026/9/3/soccer-no-21-florida-tops-youngstown-state-2-0-on-senior-night"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Wake Forest",
+        "opponentRank": 5,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://floridagators.com/sports/womens-soccer/stats/2026/wake-forest/boxscore/28011",
+          "recap": "https://floridagators.com/news/2026/9/6/soccer-no-21-florida-falls-2-1-to-no-5-wake-forest",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/wake-forest/165"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "South Carolina",
+        "opponentRank": null,
+        "location": "Columbia, SC",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/f2bf035f-eec2-408d-bbaf-cf391eac7525",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662235&vislive=fla",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/south-carolina/85"
+        }
+      },
+      {
+        "date": "2026-09-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Mississippi State",
+        "opponentRank": null,
+        "location": "Starkville, MS",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/ceb005ed-6d9c-4864-acc4-b8eb8b4e645c",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665213&vislive=fla",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/mississippi-state/40"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Texas",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/3f5f9ad8-f25d-48e2-a907-316fe1d66705",
+          "listen": "https://floridagators.com/showcase?Live=6013",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664452",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/texas/149"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Texas A&M",
+        "opponentRank": null,
+        "location": "College Station, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/4f211b2d-d9b1-4af8-a2ed-e8a436997bfc",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666218&vislive=fla",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/texas-am/88"
+        }
+      },
+      {
+        "date": "2026-10-02",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Louisiana State",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "listen": "https://floridagators.com/showcase?Live=6014",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664453",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/louisiana-state/34"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Alabama",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "listen": "https://floridagators.com/showcase?Live=6015",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664454",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/alabama/1"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Vanderbilt",
+        "opponentRank": null,
+        "location": "Nashville, TN",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666709&vislive=fla",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/vanderbilt/90"
+        }
+      },
+      {
+        "date": "2026-10-18",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Arkansas",
+        "opponentRank": null,
+        "location": "Fayetteville, AR",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663828&vislive=fla",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/arkansas/2"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Auburn",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "listen": "https://floridagators.com/showcase?Live=6016",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664447",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/auburn/4"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Georgia",
+        "opponentRank": null,
+        "location": "Donald R. Dizney Stadium, Gainesville, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "listen": "https://floridagators.com/showcase?Live=6017",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664455",
+          "history": "https://floridagators.com/sports/soccer/opponent-history/georgia/23"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "6-7-5",
+        "games": [
+          {
+            "date": "2025-08-03",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "recap": "https://floridagators.com/news/2025/8/3/soccer-wins-1-0-vs-florida-atlantic-in-exhibition-action",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/florida-atlantic-exhibition/15"
+            }
+          },
+          {
+            "date": "2025-08-09",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, FL",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "recap": "https://floridagators.com/news/2025/8/9/florida-soccer-wins-4-1-at-usf-to-close-exhibition-action",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/south-florida-exhibition/89"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida State",
+            "opponentRank": 3,
+            "location": "Tallahassee, FL",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/florida-state/boxscore/27335",
+              "recap": "https://floridagators.com/news/2025/8/14/soccer-florida-open-2025-with-5-0-loss-at-preseason-no-3-florida-state"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "W",
+            "score": "4-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/towson/boxscore/27336",
+              "recap": "https://floridagators.com/news/2025/8/21/soccer-florida-open-2025-home-action-with-4-2-win-over-towson"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/north-florida/boxscore/27337",
+              "recap": "https://floridagators.com/news/2025/8/24/soccer-florida-shut-out-north-florida-5-0"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Central Florida",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/central-florida/boxscore/27338",
+              "recap": "https://floridagators.com/news/2025/8/28/florida-soccer-loses-1-0-to-ucf"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Maryland",
+            "opponentRank": null,
+            "location": "College Park, MD",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/maryland/boxscore/27339",
+              "recap": "https://floridagators.com/news/2025/8/31/soccer-florida-closes-august-with-3-1-win-at-maryland",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/maryland/37"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida Gulf Coast",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/florida-gulf-coast/boxscore/27340",
+              "recap": "https://floridagators.com/news/2025/9/4/soccer-gators-win-2-1-over-fgcu"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/georgia-state/boxscore/27341",
+              "recap": "https://floridagators.com/news/2025/9/7/soccer-gators-nipped-2-1-by-georgia-state-panthers"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Arkansas",
+            "opponentRank": 9,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/arkansas/boxscore/27342",
+              "recap": "https://floridagators.com/news/2025/9/11/florida-soccer-edged-3-2-by-no-9-arkansas"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Oklahoma",
+            "opponentRank": 24,
+            "location": "Norman, OK",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/oklahoma/boxscore/27343",
+              "recap": "https://floridagators.com/news/2025/9/18/florida-soccer-edged-2-1-at-no-24-oklahoma",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/oklahoma/173"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Carolina",
+            "opponentRank": 15,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/south-carolina/boxscore/27344",
+              "recap": "https://floridagators.com/news/2025/9/21/soccer-florida-and-no-15-south-carolina-tie-0-0"
+            }
+          },
+          {
+            "date": "2025-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Georgia",
+            "opponentRank": 17,
+            "location": "Athens, GA",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/georgia/boxscore/27345",
+              "recap": "https://floridagators.com/news/2025/9/26/soccer-gators-rally-to-earn-2-2-draw-at-no-17-georgia-2-2",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/georgia/23"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "RV Kentucky",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/kentucky/boxscore/27346",
+              "recap": "https://floridagators.com/news/2025/10/2/soccer-gators-and-kentucky-tie-1-1"
+            }
+          },
+          {
+            "date": "2025-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Texas",
+            "opponentRank": null,
+            "location": "Austin, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/texas/boxscore/27347",
+              "recap": "https://floridagators.com/news/2025/10/5/soccer-gators-defeat-longhorns-2-1",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/texas/149"
+            }
+          },
+          {
+            "date": "2025-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Mississippi State",
+            "opponentRank": 12,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/mississippi-state/boxscore/27348",
+              "recap": "https://floridagators.com/news/2025/10/10/soccer-gators-win-2-1-over-no-12-mississippi-state"
+            }
+          },
+          {
+            "date": "2025-10-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tennessee",
+            "opponentRank": 4,
+            "location": "Knoxville, TN",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/tennessee/boxscore/27349",
+              "recap": "https://floridagators.com/news/2025/10/16/soccer-florida-battles-no-4-tennessee-to-scoreless-road-draw",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/tennessee/87"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Mississippi",
+            "opponentRank": null,
+            "location": "Donald R. Dizney Stadium, Gainesville, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/mississippi/boxscore/27350",
+              "recap": "https://floridagators.com/news/2025/10/19/soccer-florida-and-mississippi-tie-0-0"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "LSU",
+            "opponentRank": null,
+            "location": "Baton Rouge, LA",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/lsu/boxscore/27351",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/lsu/34"
+            }
+          },
+          {
+            "date": "2025-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kentucky",
+            "opponentRank": null,
+            "location": "Pensacola, FL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2025/kentucky/boxscore/27784",
+              "recap": "https://floridagators.com/news/2025/11/2/soccer-florida-falls-1-0-to-kentucky-in-sec-tournament-opening-round"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "5-8-7",
+        "games": [
+          {
+            "date": "2024-08-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Florida - EXH",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "recap": "https://floridagators.com/news/2024/8/3/soccer-florida-wins-2-1-vs-south-florida-in-exhibition-action",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/south-florida-exh/89"
+            }
+          },
+          {
+            "date": "2024-08-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Georgia Southern - EXH",
+            "opponentRank": null,
+            "location": "Statesboro, GA",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "recap": "https://floridagators.com/news/2024/8/10/florida-soccer-at-georgia-southern-tie-0-0",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/georgia-southern-exh/24"
+            }
+          },
+          {
+            "date": "2024-08-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/western-carolina/boxscore/26627",
+              "recap": "https://floridagators.com/news/2024/8/16/soccer-florida-opens-season-no-30-with-2-0-win-vs-western-carolina"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Florida",
+            "opponentRank": null,
+            "location": "Jacksonville, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/north-florida/boxscore/26628",
+              "recap": "https://floridagators.com/news/2024/8/22/soccer-florida-opens-road-play-with-0-0-tie-at-north-florida"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UCF",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/ucf/boxscore/26629",
+              "recap": "https://floridagators.com/news/2024/8/25/soccer-florida-battles-back-twice-to-tie-ucf-2-2"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Georgia State",
+            "opponentRank": null,
+            "location": "Atlanta, GA",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/georgia-state/boxscore/26630",
+              "recap": "https://floridagators.com/news/2024/8/29/soccer-florida-wins-2-0-at-georgia-state",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/georgia-state/200"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Towson",
+            "opponentRank": null,
+            "location": "Towson, MD",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/towson/boxscore/26631",
+              "recap": "https://floridagators.com/news/2024/9/1/soccer-florida-ties-towson-1-1",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/towson/107"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Florida State",
+            "opponentRank": 3,
+            "location": "Gainesville, FL",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/florida-state/boxscore/26632",
+              "recap": "https://floridagators.com/news/2024/9/8/soccer-no-3-florida-state-wins-3-0-at-florida"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/kennesaw-state/boxscore/26633",
+              "recap": "https://floridagators.com/news/2024/9/12/soccer-florida-blank-the-owls-thursday-with-3-0-win"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida Gulf Coast",
+            "opponentRank": null,
+            "location": "Fort Myers, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/florida-gulf-coast/boxscore/26634",
+              "recap": "https://floridagators.com/news/2024/9/15/soccer-florida-and-fgcu-tie-0-0-sunday"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kentucky",
+            "opponentRank": 20,
+            "location": "Lexington, KY",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/kentucky/boxscore/26635",
+              "recap": "https://floridagators.com/news/2024/9/19/soccer-florida-and-kentucky-tie-to-open-sec-play",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/kentucky/32"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Auburn",
+            "opponentRank": 6,
+            "location": "Auburn, AL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/auburn/boxscore/26636",
+              "recap": "https://floridagators.com/news/2024/9/22/soccer-no-6-auburn-takes-1-0-win-over-florida",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/auburn/4"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Missouri",
+            "opponentRank": null,
+            "location": "Columbia, MO",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/missouri/boxscore/26638",
+              "recap": "https://floridagators.com/news/2024/9/29/soccer-missouri-takes-2-0-win-over-florida",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/missouri/41"
+            }
+          },
+          {
+            "date": "2024-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas",
+            "opponentRank": 22,
+            "location": "Gainesville, FL",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/texas/boxscore/26639",
+              "recap": "https://floridagators.com/news/2024/10/4/soccer-florida-upsets-no-22-texas-2-1"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "South Carolina",
+            "opponentRank": 23,
+            "location": "Columbia, SC",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/south-carolina/boxscore/26640",
+              "recap": "https://floridagators.com/news/2024/10/10/soccer-florida-lose-2-0-at-no-23-south-carolina",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/south-carolina/85"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "RV Georgia",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/georgia/boxscore/26641",
+              "recap": "https://floridagators.com/news/2024/10/13/florida-soccer-and-georgia-soccer-tie-0-0"
+            }
+          },
+          {
+            "date": "2024-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Vanderbilt",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/vanderbilt/boxscore/26642",
+              "recap": "https://floridagators.com/news/2024/10/18/florida-soccer-loses-2-0-to-vanderbilt"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Alabama",
+            "opponentRank": null,
+            "location": "Tuscaloosa, AL",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/alabama/boxscore/26643",
+              "recap": "https://floridagators.com/news/2024/10/24/soccer-player-short-florida-loses-3-1-at-alabama",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/alabama/1"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Oklahoma",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/oklahoma/boxscore/26644",
+              "recap": "https://floridagators.com/news/2024/10/27/soccer-florida-loses-1-0-to-oklahoma"
+            }
+          },
+          {
+            "date": "2024-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Tennessee",
+            "opponentRank": null,
+            "location": "Gainesville, FL",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2024/tennessee/boxscore/26637",
+              "recap": "https://floridagators.com/news/2024/10/30/soccer-florida-closes-season-with-1-0-loss-to-tennessee"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "6-5-8",
+        "games": [
+          {
+            "date": "2023-08-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Georgia Southern - EXH",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "recap": "https://floridagators.com/news/2023/8/6/soccer-ties-georgia-southern-1-1-in-exhibition-action",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/georgia-southern-exh/24"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Florida - EXH",
+            "opponentRank": null,
+            "location": "Jacksonville, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "recap": "https://floridagators.com/news/2023/8/12/florida-soccer-and-north-florida-tie-0-0",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/north-florida-exh/73"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "East Carolina University",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/east-carolina-university/boxscore/25865",
+              "recap": "https://floridagators.com/news/2023/8/17/year-2-soccer-reset-starts-with-shutout-win-august-18-2023"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Maryland",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/maryland/boxscore/25866",
+              "recap": "https://floridagators.com/news/2023/8/20/soccer-defeats-1-0-maryland-to-open-season-2-0"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Miami",
+            "opponentRank": null,
+            "location": "Coral Gables, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/miami/boxscore/25867",
+              "recap": "https://floridagators.com/news/2023/8/24/florida-soccer-and-miami-tie-0-0"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Stetson",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/stetson/boxscore/25868",
+              "recap": "https://floridagators.com/news/2023/8/27/soccer-florida-wins-8-0-over-stetson"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Kennesaw State",
+            "opponentRank": null,
+            "location": "Kennesaw, Ga.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/kennesaw-state/boxscore/25869",
+              "recap": "https://floridagators.com/news/2023/9/3/soccer-florida-and-kennesaw-state-tie-1-1",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/kennesaw-state/111"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Charlotte, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/charlotte/boxscore/25870",
+              "recap": "https://floridagators.com/news/2023/9/7/soccer-gators-win-at-charlotte",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/charlotte/279"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Florida State",
+            "opponentRank": 5,
+            "location": "Tallahassee, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/florida-state/boxscore/25871",
+              "recap": "https://floridagators.com/news/2023/9/10/soccer-florida-drops-1-0-decision-at-no-5-florida-state",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/florida-state/22"
+            }
+          },
+          {
+            "date": "2023-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Missouri",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/missouri/boxscore/25872",
+              "recap": "https://floridagators.com/news/2023/9/15/soccer-florida-opens-sec-action-with-3-2-loss-to-missouri"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tennessee",
+            "opponentRank": null,
+            "location": "Knoxville, Tenn.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/tennessee/boxscore/25873",
+              "recap": "https://floridagators.com/news/2023/9/21/soccer-florida-opens-sec-road-action-with-2-0-loss-at-tennessee",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/tennessee/87"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Kentucky",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/kentucky/boxscore/25874",
+              "recap": "https://floridagators.com/news/2023/9/24/soccer-florida-and-kentucky-tie-1-1"
+            }
+          },
+          {
+            "date": "2023-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Louisiana State",
+            "opponentRank": null,
+            "location": "Baton Rouge, La.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/louisiana-state/boxscore/25875",
+              "recap": "https://floridagators.com/news/2023/9/29/florida-blanks-lsu-soccer-4-0-megan-hinnenkamp-scores-twice",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/louisiana-state/34"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Mississippi State",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/mississippi-state/boxscore/25876",
+              "recap": "https://floridagators.com/news/2023/10/5/florida-soccer-loses-1-0-to-msu"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "RV Georgia",
+            "opponentRank": null,
+            "location": "Athens, Ga.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/georgia/boxscore/25877",
+              "recap": "https://floridagators.com/news/2023/10/8/florida-and-rv-georgia-soccer-tie-0-0",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/georgia/23"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Arkansas",
+            "opponentRank": 10,
+            "location": "Fayetteville, Ark.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/arkansas/boxscore/25878",
+              "recap": "https://floridagators.com/news/2023/10/12/soccer-florida-loses-3-0-at-no-10-arkansas",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/arkansas/2"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Auburn",
+            "opponentRank": null,
+            "location": "Gainesville, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/auburn/boxscore/25879",
+              "recap": "https://floridagators.com/news/2023/10/19/soccer-florida-takes-1-0-win-vs-auburn-ufs-200th-sec-victory"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Vanderbilt",
+            "opponentRank": null,
+            "location": "Nashville, Tenn.",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/vanderbilt/boxscore/25880",
+              "recap": "https://floridagators.com/news/2023/10/22/florida-soccer-and-vanderbilt-tie-3-3",
+              "history": "https://floridagators.com/sports/soccer/opponent-history/vanderbilt/90"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Carolina",
+            "opponentRank": 13,
+            "location": "Gainesville, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://floridagators.com/sports/womens-soccer/stats/2023/south-carolina/boxscore/25881",
+              "recap": "https://floridagators.com/news/2023/10/26/soccer-florida-season-ends-with-0-0-tie-vs-no-13-south-carolina"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://floridagators.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:10:27Z"
+    }
+  },
   "commitments": [
     {
       "id": "addison-dean-2026",
@@ -749,7 +3798,7 @@
       "city": "Cardiff by the Sea",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -768,7 +3817,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -784,7 +3833,7 @@
       "city": "Warren",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -828,7 +3877,7 @@
       "city": "Camarillo",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -847,7 +3896,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -898,7 +3947,7 @@
       "city": "Windermere",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -917,7 +3966,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -933,7 +3982,7 @@
       "city": "Rochester",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -952,7 +4001,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -968,7 +4017,7 @@
       "city": "",
       "highSchool": "",
       "college": "florida",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1797,35 +4846,21 @@
     "2028": 12
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://floridagators.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:32:14Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=29.64629&longitude=-82.347911&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_York",
-        "at": "2026-09-07T05:32:11Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

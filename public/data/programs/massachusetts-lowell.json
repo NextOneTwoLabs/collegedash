@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T15:25:17Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 42.652864,
+    "lon": -71.326809,
+    "timezone": "America/New_York",
+    "elevationM": 45.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094723",
+      "name": "LAWRENCE MUNI AP",
+      "state": "MA",
+      "distanceKm": 18.1,
+      "elevationM": 45.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 34.8,
+        "tLowF": 19.3,
+        "precipIn": 2.86,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 27.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 37.5,
+        "tLowF": 20.6,
+        "precipIn": 2.44,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 0.0,
+        "daysFreeze": 24.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 45.3,
+        "tLowF": 28.1,
+        "precipIn": 3.42,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 21.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 57.7,
+        "tLowF": 37.6,
+        "precipIn": 3.6,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.1,
+        "daysFreeze": 6.8
+      },
+      {
+        "month": "May",
+        "tHighF": 68.5,
+        "tLowF": 47.6,
+        "precipIn": 3.39,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 0.7,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.3,
+        "tLowF": 57.1,
+        "precipIn": 3.99,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 2.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 83.2,
+        "tLowF": 63.2,
+        "precipIn": 3.48,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 6.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.6,
+        "tLowF": 61.7,
+        "precipIn": 3.04,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 73.8,
+        "tLowF": 53.9,
+        "precipIn": 3.75,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 1.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 61.8,
+        "tLowF": 42.7,
+        "precipIn": 4.1,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 2.9
+      },
+      {
+        "month": "Nov",
+        "tHighF": 50.6,
+        "tLowF": 33.9,
+        "precipIn": 3.52,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 14.1
+      },
+      {
+        "month": "Dec",
+        "tHighF": 40.1,
+        "tLowF": 25.2,
+        "precipIn": 3.32,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 24.8
+      }
+    ],
+    "annualPrecipIn": 40.9,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 67.0,
+      "avgLowF": 48.0,
+      "precipIn": 14.4,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 83.2°F), coldest Jan (avg low 19.3°F). 40.9 in of rain per year. Fall season (Aug–Nov): highs around 67.0°F, 14.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094723,USW00014702,USC00194313&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:10Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Mira Novak",
@@ -3148,11 +3297,11 @@
     "2027": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.89,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
@@ -3161,22 +3310,14 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=42.652864&longitude=-71.326809&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T15:27:50Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T15:27:50Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:22:20Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

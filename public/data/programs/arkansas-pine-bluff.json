@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T22:55:43Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 34.244031,
+    "lon": -92.018683,
+    "timezone": "America/Chicago",
+    "elevationM": 63.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093988",
+      "name": "PINE BLUFF GRIDER FLD",
+      "state": "AR",
+      "distanceKm": 10.9,
+      "elevationM": 63.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 51.8,
+        "tLowF": 33.8,
+        "precipIn": 3.82,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 14.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 56.1,
+        "tLowF": 37.0,
+        "precipIn": 4.27,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 9.2
+      },
+      {
+        "month": "Mar",
+        "tHighF": 64.8,
+        "tLowF": 44.3,
+        "precipIn": 5.29,
+        "snowIn": null,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 2.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 73.8,
+        "tLowF": 52.5,
+        "precipIn": 5.35,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 0.1,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "May",
+        "tHighF": 81.6,
+        "tLowF": 61.6,
+        "precipIn": 4.8,
+        "snowIn": null,
+        "wetDays": 7.4,
+        "days90F": 3.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 88.9,
+        "tLowF": 69.3,
+        "precipIn": 3.27,
+        "snowIn": null,
+        "wetDays": 5.3,
+        "days90F": 16.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 91.7,
+        "tLowF": 72.1,
+        "precipIn": 3.69,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 22.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.3,
+        "tLowF": 70.6,
+        "precipIn": 3.38,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 20.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 85.9,
+        "tLowF": 63.5,
+        "precipIn": 3.09,
+        "snowIn": null,
+        "wetDays": 3.7,
+        "days90F": 10.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 75.3,
+        "tLowF": 52.0,
+        "precipIn": 4.58,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 1.2,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Nov",
+        "tHighF": 63.0,
+        "tLowF": 42.1,
+        "precipIn": 3.97,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 4.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 54.0,
+        "tLowF": 36.0,
+        "precipIn": 5.3,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 12.0
+      }
+    ],
+    "annualPrecipIn": 50.8,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 78.9,
+      "avgLowF": 57.0,
+      "precipIn": 15.0,
+      "wetDays": 19.0
+    },
+    "summary": "Hottest month Jul (avg high 91.7°F), coldest Jan (avg low 33.8°F). 50.8 in of rain per year. Fall season (Aug–Nov): highs around 78.9°F, 15.0 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093988,USW00013963,USC00035754&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:59:44Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": null,
@@ -79,7 +228,16 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Fred Locario",
+        "title": "Head Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/coaches/fred-locario/913",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +256,820 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://uapblionsroar.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:35:49Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 14,
+    "players": [
+      {
+        "number": "0",
+        "name": "Zakhariah Jones",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Jonesboro, AR",
+        "highSchool": "Jonesboro HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/zakhariah-jones/5074",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Arie Parker",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Los Angeles, CA",
+        "highSchool": "King Drew Magnet HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/arie-parker/5077",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Ava Sanchez",
+        "pos": "F/D",
+        "posLabel": "F/D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Ogden, UT",
+        "highSchool": "West Field HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/ava-sanchez/5078",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Peighton Hardy",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Manvel, TX",
+        "highSchool": "Manvel HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/peighton-hardy/5071",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Hailey Hopes",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Jonesboro, AR",
+        "highSchool": "Jonesboro HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/hailey-hopes/5072",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Aubrey Hopkins",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Collierville, TN",
+        "highSchool": "St. Mary's Episcopal School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/aubrey-hopkins/5079",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Trinity Moffett",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Pflugerville, TX",
+        "highSchool": "Pflugerville High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/trinity-moffett/5080",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Dallas Rosby",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Los Angeles, CA",
+        "highSchool": "Venice High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/dallas-rosby/5081",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Samina Moss",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bahamas /",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/samina-moss/5076",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "McKinlee Butler",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cedar Hill, TX",
+        "highSchool": "Cedar Hill High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/mckinlee-butler/5082",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Nevaeh McIntosh",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Millbrook, Ontario",
+        "highSchool": "Crestwood Secondary",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/nevaeh-mcintosh/5075",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Reagan Allen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Floresville, TX",
+        "highSchool": "San Antonio Veterans Memorial",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/reagan-allen/5083",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Cali Cooper",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Champaign, IL",
+        "highSchool": "University Laboratory High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/cali-cooper/5084",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Keissy Hopes-Lopez",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Jonesboro, AR",
+        "highSchool": "Jonesboro HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://uapblionsroar.com/sports/womens-soccer/roster/keissy-hopes-lopez/5073",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 7,
+      "FR": 5,
+      "JR": 2
+    },
+    "graduatingByPos": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uapblionsroar.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:35:49Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 20,
+      "players": [
+        {
+          "number": "0",
+          "name": "Zakhariah Jones",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Jonesboro, AR",
+          "highSchool": "Jonesboro HS"
+        },
+        {
+          "number": "00",
+          "name": "Arie Parker",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Los Angeles, CA",
+          "highSchool": "King Drew Magnet HS"
+        },
+        {
+          "number": "1",
+          "name": "Makaila Riedel",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Riverside, California",
+          "highSchool": "Martin Luther King HS"
+        },
+        {
+          "number": "2",
+          "name": "Ava Sanchez",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "Ogden, UT",
+          "highSchool": "West Field HS"
+        },
+        {
+          "number": "4",
+          "name": "Amiya Callicutt",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lovejoy, Texas",
+          "highSchool": "Lovejoy HS"
+        },
+        {
+          "number": "5",
+          "name": "Keissy Hopes-Lopez",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Jonesboro, AR",
+          "highSchool": "Jonesboro HS"
+        },
+        {
+          "number": "5",
+          "name": "Denisse Quintanilla",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Little Elm, Texas",
+          "highSchool": "Little Elm HS"
+        },
+        {
+          "number": "6",
+          "name": "Perria Edmond",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Handford, CA",
+          "highSchool": "Hanford West HS"
+        },
+        {
+          "number": "7",
+          "name": "Hailey Hopes",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Jonesboro, AR",
+          "highSchool": "Jonesboro HS"
+        },
+        {
+          "number": "8",
+          "name": "Elizabeth Adesanya",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Ogun State, Nigeria /",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Tatiana Villegas",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Katy, TX",
+          "highSchool": "Fulshear HS"
+        },
+        {
+          "number": "10",
+          "name": "Ashley McGuire",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Paris, Texas",
+          "highSchool": "Paris HS"
+        },
+        {
+          "number": "11",
+          "name": "Ashlynn Tipler",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Nashville, TN",
+          "highSchool": "Metro Nashville Virtual HS"
+        },
+        {
+          "number": "12",
+          "name": "Samina Moss",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Bahamas /",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Peighton Hardy",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Manvel, TX",
+          "highSchool": "Manvel HS"
+        },
+        {
+          "number": "17",
+          "name": "Ashley Manning",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lafayette, LA",
+          "highSchool": "Southside HS"
+        },
+        {
+          "number": "19",
+          "name": "Nevaeh McIntosh",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Millbrook, Ontario",
+          "highSchool": "Crestwood Secondary"
+        },
+        {
+          "number": "21",
+          "name": "Brooke Gonzalez",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Riverside, California",
+          "highSchool": "Notre Dame HS"
+        },
+        {
+          "number": "22",
+          "name": "Harmoni Davison",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Hamilton Park, TX",
+          "highSchool": "Richardson HS"
+        },
+        {
+          "number": "24",
+          "name": "Olivia Hawley",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Oshkosh, WI",
+          "highSchool": "Oshkosh North HS"
+        }
+      ],
+      "departed": [
+        "amiya callicutt",
+        "ashley manning",
+        "ashley mcguire",
+        "ashlynn tipler",
+        "brooke gonzalez",
+        "denisse quintanilla",
+        "elizabeth adesanya",
+        "harmoni davison",
+        "makaila riedel",
+        "olivia hawley",
+        "perria edmond",
+        "tatiana villegas"
+      ]
+    },
+    "2024": {
+      "count": 14,
+      "players": [
+        {
+          "number": "1",
+          "name": "Makaila Riedel",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Riverside, California",
+          "highSchool": "Martin Luther King HS"
+        },
+        {
+          "number": "2",
+          "name": "Emma Peyton",
+          "pos": "D/F",
+          "classCode": "SR",
+          "hometown": "Madisonville, Kentucky /",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Janai Perry",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Shadow Ridge HS"
+        },
+        {
+          "number": "4",
+          "name": "Amiya Callicutt",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lovejoy, Texas",
+          "highSchool": "Lovejoy HS"
+        },
+        {
+          "number": "5",
+          "name": "Denisse Quintanilla",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Little Elm, Texas",
+          "highSchool": "Little Elm HS"
+        },
+        {
+          "number": "6",
+          "name": "Perria Edmond",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Handford, CA",
+          "highSchool": "Hanford West HS"
+        },
+        {
+          "number": "7",
+          "name": "Janae Porter",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Forney, Texas /",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Ashley McGuire",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Paris, Texas",
+          "highSchool": "Paris HS"
+        },
+        {
+          "number": "11",
+          "name": "Alexia Dugan",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "San Diego, California",
+          "highSchool": "Steele Canyon HS"
+        },
+        {
+          "number": "16",
+          "name": "Iyanah Hicks",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lewisville, Texas",
+          "highSchool": "Lewisville HS"
+        },
+        {
+          "number": "19",
+          "name": "Leanna Saleh",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Arlington, Texas",
+          "highSchool": "Arlington Martin HS"
+        },
+        {
+          "number": "21",
+          "name": "Brooke Gonzalez",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Riverside, California",
+          "highSchool": "Notre Dame HS"
+        },
+        {
+          "number": "23",
+          "name": "Sydney Azuero",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Denver, Colorado",
+          "highSchool": "Grandview HS"
+        },
+        {
+          "number": "24",
+          "name": "Olivia Hawley",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Oshkosh, WI",
+          "highSchool": "Oshkosh North HS"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 19,
+      "players": [
+        {
+          "number": "1",
+          "name": "Makaila Riedel",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Riverside, California",
+          "highSchool": "Martin Luther King HS"
+        },
+        {
+          "number": "2",
+          "name": "Emma Peyton",
+          "pos": "D/F",
+          "classCode": "JR",
+          "hometown": "Madisonville, Kentucky /",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Janai Perry",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Shadow Ridge HS"
+        },
+        {
+          "number": "4",
+          "name": "Amiya Callicutt",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lovejoy, Texas",
+          "highSchool": "Lovejoy HS"
+        },
+        {
+          "number": "5",
+          "name": "Denisse Quintanilla",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Little Elm, Texas",
+          "highSchool": "Little Elm HS"
+        },
+        {
+          "number": "6",
+          "name": "Yiselle Bernal",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Hillcrest HS"
+        },
+        {
+          "number": "7",
+          "name": "Lex Sahagian",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Thousand Oaks, California",
+          "highSchool": "Westlake HS"
+        },
+        {
+          "number": "8",
+          "name": "Abbey Glover",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Rancho Santa Margarita, California",
+          "highSchool": "Santa Margarita Catholic HS"
+        },
+        {
+          "number": "9",
+          "name": "Leanna Saleh",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Arlington, Texas",
+          "highSchool": "Arlington Martin HS"
+        },
+        {
+          "number": "10",
+          "name": "Ashley McGuire",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Paris, Texas",
+          "highSchool": "Paris HS"
+        },
+        {
+          "number": "11",
+          "name": "Alexia Dugan",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "San Diego, California",
+          "highSchool": "Steele Canyon HS"
+        },
+        {
+          "number": "12",
+          "name": "Janae Porter",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Forney, Texas /",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Alexia Muniz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "San Jose, California",
+          "highSchool": "Silver Creek HS"
+        },
+        {
+          "number": "16",
+          "name": "Iyanah Hicks",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lewisville, Texas",
+          "highSchool": "Lewisville HS"
+        },
+        {
+          "number": "20",
+          "name": "Jaya Johnson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Waxahachie, Texas",
+          "highSchool": "Waxahachie HS"
+        },
+        {
+          "number": "21",
+          "name": "Brooke Gonzalez",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Riverside, California",
+          "highSchool": "Notre Dame HS"
+        },
+        {
+          "number": "23",
+          "name": "Sydney Azuero",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Denver, Colorado",
+          "highSchool": "Grandview HS"
+        },
+        {
+          "number": "24",
+          "name": "Alondra Lepe",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "San Bernardino, California",
+          "highSchool": "Cajon HS"
+        },
+        {
+          "number": "29",
+          "name": "Madison Hernandez",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Palo Verde HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://uapblionsroar.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:35:49Z"
+    }
+  },
   "commitments": [],
   "news": {
     "recruiting": [],
@@ -179,47 +1144,27 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-08T00:00:14Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:56Z",
+    "completeness": 0.56,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": false,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "tds: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://uapblionsroar.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T22:58:17Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=34.244031&longitude=-92.018683&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T22:58:16Z"
-      },
-      {
-        "collector": "tds",
-        "error": "tds: parsed 0 commitments from https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/arkansas-pine-bluff/clgid-308/tab-commitments (markup change?)",
-        "at": "2026-09-07T22:58:19Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T22:58:16Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:35:38Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

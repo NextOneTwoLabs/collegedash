@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:52:27Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 35.785111,
+    "lon": -78.674517,
+    "timezone": "America/New_York",
+    "elevationM": 126.8,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00013722",
+      "name": "RALEIGH DURHAM INTL AP",
+      "state": "NC",
+      "distanceKm": 15.3,
+      "elevationM": 126.8
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 51.9,
+        "tLowF": 31.8,
+        "precipIn": 3.43,
+        "snowIn": 2.6,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 18.0
+      },
+      {
+        "month": "Feb",
+        "tHighF": 55.8,
+        "tLowF": 34.2,
+        "precipIn": 2.78,
+        "snowIn": 1.4,
+        "wetDays": 5.9,
+        "days90F": 0.0,
+        "daysFreeze": 13.8
+      },
+      {
+        "month": "Mar",
+        "tHighF": 63.3,
+        "tLowF": 40.3,
+        "precipIn": 4.1,
+        "snowIn": 0.3,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 7.8
+      },
+      {
+        "month": "Apr",
+        "tHighF": 72.7,
+        "tLowF": 48.9,
+        "precipIn": 3.53,
+        "snowIn": 0.0,
+        "wetDays": 5.9,
+        "days90F": 0.3,
+        "daysFreeze": 1.1
+      },
+      {
+        "month": "May",
+        "tHighF": 80.0,
+        "tLowF": 57.7,
+        "precipIn": 3.38,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 2.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 87.4,
+        "tLowF": 66.0,
+        "precipIn": 3.89,
+        "snowIn": 0.0,
+        "wetDays": 7.0,
+        "days90F": 12.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 90.8,
+        "tLowF": 70.2,
+        "precipIn": 5.02,
+        "snowIn": 0.0,
+        "wetDays": 7.5,
+        "days90F": 18.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 88.7,
+        "tLowF": 68.9,
+        "precipIn": 4.71,
+        "snowIn": 0.0,
+        "wetDays": 7.1,
+        "days90F": 13.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 82.5,
+        "tLowF": 62.7,
+        "precipIn": 5.15,
+        "snowIn": 0.0,
+        "wetDays": 5.8,
+        "days90F": 4.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 73.0,
+        "tLowF": 50.3,
+        "precipIn": 3.37,
+        "snowIn": 0.0,
+        "wetDays": 4.9,
+        "days90F": 0.4,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 63.0,
+        "tLowF": 40.0,
+        "precipIn": 3.32,
+        "snowIn": 0.1,
+        "wetDays": 5.0,
+        "days90F": 0.0,
+        "daysFreeze": 7.8
+      },
+      {
+        "month": "Dec",
+        "tHighF": 54.7,
+        "tLowF": 34.4,
+        "precipIn": 3.39,
+        "snowIn": 0.8,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 15.4
+      }
+    ],
+    "annualPrecipIn": 46.1,
+    "annualSnowIn": 5.2,
+    "fallSeason": {
+      "avgHighF": 76.8,
+      "avgLowF": 55.5,
+      "precipIn": 16.6,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 90.8°F), coldest Jan (avg low 31.8°F). 46.1 in of rain per year, 5.2 in of snow. Fall season (Aug–Nov): highs around 76.8°F, 16.6 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00013722,USW00093785,USC00317079&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:54Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Gary Higgins",
@@ -79,8 +228,138 @@
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Gary Higgins",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/coaches/gary-higgins/5264",
+        "social": {}
+      },
+      {
+        "name": "Joanna Fennema",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/coaches/joanna-fennema/5265",
+        "social": {}
+      },
+      {
+        "name": "David Rodriguez",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/coaches/david-rodriguez/5266",
+        "social": {}
+      },
+      {
+        "name": "Juan Basabe",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/coaches/juan-basabe/5267",
+        "social": {}
+      },
+      {
+        "name": "Adrian Gunning",
+        "title": "Assistant Strength & Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/adrian-gunning/1173",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Lizzie Hedrick",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/lizzie-hedrick/1198",
+        "social": {}
+      },
+      {
+        "name": "Katie Graham",
+        "title": "Sport Administrator for WSOC / Assistant Vice Chancellor & Senior Associate AD for Academics",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/katie-graham/1195",
+        "social": {}
+      },
+      {
+        "name": "Caroline Fleming",
+        "title": "Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/caroline-fleming/1196",
+        "social": {}
+      },
+      {
+        "name": "Alex Haley",
+        "title": "Assistant Athletics Communications Director",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/alex-haley/1305",
+        "social": {}
+      },
+      {
+        "name": "Cole Malone",
+        "title": "Director of Creative Services",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/cole-malone/1281",
+        "social": {}
+      },
+      {
+        "name": "Joseph Hickey",
+        "title": "Equipment Manager",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/joseph-hickey/1228",
+        "social": {}
+      },
+      {
+        "name": "Maegan McCrary",
+        "title": "Assistant Director of Creative Video",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/maegan-mccrary/1369",
+        "social": {}
+      },
+      {
+        "name": "Martika Hubbard",
+        "title": "Athletic Mental Health Clinician",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/martika-hubbard/1308",
+        "social": {}
+      },
+      {
+        "name": "Paige Timberlake",
+        "title": "Director for Compliance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/paige-timberlake/1282",
+        "social": {}
+      },
+      {
+        "name": "Kerensa Hofmeyer",
+        "title": "Director of Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/kerensa-hofmeyer/1367",
+        "social": {}
+      },
+      {
+        "name": "Megan Albidrez",
+        "title": "Senior Associate Director for Academics",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/staff/megan-albidrez/1259",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Dail Soccer Field",
       "capacity": 3000
@@ -134,10 +413,25 @@
         "url": "https://en.wikipedia.org/wiki/NC_State_Wolfpack_women%27s_soccer",
         "asOf": "2026-09-07T05:53:00Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gopack.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:12:54Z"
+      }
     }
   },
   "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "7-0-1",
+      "wins": 7,
+      "losses": 0,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 8,
+      "headCoach": null
+    },
     {
       "year": 2025,
       "label": "2025",
@@ -828,9 +1122,2577 @@
       "ncaaResult": "NCAA No Conference"
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "0",
+        "name": "Ellie Breech",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Mechanicsburg, Pa.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Psychology",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/ellie-breech/16581",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Riley Pickels",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Cornelius, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Life Sciences First Year",
+        "club": "Charlotte Independence SC",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/riley-pickels/16896",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "2",
+        "name": "Yuna Aoki",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Shizuoka, Japan",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/yuna-aoki/16561",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Alex Mohr",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Poway, Calif.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Communications",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/alex-mohr/16570",
+        "social": {
+          "instagram": "https://www.instagram.com/alex.mohr"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Mana Nakata",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Osaka, Japan",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Sociology",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/mana-nakata/16571",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Erica Roberts",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "St. Petersburg, Fla.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/erica-roberts/16575",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Rosalie Olou",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Blainville, Canada",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/rosalie-olou/16572",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Madison Casteen",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "High Point, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Life Sciences First Year",
+        "club": "NC Courage",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/madison-casteen/16582",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "10",
+        "name": "Antonella Mazziotto",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fray Bentos, Uruguay",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/antonella-mazziotto/16568",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Carly Montgomery",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Charlotte, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/carly-montgomery/16893",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Taylor Kleinschmidt",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Charlotte, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/taylor-kleinschmidt/16892",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "13",
+        "name": "Jade Bordeleau",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Terrabonne, Quebec, Canada",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Science",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/jade-bordeleau/16562",
+        "social": {
+          "instagram": "https://www.instagram.com/jade.bordeleau"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Madie Miller",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Falls Church, Va.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Design Studies",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/madie-miller/16569",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Daisy Duda",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mountain Lakes, N.J.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "Players Development Academy (PDA)",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/daisy-duda/16563",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Emily Wong",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Coquitlam, British Columbia, Canada",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Sciences",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/emily-wong/16580",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Amor Leigh Martin Esteban",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Motril, Spain",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Spanish Education",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/amor-leigh-martin-esteban/16894",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Chloe Stanley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Nakina, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Life Sciences First Year",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/chloe-stanley/16578",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Mary Frances Symmes",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Gulfport, Miss.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Biological Science",
+        "club": "Alabama FC",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/mary-frances-symmes/16579",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "22",
+        "name": "Mackenzie Harris",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "St. Louis, Mo.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exploratory Studies",
+        "club": "St. Louis Scott Gallagher",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/mackenzie-harris/16583",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Lilly Soltz",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Raleigh, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Communications",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/lilly-soltz/16577",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Kennedy Eva-Buckner",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Washington, D.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "Virginia Development Academy",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/kennedy-evabuckner/16891",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "25",
+        "name": "Avery Richards",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Charlotte, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Chemical Engineering",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/avery-richards/16574",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Collier Owen",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Kennesaw, Ga.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/collier-owen/16903",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Mackenzie Smith",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Leicester, England",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Communications",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/mackenzie-smith/16576",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Sophia Hernandez",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Greensboro, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/sophia-hernandez/16565",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Fien Leijdekker",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Oegstgeest, Netherlands",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Sport Management",
+        "club": "",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/fien-leijdekker/16567",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Katie Richter",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Apex, N.C.",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Exploratory Studies",
+        "club": "NC Courage",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/katie-richter/16897",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "31",
+        "name": "Nina Dukette",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dallas, Texas",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "Business Management",
+        "club": "FC Dallas",
+        "bioUrl": "https://gopack.com/sports/womens-soccer/roster/nina-dukette/16584",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "GR": 2,
+      "FR": 9,
+      "SR": 8,
+      "JR": 6,
+      "SO": 3
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "D": 4,
+      "F": 3,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gopack.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:12:54Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 25,
+      "players": [
+        {
+          "number": "1",
+          "name": "Olivia Pratapas",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Clemmons, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Yuna Aoki",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Shizuoka, Japan",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Maia Lazaro",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "London, England",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alex Mohr",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Poway, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Mana Nakata",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Osaka, Japan",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Erica Roberts",
+          "pos": "F",
+          "classCode": "R-JR",
+          "hometown": "St. Petersburg, Fla.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Rosalie Olou",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Blainville, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Tierra Garniss",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Toronto, Ontario, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Antonella Mazziotto",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fray Bentos, Uruguay",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Eliza Rich",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Huntersville, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Jade Bordeleau",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Terrabonne, Quebec, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Madie Miller",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Falls Church, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Daisy Duda",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Mountain Lakes, N.J.",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Emily Wong",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Coquitlam, British Columbia, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Sina Tölzel",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Bamburg, Germany",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Chloe Stanley",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Nakina, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Brooklyn Holt",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mary Frances Symmes",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Gulfport, Miss.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Lilly Soltz",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Sophia Varga",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Flagler Beach, Fla.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Avery Richards",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Emily Earles",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mackenzie Smith",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Leicester, England",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Sophia Hernandez",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Greensboro, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Fien Leijdekker",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Oegstgeest, Netherlands",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "brooklyn holt",
+        "eliza rich",
+        "emily earles",
+        "maia lazaro",
+        "olivia pratapas",
+        "sina tolzel",
+        "sophia varga",
+        "tierra garniss"
+      ]
+    },
+    "2024": {
+      "count": 26,
+      "players": [
+        {
+          "number": "1",
+          "name": "Olivia Pratapas",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Clemmons, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Yuna Aoki",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Shizuoka, Japan",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Brianna Weber",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "San Dimas, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Janet Okeke",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Laval, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alex Mohr",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Poway, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Mana Nakata",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Osaka, Japan",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Abi Hugh",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Huntington, W.Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Rosalie Olou",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Blainville, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Hannah Jibril",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Glyndon, Md.",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Annika Wohner",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Poing, Germany",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Fernanda Soto",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Romeoville, Ill.",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Jaiden Thomas",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Ponte Vedra Beach, Fla.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Jade Bordeleau",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Terrabonne, Quebec, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Madie Miller",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Falls Church, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Alivia Kelly",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Pembroke, Mass.",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Sina Tölzel",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Bamburg, Germany",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Antonella Mazziotto",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fray Bentos, Uruguay",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Brooklyn Holt",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mary Frances Symmes",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gulfport, Miss.",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Taylor Chism",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Paige Tolentino",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Pinehurst, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Kennedy Dunnings",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Virginia Beach, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Savannah Hutchins",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Moorpark, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Emily Earles",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Eliza Rich",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Huntersville, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Sophia Hernandez",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Greensboro, N.C.",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Aisley Snell",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Brunswick, Maine",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Olivia Pratapas",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Clemmons, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Mackenzie Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Leicester, England",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Brianna Weber",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "San Dimas, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Leyah Hall-Robinson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Bowie, Md.",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Alex Mohr",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Poway, Calif.",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Emika Kawagishi",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Osaka, Japan",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Rosalie Olou",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Blainville, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Hannah Jibril",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Glyndon, Md.",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Annika Wohner",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Poing, Germany",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Fernanda Soto",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Romeoville, Ill.",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Jaiden Thomas",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ponte Vedra Beach, Fla.",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Jade Bordeleau",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Terrabonne, Quebec, Canada",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Mia Vaughan",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Virginia Beach, Va.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Jameese Joseph",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Beltsville, Md.",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Brianna Holt",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Madison Reid",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cary, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Maria Echezarreta",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Aviles, Spain",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Brooklyn Holt",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Mary Frances Symmes",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gulfport, Miss.",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Taylor Chism",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Wilmington, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Alexis Strickland",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Sarah Arnold",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Emily Earles",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Eliza Rich",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Huntersville, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Sophia Hernandez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Greensboro, N.C.",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Cienna Kim",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Ellicott City, Md.",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 7,
+      "losses": 0,
+      "ties": 1,
+      "text": "7-0-1",
+      "played": 8,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-05",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "East Carolina",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gopack.com/sports/wsoc/opponent-history/east-carolina-exh/15"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Liberty",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://gopack.com/sports/wsoc/opponent-history/liberty-exh/166"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "James Madison",
+        "opponentRank": null,
+        "location": "Harrisonburg, Va.",
+        "result": "W",
+        "score": "3-1",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/james-madison/boxscore/24597",
+          "recap": "https://gopack.com/news/2026/8/12/womens-soccer-wolfpack-tops-jmu-for-first-season-opening-win-since-2022"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "VCU",
+        "opponentRank": null,
+        "location": "Richmond, Va.",
+        "result": "W",
+        "score": "4-0",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/vcu/boxscore/24598",
+          "recap": "https://gopack.com/news/2026/8/16/womens-soccer-pack-downs-vcu-to-start-season-2-0-for-first-time-since-2022"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Charlotte",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": "W",
+        "score": "4-1",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/charlotte/boxscore/24599",
+          "recap": "https://gopack.com/news/2026/8/20/womens-soccer-womens-soccer-moves-to-3-0-with-win-in-home-opener"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Elon",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/elon/boxscore/24600",
+          "recap": "https://gopack.com/news/2026/8/23/womens-soccer-nc-state-opens-season-4-0-for-first-time-since-2013"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "High Point",
+        "opponentRank": null,
+        "location": "High Point, N.C.",
+        "result": "W",
+        "score": "3-0",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/high-point/boxscore/24601",
+          "recap": "https://gopack.com/news/2026/8/27/womens-soccer-pack-shuts-out-high-point-to-become-5-0-for-first-time-since-2008"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Davidson",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": "W",
+        "score": "6-1",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/davidson/boxscore/24602",
+          "recap": "https://gopack.com/news/2026/8/30/womens-soccer-bordeleau-records-hat-trick-as-womens-soccer-dominates-davidson"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Western Carolina",
+        "opponentRank": null,
+        "location": "Cullowhee, N.C.",
+        "result": "W",
+        "score": "2-0",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/western-carolina/boxscore/24603",
+          "recap": "https://gopack.com/news/2026/9/3/womens-soccer-pack-uses-late-goals-to-top-western-carolina"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Campbell",
+        "opponentRank": null,
+        "location": "Buies Creek, N.C.",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://gopack.com/sports/womens-soccer/stats/2026/campbell/boxscore/24604",
+          "recap": "https://gopack.com/news/2026/9/6/womens-soccer-pack-finishes-nonconference-slate-with-a-draw-at-campbell"
+        }
+      },
+      {
+        "date": "2026-09-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Florida State",
+        "opponentRank": null,
+        "location": "Tallahassee, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664491&vislive=ncst",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/florida-state/23"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "SMU",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665301",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/smu/273"
+        }
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Miami",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665304",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/miami/44"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Virginia Tech",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665305",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/virginia-tech/19"
+        }
+      },
+      {
+        "date": "2026-10-04",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Wake Forest",
+        "opponentRank": null,
+        "location": "Winston-Salem, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666757&vislive=ncst",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/wake-forest/45"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Pittsburgh",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665306",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/pittsburgh/1"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Syracuse",
+        "opponentRank": null,
+        "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665307",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/syracuse/243"
+        }
+      },
+      {
+        "date": "2026-10-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Duke",
+        "opponentRank": null,
+        "location": "Durham, N.C.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664311&vislive=ncst",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/duke/13"
+        }
+      },
+      {
+        "date": "2026-10-29",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Stanford",
+        "opponentRank": null,
+        "location": "Stanford, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666081&vislive=ncst",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/stanford/123"
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "California",
+        "opponentRank": null,
+        "location": "Berkeley, Calif.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664001&vislive=ncst",
+          "history": "https://gopack.com/sports/wsoc/opponent-history/california/216"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "5-9-4",
+        "games": [
+          {
+            "date": "2025-08-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "Red vs. White Scrimmage",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gopack.com/sports/wsoc/opponent-history/red-vs-white-scrimmage/260"
+            }
+          },
+          {
+            "date": "2025-08-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Liberty",
+            "opponentRank": null,
+            "location": "Lynchburg, VA",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gopack.com/sports/wsoc/opponent-history/liberty-exh/166"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "James Madison",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/james-madison/boxscore/24022",
+              "recap": "https://gopack.com/news/2025/8/14/womens-soccer-wolfpack-drops-season-opener-to-james-madison"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Greenville, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/east-carolina/boxscore/24023",
+              "recap": "https://gopack.com/news/2025/8/17/womens-soccer-mazziottos-header-helps-wolfpack-come-back-to-draw-ecu"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Michigan State",
+            "opponentRank": 20,
+            "location": "East Lansing, MI",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/michigan-state/boxscore/24024",
+              "recap": "https://gopack.com/news/2025/8/21/womens-soccer-pack-falls-to-no-20-michigan-state"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Davidson",
+            "opponentRank": null,
+            "location": "Davidson, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/davidson/boxscore/24025",
+              "recap": "https://gopack.com/news/2025/8/24/womens-soccer-edged-at-davidson"
+            }
+          },
+          {
+            "date": "2025-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Western Carolina",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "2-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/western-carolina/boxscore/24026",
+              "recap": "https://gopack.com/news/2025/8/27/womens-soccer-bordeleaus-brace-not-enough-as-catamounts-top-pack"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Salt Lake City, UT",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/utah/boxscore/24027",
+              "recap": "https://gopack.com/news/2025/8/31/womens-soccer-wolfpack-defeated-on-the-road-at-utah"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Elon",
+            "opponentRank": null,
+            "location": "Elon, NC",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/elon/boxscore/24028",
+              "recap": "https://gopack.com/news/2025/9/4/womens-soccer-pack-plays-to-scoreless-draw-at-elon"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/campbell/boxscore/24029",
+              "recap": "https://gopack.com/news/2025/9/7/womens-soccer-pack-offense-erupts-as-higgins-earns-first-win"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Notre Dame",
+            "opponentRank": 6,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/notre-dame/boxscore/24031",
+              "recap": "https://gopack.com/news/2025/9/11/womens-soccer-late-goal-the-difference-as-wolfpack-falls-to-no-6-notre-dame"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Dallas, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/smu/boxscore/24032",
+              "recap": "https://gopack.com/news/2025/9/18/womens-soccer-wolfpack-secures-first-acc-win-of-season-at-smu"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida State",
+            "opponentRank": 7,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/florida-state/boxscore/24033",
+              "recap": "https://gopack.com/news/2025/9/21/womens-soccer-nc-state-earns-top-10-draw-against-7-florida-state"
+            }
+          },
+          {
+            "date": "2025-09-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Virginia Tech",
+            "opponentRank": null,
+            "location": "Blacksburg, VA",
+            "result": "T",
+            "score": "4-4",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/virginia-tech/boxscore/24034",
+              "recap": "https://gopack.com/news/2025/9/27/womens-soccer-pack-and-hokies-split-points-in-offensive-battle-in-blacksburg"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Wake Forest",
+            "opponentRank": 12,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/wake-forest/boxscore/24035",
+              "recap": "https://gopack.com/news/2025/10/2/womens-soccer-bordeleau-leads-wolfpack-to-first-ranked-win-since-2021"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Chestnut Hill, MA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/boston-college/boxscore/24036",
+              "recap": "https://gopack.com/news/2025/10/9/womens-soccer-pack-collects-clean-sheet-victory-at-boston-college"
+            }
+          },
+          {
+            "date": "2025-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Pittsburgh",
+            "opponentRank": null,
+            "location": "Pittsburgh, PA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/pittsburgh/boxscore/24037",
+              "recap": "https://gopack.com/news/2025/10/17/womens-soccer-womens-soccer-records-third-straight-acc-victory-by-shutting-out-pitt"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Louisville",
+            "opponentRank": 20,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/louisville/boxscore/24038",
+              "recap": "https://gopack.com/news/2025/10/23/womens-soccers-acc-unbeaten-streak-ends-with-loss-to-20-louisville"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Duke",
+            "opponentRank": 7,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/duke/boxscore/24039",
+              "recap": "https://gopack.com/news/2025/10/26/womens-soccer-pack-drops-final-home-game-to-no-7-duke"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Carolina",
+            "opponentRank": null,
+            "location": "Chapel Hill, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2025/north-carolina/boxscore/24040",
+              "recap": "https://gopack.com/news/2025/10/30/womens-soccer-womens-soccer-concludes-2025-season-with-loss-at-unc"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "4-10-4",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "App State",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/app-state/boxscore/23432",
+              "recap": "https://gopack.com/news/2024/8/15/womens-soccer-wolfpack-opens-2024-season-with-0-0-draw-against-app-state",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/app-state/37"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/east-carolina/boxscore/23433",
+              "recap": "https://gopack.com/news/2024/8/18/womens-soccer-wolfpack-falls-1-0-to-ecu-on-senior-night",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/east-carolina/15"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Campbell",
+            "opponentRank": null,
+            "location": "Buies Creek, NC",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/campbell/boxscore/23434",
+              "recap": "https://gopack.com/news/2024/8/22/womens-soccer-packs-comeback-falls-short-at-campbell",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/campbell/34"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "VCU",
+            "opponentRank": null,
+            "location": "Richmond, VA",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/vcu/boxscore/23435",
+              "recap": "https://gopack.com/news/2024/8/25/womens-soccer-wolfpack-dominates-vcu-in-5-0-road-victory",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/vcu/275"
+            }
+          },
+          {
+            "date": "2024-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/charlotte/boxscore/23436",
+              "recap": "https://gopack.com/news/2024/8/28/womens-soccer-wohners-brace-lifts-25-wolfpack-to-3-1-win-over-charlotte",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/charlotte/27"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Colorado",
+            "opponentRank": 22,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gopack.com/sports/wsoc/opponent-history/colorado/1407"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Rutgers",
+            "opponentRank": null,
+            "location": "Piscataway, NJ",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/rutgers/boxscore/23438",
+              "recap": "https://gopack.com/news/2024/9/8/womens-soccer-wolfpack-drops-road-match-at-rutgers",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/rutgers/272"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "William & Mary",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/william-mary/boxscore/23439",
+              "recap": "https://gopack.com/news/2024/9/12/womens-soccer-wolfpacks-falls-1-0-to-william-mary",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/william-mary/16"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "George Washington",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/george-washington/boxscore/23600",
+              "recap": "https://gopack.com/news/2024/9/15/womens-soccer-bordeleaus-hat-trick-powers-pack-to-4-0-win-over-george-washington",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/george-washington/102"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "California",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/california/boxscore/23440",
+              "recap": "https://gopack.com/news/2024/9/19/womens-soccer-wolfpack-drops-acc-opener-to-cal",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/california/216"
+            }
+          },
+          {
+            "date": "2024-09-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Stanford",
+            "opponentRank": 1,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/stanford/boxscore/23441",
+              "recap": "https://gopack.com/news/2024/9/22/womens-soccer-nc-state-falls-to-no-1-stanford"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Notre Dame",
+            "opponentRank": null,
+            "location": "South Bend, Ind.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "recap": "https://gopack.com/news/2024/9/26/womens-soccer-nc-state-battles-to-1-1-draw-against-no-13-notre-dame",
+              "box score": "https://gopack.com/documents/2024/9/30/303537.XML",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/notre-dame/30"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Louisville",
+            "opponentRank": null,
+            "location": "Louisville, KY",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/louisville/boxscore/23443",
+              "recap": "https://gopack.com/news/2024/9/29/womens-soccer-nc-state-falls-1-0-to-louisville",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/louisville/133"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Boston College",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/boston-college/boxscore/23444",
+              "recap": "https://gopack.com/news/2024/10/4/womens-soccer-nc-state-falls-to-boston-college",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/boston-college/51"
+            }
+          },
+          {
+            "date": "2024-10-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Virginia",
+            "opponentRank": null,
+            "location": "Charlottesville, VA",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/virginia/boxscore/23445",
+              "recap": "https://gopack.com/news/2024/10/10/womens-soccer-nc-state-drops-to-no-25-virginia",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/virginia/12"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Syracuse",
+            "opponentRank": null,
+            "location": "Syracuse, NY",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "recap": "https://gopack.com/news/2024/10/18/womens-soccer-syracuse-and-nc-state-battle-to-a-draw-in-thrilling-match",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/syracuse/243"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Clemson",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/clemson/boxscore/23447",
+              "recap": "https://gopack.com/news/2024/10/20/womens-soccer-womens-soccer-propels-past-clemson",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/clemson/2"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Virginia Tech",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, NC",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/virginia-tech/boxscore/23448",
+              "recap": "https://gopack.com/news/2024/10/24/womens-soccer-nc-state-battled-to-a-draw-with-no-19-virginia-tech"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": null,
+            "location": "Winston-Salem, NC",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2024/wake-forest/boxscore/23449",
+              "recap": "https://gopack.com/news/2024/10/31/nc-state-womens-soccer-falls-to-no-3-wake-forest-in-regular-season-finale",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/wake-forest/45"
+            }
+          },
+          {
+            "date": "2024-11-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "ACC Tournament",
+            "opponentRank": null,
+            "location": "Cary, NC",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://gopack.com/sports/wsoc/opponent-history/acc-tournament/320"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "3-9-6",
+        "games": [
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Utah",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/utah/boxscore/22829",
+              "recap": "https://gopack.com/news/2023/8/17/womens-soccer-wolfpack-records-1-1-draw-against-utah-in-season-opener",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/utah/284"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Transamerica Field, Charlotte, N.C.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/charlotte/boxscore/22830",
+              "recap": "https://gopack.com/news/2023/8/20/womens-soccer-nc-state-completes-second-half-comeback-in-2-1-win-at-charlotte",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/charlotte/27"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Rutgers",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/rutgers/boxscore/22831",
+              "recap": "https://gopack.com/news/2023/8/24/womens-soccer-wohners-late-goal-helps-pack-remain-undefeated-in-1-1-tie-against-rutgers",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/rutgers/272"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colorado",
+            "opponentRank": null,
+            "location": "Prentup Field, Boulder, Colo.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/colorado/boxscore/22832",
+              "recap": "https://gopack.com/news/2023/8/31/womens-soccer-late-goal-results-in-wolfpacks-first-loss-of-the-season-at-colorado",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/colorado/1407"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Denver",
+            "opponentRank": null,
+            "location": "University of Denver Soccer Stadium, Denver, Colo.",
+            "result": "L",
+            "score": "2-4",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/denver/boxscore/22833",
+              "recap": "https://gopack.com/news/2023/9/3/womens-soccer-wolfpacks-second-half-comeback-falls-short-at-denver",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/denver/270"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Michigan State",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/michigan-state/boxscore/22834",
+              "recap": "https://gopack.com/news/2023/9/7/womens-soccer-packwsoccer-sets-dail-soccer-stadium-attendance-record-in-setback-to-michigan-state",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/michigan-state/94"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Jordan Field, Cambridge, Mass.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/harvard/boxscore/22835",
+              "recap": "https://gopack.com/news/2023/9/10/womens-soccer-wolfpack-drops-road-match-at-harvard",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/harvard/240"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "High Point",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/high-point/boxscore/22836",
+              "recap": "https://gopack.com/news/2023/9/14/womens-soccer-wolfpack-earns-2-2-draw-against-high-point-on-senior-night",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/high-point/28"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Pittsburgh",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/pittsburgh/boxscore/22837",
+              "recap": "https://gopack.com/news/2023/9/17/womens-soccer-wolfpack-drops-acc-opener-against-pitt",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/pittsburgh/1"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Wake Forest",
+            "opponentRank": null,
+            "location": "Spry Stadium, Winston-Salem, N.C.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/wake-forest/boxscore/22838",
+              "recap": "https://gopack.com/news/2023/9/21/womens-soccer-wolfpack-earns-road-draw-at-wake-forest",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/wake-forest/45"
+            }
+          },
+          {
+            "date": "2023-09-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Duke",
+            "opponentRank": 16,
+            "location": "Koskinen Stadium, Durham, N.C.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/duke/boxscore/22839",
+              "recap": "https://gopack.com/news/2023/9/24/womens-soccer-pratapas-shutout-leads-wolfpack-to-road-draw-at-no-16-duke",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/duke/13"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Carolina",
+            "opponentRank": 1,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/north-carolina/boxscore/22840",
+              "recap": "https://gopack.com/news/2023/9/30/nc-state-womens-soccer-sets-dail-soccer-stadium-attendance-record-in-loss-to-no-1-north-carolina",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/north-carolina/14"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Virginia Tech",
+            "opponentRank": null,
+            "location": "Thompson Field, Blacksburg, Va.",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/virginia-tech/boxscore/22841",
+              "recap": "https://gopack.com/news/2023/10/5/womens-soccer-wolfpack-falls-in-acc-road-match-at-virginia-tech",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/virginia-tech/19"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Virginia",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/virginia/boxscore/22842",
+              "recap": "https://gopack.com/news/2023/10/8/womens-soccer-wolfpack-notches-2-1-victory-over-virginia",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/virginia/12"
+            }
+          },
+          {
+            "date": "2023-10-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Miami",
+            "opponentRank": null,
+            "location": "Cobb Stadium, Coral Gables, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/miami/boxscore/22843",
+              "recap": "https://gopack.com/news/2023/10/14/womens-soccer-pack-earns-0-0-draw-at-miami",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/miami/44"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Syracuse",
+            "opponentRank": null,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/syracuse/boxscore/22844",
+              "recap": "https://gopack.com/news/2023/10/19/womens-soccer-wolfpack-blanks-syracuse-2-0-on-thursday-night",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/syracuse/243"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Notre Dame",
+            "opponentRank": 12,
+            "location": "Dail Soccer Field/Track Complex, Raleigh, N.C.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/notre-dame/boxscore/22845",
+              "recap": "https://gopack.com/news/2023/10/22/womens-soccer-wolfpack-drops-home-finale-1-0-to-no-12-notre-dame",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/notre-dame/30"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida State",
+            "opponentRank": 1,
+            "location": "Seminole Soccer Complex, Tallahassee, Fla.",
+            "result": "L",
+            "score": "0-5",
+            "links": {
+              "box score": "https://gopack.com/sports/womens-soccer/stats/2023/florida-state/boxscore/22846",
+              "recap": "https://gopack.com/news/2023/10/26/womens-soccer-wolfpack-falls-at-no-1-florida-state",
+              "history": "https://gopack.com/sports/wsoc/opponent-history/florida-state/23"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gopack.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:12:54Z"
+    }
+  },
   "commitments": [
     {
       "id": "kennedy-eva-buckner-2026",
@@ -843,7 +3705,7 @@
       "city": "Chevy Chase",
       "highSchool": "Walt Whitman",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -922,7 +3784,7 @@
       "city": "St. Charles",
       "highSchool": "Whitfield",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -966,7 +3828,7 @@
       "city": "High Point",
       "highSchool": "Crossroads Flex",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1010,7 +3872,7 @@
       "city": "Keller",
       "highSchool": "Timber Creek",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1054,7 +3916,7 @@
       "city": "",
       "highSchool": "",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1073,7 +3935,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1089,7 +3951,7 @@
       "city": "",
       "highSchool": "",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1108,7 +3970,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -1379,7 +4241,7 @@
       "city": "",
       "highSchool": "",
       "college": "nc-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -1614,35 +4476,21 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gopack.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:53:02Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=35.785111&longitude=-78.674517&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T05:52:59Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

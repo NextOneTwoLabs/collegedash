@@ -69,17 +69,199 @@
       "asOf": "2026-09-07T20:05:37Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.820714,
+    "lon": -73.593678,
+    "timezone": "America/New_York",
+    "elevationM": 24.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00054787",
+      "name": "FARMINGDALE AP",
+      "state": "NY",
+      "distanceKm": 17.7,
+      "elevationM": 24.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 38.9,
+        "tLowF": 25.1,
+        "precipIn": 2.69,
+        "snowIn": null,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 23.7
+      },
+      {
+        "month": "Feb",
+        "tHighF": 41.3,
+        "tLowF": 26.4,
+        "precipIn": 2.03,
+        "snowIn": null,
+        "wetDays": 4.7,
+        "days90F": 0.0,
+        "daysFreeze": 21.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 48.1,
+        "tLowF": 32.7,
+        "precipIn": 3.46,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 14.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 58.4,
+        "tLowF": 41.9,
+        "precipIn": 3.61,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 1.9
+      },
+      {
+        "month": "May",
+        "tHighF": 68.1,
+        "tLowF": 51.4,
+        "precipIn": 3.18,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 77.2,
+        "tLowF": 61.1,
+        "precipIn": 3.45,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 1.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 82.8,
+        "tLowF": 67.8,
+        "precipIn": 3.05,
+        "snowIn": null,
+        "wetDays": 5.4,
+        "days90F": 4.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 81.5,
+        "tLowF": 66.7,
+        "precipIn": 3.25,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 2.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 74.8,
+        "tLowF": 59.6,
+        "precipIn": 3.66,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 63.9,
+        "tLowF": 48.3,
+        "precipIn": 3.37,
+        "snowIn": null,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 0.3
+      },
+      {
+        "month": "Nov",
+        "tHighF": 53.4,
+        "tLowF": 38.4,
+        "precipIn": 2.93,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 6.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.2,
+        "tLowF": 30.8,
+        "precipIn": 3.6,
+        "snowIn": null,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 18.9
+      }
+    ],
+    "annualPrecipIn": 38.3,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 68.4,
+      "avgLowF": 53.2,
+      "precipIn": 13.2,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 82.8°F), coldest Jan (avg low 25.1°F). 38.3 in of rain per year. Fall season (Aug–Nov): highs around 68.4°F, 13.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00054787,USW00014732,USC00308577&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:58:25Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Jim O'Brien",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/coaches/jim-o-brien/1088",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Jim O'Brien",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/coaches/jim-o-brien/1088",
+        "social": {}
+      },
+      {
+        "name": "Danny Leon Jr.",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/coaches/danny-leon-jr-/1090",
+        "social": {}
+      },
+      {
+        "name": "Grace Cagnina",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/coaches/grace-cagnina/1091",
+        "social": {}
+      },
+      {
+        "name": "Dennis Horton",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/coaches/dennis-horton/1089",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +280,1291 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://www.liuathletics.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:30:29Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "1",
+        "name": "Skylinne Avalos",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Davis, Calif.",
+        "highSchool": "Davis Senior",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/skylinne-avalos/7206",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Emma Panagiotakopoulos",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Montreal, Canada",
+        "highSchool": "College Beaubois",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/emma-panagiotakopoulos/7227",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Izzy Sweet",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bloomington, Ind.",
+        "highSchool": "Bloomington H.S. South",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Pride",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/izzy-sweet/7231",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "4",
+        "name": "Cloe Woodley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Fairfield, Conn.",
+        "highSchool": "St. Joseph",
+        "previousSchool": "",
+        "major": "",
+        "club": "N/A",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/cloe-woodley/7243",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "5",
+        "name": "Kendall Cox",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Oakland, N.J.",
+        "highSchool": "Depaul Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cedar Stars Academy - Bergen",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/kendall-cox/7214",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "6",
+        "name": "Ela Kisin",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Avon, Ohio",
+        "highSchool": "Avon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/ela-kisin/7223",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Brooklyn Menard",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Gatineau, Quebec, Canada",
+        "highSchool": "Philemon Wright",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/brooklyn-menard/7225",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Flavie Boulanger",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Quebec, Canada",
+        "highSchool": "Collège Francais",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/flavie-boulanger/7211",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Isabella Runa",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Union, N.J.",
+        "highSchool": "Union H.S.",
+        "previousSchool": "",
+        "major": "",
+        "club": "Cedar Stars Academy - Bergen",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/isabella-runa/7229",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "10",
+        "name": "Nalani Flores",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bowie, Md.",
+        "highSchool": "Our Lady of Good Counsel",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/nalani-flores/7218",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Monica Viveros",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Flushing, N.Y.",
+        "highSchool": "Science Skills Center",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/monica-viveros/7236",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Stephanie Schubert",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Smithtown, N.Y.",
+        "highSchool": "Smithtown West",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/stephanie-schubert/7230",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Hailey Hughes",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Blaine, Minn.",
+        "highSchool": "Blaine HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/hailey-hughes/7221",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Kaylie Govoni",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Billerica, Mass.",
+        "highSchool": "Billerica Memorial",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/kaylie-govoni/7219",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Casey Beauregard",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Dayville, Conn.",
+        "highSchool": "Killingly",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/casey-beauregard/7208",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Whitney Walker",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Encinitas, Calif.",
+        "highSchool": "La Costa Canyon",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/whitney-walker/7237",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Kaleigh West",
+        "pos": "D/F",
+        "posLabel": "D/F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Niskayuna, N.Y.",
+        "highSchool": "Niskayuna HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/kaleigh-west/7240",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Rachel Nasshorn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "East Meadow, N.Y.",
+        "highSchool": "East Meadow HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/rachel-nasshorn/7226",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Luciana Bocelli",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "St. James, N.Y.",
+        "highSchool": "Smithtown East",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/luciana-bocelli/7209",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Gigi Rabielli",
+        "pos": "M/D",
+        "posLabel": "M/D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Johnston, R.I.",
+        "highSchool": "LaSalle Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/gigi-rabielli/7228",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Isabel Kyprislidis",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Woodside, N.Y.",
+        "highSchool": "St. John's Preparatory",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/isabel-kyprislidis/7224",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Lia Cavorti",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dix Hills, N.Y.",
+        "highSchool": "Half Hollow Hills H.S. West",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/lia-cavorti/7212",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Macie Kennedy",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bucks County, Pa.",
+        "highSchool": "Archbishop Wood",
+        "previousSchool": "",
+        "major": "",
+        "club": "Philadelphia Ukrainian Nationals",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/macie-kennedy/7222",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Magee Williamson",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-1",
+        "heightIn": 61,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Doylestown, Pa.",
+        "highSchool": "Central Bucks East",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/magee-williamson/7241",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Julia Ward",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Medford, N.Y.",
+        "highSchool": "Patchogue Medford",
+        "previousSchool": "",
+        "major": "",
+        "club": "Long Island Slammers",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/julia-ward/7239",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "30",
+        "name": "Nora Truncale",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Elwood, N.Y.",
+        "highSchool": "John Glenn",
+        "previousSchool": "",
+        "major": "",
+        "club": "Northport Cow Harbor",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/nora-truncale/7235",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "99",
+        "name": "Alexandra DaEira-Loccisano",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "6-0",
+        "heightIn": 72,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Manorville, N.Y.",
+        "highSchool": "Eastport-South Manor",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://www.liuathletics.com/sports/womens-soccer/roster/alexandra-daeira-loccisano/7217",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 4,
+        "R-FR": 1,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 1,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 1,
+        "GR": 0
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "R-SO": 2,
+      "SO": 7,
+      "FR": 11,
+      "R-SR": 1,
+      "JR": 1,
+      "SR": 3,
+      "R-JR": 1,
+      "R-FR": 1
+    },
+    "graduatingByPos": {
+      "M": 2,
+      "F": 1,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.liuathletics.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:30:29Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 23,
+      "players": [
+        {
+          "number": "0",
+          "name": "Skylinne Avalos",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Davis, Calif.",
+          "highSchool": "Davis Senior"
+        },
+        {
+          "number": "1",
+          "name": "Keely Thomas",
+          "pos": "GK",
+          "classCode": "R-JR",
+          "hometown": "Richmond, Va.",
+          "highSchool": "Maggie L. Walker Governor's School"
+        },
+        {
+          "number": "2",
+          "name": "Anija Irvine",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Auckland, New Zealand",
+          "highSchool": "Baradene College"
+        },
+        {
+          "number": "3",
+          "name": "Bo Price",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Range"
+        },
+        {
+          "number": "4",
+          "name": "Chloe Price",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Liverpool, England",
+          "highSchool": "Range"
+        },
+        {
+          "number": "6",
+          "name": "Ela Kisin",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Avon, Ohio",
+          "highSchool": "Avon HS"
+        },
+        {
+          "number": "7",
+          "name": "Brooklyn Menard",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Gatineau, Quebec, Canada",
+          "highSchool": "Philemon Wright"
+        },
+        {
+          "number": "8",
+          "name": "Betty Hall",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Stockport, England",
+          "highSchool": "Hazel Grove"
+        },
+        {
+          "number": "9",
+          "name": "Flavie Boulanger",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Quebec, Canada",
+          "highSchool": "Collège Francais"
+        },
+        {
+          "number": "10",
+          "name": "Grace Hennig",
+          "pos": "F",
+          "classCode": "R-SR",
+          "hometown": "Red Hook, N.Y.",
+          "highSchool": "Red Hook HS"
+        },
+        {
+          "number": "11",
+          "name": "Monica Viveros",
+          "pos": "M/D",
+          "classCode": "R-FR",
+          "hometown": "Flushing, N.Y.",
+          "highSchool": "Science Skills Center"
+        },
+        {
+          "number": "12",
+          "name": "Morgan Sherrill",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Frederick, Md.",
+          "highSchool": "Urbana"
+        },
+        {
+          "number": "13",
+          "name": "Thalia Valdez",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Wantagh, N.Y.",
+          "highSchool": "Wantagh HS"
+        },
+        {
+          "number": "14",
+          "name": "Hailey Hughes",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Blaine, Minn.",
+          "highSchool": "Blaine HS"
+        },
+        {
+          "number": "15",
+          "name": "Izzy Stein",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Sydney, Australia",
+          "highSchool": "Stella Maris College"
+        },
+        {
+          "number": "17",
+          "name": "Kaylie Govoni",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Billerica, Mass.",
+          "highSchool": "Billerica Memorial"
+        },
+        {
+          "number": "18",
+          "name": "Casey Beauregard",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Dayville, Conn.",
+          "highSchool": "Killingly"
+        },
+        {
+          "number": "19",
+          "name": "Sophia Paffrath",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cologne, Germany",
+          "highSchool": "Rhein-Gymnasium"
+        },
+        {
+          "number": "20",
+          "name": "Kaleigh West",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Niskayuna, N.Y.",
+          "highSchool": "Niskayuna HS"
+        },
+        {
+          "number": "21",
+          "name": "Rachel Nasshorn",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "East Meadow, N.Y.",
+          "highSchool": "East Meadow HS"
+        },
+        {
+          "number": "22",
+          "name": "Luciana Bocelli",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "St. James, N.Y.",
+          "highSchool": "Smithtown East"
+        },
+        {
+          "number": "23",
+          "name": "Emma Panagiotakopoulos",
+          "pos": "",
+          "classCode": "SO",
+          "hometown": "Montreal, Canada",
+          "highSchool": "College Beaubois"
+        },
+        {
+          "number": "40",
+          "name": "Mackenzie Sibello",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lyndhurst, N.J.",
+          "highSchool": "Lyndhurst HS"
+        }
+      ],
+      "departed": [
+        "anija irvine",
+        "betty hall",
+        "bo price",
+        "chloe price",
+        "grace hennig",
+        "izzy stein",
+        "keely thomas",
+        "mackenzie sibello",
+        "morgan sherrill",
+        "sophia paffrath",
+        "thalia valdez"
+      ]
+    },
+    "2024": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Morgan Gopaul",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Irvine, C.A.",
+          "highSchool": "Northwood"
+        },
+        {
+          "number": "1",
+          "name": "Keely Thomas",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Richmond, Va.",
+          "highSchool": "Maggie L. Walker Governor's School"
+        },
+        {
+          "number": "2",
+          "name": "Lauren Mathews",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Pleasantville, N.Y.",
+          "highSchool": "Pleasantville"
+        },
+        {
+          "number": "3",
+          "name": "Elina Norstroem",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Gothenburg, Sweden",
+          "highSchool": "Katrinelundsymnasiet"
+        },
+        {
+          "number": "5",
+          "name": "Emma Hood",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Bay Shore, N.Y.",
+          "highSchool": "Bay Shore"
+        },
+        {
+          "number": "6",
+          "name": "Jane Bossler",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Reading, P.A.",
+          "highSchool": "Exeter Township"
+        },
+        {
+          "number": "7",
+          "name": "Gina Proviano",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Pittsburgh, P.A.",
+          "highSchool": "Plum"
+        },
+        {
+          "number": "8",
+          "name": "Betty Hall",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Stockport, England",
+          "highSchool": "Hazel Grove"
+        },
+        {
+          "number": "10",
+          "name": "Grace Hennig",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Red Hook, N.Y.",
+          "highSchool": "Red Hook HS"
+        },
+        {
+          "number": "11",
+          "name": "Yanelia Fernández",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Valley Stream, N.Y.",
+          "highSchool": "Valley Stream South"
+        },
+        {
+          "number": "12",
+          "name": "Emma Panagiotakopoulos",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Montreal, Canada",
+          "highSchool": "College Beaubois"
+        },
+        {
+          "number": "13",
+          "name": "Thalia Valdez",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Wantagh, N.Y.",
+          "highSchool": "Wantagh HS"
+        },
+        {
+          "number": "14",
+          "name": "Lola Gitlin",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Port Washington, N.Y.",
+          "highSchool": "Paul D. Schreiber"
+        },
+        {
+          "number": "15",
+          "name": "Izzy Stein",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sydney, Australia",
+          "highSchool": "Stella Maris College"
+        },
+        {
+          "number": "16",
+          "name": "Matiana Valdez",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Wantagh, N.Y.",
+          "highSchool": "Wantagh"
+        },
+        {
+          "number": "17",
+          "name": "Stephanie Schubert",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Smithtown, N.Y.",
+          "highSchool": "Smithtown West"
+        },
+        {
+          "number": "18",
+          "name": "Aliya Couillard",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Seattle, W.A.",
+          "highSchool": "West Seattle"
+        },
+        {
+          "number": "19",
+          "name": "Sophia Paffrath",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cologne, Germany",
+          "highSchool": "Rhein-Gymnasium"
+        },
+        {
+          "number": "20",
+          "name": "Kaleigh West",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Niskayuna, N.Y.",
+          "highSchool": "Niskayuna HS"
+        },
+        {
+          "number": "21",
+          "name": "Jayden White",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Edmond, O.K.",
+          "highSchool": "Edmond North HS"
+        },
+        {
+          "number": "22",
+          "name": "Blake Goldstein",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Oceanside, N.Y.",
+          "highSchool": "Oceanside High School"
+        },
+        {
+          "number": "23",
+          "name": "Maya-Sophie Letzel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Hohenhaslach,Baden-Wuerttemberg, Germany",
+          "highSchool": "Rotteck Gymnasium"
+        },
+        {
+          "number": "24",
+          "name": "Paige Letourneau",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Prospect, C.T.",
+          "highSchool": "Woodland Regional"
+        },
+        {
+          "number": "25",
+          "name": "Morgan Sherrill",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Frederick, Md.",
+          "highSchool": "Urbana"
+        },
+        {
+          "number": "27",
+          "name": "Casey Beauregard",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Dayville, Conn.",
+          "highSchool": "Killingly"
+        },
+        {
+          "number": "31",
+          "name": "Sofia Shakham",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Rockville Centre, N.Y.",
+          "highSchool": "South Side High School"
+        },
+        {
+          "number": "40",
+          "name": "Mackenzie Sibello",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lyndhurst, N.J.",
+          "highSchool": "Lyndhurst HS"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Morgan Gopaul",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Irvine, C.A. / Northwood",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "1",
+          "name": "Keely Thomas",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Richmond, Va. / Maggie L. Walker Governor's School",
+          "highSchool": "Longwood"
+        },
+        {
+          "number": "2",
+          "name": "Lauren Mathews",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Pleasantville, N.Y. / Pleasantville",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Jane Bossler",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Reading, P.A. / Exeter Township",
+          "highSchool": "USC Upstate"
+        },
+        {
+          "number": "4",
+          "name": "Caroline Nuttall",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Williston Park, N.Y. / St. Anthony's",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "5",
+          "name": "Noa Bartels van Bosbeek",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Güéjar Sierra, Granada, Spain / IES Miguel de Cervantes",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Ela Kisin",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Avon, Ohio / Avon HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Gina Proviano",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pittsburgh, P.A. / Plum",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Taylor Curcio",
+          "pos": "M/D",
+          "classCode": "GR",
+          "hometown": "Merrick, N.Y. / Calhoun",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "9",
+          "name": "Matilda Boyle",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Perth, Western Australia, Australia / John Curtin College of the Arts",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Grace Hennig",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Red Hook, N.Y. / Red Hook HS",
+          "highSchool": "Marist"
+        },
+        {
+          "number": "11",
+          "name": "Yanelia Fernández",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Valley Stream, N.Y. / Valley Stream South",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Mackenzie Morano",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Cape Coral, Fla. / Oasis",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Thalia Valdez",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Wantagh, N.Y. / Wantagh HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Lola Gitlin",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Port Washington, N.Y. / Paul D. Schreiber",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Izzy Stein",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Sydney, Australia / Stella Maris College",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Matiana Valdez",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Wantagh, N.Y. / Wantagh",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Stephanie Schubert",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Smithtown, N.Y. / Smithtown West",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Aliya Couillard",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Seattle, W.A. / West Seattle",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kaleigh West",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Niskayuna, N.Y. / Niskayuna HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Emma Hood",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Bay Shore, N.Y. / Bay Shore",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Briana Sayoc",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "North Bellmore, N.Y. / W.C. Mepham",
+          "highSchool": "Western Kentucky"
+        },
+        {
+          "number": "23",
+          "name": "Casey Nickerson",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Huntington, N.Y. / Harborfields",
+          "highSchool": "Susquehanna"
+        },
+        {
+          "number": "24",
+          "name": "Paige Letourneau",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Prospect, C.T. / Woodland Regional",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Allison Bennett",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Seattle, Wash. / West Seattle",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Jill Meaney",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Smithtown, N.Y. / Smithtown West",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Casey Beauregard",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Dayville, Conn. / Killingly",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Betty Hall",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Stockport, England / Hazel Grove",
+          "highSchool": "St. Francis Brooklyn"
+        },
+        {
+          "number": "32",
+          "name": "Kira Adkins",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Louisville, Ky. / duPont Manual",
+          "highSchool": ""
+        },
+        {
+          "number": "37",
+          "name": "Olivia Mancuso",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Randolph, N.J. / Randolph",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://www.liuathletics.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:30:29Z"
+    }
+  },
   "commitments": [
     {
       "id": "cloe-woodley-2026",
@@ -117,7 +1577,7 @@
       "city": "",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1596,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1612,7 @@
       "city": "Union",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1631,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -187,7 +1647,7 @@
       "city": "",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -206,7 +1666,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -222,7 +1682,7 @@
       "city": "Medford",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -241,7 +1701,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -257,7 +1717,7 @@
       "city": "Oakland",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -276,7 +1736,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -292,7 +1752,7 @@
       "city": "",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -311,7 +1771,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -327,7 +1787,7 @@
       "city": "East Northport",
       "highSchool": "",
       "college": "liu",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -346,7 +1806,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -533,41 +1993,27 @@
     "2027": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:55Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://www.liuathletics.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T20:08:11Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.820714&longitude=-73.593678&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T20:08:10Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T20:08:10Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:30:18Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

@@ -69,18 +69,193 @@
       "asOf": "2026-09-07T19:31:17Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 44.532298,
+    "lon": -87.919973,
+    "timezone": "America/Chicago",
+    "elevationM": 207.9,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014898",
+      "name": "GREEN BAY",
+      "state": "WI",
+      "distanceKm": 15.6,
+      "elevationM": 207.9
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 25.5,
+        "tLowF": 11.1,
+        "precipIn": 1.39,
+        "snowIn": 14.3,
+        "wetDays": 4.3,
+        "days90F": 0.0,
+        "daysFreeze": 29.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 29.0,
+        "tLowF": 13.2,
+        "precipIn": 1.2,
+        "snowIn": 12.0,
+        "wetDays": 3.6,
+        "days90F": 0.0,
+        "daysFreeze": 26.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 40.4,
+        "tLowF": 23.9,
+        "precipIn": 1.96,
+        "snowIn": 8.1,
+        "wetDays": 5.1,
+        "days90F": 0.0,
+        "daysFreeze": 25.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 53.8,
+        "tLowF": 34.8,
+        "precipIn": 3.0,
+        "snowIn": 4.7,
+        "wetDays": 6.6,
+        "days90F": 0.0,
+        "daysFreeze": 12.1
+      },
+      {
+        "month": "May",
+        "tHighF": 67.1,
+        "tLowF": 46.0,
+        "precipIn": 3.35,
+        "snowIn": 0.0,
+        "wetDays": 7.2,
+        "days90F": 0.2,
+        "daysFreeze": 1.3
+      },
+      {
+        "month": "Jun",
+        "tHighF": 76.6,
+        "tLowF": 56.2,
+        "precipIn": 4.1,
+        "snowIn": 0.0,
+        "wetDays": 7.5,
+        "days90F": 1.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 81.0,
+        "tLowF": 60.1,
+        "precipIn": 3.62,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 2.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 78.9,
+        "tLowF": 58.2,
+        "precipIn": 3.39,
+        "snowIn": 0.0,
+        "wetDays": 6.3,
+        "days90F": 1.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 71.7,
+        "tLowF": 50.2,
+        "precipIn": 3.2,
+        "snowIn": 0.0,
+        "wetDays": 5.9,
+        "days90F": 0.3,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "Oct",
+        "tHighF": 58.0,
+        "tLowF": 39.5,
+        "precipIn": 2.67,
+        "snowIn": 0.3,
+        "wetDays": 5.8,
+        "days90F": 0.0,
+        "daysFreeze": 7.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 43.5,
+        "tLowF": 28.9,
+        "precipIn": 1.98,
+        "snowIn": 3.1,
+        "wetDays": 4.8,
+        "days90F": 0.0,
+        "daysFreeze": 20.5
+      },
+      {
+        "month": "Dec",
+        "tHighF": 31.1,
+        "tLowF": 18.0,
+        "precipIn": 1.75,
+        "snowIn": 13.1,
+        "wetDays": 4.6,
+        "days90F": 0.0,
+        "daysFreeze": 28.4
+      }
+    ],
+    "annualPrecipIn": 31.6,
+    "annualSnowIn": 55.6,
+    "fallSeason": {
+      "avgHighF": 63.0,
+      "avgLowF": 44.2,
+      "precipIn": 11.2,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 81.0°F), coldest Jan (avg low 11.1°F). 31.6 in of rain per year, 55.6 in of snow. Fall season (Aug–Nov): highs around 63.0°F, 11.2 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014898,USC00473271,USC00473268&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:58:08Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Matt Kagan",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/coaches/matt-kagan/751",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Matt Kagan",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/coaches/matt-kagan/751",
+        "social": {}
+      },
+      {
+        "name": "Josh Davis",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/coaches/josh-davis/752",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Carly McCrumb",
+        "title": "Graduate Assistant",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/coaches/carly-mccrumb/753",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +273,1327 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://greenbayphoenix.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:29:42Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 27,
+    "players": [
+      {
+        "number": "1",
+        "name": "Anna Scott",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Littleton, Colo.",
+        "highSchool": "Heritage HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/anna-scott/5207",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Jess Howard",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Menomonee, Wis.",
+        "highSchool": "Living Word Lutheran HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/jess-howard/5213",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Ryann Hafenbrak",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Winnipeg, Mb.",
+        "highSchool": "Balmoral HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/ryann-hafenbrak/5199",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Kendall Jackson",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Rochester Hills, Mich.",
+        "highSchool": "Rochester HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/kendall-jackson/5202",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Abby Lom",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Kimberly, Wis.",
+        "highSchool": "Kimberly HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/abby-lom/5203",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Ava Nielsen",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Waunakee, Wis.",
+        "highSchool": "Waunakee Community HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/ava-nielsen/5214",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Allie Billingsley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Lake Geneva, Wis.",
+        "highSchool": "Badger HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Wisconsin",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/allie-billingsley/5215",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Reagan Schultz",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-2",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "New Lenox, Ill.",
+        "highSchool": "Lincoln Way HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/reagan-schultz/5206",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Hope Thao",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Thornton, Colo.",
+        "highSchool": "Broomfield HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/hope-thao/5219",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Senah Hanes",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Neenah, Wis.",
+        "highSchool": "Kimberly HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/senah-hanes/5200",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Rebecca Stoeckmann",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "R-Sr.",
+        "classCode": "R-SR",
+        "hometown": "Hartford, Wis.",
+        "highSchool": "Hartford Union HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/rebecca-stoeckmann/5210",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Yara Sandoval",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Inglewood, Calif. /",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/yara-sandoval/5220",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Ella Coates",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Gig Harbor, Wash.",
+        "highSchool": "Peninsula HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Washington Premier FC",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/ella-coates/5216",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Audrey Stredde",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Geneva, Ill.",
+        "highSchool": "Geneva Community HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Rockford Raptors",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/audrey-stredde/5218",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "15",
+        "name": "Lanie Weikert",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Muscatine, Iowa",
+        "highSchool": "Muscatine HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/lanie-weikert/5211",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Grace Downey",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Wynnewood, Pa.",
+        "highSchool": "Lower Merion HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/grace-downey/5197",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Allison Raasch",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Wausau, Wis.",
+        "highSchool": "Wausau West HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/allison-raasch/5204",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Nora Asbrink",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Uppsala, Sweden",
+        "highSchool": "Celsiusskolan",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/nora-asbrink/5195",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Laney Stark",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Carol Stream, Ill.",
+        "highSchool": "St. Charles North HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/laney-stark/5209",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Alyssa Flood",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lockport, Ill.",
+        "highSchool": "Lockport Township HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/alyssa-flood/5198",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Claire Paschke",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Vernon, Wis.",
+        "highSchool": "Wisconsin Lutheran HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/claire-paschke/5217",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Hannah Williams",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "McDonough, Ga. /",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/hannah-williams/5212",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Nell Smith",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Stillwater, Minn.",
+        "highSchool": "St. Croix Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/nell-smith/5208",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Aixa Helbringer-Escobar",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Santiago, Chile",
+        "highSchool": "Colo-Colo",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/aixa-helbringer-escobar/5201",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Ella Rogowski",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Germantown, Wis.",
+        "highSchool": "Germantown HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/ella-rogowski/5205",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "28",
+        "name": "Leah Colgan",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Dublin, Ireland",
+        "highSchool": "Portmarnock Community School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/leah-colgan/5221",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Bella Brozek",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Naperville, Ill.",
+        "highSchool": "Naperville Central HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://greenbayphoenix.com/sports/womens-soccer/roster/bella-brozek/5196",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 1,
+        "GR": 1
+      },
+      "F": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SO": 7,
+      "SR": 6,
+      "JR": 6,
+      "FR": 6,
+      "R-SR": 1,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "M": 3,
+      "D": 3
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://greenbayphoenix.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:29:42Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Johannah Houtkooper",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Battle Creek, Mich.",
+          "highSchool": "Delton Kellogg HS"
+        },
+        {
+          "number": "1",
+          "name": "Anna Scott",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Littleton, Colo.",
+          "highSchool": "Heritage HS"
+        },
+        {
+          "number": "2",
+          "name": "Peyton Cornejo",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Normal, Ill.",
+          "highSchool": "Normal West HS"
+        },
+        {
+          "number": "3",
+          "name": "Ryann Hafenbrak",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Winnipeg, Mb.",
+          "highSchool": "Balmoral HS"
+        },
+        {
+          "number": "4",
+          "name": "Kendall Jackson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rochester Hills, Mich.",
+          "highSchool": "Rochester HS"
+        },
+        {
+          "number": "5",
+          "name": "Reagan Schultz",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "New Lenox, Ill.",
+          "highSchool": "Lincoln Way HS"
+        },
+        {
+          "number": "6",
+          "name": "Abby Lom",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Kimberly, Wis.",
+          "highSchool": "Kimberly HS"
+        },
+        {
+          "number": "7",
+          "name": "Elle Blessinger",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Evansville, Ind.",
+          "highSchool": "Castle HS"
+        },
+        {
+          "number": "9",
+          "name": "Santina Garcia",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Racine, Wis.",
+          "highSchool": "Racine Case HS"
+        },
+        {
+          "number": "10",
+          "name": "Senah Hanes",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Neenah, Wis.",
+          "highSchool": "Kimberly HS"
+        },
+        {
+          "number": "11",
+          "name": "Rebecca Stoeckmann",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Hartford, Wis.",
+          "highSchool": "Hartford Union HS"
+        },
+        {
+          "number": "12",
+          "name": "Charlise Smith",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Waunakee, Wis.",
+          "highSchool": "Waunakee HS"
+        },
+        {
+          "number": "13",
+          "name": "Lily Petrie",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wheaton, Ill.",
+          "highSchool": "Wheaton Warrenville South HS"
+        },
+        {
+          "number": "14",
+          "name": "Amely Molina",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Holland, Mich.",
+          "highSchool": "Zeeland West HS"
+        },
+        {
+          "number": "15",
+          "name": "Lanie Weikert",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Muscatine, Iowa",
+          "highSchool": "Muscatine HS"
+        },
+        {
+          "number": "16",
+          "name": "Grace Downey",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wynnewood, Pa.",
+          "highSchool": "Lower Merion HS"
+        },
+        {
+          "number": "17",
+          "name": "Allison Raasch",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wausau, Wis.",
+          "highSchool": "Wausau West HS"
+        },
+        {
+          "number": "18",
+          "name": "Nora Asbrink",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Uppsala, Sweden",
+          "highSchool": "Celsiusskolan"
+        },
+        {
+          "number": "19",
+          "name": "Laney Stark",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Carol Stream, Ill.",
+          "highSchool": "St. Charles North HS"
+        },
+        {
+          "number": "20",
+          "name": "Alyssa Flood",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lockport, Ill.",
+          "highSchool": "Lockport Township HS"
+        },
+        {
+          "number": "22",
+          "name": "Hannah Williams",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "McDonough, Ga. /",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Nell Smith",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Stillwater, Minn.",
+          "highSchool": "St. Croix Academy"
+        },
+        {
+          "number": "24",
+          "name": "Aixa Helbringer-Escobar",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Santiago, Chile",
+          "highSchool": "Colo-Colo"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rogowski",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Germantown, Wis.",
+          "highSchool": "Germantown HS"
+        },
+        {
+          "number": "27",
+          "name": "Hanna Arvay",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Budapest, Hungary",
+          "highSchool": "Budai Ciszterci Szent Imre Gimnazium"
+        },
+        {
+          "number": "29",
+          "name": "Bella Brozek",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Naperville, Ill.",
+          "highSchool": "Naperville Central HS"
+        },
+        {
+          "number": "32",
+          "name": "Lilly Lambird",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "London, England",
+          "highSchool": "Shirley Performing Arts College"
+        }
+      ],
+      "departed": [
+        "amely molina",
+        "charlise smith",
+        "elle blessinger",
+        "hanna arvay",
+        "johannah houtkooper",
+        "lilly lambird",
+        "lily petrie",
+        "peyton cornejo",
+        "santina garcia"
+      ]
+    },
+    "2024": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Mallorie Benhart",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lakeville, Minn.",
+          "highSchool": "Salvo SC"
+        },
+        {
+          "number": "2",
+          "name": "Trudy Quidzinski",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Green Bay, Wis.",
+          "highSchool": "Notre Dame Academy"
+        },
+        {
+          "number": "3",
+          "name": "Ryann Hafenbrak",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Winnipeg, Mb.",
+          "highSchool": "Balmoral HS"
+        },
+        {
+          "number": "4",
+          "name": "Laney Hoehnke",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Bexley, Ohio",
+          "highSchool": "Bexley"
+        },
+        {
+          "number": "5",
+          "name": "Reagan Schultz",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "New Lenox, Ill.",
+          "highSchool": "Lincoln Way HS"
+        },
+        {
+          "number": "6",
+          "name": "Abby Lom",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Kimberly, Wis.",
+          "highSchool": "Kimberly HS"
+        },
+        {
+          "number": "7",
+          "name": "Elle Blessinger",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Evansville, Ind.",
+          "highSchool": "Castle HS"
+        },
+        {
+          "number": "8",
+          "name": "Veronica Decker",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Pulaski, Wis.",
+          "highSchool": "Pulaski"
+        },
+        {
+          "number": "9",
+          "name": "Santina Garcia",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Racine, Wis.",
+          "highSchool": "Racine Case HS"
+        },
+        {
+          "number": "10",
+          "name": "Senah Hanes",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Neenah, Wis.",
+          "highSchool": "Kimberly HS"
+        },
+        {
+          "number": "11",
+          "name": "Rebecca Stoeckmann",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Hartford, Wis.",
+          "highSchool": "Hartford Union HS"
+        },
+        {
+          "number": "12",
+          "name": "Charlise Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Waunakee, Wis.",
+          "highSchool": "Waunakee HS"
+        },
+        {
+          "number": "13",
+          "name": "Emmy Weisgerber",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Menominee Falls, Wis.",
+          "highSchool": "SC Wave"
+        },
+        {
+          "number": "14",
+          "name": "Ryann Locante",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Brookfield, Wis.",
+          "highSchool": "Brookfield"
+        },
+        {
+          "number": "15",
+          "name": "Lanie Weikert",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Muscatine, Iowa",
+          "highSchool": "Muscatine HS"
+        },
+        {
+          "number": "16",
+          "name": "Grace Downey",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Wynnewood, Pa.",
+          "highSchool": "Lower Merion HS"
+        },
+        {
+          "number": "18",
+          "name": "Allison Steeno",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Kimberly, Wis.",
+          "highSchool": "Wisconsin United"
+        },
+        {
+          "number": "19",
+          "name": "Laney Stark",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Carol Stream, Ill.",
+          "highSchool": "St. Charles North HS"
+        },
+        {
+          "number": "20",
+          "name": "Sophie Heyboer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Jenison, Mich.",
+          "highSchool": "MFA Revolution"
+        },
+        {
+          "number": "21",
+          "name": "Makenna Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Ortonville, Mich.",
+          "highSchool": "Brandon"
+        },
+        {
+          "number": "22",
+          "name": "Gracie Freyberg",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Northfield, Minn.",
+          "highSchool": "Northfield"
+        },
+        {
+          "number": "23",
+          "name": "Nell Smith",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Stillwater, Minn.",
+          "highSchool": "St. Croix Academy"
+        },
+        {
+          "number": "24",
+          "name": "Aixa Helbringer-Escobar",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Santiago, Chile",
+          "highSchool": "Colo-Colo"
+        },
+        {
+          "number": "25",
+          "name": "Ella Rogowski",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Germantown, Wis.",
+          "highSchool": "Germantown HS"
+        },
+        {
+          "number": "26",
+          "name": "Audrey Cassata",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Rockton, Ill.",
+          "highSchool": "Rockford Raptors"
+        },
+        {
+          "number": "27",
+          "name": "Hanna Arvay",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Budapest, Hungary",
+          "highSchool": "Budai Ciszterci Szent Imre Gimnazium"
+        },
+        {
+          "number": "30",
+          "name": "Alondra Iriarte",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Carolina, Puerto Rico",
+          "highSchool": "Western Reserve Academy"
+        },
+        {
+          "number": "31",
+          "name": "Abby Wood",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Green Bay, Wis.",
+          "highSchool": "Bay Port"
+        },
+        {
+          "number": "32",
+          "name": "Lilly Lambird",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "London, England",
+          "highSchool": "Shirley Performing Arts College"
+        },
+        {
+          "number": "33",
+          "name": "Sydney Bollis",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Franklin, Wis.",
+          "highSchool": "Franklin"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Mallorie Benhart",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lakeville, Minn.",
+          "highSchool": "Salvo SC"
+        },
+        {
+          "number": "2",
+          "name": "Morgan Peters",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Noblesville, Ind.",
+          "highSchool": "Noblesville"
+        },
+        {
+          "number": "3",
+          "name": "Ryann Hafenbrak",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Winnipeg, Mb.",
+          "highSchool": "Balmoral HS"
+        },
+        {
+          "number": "4",
+          "name": "Laney Hoehnke",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Bexley, Ohio",
+          "highSchool": "Bexley"
+        },
+        {
+          "number": "5",
+          "name": "Madeline Cruz",
+          "pos": "D",
+          "classCode": "R-SR",
+          "hometown": "Fitchburg, Wis.",
+          "highSchool": "Madison Edgewood"
+        },
+        {
+          "number": "6",
+          "name": "Santina Garcia",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Racine, Wis.",
+          "highSchool": "Racine Case HS"
+        },
+        {
+          "number": "7",
+          "name": "Elle Blessinger",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Evansville, Ind.",
+          "highSchool": "Castle HS"
+        },
+        {
+          "number": "8",
+          "name": "Allison Steeno",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Kimberly, Wis.",
+          "highSchool": "Wisconsin United"
+        },
+        {
+          "number": "9",
+          "name": "Trudy Quidzinski",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Green Bay, Wis.",
+          "highSchool": "Notre Dame Academy"
+        },
+        {
+          "number": "10",
+          "name": "Aleah Reesman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Burlington, Wis.",
+          "highSchool": "Burlington"
+        },
+        {
+          "number": "11",
+          "name": "Valerie Baca",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Porterville, Calif.",
+          "highSchool": "Porterville"
+        },
+        {
+          "number": "12",
+          "name": "Hannah Savoni",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Amherstburg, Ontario",
+          "highSchool": "St. Thomas of Villanova"
+        },
+        {
+          "number": "13",
+          "name": "Emmy Weisgerber",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Menominee Falls, Wis.",
+          "highSchool": "SC Wave"
+        },
+        {
+          "number": "14",
+          "name": "Maddie Ladish",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pewaukee, Wis.",
+          "highSchool": "Catholic Memorial"
+        },
+        {
+          "number": "15",
+          "name": "Lanie Weikert",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Muscatine, Iowa",
+          "highSchool": "Muscatine HS"
+        },
+        {
+          "number": "16",
+          "name": "Grace Miller",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Macomb, Mich.",
+          "highSchool": "L’Anse Creuse"
+        },
+        {
+          "number": "17",
+          "name": "Zoey Pagels",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Oregon, Wis.",
+          "highSchool": "Oregon"
+        },
+        {
+          "number": "18",
+          "name": "Brooke Ricca",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Weston, Fla.",
+          "highSchool": "St. Thomas Aquinas"
+        },
+        {
+          "number": "19",
+          "name": "Elle Hill",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Bismarck, N.D.",
+          "highSchool": "Bismarck"
+        },
+        {
+          "number": "20",
+          "name": "Sophie Heyboer",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Jenison, Mich.",
+          "highSchool": "MFA Revolution"
+        },
+        {
+          "number": "21",
+          "name": "Olivia Trotter",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Dallas, Texas",
+          "highSchool": "Lake Dallas"
+        },
+        {
+          "number": "22",
+          "name": "Molly Finnel",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Manitowoc, Wis.",
+          "highSchool": "Roncalli"
+        },
+        {
+          "number": "23",
+          "name": "Nell Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Stillwater, Minn.",
+          "highSchool": "St. Croix Academy"
+        },
+        {
+          "number": "24",
+          "name": "Grace Downey",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Wynnewood, Pa.",
+          "highSchool": "Lower Merion HS"
+        },
+        {
+          "number": "25",
+          "name": "Sierra Morgano",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Sussex, Wis.",
+          "highSchool": "Hamilton"
+        },
+        {
+          "number": "26",
+          "name": "Audrey Cassata",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rockton, Ill.",
+          "highSchool": "Rockford Raptors"
+        },
+        {
+          "number": "27",
+          "name": "Vera Asare",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Accra, Ghana",
+          "highSchool": "Abetiri Presby"
+        },
+        {
+          "number": "28",
+          "name": "Payton Lang",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Oregon, Wis.",
+          "highSchool": "Oregon"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://greenbayphoenix.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:29:42Z"
+    }
+  },
   "commitments": [
     {
       "id": "allie-billingsley-2026",
@@ -117,7 +1606,7 @@
       "city": "Elkhorn",
       "highSchool": "",
       "college": "wisconsin-green-bay",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +1625,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +1641,7 @@
       "city": "",
       "highSchool": "",
       "college": "wisconsin-green-bay",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +1660,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -187,7 +1676,7 @@
       "city": "Gig Harbor",
       "highSchool": "",
       "college": "wisconsin-green-bay",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -206,7 +1695,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -476,41 +1965,27 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:55Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://greenbayphoenix.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T19:33:50Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=44.532298&longitude=-87.919973&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T19:33:49Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T19:33:49Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:29:31Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

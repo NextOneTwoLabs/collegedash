@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T06:10:46Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 36.215536,
+    "lon": -81.680583,
+    "timezone": "America/New_York",
+    "elevationM": 348.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00003810",
+      "name": "HICKORY FAA AP",
+      "state": "NC",
+      "distanceKm": 59.1,
+      "elevationM": 348.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 49.1,
+        "tLowF": 30.2,
+        "precipIn": 3.81,
+        "snowIn": null,
+        "wetDays": 6.7,
+        "days90F": 0.0,
+        "daysFreeze": 18.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 53.2,
+        "tLowF": 32.8,
+        "precipIn": 3.21,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 14.9
+      },
+      {
+        "month": "Mar",
+        "tHighF": 60.7,
+        "tLowF": 39.5,
+        "precipIn": 4.08,
+        "snowIn": null,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 8.1
+      },
+      {
+        "month": "Apr",
+        "tHighF": 70.0,
+        "tLowF": 47.7,
+        "precipIn": 4.08,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 0.9
+      },
+      {
+        "month": "May",
+        "tHighF": 77.4,
+        "tLowF": 56.2,
+        "precipIn": 3.86,
+        "snowIn": null,
+        "wetDays": 6.8,
+        "days90F": 1.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 84.3,
+        "tLowF": 64.4,
+        "precipIn": 4.35,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 6.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 87.4,
+        "tLowF": 68.1,
+        "precipIn": 4.29,
+        "snowIn": null,
+        "wetDays": 7.3,
+        "days90F": 13.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.7,
+        "tLowF": 67.0,
+        "precipIn": 4.58,
+        "snowIn": null,
+        "wetDays": 6.9,
+        "days90F": 8.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.8,
+        "tLowF": 60.9,
+        "precipIn": 3.93,
+        "snowIn": null,
+        "wetDays": 5.8,
+        "days90F": 2.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 70.2,
+        "tLowF": 48.9,
+        "precipIn": 3.49,
+        "snowIn": null,
+        "wetDays": 4.4,
+        "days90F": 0.2,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Nov",
+        "tHighF": 59.9,
+        "tLowF": 38.7,
+        "precipIn": 3.62,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 8.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 51.5,
+        "tLowF": 32.8,
+        "precipIn": 3.85,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 17.0
+      }
+    ],
+    "annualPrecipIn": 47.1,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 73.9,
+      "avgLowF": 53.9,
+      "precipIn": 15.6,
+      "wetDays": 23.0
+    },
+    "summary": "Hottest month Jul (avg high 87.4°F), coldest Jan (avg low 30.2°F). 47.1 in of rain per year. Fall season (Aug–Nov): highs around 73.9°F, 15.6 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00003810,USC00310982,USC00310901&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:54:25Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Aimee Haywood",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/aimee-haywood/1718",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Aimee Haywood",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/aimee-haywood/1718",
+        "social": {}
+      },
+      {
+        "name": "Mark Catterall",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/mark-catterall/1719",
+        "social": {}
+      },
+      {
+        "name": "Kris Kirchhoff",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/kris-kirchhoff/1793",
+        "social": {}
+      },
+      {
+        "name": "Alex Garcia",
+        "title": "Strength and Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/staff/alex-garcia/967",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Austin Sarns",
+        "title": "Director of Soccer Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/austin-sarns/1721",
+        "social": {}
+      },
+      {
+        "name": "Stewart Draper",
+        "title": "Analyst",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/coaches/stewart-draper/1794",
+        "social": {}
+      },
+      {
+        "name": "Hannah Deatherage",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/staff/hannah-deatherage/830",
+        "social": {}
+      },
+      {
+        "name": "Dr. Parker Leap",
+        "title": "Associate Athletics Director for Sport Psychology & Mental Wellness",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/staff/dr-parker-leap/980",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +313,1338 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://appstatesports.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:15:23Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "0",
+        "name": "Hanna Skogsfors",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Täby, Sweden",
+        "highSchool": "Stockholms Idrottsgymnasium",
+        "previousSchool": "",
+        "major": "",
+        "club": "IF Brommapojkarna",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/hanna-skogsfors/10830",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "00",
+        "name": "Molly Coles",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Charlotte, N.C.",
+        "highSchool": "Charlotte Christian School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Soccer Academy",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/molly-coles/10818",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "1",
+        "name": "Anneliese Hindelang",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Kempton, Germany",
+        "highSchool": "Deutsche Internationale Schule Johannesburg/Sportschule Potsdam Friedrich Ludwig Jahn",
+        "previousSchool": "",
+        "major": "",
+        "club": "FFC Turbine Potsdam",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/anneliese-hindelang/11262",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "2",
+        "name": "Madison Abi-Saab",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Yorktown, Va.",
+        "highSchool": "Grafton",
+        "previousSchool": "",
+        "major": "",
+        "club": "Richmond United",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/madison-abi-saab/10989",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "4",
+        "name": "Lucy Harrington",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mechanicsville, Va.",
+        "highSchool": "Hanover",
+        "previousSchool": "",
+        "major": "",
+        "club": "Richmond United",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/lucy-harrington/10820",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "5",
+        "name": "Hayden Petrick",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Saint John's, Fla.",
+        "highSchool": "Creekside High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Elite",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/hayden-petrick/10828",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "6",
+        "name": "Avery Pegram",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Columbia, S.C.",
+        "highSchool": "Blythewood",
+        "previousSchool": "",
+        "major": "",
+        "club": "South Carolina United",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/avery-pegram/10827",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "7",
+        "name": "Libby Bermingham",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Warrington, England",
+        "highSchool": "Beamont Collegiate Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Liverpool FC",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/libby-bermingham/10815",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "8",
+        "name": "Taylor Duff",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Dublin, Ohio",
+        "highSchool": "Coffman",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/taylor-duff/10990",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "10",
+        "name": "Ellie Garrison",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Trinity, N.C.",
+        "highSchool": "Wheatmore",
+        "previousSchool": "",
+        "major": "",
+        "club": "North Carolina Fusion",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/ellie-garrison/10819",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "11",
+        "name": "Yonah Dias",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Leeds, England",
+        "highSchool": "Notre Dame Catholic Sixth Form College",
+        "previousSchool": "",
+        "major": "",
+        "club": "Leeds United",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/yonah-dias/10991",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "12",
+        "name": "Makayla Mulholland",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Pittsburgh, Pa.",
+        "highSchool": "Fox Chapel",
+        "previousSchool": "",
+        "major": "",
+        "club": "Pittsburgh Riverhounds Development Academy",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/makayla-mulholland/10825",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Morgan Chapman",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wake Forest, N.C.",
+        "highSchool": "Wakefield",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Courage Academy",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/morgan-chapman/10817",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Aleesia Ambrosio",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Jamestown, N.C.",
+        "highSchool": "Ragsdale",
+        "previousSchool": "",
+        "major": "",
+        "club": "North Carolina Fusion",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/aleesia-ambrosio/10814",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "15",
+        "name": "Millie Paton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wemyss Bay, Scotland",
+        "highSchool": "Clydeview Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "Rangers FC",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/millie-paton/10826",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "16",
+        "name": "Reagan Sturgill",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Brooklyn Heights, Ohio",
+        "highSchool": "Cuyahoga",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals Soccer Club",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/reagan-sturgill/10832",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "17",
+        "name": "Walker Bristow",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Richmond, Va.",
+        "highSchool": "Douglas S. Freeman",
+        "previousSchool": "",
+        "major": "",
+        "club": "Richmond United",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/walker-bristow/10816",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "18",
+        "name": "Olivia Simon",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Waxhaw, N.C.",
+        "highSchool": "Cuthbertson",
+        "previousSchool": "",
+        "major": "",
+        "club": "Charlotte Independence",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/olivia-simon/10829",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "21",
+        "name": "Ella Hoover",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Granville, OH",
+        "highSchool": "Granville",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/ella-hoover/10821",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "22",
+        "name": "Anaya Jones",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Upper Arlington, Ohio",
+        "highSchool": "Upper Arlington",
+        "previousSchool": "",
+        "major": "",
+        "club": "Ohio Premier",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/anaya-jones/11263",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "23",
+        "name": "Maddie Williams",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Birmingham, England",
+        "highSchool": "Tudor Grange Academy Kingshurst",
+        "previousSchool": "",
+        "major": "",
+        "club": "Aston Villa",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/maddie-williams/10833",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "24",
+        "name": "Kendall Barley",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Suwanee, Ga.",
+        "highSchool": "North Gwinnett",
+        "previousSchool": "",
+        "major": "",
+        "club": "Atlanta Fire",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/kendall-barley/11264",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "25",
+        "name": "Morgan Stallings",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Summerfield, N.C.",
+        "highSchool": "Northwest Guilford",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Fusion",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/morgan-stallings/10831",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "Marley Kahle",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Crestwood, Ky.",
+        "highSchool": "South Oldham",
+        "previousSchool": "",
+        "major": "",
+        "club": "Crestwood, Ky./Racing Louisville FC",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/marley-kahle/10823",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "27",
+        "name": "Kaytan Kroboth",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Raleigh, N.C.",
+        "highSchool": "Sanderson",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Courage Academy",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/kaytan-kroboth/10824",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "28",
+        "name": "Sofia Goclowski",
+        "pos": "F/M",
+        "posLabel": "F/M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sharon, Mass.",
+        "highSchool": "Sharon",
+        "previousSchool": "",
+        "major": "",
+        "club": "New England Futbol Club",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/sofia-goclowski/10992",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "29",
+        "name": "Campbell Sykes",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wake Forest, N.C.",
+        "highSchool": "Franklin Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "North Carolina Courage",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/campbell-sykes/11265",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      },
+      {
+        "number": "30",
+        "name": "Jordyn Burns",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Clermont, Fla.",
+        "highSchool": "East Ridge",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Kraze Krush",
+        "bioUrl": "https://appstatesports.com/sports/womens-soccer/roster/jordyn-burns/11266",
+        "social": {},
+        "bio": {},
+        "clubSource": "bio text (unverified)"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 2,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 1,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 1,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "SO": 8,
+      "R-JR": 4,
+      "FR": 6,
+      "R-FR": 1,
+      "JR": 3,
+      "GR": 2,
+      "SR": 4
+    },
+    "graduatingByPos": {
+      "D": 1,
+      "F": 3,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://appstatesports.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:15:23Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Hanna Skogsfors",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Täby, Sweden",
+          "highSchool": "Stockholms Idrottsgymnasium"
+        },
+        {
+          "number": "00",
+          "name": "Molly Coles",
+          "pos": "GK",
+          "classCode": "R-SO",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Charlotte Christian School"
+        },
+        {
+          "number": "1",
+          "name": "Anna Claire Jacobi",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Milton, Ga.",
+          "highSchool": "Cambridge"
+        },
+        {
+          "number": "3",
+          "name": "Sydney Snowden",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Chandler, Ariz.",
+          "highSchool": "Perry"
+        },
+        {
+          "number": "4",
+          "name": "Izzi Wood",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Hickory, NC",
+          "highSchool": "Hickory"
+        },
+        {
+          "number": "5",
+          "name": "Hayden Petrick",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Saint John's, Fla.",
+          "highSchool": "Creekside High School"
+        },
+        {
+          "number": "6",
+          "name": "Avery Pegram",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Columbia, S.C.",
+          "highSchool": "Blythewood"
+        },
+        {
+          "number": "7",
+          "name": "Libby Bermingham",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Warrington, England",
+          "highSchool": "Beamont Collegiate Academy"
+        },
+        {
+          "number": "8",
+          "name": "Shannon Studer",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Central Academy of Technology and Arts"
+        },
+        {
+          "number": "10",
+          "name": "Ellie Garrison",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Trinity, N.C.",
+          "highSchool": "Wheatmore"
+        },
+        {
+          "number": "11",
+          "name": "Kyli Switalski",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "High Point, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "12",
+          "name": "Makayla Mulholland",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "Fox Chapel"
+        },
+        {
+          "number": "13",
+          "name": "Morgan Chapman",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wake Forest, N.C.",
+          "highSchool": "Wakefield"
+        },
+        {
+          "number": "14",
+          "name": "Aleesia Ambrosio",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Jamestown, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "15",
+          "name": "Millie Paton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wemyss Bay, Scotland",
+          "highSchool": "Clydeview Academy"
+        },
+        {
+          "number": "16",
+          "name": "Reagan Sturgill",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Brooklyn Heights, Ohio",
+          "highSchool": "Cuyahoga"
+        },
+        {
+          "number": "17",
+          "name": "Walker Bristow",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Richmond, Va.",
+          "highSchool": "Douglas S. Freeman"
+        },
+        {
+          "number": "18",
+          "name": "Olivia Simon",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Cuthbertson"
+        },
+        {
+          "number": "19",
+          "name": "Lucy Harrington",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mechanicsville, Va.",
+          "highSchool": "Hanover"
+        },
+        {
+          "number": "20",
+          "name": "Reagan Hamilton",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Franklin, Tenn.",
+          "highSchool": "Page"
+        },
+        {
+          "number": "21",
+          "name": "Ella Hoover",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Granville, OH",
+          "highSchool": "Granville"
+        },
+        {
+          "number": "23",
+          "name": "Maddie Williams",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Birmingham, England",
+          "highSchool": "Tudor Grange Academy Kingshurst"
+        },
+        {
+          "number": "25",
+          "name": "Morgan Stallings",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Summerfield, N.C.",
+          "highSchool": "Northwest Guilford"
+        },
+        {
+          "number": "26",
+          "name": "Marley Kahle",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham"
+        },
+        {
+          "number": "27",
+          "name": "Kaytan Kroboth",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Sanderson"
+        },
+        {
+          "number": "28",
+          "name": "Natalie Bowman",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Trinity, N.C.",
+          "highSchool": "Wheatmore"
+        },
+        {
+          "number": "32",
+          "name": "Brooklyn Jones",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "San Tan Valley, Ariz.",
+          "highSchool": "Casteel"
+        }
+      ],
+      "departed": [
+        "anna claire jacobi",
+        "brooklyn jones",
+        "izzi wood",
+        "kyli switalski",
+        "natalie bowman",
+        "reagan hamilton",
+        "shannon studer",
+        "sydney snowden"
+      ]
+    },
+    "2024": {
+      "count": 28,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sarah Wommack",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Kernersville, N.C.",
+          "highSchool": "Northwest Guilford"
+        },
+        {
+          "number": "1",
+          "name": "Anna Claire Jacobi",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Milton, Ga.",
+          "highSchool": "Cambridge"
+        },
+        {
+          "number": "3",
+          "name": "Sydney Snowden",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Chandler, Ariz.",
+          "highSchool": "Perry"
+        },
+        {
+          "number": "4",
+          "name": "Izzi Wood",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Hickory, NC",
+          "highSchool": "Hickory"
+        },
+        {
+          "number": "5",
+          "name": "Hayden Petrick",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Saint John's, Fla.",
+          "highSchool": "Creekside High School"
+        },
+        {
+          "number": "6",
+          "name": "Stephanie Barbosa",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Durham, N.C.",
+          "highSchool": "Riverside"
+        },
+        {
+          "number": "7",
+          "name": "Gracie Giacoletto",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Troy, Ill.",
+          "highSchool": "Triad"
+        },
+        {
+          "number": "8",
+          "name": "Shannon Studer",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Central Academy of Technology and Arts"
+        },
+        {
+          "number": "10",
+          "name": "Ellie Garrison",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Trinity, N.C.",
+          "highSchool": "Wheatmore"
+        },
+        {
+          "number": "11",
+          "name": "Kyli Switalski",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "High Point, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "12",
+          "name": "Makayla Mulholland",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "Fox Chapel"
+        },
+        {
+          "number": "13",
+          "name": "Hannah Löfmark",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Vaxjo, Sweden",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Aleesia Ambrosio",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Jamestown, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "15",
+          "name": "Sarah Widderich",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Mebane, N.C.",
+          "highSchool": "Eastern Alamance"
+        },
+        {
+          "number": "16",
+          "name": "Reagan Sturgill",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Brooklyn Heights, Ohio",
+          "highSchool": "Cuyahoga"
+        },
+        {
+          "number": "17",
+          "name": "Walker Bristow",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Richmond, Va.",
+          "highSchool": "Douglas S. Freeman"
+        },
+        {
+          "number": "18",
+          "name": "Olivia Simon",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Cuthbertson"
+        },
+        {
+          "number": "20",
+          "name": "Reagan Hamilton",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Franklin, Tenn.",
+          "highSchool": "Page"
+        },
+        {
+          "number": "21",
+          "name": "Ella Hoover",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Granville, OH",
+          "highSchool": "Granville"
+        },
+        {
+          "number": "22",
+          "name": "Mumu Guisasola",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Miami, Fla.",
+          "highSchool": "FC Prime Sunrise"
+        },
+        {
+          "number": "23",
+          "name": "Lauren Smith",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Reidsville, N.C.",
+          "highSchool": "Rockingham"
+        },
+        {
+          "number": "24",
+          "name": "Kylee Thompson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Huntersville, N.C.",
+          "highSchool": "William Amos"
+        },
+        {
+          "number": "25",
+          "name": "Hayden Rape",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Charleston, S.C.",
+          "highSchool": "James Island"
+        },
+        {
+          "number": "26",
+          "name": "Marley Kahle",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham"
+        },
+        {
+          "number": "27",
+          "name": "Kaytan Kroboth",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Sanderson"
+        },
+        {
+          "number": "33",
+          "name": "Skyler Walk",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Providence"
+        },
+        {
+          "number": "35",
+          "name": "Skylar Gindlesperger",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Buford, Ga.",
+          "highSchool": "Seckinger"
+        },
+        {
+          "number": "40",
+          "name": "Molly Coles",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Charlotte Christian School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 29,
+      "players": [
+        {
+          "number": "0",
+          "name": "Kelli Bostick",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Marietta, Ga.",
+          "highSchool": "Concorde Fire"
+        },
+        {
+          "number": "00",
+          "name": "Sarah Wommack",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Kernersville, N.C.",
+          "highSchool": "Northwest Guilford"
+        },
+        {
+          "number": "2",
+          "name": "Kerry Eagleston",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Winston-Salem, N.C.",
+          "highSchool": "North Carolina Fusion"
+        },
+        {
+          "number": "4",
+          "name": "Izzi Wood",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Hickory, NC",
+          "highSchool": "Hickory"
+        },
+        {
+          "number": "6",
+          "name": "Stephanie Barbosa",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Durham, N.C.",
+          "highSchool": "Riverside"
+        },
+        {
+          "number": "7",
+          "name": "Gracie Giacoletto",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Troy, Ill.",
+          "highSchool": "Triad"
+        },
+        {
+          "number": "8",
+          "name": "Shannon Studer",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Central Academy of Technology and Arts"
+        },
+        {
+          "number": "9",
+          "name": "Summer Bowman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Trinity, N.C.",
+          "highSchool": "Wheatmore"
+        },
+        {
+          "number": "11",
+          "name": "Kyli Switalski",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "High Point, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "12",
+          "name": "Makayla Mulholland",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pittsburgh, Pa.",
+          "highSchool": "Fox Chapel"
+        },
+        {
+          "number": "13",
+          "name": "Hannah Löfmark",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Vaxjo, Sweden /",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Aleesia Ambrosio",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Jamestown, N.C.",
+          "highSchool": "Ragsdale"
+        },
+        {
+          "number": "15",
+          "name": "Sarah Widderich",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Mebane, N.C.",
+          "highSchool": "Eastern Alamance"
+        },
+        {
+          "number": "16",
+          "name": "Reagan Sturgill",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Brooklyn Heights, Ohio",
+          "highSchool": "Cuyahoga"
+        },
+        {
+          "number": "17",
+          "name": "Lela Stark",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Guelph, Ontario, Canada",
+          "highSchool": "Guelph Union League One"
+        },
+        {
+          "number": "18",
+          "name": "Olivia Simon",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Waxhaw, N.C.",
+          "highSchool": "Cuthbertson"
+        },
+        {
+          "number": "19",
+          "name": "Megan Gregg",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cary, N.C.",
+          "highSchool": "Wake FC"
+        },
+        {
+          "number": "21",
+          "name": "Ella Hoover",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Granville, OH",
+          "highSchool": "Granville"
+        },
+        {
+          "number": "22",
+          "name": "Mumu Guisasola",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Miami, Fla.",
+          "highSchool": "FC Prime Sunrise"
+        },
+        {
+          "number": "23",
+          "name": "Felicia Erkenfeldt",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Rydeback, Sweeden",
+          "highSchool": "FC Rosengar"
+        },
+        {
+          "number": "24",
+          "name": "Katie Fuller",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Pittsboro, N.C.",
+          "highSchool": "North Carolina FC"
+        },
+        {
+          "number": "25",
+          "name": "Hayden Rape",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Charleston, S.C.",
+          "highSchool": "James Island"
+        },
+        {
+          "number": "26",
+          "name": "Marley Kahle",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Crestwood, Ky.",
+          "highSchool": "South Oldham"
+        },
+        {
+          "number": "27",
+          "name": "Kaytan Kroboth",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Raleigh, N.C.",
+          "highSchool": "Sanderson"
+        },
+        {
+          "number": "28",
+          "name": "Breckyn Monteith",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Southlake Christian Academy"
+        },
+        {
+          "number": "29",
+          "name": "Kaitlyn Little",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Charlotte Soccer Academy Elite"
+        },
+        {
+          "number": "32",
+          "name": "Bella Doganavsargil",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Greensboro, N.C.",
+          "highSchool": "North Carolina Fusion"
+        },
+        {
+          "number": "33",
+          "name": "Skyler Walk",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Providence"
+        },
+        {
+          "number": "40",
+          "name": "Brezlyn Parsons",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Pawleys Island, S.C.",
+          "highSchool": "Waccamaw"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://appstatesports.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:15:23Z"
+    }
+  },
   "commitments": [
     {
       "id": "anaya-jones-2026",
@@ -117,7 +1657,7 @@
       "city": "",
       "highSchool": "Upper Arlington",
       "college": "appalachian-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +1676,7 @@
         "date": "2025-07-03",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -423,41 +1963,27 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://appstatesports.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:11:20Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=36.215536&longitude=-81.680583&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T06:11:19Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:11:19Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:15:11Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

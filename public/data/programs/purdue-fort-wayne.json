@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T22:37:11Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 41.117278,
+    "lon": -85.108962,
+    "timezone": "America/New_York",
+    "elevationM": 241.1,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014827",
+      "name": "FT WAYNE INTL AP",
+      "state": "IN",
+      "distanceKm": 18.2,
+      "elevationM": 241.1
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 32.6,
+        "tLowF": 18.4,
+        "precipIn": 2.54,
+        "snowIn": 10.8,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 27.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 36.5,
+        "tLowF": 21.0,
+        "precipIn": 2.06,
+        "snowIn": 7.8,
+        "wetDays": 5.2,
+        "days90F": 0.0,
+        "daysFreeze": 24.3
+      },
+      {
+        "month": "Mar",
+        "tHighF": 47.8,
+        "tLowF": 29.4,
+        "precipIn": 2.81,
+        "snowIn": 4.6,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 20.5
+      },
+      {
+        "month": "Apr",
+        "tHighF": 60.9,
+        "tLowF": 39.4,
+        "precipIn": 3.74,
+        "snowIn": 0.8,
+        "wetDays": 7.7,
+        "days90F": 0.0,
+        "daysFreeze": 6.9
+      },
+      {
+        "month": "May",
+        "tHighF": 72.2,
+        "tLowF": 50.4,
+        "precipIn": 4.58,
+        "snowIn": 0.0,
+        "wetDays": 8.1,
+        "days90F": 1.1,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Jun",
+        "tHighF": 81.0,
+        "tLowF": 60.3,
+        "precipIn": 4.48,
+        "snowIn": 0.0,
+        "wetDays": 7.9,
+        "days90F": 4.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 84.1,
+        "tLowF": 63.5,
+        "precipIn": 4.05,
+        "snowIn": 0.0,
+        "wetDays": 6.6,
+        "days90F": 6.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 82.0,
+        "tLowF": 61.2,
+        "precipIn": 3.8,
+        "snowIn": 0.0,
+        "wetDays": 5.8,
+        "days90F": 2.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 76.1,
+        "tLowF": 53.4,
+        "precipIn": 3.04,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 1.5,
+        "daysFreeze": 0.1
+      },
+      {
+        "month": "Oct",
+        "tHighF": 63.7,
+        "tLowF": 42.8,
+        "precipIn": 2.95,
+        "snowIn": 0.1,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 3.8
+      },
+      {
+        "month": "Nov",
+        "tHighF": 49.4,
+        "tLowF": 32.8,
+        "precipIn": 2.96,
+        "snowIn": 1.9,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 15.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 37.5,
+        "tLowF": 24.2,
+        "precipIn": 2.47,
+        "snowIn": 7.6,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 24.9
+      }
+    ],
+    "annualPrecipIn": 39.5,
+    "annualSnowIn": 33.6,
+    "fallSeason": {
+      "avgHighF": 67.8,
+      "avgLowF": 47.5,
+      "precipIn": 12.8,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 84.1°F), coldest Jan (avg low 18.4°F). 39.5 in of rain per year, 33.6 in of snow. Fall season (Aug–Nov): highs around 67.8°F, 12.8 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014827,USC00129724,USC00123207&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:59:34Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Jason Burr",
@@ -308,11 +457,11 @@
         "highSchool": "Glen Allen",
         "previousSchool": "",
         "major": "",
-        "club": "Richmond United ECNL",
+        "club": "Northern Virginia Alliance",
         "bioUrl": "https://gomastodons.com/sports/womens-soccer/roster/reese-alexander/9927",
         "social": {},
         "bio": {},
-        "clubSource": "bio text (unverified)"
+        "clubSource": "SoccerWire"
       },
       {
         "number": "4",
@@ -3062,7 +3211,7 @@
       "club": "Cleveland Force Soccer Club",
       "state": "OH",
       "city": "Twinsburg",
-      "highSchool": "",
+      "highSchool": "Twinsburg",
       "college": "purdue-fort-wayne",
       "status": "enrolled",
       "announced": null,
@@ -3076,16 +3225,60 @@
           "firstSeen": "2026-09-07",
           "lastSeen": "2026-09-07",
           "missingSince": null
+        },
+        {
+          "kind": "soccerwire",
+          "url": "https://www.soccerwire.com/player/dalia-sabet/",
+          "firstSeen": "2026-09-07",
+          "lastSeen": "2026-09-07",
+          "missingSince": null,
+          "profileCreated": "2025-04-21"
         }
       ],
       "flags": [],
       "approxDate": {
-        "date": "2026-09-07",
-        "basis": "first seen by CollegeDash"
+        "date": "2025-04-21",
+        "basis": "SoccerWire profile created"
       },
       "confidence": "confirmed",
       "sourceKinds": [
+        "soccerwire",
         "tds"
+      ]
+    },
+    {
+      "id": "reese-alexander-2026",
+      "name": "Reese Alexander",
+      "aliases": [],
+      "gradYear": 2026,
+      "pos": "D",
+      "club": "Northern Virginia Alliance",
+      "state": "VA",
+      "city": "",
+      "highSchool": "Glen Allen",
+      "college": "purdue-fort-wayne",
+      "status": "enrolled",
+      "announced": null,
+      "announcedSource": null,
+      "firstSeen": "2026-09-07",
+      "sources": [
+        {
+          "kind": "soccerwire",
+          "url": "https://www.soccerwire.com/player/reese-alexander/",
+          "firstSeen": "2026-09-07",
+          "lastSeen": "2026-09-07",
+          "missingSince": null,
+          "profileCreated": "2025-04-22"
+        }
+      ],
+      "flags": [],
+      "approxDate": {
+        "date": "2025-04-22",
+        "basis": "SoccerWire profile created"
+      },
+      "confidence": "confirmed",
+      "sourceKinds": [
+        "soccerwire"
       ]
     },
     {
@@ -3361,16 +3554,16 @@
   },
   "curated": {},
   "commitmentsByYear": {
-    "2026": 1,
+    "2026": 2,
     "2027": 4,
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:14Z",
-    "completeness": 0.89,
+    "builtAt": "2026-09-08T01:35:55Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": true,
       "rpi": true,
@@ -3379,28 +3572,14 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "soccerwire: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=41.117278&longitude=-85.108962&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T22:39:43Z"
-      },
-      {
-        "collector": "soccerwire",
-        "error": "giving up on https://www.soccerwire.com/wp-json/v1/elastic-proxy/soccerwirecom-post-1/_search: HTTPSConnectionPool(host='www.soccerwire.com', port=443): Read timed out. (read timeout=60)",
-        "at": "2026-09-07T22:42:18Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T22:39:43Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:34:40Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

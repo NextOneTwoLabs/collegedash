@@ -69,17 +69,207 @@
       "asOf": "2026-09-07T05:30:05Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 29.717897,
+    "lon": -95.402035,
+    "timezone": "America/Chicago",
+    "elevationM": 13.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00012918",
+      "name": "HOUSTON HOBBY AP",
+      "state": "TX",
+      "distanceKm": 14.6,
+      "elevationM": 13.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 63.8,
+        "tLowF": 46.1,
+        "precipIn": 4.09,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 0.0,
+        "daysFreeze": 2.1
+      },
+      {
+        "month": "Feb",
+        "tHighF": 67.6,
+        "tLowF": 50.1,
+        "precipIn": 2.85,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 73.4,
+        "tLowF": 55.9,
+        "precipIn": 3.28,
+        "snowIn": null,
+        "wetDays": 4.4,
+        "days90F": 0.0,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 79.3,
+        "tLowF": 61.8,
+        "precipIn": 4.08,
+        "snowIn": null,
+        "wetDays": 4.2,
+        "days90F": 0.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 85.9,
+        "tLowF": 69.3,
+        "precipIn": 5.42,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 6.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 91.0,
+        "tLowF": 74.9,
+        "precipIn": 6.09,
+        "snowIn": null,
+        "wetDays": 7.2,
+        "days90F": 20.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 92.9,
+        "tLowF": 76.6,
+        "precipIn": 4.59,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 26.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 93.5,
+        "tLowF": 76.7,
+        "precipIn": 5.44,
+        "snowIn": null,
+        "wetDays": 6.1,
+        "days90F": 26.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 89.3,
+        "tLowF": 72.9,
+        "precipIn": 5.76,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 16.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 82.1,
+        "tLowF": 63.9,
+        "precipIn": 5.78,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 3.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 72.6,
+        "tLowF": 54.0,
+        "precipIn": 3.9,
+        "snowIn": null,
+        "wetDays": 5.1,
+        "days90F": 0.1,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Dec",
+        "tHighF": 65.7,
+        "tLowF": 48.0,
+        "precipIn": 4.34,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 0.0,
+        "daysFreeze": 0.8
+      }
+    ],
+    "annualPrecipIn": 55.6,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 84.4,
+      "avgLowF": 66.9,
+      "precipIn": 20.9,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Aug (avg high 93.5°F), coldest Jan (avg low 46.1°F). 55.6 in of rain per year. Fall season (Aug–Nov): highs around 84.4°F, 20.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00012918,USW00012977,USC00414321&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:10Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Brian Lee",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/brian--lee/3337",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Brian Lee",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/brian--lee/3337",
+        "social": {}
+      },
+      {
+        "name": "Genessee Puntigam",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/genessee-puntigam/3338",
+        "social": {}
+      },
+      {
+        "name": "Bella Killgore",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/bella-killgore/3340",
+        "social": {}
+      },
+      {
+        "name": "Braxton Newman",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/braxton-newman/3339",
+        "social": {}
+      },
+      {
+        "name": "Jane Campbell",
+        "title": "Volunteer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/coaches/jane-campbell/3341",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,13 +288,2942 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://riceowls.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:10:15Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "1-3-3",
+      "wins": 1,
+      "losses": 3,
+      "ties": 3,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "Brian Lee"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "10-4-6",
+      "wins": 10,
+      "losses": 4,
+      "ties": 6,
+      "confRecord": "3-2-5",
+      "rpiRank": 80,
+      "rpi": {
+        "rank": 80,
+        "record": "10-4-6",
+        "through": "2025-12-08",
+        "prevRank": 78,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 80,
+            "record": "10-4-6"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "12-6-2",
+      "wins": 12,
+      "losses": 6,
+      "ties": 2,
+      "confRecord": "5-4-1",
+      "rpiRank": 62,
+      "rpi": {
+        "rank": 62,
+        "sosRank": 66,
+        "balancedRank": 94,
+        "kpiRank": 82,
+        "masseyRank": 115,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "3-13-2",
+      "wins": 3,
+      "losses": 13,
+      "ties": 2,
+      "confRecord": "1-7-1",
+      "rpiRank": 260,
+      "rpi": {
+        "rank": 260,
+        "sosRank": 308,
+        "balancedRank": 224,
+        "kpiRank": 273,
+        "masseyRank": 229,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "0",
+        "name": "Megan Sweeney",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Menlo Park, Calif. / Sacred Heart Preparatory",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Silicon Valley Soccer Academy (SVSA)",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/megan-sweeney/11234",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "1",
+        "name": "Kenzie Solomon",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Atlanta, Ga. / Riverwood International",
+        "highSchool": "Georgia",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/kenzie-solomon/11233",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Isabelle Kent",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sugar Land, Texas / Clements HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Challenge SC",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/isabelle-kent/11226",
+        "social": {
+          "x": "https://twitter.com/IsabelleKent8",
+          "instagram": "https://www.instagram.com/isabellekent2"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "3",
+        "name": "Dayo Tennyson",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'0\"",
+        "heightIn": 60,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Missouri City, Texas / Ridge Point HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/dayo-tennyson/11235",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Lilly Reuscher",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Kansas City, Mo. / Park Hill South HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/lilly-reuscher/11231",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Jordyn Mariam",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "La Jolla, Calif. / The Bishop's School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/jordyn-mariam/11228",
+        "social": {
+          "instagram": "https://www.instagram.com/jordyn.mariam"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Sloane Popov",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bloomfield Hills, Mich. / Bloomfield Hills HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Nationals",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/sloane-popov/11239",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "8",
+        "name": "Lauren Pickup",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "London, England / The Millfield School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/lauren-pickup/11229",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Sophie Zhang",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Sammamish, Wash. / Skyline High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "XF Academy",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/sophie-zhang/11238",
+        "social": {
+          "instagram": "https://www.instagram.com/pandabearsophie"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Valentina Labuschagne",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Redondo Beach, Calif. / Mater Dei HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Slammers FC HB Koge",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/valentina-labuschagne/11240",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "11",
+        "name": "Jadyn Jaeger",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Buda, Texas / Moe and Gene Johnson HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/jadyn-jaeger/11224",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Eileen Albers",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Melsungen, Germany / Geschwister Scholl Schule",
+        "highSchool": "Radford",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/eileen-albers/11222",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Mia Brumlow",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Houston, Texas / Clear Lake High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "HTX Soccer",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/mia-brumlow/11223",
+        "social": {
+          "x": "https://twitter.com/miabrumlow05",
+          "instagram": "https://www.instagram.com/miabrumlow2"
+        },
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "14",
+        "name": "Keeley Klenke",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Houston, Texas / Duchesne Academy of the Sacred Heart",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/keeley-klenke/11241",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Brianna Bogar",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Redondo Beach, Calif. / Redondo Union HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Beach FC (CA)",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/brianna-bogar/11242",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "16",
+        "name": "Lola Foley",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Frisco, Texas / Frisco Memorial",
+        "highSchool": "Texas",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/lola-foley/11243",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Allie Love",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Colleyville, Texas / Colleyville, Heritage",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "D'Feeters Kicks Soccer Club (DKSC)",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/allie-love/11227",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "18",
+        "name": "Madeline Preusser",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Windermere, Fla. / Bishop Moore Catholic HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Florida Kraze/Krush",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/madeline-preusser/11244",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "19",
+        "name": "Elizabet Velkova",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lynwood, Wash. / Kamiak High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/elizabet-velkova/11236",
+        "social": {
+          "instagram": "https://www.instagram.com/bettyv_6"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Amelie Hoendermis",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Groningen, Netherlands",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/amelie-hoendermis/11245",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Laurel Kelley",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Missouri City, Texas / Ridge Point",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "RISE SC",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/laurel-kelley/11225",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "22",
+        "name": "Kirsten Ruf",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Lambertville, N.J. / Princeton Day School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/kirsten-ruf/11232",
+        "social": {
+          "x": "https://twitter.com/kirstenruf",
+          "instagram": "https://www.instagram.com/kkirstenruf"
+        },
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Caelan Kenney",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Carlsbad, Calif. / La Costa Canyon HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "City SC San Diego",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/caelan-kenney/11246",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "24",
+        "name": "Elliana Ramirez",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Dallas, Texas / iSchool Virtual Academy",
+        "highSchool": "Wake Forest",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/elliana-ramirez/11247",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Camille Quarterman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Norcross, Ga. / The Westminster Schools",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/camille-quarterman/11230",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "26",
+        "name": "Samantha James",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Herndon, Va. / Oakton HS",
+        "highSchool": "Howard",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/samantha-james/11250",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Neerali Kapadia",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Coppell, Texas / Coppell HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "DKSC",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/neerali-kapadia/11248",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "33",
+        "name": "Sam Walker",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Austin, Texas / Westwood",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Westlake",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/sam-walker/11237",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "85",
+        "name": "Ava Landstra",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Grandville, Mich. / Unity Christian",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Indy Premier Soccer Club",
+        "bioUrl": "https://riceowls.com/sports/womens-soccer/roster/ava-landstra/11249",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 6,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 1,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 5,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "JR": 5,
+      "GR": 2,
+      "SR": 8,
+      "FR": 9,
+      "SO": 4,
+      "R-SO": 1
+    },
+    "graduatingByPos": {
+      "GK": 2,
+      "M": 6,
+      "F": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://riceowls.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:10:15Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "0",
+          "name": "Megan Sweeney",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Menlo Park, Calif. / Sacred Heart Preparatory",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Kenzie Solomon",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Atlanta, Ga. / Riverwood International",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "2",
+          "name": "Isabelle Kent",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sugar Land, Texas / Clements HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Dayo Tennyson",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Missouri City, Texas / Ridge Point HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Lilly Reuscher",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Kansas City, Mo. / Park Hill South HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Jordyn Mariam",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "La Jolla, Calif. / The Bishop's School",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Bailey Peek",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Coppell, Texas / Coppell HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Taylor Rish",
+          "pos": "D/F",
+          "classCode": "GR",
+          "hometown": "Alpharetta, Ga. / Blessed Trinity",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "8",
+          "name": "Lauren Pickup",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "London, England / The Millfield School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Sophie Zhang",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sammamish, Wash. / Skyline High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Mariana Elizondo",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Monterrey, Mexico / Prepa UDEM San Pedro",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Jadyn Jaeger",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Buda, Texas / Moe and Gene Johnson HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Eileen Albers",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Melsungen, Germany / Geschwister Scholl Schule",
+          "highSchool": "Radford"
+        },
+        {
+          "number": "13",
+          "name": "Mia Brumlow",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Houston, Texas / Clear Lake High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Olivia Duvall",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Alexandria, Va. / St. Stephen's and St. Agnes School",
+          "highSchool": "Wake Forest"
+        },
+        {
+          "number": "15",
+          "name": "Piper Biziorek",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Naperville, Ill. / Neuqua Valley HS",
+          "highSchool": "Charlotte"
+        },
+        {
+          "number": "16",
+          "name": "Jessica Molina",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fulshear, Texas / Harmony School of Innovation",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Allie Love",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Colleyville, Texas / Colleyville, Heritage",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kenna Sanders",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Houston, Texas / St. Agnes Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Elizabet Velkova",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Lynwood, Wash. / Kamiak High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carsyn Martz",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Tampa, Fla. / Berkeley Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Laurel Kelley",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Missouri City, Texas / Ridge Point",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kirsten Ruf",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Lambertville, N.J. / Princeton Day School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Leah Chancey",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Ovilla, Texas / Midlothian Heritage",
+          "highSchool": "SMU"
+        },
+        {
+          "number": "24",
+          "name": "Chelsea Cross",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Manvel, Texas / Manvel",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Jules Johnston",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Jupiter, Fla. / Suncoast HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Kallie McKinney",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Tampa, Fla. / Plant HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Naija Bruckner",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Tucson, Ariz. / BASIS Tucson North",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Sam Walker",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Austin, Texas / Westwood",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Camille Quarterman",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Norcross, Ga. / The Westminster Schools",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "bailey peek",
+        "carsyn martz",
+        "chelsea cross",
+        "jessica molina",
+        "jules johnston",
+        "kallie mckinney",
+        "kenna sanders",
+        "leah chancey",
+        "mariana elizondo",
+        "naija bruckner",
+        "olivia duvall",
+        "piper biziorek",
+        "taylor rish"
+      ]
+    },
+    "2024": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Faith Hutchins",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "South Kingstown, R.I. / South Kingstown HS",
+          "highSchool": "Rhode Island"
+        },
+        {
+          "number": "2",
+          "name": "Isabelle Kent",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Sugar Land, Texas / Clements HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Natalie Diaz",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "West Covina, Calif. / Bishop Amat Memorial HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Kat Lazor",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Houston, Texas / St. Thomas Episcopal",
+          "highSchool": "HCU"
+        },
+        {
+          "number": "5",
+          "name": "Jordyn Mariam",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "La Jolla, Calif. / The Bishop's School",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Bailey Peek",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Coppell, Texas / Coppell HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Catarina Albuquerque",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "London, England / Cardinal Wiseman RC School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Lauren Pickup",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "London, England / The Millfield School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Sophie Zhang",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Sammamish, Wash. / Skyline High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Mariana Elizondo",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Monterrey, Mexico / Prepa UDEM San Pedro",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Allison Padron",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Houston, Texas / Stratford HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Natalie Gorji",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Sarasota, Fla. / Out-of-Door Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Mia Brumlow",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Houston, Texas / Clear Lake High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Mikala Furuto",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Littleton, Colo. / Chatfield H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Piper Biziorek",
+          "pos": "M",
+          "classCode": "R-SR",
+          "hometown": "Naperville, Ill. / Neuqua Valley HS",
+          "highSchool": "Charlotte"
+        },
+        {
+          "number": "16",
+          "name": "Jessica Molina",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Fulshear, Texas / Harmony School of Innovation",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kenna Sanders",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Houston, Texas / St. Agnes Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Elizabet Velkova",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lynwood, Wash. / Kamiak High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carsyn Martz",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Tampa, Fla. / Berkeley Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kirsten Ruf",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Lambertville, N.J. / Princeton Day School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Leah Chancey",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Ovilla, Texas / Midlothian Heritage",
+          "highSchool": "SMU"
+        },
+        {
+          "number": "24",
+          "name": "Gabriela Quintero",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Louisville, Ky. / Sacred Heart Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Jules Johnston",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Jupiter, Fla. / Suncoast HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Taylor Rish",
+          "pos": "D/F",
+          "classCode": "GR",
+          "hometown": "Alpharetta, Ga. / Blessed Trinity",
+          "highSchool": "Georgia"
+        },
+        {
+          "number": "27",
+          "name": "Kallie McKinney",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Tampa, Fla. / Plant HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Naija Bruckner",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Tucson, Ariz. / BASIS Tucson North",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Lilly Reuscher",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Kansas City, Mo. / Park Hill South HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Megan Sweeney",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Menlo Park, Calif. / Sacred Heart Preparatory",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Allie Love",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Colleyville, Texas / Colleyville, Heritage",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Camille Quarterman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Norcross, Ga. / The Westminster Schools",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Claire Tracy",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Menomonee Falls, Wis. / Brookfield Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Dayo Tennyson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Missouri City, Texas / Ridge Point HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 27,
+      "players": [
+        {
+          "number": "0",
+          "name": "Hannah Pimentel",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Flowery Branch, Ga. / Flowery Branch HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "1",
+          "name": "Ann Stephanie Fortin",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Sainte-Julie, Quebec, Canada / Ecole Secondaire De Mortagne",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Isabelle Kent",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Sugar Land, Texas / Clements HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Natalie Diaz",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "West Covina, Calif. / Bishop Amat Memorial HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sarah Piper",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "The Woodlands, Texas / Ralston Valley HS",
+          "highSchool": "Duke"
+        },
+        {
+          "number": "5",
+          "name": "Jordyn Mariam",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "La Jolla, Calif. / The Bishop's School",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Bailey Peek",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Coppell, Texas / Coppell HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Catarina Albuquerque",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "London, England / Cardinal Wiseman RC School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Lauren Pickup",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "London, England / The Millfield School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Sophie Zhang",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Sammamish, Wash. / Skyline High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Mariana Elizondo",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Monterrey, Mexico / Prepa UDEM San Pedro",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Allison Padron",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Houston, Texas / Stratford HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Natalie Gorji",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Sarasota, Fla. / Out-of-Door Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Mia Brumlow",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Houston, Texas / Clear Lake High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Mikala Furuto",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Littleton, Colo. / Chatfield H.S.",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Piper Biziorek",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Naperville, Ill. / Neuqua Valley HS",
+          "highSchool": "Charlotte"
+        },
+        {
+          "number": "16",
+          "name": "Jessica Molina",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Fulshear, Texas / Harmony School of Innovation",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Kenna Sanders",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Houston, Texas / St. Agnes Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Elizabet Velkova",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lynwood, Wash. / Kamiak High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Carsyn Martz",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Berkeley Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Olivia Pielak",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Tampa, Fla. / Berkeley Prep",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Kirsten Ruf",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lambertville, N.J. / Princeton Day School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Ellen Halseth",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Bekkestua, Norway / Nadderud Videregaende Skole",
+          "highSchool": "Hofstra"
+        },
+        {
+          "number": "24",
+          "name": "Gabriela Quintero",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Louisville, Ky. / Sacred Heart Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Jules Johnston",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Jupiter, Fla. / Suncoast HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Kallie McKinney",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tampa, Fla. / Plant HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Naija Bruckner",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Tucson, Ariz. / BASIS Tucson North",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 1,
+      "losses": 3,
+      "ties": 3,
+      "text": "1-3-3",
+      "played": 7,
+      "scheduled": 22,
+      "confText": "0-0-0",
+      "exhibitions": 1
+    },
+    "games": [
+      {
+        "date": "2026-08-06",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Houston",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/houston-exhibition/287"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Texas A&M",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/texas-am/boxscore/28832",
+          "recap": "https://riceowls.com/news/2026/8/12/womens-soccer-owls-fall-late-to-texas-am",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/texas-am/319"
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Navy",
+        "opponentRank": null,
+        "location": "Annapolis, Md.",
+        "result": "W",
+        "score": "3-0",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/navy/boxscore/28896",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/navy/350"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "HCU",
+        "opponentRank": null,
+        "location": "Houston, TX",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/hcu/boxscore/28897",
+          "recap": "https://riceowls.com/news/2026/8/20/womens-soccer-owls-play-to-draw-at-hcu",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/hcu/288"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Lamar",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/lamar/boxscore/28898",
+          "recap": "https://riceowls.com/news/2026/8/23/womens-soccer-rice-and-lamar-play-to-draw",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/lamar/289"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "No. 3 Vanderbilt",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": "L",
+        "score": "1-3",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/no-3-vanderbilt/boxscore/28874",
+          "recap": "https://riceowls.com/news/2026/8/27/womens-soccer-owls-fall-short-to-no-3-vanderbilt",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/no-3-vanderbilt/396"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "No. 17 Texas State",
+        "opponentRank": null,
+        "location": "San Marcos, TX",
+        "result": "L",
+        "score": "3-4",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/no-17-texas-state/boxscore/28899",
+          "recap": "https://riceowls.com/news/2026/9/4/womens-soccer-owls-fall-in-valiant-effort-at-no-17-texas-state",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/no-17-texas-state/323"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "No. 15 Florida State",
+        "opponentRank": null,
+        "location": "Tallahassee, FL",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://riceowls.com/sports/womens-soccer/stats/2026/no-15-florida-state/boxscore/28900",
+          "recap": "https://riceowls.com/news/2026/9/6/womens-soccer-owls-earn-historic-draw-at-defending-champion-no-15-fsu",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/no-15-florida-state/316"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "UL-Monroe",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/ul-monroe/377"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "South Alabama",
+        "opponentRank": null,
+        "location": "Mobile, AL",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/south-alabama/382"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Memphis",
+        "opponentRank": null,
+        "location": "Memphis, TN",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/memphis/296"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Temple",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/temple/502"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Tulsa",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/tulsa/393"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UTSA",
+        "opponentRank": null,
+        "location": "San Antonio, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/utsa/339"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UAB",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/uab/352"
+        }
+      },
+      {
+        "date": "2026-10-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "East Carolina",
+        "opponentRank": null,
+        "location": "Greenville, NC",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/east-carolina/313"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "North Texas",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/north-texas/301"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "South Florida",
+        "opponentRank": null,
+        "location": "Tampa, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/south-florida/334"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Florida Atlantic",
+        "opponentRank": null,
+        "location": "Boca Raton, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/florida-atlantic/279"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Charlotte",
+        "opponentRank": null,
+        "location": "Holloway Field, Houston, Texas",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)https://www.espn.com/watch/catalog/56d874fa-ff97-41c3-8bc6-07b208281482/american-athletic-conference#bucketId=29804&sourceCollection=Browse_By_Conference_(ESPN+)",
+          "live stats": "https://riceowls.com/sidearmstats/wsoc/summary",
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/charlotte/204"
+        }
+      },
+      {
+        "date": "2026-11-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": null,
+        "opponent": "American Conference Quarterfinal",
+        "opponentRank": null,
+        "location": "Lakewood Ranch, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/american-conference-quarterfinal/1759"
+        }
+      },
+      {
+        "date": "2026-11-11",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "American Conference Semifinal",
+        "opponentRank": null,
+        "location": "Lakewood Ranch, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/american-conference-semifinal/1759"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "American Conference Championship",
+        "opponentRank": null,
+        "location": "Lakewood Ranch, Fla.",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://riceowls.com/sports/wsoc/opponent-history/american-conference-championship/1759"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "10-4-6",
+        "games": [
+          {
+            "date": "2025-08-05",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas A&M",
+            "opponentRank": null,
+            "location": "College Station, TX",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/texas-am-exhibition/319"
+            }
+          },
+          {
+            "date": "2025-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Houston",
+            "opponentRank": null,
+            "location": "Houston, TX",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/houston-exhibition/287"
+            }
+          },
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "HCU",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/hcu/boxscore/28479",
+              "recap": "https://riceowls.com/news/2025/8/14/womens-soccer-owls-open-new-season-with-win-over-hcu",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/hcu/288"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Edinburg, TX",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/utrgv/boxscore/28478",
+              "recap": "https://riceowls.com/news/2025/8/17/womens-soccer-owls-erupt-for-six-goals-to-blank-utrgv",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utrgv/338"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Incarnate Word",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/incarnate-word/328"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 12 North Carolina",
+            "opponentRank": null,
+            "location": "Chapel Hill, NC",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/no-12-north-carolina/boxscore/28476",
+              "recap": "https://riceowls.com/news/2025/8/24/womens-soccer-owls-fall-to-no-12-unc-in-chapel-hill",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/no-12-north-carolina/387"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Oklahoma State",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/oklahoma-state/boxscore/28475",
+              "recap": "https://riceowls.com/news/2025/8/28/womens-soccer-lee-earns-win-350-as-owls-take-down-oklahoma-state",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/oklahoma-state/305"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Lafayette, LA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/louisiana/boxscore/28474",
+              "recap": "https://riceowls.com/news/2025/8/31/womens-soccer-chanceys-late-goal-lifts-owls-to-road-win-over-louisiana",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/louisiana/333"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Lamar",
+            "opponentRank": null,
+            "location": "Beaumont, TX",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/lamar/boxscore/28473",
+              "recap": "https://riceowls.com/news/2025/9/7/womens-soccer-chanceys-brace-leads-rice-to-shutout-win-at-lamar",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/lamar/289"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, AL",
+            "result": "T",
+            "score": "3-3",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/uab/boxscore/28472",
+              "recap": "https://riceowls.com/news/2025/9/11/womens-soccer-bruckners-late-goal-results-in-draw-at-uab",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/uab/352"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/florida-atlantic/boxscore/28471",
+              "recap": "https://riceowls.com/news/2025/9/18/womens-soccer-chanceys-game-winner-lifts-no-25-rice-over-florida-atlantic",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/florida-atlantic/279"
+            }
+          },
+          {
+            "date": "2025-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Grambling State",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/grambling-state/boxscore/28470",
+              "recap": "https://riceowls.com/news/2025/9/21/womens-soccer-second-half-surge-powers-no-25-rice-past-grambling-state",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/grambling-state/374"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Philadelphia, PA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/temple/boxscore/28469",
+              "recap": "https://riceowls.com/news/2025/9/25/womens-soccer-bruckner-extends-no-25-rices-unbeaten-streak-to-seven",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/temple/502"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 11 Memphis",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/no-11-memphis/boxscore/28468",
+              "recap": "https://riceowls.com/news/2025/9/28/womens-soccer-no-25-rice-falls-to-no-11-memphis-in-battle-of-ranked-opponents",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/no-11-memphis/296"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/utsa/boxscore/28467",
+              "recap": "https://riceowls.com/news/2025/10/2/womens-soccer-owls-and-roadrunners-settle-for-a-draw-at-holloway-field",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utsa/339"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Charlotte, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/charlotte/boxscore/28466",
+              "recap": "https://riceowls.com/news/2025/10/9/womens-soccer-late-goals-leave-rice-and-charlotte-at-a-draw",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/charlotte/204"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/south-florida/boxscore/28465",
+              "recap": "https://riceowls.com/news/2025/10/12/womens-soccer-second-half-eruption-sends-rice-past-south-florida",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/south-florida/334"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Denton, TX",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/north-texas/boxscore/28464",
+              "recap": "https://riceowls.com/news/2025/10/19/womens-soccer-owls-rally-for-draw-at-north-texas",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/north-texas/301"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, Texas",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/east-carolina/boxscore/28463",
+              "recap": "https://riceowls.com/news/2025/10/23/womens-soccer-chanceys-late-goal-results-in-draw-with-ecu-on-senior-night",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/east-carolina/313"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Tulsa, OK",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/tulsa/boxscore/28462",
+              "recap": "https://riceowls.com/news/2025/10/30/womens-soccer-owls-fall-at-tulsa",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/tulsa/393"
+            }
+          },
+          {
+            "date": "2025-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/tulsa/boxscore/28461",
+              "recap": "https://riceowls.com/news/2025/11/3/womens-soccer-albers-goal-sends-rice-to-american-semifinal",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/tulsa/393"
+            }
+          },
+          {
+            "date": "2025-11-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/south-florida/boxscore/28682",
+              "recap": "https://riceowls.com/news/2025/11/6/womens-soccer-owls-advance-to-american-championships-game-on-penalty-kicks",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/south-florida/334"
+            }
+          },
+          {
+            "date": "2025-11-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2025/utsa/boxscore/28730",
+              "recap": "https://riceowls.com/news/2025/11/9/womens-soccer-rice-falls-in-ot-to-utsa-in-american-championship-game",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utsa/339"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "12-6-2",
+        "games": [
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/texas-state/boxscore/28024",
+              "recap": "https://riceowls.com/news/2024/8/15/womens-soccer-second-half-offense-powers-rice-to-season-opening-win",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/texas-state/323"
+            }
+          },
+          {
+            "date": "2024-08-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Navy",
+            "opponentRank": null,
+            "location": "Holloway Field",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/navy/boxscore/28025",
+              "recap": "https://riceowls.com/news/2024/8/18/womens-soccer-gorjis-goal-propels-rice-past-navy",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/navy/350"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "No. 1 Florida State",
+            "opponentRank": null,
+            "location": "Tallahassee, FL",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/no-1-florida-state/boxscore/28134",
+              "recap": "https://riceowls.com/news/2024/8/22/womens-soccer-rice-falls-on-road-to-top-ranked-florida-state",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/no-1-florida-state/316"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/utrgv/boxscore/28026",
+              "recap": "https://riceowls.com/news/2024/8/25/womens-soccer-owls-blank-vaqueros-behind-chanceys-second-half-goal",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utrgv/338"
+            }
+          },
+          {
+            "date": "2024-08-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Lamar",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/lamar/boxscore/28027",
+              "recap": "https://riceowls.com/news/2024/8/29/womens-soccer-owls-erase-early-deficit-to-defeat-lamar",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/lamar/289"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas Southern",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/texas-southern/boxscore/28029",
+              "recap": "https://riceowls.com/news/2024/9/1/womens-soccer-owls-defeat-texas-southern-for-third-consecutive-win"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Louisiana",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/louisiana/boxscore/28030",
+              "recap": "https://riceowls.com/news/2024/9/5/womens-soccer-owls-extend-unbeaten-streak-to-four-after-draw-with-louisiana",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/louisiana/333"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/sam-houston/boxscore/28031",
+              "recap": "https://riceowls.com/news/2024/9/8/womens-soccer-rice-rounds-out-non-conference-with-shutout-win-over-sam-houston",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/sam-houston/309"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/tulsa/boxscore/28032",
+              "recap": "https://riceowls.com/news/2024/9/12/womens-soccer-rices-unbeaten-streak-extends-to-six-after-shutout-win-over-tulsa",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/tulsa/393"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, FL",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/south-florida/boxscore/28035",
+              "recap": "https://riceowls.com/news/2024/9/19/womens-soccer-owls-drop-road-contest-at-south-florida",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/south-florida/334"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/uab/boxscore/28036",
+              "recap": "https://riceowls.com/news/2024/9/26/womens-soccer-owls-defeat-uab-as-chancey-extends-goal-scoring-streak",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/uab/352"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, TX",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/utsa/boxscore/28039",
+              "recap": "https://riceowls.com/news/2024/9/29/womens-soccer-chancey-ties-goal-scoring-record-as-owls-blank-utsa",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utsa/339"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/temple/boxscore/28040",
+              "recap": "https://riceowls.com/news/2024/10/3/womens-soccer-record-breaking-night-at-holloway-fuels-rice-10th-win-of-the-season",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/temple/502"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/north-texas/boxscore/28043",
+              "recap": "https://riceowls.com/news/2024/10/13/womens-soccer-owls-rally-past-north-texas-to-remain-unbeaten-at-home",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/north-texas/301"
+            }
+          },
+          {
+            "date": "2024-10-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Boca Raton, FL",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/florida-atlantic/boxscore/28042",
+              "recap": "https://riceowls.com/news/2024/10/17/womens-soccer-rice-extends-unbeaten-streak-to-five-after-draw-at-florida-atlantic",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/florida-atlantic/279"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 16 Memphis",
+            "opponentRank": null,
+            "location": "Memphis, TN",
+            "result": "L",
+            "score": "1-4",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/no-16-memphis/boxscore/28041",
+              "recap": "https://riceowls.com/news/2024/10/24/womens-soccer-owls-fall-on-the-road-to-no-16-memphis",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/no-16-memphis/296"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/charlotte/boxscore/28038",
+              "recap": "https://riceowls.com/news/2024/10/27/womens-soccer-rice-falls-to-charlotte-on-senior-day",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/charlotte/204"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Greenville, NC",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/east-carolina/boxscore/28037",
+              "recap": "https://riceowls.com/news/2024/10/31/womens-soccer-rice-drops-regular-season-finale-to-ecu",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/east-carolina/313"
+            }
+          },
+          {
+            "date": "2024-11-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/uab/boxscore/28028",
+              "recap": "https://riceowls.com/news/2024/11/4/womens-soccer-owls-power-past-uab-to-advance-to-aac-semifinals",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/uab/352"
+            }
+          },
+          {
+            "date": "2024-11-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 19 Memphis",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, Fla.",
+            "result": "L",
+            "score": "1-3",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2024/no-19-memphis/boxscore/28260",
+              "recap": "https://riceowls.com/news/2024/11/7/womens-soccer-owls-fall-in-aac-semifinal-to-no-19-memphis",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/no-19-memphis/296"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "3-13-2",
+        "games": [
+          {
+            "date": "2023-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Stephen F. Austin",
+            "opponentRank": null,
+            "location": "SFA Soccer Field, Nacogdoches, TX",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/stephen-f-austin-exhibition/140"
+            }
+          },
+          {
+            "date": "2023-08-12",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "TCU",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": null,
+            "score": null,
+            "links": {
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/tcu-exhibition/317"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Incarnate Word",
+            "opponentRank": null,
+            "location": "Gayle & Tom Benson Stadium, San Antonio, TX",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/incarnate-word/boxscore/27671",
+              "recap": "https://riceowls.com/news/2023/8/17/womens-soccer-owls-fall-in-season-opener-at-incarnate-word",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/incarnate-word/328"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas",
+            "opponentRank": 15,
+            "location": "Mike A. Myers Stadium, Austin, TX",
+            "result": "L",
+            "score": "0-6",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/-15-texas/boxscore/27672",
+              "recap": "https://riceowls.com/news/2023/8/20/womens-soccer-owls-fall-at-15-texas",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/15-texas/318"
+            }
+          },
+          {
+            "date": "2023-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas Southern",
+            "opponentRank": null,
+            "location": "Alexander Durley Stadium, Houston, TX",
+            "result": "W",
+            "score": "5-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/texas-southern/boxscore/27703",
+              "recap": "https://riceowls.com/news/2023/8/25/womens-soccer-owls-earns-first-win-of-2023-season-at-texas-southern",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/texas-southern/327"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Northwestern State",
+            "opponentRank": null,
+            "location": "Lady Demon Soccer Complex, Natchitoches, LA",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/northwestern-state/boxscore/27673",
+              "recap": "https://riceowls.com/news/2023/8/27/womens-soccer-rice-fends-off-northwestern-state-for-back-to-back-wins",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/northwestern-state/354"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Houston",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/houston/boxscore/27674",
+              "recap": "https://riceowls.com/news/2023/8/31/womens-soccer-owls-drop-home-opener-to-houston",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/houston/287"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Loyola (Md.)",
+            "opponentRank": null,
+            "location": "Ridley Athletic Complex, Baltimore, MD",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/loyola-md-/boxscore/27675",
+              "recap": "https://riceowls.com/news/2023/9/3/womens-soccer-rice-blanked-on-road-to-loyola-md",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/loyola-md/1610"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Pritchett Field, Huntsville, TX",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/sam-houston/boxscore/27676",
+              "recap": "https://riceowls.com/news/2023/9/7/womens-soccer-gorjis-late-goal-results-in-draw-at-sam-houston",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/sam-houston/309"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas A&M",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "0-4",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/texas-am/boxscore/27677",
+              "recap": "https://riceowls.com/news/2023/9/10/womens-soccer-owls-fall-at-home-to-texas-am",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/texas-am/319"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "RV SMU",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "3-6",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/rv-smu/boxscore/27678",
+              "recap": "https://riceowls.com/news/2023/9/14/womens-soccer-owls-drop-aac-opener-to-smu",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/rv-smu/312"
+            }
+          },
+          {
+            "date": "2023-09-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Xavier",
+            "opponentRank": 17,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "2-4",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/-17-xavier/boxscore/27679",
+              "recap": "https://riceowls.com/news/2023/9/17/womens-soccer-owls-fall-to-no-17-xavier-in-non-conference-finale",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/17-xavier/403"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "North Texas",
+            "opponentRank": null,
+            "location": "UNT Soccer Stadium, Denton, TX",
+            "result": "L",
+            "score": "0-6",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/north-texas/boxscore/27680",
+              "recap": "https://riceowls.com/news/2023/9/21/womens-soccer-rice-drops-road-contest-to-north-texas",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/north-texas/301"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Hurricane Soccer Stadium, Tulsa, OK",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/tulsa/boxscore/27681",
+              "recap": "https://riceowls.com/news/2023/9/28/womens-soccer-owls-drop-road-contest-to-tulsa",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/tulsa/393"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Memphis",
+            "opponentRank": 10,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/-10-memphis/boxscore/27682",
+              "recap": "https://riceowls.com/news/2023/10/5/womens-soccer-owls-drop-hard-fought-contest-to-10-memphis",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/10-memphis/296"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Temple Sports Complex, Philadelphia, PA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/temple/boxscore/27683",
+              "recap": "https://riceowls.com/news/2023/10/12/womens-soccer-zhangs-first-career-owls-gives-rice-its-first-aac-win",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/temple/502"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "PNC Field, Birmingham, AL",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/uab/boxscore/27684",
+              "recap": "https://riceowls.com/news/2023/10/15/womens-soccer-owls-fall-short-on-road-to-uab",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/uab/352"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/south-florida/boxscore/27685",
+              "recap": "https://riceowls.com/news/2023/10/19/womens-soccer-owls-and-bulls-play-to-a-draw-thursday-night",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/south-florida/334"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/27686",
+              "recap": "https://riceowls.com/news/2023/10/22/womens-soccer-late-goal-sinks-rice-against-fau",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/florida-atlantic/279"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Holloway Field, Houston, TX",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://riceowls.com/sports/womens-soccer/stats/2023/utsa/boxscore/27687",
+              "recap": "https://riceowls.com/news/2023/10/26/womens-soccer-owls-fall-to-utsa-on-senior-night",
+              "history": "https://riceowls.com/sports/wsoc/opponent-history/utsa/339"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://riceowls.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:10:15Z"
+    }
+  },
   "commitments": [
     {
       "id": "ava-landstra-2026",
@@ -117,7 +3236,7 @@
       "city": "Grandville",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -136,7 +3255,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +3271,7 @@
       "city": "Redondo Beach",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -196,7 +3315,7 @@
       "city": "Carlsbad",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -215,7 +3334,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -231,7 +3350,7 @@
       "city": "",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -250,7 +3369,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -266,7 +3385,7 @@
       "city": "",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -285,7 +3404,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -301,7 +3420,7 @@
       "city": "Bloomfield Hills",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -320,7 +3439,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -336,7 +3455,7 @@
       "city": "Redondo Beach",
       "highSchool": "",
       "college": "rice",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -355,7 +3474,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -871,41 +3990,27 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://riceowls.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T05:30:39Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=29.717897&longitude=-95.402035&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:30:37Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:30:37Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:10:04Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

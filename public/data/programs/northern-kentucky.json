@@ -69,17 +69,183 @@
       "asOf": "2026-09-07T16:14:12Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 39.029714,
+    "lon": -84.463483,
+    "timezone": "America/New_York",
+    "elevationM": 149.4,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093812",
+      "name": "CINCINNATI LUNKEN AP",
+      "state": "OH",
+      "distanceKm": 9.0,
+      "elevationM": 149.4
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 40.6,
+        "tLowF": 23.6,
+        "precipIn": 2.86,
+        "snowIn": null,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 24.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 45.0,
+        "tLowF": 25.7,
+        "precipIn": 2.79,
+        "snowIn": null,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 21.1
+      },
+      {
+        "month": "Mar",
+        "tHighF": 54.6,
+        "tLowF": 33.4,
+        "precipIn": 3.94,
+        "snowIn": null,
+        "wetDays": 7.8,
+        "days90F": 0.0,
+        "daysFreeze": 14.4
+      },
+      {
+        "month": "Apr",
+        "tHighF": 66.6,
+        "tLowF": 42.5,
+        "precipIn": 4.37,
+        "snowIn": null,
+        "wetDays": 8.2,
+        "days90F": 0.0,
+        "daysFreeze": 3.5
+      },
+      {
+        "month": "May",
+        "tHighF": 75.4,
+        "tLowF": 52.7,
+        "precipIn": 4.7,
+        "snowIn": null,
+        "wetDays": 8.7,
+        "days90F": 0.6,
+        "daysFreeze": 0.2
+      },
+      {
+        "month": "Jun",
+        "tHighF": 83.3,
+        "tLowF": 61.2,
+        "precipIn": 4.61,
+        "snowIn": null,
+        "wetDays": 7.6,
+        "days90F": 4.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 86.6,
+        "tLowF": 65.3,
+        "precipIn": 4.39,
+        "snowIn": null,
+        "wetDays": 7.4,
+        "days90F": 9.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 85.9,
+        "tLowF": 63.7,
+        "precipIn": 3.39,
+        "snowIn": null,
+        "wetDays": 5.5,
+        "days90F": 7.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 79.7,
+        "tLowF": 55.9,
+        "precipIn": 3.07,
+        "snowIn": null,
+        "wetDays": 5.0,
+        "days90F": 3.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 67.9,
+        "tLowF": 44.2,
+        "precipIn": 3.05,
+        "snowIn": null,
+        "wetDays": 5.7,
+        "days90F": 0.2,
+        "daysFreeze": 2.1
+      },
+      {
+        "month": "Nov",
+        "tHighF": 55.1,
+        "tLowF": 34.1,
+        "precipIn": 2.91,
+        "snowIn": null,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 14.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.6,
+        "tLowF": 28.0,
+        "precipIn": 3.32,
+        "snowIn": null,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 21.6
+      }
+    ],
+    "annualPrecipIn": 43.4,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 72.2,
+      "avgLowF": 49.5,
+      "precipIn": 12.4,
+      "wetDays": 22.0
+    },
+    "summary": "Hottest month Jul (avg high 86.6°F), coldest Jan (avg low 23.6°F). 43.4 in of rain per year. Fall season (Aug–Nov): highs around 72.2°F, 12.4 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093812,USW00093814,USC00331515&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:32Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Bob Sheehan",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/coaches/bob-sheehan/2236",
       "social": {}
     },
-    "coaches": [],
+    "coaches": [
+      {
+        "name": "Bob Sheehan",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/coaches/bob-sheehan/2236",
+        "social": {}
+      },
+      {
+        "name": "Terry Gruelle",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/coaches/terry-gruelle/2239",
+        "social": {}
+      }
+    ],
     "supportStaff": [],
     "stadium": null,
     "founded": null,
@@ -98,14 +264,1302 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://nkunorse.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:23:40Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
-  "commitments": [],
+  "roster": {
+    "season": 2026,
+    "count": 23,
+    "players": [
+      {
+        "number": "00",
+        "name": "Donna Bundy",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, Ohio / Taylor High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/donna-bundy/7301",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Grace Kostohryz",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Wooster, Ohio / Wooster High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/grace-kostohryz/7291",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Addison Ramby",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Springboro, Ohio / Springboro High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/addison-ramby/7316",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Natalie Newman",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kewaskum, Wis. / Kewaskum High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/natalie-newman/7315",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Megan Molner",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "St. Louis, Mo. / Incarnate Word Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/megan-molner/7313",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Macey Blanton",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "West Chester, Ohio / Badin High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/macey-blanton/7300",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Olivia Lengel",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Avon Lake, Ohio / Avon Lake High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/olivia-lengel/7293",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Emma Gianino",
+        "pos": "M/F",
+        "posLabel": "M/F",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "St. Louis, Mo. / Nerinx Hall",
+        "highSchool": "Dayton",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/emma-gianino/7289",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Gabi Folino",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Pittsburgh, Pa. / Oakland Catholic High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/gabi-folino/7307",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Mikaela Bevelander",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Columbus, Ohio / Worthington Kilbourne",
+        "highSchool": "Tiffin (OH)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/mikaela-bevelander/7279",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Sophia Kapszukiewicz",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Loveland, Ohio / Loveland High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/sophia-kapszukiewicz/7309",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Zellie Barnes",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Alliance, Ohio / Alliance High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/zellie-barnes/7317",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Avery Mueller",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Medina, Ohio / Holy Name High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/avery-mueller/7295",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Riley Evans",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lodi, Ohio / Cloverleaf High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/riley-evans/7305",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Caitlin Evans",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Milford, Ohio / Milford High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/caitlin-evans/7285",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Ayla Conn",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-11",
+        "heightIn": 71,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Indianapolis, Ind. / Hamilton Southeastern High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/ayla-conn/7283",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Kylie Anderson",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "St. Louis, Mo. / Oakville Senior High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/kylie-anderson/7297",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Erykah Cornett",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Cincinnati, Ohio / Oak Hills High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/erykah-cornett/7303",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "23",
+        "name": "Natalie Krummen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "West Chester, Ohio / Lakota West High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/natalie-krummen/7311",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Camryn Koski",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Avon Lake, Ohio / Avon Lake High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Internationals SC (OH)",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/camryn-koski/7318",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Lizzie Fight",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Milford, Ohio / Milford High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/lizzie-fight/7287",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Reagan Crisafi",
+        "pos": "M",
+        "posLabel": "M",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Loveland, Ohio / Loveland High School",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/reagan-crisafi/7319",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Autumn Bishop",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Parma, Ohio / Normandy",
+        "highSchool": "California (PA)",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://nkunorse.com/sports/womens-soccer/roster/autumn-bishop/7299",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 3,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 8,
+      "JR": 7,
+      "FR": 4,
+      "SO": 4
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "F": 3,
+      "M": 3,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://nkunorse.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:23:40Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 26,
+      "players": [
+        {
+          "number": "00",
+          "name": "Donna Bundy",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio / Taylor High School",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Grace Kostohryz",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Wooster, Ohio / Wooster High School",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Shay Shipley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "McCordsville, Ind. / Mt. Vernon High School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Natalie Newman",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Kewaskum, Wis. / Kewaskum High School",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Megan Molner",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "St. Louis, Mo. / Incarnate Word Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Lilly Yordy",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Hamilton, Ohio / Hamilton High School",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "7",
+          "name": "Olivia Lengel",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Avon Lake, Ohio / Avon Lake High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Shannon Crogan",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Mason, Ohio / Mason High School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Greta Harmeyer",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Cincinnati, Ohio / Seton High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Gabi Folino",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Pittsburgh, Pa. / Oakland Catholic High School",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Emma McSwigan",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Cincinnati, Ohio / McNicholas High School",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Sophia Kapszukiewicz",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Loveland, Ohio / Loveland High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Emilie Doersching",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lake Barrington, Ill. / Saint Viator High School",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Macey Blanton",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "West Chester, Ohio / Badin High School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Avery Mueller",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Medina, Ohio / Holy Name High School",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Riley Evans",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lodi, Ohio / Cloverleaf High School",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Caitlin Evans",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Milford, Ohio / Milford High School",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Ayla Conn",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Indianapolis, Ind. / Hamilton Southeastern High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kylie Anderson",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "St. Louis, Mo. / Oakville Senior High School",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Erykah Cornett",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio / Oak Hills High School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Natalie Krummen",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "West Chester, Ohio / Lakota West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Gabi Signorino",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Wooster, Ohio / Wooster High School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Alyssa Carnes",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Troy, Mich. / Athens High School",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Lizzie Fight",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Milford, Ohio / Milford High School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Meghan Belrose",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "St. Louis, Mo. / Ursuline Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Megan Gessner",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Fort Thomas, Ky. / Highlands High School",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "alyssa carnes",
+        "emilie doersching",
+        "emma mcswigan",
+        "gabi signorino",
+        "greta harmeyer",
+        "lilly yordy",
+        "megan gessner",
+        "meghan belrose",
+        "shannon crogan",
+        "shay shipley"
+      ]
+    },
+    "2024": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Tristen Cross",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Hastings, Michigan /",
+          "highSchool": "Delta College"
+        },
+        {
+          "number": "00",
+          "name": "Donna Bundy",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Cincinnati, Ohio / Taylor High School",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Grace Kostohryz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Wooster, Ohio / Wooster High School",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Shay Shipley",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "McCordsville, Ind. / Mt. Vernon High School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Natalie Newman",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kewaskum, Wis. / Kewaskum High School",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sofia Wilmes",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Cincinnati, Ohio / Colerain High School",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Megan Molner",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. Louis, Mo. / Incarnate Word Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Lilly Yordy",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Hamilton, Ohio / Hamilton High School",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "7",
+          "name": "Lydia Self",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Noblesville, Indiana / Hamilton Southeastern High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Shannon Crogan",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Mason, Ohio / Mason High School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Greta Harmeyer",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cincinnati, Ohio / Seton High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Gabi Folino",
+          "pos": "M/F",
+          "classCode": "SO",
+          "hometown": "Pittsburgh, Pa. / Oakland Catholic High School",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Emma McSwigan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / McNicholas High School",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Meghan Carl",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Sycamore, Illinois / Sycamore High School",
+          "highSchool": "Iowa State"
+        },
+        {
+          "number": "13",
+          "name": "Sophia Kapszukiewicz",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Loveland, Ohio / Loveland High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Emilie Doersching",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lake Barrington, Ill. / Saint Viator High School",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Avery Mueller",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Medina, Ohio / Holy Name High School",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Riley Evans",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Lodi, Ohio / Cloverleaf High School",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Caitlin Evans",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Milford, Ohio / Milford High School",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Ayla Conn",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Indianapolis, Ind. / Hamilton Southeastern High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kylie Anderson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "St. Louis, Mo. / Oakville Senior High School",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Erykah Cornett",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cincinnati, Ohio / Oak Hills High School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Natalie Krummen",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "West Chester, Ohio / Lakota West High School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Alyssa Carnes",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Troy, Mich. / Athens High School",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kaya Vogt",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Cincinnati, Ohio / West Clermont High School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Meghan Belrose",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "St. Louis, Mo. / Ursuline Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Maria Wiefering",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Fort Thomas, Kentucky / Highlands High School",
+          "highSchool": "Wisconsin-Green Bay"
+        },
+        {
+          "number": "33",
+          "name": "Megan Gessner",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Fort Thomas, Ky. / Highlands High School",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 24,
+      "players": [
+        {
+          "number": "00",
+          "name": "Donna Bundy",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Cincinnati, Ohio / Taylor High School",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Mickayla Kowalski",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Harrison, Ohio / Badin High School",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Shay Shipley",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "McCordsville, Ind. / Mt. Vernon High School",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Natalie Newman",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kewaskum, Wis. / Kewaskum High School",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Sofia Wilmes",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / Colerain High School",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Megan Molner",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "St. Louis, Mo. / Incarnate Word Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Lilly Yordy",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Hamilton, Ohio / Hamilton High School",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "7",
+          "name": "Lydia Self",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Noblesville, Indiana / Hamilton Southeastern High School",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Shannon Crogan",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Mason, Ohio / Mason High School",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jamie Lehker",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Hamilton, Ohio / Badin High School",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Gabi Folino",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Pittsburgh, Pa. / Oakland Catholic High School",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Emma McSwigan",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Cincinnati, Ohio / McNicholas High School",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Meghan Carl",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sycamore, Illinois / Sycamore High School",
+          "highSchool": "Iowa State"
+        },
+        {
+          "number": "13",
+          "name": "Sophia Kapszukiewicz",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Loveland, Ohio / Loveland High School",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Emilie Doersching",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Lake Barrington, Ill. / Saint Viator High School",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Kylie Anderson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "St. Louis, Mo. / Oakville Senior High School",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Erykah Cornett",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cincinnati, Ohio / Oak Hills High School",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Kayla Wypasek",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Strongsville, Ohio / Strongsville High School",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Emily Tirey",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / Oak Hills High School",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Alyssa Carnes",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Troy, Mich. / Athens High School",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Kaya Vogt",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Cincinnati, Ohio / West Clermont High School",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Meghan Belrose",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. Louis, Mo. / Ursuline Academy",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Maria Wiefering",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Fort Thomas, Kentucky / Highlands High School",
+          "highSchool": "Wisconsin-Green Bay"
+        },
+        {
+          "number": "33",
+          "name": "Megan Gessner",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Fort Thomas, Ky. / Highlands High School",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://nkunorse.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:23:40Z"
+    }
+  },
+  "commitments": [
+    {
+      "id": "camryn-koski-2026",
+      "name": "Camryn Koski",
+      "aliases": [],
+      "gradYear": 2026,
+      "pos": "F",
+      "club": "Internationals SC (OH)",
+      "state": "OH",
+      "city": "Avon Lake",
+      "highSchool": "",
+      "college": "northern-kentucky",
+      "status": "enrolled",
+      "announced": null,
+      "announcedSource": null,
+      "firstSeen": "2026-09-07",
+      "sources": [
+        {
+          "kind": "tds",
+          "url": "https://www.topdrawersoccer.com/club-player-profile/camryn-koski/pid-175939",
+          "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/northern-kentucky/clgid-704/tab-commitments",
+          "firstSeen": "2026-09-07",
+          "lastSeen": "2026-09-07",
+          "missingSince": null
+        }
+      ],
+      "flags": [],
+      "approxDate": {
+        "date": "2026-09-07",
+        "basis": "first seen by CollegeDash"
+      },
+      "confidence": "confirmed",
+      "sourceKinds": [
+        "tds"
+      ]
+    },
+    {
+      "id": "zsofia-jakab-2026",
+      "name": "Zsofia Jakab",
+      "aliases": [],
+      "gradYear": 2026,
+      "pos": "F",
+      "club": "Columbus United",
+      "state": "OH",
+      "city": "Richfield",
+      "highSchool": "",
+      "college": "northern-kentucky",
+      "status": "verbal",
+      "announced": null,
+      "announcedSource": null,
+      "firstSeen": "2026-09-07",
+      "sources": [
+        {
+          "kind": "tds",
+          "url": "https://www.topdrawersoccer.com/club-player-profile/zsofia-jakab/pid-178000",
+          "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/northern-kentucky/clgid-704/tab-commitments",
+          "firstSeen": "2026-09-07",
+          "lastSeen": "2026-09-07",
+          "missingSince": null
+        }
+      ],
+      "flags": [],
+      "approxDate": {
+        "date": "2026-09-07",
+        "basis": "first seen by CollegeDash"
+      },
+      "confidence": "single-source",
+      "sourceKinds": [
+        "tds"
+      ]
+    },
+    {
+      "id": "addison-gick-2027",
+      "name": "Addison Gick",
+      "aliases": [],
+      "gradYear": 2027,
+      "pos": "D",
+      "club": "Cincinnati United Soccer Club",
+      "state": "OH",
+      "city": "Cincinnati",
+      "highSchool": "",
+      "college": "northern-kentucky",
+      "status": "verbal",
+      "announced": null,
+      "announcedSource": null,
+      "firstSeen": "2026-09-07",
+      "sources": [
+        {
+          "kind": "tds",
+          "url": "https://www.topdrawersoccer.com/club-player-profile/addison-gick/pid-178393",
+          "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/northern-kentucky/clgid-704/tab-commitments",
+          "firstSeen": "2026-09-07",
+          "lastSeen": "2026-09-07",
+          "missingSince": null
+        }
+      ],
+      "flags": [],
+      "approxDate": {
+        "date": "2026-09-07",
+        "basis": "first seen by CollegeDash"
+      },
+      "confidence": "single-source",
+      "sourceKinds": [
+        "tds"
+      ]
+    }
+  ],
   "news": {
     "recruiting": [],
     "latest": [
@@ -177,49 +1631,32 @@
     }
   },
   "curated": {},
-  "commitmentsByYear": {},
+  "commitmentsByYear": {
+    "2026": 2,
+    "2027": 1
+  },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.22,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
+      "climate": true,
+      "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
-      "commitments": false,
+      "roster": true,
+      "schedule": true,
+      "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "tds: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://nkunorse.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T16:16:46Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=39.029714&longitude=-84.463483&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T16:16:45Z"
-      },
-      {
-        "collector": "tds",
-        "error": "giving up on https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/northern-kentucky/clgid-704/tab-commitments: HTTPSConnectionPool(host='www.topdrawersoccer.com', port=443): Read timed out. (read timeout=60)",
-        "at": "2026-09-07T16:20:00Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T16:16:45Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:23:29Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

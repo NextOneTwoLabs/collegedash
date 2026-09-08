@@ -69,18 +69,201 @@
       "asOf": "2026-09-07T06:31:53Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 40.808286,
+    "lon": -73.961885,
+    "timezone": "America/New_York",
+    "elevationM": 39.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00094728",
+      "name": "NEW YORK CNTRL PK TWR",
+      "state": "NY",
+      "distanceKm": 3.3,
+      "elevationM": 39.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 39.5,
+        "tLowF": 27.9,
+        "precipIn": 3.64,
+        "snowIn": 8.8,
+        "wetDays": 6.3,
+        "days90F": 0.0,
+        "daysFreeze": 20.5
+      },
+      {
+        "month": "Feb",
+        "tHighF": 42.2,
+        "tLowF": 29.5,
+        "precipIn": 3.19,
+        "snowIn": 10.1,
+        "wetDays": 6.0,
+        "days90F": 0.0,
+        "daysFreeze": 17.7
+      },
+      {
+        "month": "Mar",
+        "tHighF": 49.9,
+        "tLowF": 35.8,
+        "precipIn": 4.29,
+        "snowIn": 5.0,
+        "wetDays": 7.5,
+        "days90F": 0.0,
+        "daysFreeze": 10.6
+      },
+      {
+        "month": "Apr",
+        "tHighF": 61.8,
+        "tLowF": 45.5,
+        "precipIn": 4.09,
+        "snowIn": 0.4,
+        "wetDays": 6.5,
+        "days90F": 0.2,
+        "daysFreeze": 1.0
+      },
+      {
+        "month": "May",
+        "tHighF": 71.4,
+        "tLowF": 55.0,
+        "precipIn": 3.96,
+        "snowIn": 0.0,
+        "wetDays": 7.3,
+        "days90F": 1.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 79.7,
+        "tLowF": 64.4,
+        "precipIn": 4.54,
+        "snowIn": 0.0,
+        "wetDays": 7.0,
+        "days90F": 2.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 84.9,
+        "tLowF": 70.1,
+        "precipIn": 4.6,
+        "snowIn": 0.0,
+        "wetDays": 6.9,
+        "days90F": 7.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 83.3,
+        "tLowF": 68.9,
+        "precipIn": 4.56,
+        "snowIn": 0.0,
+        "wetDays": 6.5,
+        "days90F": 4.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 76.2,
+        "tLowF": 62.3,
+        "precipIn": 4.31,
+        "snowIn": 0.0,
+        "wetDays": 6.2,
+        "days90F": 1.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 64.5,
+        "tLowF": 51.4,
+        "precipIn": 4.38,
+        "snowIn": 0.1,
+        "wetDays": 5.6,
+        "days90F": 0.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 54.0,
+        "tLowF": 42.0,
+        "precipIn": 3.58,
+        "snowIn": 0.5,
+        "wetDays": 5.7,
+        "days90F": 0.0,
+        "daysFreeze": 3.6
+      },
+      {
+        "month": "Dec",
+        "tHighF": 44.3,
+        "tLowF": 33.8,
+        "precipIn": 4.38,
+        "snowIn": 4.9,
+        "wetDays": 7.3,
+        "days90F": 0.0,
+        "daysFreeze": 13.8
+      }
+    ],
+    "annualPrecipIn": 49.5,
+    "annualSnowIn": 29.8,
+    "fallSeason": {
+      "avgHighF": 69.5,
+      "avgLowF": 56.1,
+      "precipIn": 16.8,
+      "wetDays": 24.0
+    },
+    "summary": "Hottest month Jul (avg high 84.9°F), coldest Jan (avg low 27.9°F). 49.5 in of rain per year, 29.8 in of snow. Fall season (Aug–Nov): highs around 69.5°F, 16.8 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094728,USW00014732,USW00094741&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:55:01Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Tracey Bartholomew",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/coaches/tracey-bartholomew/3447",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Tracey Bartholomew",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/coaches/tracey-bartholomew/3447",
+        "social": {}
+      },
+      {
+        "name": "Amphone Keovongmanysar",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/coaches/amphone-keovongmanysar/3448",
+        "social": {}
+      },
+      {
+        "name": "Jack Abelson",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/coaches/jack-abelson/3449",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Omar Perez-Vega Jr.",
+        "title": "Assistant Athletic Trainer",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/staff/omar-perezvega-jr/200",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +281,2606 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gocolumbialions.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:17:42Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "1-2-3",
+      "wins": 1,
+      "losses": 2,
+      "ties": 3,
+      "inProgress": true,
+      "gamesPlayed": 6,
+      "headCoach": "Tracey Bartholomew"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "6-7-3",
+      "wins": 6,
+      "losses": 7,
+      "ties": 3,
+      "confRecord": "4-2-1",
+      "rpiRank": 156,
+      "rpi": {
+        "rank": 156,
+        "record": "6-7-3",
+        "through": "2025-12-08",
+        "prevRank": 155,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 156,
+            "record": "6-7-3"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "7-5-4",
+      "wins": 7,
+      "losses": 5,
+      "ties": 4,
+      "confRecord": "5-1-1",
+      "rpiRank": 78,
+      "rpi": {
+        "rank": 78,
+        "sosRank": 112,
+        "balancedRank": 80,
+        "kpiRank": 68,
+        "masseyRank": 63,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "11-5-3",
+      "wins": 11,
+      "losses": 5,
+      "ties": 3,
+      "confRecord": "3-2-2",
+      "rpiRank": 20,
+      "rpi": {
+        "rank": 20,
+        "sosRank": 33,
+        "balancedRank": 40,
+        "kpiRank": 22,
+        "masseyRank": 51,
+        "ncaaSeed": 4,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 30,
+    "players": [
+      {
+        "number": "0",
+        "name": "Katrina Chorzepa",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Berlin, Conn.",
+        "highSchool": "Berlin High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/katrina-chorzepa/22623",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Emme Pacheco-Hager",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Rocky Hill, Conn.",
+        "highSchool": "Westminster",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/emme-pachecohager/22638",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Samantha Mahoney",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Brookline, Mass.",
+        "highSchool": "Buckingham Browne & Nichols",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/samantha-mahoney/22634",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Dema Elder",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Dearborn, Mich.",
+        "highSchool": "Dearborn",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/dema-elder/22625",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Annie Faraone",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Gaithersburg, Md.",
+        "highSchool": "Quince Orchard",
+        "previousSchool": "",
+        "major": "",
+        "club": "Bethesda SC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/annie-faraone/22626",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Maia Beltran",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Oakland, Calif.",
+        "highSchool": "The College Preparatory School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/maia-beltran/22620",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Leila Hawkins",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Loomis, Calif.",
+        "highSchool": "Del Oro",
+        "previousSchool": "",
+        "major": "",
+        "club": "San Juan SC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/leila-hawkins/22628",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Krystal Medina",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "4'11\"",
+        "heightIn": 59,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Corona, Calif.",
+        "highSchool": "Santiago",
+        "previousSchool": "",
+        "major": "",
+        "club": "So Cal Blues",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/krystal-medina/22635",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "7",
+        "name": "Lyla Geller",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Upper Saddle River, N.J.",
+        "highSchool": "Northern Highlands Regional",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/lyla-geller/22627",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "8",
+        "name": "Avery Sarzana",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Newton, Mass.",
+        "highSchool": "Buckingham Browne & Nichols",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Stars",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/avery-sarzana/22640",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Gabby Chan",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "New City, N.Y.",
+        "highSchool": "Albertus Magnus",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/gabby-chan/22622",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Sloane Carey",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Kentfield, Calif.",
+        "highSchool": "Marin Catholic",
+        "previousSchool": "",
+        "major": "",
+        "club": "Bay Area Surf",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/sloane-carey/22621",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "12",
+        "name": "Nicole Kim",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Jose, Calif.",
+        "highSchool": "Silver Creek",
+        "previousSchool": "",
+        "major": "",
+        "club": "Mountain View Los Altos SC (MVLA)",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/nicole-kim/22632",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Maya Nuwayhid",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "Saddle River, N.J.",
+        "highSchool": "The Pingry School",
+        "previousSchool": "",
+        "major": "",
+        "club": "PDA",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/maya-nuwayhid/22808",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "14",
+        "name": "Aoife Turner",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Los Altos, Calif.",
+        "highSchool": "Los Altos",
+        "previousSchool": "",
+        "major": "",
+        "club": "Mountain View Los Altos SC (MVLA)",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/aoife-turner/22641",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "15",
+        "name": "Samantha Weiss",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Mercer Island, Wash.",
+        "highSchool": "Mercer Island High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "XF Academy",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/samantha-weiss/22643",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "16",
+        "name": "Evelyn Javers",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bethesda, Md.",
+        "highSchool": "Walt Whitman",
+        "previousSchool": "",
+        "major": "",
+        "club": "Fairfax Virginia Union",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/evelyn-javers/22630",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "17",
+        "name": "Kaitlyn Wright",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "Ventura, Calif.",
+        "highSchool": "Ventura",
+        "previousSchool": "",
+        "major": "",
+        "club": "Eagles SC (CA)",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/kaitlyn-wright/22810",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "18",
+        "name": "Rachel Chung",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Oakton, Va.",
+        "highSchool": "Trinity Christian School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Fairfax Virginia Union",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/rachel-chung/22624",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "20",
+        "name": "Angel Akanyirige",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Pleasanton, Calif.",
+        "highSchool": "Amador Valley",
+        "previousSchool": "",
+        "major": "",
+        "club": "Bay Area Surf",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/angel-akanyirige/22617",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "21",
+        "name": "Helena Andrzejewski",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "Apex, N.C.",
+        "highSchool": "Apex Friendship",
+        "previousSchool": "",
+        "major": "",
+        "club": "NC Courage",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/helena-andrzejewski/22804",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "22",
+        "name": "Sophia Ambrose",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Great Falls, Va.",
+        "highSchool": "Holton-Arms School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Fairfax Virginia Union",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/sophia-ambrose/22618",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "23",
+        "name": "Sammie Moncion",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Bergenfield, N.J.",
+        "highSchool": "Dwight-Englewood",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/sammie-moncion/22636",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Nosa Omorogbe",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Colonie, N.Y.",
+        "highSchool": "Colonie Central",
+        "previousSchool": "",
+        "major": "",
+        "club": "World Class FC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/nosa-omorogbe/22637",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "25",
+        "name": "Alexa Lee",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "Marlboro, N.J.",
+        "highSchool": "Rutgers Prep",
+        "previousSchool": "",
+        "major": "",
+        "club": "PDA",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/alexa-lee/22807",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "27",
+        "name": "Izzy Weiner",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Bradenton, Fla.",
+        "highSchool": "IMG Academy",
+        "previousSchool": "",
+        "major": "",
+        "club": "IMG Academy",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/izzy-weiner/22642",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "29",
+        "name": "Hanae Kambara-Coughlin",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "San Francisco, Calif.",
+        "highSchool": "San Fransisco University HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/hanae-kambaracoughlin/22631",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Olivia St. Pierre",
+        "pos": "M",
+        "posLabel": "MID",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "Danvers, Mass.",
+        "highSchool": "Danvers",
+        "previousSchool": "",
+        "major": "",
+        "club": "NEFC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/olivia-st-pierre/22809",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "32",
+        "name": "Jules Arcoleo",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "West Islip, N.Y.",
+        "highSchool": "West Islip",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/jules-arcoleo/22805",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "35",
+        "name": "Angie Cao",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "FY",
+        "classCode": "",
+        "hometown": "San Jose, Calif.",
+        "highSchool": "Archbishop Mitty",
+        "previousSchool": "",
+        "major": "",
+        "club": "Mtn. View Los Altos SC",
+        "bioUrl": "https://gocolumbialions.com/sports/womens-soccer/roster/angie-cao/22806",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 4,
+      "SO": 11,
+      "JR": 8,
+      "?": 7
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "F": 2,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocolumbialions.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:17:42Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Katrina Chorzepa",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Berlin, Conn.",
+          "highSchool": "Berlin High School"
+        },
+        {
+          "number": "00",
+          "name": "Emme Pacheco-Hager",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Rocky Hill, Conn.",
+          "highSchool": "Westminster"
+        },
+        {
+          "number": "1",
+          "name": "Samantha Mahoney",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Brookline, Mass.",
+          "highSchool": "Buckingham Browne & Nichols"
+        },
+        {
+          "number": "2",
+          "name": "Dema Elder",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Dearborn, Mich.",
+          "highSchool": "Dearborn"
+        },
+        {
+          "number": "3",
+          "name": "Annie Faraone",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Gaithersburg, Md.",
+          "highSchool": "Quince Orchard"
+        },
+        {
+          "number": "4",
+          "name": "Maia Beltran",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Oakland, Calif.",
+          "highSchool": "The College Preparatory School"
+        },
+        {
+          "number": "5",
+          "name": "Leila Hawkins",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Loomis, Calif.",
+          "highSchool": "Del Oro"
+        },
+        {
+          "number": "6",
+          "name": "Krystal Medina",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Corona, Calif.",
+          "highSchool": "Santiago"
+        },
+        {
+          "number": "7",
+          "name": "Lyla Geller",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Upper Saddle River, N.J.",
+          "highSchool": "Northern Highlands Regional"
+        },
+        {
+          "number": "8",
+          "name": "Avery Sarzana",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Newton, Mass.",
+          "highSchool": "Buckingham Browne & Nichols"
+        },
+        {
+          "number": "9",
+          "name": "Trinity Parameswaran",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Rye, N.Y.",
+          "highSchool": "Rye Country Day School"
+        },
+        {
+          "number": "10",
+          "name": "Gabby Chan",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "New City, N.Y.",
+          "highSchool": "Albertus Magnus"
+        },
+        {
+          "number": "11",
+          "name": "Sloane Carey",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Kentfield, Calif.",
+          "highSchool": "Marin Catholic"
+        },
+        {
+          "number": "12",
+          "name": "Nicole Kim",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Silver Creek"
+        },
+        {
+          "number": "13",
+          "name": "Charlyse Berry",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Alamo, Calif.",
+          "highSchool": "Monte Vista High School"
+        },
+        {
+          "number": "14",
+          "name": "Aoife Turner",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Los Altos, Calif.",
+          "highSchool": "Los Altos"
+        },
+        {
+          "number": "15",
+          "name": "Samantha Weiss",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Mercer Island, Wash.",
+          "highSchool": "Mercer Island High School"
+        },
+        {
+          "number": "16",
+          "name": "Maia Tabion",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Sammamish, Wash.",
+          "highSchool": "Eastlake High School"
+        },
+        {
+          "number": "17",
+          "name": "Justina Bitzer",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ann Arbor, Mich.",
+          "highSchool": "Huron High School"
+        },
+        {
+          "number": "18",
+          "name": "Rachel Chung",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Oakton, Va.",
+          "highSchool": "Trinity Christian School"
+        },
+        {
+          "number": "20",
+          "name": "Angel Akanyirige",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Pleasanton, Calif.",
+          "highSchool": "Amador Valley"
+        },
+        {
+          "number": "21",
+          "name": "Ani Safaryan",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Red Hook, N.Y.",
+          "highSchool": "Red Hook"
+        },
+        {
+          "number": "22",
+          "name": "Sophia Ambrose",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Great Falls, Va.",
+          "highSchool": "Holton-Arms School"
+        },
+        {
+          "number": "23",
+          "name": "Sammie Moncion",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bergenfield, N.J.",
+          "highSchool": "Dwight-Englewood"
+        },
+        {
+          "number": "24",
+          "name": "Nosa Omorogbe",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Colonie, N.Y.",
+          "highSchool": "Colonie Central"
+        },
+        {
+          "number": "25",
+          "name": "Akshaya Bahugudumbi",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Leigh"
+        },
+        {
+          "number": "26",
+          "name": "Evelyn Javers",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Bethesda, Md.",
+          "highSchool": "Walt Whitman"
+        },
+        {
+          "number": "27",
+          "name": "Izzy Weiner",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Bradenton, Fla.",
+          "highSchool": "IMG Academy"
+        },
+        {
+          "number": "28",
+          "name": "Lillie Hutchings",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Norco, Calif.",
+          "highSchool": "Norco"
+        },
+        {
+          "number": "29",
+          "name": "Hanae Kambara-Coughlin",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "San Francisco, Calif.",
+          "highSchool": "San Fransisco University HS"
+        },
+        {
+          "number": "31",
+          "name": "Sophia Stellabotte",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "New York, N.Y.",
+          "highSchool": "Trinity"
+        },
+        {
+          "number": "99",
+          "name": "Cameron Lane",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Westchester, Calif.",
+          "highSchool": "El Segundo"
+        }
+      ],
+      "departed": [
+        "akshaya bahugudumbi",
+        "ani safaryan",
+        "cameron lane",
+        "charlyse berry",
+        "justina bitzer",
+        "lillie hutchings",
+        "maia tabion",
+        "sophia stellabotte",
+        "trinity parameswaran"
+      ]
+    },
+    "2024": {
+      "count": 32,
+      "players": [
+        {
+          "number": "0",
+          "name": "Katrina Chorzepa",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Berlin, Conn.",
+          "highSchool": "Berlin High School"
+        },
+        {
+          "number": "00",
+          "name": "Lauren Rodriguez",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Hamilton, N.Y.",
+          "highSchool": "Hamilton Central"
+        },
+        {
+          "number": "1",
+          "name": "Samantha Mahoney",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Brookline, Mass.",
+          "highSchool": "Buckingham Browne & Nichols"
+        },
+        {
+          "number": "2",
+          "name": "Dema Elder",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Dearborn, Mich.",
+          "highSchool": "Dearborn"
+        },
+        {
+          "number": "3",
+          "name": "Annie Faraone",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Gaithersburg, Md.",
+          "highSchool": "Quince Orchard"
+        },
+        {
+          "number": "4",
+          "name": "Maia Beltran",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Oakland, Calif.",
+          "highSchool": "The College Preparatory School"
+        },
+        {
+          "number": "5",
+          "name": "Marcia Ojo",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Rahway, N.J.",
+          "highSchool": "The Lawrenceville School"
+        },
+        {
+          "number": "6",
+          "name": "Ania Prussak",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Glen Ridge, N.J.",
+          "highSchool": "Glen Ridge"
+        },
+        {
+          "number": "7",
+          "name": "Isabel Liu",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Dublin, Calif.",
+          "highSchool": "Dublin High School"
+        },
+        {
+          "number": "8",
+          "name": "Sophia Cavaliere",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bernardsville, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "9",
+          "name": "Trinity Parameswaran",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Rye, N.Y.",
+          "highSchool": "Rye Country Day School"
+        },
+        {
+          "number": "10",
+          "name": "Gabby Chan",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "New City, N.Y.",
+          "highSchool": "Albertus Magnus"
+        },
+        {
+          "number": "11",
+          "name": "Courtney Ruedt",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Wayne, N.J.",
+          "highSchool": "Wayne Hills High School"
+        },
+        {
+          "number": "12",
+          "name": "Sam Cohn",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Atlanta, Ga.",
+          "highSchool": "Westminster"
+        },
+        {
+          "number": "13",
+          "name": "Charlyse Berry",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Alamo, Calif.",
+          "highSchool": "Monte Vista High School"
+        },
+        {
+          "number": "14",
+          "name": "Aoife Turner",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Los Altos, Calif.",
+          "highSchool": "Los Altos"
+        },
+        {
+          "number": "15",
+          "name": "Samantha Weiss",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mercer Island, Wash.",
+          "highSchool": "Mercer Island High School"
+        },
+        {
+          "number": "16",
+          "name": "Maia Tabion",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Sammamish, Wash.",
+          "highSchool": "Eastlake High School"
+        },
+        {
+          "number": "17",
+          "name": "Justina Bitzer",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Ann Arbor, Mich.",
+          "highSchool": "Huron High School"
+        },
+        {
+          "number": "18",
+          "name": "Sevrin Kaese",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "San Diego, Calif.",
+          "highSchool": "Francis Parker"
+        },
+        {
+          "number": "19",
+          "name": "Isabel Ackerman",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Belleair, Fla.",
+          "highSchool": "Largo"
+        },
+        {
+          "number": "20",
+          "name": "Angel Akanyirige",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Pleasanton, Calif.",
+          "highSchool": "Amador Valley"
+        },
+        {
+          "number": "21",
+          "name": "Ani Safaryan",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Red Hook, N.Y.",
+          "highSchool": "Red Hook"
+        },
+        {
+          "number": "22",
+          "name": "Sophia Ambrose",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Great Falls, Va.",
+          "highSchool": "Holton-Arms School"
+        },
+        {
+          "number": "23",
+          "name": "Sammie Moncion",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "Bergenfield, N.J.",
+          "highSchool": "Dwight-Englewood"
+        },
+        {
+          "number": "24",
+          "name": "Nosa Omorogbe",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Colonie, N.Y.",
+          "highSchool": "Colonie Central"
+        },
+        {
+          "number": "25",
+          "name": "Akshaya Bahugudumbi",
+          "pos": "M",
+          "classCode": "",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Leigh"
+        },
+        {
+          "number": "26",
+          "name": "Nata Ramirez",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Elizabeth, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "29",
+          "name": "Stephanie Jung",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Lynbrook"
+        },
+        {
+          "number": "31",
+          "name": "Sophia Stellabotte",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "New York, N.Y.",
+          "highSchool": "Trinity"
+        },
+        {
+          "number": "32",
+          "name": "Claire Pinnie",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "Academy of Notre Dame de Namur"
+        },
+        {
+          "number": "35",
+          "name": "Spencer Robbins",
+          "pos": "M/F",
+          "classCode": "SR",
+          "hometown": "Nashville, Tenn.",
+          "highSchool": "Harpeth Hall School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Lauren Rodriguez",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Hamilton, N.Y.",
+          "highSchool": "Hamilton Central"
+        },
+        {
+          "number": "0",
+          "name": "Katrina Chorzepa",
+          "pos": "GK",
+          "classCode": "",
+          "hometown": "Berlin, Conn.",
+          "highSchool": "Berlin High School"
+        },
+        {
+          "number": "1",
+          "name": "Paige Nurkin",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Charlotte, N.C.",
+          "highSchool": "Charlotte Latin School"
+        },
+        {
+          "number": "2",
+          "name": "Trinity Parameswaran",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Rye, N.Y.",
+          "highSchool": "Rye Country Day School"
+        },
+        {
+          "number": "3",
+          "name": "Grace Hurren",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Moorestown, N.J.",
+          "highSchool": "Moorestown"
+        },
+        {
+          "number": "4",
+          "name": "Madi Pilla",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Martinsville, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "5",
+          "name": "Marcia Ojo",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Rahway, N.J.",
+          "highSchool": "The Lawrenceville School"
+        },
+        {
+          "number": "6",
+          "name": "Ania Prussak",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Glen Ridge, N.J.",
+          "highSchool": "Glen Ridge"
+        },
+        {
+          "number": "7",
+          "name": "Isabel Liu",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Dublin, Calif.",
+          "highSchool": "Dublin High School"
+        },
+        {
+          "number": "8",
+          "name": "Sophia Cavaliere",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bernardsville, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "9",
+          "name": "Shira Cohen",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Berkeley, Calif.",
+          "highSchool": "Berkeley High School"
+        },
+        {
+          "number": "10",
+          "name": "Kat Jordan",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Sarasota, Fla.",
+          "highSchool": "Pine View"
+        },
+        {
+          "number": "11",
+          "name": "Courtney Ruedt",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Wayne, N.J.",
+          "highSchool": "Wayne Hills High School"
+        },
+        {
+          "number": "12",
+          "name": "Sam Cohn",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Atlanta, Ga.",
+          "highSchool": "Westminster"
+        },
+        {
+          "number": "13",
+          "name": "Charlyse Berry",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Alamo, Calif.",
+          "highSchool": "Monte Vista High School"
+        },
+        {
+          "number": "14",
+          "name": "Maia Beltran",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Oakland, Calif.",
+          "highSchool": "The College Preparatory School"
+        },
+        {
+          "number": "15",
+          "name": "Samantha Weiss",
+          "pos": "D",
+          "classCode": "",
+          "hometown": "Mercer Island, Wash.",
+          "highSchool": "Mercer Island High School"
+        },
+        {
+          "number": "16",
+          "name": "Maia Tabion",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Sammamish, Wash.",
+          "highSchool": "Eastlake High School"
+        },
+        {
+          "number": "17",
+          "name": "Justina Bitzer",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Ann Arbor, Mich.",
+          "highSchool": "Huron High School"
+        },
+        {
+          "number": "18",
+          "name": "Ashlyn Fulgham",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "San Antonio, Texas",
+          "highSchool": "Boerne Champion"
+        },
+        {
+          "number": "19",
+          "name": "Elizabeth Matei",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Davie, Fla.",
+          "highSchool": "American Heritage School"
+        },
+        {
+          "number": "21",
+          "name": "Annie Diaz-Silveira",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Miami, Fla.",
+          "highSchool": "Carrollton School of the Sacred Heart"
+        },
+        {
+          "number": "22",
+          "name": "Sophia Ambrose",
+          "pos": "F",
+          "classCode": "",
+          "hometown": "Great Falls, Va.",
+          "highSchool": "Holton-Arms School"
+        },
+        {
+          "number": "24",
+          "name": "Ruby Hogue",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "New York, N.Y.",
+          "highSchool": "Bronx High School of Science"
+        },
+        {
+          "number": "26",
+          "name": "Nata Ramirez",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Elizabeth, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "29",
+          "name": "Stephanie Jung",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "San Jose, Calif.",
+          "highSchool": "Lynbrook"
+        },
+        {
+          "number": "30",
+          "name": "Kendall McBride",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Falls Church, Va.",
+          "highSchool": "Bishop O'Connell"
+        },
+        {
+          "number": "31",
+          "name": "Ola Weber",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Warren, N.J.",
+          "highSchool": "The Pingry School"
+        },
+        {
+          "number": "32",
+          "name": "Claire Pinnie",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "West Chester, Pa.",
+          "highSchool": "Academy of Notre Dame de Namur"
+        },
+        {
+          "number": "35",
+          "name": "Spencer Robbins",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Nashville, Tenn.",
+          "highSchool": "Harpeth Hall School"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 1,
+      "losses": 2,
+      "ties": 3,
+      "text": "1-2-3",
+      "played": 6,
+      "scheduled": 17,
+      "confText": "0-0-0",
+      "exhibitions": 0
+    },
+    "games": [
+      {
+        "date": "2026-08-21",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Hofstra",
+        "opponentRank": null,
+        "location": "Hempstead, N.Y.",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/hofstra/boxscore/15429",
+          "recap": "https://gocolumbialions.com/news/2026/8/21/womens-soccer-womens-soccer-battles-hofstra-to-a-draw"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "St. John's",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/st-john-s/boxscore/15430",
+          "recap": "https://gocolumbialions.com/news/2026/8/23/womens-soccer-womens-soccer-and-st-johns-finishes-in-a-0-0-draw-on-sunday"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Villanova",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": "L",
+        "score": "0-2",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/villanova/boxscore/15431",
+          "recap": "https://gocolumbialions.com/news/2026/8/27/womens-soccer-womens-soccer-drops-non-conference-contest-against-villanova"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "La Salle",
+        "opponentRank": null,
+        "location": "Philadelphia, Pa.",
+        "result": "W",
+        "score": "2-1",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/la-salle/boxscore/15432",
+          "recap": "https://gocolumbialions.com/news/2026/8/30/womens-soccer-womens-soccer-earns-first-win-of-2026-over-la-salle"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "RV St. Mary's",
+        "opponentRank": null,
+        "location": "Moraga, Calif.",
+        "result": "T",
+        "score": "0-0",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/st-mary-s/boxscore/15433",
+          "recap": "https://gocolumbialions.com/news/2026/9/3/womens-soccer-womens-soccer-battles-unbeaten-rv-saint-marys-to-scoreless-draw"
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Cal",
+        "opponentRank": null,
+        "location": "Berkeley, Calif.",
+        "result": "L",
+        "score": "1-2",
+        "links": {
+          "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2026/cal/boxscore/15434",
+          "recap": "https://gocolumbialions.com/news/2026/9/6/womens-soccer-womens-soccer-falls-to-cal-in-final-minutes-2-1"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Fordham",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://gocolumbialions.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Monmouth",
+        "opponentRank": null,
+        "location": "West Long Branch, N.J.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-09-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Delaware",
+        "opponentRank": null,
+        "location": "Newark, Del.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-09-26",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Brown",
+        "opponentRank": null,
+        "location": "Providence, R.I.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Dartmouth",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Cornell",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://gocolumbialions.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-10-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Penn",
+        "opponentRank": null,
+        "location": "Philadelphia, Pa.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Yale",
+        "opponentRank": null,
+        "location": "New Haven, Conn.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-10-31",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Princeton",
+        "opponentRank": null,
+        "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://gocolumbialions.com/sidearmstats/wsoc/summary"
+        }
+      },
+      {
+        "date": "2026-11-07",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Harvard",
+        "opponentRank": null,
+        "location": "Cambridge, Mass.",
+        "result": null,
+        "score": null,
+        "links": {}
+      },
+      {
+        "date": "2026-11-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "Ivy League Tournament",
+        "opponentRank": null,
+        "location": "TBD",
+        "result": null,
+        "score": null,
+        "links": {}
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "6-7-3",
+        "games": [
+          {
+            "date": "2025-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/hofstra/boxscore/14730",
+              "recap": "https://gocolumbialions.com/news/2025/8/22/hofstra-comes-from-behind-to-defeat-womens-soccer-in-season-opener"
+            }
+          },
+          {
+            "date": "2025-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Villanova",
+            "opponentRank": null,
+            "location": "Villanova, Pa.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/villanova/boxscore/14732",
+              "recap": "https://gocolumbialions.com/news/2025/8/24/womens-soccer-falls-to-villanova-on-sunday-afternoon"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Pepperdine",
+            "opponentRank": null,
+            "location": "Malibu, Calif.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/pepperdine/boxscore/14733",
+              "recap": "https://gocolumbialions.com/news/2025/8/28/womens-soccer-defeated-by-pepperdine-in-malibu"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Loyola Marymount",
+            "opponentRank": null,
+            "location": "Los Angeles, Calif.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/loyola-marymount/boxscore/14734",
+              "recap": "https://gocolumbialions.com/news/2025/8/31/womens-soccer-taken-down-by-lmu"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "St. John's",
+            "opponentRank": null,
+            "location": "Queens, N.Y.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/st-john-s/boxscore/14735",
+              "recap": "https://gocolumbialions.com/news/2025/9/4/womens-soccer-defeats-st-johns"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "La Salle",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/la-salle/boxscore/14736",
+              "recap": "https://gocolumbialions.com/news/2025/9/7/medinas-equalizer-helps-womens-soccer-battle-to-draw-with-la-salle"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Fordham",
+            "opponentRank": null,
+            "location": "New York, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/fordham/boxscore/14737",
+              "recap": "https://gocolumbialions.com/news/2025/9/11/gabby-chans-clutch-88th-minute-strike-lifts-womens-soccer-to-2-1-win-over-fordham"
+            }
+          },
+          {
+            "date": "2025-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Monmouth",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/monmouth/boxscore/14738",
+              "recap": "https://gocolumbialions.com/news/2025/9/14/womens-soccer-wraps-non-conference-play-with-1-1-draw-with-monmouth"
+            }
+          },
+          {
+            "date": "2025-09-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Ithaca, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/cornell/boxscore/14739",
+              "recap": "https://gocolumbialions.com/news/2025/9/20/elders-last-minute-header-lifts-womens-soccer-past-cornell-in-ivy-opener"
+            }
+          },
+          {
+            "date": "2025-09-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Brown",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/brown/boxscore/14740",
+              "recap": "https://gocolumbialions.com/news/2025/9/27/womens-soccer-stuns-brown-with-another-last-minute-goal-to-extend-unbeaten-streak"
+            }
+          },
+          {
+            "date": "2025-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Hanover, N.H.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/dartmouth/boxscore/14741",
+              "recap": "https://gocolumbialions.com/news/2025/10/4/dartmouth-snaps-womens-soccers-unbeaten-streak-on-saturday-in-hanover"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/penn/boxscore/14742",
+              "recap": "https://gocolumbialions.com/news/2025/10/12/faraones-brace-fuels-womens-soccers-comeback-in-2-2-draw-with-penn"
+            }
+          },
+          {
+            "date": "2025-10-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/yale/boxscore/14743",
+              "recap": "https://gocolumbialions.com/news/2025/10/18/womens-soccer-stays-hot-with-emphatic-victory-over-yale-to-climb-atop-ivy-ladder"
+            }
+          },
+          {
+            "date": "2025-10-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Princeton",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/princeton/boxscore/14744",
+              "recap": "https://gocolumbialions.com/news/2025/10/25/womens-soccer-battles-late-but-falls-2-0-to-princeton"
+            }
+          },
+          {
+            "date": "2025-11-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/harvard/boxscore/14745",
+              "recap": "https://gocolumbialions.com/news/2025/11/1/womens-soccer-clinches-ivy-tournament-berth-with-2-1-over-harvard-on-senior-day"
+            }
+          },
+          {
+            "date": "2025-11-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Dartmouth",
+            "opponentRank": 2,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2025/-2-dartmouth/boxscore/14746",
+              "recap": "https://gocolumbialions.com/news/2025/11/6/womens-soccer-falls-to-dartmouth-1-0-in-ivy-league-semifinals"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "7-5-4",
+        "games": [
+          {
+            "date": "2024-08-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "Hempstead, N.Y.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/hofstra/boxscore/13824",
+              "recap": "https://gocolumbialions.com/news/2024/8/23/womens-soccer-womens-soccer-plays-to-scoreless-draw-at-hofstra"
+            }
+          },
+          {
+            "date": "2024-08-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Vanderbilt",
+            "opponentRank": null,
+            "location": "Nashville, Tenn.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/vanderbilt/boxscore/13825",
+              "recap": "https://gocolumbialions.com/news/2024/8/30/womens-soccer-womens-soccer-topped-by-vanderbilt"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Tennessee Tech",
+            "opponentRank": null,
+            "location": "Cookeville, Tenn.",
+            "result": "T",
+            "score": "4-4",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/tennessee-tech/boxscore/13826",
+              "recap": "https://gocolumbialions.com/news/2024/9/1/womens-soccer-ramirezs-second-half-hat-trick-highlights-4-4-draw"
+            }
+          },
+          {
+            "date": "2024-09-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "FDU",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/fdu/boxscore/13827",
+              "recap": "https://gocolumbialions.com/news/2024/9/5/womens-soccer-columbia-plays-fdu-to-0-0-draw"
+            }
+          },
+          {
+            "date": "2024-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "North Carolina",
+            "opponentRank": 2,
+            "location": "Chapel Hill, N.C.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/-2-north-carolina/boxscore/13828",
+              "recap": "https://gocolumbialions.com/news/2024/9/8/womens-soccer-lions-hang-tough-against-no-2-north-carolina"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Fordham",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/fordham/boxscore/13829",
+              "recap": "https://gocolumbialions.com/news/2024/9/12/womens-soccer-early-goals-lead-womens-soccer-past-fordham-2-0"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Penn State",
+            "opponentRank": 12,
+            "location": "University Park, Pa.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/-12-penn-state/boxscore/13830",
+              "recap": "https://gocolumbialions.com/news/2024/9/15/womens-soccer-womens-soccer-rally-falls-short-at-no-12-penn-state"
+            }
+          },
+          {
+            "date": "2024-09-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/providence/boxscore/13831",
+              "recap": "https://gocolumbialions.com/news/2024/9/20/womens-soccer-womens-soccer-powers-past-providence-4-0"
+            }
+          },
+          {
+            "date": "2024-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "Philadelphia, Pa.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/penn/boxscore/13832",
+              "recap": "https://gocolumbialions.com/news/2024/9/28/womens-soccer-columbia-offense-shines-in-3-0-win-at-penn"
+            }
+          },
+          {
+            "date": "2024-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Cambridge, Mass.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/harvard/boxscore/13833",
+              "recap": "https://gocolumbialions.com/news/2024/10/5/womens-soccer-late-goal-lifts-womens-soccer-past-harvard-2-1"
+            }
+          },
+          {
+            "date": "2024-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "4-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/cornell/boxscore/13834",
+              "recap": "https://gocolumbialions.com/news/2024/10/9/womens-soccer-womens-soccer-dominates-in-4-1-win-over-cornell"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/dartmouth/boxscore/13835",
+              "recap": "https://gocolumbialions.com/news/2024/10/13/womens-soccer-womens-soccer-outlasts-dartmouth-remains-undefeated-in-ivy-action"
+            }
+          },
+          {
+            "date": "2024-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Brown",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/brown/boxscore/13836",
+              "recap": "https://gocolumbialions.com/news/2024/10/19/womens-soccer-womens-soccer-forces-draw-at-brown-clinches-spot-in-ivy-league-tournament"
+            }
+          },
+          {
+            "date": "2024-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "New Haven, Conn.",
+            "result": "W",
+            "score": "3-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/yale/boxscore/13837",
+              "recap": "https://gocolumbialions.com/news/2024/10/26/womens-soccer-womens-soccer-rallies-for-three-goals-in-second-half-to-defeat-yale-3-2"
+            }
+          },
+          {
+            "date": "2024-11-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Princeton",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/princeton/boxscore/13838",
+              "recap": "https://gocolumbialions.com/news/2024/11/2/womens-soccer-womens-soccer-falls-short-to-princeton-earns-no-2-seed-in-ivy-tournament"
+            }
+          },
+          {
+            "date": "2024-11-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "Brown",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2024/brown/boxscore/13839",
+              "recap": "https://gocolumbialions.com/news/2024/11/8/womens-soccer-womens-soccer-falls-to-brown-in-ivy-league-tournament-semifinals"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "11-5-3",
+        "games": [
+          {
+            "date": "2023-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Hofstra",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/hofstra/boxscore/13231",
+              "recap": "https://gocolumbialions.com/news/2023/8/25/womens-soccer-columbia-offense-explodes-in-3-0-win-over-hofstra"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Loyola Maryland",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/loyola-maryland/boxscore/13232",
+              "recap": "https://gocolumbialions.com/news/2023/8/27/womens-soccer-womens-soccer-earns-second-shutout-win-of-the-weekend"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Santa Clara",
+            "opponentRank": 8,
+            "location": "Santa Clara, Calif.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/-8-santa-clara/boxscore/13233",
+              "recap": "https://gocolumbialions.com/news/2023/9/1/womens-soccer-womens-soccer-drops-road-contest-at-no-8-santa-clara"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "San Francisco",
+            "opponentRank": null,
+            "location": "San Francisco, Calif.",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/san-francisco/boxscore/13234",
+              "recap": "https://gocolumbialions.com/news/2023/9/3/womens-soccer-columbia-usf-ends-in-draw"
+            }
+          },
+          {
+            "date": "2023-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Fordham",
+            "opponentRank": null,
+            "location": "Bronx, N.Y.",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/fordham/boxscore/13235",
+              "recap": "https://gocolumbialions.com/news/2023/9/7/womens-soccer-kat-jordans-two-goals-lead-lions-to-2-0-win-at-fordham"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "FDU",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "8-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/fdu/boxscore/13236",
+              "recap": "https://gocolumbialions.com/news/2023/9/10/womens-soccer-columbia-showcases-dominance-over-fdu-8-0"
+            }
+          },
+          {
+            "date": "2023-09-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "NJIT",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/njit/boxscore/13237",
+              "recap": "https://gocolumbialions.com/news/2023/9/14/womens-soccer-womens-soccer-continues-dominant-streak-with-5-0-win-over-njit"
+            }
+          },
+          {
+            "date": "2023-09-16",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Providence",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/providence/boxscore/13238",
+              "recap": "https://gocolumbialions.com/news/2023/9/16/womens-soccer-womens-soccer-downs-providence-in-fifth-straight-shutout-win"
+            }
+          },
+          {
+            "date": "2023-09-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Penn",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/penn/boxscore/13239",
+              "recap": "https://gocolumbialions.com/news/2023/9/23/womens-soccer-columbia-pushes-past-penn-1-0-in-hard-fought-win"
+            }
+          },
+          {
+            "date": "2023-09-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "L",
+            "score": "0-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/harvard/boxscore/13240",
+              "recap": "https://gocolumbialions.com/news/2023/9/30/womens-soccer-columbia-womens-soccer-falls-to-harvard-at-home"
+            }
+          },
+          {
+            "date": "2023-10-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Cornell",
+            "opponentRank": null,
+            "location": "Ithaca, N.Y.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/cornell/boxscore/13241",
+              "recap": "https://gocolumbialions.com/news/2023/10/4/womens-soccer-womens-soccer-battles-to-1-1-draw-at-cornell"
+            }
+          },
+          {
+            "date": "2023-10-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Dartmouth",
+            "opponentRank": null,
+            "location": "Hanover, N.H.",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/dartmouth/boxscore/13242",
+              "recap": "https://gocolumbialions.com/news/2023/10/8/womens-soccer-womens-soccer-plays-to-1-1-draw-at-dartmouth"
+            }
+          },
+          {
+            "date": "2023-10-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Brown",
+            "opponentRank": 16,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "L",
+            "score": "0-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/-16-brown/boxscore/13243",
+              "recap": "https://gocolumbialions.com/news/2023/10/14/womens-soccer-womens-soccer-drops-1-0-contest-to-no-16-brown"
+            }
+          },
+          {
+            "date": "2023-10-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Yale",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/yale/boxscore/13244",
+              "recap": "https://gocolumbialions.com/news/2023/10/21/womens-soccer-four-seniors-net-goals-in-4-0-win-over-yale-on-senior-day"
+            }
+          },
+          {
+            "date": "2023-10-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Princeton",
+            "opponentRank": null,
+            "location": "Princeton, N.J.",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/princeton/boxscore/13245",
+              "recap": "https://gocolumbialions.com/news/2023/10/28/womens-soccer-womens-soccer-defeats-princeton-secures-ivy-league-tournament-spot"
+            }
+          },
+          {
+            "date": "2023-11-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Brown",
+            "opponentRank": 14,
+            "location": "Providence, R.I.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/-14-brown/boxscore/13246",
+              "recap": "https://gocolumbialions.com/news/2023/11/3/womens-soccer-columbia-defeats-no-14-brown-in-overtime-to-advance-to-ivy-league-tournament-championship"
+            }
+          },
+          {
+            "date": "2023-11-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Harvard",
+            "opponentRank": null,
+            "location": "Providence, R.I.",
+            "result": "L",
+            "score": "0-3",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/harvard/boxscore/13337",
+              "recap": "https://gocolumbialions.com/news/2023/11/5/womens-soccer-columbia-falls-to-harvard-in-ivy-league-tournament-championship"
+            }
+          },
+          {
+            "date": "2023-11-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "Rutgers",
+            "opponentRank": null,
+            "location": "ROCCO B. COMMISSO SOCCER STADIUM, New York, N.Y.",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/rutgers/boxscore/13502",
+              "recap": "https://gocolumbialions.com/news/2023/11/12/womens-soccer-moving-on-lions-storm-back-in-final-minutes-to-defeat-rutgers-2-1"
+            }
+          },
+          {
+            "date": "2023-11-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": null,
+            "opponent": "Clemson",
+            "opponentRank": null,
+            "location": "Clemson, S.C.",
+            "result": "L",
+            "score": "1-2",
+            "links": {
+              "box score": "https://gocolumbialions.com/sports/womens-soccer/stats/2023/clemson/boxscore/13503",
+              "recap": "https://gocolumbialions.com/news/2023/11/17/womens-soccer-womens-soccer-falls-to-clemson-ends-ncaa-tournament-run"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gocolumbialions.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:17:42Z"
+    }
+  },
   "commitments": [
     {
       "id": "alexa-lee-2026",
@@ -117,7 +2893,7 @@
       "city": "Marlboro",
       "highSchool": "Rutgers Prep",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -161,7 +2937,7 @@
       "city": "San Jose",
       "highSchool": "",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -205,7 +2981,7 @@
       "city": "",
       "highSchool": "",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -293,7 +3069,7 @@
       "city": "",
       "highSchool": "",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -337,7 +3113,7 @@
       "city": "Saddle River",
       "highSchool": "Pingry School",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -381,7 +3157,7 @@
       "city": "Danvers",
       "highSchool": "",
       "college": "columbia",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -400,7 +3176,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -836,41 +3612,27 @@
     "2028": 5
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:12Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:52Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://gocolumbialions.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T06:32:27Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=40.808286&longitude=-73.961885&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FNew_Yor",
-        "at": "2026-09-07T06:32:26Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T06:32:26Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:17:29Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }

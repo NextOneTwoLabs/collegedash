@@ -69,7 +69,156 @@
       "asOf": "2026-09-07T05:38:54Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 32.599378,
+    "lon": -85.488258,
+    "timezone": "America/Chicago",
+    "elevationM": 119.5,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00093842",
+      "name": "COLUMBUS METRO AP",
+      "state": "GA",
+      "distanceKm": 52.0,
+      "elevationM": 119.5
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 58.7,
+        "tLowF": 38.2,
+        "precipIn": 4.24,
+        "snowIn": 0.0,
+        "wetDays": 7.1,
+        "days90F": 0.0,
+        "daysFreeze": 10.9
+      },
+      {
+        "month": "Feb",
+        "tHighF": 63.2,
+        "tLowF": 41.5,
+        "precipIn": 4.46,
+        "snowIn": 0.0,
+        "wetDays": 6.2,
+        "days90F": 0.0,
+        "daysFreeze": 5.5
+      },
+      {
+        "month": "Mar",
+        "tHighF": 70.4,
+        "tLowF": 47.3,
+        "precipIn": 4.92,
+        "snowIn": 0.2,
+        "wetDays": 6.4,
+        "days90F": 0.0,
+        "daysFreeze": 1.8
+      },
+      {
+        "month": "Apr",
+        "tHighF": 77.7,
+        "tLowF": 54.0,
+        "precipIn": 4.03,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 0.3,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "May",
+        "tHighF": 85.1,
+        "tLowF": 63.1,
+        "precipIn": 3.24,
+        "snowIn": 0.0,
+        "wetDays": 4.8,
+        "days90F": 6.1,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 90.2,
+        "tLowF": 70.5,
+        "precipIn": 4.03,
+        "snowIn": 0.0,
+        "wetDays": 6.9,
+        "days90F": 16.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 92.9,
+        "tLowF": 73.5,
+        "precipIn": 4.35,
+        "snowIn": 0.0,
+        "wetDays": 7.3,
+        "days90F": 23.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 91.8,
+        "tLowF": 73.0,
+        "precipIn": 4.68,
+        "snowIn": 0.0,
+        "wetDays": 7.0,
+        "days90F": 21.2,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 87.3,
+        "tLowF": 67.9,
+        "precipIn": 3.34,
+        "snowIn": 0.0,
+        "wetDays": 4.5,
+        "days90F": 11.4,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 78.3,
+        "tLowF": 56.8,
+        "precipIn": 2.78,
+        "snowIn": 0.0,
+        "wetDays": 3.9,
+        "days90F": 0.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 68.4,
+        "tLowF": 46.1,
+        "precipIn": 3.96,
+        "snowIn": 0.0,
+        "wetDays": 4.9,
+        "days90F": 0.0,
+        "daysFreeze": 2.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 60.6,
+        "tLowF": 40.6,
+        "precipIn": 4.79,
+        "snowIn": 0.3,
+        "wetDays": 6.9,
+        "days90F": 0.0,
+        "daysFreeze": 7.3
+      }
+    ],
+    "annualPrecipIn": 48.8,
+    "annualSnowIn": 0.5,
+    "fallSeason": {
+      "avgHighF": 81.5,
+      "avgLowF": 61.0,
+      "precipIn": 14.8,
+      "wetDays": 20.0
+    },
+    "summary": "Hottest month Jul (avg high 92.9°F), coldest Jan (avg low 38.2°F). 48.8 in of rain per year, essentially no snow. Fall season (Aug–Nov): highs around 81.5°F, 14.8 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00093842,USW00013829,USC00010425&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:53:27Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "James Armstrong",
@@ -1865,11 +2014,11 @@
     "2028": 7
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:11Z",
-    "completeness": 0.56,
+    "builtAt": "2026-09-08T01:35:51Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": false,
       "rpi": false,
@@ -1879,27 +2028,21 @@
       "news": false
     },
     "stale": [
-      "news: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
+      "news: never collected"
     ],
     "failed": [
       {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=32.599378&longitude=-85.488258&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T05:39:27Z"
-      },
-      {
         "collector": "news",
         "error": "HTTP 404 for https://auburntigers.com/sports/womens-soccer/news",
-        "at": "2026-09-07T05:39:43Z"
-      },
-      {
-        "collector": "wikipedia",
-        "error": "quote_from_bytes() expected bytes",
-        "at": "2026-09-07T05:39:27Z"
+        "at": "2026-09-08T01:11:15Z"
       }
     ],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:11:15Z"
+      }
+    ]
   }
 }

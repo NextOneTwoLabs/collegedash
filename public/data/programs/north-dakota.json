@@ -69,18 +69,217 @@
       "asOf": "2026-09-07T15:36:57Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 47.921654,
+    "lon": -97.071738,
+    "timezone": "America/Chicago",
+    "elevationM": 256.6,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00014916",
+      "name": "GRAND FORKS INTL AP",
+      "state": "ND",
+      "distanceKm": 8.7,
+      "elevationM": 256.6
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 15.8,
+        "tLowF": -3.1,
+        "precipIn": 0.49,
+        "snowIn": 9.9,
+        "wetDays": 1.6,
+        "days90F": 0.0,
+        "daysFreeze": 30.8
+      },
+      {
+        "month": "Feb",
+        "tHighF": 20.5,
+        "tLowF": 0.7,
+        "precipIn": 0.51,
+        "snowIn": 7.1,
+        "wetDays": 1.4,
+        "days90F": 0.0,
+        "daysFreeze": 27.6
+      },
+      {
+        "month": "Mar",
+        "tHighF": 33.9,
+        "tLowF": 15.0,
+        "precipIn": 0.91,
+        "snowIn": 7.4,
+        "wetDays": 2.9,
+        "days90F": 0.0,
+        "daysFreeze": 28.2
+      },
+      {
+        "month": "Apr",
+        "tHighF": 52.0,
+        "tLowF": 29.3,
+        "precipIn": 1.21,
+        "snowIn": 3.5,
+        "wetDays": 3.3,
+        "days90F": 0.0,
+        "daysFreeze": 18.6
+      },
+      {
+        "month": "May",
+        "tHighF": 66.9,
+        "tLowF": 41.4,
+        "precipIn": 2.8,
+        "snowIn": 0.0,
+        "wetDays": 5.7,
+        "days90F": 0.4,
+        "daysFreeze": 4.3
+      },
+      {
+        "month": "Jun",
+        "tHighF": 76.4,
+        "tLowF": 52.9,
+        "precipIn": 3.77,
+        "snowIn": 0.0,
+        "wetDays": 6.8,
+        "days90F": 1.7,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 80.7,
+        "tLowF": 57.0,
+        "precipIn": 3.52,
+        "snowIn": 0.0,
+        "wetDays": 5.6,
+        "days90F": 3.0,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 79.8,
+        "tLowF": 54.3,
+        "precipIn": 2.81,
+        "snowIn": 0.0,
+        "wetDays": 5.2,
+        "days90F": 2.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 70.4,
+        "tLowF": 45.3,
+        "precipIn": 2.26,
+        "snowIn": 0.0,
+        "wetDays": 4.1,
+        "days90F": 0.9,
+        "daysFreeze": 1.4
+      },
+      {
+        "month": "Oct",
+        "tHighF": 53.9,
+        "tLowF": 32.5,
+        "precipIn": 1.88,
+        "snowIn": 1.6,
+        "wetDays": 3.8,
+        "days90F": 0.1,
+        "daysFreeze": 15.0
+      },
+      {
+        "month": "Nov",
+        "tHighF": 35.7,
+        "tLowF": 17.8,
+        "precipIn": 0.92,
+        "snowIn": 6.6,
+        "wetDays": 2.6,
+        "days90F": 0.0,
+        "daysFreeze": 27.8
+      },
+      {
+        "month": "Dec",
+        "tHighF": 21.4,
+        "tLowF": 4.2,
+        "precipIn": 0.66,
+        "snowIn": 12.3,
+        "wetDays": 2.4,
+        "days90F": 0.0,
+        "daysFreeze": 31.0
+      }
+    ],
+    "annualPrecipIn": 21.7,
+    "annualSnowIn": 48.4,
+    "fallSeason": {
+      "avgHighF": 60.0,
+      "avgLowF": 37.5,
+      "precipIn": 7.9,
+      "wetDays": 16.0
+    },
+    "summary": "Hottest month Jul (avg high 80.7°F), coldest Jan (avg low -3.1°F). 21.7 in of rain per year, 48.4 in of snow. Fall season (Aug–Nov): highs around 60.0°F, 7.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00014916,USC00323621,USC00211891&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:16Z"
+    }
+  },
   "program": {
     "headCoach": {
       "name": "Henrik Sohn",
-      "title": null,
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/coaches/henrik-sohn/3668",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Henrik Sohn",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/coaches/henrik-sohn/3668",
+        "social": {}
+      },
+      {
+        "name": "Nicole Randall",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/coaches/nicole-randall/3669",
+        "social": {}
+      },
+      {
+        "name": "Cameron Hunter",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/coaches/cameron-hunter/3670",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Andrea Borray-Ortiz",
+        "title": "Director of Operations",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/coaches/andrea-borray-ortiz/3667",
+        "social": {}
+      },
+      {
+        "name": "Andres Freeman",
+        "title": "Assistant AD, Student-Athlete Support Services",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/staff/andres-freeman/2201",
+        "social": {}
+      },
+      {
+        "name": "Rhiannon Vandegrift- DAT, ATC",
+        "title": "Instructor/Athletic Trainer Volleyball",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/staff/rhiannon-vandegrift-dat-atc/2200",
+        "social": {}
+      }
+    ],
     "stadium": {
       "name": "Bronson Field",
       "capacity": null
@@ -105,13 +304,1446 @@
         "url": "https://en.wikipedia.org/wiki/North_Dakota_Fighting_Hawks_women%27s_soccer",
         "asOf": "2026-09-07T15:39:30Z"
       },
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://fightinghawks.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:22:53Z"
+      }
     }
   },
   "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 28,
+    "players": [
+      {
+        "number": "0",
+        "name": "Jacque Worden",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "White Bear Lake, Minn. / Mahtomedi HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/jacque-worden/13751",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "00",
+        "name": "Jacinda Hevesy-Rodriguez",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Santa Monica, Calif. / Palisades HS",
+        "highSchool": "Santa Monica College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/jacinda-hevesy-rodriguez/13750",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Thale Ruether",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Dorfmark, Lower Saxony, Germany / Gymnasium Walsrode",
+        "highSchool": "Casper College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/thale-ruether/13752",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Hannah Peters",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Clovis, Calif. / Clovis North HS",
+        "highSchool": "Long Beach State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/hannah-peters/13753",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "4",
+        "name": "Avery Toms",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Maple Grove, Minn. / Maple Grove HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/avery-toms/13749",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Lillian Bashaw",
+        "pos": "",
+        "posLabel": "CB",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mesa, Ariz. / Mountain View HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/lillian-bashaw/13743",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "6",
+        "name": "Morgan Neall",
+        "pos": "",
+        "posLabel": "OB",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Salisbury, Md. / James M. Bennett HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/morgan-neall/13754",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Jojo Muelhaupt",
+        "pos": "F",
+        "posLabel": "FW",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Waukee, Iowa / Waukee HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/jojo-muelhaupt/13755",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Rylee Lawrence",
+        "pos": "",
+        "posLabel": "Winger",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Stillwater, Minn. / Stillwater Area HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/rylee-lawrence/13756",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "9",
+        "name": "Emily Archuleta",
+        "pos": "",
+        "posLabel": "OB/WB",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Taos, New Mexico / Cushing Academy",
+        "highSchool": "Colorado College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/emily-archuleta/13757",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "10",
+        "name": "Cora Ellermann",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Magdeburg, Germany / Sportgymnasium Magdeburg",
+        "highSchool": "Kansas City Kansas Community College",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/cora-ellermann/13747",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Jentrie Porter",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-6",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Clearfield, Utah / Clearfield HS",
+        "highSchool": "Laramie County CC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/jentrie-porter/13758",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "12",
+        "name": "Camille Derouen",
+        "pos": "",
+        "posLabel": "CM",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lyon, France / Saint Louis Saint Bruno",
+        "highSchool": "UNCC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/camille-derouen/13759",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "13",
+        "name": "Cece Hulst",
+        "pos": "",
+        "posLabel": "CB",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Sammamish, Wash. / Skyline HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/cece-hulst/13760",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Linnea Peltonen",
+        "pos": "F",
+        "posLabel": "FW",
+        "height": "5-10",
+        "heightIn": 70,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Moorpark, Calif. / Moorpark HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/linnea-peltonen/13761",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Bailee Zentner",
+        "pos": "",
+        "posLabel": "OB",
+        "height": "5-3",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Highland, Utah / Lone Peak HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/bailee-zentner/13762",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Carly Brimhall",
+        "pos": "",
+        "posLabel": "CB",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Stafford, Va. / Colonial Forge",
+        "highSchool": "Weber State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/carly-brimhall/13746",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "17",
+        "name": "Viktoria Filsner",
+        "pos": "",
+        "posLabel": "Winger",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Pitten, Austria / BG Zehnergasse",
+        "highSchool": "Lincoln Memorial",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/viktoria-filsner/13763",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Felicitas Uhlig",
+        "pos": "F",
+        "posLabel": "FW",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Chemnitz, Germany / Sportschule Potsdam",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/felicitas-uhlig/13764",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Emma Montgomery",
+        "pos": "",
+        "posLabel": "OB",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Peoria, Ariz. / Mountain Ridge HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/emma-montgomery/13748",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Addison Stadden",
+        "pos": "",
+        "posLabel": "CB",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Blaine, Minn. / Blaine HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Minnesota Thunder Academy",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/addison-stadden/13766",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Charlie Basinet",
+        "pos": "F",
+        "posLabel": "FW",
+        "height": "5-4",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "San Diego, Calif. / Cathedral Catholic HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/charlie-basinet/13744",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Hunter Borgel",
+        "pos": "F",
+        "posLabel": "Winger/FW",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Las Vegas, Nev. / Bishop Gorman HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/hunter-borgel/13745",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "25",
+        "name": "Payton McKnight",
+        "pos": "F",
+        "posLabel": "FW",
+        "height": "5-7",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Andover, Minn. / Andover HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/payton-mcknight/13767",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Annie Stook",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Gr.",
+        "classCode": "GR",
+        "hometown": "Trumbull, Conn. / St. Joseph HS",
+        "highSchool": "Northwestern State",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/annie-stook/13768",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "30",
+        "name": "Julia Goncalves",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Gauteng, South Africa / Elite Sporting and Cultural Academy",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/julia-goncalves/13769",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "33",
+        "name": "Grayson Vacanti",
+        "pos": "",
+        "posLabel": "OB",
+        "height": "5-8",
+        "heightIn": 68,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Parkville, Mo. / St. Pius X HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/grayson-vacanti/13770",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "34",
+        "name": "Kate Sell",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "5-9",
+        "heightIn": 69,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Liberty, Mo. / St. Pius X HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://fightinghawks.com/sports/womens-soccer/roster/kate-sell/13771",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 4,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 13,
+      "JR": 6,
+      "SO": 5,
+      "SR": 3,
+      "GR": 1
+    },
+    "graduatingByPos": {
+      "M": 3,
+      "?": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://fightinghawks.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:22:53Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 30,
+      "players": [
+        {
+          "number": "00",
+          "name": "Sydney Bakritzes",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Edina, Minn. / Edina HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Grace Miller",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "San Diego, Calif. / Patrick Henry HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Brynn Belcher",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Las Vegas, Nev. / Shadow Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Adilyn Radwanski",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Las Vegas, Nevada / Faith Lutheran",
+          "highSchool": "Houston Christian"
+        },
+        {
+          "number": "4",
+          "name": "Avery Toms",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Maple Grove, Minn. / Maple Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Lillian Bashaw",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mesa, Ariz. / Mountain View HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Aubrey Wimberly",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Rosemount, Minn. / Rosemount HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Paula Moreno Diaz",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Madrid, Spain / IES Maria Zambrano",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Sarah McCracken",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Naperville, Ill. / Naperville Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Mia Voutsinas",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Montreal, Quebec / Northfield Mount Hermon HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Cora Ellermann",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Magdeburg, Germany / Sportgymnasium Magdeburg",
+          "highSchool": "Kansas City Kansas Community College"
+        },
+        {
+          "number": "11",
+          "name": "Amelia Loeffler",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Claremont, Calif. / Claremont HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Haley Wasilewski",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Linden, Mich. / Linden HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Emilia Gottinger",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Pirching am Traubenberg, Austria / BG/BRG/Borg Graz-Liebenau (HIB)",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Hunter Borgel",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev. / Bishop Gorman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Carly Brimhall",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Stafford, Va. / Colonial Forge",
+          "highSchool": "Weber State"
+        },
+        {
+          "number": "17",
+          "name": "Yui Fujii",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Osaka, Japan / Daisho Gakuen HS",
+          "highSchool": "Southern Utah"
+        },
+        {
+          "number": "19",
+          "name": "Mea Hook",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Glen Carbon, Ill. / Edwardsville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Emma Montgomery",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Peoria, Ariz. / Mountain Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Alexis McPhail",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Riverside, Calif. / Riverside Poly HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Charlie Basinet",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "San Diego, Calif. / Cathedral Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Caroline Kuhn",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "New Braunfels, Texas / Canyon HS",
+          "highSchool": "Laramie County CC"
+        },
+        {
+          "number": "25",
+          "name": "Athena McGinn",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Lake Villa, Ill. / Warren Township HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Natalie Enderle",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Berlin, Germany / Friedrich – Ludwig – Jahn, Sportschule, Potsdam",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Emmerson Peller",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Broomfield, Colo. / Broomfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alisha Maake",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ewa Beach, Hawaii / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Jessica Machovec",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Woodbury, Minn. / East Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Miyu Yoshida",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "/",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Aubrey Dew",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Fargo, N.D. / Shanley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Isabel Oferosky",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Woodbury, Minn. / East Ridge HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "adilyn radwanski",
+        "alexis mcphail",
+        "alisha maake",
+        "amelia loeffler",
+        "athena mcginn",
+        "aubrey dew",
+        "aubrey wimberly",
+        "brynn belcher",
+        "caroline kuhn",
+        "emilia gottinger",
+        "emmerson peller",
+        "grace miller",
+        "haley wasilewski",
+        "isabel oferosky",
+        "jessica machovec",
+        "mea hook",
+        "mia voutsinas",
+        "miyu yoshida",
+        "natalie enderle",
+        "paula moreno diaz",
+        "sarah mccracken",
+        "sydney bakritzes",
+        "yui fujii"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Sarah Ruenes",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Frisco, Texas / Centennial HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Sydney Bakritzes",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Edina, Minn. / Edina HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Grace Miller",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif. / Patrick Henry HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Brynn Belcher",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev. / Shadow Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Reece Vorachek",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bismarck, N.D. / Bismarck HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Avery Toms",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Maple Grove, Minn. / Maple Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Marianna Carpenter",
+          "pos": "F",
+          "classCode": "R-SO",
+          "hometown": "Castle Rock, Colo. / Castle View HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Paula Moreno Diaz",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Madrid, Spain / IES Maria Zambrano",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Sarah McCracken",
+          "pos": "M/D",
+          "classCode": "JR",
+          "hometown": "Naperville, Ill. / Naperville Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Milan Cordone",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev. / Coronado HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Irene Jirasevijinda",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Bangkok, Thailand / Rancho Christian HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Morgan Huff",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Longmont, Colo. / Silver Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Haley Wasilewski",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Linden, Mich. / Linden HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Mary Gasaway",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Columbia, Ill / Columbia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Samantha Diaz",
+          "pos": "F/M",
+          "classCode": "SR",
+          "hometown": "Ogden, Utah / Ben Lomond HS",
+          "highSchool": "Grambling State"
+        },
+        {
+          "number": "15",
+          "name": "Hunter Borgel",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev. / Bishop Gorman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Sofia Desirello",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Menifee, Calif. / Paloma Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Julia Briggs",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Reno, Nev. / Damonte Ranch HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kaylie Fowler",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Liberty Hill, Texas / Liberty Hill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Madalyn Carlson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mesa, Ariz. / Red Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Amelia Loeffler",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Claremont, Calif. / Claremont HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Alexis McPhail",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Riverside, Calif. / Riverside Poly HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Charlie Basinet",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "San Diego, Calif. / Cathedral Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Caroline Kuhn",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "New Braunfels, Texas / Canyon HS",
+          "highSchool": "Laramie County CC"
+        },
+        {
+          "number": "25",
+          "name": "Athena McGinn",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Lake Villa, Ill. / Warren Township HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Ariana Chisteckoff",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Las Vegas, Nev. / Liberty HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Emmerson Peller",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Broomfield, Colo. / Broomfield HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Allison Tschetter",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Sioux Falls, S.D. / O'Gorman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alisha Maake",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Ewa Beach, Hawaii / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Jessica Machovec",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Woodbury, Minn. / East Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Haylee Goodrich",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Spring, Texas / Klein Cain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Aubrey Dew",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Fargo, N.D. / Shanley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Morgan Shirley",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Gillette, Wyo. / Thunder Basin HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 33,
+      "players": [
+        {
+          "number": "0",
+          "name": "Sarah Ruenes",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Frisco, Texas / Centennial HS",
+          "highSchool": ""
+        },
+        {
+          "number": "00",
+          "name": "Sydney Bakritzes",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Edina, Minn. / Edina HS",
+          "highSchool": ""
+        },
+        {
+          "number": "1",
+          "name": "Madi Livingston",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Centennial, Colo. / Grandview HS",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Brynn Belcher",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev. / Shadow Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Reece Vorachek",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Bismarck, N.D. / Bismarck HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Avery Toms",
+          "pos": "M/D",
+          "classCode": "FR",
+          "hometown": "Maple Grove, Minn. / Maple Grove HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Evelyn Pazienza",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Pewee Valley, Ky. / South Oldham High School",
+          "highSchool": "Louisville"
+        },
+        {
+          "number": "6",
+          "name": "Marianna Carpenter",
+          "pos": "F",
+          "classCode": "R-FR",
+          "hometown": "Castle Rock, Colo. / Castle View HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Paula Moreno Diaz",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Madrid, Spain / IES Maria Zambrano",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Sarah McCracken",
+          "pos": "M/D",
+          "classCode": "SO",
+          "hometown": "Naperville, Ill. / Naperville Central HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Allison Rapaduski",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Algonquin, Ill. / Harry D. Jacobs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Irene Jirasevijinda",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Bangkok, Thailand / Rancho Christian HS",
+          "highSchool": ""
+        },
+        {
+          "number": "11",
+          "name": "Gracie Gehler",
+          "pos": "M",
+          "classCode": "R-SO",
+          "hometown": "Coronado, Calif. / Coronado HS",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Mary Gasaway",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Columbia, Ill / Columbia HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Milan Cordone",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev. / Coronado HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Sofia Desirello",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Menifee, Calif. / Paloma Valley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Julia Briggs",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Reno, Nev. / Damonte Ranch HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Katie Alto",
+          "pos": "M/D",
+          "classCode": "SR",
+          "hometown": "Bemidji, Minn. / Bemidji HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Kaylie Fowler",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Liberty Hill, Texas / Liberty Hill HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Madalyn Carlson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mesa, Ariz. / Red Mountain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "21",
+          "name": "Amelia Loeffler",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Claremont, Calif. / Claremont HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Alexis McPhail",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Riverside, Calif. / Riverside Poly HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Shalyn Pryor",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Evanston, Ill. / Evanston Township HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Gianna Hall",
+          "pos": "F/M",
+          "classCode": "JR",
+          "hometown": "Sacramento, Calif. / Rio Americano HS",
+          "highSchool": "Sierra College"
+        },
+        {
+          "number": "25",
+          "name": "Athena McGinn",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Lake Villa, Ill. / Warren Township HS",
+          "highSchool": ""
+        },
+        {
+          "number": "26",
+          "name": "Ariana Chisteckoff",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Las Vegas, Nev. / Liberty HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mikayla Gonzalez",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "La Mirada, Calif. / La Mirada HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Allison Tschetter",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Sioux Falls, S.D. / O'Gorman HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Alisha Maake",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Ewa Beach, Hawaii / Casteel HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Jessica Machovec",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Woodbury, Minn. / East Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "33",
+          "name": "Haylee Goodrich",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Spring, Texas / Klein Cain HS",
+          "highSchool": ""
+        },
+        {
+          "number": "34",
+          "name": "Aubrey Dew",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Fargo, N.D. / Shanley HS",
+          "highSchool": ""
+        },
+        {
+          "number": "35",
+          "name": "Annika Franz",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Riverton, Utah / Riverton HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://fightinghawks.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:22:53Z"
+    }
+  },
   "commitments": [
     {
       "id": "addison-stadden-2026",
@@ -124,7 +1756,7 @@
       "city": "Blaine",
       "highSchool": "",
       "college": "north-dakota",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -500,35 +2132,21 @@
     "2027": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.44,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
-      "climate": false,
+      "climate": true,
       "program": true,
       "seasons": false,
       "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://fightinghawks.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T15:39:31Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=47.921654&longitude=-97.071738&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T15:39:30Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": []
   }
 }

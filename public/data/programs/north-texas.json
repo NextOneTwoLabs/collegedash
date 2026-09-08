@@ -69,18 +69,233 @@
       "asOf": "2026-09-07T15:19:42Z"
     }
   },
-  "climate": null,
+  "climate": {
+    "lat": 33.211178,
+    "lon": -97.148422,
+    "timezone": "America/Chicago",
+    "elevationM": 195.7,
+    "normalsPeriod": "1991-2020",
+    "station": {
+      "id": "USW00003991",
+      "name": "DENTON MUNI AP",
+      "state": "TX",
+      "distanceKm": 4.7,
+      "elevationM": 195.7
+    },
+    "monthly": [
+      {
+        "month": "Jan",
+        "tHighF": 55.7,
+        "tLowF": 32.2,
+        "precipIn": 1.94,
+        "snowIn": null,
+        "wetDays": 3.3,
+        "days90F": 0.0,
+        "daysFreeze": 16.3
+      },
+      {
+        "month": "Feb",
+        "tHighF": 60.0,
+        "tLowF": 36.4,
+        "precipIn": 2.48,
+        "snowIn": null,
+        "wetDays": 4.2,
+        "days90F": 0.0,
+        "daysFreeze": 10.3
+      },
+      {
+        "month": "Mar",
+        "tHighF": 67.6,
+        "tLowF": 44.7,
+        "precipIn": 3.11,
+        "snowIn": null,
+        "wetDays": 4.4,
+        "days90F": 0.1,
+        "daysFreeze": 3.9
+      },
+      {
+        "month": "Apr",
+        "tHighF": 75.0,
+        "tLowF": 51.4,
+        "precipIn": 3.43,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 0.8,
+        "daysFreeze": 0.6
+      },
+      {
+        "month": "May",
+        "tHighF": 82.9,
+        "tLowF": 61.3,
+        "precipIn": 4.52,
+        "snowIn": null,
+        "wetDays": 6.5,
+        "days90F": 6.6,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jun",
+        "tHighF": 91.3,
+        "tLowF": 69.4,
+        "precipIn": 3.67,
+        "snowIn": null,
+        "wetDays": 4.6,
+        "days90F": 21.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Jul",
+        "tHighF": 95.7,
+        "tLowF": 73.2,
+        "precipIn": 1.77,
+        "snowIn": null,
+        "wetDays": 2.9,
+        "days90F": 28.5,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Aug",
+        "tHighF": 95.6,
+        "tLowF": 72.5,
+        "precipIn": 2.39,
+        "snowIn": null,
+        "wetDays": 3.0,
+        "days90F": 26.9,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Sep",
+        "tHighF": 88.1,
+        "tLowF": 64.4,
+        "precipIn": 2.65,
+        "snowIn": null,
+        "wetDays": 3.5,
+        "days90F": 15.8,
+        "daysFreeze": 0.0
+      },
+      {
+        "month": "Oct",
+        "tHighF": 77.6,
+        "tLowF": 52.7,
+        "precipIn": 4.17,
+        "snowIn": null,
+        "wetDays": 4.8,
+        "days90F": 3.3,
+        "daysFreeze": 0.4
+      },
+      {
+        "month": "Nov",
+        "tHighF": 66.1,
+        "tLowF": 42.4,
+        "precipIn": 2.71,
+        "snowIn": null,
+        "wetDays": 3.4,
+        "days90F": 0.1,
+        "daysFreeze": 5.3
+      },
+      {
+        "month": "Dec",
+        "tHighF": 56.8,
+        "tLowF": 34.2,
+        "precipIn": 2.76,
+        "snowIn": null,
+        "wetDays": 3.7,
+        "days90F": 0.0,
+        "daysFreeze": 14.9
+      }
+    ],
+    "annualPrecipIn": 35.6,
+    "annualSnowIn": null,
+    "fallSeason": {
+      "avgHighF": 81.8,
+      "avgLowF": 58.0,
+      "precipIn": 11.9,
+      "wetDays": 15.0
+    },
+    "summary": "Hottest month Jul (avg high 95.7°F), coldest Jan (avg low 32.2°F). 35.6 in of rain per year. Fall season (Aug–Nov): highs around 81.8°F, 11.9 in of rain over the season.",
+    "_meta": {
+      "source": "climate",
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00003991,USW00053909,USC00412404&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
+      "asOf": "2026-09-08T00:56:06Z"
+    }
+  },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "John Hedlund",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/coaches/john-hedlund/990",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "John Hedlund",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/coaches/john-hedlund/990",
+        "social": {}
+      },
+      {
+        "name": "Dejan Milosevic",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/coaches/dejan-milosevic/1007",
+        "social": {}
+      },
+      {
+        "name": "Neal Ozmun",
+        "title": "Assistant Coach/Recruiting Coordinator",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/coaches/neal-ozmun/991",
+        "social": {}
+      },
+      {
+        "name": "JJ Sissen",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/coaches/jj-sissen/992",
+        "social": {}
+      },
+      {
+        "name": "Michaela White",
+        "title": "Asst. Strength & Conditioning Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/staff/michaela-white/254",
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Hannah Ellis",
+        "title": "Associate Athletic Trainer (Soccer/Track & Field)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/staff/hannah-ellis/253",
+        "social": {}
+      },
+      {
+        "name": "Kayla Jones",
+        "title": "Director, Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/staff/kayla-jones/252",
+        "social": {}
+      },
+      {
+        "name": "Claire Bailey",
+        "title": "Sport Psychology",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/staff/claire--bailey-/255",
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -98,13 +313,2806 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://meangreensports.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-08T01:22:20Z"
+      }
     }
   },
-  "seasons": [],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "seasons": [
+    {
+      "year": 2026,
+      "label": "2026",
+      "record": "3-3-1",
+      "wins": 3,
+      "losses": 3,
+      "ties": 1,
+      "inProgress": true,
+      "gamesPlayed": 7,
+      "headCoach": "John Hedlund"
+    },
+    {
+      "year": 2025,
+      "label": "2025",
+      "record": "6-10-4",
+      "wins": 6,
+      "losses": 10,
+      "ties": 4,
+      "confRecord": "2-5-3",
+      "rpiRank": 201,
+      "rpi": {
+        "rank": 201,
+        "record": "6-10-4",
+        "through": "2025-12-08",
+        "prevRank": 198,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 201,
+            "record": "6-10-4"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "record": "7-6-6",
+      "wins": 7,
+      "losses": 6,
+      "ties": 6,
+      "confRecord": "3-3-4",
+      "rpiRank": 156,
+      "rpi": {
+        "rank": 156,
+        "sosRank": 154,
+        "balancedRank": 182,
+        "kpiRank": 144,
+        "masseyRank": 168,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    },
+    {
+      "year": 2023,
+      "label": "2023",
+      "record": "8-5-3",
+      "wins": 8,
+      "losses": 5,
+      "ties": 3,
+      "confRecord": "2-4-3",
+      "rpiRank": 83,
+      "rpi": {
+        "rank": 83,
+        "sosRank": 99,
+        "balancedRank": 87,
+        "kpiRank": 91,
+        "masseyRank": 104,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "00",
+        "name": "Sarah Margaret Seabrook",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Ridgeland, MS / University of Mississippi High School",
+        "highSchool": "Ole Miss",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/sarah-margaret-seabrook/7640",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "0",
+        "name": "Stacy Barresi",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mentor, OH / Gilmour Academy",
+        "highSchool": "Utah Valley",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/stacy-barresi/7741",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "1",
+        "name": "Hicks Bishop",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Austin, TX / IMG Academy (FL.)",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/hicks-bishop/7628",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "2",
+        "name": "Payton Annis",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Lavon, TX / Community HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/payton-annis/7625",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "3",
+        "name": "Madalynn Putnam",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Forney, TX / Forney HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Soccer",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/madalynn-putnam/7745",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "4",
+        "name": "Beya Rosales",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'9\"",
+        "heightIn": 69,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Prosper, TX / Prosper HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/beya-rosales/7639",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "5",
+        "name": "Hannah Phillips",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Katy, TX / Katy HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/hannah-phillips/7637",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "6",
+        "name": "Lillian Vandiver",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Cedar Park, TX / Vista Ridge HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/lillian-vandiver/7641",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "7",
+        "name": "Kelby Dansby",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Mesquite, TX / Mesquite Horn HS",
+        "highSchool": "Missouri",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/kelby-dansby/7742",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "8",
+        "name": "Ava Itz",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Belton, TX / Belton HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "FC Westlake",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/ava-itz/7633",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "9",
+        "name": "Claire Niedermeier",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Heath, TX / Rockwall Heath HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Soccer",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/claire-niedermeier/7636",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "10",
+        "name": "Anna Bewley",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Princeton, TX / Princeton HS",
+        "highSchool": "Nelson University",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/anna-bewley/7627",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "11",
+        "name": "Makayla Sellyei",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Parker, CO / Cherokee Trail HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Colorado Rush",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/makayla-sellyei/7848",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "12",
+        "name": "Emma King",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Houston, TX / St. Pius X",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Albion Hurricanes FC",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/emma-king/7634",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "13",
+        "name": "Alexis Miller",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Haslet, TX / V.R. Eaton HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/alexis-miller/7851",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "14",
+        "name": "Mya Mitchell",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Dallas, TX / Mesquite Horn HS",
+        "highSchool": "East Texas A&M",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/mya-mitchell/7744",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "15",
+        "name": "Ava Haley",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'11\"",
+        "heightIn": 71,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Plano, TX / Plano West HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/ava-haley/7632",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "16",
+        "name": "Sophie Altieri",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Frisco, TX / Wakeland HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "DKSC",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/sophie-altieri/7850",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "17",
+        "name": "Lily Cunningham",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Edmond, OK / Deer Creek HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/lily-cunningham/7630",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "18",
+        "name": "Naho Yamamura",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Tokushima, Japan /",
+        "highSchool": "Butler CC",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/naho-yamamura/7853",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "19",
+        "name": "Clara Carter",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Austin, TX / Regents School of Austin",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/clara-carter/7849",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "20",
+        "name": "Emma Thurston",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Leawood, KS / Shawnee Mission South",
+        "highSchool": "Southern Indiana",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/emma-thurston/7743",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "21",
+        "name": "Rydlii Rives",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Arlington, TX / Martin HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/rydlii-rives/7638",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "22",
+        "name": "Alexa Perreira",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Wylie, TX / Plano East HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Sting Black",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/alexa-perreira/7852",
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer"
+      },
+      {
+        "number": "23",
+        "name": "Marin Wright",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Orlando, FL / Winter Park HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/marin-wright/7642",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "24",
+        "name": "Mia Bernard",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Heath, TX / Rockwall Heath HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Solar Soccer Club",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/mia-bernard/7626",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      },
+      {
+        "number": "26",
+        "name": "AJ Jaquay",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Allen, TX / Allen HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/aj-jaquay/7847",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "27",
+        "name": "Georgia Guenther",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Plano, TX / Coram Deo Academy",
+        "highSchool": "Abilene Christian",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/georgia-guenther/7631",
+        "social": {},
+        "bio": {},
+        "clubSource": null
+      },
+      {
+        "number": "29",
+        "name": "Ella Bushko",
+        "pos": "D",
+        "posLabel": "Defense",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Haslet, TX / VR Eaton HS",
+        "highSchool": "",
+        "previousSchool": "",
+        "major": "",
+        "club": "Dallas Texans",
+        "bioUrl": "https://meangreensports.com/sports/womens-soccer/roster/ella-bushko/7629",
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire"
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 0,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 0,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "D": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "M": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 1
+      }
+    },
+    "byClass": {
+      "GR": 4,
+      "JR": 9,
+      "SO": 6,
+      "FR": 6,
+      "SR": 4
+    },
+    "graduatingByPos": {
+      "GK": 1,
+      "F": 3,
+      "D": 2,
+      "M": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://meangreensports.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-08T01:22:20Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "0",
+          "name": "Alina Arneth",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Hirschaid, Germany / Staatliche Fachoberschule",
+          "highSchool": "Motlow State College"
+        },
+        {
+          "number": "00",
+          "name": "Sarah Margaret Seabrook",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Ridgeland, MS / University of Mississippi High School",
+          "highSchool": "Ole Miss"
+        },
+        {
+          "number": "1",
+          "name": "Hicks Bishop",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Austin, TX / IMG Academy (FL.)",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Payton Annis",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Lavon, TX / Community HS",
+          "highSchool": ""
+        },
+        {
+          "number": "3",
+          "name": "Rowan Faircloth",
+          "pos": "F/D",
+          "classCode": "FR",
+          "hometown": "Sulphur Springs, TX / Sulphur Springs HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Beya Rosales",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Prosper, TX / Prosper HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Hannah Phillips",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Katy, TX / Katy HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Summer Brown",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Arlington, TX / Arlington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Micah Beasley",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Spring, TX / Connections Academy",
+          "highSchool": "Baylor"
+        },
+        {
+          "number": "8",
+          "name": "Ava Itz",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Belton, TX / Belton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Claire Niedermeier",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Heath, TX / Rockwall Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Anna Bewley",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Princeton, TX / Princeton HS",
+          "highSchool": "Nelson University"
+        },
+        {
+          "number": "12",
+          "name": "Emma King",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Houston, TX / St. Pius X",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Avery Lang",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Austin, TX / Lake Travis HS",
+          "highSchool": "Seminole State College"
+        },
+        {
+          "number": "14",
+          "name": "Drew Lessert",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Carrollton, TX / Coram Deo Academy",
+          "highSchool": "LeTourneau"
+        },
+        {
+          "number": "15",
+          "name": "Ava Haley",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Plano, TX / Plano West HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Lillian Vandiver",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Cedar Park, TX / Vista Ridge HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Lily Cunningham",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Edmond, OK / Deer Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Peyton Renfro",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Waxahachie, TX / Waxahachie HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Marin Wright",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Orlando, FL / Winter Park HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Abi Major",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Frisco, TX / Rick Reedy HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "21",
+          "name": "Rydlii Rives",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Arlington, TX / Martin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Rachel Roebuck",
+          "pos": "F/D",
+          "classCode": "GR",
+          "hometown": "Royse City, TX / Royse City HS",
+          "highSchool": "Paris JC"
+        },
+        {
+          "number": "24",
+          "name": "Mia Bernard",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Heath, TX / Rockwall Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Sarah Peyton Webb",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Prosper, TX / Prosper HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Georgia Guenther",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Plano, TX / Coram Deo Academy",
+          "highSchool": "Abilene Christian"
+        },
+        {
+          "number": "29",
+          "name": "Ella Bushko",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Haslet, TX / VR Eaton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "32",
+          "name": "Kylie Kissee",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "San Antonio, TX / Cole HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": [
+        "abi major",
+        "alina arneth",
+        "avery lang",
+        "drew lessert",
+        "kylie kissee",
+        "micah beasley",
+        "peyton renfro",
+        "rachel roebuck",
+        "rowan faircloth",
+        "sarah peyton webb",
+        "summer brown"
+      ]
+    },
+    "2024": {
+      "count": 29,
+      "players": [
+        {
+          "number": "00",
+          "name": "Maddie Ogden",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Cinnaminson, NJ / Cinnaminson HS",
+          "highSchool": "Colorado State"
+        },
+        {
+          "number": "1",
+          "name": "Hicks Bishop",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Austin, TX / IMG Academy (FL.)",
+          "highSchool": ""
+        },
+        {
+          "number": "2",
+          "name": "Bailey Wesco",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Midlothian, TX / Midlothian HS",
+          "highSchool": "Oklahoma"
+        },
+        {
+          "number": "3",
+          "name": "Katherine Williams",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Spring, TX / The Woodlands HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Beya Rosales",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Prosper, TX / Prosper HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Hannah Phillips",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Katy, TX / Katy HS",
+          "highSchool": ""
+        },
+        {
+          "number": "6",
+          "name": "Summer Brown",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Arlington, TX / Arlington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Micah Beasley",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Spring, TX / Connections Academy",
+          "highSchool": "Baylor"
+        },
+        {
+          "number": "9",
+          "name": "Claire Niedermeier",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Heath, TX / Rockwall Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "10",
+          "name": "Davia Richards",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Kingston, Jamaica / Excelsior HS",
+          "highSchool": "Hill College"
+        },
+        {
+          "number": "11",
+          "name": "Meghan Schwertner",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Lake Jackson, TX / Brazoswood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Emma King",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Houston, TX / St. Pius X",
+          "highSchool": ""
+        },
+        {
+          "number": "13",
+          "name": "Alexis Miller",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Haslet, TX / V.R. Eaton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Celine Diaz",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Fort Worth, TX / Birdville HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Addi Christian",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Frisco, TX / Frisco HS",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Ramsey Fieker",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Tulsa, OK / Jenks HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Lily Cunningham",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Edmond, OK / Deer Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Peyton Renfro",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Waxahachie, TX / Waxahachie HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Devyn Flannery",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Frisco, TX / Lebanon Trails HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Abi Major",
+          "pos": "D",
+          "classCode": "R-JR",
+          "hometown": "Frisco, TX / Rick Reedy HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "21",
+          "name": "Rydlii Rives",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Arlington, TX / Martin HS",
+          "highSchool": ""
+        },
+        {
+          "number": "22",
+          "name": "Sadie Ozymy",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Coppell, TX / Coppell HS",
+          "highSchool": ""
+        },
+        {
+          "number": "23",
+          "name": "Rachel Roebuck",
+          "pos": "F/D",
+          "classCode": "GR",
+          "hometown": "Royse City, TX / Royse City HS",
+          "highSchool": "Paris JC"
+        },
+        {
+          "number": "24",
+          "name": "Mia Bernard",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Heath, TX / Rockwall Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Sarah Peyton Webb",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Prosper, TX / Prosper HS",
+          "highSchool": ""
+        },
+        {
+          "number": "28",
+          "name": "Madi Lambert",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Katy, TX / Jordan HS",
+          "highSchool": ""
+        },
+        {
+          "number": "29",
+          "name": "Ella Bushko",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Haslet, TX / VR Eaton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Jacqueline Barnes",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Spring, TX / Klein Oak HS",
+          "highSchool": "TCU"
+        },
+        {
+          "number": "32",
+          "name": "Bry Russell",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Flower Mound, TX / Marcus HS",
+          "highSchool": ""
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 29,
+      "players": [
+        {
+          "number": "00",
+          "name": "Maddie Ogden",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Cinnaminson, NJ / Cinnaminson HS",
+          "highSchool": "Colorado State"
+        },
+        {
+          "number": "0",
+          "name": "Bella Lister",
+          "pos": "GK",
+          "classCode": "R-FR",
+          "hometown": "Victoria, BC",
+          "highSchool": "Texas A&M"
+        },
+        {
+          "number": "1",
+          "name": "Mac Titus",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Chelsea, AL / Chelsea HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "2",
+          "name": "Bailey Wesco",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Midlothian, TX / Midlothian HS",
+          "highSchool": "Oklahoma"
+        },
+        {
+          "number": "3",
+          "name": "Katherine Williams",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Spring, TX / The Woodlands HS",
+          "highSchool": ""
+        },
+        {
+          "number": "4",
+          "name": "Bree Korta",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lincoln, NE / Lincoln Plus X Catholic HS",
+          "highSchool": ""
+        },
+        {
+          "number": "5",
+          "name": "Grace Dennis",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Allen, TX / Allen HS",
+          "highSchool": "Oklahoma State"
+        },
+        {
+          "number": "6",
+          "name": "Summer Brown",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Arlington, TX / Arlington HS",
+          "highSchool": ""
+        },
+        {
+          "number": "7",
+          "name": "Madi Starrett",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Frisco, TX / Lebanon Trails HS",
+          "highSchool": ""
+        },
+        {
+          "number": "8",
+          "name": "Lakin Appell",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Omaha, NE / Skutt Catholic",
+          "highSchool": ""
+        },
+        {
+          "number": "9",
+          "name": "Jenna Sheely",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Austin, TX / Jack C. Hays HS",
+          "highSchool": "Oklahoma"
+        },
+        {
+          "number": "10",
+          "name": "Avery Barron",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Pearland, TX / Pearland HS",
+          "highSchool": "TCU"
+        },
+        {
+          "number": "11",
+          "name": "Meghan Schwertner",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Lake Jackson, TX / Brazoswood HS",
+          "highSchool": ""
+        },
+        {
+          "number": "12",
+          "name": "Megan Brouse",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Phoenix, AZ / Desert Vista HS",
+          "highSchool": "Coastal Carolina"
+        },
+        {
+          "number": "13",
+          "name": "Alexis Miller",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Haslet, TX / V.R. Eaton HS",
+          "highSchool": ""
+        },
+        {
+          "number": "14",
+          "name": "Kennedy Bernsen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "O'Fallon, MO / Fort Zumwalt West HS",
+          "highSchool": ""
+        },
+        {
+          "number": "15",
+          "name": "Danae Hobson",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Sand Springs, OK / Union HS",
+          "highSchool": ""
+        },
+        {
+          "number": "17",
+          "name": "Lily Cunningham",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Edmond, OK / Deer Creek HS",
+          "highSchool": ""
+        },
+        {
+          "number": "18",
+          "name": "Peyton Renfro",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Waxahachie, TX / Waxahachie HS",
+          "highSchool": ""
+        },
+        {
+          "number": "19",
+          "name": "Devyn Flannery",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Frisco, TX / Lebanon Trails HS",
+          "highSchool": ""
+        },
+        {
+          "number": "20",
+          "name": "Abi Major",
+          "pos": "D",
+          "classCode": "R-SO",
+          "hometown": "Frisco, TX / Rick Reedy HS",
+          "highSchool": "Mississippi State"
+        },
+        {
+          "number": "21",
+          "name": "Lorelai Stramrood",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Houston, TX / Tomball Memorial HS",
+          "highSchool": "Baylor"
+        },
+        {
+          "number": "22",
+          "name": "Victoria Altieri",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Frisco, TX / Wakeland HS",
+          "highSchool": "Louisiana Monroe"
+        },
+        {
+          "number": "23",
+          "name": "Kat Burnell",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Keller, TX / Keller HS",
+          "highSchool": ""
+        },
+        {
+          "number": "24",
+          "name": "Mia Bernard",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Heath, TX / Rockwall Heath HS",
+          "highSchool": ""
+        },
+        {
+          "number": "25",
+          "name": "Sarah Peyton Webb",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Prosper, TX / Prosper HS",
+          "highSchool": ""
+        },
+        {
+          "number": "27",
+          "name": "Mia Merritt",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Austin, TX / Lake Travis HS",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Rachel Roebuck",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Royse City, TX / Royse City HS",
+          "highSchool": "Paris JC"
+        },
+        {
+          "number": "32",
+          "name": "Abby Carlson",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Hudson, WI / Hudson HS",
+          "highSchool": "St. Edward's"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 3,
+      "losses": 3,
+      "ties": 1,
+      "text": "3-3-1",
+      "played": 7,
+      "scheduled": 20,
+      "confText": "0-0-0",
+      "exhibitions": 1
+    },
+    "games": [
+      {
+        "date": "2026-08-06",
+        "datetime": null,
+        "exhibition": true,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Tarleton State",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/tarleton-state-exhibition/210"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Navarro College",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": "W",
+        "score": "9-0",
+        "links": {
+          "recap": "https://meangreensports.com/news/2026/8/13/womens-soccer-mean-green-scores-nine-goals-in-win",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/navarro-college/435"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "SMU",
+        "opponentRank": null,
+        "location": "Dallas, TX",
+        "result": "L",
+        "score": "2-0",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/smu/boxscore/7183",
+          "recap": "https://meangreensports.com/news/2026/8/16/womens-soccer-soccer-drops-road-game-at-smu",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/smu/105"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "ULM",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": "W",
+        "score": "1-0",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/ulm/boxscore/7184",
+          "recap": "https://meangreensports.com/news/2026/8/20/womens-soccer-mean-green-take-down-ulm-in-physical-battle",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/ulm/130"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "McNeese State",
+        "opponentRank": null,
+        "location": "Lake Charles, LA",
+        "result": "W",
+        "score": "4-2",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/mcneese-state/boxscore/7185",
+          "recap": "https://meangreensports.com/news/2026/8/23/womens-soccer-niedermeier-nets-second-career-hat-trick-in-win",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/mcneese-state/88"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Oral Roberts",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": "T",
+        "score": "1-1",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/oral-roberts/boxscore/7186",
+          "recap": "https://meangreensports.com/news/2026/8/27/womens-soccer-mean-green-earn-result-with-second-half-rally",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/oral-roberts/100"
+        }
+      },
+      {
+        "date": "2026-08-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Air Force",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": "L",
+        "score": "1-0",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/air-force/boxscore/7187",
+          "recap": "https://meangreensports.com/news/2026/8/30/womens-soccer-mean-green-fall-1-0-to-air-force",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/air-force/62"
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Oklahoma",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": "L",
+        "score": "6-2",
+        "links": {
+          "box score": "https://meangreensports.com/sports/womens-soccer/stats/2026/oklahoma/boxscore/7188",
+          "recap": "https://meangreensports.com/news/2026/9/3/womens-soccer-mean-green-fall-to-oklahoma",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/oklahoma/37"
+        }
+      },
+      {
+        "date": "2026-09-10",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "Nelson",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "watch": "https://www.espn.com/watch/player/_/id/3bc319f6-867d-4eb0-b897-b51d45911909",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665478",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/nelson/367"
+        }
+      },
+      {
+        "date": "2026-09-13",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "A",
+        "opponent": "DePaul",
+        "opponentRank": null,
+        "location": "Chicago, IL",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664281&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/depaul/377"
+        }
+      },
+      {
+        "date": "2026-09-17",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "South Florida",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=662515",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/south-florida/156"
+        }
+      },
+      {
+        "date": "2026-09-24",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Charlotte",
+        "opponentRank": null,
+        "location": "Charlotte, NC",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665296&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/charlotte/59"
+        }
+      },
+      {
+        "date": "2026-09-27",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Temple",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665476",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/temple/385"
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "UAB",
+        "opponentRank": null,
+        "location": "Birmingham, AL",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=663775&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/uab/115"
+        }
+      },
+      {
+        "date": "2026-10-08",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "FAU",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665479",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/fau/69"
+        }
+      },
+      {
+        "date": "2026-10-15",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Rice",
+        "opponentRank": null,
+        "location": "Houston, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665795&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/rice/122"
+        }
+      },
+      {
+        "date": "2026-10-22",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "East Carolina",
+        "opponentRank": null,
+        "location": "Greenville, NC",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=664327&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/east-carolina/230"
+        }
+      },
+      {
+        "date": "2026-10-25",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "Memphis",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665475",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/memphis/90"
+        }
+      },
+      {
+        "date": "2026-10-30",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "H",
+        "opponent": "UTSA",
+        "opponentRank": null,
+        "location": "Denton, TX",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665480",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/utsa/126"
+        }
+      },
+      {
+        "date": "2026-11-03",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": true,
+        "homeAway": "A",
+        "opponent": "Tulsa",
+        "opponentRank": null,
+        "location": "Tulsa, OK",
+        "result": null,
+        "score": null,
+        "links": {
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666406&vislive=ntex",
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/tulsa/118"
+        }
+      },
+      {
+        "date": "2026-11-14",
+        "datetime": null,
+        "exhibition": false,
+        "conferenceGame": false,
+        "homeAway": "H",
+        "opponent": "American Conference Championship",
+        "opponentRank": null,
+        "location": "Lakewood Ranch, FL",
+        "result": null,
+        "score": null,
+        "links": {
+          "history": "https://meangreensports.com/sports/wsoc/opponent-history/american-conference-championship/374"
+        }
+      }
+    ],
+    "history": {
+      "2025": {
+        "record": "6-10-4",
+        "games": [
+          {
+            "date": "2025-08-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Incarnate Word",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/incarnate-word/boxscore/6797",
+              "recap": "https://meangreensports.com/news/2025/8/14/womens-soccer-mean-green-fall-in-season-opener",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/incarnate-word/5"
+            }
+          },
+          {
+            "date": "2025-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Sam Houston",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/sam-houston/boxscore/6798",
+              "recap": "https://meangreensports.com/news/2025/8/17/womens-soccer-mean-green-shut-out-sam-houston",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/sam-houston/102"
+            }
+          },
+          {
+            "date": "2025-08-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "4-3",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/smu/boxscore/6799",
+              "recap": "https://meangreensports.com/news/2025/8/21/womens-soccer-unt-rally-falls-short-late-against-smu",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/smu/105"
+            }
+          },
+          {
+            "date": "2025-08-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Prairie View A&M",
+            "opponentRank": null,
+            "location": "Prairie View, TX",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/prairie-view-am/boxscore/6801",
+              "recap": "https://meangreensports.com/news/2025/8/23/womens-soccer-mean-green-win-first-road-game-of-season",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/prairie-view-am/272"
+            }
+          },
+          {
+            "date": "2025-08-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "McNeese State",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/mcneese-state/boxscore/6802",
+              "recap": "https://meangreensports.com/news/2025/8/28/womens-soccer-unt-routs-mcneese-in-shutout-fashion",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/mcneese-state/88"
+            }
+          },
+          {
+            "date": "2025-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Oklahoma",
+            "opponentRank": null,
+            "location": "Norman, Okla.",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/oklahoma/boxscore/6803",
+              "recap": "https://meangreensports.com/news/2025/8/31/womens-soccer-unt-soccer-falls-1-0-to-no-20-sooners",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/oklahoma/37"
+            }
+          },
+          {
+            "date": "2025-09-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Abilene Christian",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/abilene-christian/boxscore/6805",
+              "recap": "https://meangreensports.com/news/2025/9/4/womens-soccer-niedermeier-nets-game-winner-in-90th-to-beat-acu",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/abilene-christian/270"
+            }
+          },
+          {
+            "date": "2025-09-07",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "ULM",
+            "opponentRank": null,
+            "location": "Monroe, LA",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/ulm/boxscore/6806",
+              "recap": "https://meangreensports.com/news/2025/9/7/womens-soccer-soccer-falls-at-ulm-1-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/ulm/130"
+            }
+          },
+          {
+            "date": "2025-09-11",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Army",
+            "opponentRank": null,
+            "location": "West Point, N.Y.",
+            "result": "L",
+            "score": "3-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/army/boxscore/6808",
+              "recap": "https://meangreensports.com/news/2025/9/11/womens-soccer-soccer-takes-early-lead-falls-to-army",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/army/43"
+            }
+          },
+          {
+            "date": "2025-09-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "NJIT",
+            "opponentRank": null,
+            "location": "Newark, NJ",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/njit/boxscore/6809",
+              "recap": "https://meangreensports.com/news/2025/9/13/womens-soccer-soccer-earns-1-1-road-draw-at-njit",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/njit/421"
+            }
+          },
+          {
+            "date": "2025-09-18",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, TX",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/utsa/boxscore/6810",
+              "recap": "https://meangreensports.com/news/2025/9/18/womens-soccer-soccer-drops-conference-opener-at-utsa",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/utsa/126"
+            }
+          },
+          {
+            "date": "2025-09-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "3-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/charlotte/boxscore/6811",
+              "recap": "https://meangreensports.com/news/2025/9/25/womens-soccer-mean-green-drop-one-to-charlotte",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/charlotte/59"
+            }
+          },
+          {
+            "date": "2025-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/east-carolina/boxscore/6812",
+              "recap": "https://meangreensports.com/news/2025/9/28/womens-soccer-unt-soccer-falls-to-east-carolina",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/east-carolina/230"
+            }
+          },
+          {
+            "date": "2025-10-02",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Philadelphia, PA",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/temple/boxscore/6813",
+              "recap": "https://meangreensports.com/news/2025/10/2/womens-soccer-mean-green-topple-temple-in-shutout-fashion",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/temple/385"
+            }
+          },
+          {
+            "date": "2025-10-09",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Memphis",
+            "opponentRank": null,
+            "location": "Memphis, TN",
+            "result": "L",
+            "score": "4-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/memphis/boxscore/6814",
+              "recap": "https://meangreensports.com/news/2025/10/9/womens-soccer-mean-green-fall-at-no-8-memphis",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/memphis/90"
+            }
+          },
+          {
+            "date": "2025-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/tulsa/boxscore/6815",
+              "recap": "https://meangreensports.com/news/2025/10/12/womens-soccer-freshman-hits-late-equalizer-to-draw-tulsa",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/tulsa/118"
+            }
+          },
+          {
+            "date": "2025-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/rice/boxscore/6816",
+              "recap": "https://meangreensports.com/news/2025/10/19/womens-soccer-mean-green-pick-up-point-after-draw-with-rice",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/rice/122"
+            }
+          },
+          {
+            "date": "2025-10-23",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, FL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/south-florida/boxscore/6817",
+              "recap": "https://meangreensports.com/news/2025/10/23/womens-soccer-mean-green-fight-back-for-draw-at-usf",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/south-florida/156"
+            }
+          },
+          {
+            "date": "2025-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Boca Raton, FL",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/florida-atlantic/boxscore/6818",
+              "recap": "https://meangreensports.com/news/2025/10/26/womens-soccer-soccer-earns-much-needed-win-at-florida-atlantic",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/florida-atlantic/69"
+            }
+          },
+          {
+            "date": "2025-10-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "3-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2025/uab/boxscore/6819",
+              "recap": "https://meangreensports.com/news/2025/10/30/womens-soccer-mean-green-drop-finale-to-uab",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/uab/115"
+            }
+          }
+        ]
+      },
+      "2024": {
+        "record": "7-6-6",
+        "games": [
+          {
+            "date": "2024-08-08",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colorado State",
+            "opponentRank": null,
+            "location": "Fort Collins, CO",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "recap": "https://meangreensports.com/news/2024/8/8/womens-soccer-soccer-draws-road-preseason-friendly-2-2",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/colorado-state/280"
+            }
+          },
+          {
+            "date": "2024-08-10",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Colorado",
+            "opponentRank": null,
+            "location": "Boulder, CO",
+            "result": "L",
+            "score": "4-3",
+            "links": {
+              "recap": "https://meangreensports.com/news/2024/8/10/womens-soccer-soccers-offensive-assault-falls-short-in-final-exhibition-at-colorado",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/colorado/387"
+            }
+          },
+          {
+            "date": "2024-08-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Oklahoma",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/oklahoma/boxscore/6225",
+              "recap": "https://meangreensports.com/news/2024/8/15/womens-soccer-soccer-drops-season-opener-1-0-to-oklahoma",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/oklahoma/123"
+            }
+          },
+          {
+            "date": "2024-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 20 Alabama",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/alabama/boxscore/6226",
+              "recap": "https://meangreensports.com/news/2024/8/17/womens-soccer-soccer-loses-2-1-to-no-20-alabama-on-late-goal",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/alabama/163"
+            }
+          },
+          {
+            "date": "2024-08-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas Southern",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/texas-southern/boxscore/6227",
+              "recap": "https://meangreensports.com/news/2024/8/22/womens-soccer-soccer-beats-texas-southern-2-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/texas-southern/148"
+            }
+          },
+          {
+            "date": "2024-08-25",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Prairie View A&M",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "9-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/prairie-view-am/boxscore/6228",
+              "recap": "https://meangreensports.com/news/2024/8/25/womens-soccer-roebuck-scores-four-to-lead-mean-green-to-9-0-win",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/prairie-view-am/272"
+            }
+          },
+          {
+            "date": "2024-08-30",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas A&M Commerce",
+            "opponentRank": null,
+            "location": "Commerce, TX",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/texas-am-commerce/boxscore/6229",
+              "recap": "https://meangreensports.com/news/2024/8/30/womens-soccer-soccer-draws-2-2-at-texas-am-commerce",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/texas-am-commerce/327"
+            }
+          },
+          {
+            "date": "2024-09-01",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Southern",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/southern/boxscore/6230",
+              "recap": "https://meangreensports.com/news/2024/9/1/womens-soccer-soccer-blanks-southern-5-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/southern/240"
+            }
+          },
+          {
+            "date": "2024-09-06",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Incarnate Word",
+            "opponentRank": null,
+            "location": "San Antonio, TX",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/incarnate-word/boxscore/6231",
+              "recap": "https://meangreensports.com/news/2024/9/6/womens-soccer-soccer-wins-at-incarnate-word-2-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/incarnate-word/208"
+            }
+          },
+          {
+            "date": "2024-09-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/florida-atlantic/boxscore/6233",
+              "recap": "https://meangreensports.com/news/2024/9/12/womens-soccer-soccer-opens-conference-with-1-0-win-over-fau",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/florida-atlantic/69"
+            }
+          },
+          {
+            "date": "2024-09-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Abilene Christian",
+            "opponentRank": null,
+            "location": "Abilene, TX",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/abilene-christian/boxscore/6234",
+              "recap": "https://meangreensports.com/news/2024/9/15/womens-soccer-soccer-extends-unbeaten-streak-to-seven-in-row",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/abilene-christian/270"
+            }
+          },
+          {
+            "date": "2024-09-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Tulsa, OK",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/tulsa/boxscore/6235",
+              "recap": "https://meangreensports.com/news/2024/9/20/womens-soccer-soccer-beats-tulsa-3-1",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/tulsa/118"
+            }
+          },
+          {
+            "date": "2024-09-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Temple",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/temple/boxscore/6236",
+              "recap": "https://meangreensports.com/news/2024/9/26/womens-soccer-hedlund-wins-400th-in-6-0-victory",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/temple/385"
+            }
+          },
+          {
+            "date": "2024-09-29",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Greenville, NC",
+            "result": "L",
+            "score": "3-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/east-carolina/boxscore/6237",
+              "recap": "https://meangreensports.com/news/2024/9/29/womens-soccer-soccer-falls-at-ecu",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/east-carolina/230"
+            }
+          },
+          {
+            "date": "2024-10-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/utsa/boxscore/6238",
+              "recap": "https://meangreensports.com/news/2024/10/3/womens-soccer-king-saves-day-with-late-equalizer",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/utsa/126"
+            }
+          },
+          {
+            "date": "2024-10-13",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "(RV) Rice",
+            "opponentRank": null,
+            "location": "Houston, TX",
+            "result": "L",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/rice/boxscore/6239",
+              "recap": "https://meangreensports.com/news/2024/10/13/womens-soccer-soccer-falls-at-rv-rice",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/rice/122"
+            }
+          },
+          {
+            "date": "2024-10-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "L",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/south-florida/boxscore/6240",
+              "recap": "https://meangreensports.com/news/2024/10/20/womens-soccer-soccer-falls-to-usf-2-1",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/south-florida/156"
+            }
+          },
+          {
+            "date": "2024-10-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Charlotte, NC",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/charlotte/boxscore/6241",
+              "recap": "https://meangreensports.com/news/2024/10/24/womens-soccer-soccer-battles-to-1-1-draw-at-charlotte",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/charlotte/59"
+            }
+          },
+          {
+            "date": "2024-10-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "No. 16 Memphis",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium",
+            "result": "T",
+            "score": "0-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/memphis/boxscore/6242",
+              "recap": "https://meangreensports.com/news/2024/10/27/womens-soccer-soccer-draws-with-no-16-memphis-0-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/memphis/90"
+            }
+          },
+          {
+            "date": "2024-10-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UAB",
+            "opponentRank": null,
+            "location": "Birmingham, AL",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/uab/boxscore/6243",
+              "recap": "https://meangreensports.com/news/2024/10/31/womens-soccer-soccer-draws-2-2-at-uab",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/uab/115"
+            }
+          },
+          {
+            "date": "2024-11-04",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "No. 2 South Florida",
+            "opponentRank": null,
+            "location": "Lakewood Ranch, FL",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2024/south-florida/boxscore/6244",
+              "recap": "https://meangreensports.com/news/2024/11/4/womens-soccer-soccer-season-ends-in-aac-quarterfinals",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/south-florida/156"
+            }
+          }
+        ]
+      },
+      "2023": {
+        "record": "8-5-3",
+        "games": [
+          {
+            "date": "2023-08-09",
+            "datetime": null,
+            "exhibition": true,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Abilene Christian",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "W",
+            "score": "5-1",
+            "links": {
+              "recap": "https://meangreensports.com/news/2023/8/9/womens-soccer-soccer-defeats-acu-in-preseason-friendly-5-1",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/abilene-christian-exhibition/270"
+            }
+          },
+          {
+            "date": "2023-08-17",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "UNLV",
+            "opponentRank": null,
+            "location": "Las Vegas, NV",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/unlv/boxscore/5816",
+              "recap": "https://meangreensports.com/news/2023/8/17/womens-soccer-soccer-opens-season-with-shutout-road-win",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/unlv/322"
+            }
+          },
+          {
+            "date": "2023-08-20",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Northwestern State",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/northwestern-state/boxscore/5817",
+              "recap": "https://meangreensports.com/news/2023/8/20/womens-soccer-mean-green-shutout-northwestern-state-3-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/northwestern-state/301"
+            }
+          },
+          {
+            "date": "2023-08-24",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas State",
+            "opponentRank": null,
+            "location": "San Marcos, TX",
+            "result": "W",
+            "score": "3-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/texas-state/boxscore/5818",
+              "recap": "https://meangreensports.com/news/2023/8/24/womens-soccer-mean-green-perfect-with-another-3-0-win",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/texas-state/149"
+            }
+          },
+          {
+            "date": "2023-08-27",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Texas A&M - Commerce",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "W",
+            "score": "3-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/texas-am-commerce/boxscore/5819",
+              "recap": "https://meangreensports.com/news/2023/8/27/womens-soccer-soccer-stays-undefeated-with-3-1-win",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/texas-am-commerce/327"
+            }
+          },
+          {
+            "date": "2023-08-31",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Texas Tech",
+            "opponentRank": null,
+            "location": "Lubbock, TX",
+            "result": "L",
+            "score": "6-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/texas-tech/boxscore/5820",
+              "recap": "https://meangreensports.com/news/2023/8/31/womens-soccer-soccer-drops-first-match-of-year",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/texas-tech/147"
+            }
+          },
+          {
+            "date": "2023-09-03",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "A",
+            "opponent": "Oral Roberts",
+            "opponentRank": null,
+            "location": "Tulsa, OK",
+            "result": "W",
+            "score": "5-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/oral-roberts/boxscore/5821",
+              "recap": "https://meangreensports.com/news/2023/9/3/womens-soccer-soccer-explodes-for-5-0-road-win",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/oral-roberts/100"
+            }
+          },
+          {
+            "date": "2023-09-08",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "Incarnate Word",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": null,
+            "score": null,
+            "links": {
+              "recap": "https://meangreensports.com/news/2023/9/8/womens-soccer-soccer-match-versus-incarnate-word-canceled",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/incarnate-word/5"
+            }
+          },
+          {
+            "date": "2023-09-10",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": false,
+            "homeAway": "H",
+            "opponent": "UTRGV",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "W",
+            "score": "4-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/utrgv/boxscore/5823",
+              "recap": "https://meangreensports.com/news/2023/9/10/womens-soccer-soccer-off-to-best-start-since-2015",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/utrgv/157"
+            }
+          },
+          {
+            "date": "2023-09-14",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "No. 14 Memphis",
+            "opponentRank": null,
+            "location": "Memphis, TN",
+            "result": "L",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/no-14-memphis/boxscore/5824",
+              "recap": "https://meangreensports.com/news/2023/9/14/womens-soccer-soccer-falls-at-no-14-memphis-2-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/no-14-memphis/90"
+            }
+          },
+          {
+            "date": "2023-09-21",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Rice",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "W",
+            "score": "6-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/rice/boxscore/5825",
+              "recap": "https://meangreensports.com/news/2023/9/21/womens-soccer-soccer-thrashes-rice-6-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/rice/122"
+            }
+          },
+          {
+            "date": "2023-09-28",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "UTSA",
+            "opponentRank": null,
+            "location": "San Antonio, TX",
+            "result": "W",
+            "score": "2-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/utsa/boxscore/5826",
+              "recap": "https://meangreensports.com/news/2023/9/28/womens-soccer-soccer-shutout-utsa-on-road-2-0",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/utsa/126"
+            }
+          },
+          {
+            "date": "2023-10-05",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Tulsa",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/tulsa/boxscore/5827",
+              "recap": "https://meangreensports.com/news/2023/10/5/womens-soccer-wesco-scores-twice-in-2-2-draw-with-tulsa",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/tulsa/118"
+            }
+          },
+          {
+            "date": "2023-10-12",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "South Florida",
+            "opponentRank": null,
+            "location": "Tampa, FL",
+            "result": "L",
+            "score": "1-0",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/south-florida/boxscore/5828",
+              "recap": "https://meangreensports.com/news/2023/10/12/womens-soccer-soccer-falls-1-0-at-usf",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/south-florida/156"
+            }
+          },
+          {
+            "date": "2023-10-15",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "A",
+            "opponent": "Florida Atlantic",
+            "opponentRank": null,
+            "location": "Boca Raton, FL",
+            "result": "T",
+            "score": "1-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/florida-atlantic/boxscore/5829",
+              "recap": "https://meangreensports.com/news/2023/10/15/womens-soccer-soccer-secures-29th-consecutive-winning-season",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/florida-atlantic/69"
+            }
+          },
+          {
+            "date": "2023-10-19",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "Charlotte",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "L",
+            "score": "2-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/charlotte/boxscore/5830",
+              "recap": "https://meangreensports.com/news/2023/10/19/womens-soccer-soccer-falls-to-charlotte-2-1",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/charlotte/59"
+            }
+          },
+          {
+            "date": "2023-10-22",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "East Carolina",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "T",
+            "score": "2-2",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/east-carolina/boxscore/5831",
+              "recap": "https://meangreensports.com/news/2023/10/22/womens-soccer-soccer-draws-with-east-carolina-2-2",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/east-carolina/230"
+            }
+          },
+          {
+            "date": "2023-10-26",
+            "datetime": null,
+            "exhibition": false,
+            "conferenceGame": true,
+            "homeAway": "H",
+            "opponent": "SMU",
+            "opponentRank": null,
+            "location": "Norma Knobel Hunt Stadium, Denton",
+            "result": "L",
+            "score": "3-1",
+            "links": {
+              "box score": "https://meangreensports.com/sports/womens-soccer/stats/2023/smu/boxscore/5832",
+              "recap": "https://meangreensports.com/news/2023/10/26/womens-soccer-soccers-season-ends-with-3-1-loss",
+              "history": "https://meangreensports.com/sports/wsoc/opponent-history/smu/105"
+            }
+          }
+        ]
+      }
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://meangreensports.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-08T01:22:20Z"
+    }
+  },
   "commitments": [
     {
       "id": "alexa-perreira-2026",
@@ -117,7 +3125,7 @@
       "city": "Plano",
       "highSchool": "",
       "college": "north-texas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -136,7 +3144,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -152,7 +3160,7 @@
       "city": "",
       "highSchool": "Forney",
       "college": "north-texas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -171,7 +3179,7 @@
         "date": "2024-04-23",
         "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "soccerwire"
       ]
@@ -187,7 +3195,7 @@
       "city": "",
       "highSchool": "",
       "college": "north-texas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -206,7 +3214,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -222,7 +3230,7 @@
       "city": "Frisco",
       "highSchool": "",
       "college": "north-texas",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-07",
@@ -241,7 +3249,7 @@
         "date": "2026-09-07",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -341,41 +3349,27 @@
     "2026": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T00:00:13Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-08T01:35:53Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
-      "climate": false,
-      "program": false,
-      "seasons": false,
-      "rpi": false,
-      "roster": false,
-      "schedule": false,
+      "climate": true,
+      "program": true,
+      "seasons": true,
+      "rpi": true,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "athletics",
-        "error": "athletics: roster parse found 0 players at https://meangreensports.com/sports/womens-soccer/roster",
-        "at": "2026-09-07T15:22:17Z"
-      },
-      {
-        "collector": "climate",
-        "error": "giving up on https://archive-api.open-meteo.com/v1/archive?latitude=33.211178&longitude=-97.148422&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Csnowfall_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=America%2FChicago",
-        "at": "2026-09-07T15:22:15Z"
-      },
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "wikipedia",
-        "error": "wikipedia: no team article for this program (most mid-majors have none)",
-        "at": "2026-09-07T15:22:15Z"
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-08T01:22:09Z"
       }
-    ],
-    "skipped": []
+    ]
   }
 }
