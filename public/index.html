@@ -649,9 +649,10 @@ function renderSidebar() {
     ${body}
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span><span><kbd>c</kbd> cards / table</span></div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { f.conf = b.dataset.conf; saveState(); closeDrawer(); location.hash = f.conf ? `#/c/${encodeURIComponent(f.conf)}` : '#/'; if (currentView() === 'list') { renderSidebar(); renderList(); } });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { f.region = b.dataset.region; saveState(); renderSidebar(); rerenderForFilters(); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { f.classYear = b.dataset.class; saveState(); renderSidebar(); rerenderForFilters(); });
+  // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { f.conf = b.dataset.conf; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { f.region = b.dataset.region; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { f.classYear = b.dataset.class; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
@@ -699,12 +700,14 @@ function route() {
   const go = p => p.catch(e => { app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e); });
   $('#main').scrollTop = 0;
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
-  if (view === 'c') { S.filters.conf = decodeURIComponent(parts[1] || ''); saveState(); renderSidebar(); return go(renderList()); }
+  if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
+    S.filters.conf = decodeURIComponent(parts[1] || ''); saveState(); renderSidebar();
+    history.replaceState(null, '', '#/'); return go(renderList());
+  }
   if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = ''; saveState(); location.replace('#/'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   if (view === 'faq') return go(renderFaq());
-  if (S.filters.conf && !parts.length) { S.filters.conf = ''; saveState(); renderSidebar(); }
   return go(renderList());
 }
 window.addEventListener('hashchange', route);
