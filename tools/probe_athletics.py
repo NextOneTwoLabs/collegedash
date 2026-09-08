@@ -31,6 +31,8 @@ from collect.athletics_site import detect_platform  # noqa: E402
 KNOWN_HOSTS = {
     "buffalo": "https://ubbulls.com",
     "oral-roberts": "https://oruathletics.com",
+    "george-washington": "https://gwsports.com",
+    "southeast-missouri-state": "https://semoredhawks.com",
     "quinnipiac": "https://gobobcats.com",
     "louisville": "https://gocards.com",
     "arizona-state": "https://thesundevils.com",

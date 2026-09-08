@@ -639,7 +639,7 @@
     "2027": 4
   },
   "_build": {
-    "builtAt": "2026-09-08T01:35:54Z",
+    "builtAt": "2026-09-08T01:43:45Z",
     "completeness": 0.44,
     "sections": {
       "school": true,
@@ -652,17 +652,14 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "athletics: never collected"
-    ],
-    "failed": [
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "athletics",
-        "error": "athletics: roster page is rendered in the browser at https://gomason.com/sports/womens-soccer/roster; set athletics.rosterRequiresBrowser=true in the registry to skip it",
-        "at": "2026-09-08T01:26:33Z"
-      }
-    ],
-    "skipped": [
+        "reason": "athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); needs a headless browser, see athletics.note",
+        "at": "2026-09-08T01:41:55Z"
+      },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",

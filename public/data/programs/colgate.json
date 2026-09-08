@@ -509,7 +509,7 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-08T01:35:52Z",
+    "builtAt": "2026-09-08T01:43:44Z",
     "completeness": 0.33,
     "sections": {
       "school": true,
@@ -522,23 +522,19 @@
       "commitments": true,
       "news": false
     },
-    "stale": [
-      "athletics: never collected",
-      "news: never collected"
-    ],
-    "failed": [
+    "stale": [],
+    "failed": [],
+    "skipped": [
       {
         "collector": "athletics",
-        "error": "giving up after 3 attempts: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
-        "at": "2026-09-08T01:15:36Z"
+        "reason": "athletics: gocolgateraiders.com resets connections from the collector (blocked?) (registry athletics.skipReason)",
+        "at": "2026-09-08T01:41:39Z"
       },
       {
         "collector": "news",
-        "error": "news: athletics platform unknown (athletics collector has not succeeded yet)",
-        "at": "2026-09-08T01:15:36Z"
-      }
-    ],
-    "skipped": [
+        "reason": "news: gocolgateraiders.com resets connections from the collector (blocked?) (registry athletics.skipReason)",
+        "at": "2026-09-08T01:43:41Z"
+      },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",

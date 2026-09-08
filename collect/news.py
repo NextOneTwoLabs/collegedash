@@ -21,12 +21,26 @@ RECRUIT_RE = re.compile(
 
 def collect(program: dict, registry: dict) -> dict:
     platform = program["athletics"].get("platform") or "auto"
+    if program["athletics"].get("skipReason"):
+        raise common.SkipCollector(f"news: {program['athletics']['skipReason']} (registry athletics.skipReason)")
     if platform == "auto":
         raise common.FetchError("news: athletics platform unknown (athletics collector has not succeeded yet)")
     ad = adapters.get(platform)
     u = ad.urls(program, registry)
-    html, meta = common.fetch_text(u["news"], max_age_hours=12)
-    items = ad.parse_news(html, program["athletics"]["baseUrl"])
+    a = program["athletics"]
+    news_url = u["news"]
+    try:
+        html, meta = common.fetch_text(news_url, max_age_hours=12)
+    except common.FetchError as e:
+        # Some WMT sites (lsusports.net, purduesports.com, auburntigers.com) serve news only from the
+        # site-wide archive filtered by sport: /news/?sport=<sport slug>.
+        if platform != "wmt" or "HTTP 404" not in str(e):
+            raise
+        news_url = f"{a['baseUrl']}/news/?sport={a['sportPath'].rsplit('/', 1)[-1]}"
+        html, meta = common.fetch_text(news_url, max_age_hours=12)
+    items = ad.parse_news(html, a["baseUrl"])
+    if not items:
+        raise common.FetchError(f"news: parsed 0 items from {news_url} (markup change?)")
     # Sidearm sites also publish an RSS feed with proper dates; merge it in when the adapter has one.
     if u.get("rss") and hasattr(ad, "parse_rss"):
         try:
@@ -43,7 +57,7 @@ def collect(program: dict, registry: dict) -> dict:
         known[it["url"]] = {**known.get(it["url"], {}), **it}
     merged = sorted(known.values(), key=lambda i: i.get("date") or "", reverse=True)
     data = {"items": merged, "recruitingItems": [i for i in merged if i.get("recruiting")]}
-    common.save_source(program["slug"], NAME, data, url=u["news"], collector=NAME,
+    common.save_source(program["slug"], NAME, data, url=news_url, collector=NAME,
                        extra={"fromCache": meta.get("fromCache", False)})
     common.log(f"news: {len(items)} on page, {len(merged)} archived, {len(data['recruitingItems'])} recruiting-related")
     return data
