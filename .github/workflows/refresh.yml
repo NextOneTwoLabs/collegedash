@@ -4,7 +4,9 @@ name: Refresh program data
 # The social scout never runs here - it needs the logged-in browser profile on your own PC.
 #
 #   daily 11:00 UTC  -> commitments (TDS + SoccerWire), news, NCAA RPI
-#   Mondays          -> also rosters/schedules/bios (roster changes are rare mid-season)
+#   Mondays          -> also rosters/schedules (no bios) and Wikipedia; school facts and climate only
+#                       on a manual "full" run (Scorecard falls back to DEMO_KEY, 30 requests/hour,
+#                       until the SCORECARD_API_KEY secret is set)
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -40,8 +42,10 @@ jobs:
         env:
           SCORECARD_API_KEY: ${{ secrets.SCORECARD_API_KEY }}
         run: |
-          if [ "${{ inputs.full }}" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
-            python collegedash.py refresh
+          if [ "${{ inputs.full }}" = "true" ]; then
+            python collegedash.py refresh --no-bios
+          elif [ "$(date -u +%u)" = "1" ]; then
+            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,rpi --no-bios
           else
             python collegedash.py refresh --only tds,soccerwire,news,rpi
           fi

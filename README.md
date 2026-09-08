@@ -89,5 +89,18 @@ the rate-limited `DEMO_KEY`.
 
 ## Deploying
 
-Cloudflare Pages / Workers static assets: connect the repo, production branch `main`, no build
-command, output directory `public`. Pushing to `main` deploys.
+The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo root:
+`[assets] directory = "./public"`, plus a ten-line `worker.js` that only redirects the `workers.dev`
+hostname). It is built by Cloudflare's Git integration on the **NextOneTwoLabs** Cloudflare account:
+repository `NextOneTwoLabs/collegedash`, branch `main`, build command empty, deploy command
+`npx wrangler deploy`. Pushing to `main` — including the scheduled data commits from
+`.github/workflows/refresh.yml` — redeploys.
+
+- **Canonical URL:** `https://college.nextonetwo.com` — a custom domain attached to the Worker
+  (Settings → Domains & Routes; the `nextonetwo.com` zone lives in the same account, so DNS and the
+  certificate are managed automatically).
+- `https://collegedash.nextonetwolabs.workers.dev` permanently redirects there (`worker.js` runs ahead of
+  the assets for `/` only, so a page view costs one Worker request and every other file is a free static
+  asset). Deep-link `#` fragments survive the redirect.
+- The daily refresh needs no secret; add `SCORECARD_API_KEY` under the repo's Actions secrets to lift the
+  DEMO_KEY rate limit on school-facts refreshes.

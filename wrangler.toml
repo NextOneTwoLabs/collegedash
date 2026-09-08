@@ -1,9 +1,19 @@
-# Cloudflare static-assets deployment. No Worker script: everything under public/ is served
-# as-is, and public/ is also what `python collegedash.py serve` serves locally, so the hosted
-# site and your local copy are the same files. Write endpoints (/api/*) exist only locally.
+# Cloudflare Workers config for the site.
+#
+# The site is the static files in public/ - the same directory `python collegedash.py serve`
+# serves locally, so the deployed site is byte-identical to a local run. The tiny worker.js only
+# redirects the workers.dev address to the canonical custom domain; it runs ahead of the assets
+# for "/" alone, so everything else is served as free static assets without invoking the Worker.
+# Write endpoints (/api/*) exist only in the local server.
+#
+# Canonical address: https://college.nextonetwo.com  (custom domain, attached to this Worker in
+# the Cloudflare dashboard under Settings -> Domains & Routes).
 
 name = "collegedash"
+main = "worker.js"
 compatibility_date = "2026-08-31"
 
 [assets]
 directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/"]
