@@ -18,6 +18,9 @@ python collegedash.py serve            # http://127.0.0.1:8000/
 
 Any static server over `public/` also works (`cd public && python -m http.server`), read-only.
 
+The FAQ page (`#/faq`) explains the sources, that nothing is verified by hand, and how to send feedback;
+the address is the `FEEDBACK_EMAIL` constant in `public/index.html`.
+
 ## Add or refresh a program
 
 ```bash

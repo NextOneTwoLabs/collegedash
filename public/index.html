@@ -80,6 +80,16 @@ tr:hover td { background: var(--surface-alt); }
 .iconbtn { border: 1px solid var(--border-strong); background: var(--surface); border-radius: var(--radius-sm); padding: 5px 9px; color: var(--ink-2); }
 .iconbtn:hover { background: var(--surface-alt); }
 main { max-width: 1240px; margin: 0 auto; padding: 18px; }
+.site-notice { max-width: 1240px; margin: 0 auto; padding: 12px 18px 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--grid); }
+.faq { max-width: 760px; margin: 0 auto; }
+.faq .card { margin-bottom: 14px; }
+.faq h2 { font-size: 22px; margin-bottom: 4px; }
+.faq h3 { font-size: 16px; margin-bottom: 8px; }
+.faq p, .faq li { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.faq p + p { margin-top: 8px; }
+.faq ul { margin: 6px 0 0 18px; }
+.faq table td, .faq table th { vertical-align: top; }
+.faq .lead { color: var(--ink); font-size: 15px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
 .grid { display: grid; gap: 14px; }
 .g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
@@ -204,6 +214,7 @@ details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
     <a href="#/" data-route="list">Programs</a>
     <a href="#/rpi" data-route="rpi">RPI</a>
     <a href="#/compare" data-route="compare">Compare</a>
+    <a href="#/faq" data-route="faq">FAQ</a>
   </nav>
   <div class="spacer"></div>
   <div class="search"><input type="search" id="q" placeholder="Search programs (UCLA, Ole Miss, Gauchos)…" aria-label="Search programs" autocomplete="off"><button class="clear" id="qClear" title="Clear search" aria-label="Clear search" hidden>×</button></div>
@@ -211,6 +222,7 @@ details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
   <button class="iconbtn" id="themeBtn" title="Toggle light / dark">◐</button>
 </header>
 <main id="app"><div class="empty">Loading…</div></main>
+<footer class="site-notice">Collected automatically from public sources; not owned or verified by CollegeDash. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></footer>
 
 <script>
 'use strict';
@@ -357,6 +369,7 @@ function route() {
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
   if (view === 'rpi') return go(renderRpi());
   if (view === 'compare') { S.compare = (parts[1] || '').split(',').filter(Boolean); return go(renderCompare()); }
+  if (view === 'faq') return go(renderFaq());
   return go(renderList());
 }
 window.addEventListener('hashchange', route);
@@ -484,7 +497,7 @@ async function renderList() {
       <span class="muted small">${S.q ? `${rows.length} match${rows.length === 1 ? '' : 'es'} for “${esc(S.q)}” · ` : ''}${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'} · season ${idx.season?.current ?? ''}</span>
     </div>
     <div class="grid cards">${rows.map(cardHtml).join('') || (S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match.</div>')}</div>
-    <p class="muted small" style="margin-top:14px">Only onboarded programs appear here. Add one to <code>public/data/registry.json</code> and run <code>python collegedash.py onboard &lt;slug&gt;</code>.</p>`;
+`;
   $('#fConf').onchange = e => { f.conf = e.target.value; renderList(); };
   $('#fRegion').onchange = e => { f.region = e.target.value; renderList(); };
   $('#fSort').onchange = e => { f.sort = e.target.value; renderList(); };
@@ -795,6 +808,53 @@ async function renderCompare() {
       location.hash = '#/compare/' + sel.join(',');
     });
   }
+}
+
+/* ---------- FAQ ---------- */
+const FEEDBACK_EMAIL = 'nextonetwolabs@gmail.com';
+const feedbackLink = (text = FEEDBACK_EMAIL) => `<a href="mailto:${esc(FEEDBACK_EMAIL)}?subject=${encodeURIComponent('CollegeDash feedback')}">${esc(text)}</a>`;
+async function renderFaq() {
+  const ext = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
+  const sources = [
+    ['Official athletics websites', 'Roster, coaching staff, schedule and results, news', 'Each program’s own site (linked at the top of every profile)'],
+    [ext('https://collegescorecard.ed.gov/', 'College Scorecard'), 'Admission rate, SAT range, enrollment, tuition, net price, graduation rate', 'U.S. Department of Education'],
+    [ext('https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA NCEI Climate Normals'), 'Monthly temperature and rainfall averages for 1991–2020 at the weather station nearest campus', 'U.S. National Oceanic and Atmospheric Administration'],
+    [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, national titles, stadium', 'Team articles, where one exists'],
+    [ext('https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi', 'NCAA.com RPI') + ' and Chris Henderson’s RPI archive', 'Weekly RPI during the season; end-of-season RPI since 2007', 'NCAA; an independent, widely cited archive'],
+    [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
+  ];
+  const app = $('#app');
+  app.innerHTML = `<div class="faq">
+    <div class="card"><h2>About the data</h2>
+      <p class="lead">CollegeDash gathers public information about NCAA Division I women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
+
+    <div class="card"><h3>Where does the data come from?</h3>
+      <p>Every figure comes from a public source that coaches, journalists and families already rely on. Nothing is estimated or made up.</p>
+      <div class="tscroll" style="margin-top:10px"><table><tr><th>Source</th><th>What it supplies</th><th>Who publishes it</th></tr>
+        ${sources.map(([s, w, p]) => `<tr><td>${s}</td><td>${esc(w)}</td><td class="small">${esc(p)}</td></tr>`).join('')}</table></div></div>
+
+    <div class="card"><h3>Do you own or verify this data?</h3>
+      <p><b>No.</b> The data belongs to the sources above. It is collected automatically and shown as found; nobody edits or fact-checks it by hand.</p>
+      <p>Every section of a profile shows its source and the date it was fetched (the “Source … as of” line). A yellow banner marks anything stale or a collection that failed. Sources can be wrong, incomplete or out of date, and a website redesign can silently break a collector until it is fixed.</p></div>
+
+    <div class="card"><h3>How current is it?</h3>
+      <p>Commitments, news and the NCAA RPI are refreshed daily; rosters, schedules and staff weekly during the season; school facts and climate change rarely and are refreshed a few times a year. The “Updated” stamp in the header shows the last refresh.</p></div>
+
+    <div class="card"><h3>What should I double-check before acting on it?</h3>
+      <ul>
+        <li><b>Tuition and net price.</b> Sticker prices change every year and what a family actually pays depends on financial aid and athletic scholarships. Ask the school.</li>
+        <li><b>Admission rate and test scores.</b> Published for the whole university, not for recruited athletes, and they move year to year.</li>
+        <li><b>Commitments.</b> Recruiting sites list verbal commitments. They are not binding, can be withdrawn, and a name disappearing from a list is only a hint that something changed.</li>
+        <li><b>Rosters and coaches.</b> Staff changes and transfers happen mid-year; the official athletics site is the authority.</li>
+      </ul>
+      <p>Treat CollegeDash as a starting point for questions, and confirm anything that matters with the school’s admissions or athletics office.</p></div>
+
+    <div class="card"><h3>What about players’ privacy?</h3>
+      <p>CollegeDash shows only what official rosters and public recruiting sites already publish: name, position, club, home state and class year. No contact details are collected. If you would like a record removed, email ${feedbackLink()}.</p></div>
+
+    <div class="card"><h3>Found a mistake or have a suggestion?</h3>
+      <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
+  </div>`;
 }
 
 /* ---------- boot ---------- */
