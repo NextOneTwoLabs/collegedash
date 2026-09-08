@@ -3005,6 +3005,14 @@
           "firstSeen": "2026-09-06",
           "lastSeen": "2026-09-08",
           "missingSince": null
+        },
+        {
+          "kind": "soccerwire",
+          "url": "https://www.soccerwire.com/player/maura-hayes/",
+          "firstSeen": "2026-09-08",
+          "lastSeen": "2026-09-08",
+          "missingSince": null,
+          "profileCreated": "2026-09-08"
         }
       ],
       "flags": [],
@@ -3012,8 +3020,9 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
+        "soccerwire",
         "tds"
       ]
     }
@@ -3104,7 +3113,7 @@
     "_meta": {
       "source": "news",
       "url": "https://smumustangs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-07T05:24:22Z"
+      "asOf": "2026-09-08T16:30:51Z"
     }
   },
   "curated": {},
@@ -3114,7 +3123,7 @@
     "2028": 3
   },
   "_build": {
-    "builtAt": "2026-09-08T03:29:25Z",
+    "builtAt": "2026-09-08T16:48:42Z",
     "completeness": 1.0,
     "sections": {
       "school": true,
@@ -3128,13 +3137,7 @@
       "news": true
     },
     "stale": [],
-    "failed": [
-      {
-        "collector": "news",
-        "error": "news: parsed 0 items from https://smumustangs.com/sports/womens-soccer/archives (markup change?)",
-        "at": "2026-09-08T03:16:03Z"
-      }
-    ],
+    "failed": [],
     "skipped": []
   }
 }
