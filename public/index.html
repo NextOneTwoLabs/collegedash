@@ -70,7 +70,12 @@ tr:hover td { background: var(--surface-alt); }
 .nav a { padding: 6px 10px; border-radius: var(--radius-sm); color: var(--ink-2); font-weight: 500; }
 .nav a.active, .nav a:hover { background: var(--surface-alt); color: var(--ink); text-decoration: none; }
 .topbar .spacer { flex: 1; }
-.topbar input[type=search] { width: 220px; padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); }
+.topbar .search { position: relative; display: flex; align-items: center; }
+.topbar input[type=search] { width: 260px; padding: 6px 28px 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--page); color: var(--ink); -webkit-appearance: none; appearance: none; }
+.topbar input[type=search]::-webkit-search-cancel-button { display: none; }
+.topbar .search .clear { position: absolute; right: 4px; border: none; background: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 2px 6px; cursor: pointer; border-radius: 999px; }
+.topbar .search .clear:hover { color: var(--ink); background: var(--surface-alt); }
+.pcard .foot .why { color: var(--ink-2); background: var(--surface-alt); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-size: 11px; }
 .updated { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .iconbtn { border: 1px solid var(--border-strong); background: var(--surface); border-radius: var(--radius-sm); padding: 5px 9px; color: var(--ink-2); }
 .iconbtn:hover { background: var(--surface-alt); }
@@ -183,7 +188,7 @@ details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
 
 @media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
 @media (max-width: 700px) {
-  .topbar input[type=search] { width: 120px; }
+  .topbar input[type=search] { width: 140px; }
   .nav a { padding: 6px 7px; }
   main { padding: 10px; }
   .commit { grid-template-columns: 1fr; }
@@ -201,7 +206,7 @@ details p { font-size: 12px; color: var(--ink-2); margin: 6px 0; }
     <a href="#/compare" data-route="compare">Compare</a>
   </nav>
   <div class="spacer"></div>
-  <input type="search" id="q" placeholder="Search programs…" aria-label="Search programs">
+  <div class="search"><input type="search" id="q" placeholder="Search programs (UCLA, Ole Miss, Gauchos)…" aria-label="Search programs" autocomplete="off"><button class="clear" id="qClear" title="Clear search" aria-label="Clear search" hidden>×</button></div>
   <span class="updated" id="updated" title="When the data was last refreshed"></span>
   <button class="iconbtn" id="themeBtn" title="Toggle light / dark">◐</button>
 </header>
@@ -256,6 +261,51 @@ function tuitionHtml(inS, outS) { // one figure when equal or one side missing; 
 }
 const fact = (label, value) => `<div><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`;
 
+/* ---------- search: word-prefix matching over school names (+ nickname), ranked ---------- */
+// "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st mary s", "Hawaiʻi" -> "hawaii"
+const normText = s => String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  .replace(/&/g, '').replace(/[‐-―\-]/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); // 'Texas A&M' -> 'texas am'
+const wordsOf = s => s ? s.split(' ') : [];
+// every query token must be a prefix of some word (any order); tokens may not reuse the same word
+function tokensPrefixWords(qToks, words) {
+  const used = new Set();
+  return qToks.every(t => { const i = words.findIndex((w, k) => !used.has(k) && w.startsWith(t)); if (i < 0) return false; used.add(i); return true; });
+}
+function prepareSearch(p) { // once per program, when the program list is loaded
+  const short = normText(p.shortName || p.name);
+  const seen = new Set(), names = [];
+  for (const label of (p.searchNames || [p.shortName, p.name])) {
+    const text = normText(label);
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
+  }
+  p._search = { short, shortWords: wordsOf(short), initials: wordsOf(short).map(w => w[0]).join(''), names,
+    nick: normText(p.nickname), nickWords: wordsOf(normText(p.nickname)) };
+}
+// returns {score, why} or null. Higher score = better match; `why` names the matched text when it is not the short name.
+function matchScore(p, q) {
+  const s = p._search, toks = wordsOf(q), joined = q.replace(/ /g, '');
+  if (!s || !toks.length) return null;
+  if (s.short === q) return { score: 100 };
+  if (s.short.startsWith(q)) return { score: 90 };
+  if (tokensPrefixWords(toks, s.shortWords)) return { score: 80 };
+  if (s.initials === joined && joined.length >= 3) return { score: 55 };
+  let best = null;
+  for (const n of s.names) {
+    if (n.text === s.short) continue;
+    let sc = 0;
+    if (n.text === q || n.text.startsWith(q)) sc = 70;
+    else if (tokensPrefixWords(toks, n.words)) sc = 60;
+    else if (joined.length >= 3 && n.joined.startsWith(joined)) sc = 50;
+    if (sc > (best?.score || 0)) best = { score: sc, why: n.label };
+  }
+  if (best) return best;
+  if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords))) return { score: 30, why: p.nickname };
+  if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
+  return null;
+}
+
 /* ---------- persistence (per-viewer conveniences only) ---------- */
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
@@ -279,6 +329,7 @@ async function getJSON(url, opts) {
 async function loadIndex() {
   if (S.index) return S.index;
   S.index = await getJSON('data/programs/index.json');
+  S.index.programs.forEach(prepareSearch);
   getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderUpdated(); }).catch(() => { });
   getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
   return S.index;
@@ -309,7 +360,30 @@ function route() {
   return go(renderList());
 }
 window.addEventListener('hashchange', route);
-$('#q').addEventListener('input', e => { S.q = e.target.value.trim().toLowerCase(); if (!location.hash.startsWith('#/p/')) renderList(); });
+/* ---------- search box ---------- */
+let qTimer = null;
+function rerenderForQuery() {
+  const view = location.hash.replace(/^#\/?/, '').split('/')[0] || 'list';
+  if (view === 'list') renderList();
+  else if (view === 'rpi') renderRpi().catch(console.error);
+  // on a profile or compare view the query is kept and applied when the user returns to Programs
+}
+function setQuery(v) {
+  S.q = normText(v);
+  $('#qClear').hidden = !v;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(rerenderForQuery, 80);
+}
+function searchMatches() {
+  if (!S.index || !S.q) return [];
+  return S.index.programs.map(p => ({ p, m: matchScore(p, S.q) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score);
+}
+$('#q').addEventListener('input', e => setQuery(e.target.value));
+$('#q').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { $('#q').value = ''; setQuery(''); location.hash = `#/p/${top.p.slug}`; } }
+  else if (e.key === 'Escape') { $('#q').value = ''; setQuery(''); }
+});
+$('#qClear').addEventListener('click', () => { $('#q').value = ''; setQuery(''); $('#q').focus(); });
 
 /* ---------- charts (inline SVG, no library) ---------- */
 function svgLine(cfg) {
@@ -387,26 +461,29 @@ async function renderList() {
   const confs = [...new Set(idx.programs.map(p => p.conference).filter(Boolean))].sort();
   const regions = [...new Set(idx.programs.map(p => p.region).filter(Boolean))].sort();
   const f = S.filters;
-  let rows = idx.programs.filter(p => (!S.q || (p.name + ' ' + p.nickname + ' ' + p.conference + ' ' + (p.city || '')).toLowerCase().includes(S.q))
+  const score = new Map();
+  idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
+  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug))
     && (!f.conf || p.conference === f.conf) && (!f.region || p.region === f.region) && (!f.fav || S.favorites.has(p.slug)));
   const rpiOf = p => p.lastSeason?.rpiRank ?? p.currentSeason?.rpiRank ?? 999;
   const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missing last (Infinity - Infinity is NaN)
   const SORTS = [['rpi', 'RPI'], ['name', 'Name'], ['admit', 'Admission rate'], ['titles', 'National titles'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads']];
-  rows.sort((a, b) => f.sort === 'name' ? a.name.localeCompare(b.name)
+  const bySort = (a, b) => f.sort === 'name' ? a.name.localeCompare(b.name)
     : f.sort === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
     : f.sort === 'titles' ? b.nationalTitles - a.nationalTitles
     : f.sort === 'tuition' ? tuitionOf(a) - tuitionOf(b)
     : f.sort === 'undergrads' ? (b.undergradEnrollment ?? -1) - (a.undergradEnrollment ?? -1)
-    : rpiOf(a) - rpiOf(b));
+    : rpiOf(a) - rpiOf(b);
+  rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || bySort(a, b)); // best match first, then the chosen sort
   app.innerHTML = `
     <div class="filters">
       <select id="fConf"><option value="">All conferences</option>${confs.map(c => `<option ${f.conf === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
       <select id="fRegion"><option value="">All regions</option>${regions.map(c => `<option ${f.region === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
       <select id="fSort">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>Sort: ${l}</option>`).join('')}</select>
       <label class="small"><input type="checkbox" id="fFav" ${f.fav ? 'checked' : ''}> ★ My list only</label>
-      <span class="muted small">${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'} · season ${idx.season?.current ?? ''}</span>
+      <span class="muted small">${S.q ? `${rows.length} match${rows.length === 1 ? '' : 'es'} for “${esc(S.q)}” · ` : ''}${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'} · season ${idx.season?.current ?? ''}</span>
     </div>
-    <div class="grid cards">${rows.map(cardHtml).join('') || '<div class="empty">No programs match.</div>'}</div>
+    <div class="grid cards">${rows.map(cardHtml).join('') || (S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match.</div>')}</div>
     <p class="muted small" style="margin-top:14px">Only onboarded programs appear here. Add one to <code>public/data/registry.json</code> and run <code>python collegedash.py onboard &lt;slug&gt;</code>.</p>`;
   $('#fConf').onchange = e => { f.conf = e.target.value; renderList(); };
   $('#fRegion').onchange = e => { f.region = e.target.value; renderList(); };
@@ -431,7 +508,7 @@ function cardHtml(p) {
         ${fact('Undergrads', fmtNum(p.undergradEnrollment))}
         ${fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState))}
       </div></div>
-    <div class="foot"><span>Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}</span>
+    <div class="foot"><span>Commits ${commits || '—'} · ${p.rosterSize ?? '—'} on roster${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
       <button class="star ${fav ? 'on' : ''}" data-slug="${esc(p.slug)}" title="Add to my list">${fav ? '★' : '☆'}</button></div>
   </div>`;
 }
@@ -678,7 +755,7 @@ async function renderRpi() {
   const onboarded = new Map(idx.programs.map(p => [p.slug, p]));
   const bySchool = new Map(idx.programs.map(p => [p.shortName || p.name, p.slug]));
   const q = S.q;
-  const rows = rpi.teams.filter(t => !q || (t.school + ' ' + t.conference).toLowerCase().includes(q));
+  const rows = rpi.teams.filter(t => !q || tokensPrefixWords(wordsOf(q), wordsOf(normText(t.school + ' ' + t.conference))));
   $('#app').innerHTML = `<div class="card"><h2>NCAA Division I women's soccer RPI</h2><p class="ink2">Season ${rpi.season} · through games ${fmtDate(rpi.throughGames)} · ${rpi.teams.length} teams · <a href="${esc(rpi.sourceUrl)}" target="_blank" rel="noopener">NCAA.com</a></p>
     <p class="small muted">Weekly snapshots are archived under <code>data/rpi/weekly/</code> each refresh; the NCAA only publishes the latest week. Programs already in CollegeDash are linked.</p>
     <div class="tscroll"><table><tr><th class="num">Rank</th><th>School</th><th>Conference</th><th>Record</th><th>Home</th><th>Road</th><th>Neutral</th><th class="num">Prev</th></tr>

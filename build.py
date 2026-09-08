@@ -514,6 +514,38 @@ def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], []
             "sections": checks, "stale": stale, "failed": failed, "skipped": skipped}
 
 
+def search_names(p: dict) -> list[str]:
+    """Names people might type for this school, for the dashboard search: short name, full name,
+    NCAA and RPI-archive names ('ULM', 'CalStateFullerton' -> 'Cal State Fullerton'), initials of a
+    3+ word short name ('UC Santa Barbara' -> 'UCSB'), and St./Saint swaps. De-duplicated, in order."""
+    ids = p.get("ids") or {}
+    raw = [p.get("shortName"), p.get("name"), ids.get("ncaaName"), ids.get("rpiHistoryName")]
+    out: list[str] = []
+
+    def add(s):
+        s = common.clean(s or "")
+        s = re.sub(r"\s*\([^)]*\)", "", s)  # 'Miami (FL)' -> 'Miami'
+        if s and s.lower() not in {o.lower() for o in out}:
+            out.append(s)
+
+    for s in raw:
+        if not s:
+            continue
+        if " " not in s and re.search(r"[a-z][A-Z]", s):  # CamelCase archive names
+            s = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", s)
+        add(s)
+    short = p.get("shortName") or ""
+    words = short.split()
+    if len(words) >= 3:  # 'UC Santa Barbara' -> 'UCSB' (an all-caps word keeps all its letters)
+        add("".join((w if w.isupper() and len(w) <= 4 else w[0]) for w in words if w[0].isalpha()))
+    for s in list(out):
+        if re.search(r"\bSt\.?\s", s):
+            add(re.sub(r"\bSt\.?\s", "Saint ", s))
+        elif re.search(r"\bSaint\s", s):
+            add(re.sub(r"\bSaint\s", "St ", s))
+    return out
+
+
 def summary_row(p: dict) -> dict:
     school = p.get("school") or {}
     seasons = p.get("seasons") or []
@@ -521,6 +553,7 @@ def summary_row(p: dict) -> dict:
     last_final = next((s for s in seasons if not s.get("inProgress") and s.get("record")), None)
     return {
         "slug": p["slug"], "name": p["name"], "shortName": p.get("shortName"), "nickname": p.get("nickname"),
+        "searchNames": search_names(p),
         "conference": p.get("conference"), "division": p.get("division"), "colors": p.get("colors"),
         "city": school.get("city"), "state": school.get("state"), "region": school.get("region"),
         "ownership": school.get("ownership"), "undergradEnrollment": school.get("undergradEnrollment"),
