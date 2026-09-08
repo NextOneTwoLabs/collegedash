@@ -18,6 +18,10 @@ on:
         description: "Run every collector (rosters, schedules, bios, school facts, climate, Wikipedia)"
         type: boolean
         default: false
+      fail_threshold:
+        description: "Share of collector runs allowed to fail before the run is marked failed (0.05 = 5%)"
+        type: string
+        default: "0.05"
 
 concurrency:
   group: refresh-data
@@ -36,19 +40,27 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
 
+      # Individual collector failures are expected (a site is down, a page was redesigned); they are
+      # reported as warnings. The run is marked failed only when more than the threshold share of
+      # collector runs fail - a sign the flow itself needs attention - or when the command crashes.
       - name: Refresh data
         id: refresh
         continue-on-error: true
         env:
           SCORECARD_API_KEY: ${{ secrets.SCORECARD_API_KEY }}
+          COLLEGEDASH_FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
         run: |
+          set +e
           if [ "${{ inputs.full }}" = "true" ]; then
-            python collegedash.py refresh --no-bios
+            python collegedash.py refresh --no-bios --mode full
           elif [ "$(date -u +%u)" = "1" ]; then
-            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,rpi --no-bios
+            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,rpi --no-bios --mode weekly
           else
-            python collegedash.py refresh --only tds,soccerwire,news,rpi
+            python collegedash.py refresh --only tds,soccerwire,news,rpi --mode daily
           fi
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit $code
 
       - name: Show refresh state
         if: always()
@@ -80,8 +92,9 @@ jobs:
           echo "could not push after 3 attempts"
           exit 1
 
-      - name: Fail if the refresh reported errors
-        if: steps.refresh.outcome == 'failure'
+      - name: Fail if too many collectors failed
+        if: steps.refresh.outputs.code != '0'
         run: |
-          echo "collegedash.py reported failures - see the Refresh data step."
+          echo "refresh exited with code ${{ steps.refresh.outputs.code }}: 1 = more than ${{ inputs.fail_threshold || '0.05' }} of collector runs failed, 2 = the command crashed."
+          echo "See the Summary tab for the failure table. The data that was collected has already been committed."
           exit 1

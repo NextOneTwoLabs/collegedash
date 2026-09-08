@@ -87,6 +87,16 @@ the rate-limited `DEMO_KEY`.
 - Phase 2 adds the social scout: a local Playwright browser watches program/aggregator Instagram
   and X accounts, keyword-filters posts, and queues them for your approval — no LLM involved.
 
+## Refresh runs and failures
+
+A refresh touches up to ~1,400 program/collector pairs, and a few always fail (a site is down, a page was
+redesigned). `collegedash.py refresh` therefore treats individual failures as warnings and exits **0** as long as
+no more than `--fail-threshold` of the runs failed (default 5%, env `COLLEGEDASH_FAIL_THRESHOLD`); it exits **1**
+above the threshold, meaning the flow itself needs attention, and **2** if the command crashed. The summary and
+the failed collectors are printed at the end, recorded as `lastRun` in `public/archive/refresh-state.json`, and on
+GitHub Actions shown as annotations and in the run's Summary tab. The workflow's `fail_threshold` input changes
+the limit for a manual run.
+
 ## Deploying
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo root:
