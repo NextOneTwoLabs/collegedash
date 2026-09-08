@@ -192,7 +192,10 @@ def fetch(
     if stored and os.path.exists(meta_path):
         meta = read_json(meta_path, {})
         age_h = (time.time() - os.path.getmtime(stored)) / 3600.0
-        if (max_age_hours and age_h <= max_age_hours) or os.environ.get("COLLEGEDASH_OFFLINE"):
+        # a cached error page (e.g. a 404 kept by a probe with allow_status) must not satisfy a caller
+        # that only accepts 200
+        status_ok = meta.get("status", 200) in allow_status
+        if status_ok and ((max_age_hours and age_h <= max_age_hours) or os.environ.get("COLLEGEDASH_OFFLINE")):
             meta["fromCache"] = True
             if stored.endswith(".gz"):
                 with gzip.open(stored, "rb") as f:
