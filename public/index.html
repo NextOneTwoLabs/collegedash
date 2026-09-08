@@ -118,11 +118,8 @@ tr:hover td { background: var(--row-hover); }
 .pill { padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 999px; cursor: pointer; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-primary); transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); text-align: center; line-height: 1.25; font-family: var(--font); }
 .pill:hover { border-color: var(--accent); color: var(--accent-text); }
 .pill.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
-.conference-list { list-style: none; margin: 0; padding: 0; flex: 1; }
-.conference-item { width: 100%; padding: 9px 20px 9px 17px; font-size: 13px; font-weight: 500; font-family: var(--font); text-align: left; cursor: pointer; background: none; border: none; border-left: 3px solid transparent; transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--text-primary); }
-.conference-item:hover { background: var(--bg-surface-alt); color: var(--accent-text); }
-.conference-item.active { background: var(--accent-surface); border-left-color: var(--accent); color: var(--accent-text); font-weight: 600; }
-.conference-item .count { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+.pill .pill-sub { font-size: 10px; font-weight: 500; opacity: 0.65; margin-left: 5px; }
+.pill.active .pill-sub { opacity: 0.85; }
 .side-list { list-style: none; margin: 0; padding: 0 8px 8px; }
 .side-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; }
 .side-item:hover { background: var(--bg-surface-alt); }
@@ -628,10 +625,7 @@ function renderSidebar() {
       <div class="browse-label">Recruiting class</div>
       <div class="pill-row" role="group" aria-label="Recruiting class"><button class="pill${!f.classYear ? ' active' : ''}" data-class="">All</button>${years.map(y => `<button class="pill${f.classYear === String(y) ? ' active' : ''}" data-class="${y}">'${String(y).slice(2)}</button>`).join('')}</div>
       <div class="browse-label">Conference</div>
-      <ul class="conference-list">
-        <li><button class="conference-item${!f.conf ? ' active' : ''}" data-conf="">All programs <span class="count">${S.index.programs.length}</span></button></li>
-        ${confs.map(([c, n]) => `<li><button class="conference-item${f.conf === c ? ' active' : ''}" data-conf="${esc(c)}">${esc(c)} <span class="count">${n}</span></button></li>`).join('')}
-      </ul>`;
+      <div class="pill-row" role="group" aria-label="Conference"><button class="pill${!f.conf ? ' active' : ''}" data-conf="">All</button>${confs.map(([c, n]) => `<button class="pill${f.conf === c ? ' active' : ''}" data-conf="${esc(c)}" title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`).join('')}</div>`;
   } else if (tab === 'shortlist') {
     const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999));
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
