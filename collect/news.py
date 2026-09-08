@@ -39,15 +39,16 @@ def collect(program: dict, registry: dict) -> dict:
         news_url = f"{a['baseUrl']}/news/?sport={a['sportPath'].rsplit('/', 1)[-1]}"
         html, meta = common.fetch_text(news_url, max_age_hours=12)
     items = ad.parse_news(html, a["baseUrl"])
-    if not items:
-        raise common.FetchError(f"news: parsed 0 items from {news_url} (markup change?)")
     # Sidearm sites also publish an RSS feed with proper dates; merge it in when the adapter has one.
+    # Older Sidearm themes have an empty /archives page and only the feed, so the feed counts too.
     if u.get("rss") and hasattr(ad, "parse_rss"):
         try:
             xml_text, _ = common.fetch_text(u["rss"], max_age_hours=12)
             items = ad.parse_rss(xml_text, program["athletics"]["baseUrl"]) + items
         except common.FetchError as e:
             common.log(f"news: rss failed: {e}")
+    if not items:
+        raise common.FetchError(f"news: parsed 0 items from {news_url} (markup change?)")
     for it in items:
         it["recruiting"] = bool(RECRUIT_RE.search(it["title"]))
     # Keep the archive growing: merge with what we already have (by url).
