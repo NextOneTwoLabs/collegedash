@@ -125,6 +125,34 @@ def rpi_weekly_for(school: str, season: int) -> list[dict]:
 
 # ---------- sections ----------
 
+# NCAA Division I women's soccer champions by season (NCAA record book; 2025 per the College Cup
+# result). Wikipedia infobox rows are cross-checked against this so a mislabelled row can never
+# publish a conference title as a national one.
+NCAA_D1_WOMENS_CHAMPIONS = {
+    1982: "north-carolina", 1983: "north-carolina", 1984: "north-carolina", 1985: "george-mason",
+    1986: "north-carolina", 1987: "north-carolina", 1988: "north-carolina", 1989: "north-carolina",
+    1990: "north-carolina", 1991: "north-carolina", 1992: "north-carolina", 1993: "north-carolina",
+    1994: "north-carolina", 1995: "notre-dame", 1996: "north-carolina", 1997: "north-carolina",
+    1998: "florida", 1999: "north-carolina", 2000: "north-carolina", 2001: "santa-clara",
+    2002: "portland", 2003: "north-carolina", 2004: "notre-dame", 2005: "portland",
+    2006: "north-carolina", 2007: "usc", 2008: "north-carolina", 2009: "north-carolina",
+    2010: "notre-dame", 2011: "stanford", 2012: "north-carolina", 2013: "ucla",
+    2014: "florida-state", 2015: "penn-state", 2016: "usc", 2017: "stanford",
+    2018: "florida-state", 2019: "stanford", 2020: "santa-clara", 2021: "florida-state",
+    2022: "ucla", 2023: "florida-state", 2024: "north-carolina", 2025: "florida-state",
+}
+
+
+def national_titles(slug: str, wiki_years: list[int]) -> list[int]:
+    """Authoritative title years for a program: the champions table, plus nothing else. Wikipedia
+    years that the table does not attribute to this program are logged and dropped."""
+    official = sorted(y for y, s in NCAA_D1_WOMENS_CHAMPIONS.items() if s == slug)
+    bogus = sorted(set(wiki_years or []) - set(official))
+    if bogus:
+        common.log(f"build: wikipedia claims NCAA titles for {slug} in {bogus} - not in the NCAA champions list, ignored")
+    return official
+
+
 def build_program_section(program, wiki, ath) -> dict:
     w = wiki["data"] if wiki else {}
     a = ath["data"] if ath else {}
@@ -150,7 +178,7 @@ def build_program_section(program, wiki, ath) -> dict:
         "supportStaff": support,
         "stadium": w.get("stadium"),
         "founded": w.get("founded"),
-        "nationalTitles": w.get("nationalTitles", []),
+        "nationalTitles": national_titles(program["slug"], w.get("nationalTitles", [])),
         "nationalRunnerUp": w.get("nationalRunnerUp", []),
         "collegeCups": w.get("collegeCups", []),
         "ncaaAppearances": w.get("ncaaAppearances", []),
@@ -623,6 +651,26 @@ def validate(registry: dict, verbose: bool = False) -> bool:
             b = p["_build"]
             missing = [k for k, v in b["sections"].items() if not v]
             print(f"{program['slug']}: completeness {b['completeness']}; missing {missing or 'none'}; stale {b['stale'] or 'none'}")
+    return check_titles(registry) and ok
+
+
+def check_titles(registry: dict) -> bool:
+    """Every NCAA title year must be claimed by exactly the champion in NCAA_D1_WOMENS_CHAMPIONS."""
+    claimed: dict[int, list[str]] = {}
+    for program in common.iter_programs(registry):
+        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"))
+        for y in ((p or {}).get("program") or {}).get("nationalTitles") or []:
+            claimed.setdefault(y, []).append(program["slug"])
+    ok = True
+    for y, slugs in sorted(claimed.items()):
+        expected = NCAA_D1_WOMENS_CHAMPIONS.get(y)
+        if slugs != [expected]:
+            print(f"TITLES {y}: claimed by {slugs}, NCAA champion is {expected}")
+            ok = False
+    total = sum(len(s) for s in claimed.values())
+    if total != len(NCAA_D1_WOMENS_CHAMPIONS):
+        print(f"TITLES: {total} title years published across programs, NCAA record has {len(NCAA_D1_WOMENS_CHAMPIONS)}")
+        ok = False
     return ok
 
 

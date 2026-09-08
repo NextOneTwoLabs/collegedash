@@ -19,8 +19,17 @@ YEAR_RE = re.compile(r"\b(?:19|20)\d\d\b")
 RECORD_RE = re.compile(r"(\d+)\s*[–—-]\s*(\d+)(?:\s*[–—-]\s*(\d+))?")
 
 
-def _years(text: str) -> list[int]:
-    return sorted({int(y) for y in YEAR_RE.findall(text or "")})
+OTHER_BODY_RE = re.compile(r"\b((?:19|20)\d\d)\s*\((?:[^)]*(?:AIAW|NAIA|NCCAA|NJCAA|vacated|club)[^)]*)\)", re.I)
+
+
+def _years(text: str, max_year: int | None = None) -> list[int]:
+    """Distinct years in a cell, ignoring years tagged as another governing body or vacated
+    ('1981 (AIAW)') and anything after `max_year` (typos such as 2026 in a 2025 list)."""
+    text = OTHER_BODY_RE.sub(" ", text or "")
+    years = {int(y) for y in YEAR_RE.findall(text)}
+    if max_year:
+        years = {y for y in years if y <= max_year}
+    return sorted(years)
 
 
 def _record(text: str) -> dict | None:
@@ -150,13 +159,25 @@ def collect(program: dict, registry: dict) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     ib = _infobox(soup)
 
-    def find(*labels):
+    def find(*labels):  # loose match, for descriptive rows (stadium, head coach, nickname)
         for k, v in ib.items():
             kl = k.lower()
             if any(l in kl for l in labels):
                 return v
         return ""
 
+    def row(*patterns):
+        """Honours rows are matched on the WHOLE label, anchored, so 'Conference tournament
+        championships' can never satisfy the national-title pattern (that bug published Big West
+        titles as NCAA championships)."""
+        for k, v in ib.items():
+            kl = common.clean(k).lower()
+            if any(re.fullmatch(p, kl) for p in patterns):
+                return v
+        return ""
+
+    max_year = (registry.get("season") or {}).get("current")
+    honours = lambda *patterns: _years(row(*patterns), max_year)
     stadium_txt = find("stadium")
     cap = re.search(r"capacity[:\s]*([\d,]+)", stadium_txt, re.I)
     seasons = _seasons_table(soup)
@@ -169,22 +190,17 @@ def collect(program: dict, registry: dict) -> dict:
         "stadium": {"name": re.sub(r"\(.*", "", stadium_txt).strip() or None,
                     "capacity": int(cap.group(1).replace(",", "")) if cap else None},
         "nickname": find("nickname") or None,
-        "nationalTitles": _years(find("tournament championships", "national championships")),
-        "nationalRunnerUp": _years(find("runner-up", "runner up")),
+        "nationalTitles": honours(r"ncaa (?:tournament |division i )?champion(?:s|ships?)?", r"national champion(?:s|ships?)?"),
+        "nationalRunnerUp": honours(r"ncaa .*runner[- ]up"),
         # some articles label the final four 'Semifinals' instead of 'College Cup'
-        "collegeCups": _years(find("college cup") or find("semifinal")),
-        "ncaaQuarterfinals": _years(find("quarterfinal")),
-        "ncaaAppearances": _years(find("tournament appearances", "ncaa appearances")),
-        "confRegularSeasonTitles": _years(find("regular season champ")),
-        "confTournamentTitles": _years(find("tournament champ") if "tournament champ" in " ".join(ib).lower() and "ncaa" not in find("tournament champ").lower() else ""),
+        "collegeCups": honours(r"ncaa .*college cup", r"ncaa .*semifinals?"),
+        "ncaaQuarterfinals": honours(r"ncaa .*quarterfinals?"),
+        "ncaaAppearances": honours(r"ncaa .*appearances", r"ncaa tournament"),
+        "confRegularSeasonTitles": honours(r"conference regular[- ]season champion(?:s|ships?)?"),
+        "confTournamentTitles": honours(r"conference tournament champion(?:s|ships?)?"),
         "seasons": seasons,
         "infobox": ib,
     }
-    # Conference tournament titles: look for a label that mentions conference + tournament.
-    for k, v in ib.items():
-        kl = k.lower()
-        if "conference" in kl and "tournament" in kl:
-            data["confTournamentTitles"] = _years(v)
     common.save_source(program["slug"], NAME, data, url=data["pageUrl"], collector=NAME,
                        extra={"fromCache": meta.get("fromCache", False)})
     common.log(f"wikipedia: {len(seasons)} seasons, titles {data['nationalTitles']}, stadium {data['stadium']}")

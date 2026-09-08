@@ -69,7 +69,7 @@ the rate-limited `DEMO_KEY`.
 | Roster, staff, bios, schedule, news | Official athletics site | Sidearm (two generations) and WMT Digital (four roster themes); a few legacy sites render rosters in the browser and are skipped (`athletics.rosterRequiresBrowser`) |
 | School facts | College Scorecard API | admission rate, test bands, size, cost, outcomes |
 | Climate | NOAA NCEI 1991–2020 U.S. Climate Normals (monthly) | nearest airport/coop station to campus; no key, no quota |
-| History, honours | Wikipedia team article | infobox + year-by-year table |
+| History, honours | Wikipedia team article | infobox + year-by-year table; national titles are cross-checked against the NCAA champions list in `build.py` |
 | RPI 2007–2024 | Chris Henderson, *RPI for Division I Women's Soccer* | end-of-season, recomputed under the 2024 formula (XLSX export; the CSV export loses formula values for 2021–24) |
 | RPI weekly | NCAA.com RPI page | only the latest week is published; each refresh archives a snapshot |
 | Commitments | TopDrawerSoccer team tab; SoccerWire directory (Elasticsearch proxy) | no dates on either; SoccerWire profile date is an approximation |
