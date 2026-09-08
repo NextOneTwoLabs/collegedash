@@ -61,10 +61,12 @@
       "keyEnv": "SCORECARD_API_KEY"
     },
     "climate": {
-      "_comment": "Open-Meteo Historical Weather API (ERA5 reanalysis), no key. Daily data aggregated to 1991-2020 monthly normals.",
-      "api": "https://archive-api.open-meteo.com/v1/archive",
-      "normalsStart": 1991,
-      "normalsEnd": 2020
+      "_comment": "NOAA NCEI 1991-2020 U.S. Climate Normals (monthly) via the Access Data Service; no key. Nearest airport (USW, within preferAirportWithinKm) else cooperative (USC) station from the inventory.",
+      "dataApi": "https://www.ncei.noaa.gov/access/services/data/v1",
+      "dataset": "normals-monthly-1991-2020",
+      "inventory": "https://www.ncei.noaa.gov/data/normals-monthly/1991-2020/doc/inventory_30yr.txt",
+      "preferAirportWithinKm": 60,
+      "normalsPeriod": "1991-2020"
     },
     "wikipedia": {
       "htmlApi": "https://en.wikipedia.org/api/rest_v1/page/html/{title}"
@@ -178,7 +180,7 @@
       "athletics": {
         "platform": "wmt",
         "baseUrl": "https://virginiasports.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 234030,
@@ -200,11 +202,7 @@
         "lon": -77.452697,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "notre-dame",
@@ -219,9 +217,9 @@
         "#C99700"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://und.com",
-        "sportPath": "/sports/womens-soccer"
+        "platform": "wmt",
+        "baseUrl": "https://fightingirish.com",
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 152080,
@@ -243,11 +241,7 @@
         "lon": -86.238959,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "tcu",
@@ -286,10 +280,7 @@
         "lon": -97.364758,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "duke",
@@ -363,11 +354,7 @@
         "lon": -84.476111,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "vanderbilt",
@@ -382,9 +369,9 @@
         "#CFAE70"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://vucommodores.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 221999,
@@ -406,11 +393,7 @@
         "lon": -86.803369,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "colorado",
@@ -449,10 +432,7 @@
         "lon": -105.270823,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "kansas",
@@ -491,11 +471,7 @@
         "lon": -95.247567,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "georgetown",
@@ -534,10 +510,7 @@
         "lon": -77.073463,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "west-virginia",
@@ -576,10 +549,7 @@
         "lon": -79.954391,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "tennessee",
@@ -618,10 +588,7 @@
         "lon": -83.925852,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "north-carolina",
@@ -699,10 +666,7 @@
         "lon": -97.121041,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "lsu",
@@ -741,10 +705,7 @@
         "lon": -92.414409,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "texas-tech",
@@ -767,7 +728,7 @@
         "scorecardUnitId": 229115,
         "tdsClgId": 212,
         "tdsSlug": "texas-tech",
-        "wikipedia": null,
+        "wikipedia": "Texas_Tech_Red_Raiders_women's_soccer",
         "ncaaName": "Texas Tech",
         "ncaaSlug": "texas-tech",
         "rpiHistoryName": "TexasTech"
@@ -783,11 +744,7 @@
         "lon": -101.874783,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "xavier",
@@ -826,10 +783,7 @@
         "lon": -84.47465,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "ohio-state",
@@ -868,10 +822,7 @@
         "lon": -83.007525,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "memphis",
@@ -910,10 +861,7 @@
         "lon": -89.938068,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "wisconsin",
@@ -991,10 +939,7 @@
         "lon": -122.30514,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "louisville",
@@ -1009,8 +954,8 @@
         "#000000"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://uoflsports.com",
+        "platform": "sidearm",
+        "baseUrl": "https://gocards.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -1033,12 +978,7 @@
         "lon": -85.760412,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "iowa",
@@ -1053,9 +993,9 @@
         "#FCD116"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://hawkeyesports.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 153658,
@@ -1077,13 +1017,7 @@
         "lon": -91.536425,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "ucla",
@@ -1157,11 +1091,7 @@
         "lon": -111.649281,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "wake-forest",
@@ -1176,8 +1106,8 @@
         "#CEB888"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://wakeforestsports.com",
+        "platform": "sidearm",
+        "baseUrl": "https://godeacs.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -1200,12 +1130,7 @@
         "lon": -80.277446,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "arkansas",
@@ -1220,9 +1145,9 @@
         "#FFFFFF"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://arkansasrazorbacks.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sport/w-soccer"
       },
       "ids": {
         "scorecardUnitId": 106397,
@@ -1244,12 +1169,7 @@
         "lon": -94.176981,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "dayton",
@@ -1288,11 +1208,7 @@
         "lon": -84.176113,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "penn-state",
@@ -1331,10 +1247,7 @@
         "lon": -76.741216,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "clemson",
@@ -1373,10 +1286,7 @@
         "lon": -82.835114,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "ucf",
@@ -1415,11 +1325,7 @@
         "lon": -81.200889,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "alabama",
@@ -1458,10 +1364,7 @@
         "lon": -87.545978,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "saint-louis",
@@ -1539,10 +1442,7 @@
         "lon": -87.679858,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "western-michigan",
@@ -1620,12 +1520,7 @@
         "lon": -73.255903,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "illinois",
@@ -1664,10 +1559,7 @@
         "lon": -88.229114,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "mississippi-state",
@@ -1706,11 +1598,7 @@
         "lon": -88.790139,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "utah-valley",
@@ -1749,10 +1637,7 @@
         "lon": -111.716456,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "saint-mary-s",
@@ -1773,8 +1658,8 @@
       },
       "ids": {
         "scorecardUnitId": 123554,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 471,
+        "tdsSlug": "st-marys-(ca)",
         "wikipedia": null,
         "ncaaName": "Saint Mary's (CA)",
         "ncaaSlug": null,
@@ -1791,12 +1676,7 @@
         "lon": -122.109031,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "south-carolina",
@@ -1811,9 +1691,9 @@
         "#000000"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://gamecocksonline.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 218663,
@@ -1835,12 +1715,7 @@
         "lon": -81.026935,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "connecticut",
@@ -1918,10 +1793,7 @@
         "lon": -83.374039,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "california",
@@ -1960,10 +1832,7 @@
         "lon": -122.260463,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "lipscomb",
@@ -2041,12 +1910,7 @@
         "lon": -86.791799,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "liberty",
@@ -2085,10 +1949,7 @@
         "lon": -79.18222,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "rhode-island",
@@ -2127,10 +1988,7 @@
         "lon": -71.527356,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "kentucky",
@@ -2145,9 +2003,9 @@
         "#C8C9C7"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://ukathletics.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 157085,
@@ -2169,13 +2027,7 @@
         "lon": -84.504747,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "charlotte",
@@ -2214,11 +2066,7 @@
         "lon": -80.730919,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "old-dominion",
@@ -2257,10 +2105,7 @@
         "lon": -76.30666,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "james-madison",
@@ -2299,11 +2144,7 @@
         "lon": -78.870484,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "unc-wilmington",
@@ -2342,11 +2183,7 @@
         "lon": -77.875527,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "cal-state-fullerton",
@@ -2385,12 +2222,7 @@
         "lon": -117.885446,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "south-alabama",
@@ -2429,12 +2261,7 @@
         "lon": -88.178711,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "oklahoma",
@@ -2451,7 +2278,9 @@
       "athletics": {
         "platform": "sidearm",
         "baseUrl": "https://soonersports.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "rosterRequiresBrowser": true,
+        "note": "Sidearm Nuxt theme with a skeleton loader; roster is fetched in the browser"
       },
       "ids": {
         "scorecardUnitId": 207500,
@@ -2473,11 +2302,7 @@
         "lon": -97.444211,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "army",
@@ -2516,11 +2341,7 @@
         "lon": -73.956772,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "texas-state",
@@ -2559,11 +2380,7 @@
         "lon": -97.943029,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "kansas-state",
@@ -2602,12 +2419,7 @@
         "lon": -96.581077,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "utah-state",
@@ -2624,7 +2436,9 @@
       "athletics": {
         "platform": "sidearm",
         "baseUrl": "https://utahstateaggies.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "rosterRequiresBrowser": true,
+        "note": "legacy Sidearm Vue/Knockout template; roster is fetched in the browser"
       },
       "ids": {
         "scorecardUnitId": 230728,
@@ -2646,12 +2460,7 @@
         "lon": -111.81391,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "louisiana-monroe",
@@ -2690,11 +2499,7 @@
         "lon": -92.07374,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "pepperdine",
@@ -2709,8 +2514,8 @@
         "#EE7624"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://pepperdinesports.com",
+        "platform": "sidearm",
+        "baseUrl": "https://pepperdinewaves.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -2733,13 +2538,7 @@
         "lon": -118.707077,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "utsa",
@@ -2754,9 +2553,9 @@
         "#E14504"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://goutsa.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/soccer"
       },
       "ids": {
         "scorecardUnitId": 229027,
@@ -2778,12 +2577,7 @@
         "lon": -98.620657,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "seattle",
@@ -2822,12 +2616,7 @@
         "lon": -122.318851,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "eastern-kentucky",
@@ -2866,11 +2655,7 @@
         "lon": -84.300796,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "loyola-chicago",
@@ -2909,12 +2694,7 @@
         "lon": -87.656872,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "pittsburgh",
@@ -2953,10 +2733,7 @@
         "lon": -79.953254,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "buffalo",
@@ -2971,8 +2748,8 @@
         "#FFFFFF"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://buffalobulls.com",
+        "platform": "sidearm",
+        "baseUrl": "https://ubbulls.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -2995,13 +2772,7 @@
         "lon": -78.789458,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "usc",
@@ -3075,10 +2846,7 @@
         "lon": -96.783365,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "arizona-state",
@@ -3093,8 +2861,8 @@
         "#FFC72C"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://thesundevils.fansonly.com",
+        "platform": "wmt",
+        "baseUrl": "https://thesundevils.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -3117,13 +2885,7 @@
         "lon": -111.934383,
         "timezone": "America/Phoenix"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "stony-brook",
@@ -3138,8 +2900,8 @@
         "#16243E"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://goseawolves.org",
+        "platform": "sidearm",
+        "baseUrl": "https://stonybrookathletics.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -3162,12 +2924,7 @@
         "lon": -73.12046,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "denver",
@@ -3206,12 +2963,7 @@
         "lon": -104.963259,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "portland",
@@ -3250,10 +3002,7 @@
         "lon": -122.726691,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "miami-fl",
@@ -3268,14 +3017,14 @@
         "#F05A00"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://miamihurricanes.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/soc"
       },
       "ids": {
         "scorecardUnitId": 135726,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 191,
+        "tdsSlug": "miami-(fl)",
         "wikipedia": "Miami_Hurricanes_women's_soccer",
         "ncaaName": "Miami (FL)",
         "ncaaSlug": null,
@@ -3292,13 +3041,7 @@
         "lon": -80.278662,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "tds",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "duquesne",
@@ -3337,12 +3080,7 @@
         "lon": -79.993123,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "south-dakota-state",
@@ -3381,12 +3119,7 @@
         "lon": -96.782139,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "brown",
@@ -3425,12 +3158,7 @@
         "lon": -71.40385,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "rice",
@@ -3469,12 +3197,7 @@
         "lon": -95.402035,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "boston-university",
@@ -3513,11 +3236,7 @@
         "lon": -71.107942,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "florida",
@@ -3556,11 +3275,7 @@
         "lon": -82.347911,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "utah",
@@ -3599,10 +3314,7 @@
         "lon": -111.846044,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "texas-am",
@@ -3617,9 +3329,9 @@
         "#FFFFFF"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://aggieathletics.com",
-        "sportPath": "/sports/womens-soccer"
+        "platform": "wmt",
+        "baseUrl": "https://12thman.com",
+        "sportPath": "/sports/soccer"
       },
       "ids": {
         "scorecardUnitId": 224554,
@@ -3641,12 +3353,7 @@
         "lon": -95.904579,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "santa-clara",
@@ -3685,10 +3392,7 @@
         "lon": -121.93784,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "houston",
@@ -3727,12 +3431,7 @@
         "lon": -95.343537,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "nebraska",
@@ -3747,9 +3446,9 @@
         "#F5F1E7"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://huskers.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/soccer"
       },
       "ids": {
         "scorecardUnitId": 181464,
@@ -3771,12 +3470,7 @@
         "lon": -96.700508,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "south-florida",
@@ -3815,11 +3509,7 @@
         "lon": -82.413232,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "virginia-tech",
@@ -3858,10 +3548,7 @@
         "lon": -80.423675,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "auburn",
@@ -3900,12 +3587,7 @@
         "lon": -85.488258,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "boise-state",
@@ -3944,12 +3626,7 @@
         "lon": -116.203301,
         "timezone": "America/Boise"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "weber-state",
@@ -3988,11 +3665,7 @@
         "lon": -111.944845,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "bowling-green",
@@ -4031,10 +3704,7 @@
         "lon": -83.640896,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "dartmouth",
@@ -4073,11 +3743,7 @@
         "lon": -72.289949,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "montana",
@@ -4116,11 +3782,7 @@
         "lon": -113.982912,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "san-diego-state",
@@ -4159,10 +3821,7 @@
         "lon": -117.071228,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "cal-poly",
@@ -4201,11 +3860,7 @@
         "lon": -120.657311,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "east-tennessee-state",
@@ -4244,10 +3899,7 @@
         "lon": -82.366954,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "princeton",
@@ -4286,11 +3938,7 @@
         "lon": -74.659365,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "miami-oh",
@@ -4305,14 +3953,14 @@
         "#000000"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://muredhawks.com",
+        "platform": "sidearm",
+        "baseUrl": "https://miamiredhawks.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
         "scorecardUnitId": 204024,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 239,
+        "tdsSlug": "miami-(oh)",
         "wikipedia": null,
         "ncaaName": "Miami (OH)",
         "ncaaSlug": "miami-oh",
@@ -4329,14 +3977,7 @@
         "lon": -84.732954,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "creighton",
@@ -4375,12 +4016,7 @@
         "lon": -95.947811,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "wisconsin-milwaukee",
@@ -4419,10 +4055,7 @@
         "lon": -87.880488,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "arizona",
@@ -4461,11 +4094,7 @@
         "lon": -110.950815,
         "timezone": "America/Phoenix"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "rutgers",
@@ -4504,10 +4133,7 @@
         "lon": -74.446251,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "indiana",
@@ -4546,12 +4172,7 @@
         "lon": -86.526559,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "furman",
@@ -4590,11 +4211,7 @@
         "lon": -82.440458,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "nc-state",
@@ -4633,11 +4250,7 @@
         "lon": -78.674517,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "michigan",
@@ -4676,10 +4289,7 @@
         "lon": -84.476111,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "binghamton",
@@ -4718,11 +4328,7 @@
         "lon": -75.966889,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "ut-chattanooga",
@@ -4761,12 +4367,7 @@
         "lon": -85.300247,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "marshall",
@@ -4805,12 +4406,7 @@
         "lon": -82.428964,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "western-carolina",
@@ -4849,12 +4445,7 @@
         "lon": -83.186258,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "syracuse",
@@ -4869,8 +4460,8 @@
         "#000E54"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://suathletics.com",
+        "platform": "sidearm",
+        "baseUrl": "https://cuse.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -4893,12 +4484,7 @@
         "lon": -76.133989,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "colorado-state",
@@ -4937,12 +4523,7 @@
         "lon": -104.989255,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "oral-roberts",
@@ -4957,9 +4538,9 @@
         "#DAC792"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://orugoldeneagles.com",
-        "sportPath": "/sports/womens-soccer"
+        "platform": "sidearm",
+        "baseUrl": "https://oruathletics.com",
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 207582,
@@ -4981,13 +4562,7 @@
         "lon": -95.952547,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "bellarmine",
@@ -5026,11 +4601,7 @@
         "lon": -85.704997,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "tulsa",
@@ -5069,12 +4640,7 @@
         "lon": -95.945941,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "murray-state",
@@ -5113,11 +4679,7 @@
         "lon": -88.323629,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "uc-santa-barbara",
@@ -5156,11 +4718,7 @@
         "lon": -119.846426,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "middle-tennessee",
@@ -5199,11 +4757,7 @@
         "lon": -86.360618,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "fordham",
@@ -5242,12 +4796,7 @@
         "lon": -73.882705,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "gonzaga",
@@ -5286,11 +4835,7 @@
         "lon": -117.400625,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "uab",
@@ -5329,11 +4874,7 @@
         "lon": -86.799345,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "providence",
@@ -5372,11 +4913,7 @@
         "lon": -71.437446,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "florida-international",
@@ -5415,12 +4952,7 @@
         "lon": -80.373928,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "missouri",
@@ -5459,11 +4991,7 @@
         "lon": -92.328843,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "quinnipiac",
@@ -5478,8 +5006,8 @@
         "#FFB819"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://quinnipiacbobcats.com",
+        "platform": "sidearm",
+        "baseUrl": "https://gobobcats.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -5502,13 +5030,7 @@
         "lon": -72.894117,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "minnesota",
@@ -5547,11 +5069,7 @@
         "lon": -94.206254,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "elon",
@@ -5590,10 +5108,7 @@
         "lon": -79.50344,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "appalachian-state",
@@ -5632,12 +5147,7 @@
         "lon": -81.680583,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "colgate",
@@ -5676,13 +5186,7 @@
         "lon": -75.536346,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "hofstra",
@@ -5721,12 +5225,7 @@
         "lon": -73.60078,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "sacred-heart",
@@ -5765,10 +5264,7 @@
         "lon": -73.243332,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "kent-state",
@@ -5807,10 +5303,7 @@
         "lon": -81.342533,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "villanova",
@@ -5849,12 +5342,7 @@
         "lon": -75.340502,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "air-force",
@@ -5893,12 +5381,7 @@
         "lon": -104.891358,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "fgcu",
@@ -5937,10 +5420,7 @@
         "lon": -81.7726,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "monmouth",
@@ -5979,12 +5459,7 @@
         "lon": -74.006447,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "iowa-state",
@@ -6023,10 +5498,7 @@
         "lon": -93.648504,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "washington-state",
@@ -6065,11 +5537,7 @@
         "lon": -117.158168,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "oklahoma-state",
@@ -6108,11 +5576,7 @@
         "lon": -97.069743,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "maine",
@@ -6151,11 +5615,7 @@
         "lon": -68.669332,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "la-salle",
@@ -6194,12 +5654,7 @@
         "lon": -75.153061,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "delaware",
@@ -6238,12 +5693,7 @@
         "lon": -75.752822,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "east-carolina",
@@ -6282,12 +5732,7 @@
         "lon": -77.368291,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "harvard",
@@ -6326,10 +5771,7 @@
         "lon": -71.118313,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "sam-houston-state",
@@ -6368,11 +5810,7 @@
         "lon": -95.546205,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "wyoming",
@@ -6389,7 +5827,9 @@
       "athletics": {
         "platform": "sidearm",
         "baseUrl": "https://gowyo.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "rosterRequiresBrowser": true,
+        "note": "legacy Sidearm Vue/Knockout template; roster is fetched in the browser"
       },
       "ids": {
         "scorecardUnitId": 240727,
@@ -6411,12 +5851,7 @@
         "lon": -105.57931,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "college-of-charleston",
@@ -6455,11 +5890,7 @@
         "lon": -79.939794,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "uc-irvine",
@@ -6498,11 +5929,7 @@
         "lon": -117.841248,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "vermont",
@@ -6541,11 +5968,7 @@
         "lon": -73.196646,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "ball-state",
@@ -6584,10 +6007,7 @@
         "lon": -85.409043,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "boston-college",
@@ -6626,10 +6046,7 @@
         "lon": -71.169242,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "cincinnati",
@@ -6668,12 +6085,7 @@
         "lon": -84.51428,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "mississippi",
@@ -6712,11 +6124,7 @@
         "lon": -89.537434,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "columbia",
@@ -6755,12 +6163,7 @@
         "lon": -73.961885,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-06"
     },
     {
       "slug": "drake",
@@ -6799,10 +6202,7 @@
         "lon": -93.652163,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "houston-christian",
@@ -6841,10 +6241,7 @@
         "lon": -95.515954,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "siena-college",
@@ -6883,11 +6280,7 @@
         "lon": -73.7526,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "georgia-state",
@@ -6926,10 +6319,7 @@
         "lon": -84.38667,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "csu-bakersfield",
@@ -6968,11 +6358,7 @@
         "lon": -119.104711,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "california-baptist",
@@ -7011,10 +6397,7 @@
         "lon": -117.425619,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "marquette",
@@ -7053,11 +6436,7 @@
         "lon": -87.927961,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "vcu",
@@ -7135,11 +6514,7 @@
         "lon": -79.011767,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "william-mary",
@@ -7217,11 +6592,7 @@
         "lon": -87.680407,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "illinois-state",
@@ -7260,11 +6631,7 @@
         "lon": -88.990058,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "tennessee-tech",
@@ -7281,7 +6648,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://ttusports.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "ttusports.com is a PrestoSports site; no adapter yet"
       },
       "ids": {
         "scorecardUnitId": 221847,
@@ -7303,12 +6671,7 @@
         "lon": -85.504039,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northwestern-state",
@@ -7347,11 +6710,7 @@
         "lon": -93.097797,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "uic",
@@ -7390,10 +6749,7 @@
         "lon": -87.650503,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "missouri-state",
@@ -7432,11 +6788,7 @@
         "lon": -93.281281,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "manhattan",
@@ -7475,10 +6827,7 @@
         "lon": -73.901893,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "louisiana",
@@ -7517,12 +6866,7 @@
         "lon": -92.020165,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "butler",
@@ -7561,10 +6905,7 @@
         "lon": -86.172167,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "cornell",
@@ -7603,11 +6944,7 @@
         "lon": -76.483084,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "texas",
@@ -7646,10 +6983,7 @@
         "lon": -97.738273,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "wagner",
@@ -7688,11 +7022,7 @@
         "lon": -74.092913,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "mercer",
@@ -7731,11 +7061,7 @@
         "lon": -83.649392,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "new-mexico",
@@ -7750,9 +7076,9 @@
         "#A7A8AA"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "wmt",
         "baseUrl": "https://golobos.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 187985,
@@ -7774,13 +7100,7 @@
         "lon": -106.620155,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "purdue",
@@ -7819,13 +7139,7 @@
         "lon": -86.914435,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "western-kentucky",
@@ -7864,10 +7178,7 @@
         "lon": -86.456828,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "kansas-city",
@@ -7906,10 +7217,7 @@
         "lon": -94.582141,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southern-illinois",
@@ -7948,11 +7256,7 @@
         "lon": -89.217273,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "usc-upstate",
@@ -7991,11 +7295,7 @@
         "lon": -81.970583,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "colorado-college",
@@ -8034,11 +7334,7 @@
         "lon": -104.822697,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "lindenwood",
@@ -8077,11 +7373,7 @@
         "lon": -90.501286,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "belmont",
@@ -8120,11 +7412,7 @@
         "lon": -86.794807,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "csun",
@@ -8163,10 +7451,7 @@
         "lon": -118.529319,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "canisius",
@@ -8205,11 +7490,7 @@
         "lon": -78.852577,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "yale",
@@ -8287,10 +7568,7 @@
         "lon": -122.450477,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "davidson",
@@ -8329,11 +7607,7 @@
         "lon": -80.843979,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "oregon",
@@ -8372,11 +7646,7 @@
         "lon": -123.075792,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "maryland",
@@ -8415,10 +7685,7 @@
         "lon": -76.944721,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "loyola-marymount",
@@ -8457,11 +7724,7 @@
         "lon": -118.415744,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "east-texas-am",
@@ -8539,11 +7802,7 @@
         "lon": -112.129929,
         "timezone": "America/Phoenix"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "radford",
@@ -8582,10 +7841,7 @@
         "lon": -80.549728,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "stephen-f-austin",
@@ -8624,11 +7880,7 @@
         "lon": -94.64908,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "north-texas",
@@ -8667,12 +7919,7 @@
         "lon": -97.148422,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "north-florida",
@@ -8711,11 +7958,7 @@
         "lon": -81.509144,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "massachusetts-lowell",
@@ -8754,11 +7997,7 @@
         "lon": -71.326809,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "florida-atlantic",
@@ -8797,12 +8036,7 @@
         "lon": -80.102978,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "fresno-state",
@@ -8841,11 +8075,7 @@
         "lon": -119.744569,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "navy",
@@ -8884,12 +8114,7 @@
         "lon": -76.481692,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "north-dakota",
@@ -8928,11 +8153,7 @@
         "lon": -97.071738,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "central-arkansas",
@@ -8971,11 +8192,7 @@
         "lon": -92.457672,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "njit",
@@ -9014,11 +8231,7 @@
         "lon": -74.177113,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "massachusetts",
@@ -9057,11 +8270,7 @@
         "lon": -72.526728,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "holy-cross",
@@ -9100,10 +8309,7 @@
         "lon": -71.808214,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "longwood",
@@ -9142,11 +8348,7 @@
         "lon": -78.396987,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "georgia-southern",
@@ -9185,12 +8387,7 @@
         "lon": -81.784045,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "utah-tech",
@@ -9229,12 +8426,7 @@
         "lon": -113.565903,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "penn",
@@ -9273,11 +8465,7 @@
         "lon": -75.19391,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "idaho",
@@ -9316,11 +8504,7 @@
         "lon": -117.014167,
         "timezone": "America/Boise"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northeastern",
@@ -9359,10 +8543,7 @@
         "lon": -71.088782,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "bryant",
@@ -9401,13 +8582,7 @@
         "lon": -71.539547,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northern-kentucky",
@@ -9446,13 +8621,7 @@
         "lon": -84.463483,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "ohio-university",
@@ -9491,13 +8660,7 @@
         "lon": -82.100985,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "central-connecticut",
@@ -9536,13 +8699,7 @@
         "lon": -72.765991,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "tds",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "uc-san-diego",
@@ -9581,11 +8738,7 @@
         "lon": -117.235866,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "san-diego",
@@ -9624,12 +8777,7 @@
         "lon": -117.192073,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "eastern-michigan",
@@ -9668,11 +8816,7 @@
         "lon": -83.627443,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "evansville",
@@ -9711,12 +8855,7 @@
         "lon": -87.531644,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "akron",
@@ -9755,11 +8894,7 @@
         "lon": -81.511167,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "loyola-md",
@@ -9780,8 +8915,8 @@
       },
       "ids": {
         "scorecardUnitId": 163046,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 116,
+        "tdsSlug": "loyola-(md)",
         "wikipedia": null,
         "ncaaName": "Loyola Maryland",
         "ncaaSlug": "loyola-maryland",
@@ -9798,13 +8933,7 @@
         "lon": -76.621872,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "unc-greensboro",
@@ -9843,11 +8972,7 @@
         "lon": -79.809414,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "marist",
@@ -9886,11 +9011,7 @@
         "lon": -73.935484,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "indiana-state",
@@ -9929,12 +9050,7 @@
         "lon": -87.407846,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "abilene-christian",
@@ -9973,12 +9089,7 @@
         "lon": -99.709797,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "little-rock",
@@ -10017,11 +9128,7 @@
         "lon": -92.339778,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "eastern-washington",
@@ -10060,13 +9167,7 @@
         "lon": -117.583808,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "jacksonville",
@@ -10105,12 +9206,7 @@
         "lon": -81.60458,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "omaha",
@@ -10149,11 +9245,7 @@
         "lon": -96.008516,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "fairleigh-dickinson",
@@ -10192,11 +9284,7 @@
         "lon": -74.028986,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "south-dakota",
@@ -10235,11 +9323,7 @@
         "lon": -96.925283,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "towson",
@@ -10278,12 +9362,7 @@
         "lon": -76.611164,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "umbc",
@@ -10322,11 +9401,7 @@
         "lon": -76.711607,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "grambling-state",
@@ -10365,11 +9440,7 @@
         "lon": -92.713245,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "lamar",
@@ -10408,11 +9479,7 @@
         "lon": -94.072244,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "troy",
@@ -10451,12 +9518,7 @@
         "lon": -85.95802,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "george-washington",
@@ -10495,13 +9557,7 @@
         "lon": -77.048363,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "long-beach-state",
@@ -10540,12 +9596,7 @@
         "lon": -118.11204,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "niagara",
@@ -10584,12 +9635,7 @@
         "lon": -79.036689,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "jacksonville-state",
@@ -10628,11 +9674,7 @@
         "lon": -85.765321,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northern-arizona",
@@ -10671,11 +9713,7 @@
         "lon": -111.653724,
         "timezone": "America/Phoenix"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "depaul",
@@ -10714,11 +9752,7 @@
         "lon": -87.62724,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southeastern-louisiana",
@@ -10757,12 +9791,7 @@
         "lon": -90.468676,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "new-hampshire",
@@ -10801,12 +9830,7 @@
         "lon": -71.451842,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "hawaii",
@@ -10845,11 +9869,7 @@
         "lon": -157.818979,
         "timezone": "Pacific/Honolulu"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "campbell",
@@ -10888,11 +9908,7 @@
         "lon": -78.738238,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "george-mason",
@@ -10931,12 +9947,7 @@
         "lon": -77.307063,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "lafayette",
@@ -10975,11 +9986,7 @@
         "lon": -75.209786,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "oregon-state",
@@ -11018,12 +10025,7 @@
         "lon": -123.274723,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "st-johns",
@@ -11062,11 +10064,7 @@
         "lon": -73.796104,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "wright-state",
@@ -11105,12 +10103,7 @@
         "lon": -84.064881,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "bucknell",
@@ -11149,12 +10142,7 @@
         "lon": -76.882616,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "new-mexico-state",
@@ -11193,11 +10181,7 @@
         "lon": -106.752069,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "arkansas-state",
@@ -11236,11 +10220,7 @@
         "lon": -90.679988,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "saint-josephs",
@@ -11279,11 +10259,7 @@
         "lon": -75.238343,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "idaho-state",
@@ -11322,12 +10298,7 @@
         "lon": -112.432312,
         "timezone": "America/Boise"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "richmond",
@@ -11366,11 +10337,7 @@
         "lon": -77.538806,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "louisiana-tech",
@@ -11409,11 +10376,7 @@
         "lon": -92.649963,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "tarleton-state",
@@ -11428,9 +10391,9 @@
         "#000000"
       ],
       "athletics": {
-        "platform": "auto",
+        "platform": "sidearm",
         "baseUrl": "https://tarletonsports.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/wsoc"
       },
       "ids": {
         "scorecardUnitId": 228529,
@@ -11452,13 +10415,7 @@
         "lon": -98.219039,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "pacific",
@@ -11497,11 +10454,7 @@
         "lon": -121.312301,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northern-illinois",
@@ -11540,11 +10493,7 @@
         "lon": -88.766428,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "howard",
@@ -11583,12 +10532,7 @@
         "lon": -77.018966,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "high-point",
@@ -11627,10 +10571,7 @@
         "lon": -79.994675,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southern-indiana",
@@ -11669,11 +10610,7 @@
         "lon": -87.677214,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "seton-hall",
@@ -11712,11 +10649,7 @@
         "lon": -74.246027,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "merrimack",
@@ -11755,12 +10688,7 @@
         "lon": -71.124216,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northern-colorado",
@@ -11799,11 +10727,7 @@
         "lon": -104.692777,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "wofford",
@@ -11842,11 +10766,7 @@
         "lon": -81.933568,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "youngstown-state",
@@ -11885,11 +10805,7 @@
         "lon": -80.64659,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "utep",
@@ -11928,12 +10844,7 @@
         "lon": -106.504098,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "austin-peay",
@@ -11972,12 +10883,7 @@
         "lon": -87.354081,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "jackson-state",
@@ -11992,8 +10898,8 @@
         "#008ED6"
       ],
       "athletics": {
-        "platform": "auto",
-        "baseUrl": "https://jsutigers.com",
+        "platform": "sidearm",
+        "baseUrl": "https://gojsutigers.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {
@@ -12016,13 +10922,7 @@
         "lon": -90.207405,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "eastern-illinois",
@@ -12061,12 +10961,7 @@
         "lon": -88.175658,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "toledo",
@@ -12105,11 +11000,7 @@
         "lon": -83.614714,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "stonehill",
@@ -12148,12 +11039,7 @@
         "lon": -71.080632,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "incarnate-word",
@@ -12192,12 +11078,7 @@
         "lon": -98.46583,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "saint-peters",
@@ -12236,12 +11117,7 @@
         "lon": -74.071541,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "portland-state",
@@ -12280,11 +11156,7 @@
         "lon": -122.686289,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "wisconsin-green-bay",
@@ -12323,12 +11195,7 @@
         "lon": -87.919973,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "unlv",
@@ -12367,12 +11234,7 @@
         "lon": -115.138462,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "iona-university",
@@ -12411,11 +11273,7 @@
         "lon": -73.788046,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "sacramento-state",
@@ -12454,11 +11312,7 @@
         "lon": -121.423549,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "drexel",
@@ -12497,11 +11351,7 @@
         "lon": -75.190051,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "uc-davis",
@@ -12540,12 +11390,7 @@
         "lon": -121.749567,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "texas-am-corpus-christi",
@@ -12584,12 +11429,7 @@
         "lon": -97.32395,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "kennesaw-state",
@@ -12628,11 +11468,7 @@
         "lon": -84.583052,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "lehigh",
@@ -12671,11 +11507,7 @@
         "lon": -75.380236,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "valparaiso",
@@ -12714,11 +11546,7 @@
         "lon": -87.040172,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "american",
@@ -12757,11 +11585,7 @@
         "lon": -77.088875,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "utrgv",
@@ -12800,11 +11624,7 @@
         "lon": -98.173567,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "liu",
@@ -12843,12 +11663,7 @@
         "lon": -73.593678,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southern-utah",
@@ -12887,11 +11702,7 @@
         "lon": -113.070146,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "rider",
@@ -12930,12 +11741,7 @@
         "lon": -74.737833,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "san-jose-state",
@@ -12974,11 +11780,7 @@
         "lon": -121.880621,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "oakland",
@@ -13017,12 +11819,7 @@
         "lon": -83.216418,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "charleston-southern",
@@ -13061,12 +11858,7 @@
         "lon": -80.072587,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "queens",
@@ -13087,8 +11879,8 @@
       },
       "ids": {
         "scorecardUnitId": 199412,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 642,
+        "tdsSlug": "queens-(nc)",
         "wikipedia": null,
         "ncaaName": "Queens (NC)",
         "ncaaSlug": "queens-nc",
@@ -13105,13 +11897,7 @@
         "lon": -80.833509,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "ut-martin",
@@ -13150,12 +11936,7 @@
         "lon": -88.864211,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southern-mississippi",
@@ -13194,12 +11975,7 @@
         "lon": -89.331236,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "cleveland-state",
@@ -13238,11 +12014,7 @@
         "lon": -81.674355,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "alabama-am",
@@ -13281,12 +12053,7 @@
         "lon": -86.568502,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "albany",
@@ -13325,11 +12092,7 @@
         "lon": -73.824662,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "nevada",
@@ -13368,12 +12131,7 @@
         "lon": -119.815377,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "north-dakota-state",
@@ -13412,10 +12170,7 @@
         "lon": -96.800838,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "central-michigan",
@@ -13454,12 +12209,7 @@
         "lon": -84.77525,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "mount-st-marys",
@@ -13498,10 +12248,7 @@
         "lon": -77.351887,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "winthrop",
@@ -13540,12 +12287,7 @@
         "lon": -81.031404,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "mcneese-state",
@@ -13584,12 +12326,7 @@
         "lon": -93.217222,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "unc-asheville",
@@ -13628,11 +12365,7 @@
         "lon": -82.565392,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "northern-iowa",
@@ -13671,11 +12404,7 @@
         "lon": -92.459703,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "robert-morris",
@@ -13714,12 +12443,7 @@
         "lon": -80.210468,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "morehead-state",
@@ -13758,12 +12482,7 @@
         "lon": -83.434021,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "nicholls",
@@ -13802,10 +12521,7 @@
         "lon": -90.801571,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "west-georgia",
@@ -13844,13 +12560,7 @@
         "lon": -85.097762,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "temple",
@@ -13889,11 +12599,7 @@
         "lon": -75.156859,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "stetson",
@@ -13932,12 +12638,7 @@
         "lon": -81.300746,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "st-bonaventure",
@@ -13976,11 +12677,7 @@
         "lon": -78.481107,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "iu-indianapolis",
@@ -14019,11 +12716,7 @@
         "lon": -86.172217,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "the-citadel",
@@ -14062,10 +12755,7 @@
         "lon": -79.958775,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "mercyhurst",
@@ -14104,12 +12794,7 @@
         "lon": -80.053412,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "siue",
@@ -14148,11 +12833,7 @@
         "lon": -89.997779,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "alcorn-state",
@@ -14191,13 +12872,7 @@
         "lon": -91.142854,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "detroit-mercy",
@@ -14236,11 +12911,7 @@
         "lon": -83.139158,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "chicago-state",
@@ -14279,12 +12950,7 @@
         "lon": -87.609384,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "st-thomas",
@@ -14305,8 +12971,8 @@
       },
       "ids": {
         "scorecardUnitId": 174914,
-        "tdsClgId": null,
-        "tdsSlug": null,
+        "tdsClgId": 1411,
+        "tdsSlug": "st-thomas-(minn)",
         "wikipedia": null,
         "ncaaName": "St. Thomas (MN)",
         "ncaaSlug": "st-thomas-mn",
@@ -14323,13 +12989,7 @@
         "lon": -93.188986,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southeast-missouri-state",
@@ -14368,13 +13028,7 @@
         "lon": -89.531187,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "news"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "texas-southern",
@@ -14413,12 +13067,7 @@
         "lon": -95.361113,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "prairie-view-am",
@@ -14457,11 +13106,7 @@
         "lon": -95.989475,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "vmi",
@@ -14500,11 +13145,7 @@
         "lon": -79.437067,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "presbyterian",
@@ -14543,12 +13184,7 @@
         "lon": -81.87448,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "athletics",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "delaware-state",
@@ -14587,12 +13223,7 @@
         "lon": -75.54053,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "gardner-webb",
@@ -14631,12 +13262,7 @@
         "lon": -81.668141,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "uc-riverside",
@@ -14675,12 +13301,7 @@
         "lon": -117.32741,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "hampton-university",
@@ -14719,14 +13340,7 @@
         "lon": -76.339161,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "southern-university",
@@ -14765,13 +13379,7 @@
         "lon": -91.190105,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "mississippi-val",
@@ -14810,13 +13418,7 @@
         "lon": -90.341274,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "tds",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "le-moyne",
@@ -14855,12 +13457,7 @@
         "lon": -76.090435,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "purdue-fort-wayne",
@@ -14899,12 +13496,7 @@
         "lon": -85.108962,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "soccerwire"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "new-haven",
@@ -14943,12 +13535,7 @@
         "lon": -72.961472,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "saint-francis",
@@ -14987,13 +13574,7 @@
         "lon": -78.63904,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "western-illinois",
@@ -15032,12 +13613,7 @@
         "lon": -90.686899,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "south-carolina-state",
@@ -15076,12 +13652,7 @@
         "lon": -80.848722,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "alabama-state",
@@ -15120,12 +13691,7 @@
         "lon": -86.295677,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics"
-      ]
+      "onboardedAt": "2026-09-07"
     },
     {
       "slug": "arkansas-pine-bluff",
@@ -15164,13 +13730,7 @@
         "lon": -92.018683,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07",
-      "onboardIssues": [
-        "climate",
-        "wikipedia",
-        "athletics",
-        "tds"
-      ]
+      "onboardedAt": "2026-09-07"
     }
   ]
 }
