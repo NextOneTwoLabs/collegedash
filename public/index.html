@@ -82,7 +82,8 @@ tr:hover td { background: var(--row-hover); }
 .wordmark:hover { text-decoration: none; }
 .wordmark .accent { color: var(--accent); }
 .header-divider { width: 1px; height: 24px; background: var(--border); }
-.section-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+.section-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; text-decoration: none; }
+.section-label:hover { color: var(--accent-text); text-decoration: none; }
 .header-right { display: flex; align-items: center; gap: 14px; }
 .observed-top { font-size: 13px; font-weight: 500; color: var(--text-secondary); white-space: nowrap; }
 .header-link { font-size: 13px; font-weight: 600; color: var(--accent-text); white-space: nowrap; }
@@ -382,9 +383,9 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
     <button class="hamburger" id="sidebarToggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/></svg>
     </button>
-    <a class="wordmark" href="#/">next<span class="accent">one</span>two</a>
+    <a class="wordmark" href="https://www.nextonetwo.com">next<span class="accent">one</span>two</a>
     <div class="header-divider"></div>
-    <div class="section-label">College Soccer</div>
+    <a class="section-label" href="https://college.nextonetwo.com/">College Soccer</a>
   </div>
   <div class="header-right">
     <span class="observed-top" id="observedTop" title="When the data was last collected"></span>
