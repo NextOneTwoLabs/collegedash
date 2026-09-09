@@ -707,7 +707,8 @@ function route() {
   if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   if (view === 'faq') return go(renderFaq());
-  return go(renderList());
+  if (view === 'list') return go(renderList());
+  renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
 }
 window.addEventListener('hashchange', route);
 
@@ -722,6 +723,22 @@ function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', 
         ${subtitle ? `<div class="content-subtitle">${subtitle}</div>` : ''}</div>
       <div class="content-header-right"><div class="observed">${esc(observedText())}</div>${right ? `<div class="ext-links">${right}</div>` : ''}</div>
     </div>${tabs ? `<div class="view-tabs" role="tablist">${tabs}</div>` : ''}</div>`;
+}
+
+/* ---------- not found (unknown program slug or route): message, up to three "did you mean" links, keeps the URL ---------- */
+function renderNotFound({ title, message, suggestions = [] }) {
+  const did = suggestions.length ? `<p>Did you mean ${suggestions.map(p => `<a href="#/p/${esc(p.slug)}">${esc(p.name)}</a>`).join(', ')}?</p>` : '';
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Not found' }], title: esc(title) })
+    + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
+}
+// programs whose name a hash segment looks like: "stanfrod" and "program/stanford" both suggest Stanford
+function slugSuggestions(parts) {
+  const qs = parts.map(normText);
+  for (let cut = 0; cut <= 3; cut++) for (const q of qs) { // whole segments first, then with up to three characters trimmed off a typo
+    const m = q.length - cut >= 3 ? searchMatches(q.slice(0, q.length - cut).trim(), 3) : [];
+    if (m.length) return m.map(x => x.p);
+  }
+  return [];
 }
 
 /* ---------- charts (inline SVG, no library) ---------- */
@@ -948,8 +965,12 @@ function glanceHtml(p, row) {
 }
 async function renderProfile(slug, tab) {
   await loadIndex();
-  const p = await loadProfile(slug);
   const row = programBySlug(slug);
+  if (!row) return renderNotFound({ title: 'Program not found', message: `There is no program at <code>#/p/${esc(slug)}</code>.`, suggestions: slugSuggestions([slug]) });
+  let p;
+  try { p = await loadProfile(slug); }
+  catch { return renderNotFound({ title: 'Profile not built yet', message: `${esc(row.name)} is in the index but its profile has not been built yet. Check back after the next data refresh.` }); }
+  if (!TABS.some(([k]) => k === tab)) tab = 'overview';
   const app = $('#app');
   const s25 = (p.seasons || []).find(s => s.year === RPI_SEASON);
   const failed = p._build.failed || [];
