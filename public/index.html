@@ -428,6 +428,7 @@ const fmtUsd = v => v == null ? '—' : '$' + Number(v).toLocaleString();
 const dash = v => (v === null || v === undefined || v === '') ? '—' : v;
 const fmtDate = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); };
 const fmtDay = iso => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); };
+const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }; // local calendar date, not UTC
 const ordinal = n => n == null ? '—' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4 === n % 10 ? n % 10 : 0] || 'th');
 const rankStr = n => n == null ? '—' : '#' + n;
 const EXT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
@@ -929,9 +930,9 @@ function glanceHtml(p, row) {
   const cur = seasons.find(s => s.inProgress);
   const sch = p.school || {}, pr = p.program || {};
   // next unplayed game on or after today, and the most recent played one - from the schedule the profile already carries
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayLocal();
   const games = (p.schedule?.games || []).filter(g => g.date);
-  const nxt = games.filter(g => !g.result && g.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+  const nxt = games.filter(g => !g.result && !g.exhibition && g.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
   const last = games.filter(g => g.result).sort((a, b) => b.date.localeCompare(a.date))[0];
   const chip = r => r ? `<span class="form-chip inline ${r === 'W' ? 'w' : r === 'L' ? 'l' : 'd'}">${esc(r === 'T' ? 'D' : r)}</span>` : '';
   const at = g => g ? (g.homeAway === 'A' ? 'at ' : g.homeAway === 'N' ? 'vs ' : 'vs ') : '';
@@ -1169,13 +1170,17 @@ async function tabCommitments(p) {
 async function tabSchedule(p) {
   const s = p.schedule;
   if (!s) return '<div class="card empty">Schedule not collected yet.</div>';
-  const row = g => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
-    <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : '<span class="muted">upcoming</span>'}</td>
+  const today = todayLocal();
+  // unscored cell: future dates are upcoming; history and exhibitions were never recorded; a past date is a result we have not collected yet
+  const unscored = (g, isHist) => !g.date ? '—' : g.date >= today ? 'upcoming' : (isHist || g.exhibition) ? 'not recorded' : 'result pending';
+  const row = (g, isHist) => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
+    <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : `<span class="muted">${unscored(g, isHist)}</span>`}</td>
     <td class="small">${Object.entries(g.links || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(' · ')}</td></tr>`;
   const hist = Object.entries(s.history || {}).sort((a, b) => b[0] - a[0]);
-  return `<div class="card section"><h3>${s.season} season · ${esc(s.record.text)}${s.record.confText && s.record.confText !== '0-0-0' ? ` · ${esc(s.record.confText)} conference` : ''} <span class="muted small">(${s.record.played} of ${s.record.scheduled} played${s.record.exhibitions ? `, ${s.record.exhibitions} exhibition excluded` : ''})</span></h3>
-      <div class="tscroll"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${s.games.map(row).join('')}</table></div>${prov(s._meta)}</div>
-    ${hist.map(([y, h]) => `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>${y}</b> season · ${esc(h.record)}</summary><div class="tscroll" style="margin-top:8px"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${h.games.map(row).join('')}</table></div></details>`).join('')}`;
+  const pending = s.games.filter(g => !g.exhibition && !g.result && g.date && g.date < today).length;
+  return `<div class="card section"><h3>${s.season} season · ${esc(s.record.text)}${s.record.confText && s.record.confText !== '0-0-0' ? ` · ${esc(s.record.confText)} conference` : ''} <span class="muted small">(${s.record.played} of ${s.record.scheduled} played${pending ? `, ${pending} pending` : ''}${s.record.exhibitions ? `, ${s.record.exhibitions} exhibition excluded` : ''})</span></h3>
+      <div class="tscroll"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${s.games.map(g => row(g, false)).join('')}</table></div>${prov(s._meta)}</div>
+    ${hist.map(([y, h]) => `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>${y}</b> season · ${esc(h.record)}</summary><div class="tscroll" style="margin-top:8px"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${h.games.map(g => row(g, true)).join('')}</table></div></details>`).join('')}`;
 }
 
 async function tabNews(p) {
