@@ -1171,10 +1171,10 @@ async function tabSchedule(p) {
   const s = p.schedule;
   if (!s) return '<div class="card empty">Schedule not collected yet.</div>';
   const today = todayLocal();
-  // unscored cell: history and exhibitions were never recorded; a past date is a result we have not collected yet
-  const unscored = (g, hist) => !g.date ? '—' : (hist || g.exhibition) ? 'not recorded' : g.date < today ? 'result pending' : 'upcoming';
-  const row = (g, hist) => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
-    <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : `<span class="muted">${unscored(g, hist)}</span>`}</td>
+  // unscored cell: future dates are upcoming; history and exhibitions were never recorded; a past date is a result we have not collected yet
+  const unscored = (g, isHist) => !g.date ? '—' : g.date >= today ? 'upcoming' : (isHist || g.exhibition) ? 'not recorded' : 'result pending';
+  const row = (g, isHist) => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
+    <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : `<span class="muted">${unscored(g, isHist)}</span>`}</td>
     <td class="small">${Object.entries(g.links || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(' · ')}</td></tr>`;
   const hist = Object.entries(s.history || {}).sort((a, b) => b[0] - a[0]);
   const pending = s.games.filter(g => !g.exhibition && !g.result && g.date && g.date < today).length;
