@@ -414,7 +414,7 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
    ===================================================================== */
 const S = {
   index: null, profiles: {}, refresh: null, local: false,
-  favorites: new Set(), compare: [], q: '',
+  favorites: new Set(), compare: [], q: '', qRaw: '',
   filters: { conf: [], region: [], sort: 'rpi', classYear: [], view: 'cards', moreStats: false }, // conf/region/classYear: [] = all
   sidebarTab: 'programs', residency: '',
 };
@@ -621,7 +621,7 @@ function renderSidebar() {
     const years = S.index.season?.gradYears || [];
     body = `
       <div class="sidebar-section-title">Find a program</div>
-      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc($('#q')?.value || '')}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.q ? '' : 'hidden'}>✕</button></div>
+      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
       <div class="search-status" id="qStatus"></div>
       <div class="sidebar-section-title">Browse</div>
       <div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
@@ -678,7 +678,7 @@ document.addEventListener('keydown', e => {
 /* ---------- search box ---------- */
 let qTimer = null;
 function setQuery(v) {
-  S.q = normText(v);
+  S.qRaw = v; S.q = normText(v);
   const clr = $('#qClear'); if (clr) clr.hidden = !v;
   clearTimeout(qTimer);
   qTimer = setTimeout(() => { updateSearchStatus(); if (currentView() === 'list' || currentView() === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
@@ -845,11 +845,11 @@ async function renderList() {
   if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
-  if (S.q) bits.push(`matching “${esc(S.q)}”`);
+  if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
   bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
   const tabs = [['cards', 'Cards'], ['table', 'Table']].map(([k, l]) => `<button class="view-tab${f.view === k ? ' active' : ''}" role="tab" aria-selected="${f.view === k}" data-view="${k}">${l}</button>`).join('');
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
-  const empty = S.q ? `<div class="empty">No programs match “${esc(S.q)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
+  const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${body}</div>`;
   const app = $('#app');
