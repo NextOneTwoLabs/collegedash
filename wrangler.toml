@@ -1,10 +1,10 @@
 # Cloudflare Workers config for the site.
 #
 # The site is the static files in public/ - the same directory `python collegedash.py serve`
-# serves locally, so the deployed site is byte-identical to a local run. The tiny worker.js only
-# redirects the workers.dev address to the canonical custom domain; it runs ahead of the assets
-# for "/" alone, so everything else is served as free static assets without invoking the Worker.
-# Write endpoints (/api/*) exist only in the local server.
+# serves locally, so the deployed site is byte-identical to a local run. worker.js redirects the
+# workers.dev address to the canonical custom domain and answers two small endpoints,
+# GET /api/status and POST /api/feedback. It runs ahead of the assets for "/" and "/api/*" only,
+# so every other file is served as a free static asset without invoking the Worker.
 #
 # Canonical address: https://college.nextonetwo.com  (custom domain, attached to this Worker in
 # the Cloudflare dashboard under Settings -> Domains & Routes).
@@ -16,4 +16,25 @@ compatibility_date = "2026-08-31"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = ["/"]
+# "/api/*" is listed for explicitness only. A path with no matching asset already falls through
+# to the Worker, which is why /api/status used to 404 (issue #11).
+run_worker_first = ["/", "/api/*"]
+
+# Visitor feedback queue (issue #41). One key per submission; see the Triage section of README.md.
+#
+# !!! PLACEHOLDER - the id below is not a real namespace and this Worker will not deploy until it
+# !!! is replaced. Owner setup: `npx wrangler kv namespace create FEEDBACK` prints an id; paste it
+# !!! here and commit. The id is an identifier, not a credential, so committing it is correct.
+[[kv_namespaces]]
+binding = "FEEDBACK"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+# Kill switch for POST /api/feedback. "1" enables it; anything else returns 503 and writes
+# nothing, which is how this ships. Turn it on only after the KV namespace id above is real and
+# the Cloudflare rate-limiting rule on /api/feedback exists.
+#
+# `wrangler deploy` replaces plaintext vars with the values in this file, so a dashboard edit
+# survives only until the next deploy - and the daily refresh push to main deploys. A dashboard
+# flip is fine for an emergency stop within the hour; the durable setting is a commit here.
+FEEDBACK_ENABLED = "0"
