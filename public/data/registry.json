@@ -1,5 +1,5 @@
 {
-  "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>",
+  "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>. Optional per-program athletics.campsUrl points the camps collector straight at the program's camp page (skips the nav search and any skipReason); athletics.campsNote is free text for humans.",
   "updated": "2026-09-07",
   "division": "D1",
   "season": {

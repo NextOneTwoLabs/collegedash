@@ -22,6 +22,7 @@ import re
 import tempfile
 import time
 import unicodedata
+from urllib import robotparser
 
 import requests
 
@@ -155,11 +156,80 @@ def _polite_wait(url: str) -> None:
     host = _host(url)
     last = _last_request_at.get(host)
     if last is not None:
-        gap = MIN_GAP_SECONDS + random.uniform(0, 0.8)
+        gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, 0.8)
         elapsed = time.monotonic() - last
         if elapsed < gap:
             time.sleep(gap - elapsed)
     _last_request_at[host] = time.monotonic()
+
+
+# ---------- robots.txt ----------
+# Hosts outside the athletics sites (camp vendors, coaches' own sites) are checked against their
+# robots.txt before a request is made. Cached per host for the life of the process (never on disk,
+# so a denied host leaves no trace in .cache/http). A Crawl-delay for '*' raises that host's gap
+# between requests above MIN_GAP_SECONDS.
+_robots: dict[str, "robotparser.RobotFileParser"] = {}
+_host_delay: dict[str, float] = {}
+ROBOTS_AGENT = "*"
+
+
+def set_robots_txt(host: str, text: str | None) -> None:
+    """Seed the robots cache for `host` (tests, offline runs). None = no robots.txt (allow all)."""
+    rp = robotparser.RobotFileParser()
+    if text is None:
+        rp.allow_all = True
+    else:
+        rp.parse(text.splitlines())
+    _robots[host] = rp
+    _apply_crawl_delay(host, rp)
+
+
+def _apply_crawl_delay(host: str, rp) -> None:
+    try:
+        delay = rp.crawl_delay(ROBOTS_AGENT)
+    except Exception:  # robotparser raises on a parser that has not been fed
+        delay = None
+    if delay and float(delay) > MIN_GAP_SECONDS:
+        _host_delay[host] = min(float(delay), 30.0)
+        log(f"robots: {host} asks Crawl-delay {delay}s; using {_host_delay[host]:.0f}s between requests")
+
+
+def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
+    rp = robotparser.RobotFileParser()
+    if os.environ.get("COLLEGEDASH_OFFLINE"):
+        rp.disallow_all = True  # unknown = do not fetch
+        return rp
+    url = f"{scheme}://{host}/robots.txt"
+    try:
+        _polite_wait(url)
+        resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=20)
+    except requests.RequestException as e:
+        log(f"robots: {host} unreachable ({type(e).__name__}); treating as disallowed")
+        rp.disallow_all = True
+        return rp
+    if 200 <= resp.status_code < 300:
+        rp.parse(resp.text.splitlines())
+    elif 400 <= resp.status_code < 500:
+        rp.allow_all = True  # no robots.txt = no restrictions
+    else:
+        log(f"robots: {host} returned HTTP {resp.status_code}; treating as disallowed")
+        rp.disallow_all = True
+    return rp
+
+
+def robots_allowed(url: str) -> bool:
+    """True when `url` may be fetched under the host's robots.txt (agent '*'). 4xx = allowed;
+    unreachable or 5xx = disallowed. Records the host's Crawl-delay for _polite_wait."""
+    m = re.match(r"^(https?)://([^/]+)", url)
+    if not m:
+        return False
+    scheme, host = m.group(1), m.group(2).lower()
+    rp = _robots.get(host)
+    if rp is None:
+        rp = _load_robots(host, scheme)
+        _robots[host] = rp
+        _apply_crawl_delay(host, rp)
+    return rp.can_fetch(ROBOTS_AGENT, url)
 
 
 def fetch(

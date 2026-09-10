@@ -917,13 +917,13 @@ async function renderShortlist() {
 }
 
 /* ---------- profile ---------- */
-const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['climate', 'Climate'], ['history', 'History & RPI'], ['staff', 'Staff'], ['roster', 'Roster'], ['commitments', 'Commitments'], ['schedule', 'Schedule'], ['news', 'News']];
+const TABS = [['overview', 'Overview'], ['school', 'School & Location'], ['climate', 'Climate'], ['history', 'History & RPI'], ['staff', 'Staff'], ['roster', 'Roster'], ['commitments', 'Commitments'], ['schedule', 'Schedule'], ['news', 'News'], ['camps', 'ID Camps']];
 function prov(meta, extra) {
   if (!meta) return '';
   const items = Array.isArray(meta) ? meta : [meta];
   return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · checked ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
 }
-const LINK_LABELS = { athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' };
+const LINK_LABELS = { athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', camps: 'Camps', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' };
 function glanceHtml(p, row) {
   const seasons = p.seasons || [];
   const s25 = seasons.find(s => s.year === RPI_SEASON);
@@ -976,7 +976,7 @@ async function renderProfile(slug, tab) {
   const s25 = (p.seasons || []).find(s => s.year === RPI_SEASON);
   const failed = p._build.failed || [];
   const notices = [];
-  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
+  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
@@ -985,7 +985,7 @@ async function renderProfile(slug, tab) {
   const tabs = TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${l}</a>`).join('');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: p.shortName || p.name }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
-  const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews }[tab] || tabOverview;
+  const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
   el.innerHTML = await fn(p);
   wireCharts(el);
@@ -1189,6 +1189,48 @@ async function tabNews(p) {
   const li = it => `<li><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a> <span class="muted small">${fmtDate(it.date)}</span></li>`;
   return `<div class="grid g2"><div class="card"><h3>Recruiting-related</h3>${n.recruiting.length ? `<ul style="padding-left:18px">${n.recruiting.map(li).join('')}</ul>` : '<div class="empty">Nothing recruiting-related in the archive yet (signing-day releases usually land in November and February).</div>'}</div>
     <div class="card"><h3>Latest</h3><ul style="padding-left:18px">${n.latest.map(li).join('')}</ul>${prov(n._meta)}</div></div>`;
+}
+
+async function tabCamps(p) {
+  // p.camps: { url, hubUrl, finalUrl, host, vendor, discoveredVia, robotsBlocked, fetchError, items[], _meta[] }
+  // items carry kind (camp | news | curated), startDate/endDate (YYYY-MM-DD, or YYYY-MM when precision is
+  // 'month'), dateText, confidence ('heuristic' = read automatically from page text). upcoming/past is
+  // decided here with today's local date: the site is static and rebuilt once a day.
+  const c = p.camps;
+  const skipped = (p._build.skipped || []).find(s => s.collector === 'camps');
+  if (!c) return skipped
+    ? `<div class="card empty">Camp information is not collected for this program: ${esc(skipped.reason.replace(/^camps: /, '').replace(/ \(registry [^)]*\)$/, ''))}. Check the ${extLink(p.links.athletics, 'athletics site')} directly.</div>`
+    : '<div class="card empty">Camp info not collected yet.</div>';
+  const today = todayLocal(), month = today.slice(0, 7);
+  const asOf = c._meta?.[0]?.asOf;
+  const checked = asOf ? ` (checked ${fmtDate(asOf)})` : '';
+  const isPast = it => it.precision === 'month' ? it.startDate < month : (it.endDate || it.startDate) < today;
+  const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
+  const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
+  const when = it => it.precision === 'month' ? esc(it.dateText || it.startDate)
+    : it.endDate && it.endDate !== it.startDate ? `${fmtDate(it.startDate)} – ${fmtDate(it.endDate)}` : fmtDate(it.startDate);
+  const badges = (it, old) => [
+    old ? '<span class="badge">past</span>' : '',
+    it.kind === 'news' ? '<span class="badge">from news release</span>' : it.kind === 'curated' ? '<span class="badge">curated</span>' : '',
+    it.confidence === 'heuristic' ? '<span class="badge" title="Read automatically from the page text; confirm with the source before relying on it">auto-detected</span>' : '',
+    it.yearInferred ? '<span class="badge" title="The source gave no year; it was inferred from the release date">year inferred</span>' : '',
+  ].filter(Boolean).join(' ');
+  const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
+    <td><b>${esc(it.name)}</b> ${badges(it, old)}${it.kind === 'news' && it.newsTitle && it.newsTitle !== it.name ? `<div class="small muted">${esc(it.newsTitle)}</div>` : ''}</td>
+    <td class="small">${esc([it.location, it.ages, it.price].filter(Boolean).join(' · '))}</td>
+    <td class="small">${[it.registerUrl ? `<a href="${esc(it.registerUrl)}" target="_blank" rel="noopener">register</a>` : '', it.sourceUrl ? `<a href="${esc(it.sourceUrl)}" target="_blank" rel="noopener">source</a>` : ''].filter(Boolean).join(' · ')}</td></tr>`;
+  const table = (rows, old) => `<div class="tscroll"><table><tr><th>When</th><th>Camp</th><th>Details</th><th>Links</th></tr>${rows.map(it => row(it, old)).join('')}</table></div>`;
+  const shown = c.finalUrl || c.url;
+  const linkCard = c.url
+    ? `<div class="card"><h3>Camp information</h3><p>${extLink(shown, `Camp page on ${c.host || shown}`)}${c.discoveredVia === 'registry' ? '' : ' <span class="muted small">(auto-detected from the athletics site navigation)</span>'}${c.hubUrl ? `<br><span class="small muted">via the all-sports camps page: <a href="${esc(c.hubUrl)}" target="_blank" rel="noopener">${esc(c.hubUrl)}</a></span>` : ''}</p>
+        ${c.robotsBlocked ? '<p class="small muted">This site asks automated readers not to open it (robots.txt), so only the link is shown here; open it to see dates.</p>' : ''}
+        ${c.fetchError ? '<p class="small muted">The camp page could not be read on the last check; open it directly.</p>' : ''}</div>`
+    : `<div class="card empty">We could not find a camp page on the athletics site${checked}. Camps are usually announced in spring; try the ${extLink(p.links.athletics, 'athletics site')} directly.</div>`;
+  const list = upcoming.length ? `<div class="card section"><h3>Upcoming camps</h3>${table(upcoming, false)}</div>`
+    : (c.url && !c.robotsBlocked && !c.fetchError) ? `<div class="card empty">No upcoming ID camps listed on the camp page${checked}. Open the camp page for the latest dates.</div>` : '';
+  const pastHtml = past.length ? `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>Past camps</b> · ${past.length}</summary><div style="margin-top:8px">${table(past, true)}</div></details>` : '';
+  const undatedHtml = undated.length ? `<div class="card section"><h3>Announced without a date</h3>${table(undated, false)}</div>` : '';
+  return `${linkCard}${list}${pastHtml}${undatedHtml}${prov(c._meta, 'Camp entries are read automatically from the camp page and news releases; confirm dates and prices with the school before registering.')}`;
 }
 
 

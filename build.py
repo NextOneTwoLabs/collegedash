@@ -21,6 +21,10 @@ from collect import common
 from collect.commitments_tds import record_key
 
 CURRENT_SEASON_FALLBACK = dt.date.today().year
+# Sources whose absence is not staleness: a program never collected for camps (new program, collector
+# not yet run) shows "not collected yet" in the UI instead of a stale banner. They are also not in
+# the completeness checks.
+OPTIONAL_ENVS = {"camps"}
 GRADUATING = {"SR", "R-SR", "GR"}
 POS_ORDER = ["GK", "D", "M", "F"]
 CLASS_ORDER = ["FR", "R-FR", "SO", "R-SO", "JR", "R-JR", "SR", "R-SR", "GR"]
@@ -318,6 +322,44 @@ def build_schedule(ath) -> dict | None:
             "_meta": _meta(ath, (ath or {}).get("scheduleUrl"))}
 
 
+# ---------- camps ----------
+
+def build_camps(camps, news, curated) -> dict | None:
+    """ID camps section: the camp page (link, host, vendor, robots state) plus one merged list of
+    entries with `kind`: "camp" (extracted from the camp page), "news" (announced in a news
+    release), "curated" (hand-written curated.camps[]). Dated entries first by start date, undated
+    last; a news entry that repeats a camp-page entry (same start date, same name) is dropped.
+    `upcoming` is not computed here: the site is static, so the UI splits on today's date."""
+    if not camps and not (curated.get("camps") or []):
+        return None
+    c = (camps or {}).get("data") or {}
+    items = []
+    for e in c.get("camps") or []:
+        items.append({**e, "kind": "camp"})
+    for e in c.get("newsCamps") or []:
+        items.append({**e, "kind": "news"})
+    for e in curated.get("camps") or []:
+        if isinstance(e, dict) and e.get("name"):
+            items.append({"startDate": None, "endDate": None, "dateText": None, "precision": "day" if e.get("startDate") else None,
+                          "yearInferred": False, "location": None, "ages": None, "price": None, "registerUrl": None,
+                          "sourceUrl": None, "confidence": "curated", **e, "kind": "curated"})
+    seen, merged = set(), []
+    for it in items:
+        key = (it.get("startDate"), re.sub(r"\W+", "", (it.get("name") or "").lower())[:40])
+        if it.get("startDate") and key in seen:
+            continue
+        seen.add(key)
+        merged.append(it)
+    merged.sort(key=lambda it: (it.get("startDate") is None, it.get("startDate") or "", it.get("name") or ""))
+    metas = [_meta(camps)] if camps else []
+    if news and any(it["kind"] == "news" for it in merged):
+        metas.append(_meta(news))
+    return {"url": c.get("campsUrl"), "hubUrl": c.get("hubUrl"), "finalUrl": c.get("finalUrl"), "host": c.get("host"),
+            "vendor": c.get("vendor"), "pageTitle": c.get("pageTitle"), "discoveredVia": c.get("discoveredVia"),
+            "robotsBlocked": bool(c.get("robotsBlocked")), "fetchError": c.get("fetchError"),
+            "newsScanned": c.get("newsScanned", 0), "items": merged, "_meta": metas}
+
+
 # ---------- commitments ----------
 
 def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> list[dict]:
@@ -442,7 +484,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
     slug = program["slug"]
     S = lambda n: common.load_source(slug, n)
     scorecard, climate, wiki, ath = S("scorecard"), S("climate"), S("wikipedia"), S("athletics")
-    tds, sw, news = S("commitments.tds"), S("commitments.soccerwire"), S("news")
+    tds, sw, news, camps = S("commitments.tds"), S("commitments.soccerwire"), S("news"), S("camps")
     curated = common.load_curated(slug)
     reviewed = common.load_reviewed(slug)
 
@@ -455,6 +497,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
         "links": {
             "athletics": a["baseUrl"] + a["sportPath"], "roster": a["baseUrl"] + a["sportPath"] + "/roster",
             "schedule": a["baseUrl"] + a["sportPath"] + "/schedule", "news": a["baseUrl"] + a["sportPath"] + "/news",
+            "camps": ((camps or {}).get("data") or {}).get("finalUrl") or ((camps or {}).get("data") or {}).get("campsUrl"),
             "tds": (registry["sources"]["tds"]["team"].format(tdsSlug=program["ids"]["tdsSlug"], tdsClgId=program["ids"]["tdsClgId"])
                     if program["ids"].get("tdsClgId") and program["ids"].get("tdsSlug") else None),
             "wikipedia": (wiki or {}).get("data", {}).get("pageUrl"),
@@ -471,6 +514,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
         "commitments": resolve_commitments(program, tds, sw, reviewed, news, roster, registry),
         "news": ({"recruiting": (news["data"].get("recruitingItems") or [])[:25], "latest": (news["data"].get("items") or [])[:12],
                   "_meta": _meta(news)} if news else None),
+        "camps": build_camps(camps, news, curated),
         "curated": {k: v for k, v in curated.items() if not k.startswith("_") and k != "overrides"},
     }
     # curated overrides: {"program": {"headCoach": {"since": 2003}}, "school": {...}}
@@ -483,7 +527,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
         commits_by_year[str(c["gradYear"])] += 1
     profile["commitmentsByYear"] = dict(sorted(commits_by_year.items()))
     envs = {"athletics": ath, "tds": tds, "soccerwire": sw, "news": news, "scorecard": scorecard,
-            "climate": climate, "wikipedia": wiki}
+            "climate": climate, "wikipedia": wiki, "camps": camps}
     profile["_build"] = _build_meta(profile, envs, collector_outcomes(slug, state or {}))
     return profile
 
@@ -527,14 +571,15 @@ def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], []
         "commitments": bool(profile.get("commitments")),
         "news": bool(profile.get("news")),
     }  # hand-written curated fields are optional and do not count
-    thresholds = {"athletics": 14, "tds": 3, "soccerwire": 3, "news": 7, "scorecard": 120, "climate": 400, "wikipedia": 45}
+    thresholds = {"athletics": 14, "tds": 3, "soccerwire": 3, "news": 7, "scorecard": 120, "climate": 400, "wikipedia": 45,
+                  "camps": 45}
     failed, skipped = outcomes
     skipped_names = {s["collector"] for s in skipped}
     stale = []
     for k, env in envs.items():
         age = _age_days((env or {}).get("fetchedAt"))
         if env is None:
-            if k not in skipped_names:  # a deliberate skip (no article, no TDS id) is not staleness
+            if k not in skipped_names and k not in OPTIONAL_ENVS:  # a deliberate skip (no article, no TDS id) is not staleness
                 stale.append(f"{k}: never collected")
         elif age is not None and age > thresholds.get(k, 30):
             stale.append(f"{k}: {age:.0f}d old")
