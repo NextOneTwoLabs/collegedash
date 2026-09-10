@@ -19,8 +19,11 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_MESSAGE = 2000;
 // The hash route the visitor was on, e.g. "#/p/stanford/roster", and the program slug when the
 // page had one. This site has 350 program pages, so the page is the difference between an
-// actionable report and a vague one.
+// actionable report and a vague one. Both have a shape, so both are checked against one: the
+// route must be a hash route anchored at "#/" with no whitespace, which keeps arbitrary text out
+// of the record structurally rather than by documentation.
 const MAX_ROUTE = 200;
+const ROUTE = /^#\/\S*$/;
 const SLUG = /^[a-z0-9-]{1,64}$/;
 
 export default {
@@ -29,7 +32,14 @@ export default {
 
     // /api/* is routed before the workers.dev redirect below: a 301 is downgraded to GET by most
     // clients, so redirecting a POST would silently turn a submission into a page view.
-    if (url.pathname === '/api/status') return Response.json({ local: false });
+    if (url.pathname === '/api/status') {
+      // GET/HEAD only, the same shape of guard the feedback handler uses: a status read is not a
+      // place to accept a DELETE and answer 200.
+      if (request.method !== 'GET' && request.method !== 'HEAD') {
+        return new Response('Method not allowed', { status: 405, headers: { allow: 'GET, HEAD' } });
+      }
+      return Response.json({ local: false });
+    }
     if (url.pathname === '/api/feedback') return feedback(request, env);
 
     if (url.hostname.endsWith('.workers.dev')) {
@@ -74,7 +84,8 @@ async function feedback(request, env) {
 
   // Context, both capped and both dropped silently if they do not fit the shape: they are a
   // convenience for triage, never a reason to refuse a submission.
-  const route = String(body.route || '').trim().slice(0, MAX_ROUTE);
+  const hash = String(body.route || '').trim().slice(0, MAX_ROUTE);
+  const route = ROUTE.test(hash) ? hash : '';
   const slug = String(body.program || '').trim();
   const program = SLUG.test(slug) ? slug : '';
 
@@ -84,9 +95,8 @@ async function feedback(request, env) {
 
   // One key per submission. The email cannot be the key: it is optional and not unique. The ISO
   // timestamp makes `kv key list` come back in chronological order and readable by eye; the random
-  // suffix keeps two submissions in the same millisecond apart. Repeating the email and the route
-  // as metadata lets a listing show the context and whether there is a reply address without
-  // fetching every record.
+  // suffix keeps two submissions in the same millisecond apart. Repeating the email as metadata
+  // lets a listing show whether there is a reply address without fetching every record.
   const suffix = [...crypto.getRandomValues(new Uint8Array(4))]
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
@@ -94,8 +104,18 @@ async function feedback(request, env) {
   if (email) record.email = email;
   if (route) record.route = route;
   if (program) record.program = program;
-  await env.FEEDBACK.put(`${record.sent}-${suffix}`, JSON.stringify(record), {
-    metadata: { email: email || null, route: route || null },
-  });
+  try {
+    await env.FEEDBACK.put(`${record.sent}-${suffix}`, JSON.stringify(record), {
+      // Metadata stays minimal - the one field a listing needs - because KV caps it at 1024 bytes
+      // and rejects the whole write when it is exceeded. A 254-character email alone leaves room;
+      // adding the route as well crosses the limit for a long pair, and the route is already in
+      // the record value, which is what triage reads.
+      metadata: { email: email || null },
+    });
+  } catch {
+    // A rejected or failed write - the account-wide 1,000-writes-a-day budget exhausted, KV
+    // unavailable - takes the clean error path. Left to throw it would escape fetch() as a 500.
+    return reply(503, 'Feedback is unavailable right now.');
+  }
   return reply(200);
 }

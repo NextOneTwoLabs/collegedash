@@ -93,8 +93,8 @@ test('a missing binding is a clean 503, not a 500', async () => {
   assert.equal(json.error, 'Feedback is unavailable right now.');
 });
 
-// wrangler.toml ships without a [[kv_namespaces]] binding, because a placeholder id fails the
-// build and freezes the site. This is what the deployed Worker does until the real id lands: only
+// wrangler.toml does bind the namespace (wrangler.toml:28-30), so this is not the shipped state;
+// it is the fail-closed path for the day the binding is missing or misconfigured. Only
 // /api/feedback is out, and "/" is run_worker_first, so the home page has to keep working.
 test('with no FEEDBACK binding the rest of the Worker is unaffected', async () => {
   const env = { ASSETS: { fetch: () => new Response('the home page', { status: 200 }) } };
@@ -116,7 +116,7 @@ test('route and program are capped and stored when they fit', async () => {
   const record = JSON.parse(kept.env.puts[0].value);
   assert.equal(record.route, '#/p/stanford/roster');
   assert.equal(record.program, 'stanford');
-  assert.equal(kept.env.puts[0].opts.metadata.route, '#/p/stanford/roster');
+  assert.deepEqual(Object.keys(kept.env.puts[0].opts.metadata), ['email'], 'metadata is email only');
 
   const capped = await send({ message: 'hi', route: '#/' + 'a'.repeat(500), program: 'Not A Slug' });
   const trimmed = JSON.parse(capped.env.puts[0].value);
@@ -130,4 +130,94 @@ test('keys are <ISO>-<8 hex> and sort chronologically', async () => {
   const keys = env.puts.map((p) => p.key);
   for (const key of keys) assert.match(key, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z-[0-9a-f]{8}$/);
   assert.deepEqual(keys.map((k) => k.slice(0, 24)), [...keys.map((k) => k.slice(0, 24))].sort());
+});
+
+test('a route that is not a #/ hash route is dropped, a valid one is stored', async () => {
+  for (const route of ['javascript:alert(1)', 'https://example.com/#/p/x', 'p/stanford', '#p/stanford', '#/ has a space', '#']) {
+    const { res, env } = await send({ message: 'hi', route });
+    assert.equal(res.status, 200, route);
+    assert.ok(!('route' in JSON.parse(env.puts[0].value)), `dropped: ${route}`);
+  }
+  for (const route of ['#/', '#/p/stanford/roster', '#/faq']) {
+    const { env } = await send({ message: 'hi', route });
+    assert.equal(JSON.parse(env.puts[0].value).route, route);
+  }
+});
+
+// KV rejects a write whose metadata exceeds 1024 bytes, and a rejected write loses the submission.
+// Storing the route alongside the email was measured at 1371 bytes for the pair below, so the
+// metadata is now the email alone; the route stays in the record value, where triage reads it.
+test('metadata stays under the 1024-byte KV limit for the longest legal email and route', async () => {
+  const email = '漢'.repeat(125) + '@' + '漢'.repeat(124) + '.' + '漢';
+  const route = '#/' + '漢'.repeat(198);
+  assert.equal(email.length, 252, 'passes the 254 cap');
+  assert.equal(route.length, 200, 'at MAX_ROUTE');
+
+  const { res, env } = await send({ message: 'hi', email, route });
+  assert.equal(res.status, 200);
+  const { metadata } = env.puts[0].opts;
+  const bytes = (value) => new TextEncoder().encode(JSON.stringify(value)).length;
+  assert.ok(bytes(metadata) < 1024, `metadata is ${bytes(metadata)} bytes`);
+  assert.deepEqual(Object.keys(metadata), ['email']);
+  assert.ok(bytes({ ...metadata, route }) > 1024, 'the dropped field is what used to cross the limit');
+  assert.equal(JSON.parse(env.puts[0].value).route, route, 'the route is still in the record');
+});
+
+test('a KV write that fails is a clean 503, not a 500 and not an uncaught throw', async () => {
+  const throws = { FEEDBACK: { put: () => { throw new Error('metadata too large'); } } };
+  const rejects = { FEEDBACK: { put: async () => { throw new Error('KV unavailable'); } } };
+  for (const env of [throws, rejects]) {
+    const res = await post({ message: 'hi' }, env);
+    assert.equal(res.status, 503);
+    assert.equal((await res.json()).error, 'Feedback is unavailable right now.');
+  }
+});
+
+test('/api/status answers GET and HEAD, and 405s anything else', async () => {
+  const env = stubEnv();
+  const status = (method) =>
+    worker.fetch(new Request('https://college.nextonetwo.com/api/status', { method }), env);
+
+  for (const method of ['GET', 'HEAD']) {
+    const res = await status(method);
+    assert.equal(res.status, 200, method);
+  }
+  assert.deepEqual(await (await status('GET')).json(), { local: false });
+
+  for (const method of ['DELETE', 'POST', 'PUT']) {
+    const res = await status(method);
+    assert.equal(res.status, 405, method);
+    assert.equal(res.headers.get('allow'), 'GET, HEAD');
+  }
+});
+
+// /api/* is matched ahead of the workers.dev redirect. That order is the point of the routing:
+// a 301 is downgraded to GET by most clients, so a redirected POST would become a page view.
+test('workers.dev redirects the page but not /api/*', async () => {
+  const env = { ...stubEnv(), ASSETS: { fetch: () => new Response('assets', { status: 200 }) } };
+  const workersDev = 'https://collegedash.nextonetwolabs.workers.dev';
+
+  const deep = await worker.fetch(new Request(`${workersDev}/#/p/stanford/roster`), env);
+  assert.equal(deep.status, 301);
+  assert.equal(
+    deep.headers.get('location'),
+    'https://college.nextonetwo.com/#/p/stanford/roster',
+    'the canonical host, with the deep-link fragment intact',
+  );
+
+  const submission = await worker.fetch(
+    new Request(`${workersDev}/api/feedback`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ message: 'from the workers.dev host' }),
+    }),
+    env,
+  );
+  assert.equal(submission.status, 200, 'handled, not redirected');
+  assert.equal(env.puts.length, 1);
+  assert.equal(JSON.parse(env.puts[0].value).message, 'from the workers.dev host');
+
+  const status = await worker.fetch(new Request(`${workersDev}/api/status`), env);
+  assert.equal(status.status, 200);
+  assert.deepEqual(await status.json(), { local: false });
 });

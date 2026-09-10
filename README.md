@@ -111,9 +111,10 @@ repository `NextOneTwoLabs/collegedash`, branch `main`, build command empty, dep
   (Settings → Domains & Routes; the `nextonetwo.com` zone lives in the same account, so DNS and the
   certificate are managed automatically).
 - `https://collegedash.nextonetwolabs.workers.dev` permanently redirects there (`worker.js` runs ahead of
-  the assets for `/` and `/api/*` only, so a page view costs one Worker request and every other file is a
-  free static asset). Deep-link `#` fragments survive the redirect. `/api/*` is matched *before* the
-  redirect, because a 301 downgrades a POST to a GET in most clients.
+  the assets for `/` and `/api/*` only, so a page view costs two Worker requests — the page itself and the
+  `GET /api/status` the front end makes on every load to decide whether write actions are available — and
+  every other file is a free static asset). Deep-link `#` fragments survive the redirect. `/api/*` is
+  matched *before* the redirect, because a 301 downgrades a POST to a GET in most clients.
 - The daily refresh needs no secret; add `SCORECARD_API_KEY` under the repo's Actions secrets to lift the
   DEMO_KEY rate limit on school-facts refreshes.
 
@@ -144,14 +145,17 @@ per submission into the `FEEDBACK` KV namespace:
     value:    { "sent": "<ISO 8601>", "message": "<what the visitor typed>",
                 "email": "<optional>", "route": "<optional, e.g. #/p/stanford/roster>",
                 "program": "<optional slug>" }
-    metadata: { "email": "<the same address, or null>", "route": "<the same route, or null>" }
+    metadata: { "email": "<the same address, or null>" }
 
 The email cannot be the key: it is optional and not unique. Optional fields are left out of the value
 entirely when they are absent. The timestamp prefix makes a listing come back in chronological order and
-readable by eye; the random suffix keeps two submissions in the same millisecond apart. The email and the
-route are repeated as metadata so a listing shows which of the 350 program pages someone was on, and
-whether there is a reply address, without fetching every record. No IP address and no user agent is
-stored, and nothing submitted is ever rendered back into the site.
+readable by eye; the random suffix keeps two submissions in the same millisecond apart. The email alone is
+repeated as metadata, so a listing shows whether there is a reply address without fetching every record;
+the route is not, because KV caps metadata at 1024 bytes and rejects the whole write when it is exceeded,
+and a long email plus a long route crosses that line. The route is in the value, which is what triage
+reads. A write that fails anyway returns the same error the form shows for an unavailable service, rather
+than a 500. No IP address and no user agent is stored, and nothing submitted is ever rendered back into
+the site.
 
 **The message is free text.** It can contain anything a visitor chooses to type, including a name, a
 school, a club, or contact details the site never asked for and cannot validate. It is stored in plain

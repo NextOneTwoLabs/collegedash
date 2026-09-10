@@ -424,7 +424,7 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
           <label for="feedbackEmail">Email (optional, for a reply)</label>
           <input id="feedbackEmail" type="email" name="email" autocomplete="email">
           <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <button class="btn primary" type="submit">Send</button>
+          <button class="btn primary" type="button">Send</button>
         </form>
         <p class="feedback-note" id="feedbackNote" aria-live="polite"></p>
       </details>
@@ -1390,6 +1390,12 @@ async function renderFaq() {
   /* Not every failure comes from the Worker — a proxy or the local server answers in its own
      words — so end the sentence before the fallback rather than assuming it was punctuated. */
   const fail = msg => { note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`; };
+  /* Send is type="button", not a submit control: if anything earlier in this script throws and the
+     handler below is never attached, a native submit would reload the page and throw away what the
+     visitor typed. requestSubmit() runs the same required/email validation a submit click would. */
+  form.querySelector('button').addEventListener('click', () => form.requestSubmit());
+  /* With no submit control the browser no longer submits on Enter in the email field, so keep it. */
+  form.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); form.requestSubmit(); } });
   panel.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.open) { panel.open = false; panel.querySelector('summary').focus(); } });
   form.addEventListener('submit', async e => {
     e.preventDefault();
