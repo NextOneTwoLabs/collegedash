@@ -89,6 +89,35 @@
       }
     },
     "news": {"type": ["object", "null"]},
+    "camps": {
+      "type": ["object", "null"],
+      "description": "ID camps: the program's camp page plus dated camps from that page (kind camp), news releases (kind news) and curated.json (kind curated). Missing = camps collector has not run; the UI derives upcoming/past from today's date.",
+      "required": ["items", "_meta"],
+      "properties": {
+        "url": {"type": ["string", "null"]},
+        "hubUrl": {"type": ["string", "null"]},
+        "finalUrl": {"type": ["string", "null"]},
+        "host": {"type": ["string", "null"]},
+        "vendor": {"type": ["string", "null"]},
+        "discoveredVia": {"type": ["string", "null"], "enum": ["registry", "anchor", "json", null]},
+        "robotsBlocked": {"type": "boolean"},
+        "parsed": {"type": ["boolean", "null"], "description": "false = the camp page was fetched but could not be read (PDF, empty or non-HTML body); null = collected before the flag existed"},
+        "items": {"type": "array", "items": {"type": "object", "required": ["name", "kind"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "kind": {"enum": ["camp", "news", "curated"]},
+            "startDate": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"},
+            "endDate": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"},
+            "dateText": {"type": ["string", "null"]},
+            "precision": {"enum": ["day", "month", null]},
+            "yearInferred": {"type": "boolean"},
+            "location": {"type": ["string", "null"]}, "ages": {"type": ["string", "null"]}, "price": {"type": ["string", "null"]},
+            "registerUrl": {"type": ["string", "null"]}, "sourceUrl": {"type": ["string", "null"]},
+            "confidence": {"enum": ["heuristic", "curated", "vendor"]}
+          }}},
+        "_meta": {"type": "array", "items": {"$ref": "#/$defs/meta"}}
+      }
+    },
     "curated": {"type": "object"},
     "commitmentsByYear": {"type": "object"},
     "_build": {

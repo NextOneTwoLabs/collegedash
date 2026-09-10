@@ -1,0 +1,541 @@
+{
+ "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[].",
+ "nav": [
+  {
+   "file": "nav/duke.html",
+   "pageUrl": "https://goduke.com/sports/womens-soccer/roster",
+   "expect": "https://www.dukesocceracademy.com/",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/georgetown.html",
+   "pageUrl": "https://guhoyas.com/sports/womens-soccer/roster",
+   "expect": "https://guhoyas.com/sports/2021/6/24/hoya-winter-soccer-id-clinic.aspx",
+   "via": "json"
+  },
+  {
+   "file": "nav/stanford.html",
+   "pageUrl": "https://gostanford.com/sports/womens-soccer/roster",
+   "expect": "https://stanfordathleticscamps.com/",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/utah-state.html",
+   "pageUrl": "https://utahstateaggies.com/sports/womens-soccer/roster",
+   "expect": "https://utahstateaggies.com/sports/2018/6/12/camps-ust-camps-html.aspx",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/vanderbilt.html",
+   "pageUrl": "https://vucommodores.com/sports/wsoc/roster",
+   "expect": "http://www.vandysoccercamps.com/",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/penn-state.html",
+   "pageUrl": "https://gopsusports.com/sports/womens-soccer/roster",
+   "expect": "https://gopsusports.com/girls-soccer-camps",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/msoc.html",
+   "pageUrl": "https://example.edu/sports/wsoc/roster",
+   "expect": "https://example.edu/camps",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/wsoc.html",
+   "pageUrl": "https://example.edu/sports/wsoc/roster",
+   "expect": "https://example.edu/sports/wsoc/camps",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/negatives.html",
+   "pageUrl": "https://example.edu/sports/womens-soccer/roster",
+   "expect": null
+  }
+ ],
+ "hub": [
+  {
+   "file": "hub/florida-state.html",
+   "pageUrl": "https://seminoles.com/sports/2017/7/4/camps",
+   "expect": "https://www.nolessoccercamps.com/"
+  },
+  {
+   "file": "hub/ucla.html",
+   "pageUrl": "https://uclabruins.com/camps",
+   "expect": "https://uclabruins.com/ucla-soccer-camp-girls"
+  },
+  {
+   "file": "hub/duke.html",
+   "pageUrl": "https://goduke.com/sports/2020/3/30/camp-information",
+   "expect": "https://www.dukesocceracademy.com/"
+  },
+  {
+   "file": "hub/utah-state.html",
+   "pageUrl": "https://utahstateaggies.com/sports/2018/6/12/camps-ust-camps-html.aspx",
+   "expect": null
+  }
+ ],
+ "extract": [
+  {
+   "file": "extract/penn-state.html",
+   "pageUrl": "https://gopsusports.com/girls-soccer-camps",
+   "title": "Girls Soccer Camps",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Soccer ID Clinic",
+     "startDate": "2026-09-12",
+     "precision": "day",
+     "ages": "Grades 8-12",
+     "price": "$145 Day Camper",
+     "registerUrl": "https://app.campdoc.com/!/dn/login?r=psu%20upgsocceridclinic26"
+    }
+   ]
+  },
+  {
+   "file": "extract/florida-state.html",
+   "pageUrl": "https://www.nolessoccercamps.com/",
+   "title": "Brian Pensky Soccer Camps",
+   "count": 5,
+   "expect": [
+    {
+     "name": "June 6th ID Camp",
+     "startDate": "2026-06-06",
+     "price": "$225"
+    },
+    {
+     "name": "March 21st ID Camp",
+     "startDate": "2026-03-21"
+    },
+    {
+     "name": "Goalkeeper Camp",
+     "startDate": "2026-06-13",
+     "endDate": "2026-06-14"
+    }
+   ]
+  },
+  {
+   "file": "extract/georgetown.html",
+   "pageUrl": "https://guhoyas.com/sports/2021/6/24/hoya-winter-soccer-id-clinic.aspx",
+   "title": "Women's Soccer Hoya ID Clinic",
+   "count": 1,
+   "expect": [
+    {
+     "startDate": "2026-07-25",
+     "endDate": "2026-07-26",
+     "price": "$275",
+     "ages": "9th-12th Grade"
+    }
+   ]
+  },
+  {
+   "file": "extract/registration.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "Summer ID Camp",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-06-10",
+     "price": "$250",
+     "registerUrl": "https://example.totalcamps.com/shop/EVENT"
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2026-03-01"
+    },
+    {
+     "startDate": "2026-04-15"
+    }
+   ]
+  },
+  {
+   "file": "extract/tbd.html",
+   "pageUrl": "https://www.dukesocceracademy.com/idcamps",
+   "title": "ID Camps",
+   "count": 0
+  },
+  {
+   "file": "extract/unsafe-hrefs.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "ID Camps",
+   "count": 5,
+   "expect": [
+    {
+     "name": "Spring ID Camp",
+     "startDate": "2026-03-07",
+     "registerUrl": null
+    },
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-06-06",
+     "registerUrl": null
+    },
+    {
+     "name": "Fall ID Camp",
+     "startDate": "2026-09-12",
+     "registerUrl": null
+    },
+    {
+     "name": "Winter ID Clinic",
+     "startDate": "2026-12-05",
+     "registerUrl": "https://register.example.com/x"
+    },
+    {
+     "name": "Goalkeeper ID Camp",
+     "startDate": "2026-07-18",
+     "registerUrl": "http://www.example.com/register"
+    }
+   ]
+  }
+ ],
+ "robots": [
+  {
+   "name": "denied host (Vanderbilt)",
+   "robots": {
+    "www.vandysoccercamps.com": "User-agent: *\nDisallow: /\nUser-agent: Googlebot\nAllow: /\n"
+   },
+   "url": "http://www.vandysoccercamps.com/",
+   "baseHost": "vucommodores.com",
+   "expectBlocked": true,
+   "expectFetched": false
+  },
+  {
+   "name": "allowed host with crawl-delay (Duke)",
+   "robots": {
+    "www.dukesocceracademy.com": "User-agent: *\nDisallow: /s/search\nCrawl-delay: 5\n"
+   },
+   "url": "https://www.dukesocceracademy.com/idcamps",
+   "baseHost": "goduke.com",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": true,
+   "expectCacheCleared": false
+  },
+  {
+   "name": "redirect to denied host",
+   "robots": {
+    "camps.example.edu": null,
+    "denied.example.com": "User-agent: *\nDisallow: /\n"
+   },
+   "url": "https://camps.example.edu/soccer",
+   "finalUrl": "https://denied.example.com/soccer",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": true,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectCacheCleared": true
+  },
+  {
+   "name": "athletics site itself is never robots-checked",
+   "robots": {
+    "athletics.example.edu": "User-agent: *\nDisallow: /\n"
+   },
+   "url": "https://athletics.example.edu/sports/2020/1/1/camps",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true
+  },
+  {
+   "name": "camp page is a PDF (Gardner-Webb)",
+   "robots": {
+    "gwusports.com": null
+   },
+   "url": "https://gwusports.com/documents/2026/3/2/Camp_Info.pdf",
+   "contentType": "application/pdf",
+   "baseHost": "gwusports.com",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "camp page has an empty body",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/soccer",
+   "body": "",
+   "contentType": "text/html",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "camp page served as JSON",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/api/camps",
+   "body": "{\"camps\": []}",
+   "contentType": "application/json",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "ordinary HTML camp page is parsed",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/soccer",
+   "contentType": "text/html; charset=utf-8",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": true,
+   "expectNonHtml": false
+  }
+ ],
+ "news": {
+  "file": "news/titles.json",
+  "expectAccepted": 15
+ },
+ "dates": [
+  {
+   "text": "Soccer ID Clinic - September 12, 2026",
+   "expect": [
+    [
+     "2026-09-12",
+     "2026-09-12",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "July 25-26, 2026",
+   "expect": [
+    [
+     "2026-07-25",
+     "2026-07-26",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "June 13th - 14th, 2026",
+   "expect": [
+    [
+     "2026-06-13",
+     "2026-06-14",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "June 28 - July 1, 2026",
+   "expect": [
+    [
+     "2026-06-28",
+     "2026-07-01",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "September 12 – 1:00 p.m. to 5:00 p.m.",
+   "expect": []
+  },
+  {
+   "text": "Owls Host First ID Camp on February 22",
+   "published": "2026-01-14",
+   "expect": [
+    [
+     "2026-02-22",
+     "2026-02-22",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "Youth ID Camp in July",
+   "published": "2026-02-11",
+   "expect": [
+    [
+     "2026-07",
+     "2026-07",
+     "month"
+    ]
+   ]
+  },
+  {
+   "text": "WSOC February ID Clinic",
+   "published": "2026-01-14",
+   "expect": [
+    [
+     "2026-02",
+     "2026-02",
+     "month"
+    ]
+   ]
+  },
+  {
+   "text": "ID clinic on October 3rd",
+   "published": "2026-08-25",
+   "expect": [
+    [
+     "2026-10-03",
+     "2026-10-03",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "Spring ID Camp on April 19",
+   "published": "2026-11-20",
+   "expect": [
+    [
+     "2027-04-19",
+     "2027-04-19",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "The camp dates are April 26, May 17 and June 28",
+   "published": "2026-03-02",
+   "expect": [
+    [
+     "2026-04-26",
+     "2026-04-26",
+     "day"
+    ],
+    [
+     "2026-05-17",
+     "2026-05-17",
+     "day"
+    ],
+    [
+     "2026-06-28",
+     "2026-06-28",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "3/2/2026 4:30:00 PM | Women's Soccer",
+   "expect": []
+  },
+  {
+   "text": "Camp Registration",
+   "published": "2024-11-27",
+   "expect": []
+  },
+  {
+   "text": "A recap of the December 20 ID Camp",
+   "published": "2026-01-05",
+   "expect": [
+    [
+     "2025-12-20",
+     "2025-12-20",
+     "day"
+    ]
+   ]
+  }
+ ],
+ "urls": [
+  {
+   "href": " javascript:alert(1)",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "data:text/html,x",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "JAVASCRIPT:alert(1)",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "//register.example.com/x",
+   "base": "https://example.edu/camps",
+   "expect": "https://register.example.com/x"
+  },
+  {
+   "href": "http://www.example.com/register",
+   "base": "https://example.edu/camps",
+   "expect": "http://www.example.com/register"
+  },
+  {
+   "href": "/sports/wsoc/camps",
+   "base": "https://example.edu/roster",
+   "expect": "https://example.edu/sports/wsoc/camps"
+  },
+  {
+   "href": "HTTPS://Camps.Example.com/",
+   "base": null,
+   "expect": "https://Camps.Example.com/"
+  },
+  {
+   "href": "vbscript:msgbox(1)",
+   "base": null,
+   "expect": null
+  },
+  {
+   "href": "mailto:coach@example.edu",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "",
+   "base": "https://example.edu/camps",
+   "expect": null
+  }
+ ],
+ "curated": [
+  {
+   "camps": [
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-07"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-07",
+     "precision": "month"
+    }
+   ]
+  },
+  {
+   "camps": [
+    {
+     "name": "Fall ID Clinic",
+     "startDate": "2026-09-12"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Fall ID Clinic",
+     "startDate": "2026-09-12",
+     "precision": "day"
+    }
+   ]
+  },
+  {
+   "camps": [
+    {
+     "name": "Winter Clinic"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Winter Clinic",
+     "startDate": null,
+     "precision": null
+    }
+   ]
+  }
+ ]
+}

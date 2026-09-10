@@ -13,7 +13,7 @@ CollegeDash command line.
   python collegedash.py validate                         schema + completeness report
   python collegedash.py serve [--port 8000]              local static server (public/) with write endpoints
 
-Collectors: athletics, scorecard, climate, wikipedia, tds, soccerwire, news, rpi
+Collectors: athletics, scorecard, climate, wikipedia, tds, soccerwire, news, camps, rpi
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ import traceback
 
 from collect import common
 
-COLLECTORS = ["scorecard", "climate", "wikipedia", "athletics", "tds", "soccerwire", "news"]
+COLLECTORS = ["scorecard", "climate", "wikipedia", "athletics", "tds", "soccerwire", "news", "camps"]  # camps after news: it mines the news archive
 
 
 def run_collector(name: str, program: dict, registry: dict, **kw) -> bool:
@@ -58,6 +58,9 @@ def run_collector_outcome(name: str, program: dict, registry: dict, **kw) -> dic
             m.collect(program, registry)
         elif name == "news":
             from collect import news as m
+            m.collect(program, registry)
+        elif name == "camps":
+            from collect import camps as m
             m.collect(program, registry)
         else:
             common.log(f"unknown collector {name}")

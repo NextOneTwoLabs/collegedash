@@ -6,9 +6,11 @@ name: Refresh program data
 #   daily 11:00 UTC  -> commitments (TDS + SoccerWire), news, NCAA RPI
 #   Aug-Dec daily    -> also rosters/schedules (no bios), so results land the morning after a game
 #                       (about 2,800 extra requests and +60-90 min per run; the runner has no HTTP cache)
-#   Mondays          -> also rosters/schedules (no bios) and Wikipedia; school facts and climate only
-#                       on a manual "full" run (Scorecard falls back to DEMO_KEY, 30 requests/hour,
-#                       until the SCORECARD_API_KEY secret is set)
+#   Mondays          -> also rosters/schedules (no bios), Wikipedia and ID camps (camp pages are
+#                       seasonal; one request per program plus one per camp site, honouring
+#                       robots.txt); school facts and climate only on a manual "full" run
+#                       (Scorecard falls back to DEMO_KEY, 30 requests/hour, until the
+#                       SCORECARD_API_KEY secret is set)
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -56,7 +58,7 @@ jobs:
           if [ "${{ inputs.full }}" = "true" ]; then
             python collegedash.py refresh --no-bios --mode full
           elif [ "$(date -u +%u)" = "1" ]; then
-            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,rpi --no-bios --mode weekly
+            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --mode weekly
           elif [ "$(date -u +%m)" -ge 8 ]; then   # Aug-Dec, in season: schedules/results daily
             python collegedash.py refresh --only athletics,tds,soccerwire,news,rpi --no-bios --mode daily
           else

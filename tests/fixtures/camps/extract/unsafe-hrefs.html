@@ -1,0 +1,14 @@
+<!-- synthetic: a camp page whose register links carry non-http schemes. A camp page is third-party content, so a javascript:/data: href (leading whitespace, upper case) must never become registerUrl; a protocol-relative href takes the page's scheme; a plain http:// link is kept. Expected: 5 entries, registerUrl null for the first three. -->
+<html><head><title>ID Camps</title></head><body>
+<main>
+<h1>2026 ID Camp Dates</h1>
+<table>
+<tr><th>Camp</th><th>Dates</th><th>Cost</th><th>Register</th></tr>
+<tr><td>Spring ID Camp</td><td>March 7, 2026</td><td>$150</td><td><a href=" javascript:alert(1)">Register</a></td></tr>
+<tr><td>Summer ID Camp</td><td>June 6, 2026</td><td>$225</td><td><a href="data:text/html,x">Register</a></td></tr>
+<tr><td>Fall ID Camp</td><td>September 12, 2026</td><td>$145</td><td><a href="JAVASCRIPT:alert(1)">Register here</a></td></tr>
+<tr><td>Winter ID Clinic</td><td>December 5, 2026</td><td>$95</td><td><a href="//register.example.com/x">Register</a></td></tr>
+<tr><td>Goalkeeper ID Camp</td><td>July 18, 2026</td><td>$200</td><td><a href="http://www.example.com/register">Register</a></td></tr>
+</table>
+</main>
+</body></html>
