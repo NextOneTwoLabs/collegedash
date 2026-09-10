@@ -27,7 +27,7 @@
     "roster": "https://gomason.com/sports/womens-soccer/roster",
     "schedule": "https://gomason.com/sports/womens-soccer/schedule",
     "news": "https://gomason.com/sports/womens-soccer/news",
-    "camps": null,
+    "camps": "https://www.gmuwomenssoccercamps.com/",
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/george-mason/clgid-84",
     "wikipedia": null,
     "x": null,
@@ -637,17 +637,53 @@
     "_meta": {
       "source": "news",
       "url": "https://gomason.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-10T15:56:12Z"
+      "asOf": "2026-09-10T20:01:13Z"
     }
   },
-  "camps": null,
+  "camps": {
+    "url": "https://www.gmuwomenssoccercamps.com/",
+    "hubUrl": null,
+    "finalUrl": "https://www.gmuwomenssoccercamps.com/",
+    "host": "www.gmuwomenssoccercamps.com",
+    "vendor": "ryzer",
+    "pageTitle": "Aaron Brunner's Soccer Camps at George Mason University",
+    "discoveredVia": "json",
+    "robotsBlocked": false,
+    "fetchError": null,
+    "parsed": true,
+    "newsScanned": 10,
+    "items": [
+      {
+        "name": "College ID Camp",
+        "startDate": "2026-11-28",
+        "endDate": "2026-11-28",
+        "dateText": "11/28/2026",
+        "precision": "day",
+        "yearInferred": false,
+        "location": null,
+        "ages": "8th - 12th",
+        "price": "$180.00",
+        "registerUrl": "https://register.ryzer.com/camp.cfm?sport=7&id=320666",
+        "sourceUrl": "https://www.gmuwomenssoccercamps.com/",
+        "confidence": "heuristic",
+        "kind": "camp"
+      }
+    ],
+    "_meta": [
+      {
+        "source": "camps",
+        "url": "https://www.gmuwomenssoccercamps.com/",
+        "asOf": "2026-09-10T05:51:24Z"
+      }
+    ]
+  },
   "curated": {},
   "commitmentsByYear": {
     "2026": 4,
     "2027": 4
   },
   "_build": {
-    "builtAt": "2026-09-10T16:27:28Z",
+    "builtAt": "2026-09-10T20:35:18Z",
     "completeness": 0.44,
     "sections": {
       "school": true,
@@ -666,7 +702,7 @@
       {
         "collector": "athletics",
         "reason": "athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); needs a headless browser, see athletics.note",
-        "at": "2026-09-10T15:56:07Z"
+        "at": "2026-09-10T20:01:08Z"
       },
       {
         "collector": "wikipedia",
