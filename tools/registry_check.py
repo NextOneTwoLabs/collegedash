@@ -11,9 +11,16 @@ to a branch campus, or to an unrelated school whose name happens to contain the 
     python tools/registry_check.py --json report.json --verbose
     python tools/registry_check.py --max-suspects 0   # exit 1 on any unaccepted suspect
 
-Classes: duplicate-unit-id | state-mismatch | city-mismatch | name-drift | no-registry-location | ok
+Classes: duplicate-unit-id | state-mismatch | city-mismatch | name-drift | no-registry-location |
+no-scorecard-source | unreadable-scorecard-source | ok
 
-duplicate-unit-id and state-mismatch are hard signals and are never silenced by ACCEPTED.
+It compares the registry against the *collected source*, so a registry id edited by hand stays
+invisible here until the collector next runs and rewrites programs/<slug>/sources/scorecard.json.
+The exception is duplicate-unit-id, which reads the registry ids themselves and so catches a bad
+id immediately.
+
+ACCEPTED can silence only city-mismatch and name-drift, and only while the row is still in the
+reviewed town. duplicate-unit-id, state-mismatch and a missing or unreadable source always raise.
 no-registry-location is reported but never counts as a suspect: with no registry city or state
 there is nothing to compare the Scorecard row against, so it is a gap, not a finding.
 
@@ -42,17 +49,22 @@ BULK_PATH = os.path.join(ROOT, "data", "scorecard-bulk.json")
 # accept threshold: this is a "these are not the same school" alarm, not a match-quality score.
 NAME_DRIFT_BELOW = 0.2
 
-HARD_CLASSES = ("duplicate-unit-id", "state-mismatch")
+# ACCEPTED can only ever silence these two naming variances, the two the audit actually reviewed.
+# Everything else -- duplicate-unit-id, state-mismatch, and a source that is missing or unreadable --
+# is raised for every program, pinned or not: no spelling of a city name explains any of them.
+ACCEPTABLE_CLASSES = ("city-mismatch", "name-drift")
 
-# The 27 variances reviewed by hand during the issue #48 audit, each confirmed to be a naming
+# The 25 variances reviewed by hand during the issue #48 audit, each confirmed to be a naming
 # difference rather than a wrong campus. Keyed by slug: (Scorecard city reviewed, reason).
+# Two more were registry defects rather than variance -- gardner-webb's "Boilings Springs" typo
+# and fairleigh-dickinson's "Madison", the wrong campus label for a Teaneck team -- and were
+# corrected in registry.json instead of being listed here.
 #
 # The city is pinned rather than the slug blanket-accepted, and that matters: before the fix,
 # `minnesota` pointed at Rasmussen University in St. Cloud, so a slug-level allowlist entry for
 # its Falcon Heights / Minneapolis variance would have hidden the very bug this tool exists to
 # find. Pinning means the acceptance lapses the moment the row moves to a different town.
-# A city of None accepts name-drift only. Acceptance never suppresses duplicate-unit-id or
-# state-mismatch, since no spelling of a city name explains either.
+# A city of None accepts name-drift only.
 ACCEPTED = {
     # --- suburb, township or legal-city naming: the campus is right, the town name differs ---
     "rutgers": ("New Brunswick", "Scorecard names the New Brunswick campus; the fields sit in Piscataway."),
@@ -67,8 +79,6 @@ ACCEPTED = {
     "richmond": ("University of Richmond", "Scorecard's city is the literal postal place name."),
     "alcorn-state": ("Alcorn State", "Scorecard's city is the campus post office, not Lorman."),
     "minnesota": ("Minneapolis", "Registry says Falcon Heights, the suburb holding part of Twin Cities."),
-    "gardner-webb": ("Boiling Springs", "Registry city is a typo, Boilings Springs for Boiling Springs."),
-    "fairleigh-dickinson": ("Teaneck", "Metropolitan campus is correct; the registry's Madison is the wrong half."),
     "virginia-tech": (None, "Legal name Virginia Polytechnic Institute and State University shares few tokens."),
     # --- Main Campus is the Scorecard's ordinary naming for a flagship, not a warning sign.
     # These agreed on city when reviewed and so raise nothing today; they are kept as the record
@@ -149,7 +159,11 @@ def check(program: dict, dup_slugs: dict) -> dict:
     slug = program["slug"]
     loc = program.get("location") or {}
     unit_id = (program.get("ids") or {}).get("scorecardUnitId")
-    data = (common.load_source(slug, "scorecard") or {}).get("data") or {}
+    error = None
+    try:
+        data = (common.load_source(slug, "scorecard") or {}).get("data") or {}
+    except (ValueError, OSError) as e:  # json.JSONDecodeError is a ValueError
+        data, error = {}, f"{type(e).__name__}: {e}"
     out = {
         "slug": slug,
         "unitId": unit_id,
@@ -165,7 +179,10 @@ def check(program: dict, dup_slugs: dict) -> dict:
     if unit_id in dup_slugs:
         out["classes"].append("duplicate-unit-id")
         out["sharedWith"] = [s for s in dup_slugs[unit_id] if s != slug]
-    if not data:
+    if error:
+        out["error"] = error
+        out["classes"].append("unreadable-scorecard-source")
+    elif not data:
         out["classes"].append("no-scorecard-source")
     elif not loc.get("city") or not loc.get("state"):
         out["classes"].append("no-registry-location")
@@ -180,11 +197,17 @@ def check(program: dict, dup_slugs: dict) -> dict:
     pinned_city, reason = ACCEPTED.get(slug, (None, None))
     accepted_for = []
     if reason:
+        row_city = norm_city(data.get("city"))
         for c in out["classes"]:
-            if c in HARD_CLASSES:
+            if c not in ACCEPTABLE_CLASSES:
                 continue
-            if c == "city-mismatch" and norm_city(data.get("city")) != norm_city(pinned_city):
+            if c == "city-mismatch" and row_city != norm_city(pinned_city):
                 continue  # the row moved somewhere the audit never reviewed: still a suspect
+            # A pin vouches for a town's spelling, not for the school staying the same
+            # underneath it -- Lesley University is in Cambridge too -- so name-drift is
+            # accepted only while the row still sits in the registry's own town.
+            if c == "name-drift" and row_city != norm_city(loc.get("city")):
+                continue
             accepted_for.append(c)
     out["suspectClasses"] = [
         c for c in out["classes"] if c not in accepted_for and c != "no-registry-location"
@@ -219,7 +242,18 @@ def main(argv=None) -> int:
     dup_slugs = {k: v for k, v in by_unit.items() if len(v) > 1}
 
     if args.slug:
-        programs = [common.get_program(s.strip(), reg) for s in args.slug.split(",")]
+        programs, unknown = [], []
+        for s in args.slug.split(","):
+            s = s.strip()
+            if not s:
+                continue
+            try:
+                programs.append(common.get_program(s, reg))
+            except KeyError:
+                unknown.append(s)
+        if unknown:
+            print(f"unknown program slug: {', '.join(unknown)}", file=sys.stderr)
+            return 1
     else:
         programs = everyone
     results = [check(p, dup_slugs) for p in programs]
@@ -234,7 +268,9 @@ def main(argv=None) -> int:
                 r["suggestion"] = s
 
     for r in results:
-        if r["suspectClasses"]:
+        if r.get("error"):
+            print(f"{r['slug']:24} {'unreadable-scorecard-source':34} {r['error']}")
+        elif r["suspectClasses"]:
             print(f"{r['slug']:24} {','.join(r['suspectClasses']):34} "
                   f"registry={r['registryCity']}, {r['registryState']} != "
                   f"scorecard={r['scorecardCity']}, {r['scorecardState']} "
@@ -261,6 +297,9 @@ def main(argv=None) -> int:
     if unchecked:
         print(f"  no registry location, not checked: {', '.join(unchecked)}")
     print(f"  unaccepted suspects: {len(suspects)}")
+    unreadable = [r["slug"] for r in results if r.get("error")]
+    if unreadable:
+        print(f"  unreadable scorecard sources: {', '.join(unreadable)}")
 
     if args.verbose:
         seen = {r["slug"] for r in results}
@@ -271,6 +310,8 @@ def main(argv=None) -> int:
 
     if args.json:
         common.write_json(args.json, results)
+    if unreadable:
+        return 1
     if args.max_suspects is not None and len(suspects) > args.max_suspects:
         return 1
     return 0
