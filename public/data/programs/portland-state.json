@@ -27,6 +27,7 @@
     "roster": "https://goviks.com/sports/womens-soccer/roster",
     "schedule": "https://goviks.com/sports/womens-soccer/schedule",
     "news": "https://goviks.com/sports/womens-soccer/news",
+    "camps": null,
     "tds": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/portland-state/clgid-217",
     "wikipedia": null,
     "x": null,
@@ -221,20 +222,19 @@
   },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Maureen Whitney",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
-      "bioUrl": null,
+      "bioUrl": "https://goviks.com/sports/womens-soccer/roster/coaches/maureen-whitney/1265",
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [
+    "coaches": [
       {
         "name": "Maureen Whitney",
         "title": "Head Coach",
-        "isHeadCoach": false,
-        "isCoach": false,
+        "isHeadCoach": true,
+        "isCoach": true,
         "bioUrl": "https://goviks.com/sports/womens-soccer/roster/coaches/maureen-whitney/1265",
         "social": {}
       },
@@ -242,7 +242,7 @@
         "name": "Lauren Prott",
         "title": "Assistant Coach",
         "isHeadCoach": false,
-        "isCoach": false,
+        "isCoach": true,
         "bioUrl": "https://goviks.com/sports/womens-soccer/roster/coaches/lauren-prott/1266",
         "social": {}
       },
@@ -250,10 +250,12 @@
         "name": "Phoenix Baltrus",
         "title": "Assistant Coach",
         "isHeadCoach": false,
-        "isCoach": false,
+        "isCoach": true,
         "bioUrl": "https://goviks.com/sports/womens-soccer/roster/coaches/phoenix-baltrus/1267",
         "social": {}
-      },
+      }
+    ],
+    "supportStaff": [
       {
         "name": "Madeline Smith",
         "title": "Athletic Trainer",
@@ -291,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://goviks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-07T19:31:11Z"
+        "asOf": "2026-09-10T16:06:11Z"
       }
     }
   },
@@ -877,7 +879,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://goviks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-07T19:31:11Z"
+      "asOf": "2026-09-10T16:06:11Z"
     }
   },
   "rosterHistory": {
@@ -1631,7 +1633,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://goviks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-07T19:31:11Z"
+      "asOf": "2026-09-10T16:06:11Z"
     }
   },
   "commitments": [
@@ -1657,7 +1659,7 @@
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/portland-state/clgid-217/tab-commitments",
           "firstSeen": "2026-09-07",
           "lastSeen": "2026-09-09",
-          "missingSince": null
+          "missingSince": "2026-09-10"
         }
       ],
       "flags": [],
@@ -1674,6 +1676,12 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Vikings Play Rivalry Match at University of Portland Thursday, Host Boise State Sunday",
+        "url": "https://goviks.com/news/2026/9/9/WSOC_20260909.aspx",
+        "date": "2026-09-09",
+        "recruiting": false
+      },
       {
         "title": "Three First-Half Goals Hold Up for Vikings in 3-2 Win over Western Oregon",
         "url": "https://goviks.com/news/2026/9/6/WSOC_20260906.aspx",
@@ -1738,20 +1746,21 @@
     "_meta": {
       "source": "news",
       "url": "https://goviks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-09T15:14:38Z"
+      "asOf": "2026-09-10T16:06:15Z"
     }
   },
+  "camps": null,
   "curated": {},
   "commitmentsByYear": {
     "2026": 1
   },
   "_build": {
-    "builtAt": "2026-09-09T15:18:34Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-10T16:27:28Z",
+    "completeness": 0.78,
     "sections": {
       "school": true,
       "climate": true,
-      "program": false,
+      "program": true,
       "seasons": false,
       "rpi": false,
       "roster": true,
