@@ -1197,6 +1197,9 @@ async function tabCamps(p) {
   // 'month'), dateText, confidence ('heuristic' = read automatically from page text). upcoming/past is
   // decided here with today's local date: the site is static and rebuilt once a day.
   const c = p.camps;
+  // Camp pages are third-party content: only http(s) URLs become links, anything else is shown as text.
+  const httpUrl = u => /^https?:\/\//i.test(u || '') ? u : null;
+  const link = (u, text) => httpUrl(u) ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(text)}</a>` : `<span class="muted">${esc(text)}</span>`;
   const skipped = (p._build.skipped || []).find(s => s.collector === 'camps');
   if (!c) return skipped
     ? `<div class="card empty">Camp information is not collected for this program: ${esc(skipped.reason.replace(/^camps: /, '').replace(/ \(registry [^)]*\)$/, ''))}. Check the ${extLink(p.links.athletics, 'athletics site')} directly.</div>`
@@ -1218,16 +1221,18 @@ async function tabCamps(p) {
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
     <td><b>${esc(it.name)}</b> ${badges(it, old)}${it.kind === 'news' && it.newsTitle && it.newsTitle !== it.name ? `<div class="small muted">${esc(it.newsTitle)}</div>` : ''}</td>
     <td class="small">${esc([it.location, it.ages, it.price].filter(Boolean).join(' · '))}</td>
-    <td class="small">${[it.registerUrl ? `<a href="${esc(it.registerUrl)}" target="_blank" rel="noopener">register</a>` : '', it.sourceUrl ? `<a href="${esc(it.sourceUrl)}" target="_blank" rel="noopener">source</a>` : ''].filter(Boolean).join(' · ')}</td></tr>`;
+    <td class="small">${[it.registerUrl ? link(it.registerUrl, 'register') : '', it.sourceUrl ? link(it.sourceUrl, 'source') : ''].filter(Boolean).join(' · ')}</td></tr>`;
   const table = (rows, old) => `<div class="tscroll"><table><tr><th>When</th><th>Camp</th><th>Details</th><th>Links</th></tr>${rows.map(it => row(it, old)).join('')}</table></div>`;
   const shown = c.finalUrl || c.url;
+  const unreadable = c.parsed === false && c.url && !c.robotsBlocked && !c.fetchError;  // a PDF, an empty body, non-HTML
   const linkCard = c.url
-    ? `<div class="card"><h3>Camp information</h3><p>${extLink(shown, `Camp page on ${c.host || shown}`)}${c.discoveredVia === 'registry' ? '' : ' <span class="muted small">(auto-detected from the athletics site navigation)</span>'}${c.hubUrl ? `<br><span class="small muted">via the all-sports camps page: <a href="${esc(c.hubUrl)}" target="_blank" rel="noopener">${esc(c.hubUrl)}</a></span>` : ''}</p>
+    ? `<div class="card"><h3>Camp information</h3><p>${httpUrl(shown) ? extLink(shown, `Camp page on ${c.host || shown}`) : `<span class="muted">Camp page on ${esc(c.host || shown)}</span>`}${c.discoveredVia === 'registry' ? '' : ' <span class="muted small">(auto-detected from the athletics site navigation)</span>'}${c.hubUrl ? `<br><span class="small muted">via the all-sports camps page: ${link(c.hubUrl, c.hubUrl)}</span>` : ''}</p>
         ${c.robotsBlocked ? '<p class="small muted">This site asks automated readers not to open it (robots.txt), so only the link is shown here; open it to see dates.</p>' : ''}
-        ${c.fetchError ? '<p class="small muted">The camp page could not be read on the last check; open it directly.</p>' : ''}</div>`
+        ${c.fetchError ? '<p class="small muted">The camp page could not be read on the last check; open it directly.</p>' : ''}
+        ${unreadable ? '<p class="small muted">The camp page could not be read automatically; open it for dates.</p>' : ''}</div>`
     : `<div class="card empty">We could not find a camp page on the athletics site${checked}. Camps are usually announced in spring; try the ${extLink(p.links.athletics, 'athletics site')} directly.</div>`;
   const list = upcoming.length ? `<div class="card section"><h3>Upcoming camps</h3>${table(upcoming, false)}</div>`
-    : (c.url && !c.robotsBlocked && !c.fetchError) ? `<div class="card empty">No upcoming ID camps listed on the camp page${checked}. Open the camp page for the latest dates.</div>` : '';
+    : (c.url && !c.robotsBlocked && !c.fetchError && !unreadable) ? `<div class="card empty">No upcoming ID camps listed on the camp page${checked}. Open the camp page for the latest dates.</div>` : '';
   const pastHtml = past.length ? `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>Past camps</b> · ${past.length}</summary><div style="margin-top:8px">${table(past, true)}</div></details>` : '';
   const undatedHtml = undated.length ? `<div class="card section"><h3>Announced without a date</h3>${table(undated, false)}</div>` : '';
   return `${linkCard}${list}${pastHtml}${undatedHtml}${prov(c._meta, 'Camp entries are read automatically from the camp page and news releases; confirm dates and prices with the school before registering.')}`;

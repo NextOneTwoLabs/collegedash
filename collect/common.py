@@ -149,7 +149,22 @@ def _cache_key(method: str, url: str, body: str | None) -> str:
 
 
 def _host(url: str) -> str:
-    return re.sub(r"^https?://([^/]+).*$", r"\1", url)
+    return re.sub(r"^https?://([^/]+).*$", r"\1", url).lower()  # lower-cased: _host_delay is keyed by lower-cased host
+
+
+def forget_cached(url: str, *, method: str = "GET", json_body=None) -> bool:
+    """Remove a URL's `.cache/http` entry (body and meta). Used when a fetch turns out to be one we
+    should not keep, e.g. a redirect onto a host whose robots.txt disallows crawling. True when
+    something was removed."""
+    body_str = json.dumps(json_body, sort_keys=True) if json_body is not None else None
+    key = _cache_key(method, url, body_str)
+    removed = False
+    for name in (key + ".body.gz", key + ".body", key + ".json"):
+        path = os.path.join(CACHE_DIR, name)
+        if os.path.exists(path):
+            os.remove(path)
+            removed = True
+    return removed
 
 
 def _polite_wait(url: str) -> None:
@@ -166,7 +181,8 @@ def _polite_wait(url: str) -> None:
 # ---------- robots.txt ----------
 # Hosts outside the athletics sites (camp vendors, coaches' own sites) are checked against their
 # robots.txt before a request is made. Cached per host for the life of the process (never on disk,
-# so a denied host leaves no trace in .cache/http). A Crawl-delay for '*' raises that host's gap
+# so a denied host leaves no trace in .cache/http; a redirect onto a denied host is fetched once and
+# the entry is then removed with forget_cached). A Crawl-delay for '*' raises that host's gap
 # between requests above MIN_GAP_SECONDS.
 _robots: dict[str, "robotparser.RobotFileParser"] = {}
 _host_delay: dict[str, float] = {}

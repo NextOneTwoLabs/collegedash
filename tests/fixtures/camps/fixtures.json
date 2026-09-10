@@ -1,5 +1,5 @@
 {
- "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt and a stubbed fetch; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates.",
+ "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[].",
  "nav": [
   {
    "file": "nav/duke.html",
@@ -35,6 +35,18 @@
    "file": "nav/penn-state.html",
    "pageUrl": "https://gopsusports.com/sports/womens-soccer/roster",
    "expect": "https://gopsusports.com/girls-soccer-camps",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/msoc.html",
+   "pageUrl": "https://example.edu/sports/wsoc/roster",
+   "expect": "https://example.edu/camps",
+   "via": "anchor"
+  },
+  {
+   "file": "nav/wsoc.html",
+   "pageUrl": "https://example.edu/sports/wsoc/roster",
+   "expect": "https://example.edu/sports/wsoc/camps",
    "via": "anchor"
   },
   {
@@ -145,6 +157,39 @@
    "pageUrl": "https://www.dukesocceracademy.com/idcamps",
    "title": "ID Camps",
    "count": 0
+  },
+  {
+   "file": "extract/unsafe-hrefs.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "ID Camps",
+   "count": 5,
+   "expect": [
+    {
+     "name": "Spring ID Camp",
+     "startDate": "2026-03-07",
+     "registerUrl": null
+    },
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-06-06",
+     "registerUrl": null
+    },
+    {
+     "name": "Fall ID Camp",
+     "startDate": "2026-09-12",
+     "registerUrl": null
+    },
+    {
+     "name": "Winter ID Clinic",
+     "startDate": "2026-12-05",
+     "registerUrl": "https://register.example.com/x"
+    },
+    {
+     "name": "Goalkeeper ID Camp",
+     "startDate": "2026-07-18",
+     "registerUrl": "http://www.example.com/register"
+    }
+   ]
   }
  ],
  "robots": [
@@ -167,7 +212,8 @@
    "baseHost": "goduke.com",
    "expectBlocked": false,
    "expectFetched": true,
-   "expectBody": true
+   "expectBody": true,
+   "expectCacheCleared": false
   },
   {
    "name": "redirect to denied host",
@@ -180,7 +226,8 @@
    "baseHost": "athletics.example.edu",
    "expectBlocked": true,
    "expectFetched": true,
-   "expectBody": false
+   "expectBody": false,
+   "expectCacheCleared": true
   },
   {
    "name": "athletics site itself is never robots-checked",
@@ -191,6 +238,60 @@
    "baseHost": "athletics.example.edu",
    "expectBlocked": false,
    "expectFetched": true
+  },
+  {
+   "name": "camp page is a PDF (Gardner-Webb)",
+   "robots": {
+    "gwusports.com": null
+   },
+   "url": "https://gwusports.com/documents/2026/3/2/Camp_Info.pdf",
+   "contentType": "application/pdf",
+   "baseHost": "gwusports.com",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "camp page has an empty body",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/soccer",
+   "body": "",
+   "contentType": "text/html",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "camp page served as JSON",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/api/camps",
+   "body": "{\"camps\": []}",
+   "contentType": "application/json",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": false,
+   "expectNonHtml": true
+  },
+  {
+   "name": "ordinary HTML camp page is parsed",
+   "robots": {
+    "camps.example.com": null
+   },
+   "url": "https://camps.example.com/soccer",
+   "contentType": "text/html; charset=utf-8",
+   "baseHost": "athletics.example.edu",
+   "expectBlocked": false,
+   "expectFetched": true,
+   "expectBody": true,
+   "expectNonHtml": false
   }
  ],
  "news": {
@@ -326,6 +427,115 @@
    "text": "Camp Registration",
    "published": "2024-11-27",
    "expect": []
+  },
+  {
+   "text": "A recap of the December 20 ID Camp",
+   "published": "2026-01-05",
+   "expect": [
+    [
+     "2025-12-20",
+     "2025-12-20",
+     "day"
+    ]
+   ]
+  }
+ ],
+ "urls": [
+  {
+   "href": " javascript:alert(1)",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "data:text/html,x",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "JAVASCRIPT:alert(1)",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "//register.example.com/x",
+   "base": "https://example.edu/camps",
+   "expect": "https://register.example.com/x"
+  },
+  {
+   "href": "http://www.example.com/register",
+   "base": "https://example.edu/camps",
+   "expect": "http://www.example.com/register"
+  },
+  {
+   "href": "/sports/wsoc/camps",
+   "base": "https://example.edu/roster",
+   "expect": "https://example.edu/sports/wsoc/camps"
+  },
+  {
+   "href": "HTTPS://Camps.Example.com/",
+   "base": null,
+   "expect": "https://Camps.Example.com/"
+  },
+  {
+   "href": "vbscript:msgbox(1)",
+   "base": null,
+   "expect": null
+  },
+  {
+   "href": "mailto:coach@example.edu",
+   "base": "https://example.edu/camps",
+   "expect": null
+  },
+  {
+   "href": "",
+   "base": "https://example.edu/camps",
+   "expect": null
+  }
+ ],
+ "curated": [
+  {
+   "camps": [
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-07"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Summer ID Camp",
+     "startDate": "2026-07",
+     "precision": "month"
+    }
+   ]
+  },
+  {
+   "camps": [
+    {
+     "name": "Fall ID Clinic",
+     "startDate": "2026-09-12"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Fall ID Clinic",
+     "startDate": "2026-09-12",
+     "precision": "day"
+    }
+   ]
+  },
+  {
+   "camps": [
+    {
+     "name": "Winter Clinic"
+    }
+   ],
+   "expect": [
+    {
+     "name": "Winter Clinic",
+     "startDate": null,
+     "precision": null
+    }
+   ]
   }
  ]
 }

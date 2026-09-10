@@ -1,5 +1,5 @@
 """Offline checks for the camps collector (collect/camps.py). No live requests, nothing written
-under programs/ or public/.
+under programs/, public/ or .cache/ (the robots fixtures use a temporary cache directory).
 
     python tools/camps_check.py                      # discovery sweep over every cached roster page
     python tools/camps_check.py --slug duke,stanford # a few programs
@@ -24,6 +24,7 @@ import gzip
 import json
 import os
 import sys
+import tempfile
 from urllib.parse import urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +32,7 @@ sys.path.insert(0, ROOT)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 from collect import adapters, camps, common  # noqa: E402
+import build  # noqa: E402
 
 FIXTURES = os.path.join(ROOT, "tests", "fixtures", "camps")
 
@@ -163,26 +165,46 @@ def fixtures(args) -> int:
             match = [e for e in entries if all(e.get(k) == v for k, v in exp.items())]
             ok(f"{fx['file']} lacks {exp}", not match)
     print("robots: fetch_checked")
+    real_cache = common.CACHE_DIR
     for fx in spec["robots"]:
         for host, text in fx["robots"].items():
             common.set_robots_txt(host, text)
         calls = []
         real = common.fetch_text
+        body = fx.get("body", "<html><body><p>Girls ID Camp June 6, 2026</p></body></html>")
 
         def stub(url, **kw):
             calls.append(url)
-            return "<html><body><p>Girls ID Camp June 6, 2026</p></body></html>", {"url": url, "finalUrl": fx.get("finalUrl") or url}
+            return body, {"url": url, "finalUrl": fx.get("finalUrl") or url, "contentType": fx.get("contentType", "")}
 
+        # a throwaway .cache/http holding an entry for the URL, as common.fetch would have written it
+        # before fetch_checked could look at the final host
+        tmp = tempfile.mkdtemp(prefix="camps-check-")
+        key = common._cache_key("GET", fx["url"], None)
+        with gzip.open(os.path.join(tmp, key + ".body.gz"), "wb") as f:
+            f.write(body.encode("utf-8"))
+        common.write_json(os.path.join(tmp, key + ".json"), {"url": fx["url"], "status": 200})
+        common.CACHE_DIR = tmp
         common.fetch_text = stub
         try:
             r = camps.fetch_checked(fx["url"], fx["baseHost"])
         finally:
             common.fetch_text = real
+            common.CACHE_DIR = real_cache
         ok(f"{fx['name']}: robotsBlocked", r["robotsBlocked"] is fx["expectBlocked"], f"got {r}")
         if "expectFetched" in fx:
             ok(f"{fx['name']}: request made", bool(calls) is fx["expectFetched"], f"calls {calls}")
         if "expectBody" in fx:
             ok(f"{fx['name']}: body kept", (r["html"] is not None) is fx["expectBody"], f"got html={r['html'] is not None}")
+        if "expectNonHtml" in fx:
+            ok(f"{fx['name']}: nonHtml", r["nonHtml"] is fx["expectNonHtml"], f"got {r}")
+        if "expectCacheCleared" in fx:
+            left = sorted(os.listdir(tmp))
+            ok(f"{fx['name']}: cache entry {'removed' if fx['expectCacheCleared'] else 'kept'}",
+               (not left) is fx["expectCacheCleared"], f"cache dir holds {left}")
+        for name in os.listdir(tmp):
+            os.remove(os.path.join(tmp, name))
+        os.rmdir(tmp)
     print("news: mine_camp_news")
     rows = json.loads(_read(spec["news"]["file"]))
     accepted, rejected = camps.mine_camp_news(rows)
@@ -197,6 +219,16 @@ def fixtures(args) -> int:
         got = [(d["startDate"], d["endDate"], d["precision"]) for d in ds]
         exp = [tuple(x) for x in fx["expect"]]
         ok(f"{fx['text'][:50]!r}", got == exp, f"got {got}, expected {exp}")
+    print("urls: _http_url")
+    for fx in spec.get("urls") or []:
+        got = camps._http_url(fx["href"], fx.get("base"))
+        ok(f"{fx['href']!r}", got == fx["expect"], f"got {got!r}, expected {fx['expect']!r}")
+    print("curated: build_camps")
+    for fx in spec.get("curated") or []:
+        items = (build.build_camps(None, None, {"camps": fx["camps"]}) or {}).get("items") or []
+        for exp in fx["expect"]:
+            match = [e for e in items if all(e.get(k) == v for k, v in exp.items())]
+            ok(f"curated {exp}", bool(match), f"items: {[{k: e.get(k) for k in exp} for e in items]}")
     print(f"\n{total - len(fails)} of {total} checks passed" + (f"; FAILED: {fails}" if fails else ""))
     return 1 if fails else 0
 

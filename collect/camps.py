@@ -38,8 +38,8 @@ CAMP_LOOSE_RE = re.compile(r"(?:camps?|clinics?)(?![a-z])", re.I)  # hosts/paths
 NOT_CAMP_RE = re.compile(r"campus|campaign", re.I)            # 'Campus Map', utm_campaign
 FEMALE_RE = re.compile(r"\b(?:women|girls?|female|ladies)(?:'s|’s|s)?\b", re.I)
 MALE_RE = re.compile(r"\b(?:men|boys?)(?:'s|’s|s)?\b", re.I)
-FEMALE_LOOSE_RE = re.compile(r"women|girls?|female|ladies", re.I)
-MALE_LOOSE_RE = re.compile(r"(?<!wo)mens?(?:-|/|$|%27s|'s)|boys?", re.I)
+FEMALE_LOOSE_RE = re.compile(r"women|girls?|female|ladies|(?<![a-z])wsoc", re.I)                       # hosts/paths: /sports/wsoc/camps
+MALE_LOOSE_RE = re.compile(r"(?<!wo)mens?(?:-|/|$|%27s|'s)|boys?|(?<![a-z])msoc|mens-soccer", re.I)   # /sports/msoc/camps
 SOCCER_RE = re.compile(r"soccer|wsoc|futbol", re.I)
 OTHER_SPORT_RE = re.compile(
     r"\b(?:baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim(?:ming)?|dive|diving|track|"
@@ -50,6 +50,7 @@ OTHER_SPORT_LOOSE_RE = re.compile(
     r"cheer|fencing|water-?polo|bowling|rifle|equestrian|esports|runningcamp", re.I)
 ID_RE = re.compile(r"\bID\b")
 SKIP_HREF_RE = re.compile(r"^(?:#|javascript:|mailto:|tel:|sms:)|^$", re.I)
+HTTP_URL_RE = re.compile(r"^https?://", re.I)
 NOT_CAMP_PAGE_RE = re.compile(r"/roster|/schedule|/news/|/stats|/coaches/|/staff|/archives|/tickets|/donate|/promotions/|"
                               r"adhandler|/click\?|redirect=|facebook\.com|twitter\.com|x\.com|instagram\.com|youtube\.com|tiktok\.com", re.I)
 HUB_PATH_RE = re.compile(r"/sports/\d{4}/\d{1,2}/\d{1,2}/", re.I)
@@ -73,6 +74,21 @@ def _host(url: str) -> str:
 def _same_site(url: str, base_host: str) -> bool:
     h, b = _host(url), (base_host or "").lower()
     return re.sub(r"^www\.", "", h) == re.sub(r"^www\.", "", b) if h and b else False
+
+
+def _http_url(href: str | None, base_url: str | None = None) -> str | None:
+    """`href` resolved against `base_url`, or None unless the result is an http(s) URL. Every URL the
+    collector emits passes through here: camp pages are third-party content, so a `javascript:` or
+    `data:` href (with or without leading whitespace or odd casing) must never reach an href in the
+    UI. Protocol-relative `//host/x` takes the page's scheme."""
+    href = (href or "").strip()
+    if not href or SKIP_HREF_RE.match(href):
+        return None
+    try:
+        url = urljoin(base_url, href) if base_url else href
+    except ValueError:
+        return None
+    return HTTP_URL_RE.sub(lambda m: m.group(0).lower(), url) if HTTP_URL_RE.match(url) else None
 
 
 def _link_score(text: str, href: str) -> dict | None:
@@ -101,7 +117,7 @@ def _link_score(text: str, href: str) -> dict | None:
 def _pick(cands: list[dict]) -> dict | None:
     if not cands:
         return None
-    if any(c["female"] for c in cands):
+    if any(not c["male"] for c in cands):  # a men's/boys' link only when nothing else qualifies
         cands = [c for c in cands if not c["male"]]
     return max(cands, key=lambda c: (c["score"], -c["order"]))
 
@@ -109,11 +125,8 @@ def _pick(cands: list[dict]) -> dict | None:
 def _anchor_candidates(soup, base_url: str, exclude: set[str]) -> list[dict]:
     out, seen = [], set()
     for i, a in enumerate(soup.find_all("a", href=True)):
-        href = (a.get("href") or "").strip()
-        if SKIP_HREF_RE.match(href):
-            continue
-        url = urljoin(base_url, href)
-        if not url.startswith("http") or url.split("#")[0] in exclude or url in seen or NOT_CAMP_PAGE_RE.search(url):
+        url = _http_url(a.get("href"), base_url)
+        if not url or url.split("#")[0] in exclude or url in seen or NOT_CAMP_PAGE_RE.search(url):
             continue
         text = " ".join(filter(None, [a.get_text(" ", strip=True), a.get("title"), a.get("aria-label")]))
         text = re.sub(r"opens in a new (?:window|tab)", "", text, flags=re.I)
@@ -141,7 +154,7 @@ def _json_candidates(html: str, base_url: str, exclude: set[str]) -> list[dict]:
     out, seen = [], set()
     for i, m in enumerate(_JSON_URL_RE.finditer(html)):
         href = _json_unescape(m.group(1))
-        if SKIP_HREF_RE.match(href) or href.startswith("{"):
+        if href.startswith("{"):
             continue
         start = html.rfind("{", max(0, m.start() - 400), m.start())
         if start < 0:
@@ -152,8 +165,8 @@ def _json_candidates(html: str, base_url: str, exclude: set[str]) -> list[dict]:
         seg += tail[:cut]
         tm = _JSON_TITLE_RE.search(seg)
         title = _json_unescape(tm.group(1)) if tm else ""
-        url = urljoin(base_url, href)
-        if not url.startswith("http") or url.split("#")[0] in exclude or url in seen or NOT_CAMP_PAGE_RE.search(url):
+        url = _http_url(href, base_url)
+        if not url or url.split("#")[0] in exclude or url in seen or NOT_CAMP_PAGE_RE.search(url):
             continue
         sc = _link_score(title, url)
         if sc:
@@ -218,11 +231,8 @@ def find_hub_hop(html: str, page_url: str, exclude: set[str]) -> dict | None:
     skip = exclude | {page_url.split("#")[0]}
     cands, seen = [], set()
     for i, a in enumerate(soup.find_all("a", href=True)):
-        href = (a.get("href") or "").strip()
-        if SKIP_HREF_RE.match(href):
-            continue
-        url = urljoin(page_url, href)
-        if not url.startswith("http") or url.split("#")[0] in skip or url in seen:
+        url = _http_url(a.get("href"), page_url)
+        if not url or url.split("#")[0] in skip or url in seen:
             continue
         if NOT_CAMP_PAGE_RE.search(url) or REGISTER_PORTAL_RE.search(url):
             continue
@@ -264,8 +274,10 @@ def detect_vendor(url: str | None, html: str | None, base_host: str) -> str | No
 def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0) -> dict:
     """Fetch a camp page. Hosts outside the athletics site are checked against robots.txt before
     the request (denied = no request at all) and again on the final host after redirects (denied =
-    the body is discarded). Returns {url, finalUrl, html, robotsBlocked, error}."""
-    out = {"url": url, "finalUrl": None, "html": None, "robotsBlocked": False, "error": None}
+    the body is discarded and its `.cache/http` entry removed). Returns {url, finalUrl, html,
+    robotsBlocked, error, nonHtml}; nonHtml is True when the page was fetched but is not HTML (a PDF,
+    an empty body, another content type), so nothing could be parsed."""
+    out = {"url": url, "finalUrl": None, "html": None, "robotsBlocked": False, "error": None, "nonHtml": False}
     if not _same_site(url, base_host) and not common.robots_allowed(url):
         out["robotsBlocked"] = True
         return out
@@ -278,10 +290,13 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0) -> d
     out["finalUrl"] = final
     if _host(final) != _host(url) and not _same_site(final, base_host) and not common.robots_allowed(final):
         out["robotsBlocked"] = True  # redirected onto a host that disallows crawling: keep the link, drop the body
+        common.forget_cached(url)    # common.fetch stored it before the final host could be checked
         return out
     ctype = (meta.get("contentType") or "").lower()
-    if "pdf" in ctype or final.lower().endswith(".pdf") or (ctype and "html" not in ctype and "xml" not in ctype):
-        return out  # a camp-info PDF or other non-HTML: the link is still shown, nothing is parsed
+    if "pdf" in ctype or final.lower().endswith(".pdf") or (ctype and "html" not in ctype and "xml" not in ctype) \
+            or not (html or "").strip():
+        out["nonHtml"] = True  # a camp-info PDF, an empty body or other non-HTML: the link is shown, nothing is parsed
+        return out
     out["html"] = html
     return out
 
@@ -320,7 +335,8 @@ def _valid(y: int, m: int, d: int) -> bool:
 def _infer_year(month: int, day: int, published: str | None) -> int | None:
     """Year for a day/month with no year: the release year, rolled forward when the date would fall
     more than 30 days before the release (a January release about a February camp stays; an
-    August release about a July camp means next year)."""
+    August release about a July camp means next year) and rolled back when it would fall more than
+    330 days after it (a January 5 recap of "the December 20 ID Camp" means last December)."""
     if not published:
         return None
     try:
@@ -332,7 +348,9 @@ def _infer_year(month: int, day: int, published: str | None) -> int | None:
         return None
     if _dt.date(y, month, day) < pub - _dt.timedelta(days=30):
         y += 1
-    return y
+    elif _dt.date(y, month, day) > pub + _dt.timedelta(days=330):
+        y -= 1
+    return y if _valid(y, month, day) else None
 
 
 def parse_camp_dates(text: str, published: str | None = None, *, default_year: int | None = None) -> list[dict]:
@@ -478,11 +496,11 @@ def _camp_phrase(line: str, fallback: str | None) -> str:
 def _register_url(elements, page_url: str) -> str | None:
     for el in elements:
         for a in el.find_all("a", href=True) if hasattr(el, "find_all") else []:
-            href = a.get("href") or ""
-            if SKIP_HREF_RE.match(href):
+            url = _http_url(a.get("href"), page_url)
+            if not url:
                 continue
-            if REGISTER_HREF_RE.search(href) or REGISTER_TEXT_RE.search(a.get_text(" ", strip=True) or ""):
-                return urljoin(page_url, href)
+            if REGISTER_HREF_RE.search(url) or REGISTER_TEXT_RE.search(a.get_text(" ", strip=True) or ""):
+                return url
     return None
 
 
@@ -747,11 +765,15 @@ def collect(program: dict, registry: dict) -> dict:
         raise common.FetchError("camps: no athletics baseUrl in registry")
     base_host = _host(base)
     data = {"campsUrl": None, "discoveredVia": None, "hubUrl": None, "finalUrl": None, "host": None, "vendor": None,
-            "pageTitle": None, "robotsBlocked": False, "fetchError": None, "camps": [], "newsCamps": [], "newsScanned": 0}
+            "pageTitle": None, "robotsBlocked": False, "fetchError": None, "parsed": False,
+            "camps": [], "newsCamps": [], "newsScanned": 0}
     roster_url = f"{base}{a.get('sportPath', '')}/roster"
     link = None
-    if a.get("campsUrl"):
-        link = {"url": a["campsUrl"], "text": "registry", "via": "registry", "female": True, "soccer": True}
+    registry_url = _http_url(a.get("campsUrl"))
+    if a.get("campsUrl") and not registry_url:
+        common.log(f"camps: registry athletics.campsUrl is not an http(s) URL, ignored: {a['campsUrl']!r}")
+    if registry_url:
+        link = {"url": registry_url, "text": "registry", "via": "registry", "female": True, "soccer": True}
     else:
         if a.get("skipReason"):
             raise common.SkipCollector(f"camps: {a['skipReason']} (registry athletics.skipReason)")
@@ -778,6 +800,7 @@ def collect(program: dict, registry: dict) -> dict:
         data["robotsBlocked"] = r["robotsBlocked"]
         data["fetchError"] = r["error"]
         data["vendor"] = detect_vendor(data["finalUrl"], r["html"], base_host)
+        data["parsed"] = bool(r["html"])  # False: robots, fetch error, or a PDF/empty/non-HTML page (nothing to read)
         if r["html"]:
             soup = BeautifulSoup(r["html"][:20000], "html.parser")
             data["pageTitle"] = common.clean(soup.title.get_text())[:120] if soup.title else None
@@ -787,11 +810,28 @@ def collect(program: dict, registry: dict) -> dict:
                    + (f" -> {data['finalUrl']}" if data["finalUrl"] != data["campsUrl"] else "")
                    + (" [robots: link only]" if data["robotsBlocked"] else "")
                    + (f" [fetch failed: {data['fetchError']}]" if data["fetchError"] else "")
+                   + (" [not HTML: link only]" if r.get("nonHtml") else "")
                    + f": {len(data['camps'])} dated camps ({data['vendor']})")
     else:
         common.log(f"camps: no camps link found on {roster_url}")
     data["newsCamps"], data["newsScanned"] = _news_camps(slug, base_host)
     if data["newsCamps"]:
         common.log(f"camps: {len(data['newsCamps'])} camp entries from {data['newsScanned']} archived news items")
-    common.save_source(slug, NAME, data, url=source_url, collector=NAME)
+    _sanitize_urls(data)
+    common.save_source(slug, NAME, data, url=_http_url(source_url) or roster_url, collector=NAME)
     return data
+
+
+URL_FIELDS = ("campsUrl", "hubUrl", "finalUrl")
+ENTRY_URL_FIELDS = ("registerUrl", "sourceUrl", "newsUrl")
+
+
+def _sanitize_urls(data: dict) -> None:
+    """Last line of defence before camps.json: every URL field is http(s) or null, whatever the
+    registry, a redirect or a page put there."""
+    for k in URL_FIELDS:
+        data[k] = _http_url(data.get(k))
+    for e in (data.get("camps") or []) + (data.get("newsCamps") or []):
+        for k in ENTRY_URL_FIELDS:
+            if k in e:
+                e[k] = _http_url(e.get(k))

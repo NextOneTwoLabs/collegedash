@@ -340,7 +340,9 @@ def build_camps(camps, news, curated) -> dict | None:
         items.append({**e, "kind": "news"})
     for e in curated.get("camps") or []:
         if isinstance(e, dict) and e.get("name"):
-            items.append({"startDate": None, "endDate": None, "dateText": None, "precision": "day" if e.get("startDate") else None,
+            sd = e.get("startDate")
+            items.append({"startDate": None, "endDate": None, "dateText": None,
+                          "precision": ("month" if len(sd) == 7 else "day") if isinstance(sd, str) and sd else None,
                           "yearInferred": False, "location": None, "ages": None, "price": None, "registerUrl": None,
                           "sourceUrl": None, "confidence": "curated", **e, "kind": "curated"})
     seen, merged = set(), []
@@ -357,6 +359,7 @@ def build_camps(camps, news, curated) -> dict | None:
     return {"url": c.get("campsUrl"), "hubUrl": c.get("hubUrl"), "finalUrl": c.get("finalUrl"), "host": c.get("host"),
             "vendor": c.get("vendor"), "pageTitle": c.get("pageTitle"), "discoveredVia": c.get("discoveredVia"),
             "robotsBlocked": bool(c.get("robotsBlocked")), "fetchError": c.get("fetchError"),
+            "parsed": c.get("parsed"),  # False: the page was fetched but is not HTML (PDF, empty); None: older camps.json
             "newsScanned": c.get("newsScanned", 0), "items": merged, "_meta": metas}
 
 
