@@ -19,10 +19,12 @@ directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/", "/api/*"]
 
-# Visitor feedback is stored in a FEEDBACK KV namespace, one key per submission. There is no
-# binding here yet, and a placeholder id would not stand in for one: wrangler checks only that an
-# id is a non-empty string and then sends it verbatim, so Cloudflare rejects an unknown namespace
-# when the version is created - the build fails, nothing new publishes, and the site freezes on the
-# last good version. Create the namespace with `npx wrangler kv namespace create FEEDBACK`, then
-# add a [[kv_namespaces]] table here with binding = "FEEDBACK" and the id it prints. Until then
-# worker.js answers POST /api/feedback with a 503 and the rest of the site deploys normally.
+# Visitor feedback is stored one key per submission in the KV namespace titled
+# COLLEGEDASH_FEEDBACK on the NextOneTwoLabs account. The title is prefixed because the bare
+# FEEDBACK title already belongs to the sibling project NextOneTwoLabs/nextonetwo-website; the
+# title and the binding name are independent, and it is the binding name below that worker.js
+# reads as env.FEEDBACK. The id is an identifier, not a credential, so committing it is correct.
+
+[[kv_namespaces]]
+binding = "FEEDBACK"
+id = "effbba53953e424aa9f528b2a6f00f4e"

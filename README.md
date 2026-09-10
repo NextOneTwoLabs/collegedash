@@ -117,22 +117,22 @@ repository `NextOneTwoLabs/collegedash`, branch `main`, build command empty, dep
 - The daily refresh needs no secret; add `SCORECARD_API_KEY` under the repo's Actions secrets to lift the
   DEMO_KEY rate limit on school-facts refreshes.
 
-One-time setup for the feedback form. `wrangler.toml` carries **no** `FEEDBACK` binding yet, so
-`/api/feedback` answers 503 and the footer form shows its error path; everything else deploys normally.
-A placeholder id is not a way to get ahead of this: wrangler checks only that an id is a non-empty
-string, Cloudflare then rejects the unknown namespace when the version is created, and the build fails
-with the site frozen on its last good version. So create the namespace first:
-
-    npx wrangler kv namespace create FEEDBACK
-
-then add the binding and the id it prints to `wrangler.toml` as a one-line change:
+The feedback form's storage is set up. The KV namespace is titled **`COLLEGEDASH_FEEDBACK`** on the
+NextOneTwoLabs account — prefixed because the bare `FEEDBACK` title already belongs to the sibling
+project `NextOneTwoLabs/nextonetwo-website` — and `wrangler.toml` binds it:
 
     [[kv_namespaces]]
     binding = "FEEDBACK"
-    id = "<the id it printed>"
+    id = "effbba53953e424aa9f528b2a6f00f4e"
 
-Pushing that to `main` deploys it and the form starts working. The id is an identifier, not a credential,
-so committing it is correct.
+The namespace title and the binding name are independent; `worker.js` reads the **binding** name, as
+`env.FEEDBACK`, so that name must not change. The id is an identifier, not a credential, so committing
+it is correct. Pushing to `main` deploys the binding along with everything else.
+
+If the binding is ever removed or misnamed, `/api/feedback` answers 503 and the footer form shows its
+error path while the rest of the site keeps working. A placeholder id is not a repair: wrangler checks
+only that an id is a non-empty string, Cloudflare then rejects the unknown namespace when the version
+is created, and the build fails with the site frozen on its last good version.
 
 ## Feedback
 
@@ -163,8 +163,8 @@ provides no deletion path; both are open decisions.
     npx wrangler kv key list --binding FEEDBACK --remote
     npx wrangler kv key get "2026-09-10T18:04:21.512Z-9f3ac1b2" --binding FEEDBACK --remote
 
-Both resolve `--binding FEEDBACK` through `wrangler.toml`, so they work only once the binding above is in
-place. `--remote` is required on wrangler v4; without it you read the local simulated store. The dashboard shows
+Both resolve `--binding FEEDBACK` through `wrangler.toml` to the `COLLEGEDASH_FEEDBACK` namespace.
+`--remote` is required on wrangler v4; without it you read the local simulated store. The dashboard shows
 the same thing under Storage & Databases → KV. The keys are not guessable, so reading feedback is list
 then get, one call per submission — it is storage, not an inbox. A listing prints the metadata, so it
 prints every reply email: never paste one into a public issue or a screenshot.
@@ -178,8 +178,18 @@ that it was not acted on.
 ### Spam and limits
 
 Rate limiting is **not built**. A hidden honeypot field drops the crudest bots and the message is capped
-at 2,000 characters, but the cap bounds each write, not how many arrive; KV writes on the free plan are
-capped at 1,000 a day for the whole account. The escalation, to turn on at the first sign of junk rather
-than after, is the free plan's single WAF rate-limiting rule, which caps requests per IP from the
-dashboard; its expression must be path-only (`http.request.uri.path eq "/api/feedback"`), because the
+at 2,000 characters, but the cap bounds each write, not how many arrive.
+
+The free plan's 1,000 KV writes a day is an **account-wide** budget, not a per-namespace one, and the
+NextOneTwoLabs account also carries the sibling website's `FEEDBACK` and `WAITLIST` namespaces and the
+ECNL project. So a flood against this endpoint does not merely fill up this dashboard's feedback: it
+spends the day's writes for everything else on the account, and the website's waiting-list signups start
+failing. That shared blast radius, not the size of this namespace, is the reason to cap traffic early.
+
+The escalation, to turn on at the first sign of junk rather than after, is the free plan's WAF
+rate-limiting rule, which caps requests per IP from the dashboard. The free plan allows exactly **one**
+such rule per account, so the one rule has to cover the whole API surface: match `/api/*`
+(`starts_with(http.request.uri.path, "/api/")`) rather than the single path
+`http.request.uri.path eq "/api/feedback"`, which would leave every other endpoint unprotected and
+spend the account's only rule on one route. The expression must be path-only either way, because the
 free plan cannot filter on the request method.
