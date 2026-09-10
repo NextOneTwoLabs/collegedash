@@ -117,14 +117,22 @@ repository `NextOneTwoLabs/collegedash`, branch `main`, build command empty, dep
 - The daily refresh needs no secret; add `SCORECARD_API_KEY` under the repo's Actions secrets to lift the
   DEMO_KEY rate limit on school-facts refreshes.
 
-One-time setup for the feedback form — the KV namespace must exist before the first deploy that
-references it, or the build fails and the site freezes on its last good version:
+One-time setup for the feedback form. `wrangler.toml` carries **no** `FEEDBACK` binding yet, so
+`/api/feedback` answers 503 and the footer form shows its error path; everything else deploys normally.
+A placeholder id is not a way to get ahead of this: wrangler checks only that an id is a non-empty
+string, Cloudflare then rejects the unknown namespace when the version is created, and the build fails
+with the site frozen on its last good version. So create the namespace first:
 
     npx wrangler kv namespace create FEEDBACK
 
-Paste the id it prints into `wrangler.toml` under `[[kv_namespaces]]` and push. The id is an identifier,
-not a credential, so committing it is correct. Because pushes to `main` deploy automatically, never merge
-a binding that still holds a placeholder id.
+then add the binding and the id it prints to `wrangler.toml` as a one-line change:
+
+    [[kv_namespaces]]
+    binding = "FEEDBACK"
+    id = "<the id it printed>"
+
+Pushing that to `main` deploys it and the form starts working. The id is an identifier, not a credential,
+so committing it is correct.
 
 ## Feedback
 
@@ -155,7 +163,8 @@ provides no deletion path; both are open decisions.
     npx wrangler kv key list --binding FEEDBACK --remote
     npx wrangler kv key get "2026-09-10T18:04:21.512Z-9f3ac1b2" --binding FEEDBACK --remote
 
-`--remote` is required on wrangler v4; without it you read the local simulated store. The dashboard shows
+Both resolve `--binding FEEDBACK` through `wrangler.toml`, so they work only once the binding above is in
+place. `--remote` is required on wrangler v4; without it you read the local simulated store. The dashboard shows
 the same thing under Storage & Databases → KV. The keys are not guessable, so reading feedback is list
 then get, one call per submission — it is storage, not an inbox. A listing prints the metadata, so it
 prints every reply email: never paste one into a public issue or a screenshot.

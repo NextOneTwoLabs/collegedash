@@ -19,13 +19,10 @@ directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/", "/api/*"]
 
-# Visitor feedback, one key per submission. Create once with
-# `npx wrangler kv namespace create FEEDBACK` and paste the id it prints.
-#
-# !!! PLACEHOLDER - the id below is not a real namespace. wrangler checks only that it is a
-# !!! non-empty string and then sends it verbatim, so Cloudflare rejects it when the version is
-# !!! created: the build fails, no new version is published, and the site freezes on the last good
-# !!! one. Paste the real id here before merging.
-[[kv_namespaces]]
-binding = "FEEDBACK"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+# Visitor feedback is stored in a FEEDBACK KV namespace, one key per submission. There is no
+# binding here yet, and a placeholder id would not stand in for one: wrangler checks only that an
+# id is a non-empty string and then sends it verbatim, so Cloudflare rejects an unknown namespace
+# when the version is created - the build fails, nothing new publishes, and the site freezes on the
+# last good version. Create the namespace with `npx wrangler kv namespace create FEEDBACK`, then
+# add a [[kv_namespaces]] table here with binding = "FEEDBACK" and the id it prints. Until then
+# worker.js answers POST /api/feedback with a 503 and the rest of the site deploys normally.

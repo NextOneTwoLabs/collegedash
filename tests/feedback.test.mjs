@@ -93,6 +93,24 @@ test('a missing binding is a clean 503, not a 500', async () => {
   assert.equal(json.error, 'Feedback is unavailable right now.');
 });
 
+// wrangler.toml ships without a [[kv_namespaces]] binding, because a placeholder id fails the
+// build and freezes the site. This is what the deployed Worker does until the real id lands: only
+// /api/feedback is out, and "/" is run_worker_first, so the home page has to keep working.
+test('with no FEEDBACK binding the rest of the Worker is unaffected', async () => {
+  const env = { ASSETS: { fetch: () => new Response('the home page', { status: 200 }) } };
+
+  const feedback = await post({ message: 'hi' }, env);
+  assert.equal(feedback.status, 503);
+
+  const status = await worker.fetch(new Request('https://college.nextonetwo.com/api/status'), env);
+  assert.equal(status.status, 200);
+  assert.deepEqual(await status.json(), { local: false });
+
+  const home = await worker.fetch(new Request('https://college.nextonetwo.com/'), env);
+  assert.equal(home.status, 200);
+  assert.equal(await home.text(), 'the home page');
+});
+
 test('route and program are capped and stored when they fit', async () => {
   const kept = await send({ message: 'hi', route: '#/p/stanford/roster', program: 'stanford' });
   const record = JSON.parse(kept.env.puts[0].value);
