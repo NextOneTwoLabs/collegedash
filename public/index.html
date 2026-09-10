@@ -356,6 +356,22 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 .faq table td, .faq table th { vertical-align: top; }
 .faq .lead { color: var(--text-primary); font-size: 15px; }
 
+/* Feedback panel — in the footer, so it is on every view */
+.feedback { margin-bottom: 10px; }
+.feedback summary { display: inline-block; list-style: none; color: var(--accent-text); font-weight: 600; cursor: pointer; padding: 2px 0; }
+.feedback summary::-webkit-details-marker { display: none; }
+.feedback summary:hover { text-decoration: underline; }
+.feedback > p { margin: 8px 0 0; }
+.feedback form { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; max-width: 440px; margin: 8px 0 0; }
+.feedback label { font-weight: 600; color: var(--text-primary); }
+.feedback textarea, .feedback input[type="email"] { align-self: stretch; font-size: 16px; padding: 7px 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.feedback textarea { resize: vertical; min-height: 80px; }
+.feedback textarea:focus-visible, .feedback input[type="email"]:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); }
+.feedback .btn { margin-top: 4px; }
+.feedback .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.feedback-note { margin: 8px 0 0; min-height: 1.45em; color: var(--text-secondary); }
+.feedback-note.ok { color: var(--good-text); }
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
 @media (max-width: 1024px) { .conf-layout { grid-template-columns: 1fr; } .glance-panel { order: -1; position: static; } }
@@ -398,7 +414,22 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
   <aside class="sidebar" id="sidebar" aria-label="Navigation"></aside>
   <div class="main" id="main">
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
-    <footer class="site-notice">Collected automatically from public sources; not owned or verified by nextonetwo. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></footer>
+    <footer class="site-notice">
+      <details class="feedback" id="feedback">
+        <summary>Send feedback</summary>
+        <p>What would make this better?</p>
+        <form id="feedbackForm">
+          <label for="feedbackMessage">Message</label>
+          <textarea id="feedbackMessage" name="message" rows="4" maxlength="2000" required></textarea>
+          <label for="feedbackEmail">Email (optional, for a reply)</label>
+          <input id="feedbackEmail" type="email" name="email" autocomplete="email">
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn primary" type="submit">Send</button>
+        </form>
+        <p class="feedback-note" id="feedbackNote" aria-live="polite"></p>
+      </details>
+      <div>Collected automatically from public sources; not owned or verified by nextonetwo. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></div>
+    </footer>
   </div>
 </div>
 
@@ -1348,6 +1379,53 @@ async function renderFaq() {
   </div></div>`;
 }
 
+
+/* ---------- feedback ---------- */
+/* The panel lives in the footer, outside #app, so it survives every re-render. It posts JSON to
+   the Worker (worker.js); the mailto: address stays as the fallback, shown only when the post
+   fails, with whatever the visitor typed still in the box. */
+(() => {
+  const panel = $('#feedback'), form = $('#feedbackForm'), note = $('#feedbackNote');
+  if (!panel || !form || !note) return;
+  /* Not every failure comes from the Worker — a proxy or the local server answers in its own
+     words — so end the sentence before the fallback rather than assuming it was punctuated. */
+  const fail = msg => { note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`; };
+  panel.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.open) { panel.open = false; panel.querySelector('summary').focus(); } });
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    note.classList.remove('ok');
+    note.textContent = 'Sending…';
+    const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    try {
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          message: form.elements.message.value,
+          email: form.elements.email.value,
+          website: form.elements.website.value,
+          route: location.hash,
+          program: parts[0] === 'p' ? (parts[1] || '') : '',
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        form.hidden = true;
+        note.classList.add('ok');
+        note.textContent = 'Thanks — got it.';
+        note.tabIndex = -1;
+        note.focus({ preventScroll: true });
+      } else {
+        fail(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      fail('Couldn’t reach the server. Please try again.');
+    }
+    btn.disabled = false;
+  });
+})();
 
 /* ---------- boot ---------- */
 loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => { $('#app').innerHTML = `<div class="content-body"><div class="card"><h2>The data could not be loaded</h2><p class="muted">${esc(e.message)}. Please try again in a few minutes.</p></div></div>`; });
