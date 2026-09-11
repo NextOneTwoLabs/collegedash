@@ -19,6 +19,11 @@ Covers, in order:
                 an acronym-shaped candidate cannot claim a row
   check tool    exits 0 on the committed pair and non-zero on a corrupted copy, with every finding
                 type it can emit offline actually emitted
+  build         what build.py publishes: 126 ranked / 224 null in the profiles and in index.json,
+                the spot checks, the hard failure on a missing asset, the schema's required block
+                and the validate invariant that traces every published rank back to an asset row
+  card          public/index.html: the card renders the rank, and every other admission-rate
+                surface -- sort, table column, glance panel, tabs, compare -- is left alone
 """
 
 from __future__ import annotations
@@ -37,6 +42,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
+import build  # noqa: E402
 from collect import common, the_rank  # noqa: E402
 from tools import the_rank_check, the_rank_derive  # noqa: E402
 
@@ -518,6 +524,143 @@ def test_check_tool(asset: dict) -> None:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+# ---------- build, schema and card ----------
+
+def _fake_profiles(tmp: str, rows: dict[str, dict]) -> dict:
+    """Write {slug: academicRank block} into a scratch profiles directory and return a registry
+    naming exactly those slugs, so check_academic_ranks can be tested without touching public/."""
+    for slug, ar in rows.items():
+        common.write_json(os.path.join(tmp, f"{slug}.json"), {"slug": slug, "academicRank": ar})
+    return {"programs": [{"slug": s, "onboarded": True} for s in rows]}
+
+
+def _check_ranks(tmp: str, rows: dict[str, dict]) -> tuple[bool, str]:
+    reg = _fake_profiles(tmp, rows)
+    real = common.PROGRAMS_OUT_DIR
+    common.PROGRAMS_OUT_DIR = tmp
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf):
+            passed = build.check_academic_ranks(reg)
+    finally:
+        common.PROGRAMS_OUT_DIR = real
+    return passed, buf.getvalue().strip()
+
+
+def test_build(asset: dict, table: dict) -> None:
+    """What build.py publishes, and the two guards that stop a silent failure looking like data."""
+    print("build: profiles, index.json, and the validate invariant")
+    index = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), encoding="utf-8"))
+    rows = index["programs"]
+    ranked = [r for r in rows if r.get("academicRank") is not None]
+    ok("index.json carries 350 rows", len(rows) == 350, str(len(rows)))
+    ok("126 ranked in index.json", len(ranked) == 126, str(len(ranked)))
+    ok("224 unranked in index.json", len(rows) - len(ranked) == 224, str(len(rows) - len(ranked)))
+    ok("every row carries the key, so undefined never means unranked",
+       all("academicRank" in r and "academicRankTied" in r for r in rows))
+
+    asset_rows = {r["theSlug"]: r for r in asset["rows"]}
+    by_slug, n_ranked, n_null = {}, 0, 0
+    for f in sorted(os.listdir(common.PROGRAMS_OUT_DIR)):
+        if f == "index.json" or not f.endswith(".json"):
+            continue
+        p = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, f), encoding="utf-8"))
+        by_slug[p["slug"]] = p.get("academicRank")
+        if isinstance(p.get("academicRank"), dict) and p["academicRank"].get("rank") is not None:
+            n_ranked += 1
+        else:
+            n_null += 1
+    ok("126 ranked profiles", n_ranked == 126, str(n_ranked))
+    ok("224 null profiles", n_null == 224, str(n_null))
+    ok("every profile carries the block", all(isinstance(v, dict) for v in by_slug.values()))
+
+    for slug, want in (("stanford", (3, True)), ("virginia", (50, False)), ("penn-state", (39, True)),
+                       ("hawaii", (63, True)), ("rutgers", (66, True))):
+        a = by_slug[slug]
+        ok(f"{slug} publishes {'=' if want[1] else ''}{want[0]}", (a["rank"], a["tied"]) == want, str(a))
+        ok(f"{slug}'s theSlug is a real asset row", a["theSlug"] in asset_rows, str(a.get("theSlug")))
+    for slug in ("clemson", "san-diego", "siena-college"):
+        a = by_slug[slug]
+        ok(f"{slug} publishes rank null and no theSlug",
+           a["rank"] is None and a["theSlug"] is None, str(a))
+    ok("the block names Times Higher Education and its URL",
+       by_slug["stanford"]["source"] == "Times Higher Education"
+       and by_slug["stanford"]["sourceUrl"] == asset["sourceUrl"], str(by_slug["stanford"]))
+
+    # Losing the asset must not look like 224 unranked programs turning into 350.
+    tmp = tempfile.mkdtemp(prefix="the-rank-build-")
+    try:
+        reg = common.load_registry()
+        for name, attr in (("ranking asset", "THE_ASSET_PATH"), ("alias table", "THE_ALIAS_PATH")):
+            real = getattr(build, attr)
+            setattr(build, attr, os.path.join(tmp, "gone.json"))
+            try:
+                raises(f"a missing {name} raises rather than emitting 350 nulls",
+                       FileNotFoundError, build.load_academic_ranks, reg)
+            finally:
+                setattr(build, attr, real)
+
+        good = {"rank": 50, "tied": False, "theSlug": "university-virginia-main-campus",
+                "year": 2026, "label": "US Rank 2026", "source": "Times Higher Education",
+                "sourceUrl": asset["sourceUrl"], "asOf": asset["fetchedAt"]}
+        null = {**good, "rank": None, "tied": False, "theSlug": None}
+        passed, out = _check_ranks(tmp, {"virginia": good, "clemson": null})
+        ok("validate passes on a sound pair", passed, out)
+        passed, out = _check_ranks(tmp, {"virginia": {**good, "theSlug": "university-of-nowhere"}})
+        ok("validate catches a theSlug that is not in the asset",
+           not passed and "not in" in out, out)
+        passed, out = _check_ranks(tmp, {"virginia": {**good, "rank": 1}})
+        ok("validate catches a rank hand-edited away from its row",
+           not passed and "publishes 1" in out, out)
+        passed, out = _check_ranks(tmp, {"virginia": good, "clemson": dict(good)})
+        ok("validate catches one asset row claimed twice",
+           not passed and "claimed by" in out, out)
+        passed, out = _check_ranks(tmp, {"virginia": {**null, "theSlug": "stanford-university"}})
+        ok("validate catches a null rank still claiming a row", not passed, out)
+
+        import jsonschema
+        schema = common.read_json(common.SCHEMA_PATH)
+        profile = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, "clemson.json"), encoding="utf-8"))
+        ok("the committed clemson profile is schema-valid",
+           not list(jsonschema.Draft202012Validator(schema).iter_errors(profile)))
+        for broken, why in ((lambda p: p.pop("academicRank"), "no academicRank block at all"),
+                            (lambda p: p["academicRank"].pop("rank"), "a block with no rank key")):
+            p = json.loads(json.dumps(profile))
+            broken(p)
+            ok(f"the schema rejects {why}",
+               bool(list(jsonschema.Draft202012Validator(schema).iter_errors(p))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_card() -> None:
+    """The card shows the rank; every other admission-rate surface is left alone (issue #46)."""
+    print("card: public/index.html")
+    html = open(os.path.join(ROOT, "public", "index.html"), encoding="utf-8").read()
+    card = html[html.index("function cardHtml("):html.index("function tableHtml(")]
+
+    ok("the card's fact names the source", "fact('US rank (THE)', rankHtml(p), rankTitle(p))" in card)
+    ok("the card no longer reads the admission rate", "admissionRate" not in card, card)
+    ok("a tie renders with THE's '=' marker",
+       "p.academicRankTied ? '=' : ''" in html and "'#' " not in html.split("const rankHtml")[1][:200])
+    ok("an unranked program renders N/A", "p.academicRank == null ? 'N/A'" in html)
+    ok("the title attribute spells out the ranking",
+       "Times Higher Education, Best universities in the United States 2026" in html)
+    ok("fact() renders a title attribute when given one",
+       'const fact = (label, value, title) =>' in html and 'title="${esc(title)}"' in html)
+
+    for what, needle in (
+            ("the sort options keep Admission rate", "['admit', 'Admission rate']"),
+            ("sortCmp keeps its admit key", "key === 'admit' ? (a.admissionRate ?? 1)"),
+            ("the table keeps its Admit column", "['admit', 'Admit', 'num', p => fmtPct(p.admissionRate)"),
+            ("the at-a-glance panel keeps Admit rate", 'Admit rate</div><div class="stat-value">${fmtPct(sch.admissionRate)}'),
+            ("the Overview tab keeps Admission rate", "tile('Admission rate', fmtPct(sch.admissionRate)"),
+            ("the School tab keeps Admission rate", "kv('Admission rate', fmtPct(s.admissionRate))"),
+            ("compare keeps Admission rate", "['Admission rate', p => fmtPct(p.school?.admissionRate)]"),
+            ("the FAQ credits Times Higher Education", "ext(THE_RANK_URL, 'Times Higher Education')")):
+        ok(what, needle in html, needle)
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__,
@@ -535,6 +678,8 @@ def main(argv=None) -> int:
     test_traps(asset, table)
     test_derivation(asset)
     test_check_tool(asset)
+    test_build(asset, table)
+    test_card()
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed"
           + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))

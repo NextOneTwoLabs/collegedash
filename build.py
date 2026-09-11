@@ -481,10 +481,62 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> l
     return merged
 
 
+# ---------- academic rank ----------
+# Times Higher Education's "Best universities in the United States" table, captured once and
+# committed as data/the-us-rankings-2026.json with a hand-reviewed slug -> row alias table beside it
+# (data/the-rank-aliases.json, derived through Wikidata's IPEDS property by tools/the_rank_derive.py,
+# never by name similarity). Nothing here fetches anything: refreshing the ranking is a deliberate
+# annual act, tools/the_rank_check.py --refetch, which shows its diff to a person first.
+
+THE_ASSET_PATH = os.path.join(common.DATA_DIR, "the-us-rankings-2026.json")
+THE_ALIAS_PATH = os.path.join(common.DATA_DIR, "the-rank-aliases.json")
+THE_SOURCE = "Times Higher Education"
+
+
+def load_academic_ranks(registry: dict) -> dict[str, dict]:
+    """slug -> the profile's academicRank block, for every onboarded program.
+
+    Raises rather than degrading. 224 of the 350 programs are genuinely unranked and publish
+    `rank: null`; if a missing asset produced nulls as well, losing the feature would look exactly
+    like the data it is meant to carry, on every card at once. A missing rank and a missing ranking
+    must not render the same.
+    """
+    asset = common.read_json(THE_ASSET_PATH)
+    table = common.read_json(THE_ALIAS_PATH)
+    if not asset or not asset.get("rows"):
+        raise FileNotFoundError(f"academic rank: missing or empty ranking asset {THE_ASSET_PATH}")
+    if not table or not table.get("aliases"):
+        raise FileNotFoundError(f"academic rank: missing or empty alias table {THE_ALIAS_PATH}")
+
+    rows = {r["theSlug"]: r for r in asset["rows"] if r.get("theSlug")}
+    meta = {"year": asset.get("rankYear"), "label": asset.get("rankLabel"), "source": THE_SOURCE,
+            "sourceUrl": asset.get("sourceUrl"), "asOf": asset.get("fetchedAt")}
+    aliases, claimed, out = table["aliases"], {}, {}
+    for program in common.iter_programs(registry):
+        slug = program["slug"]
+        a = aliases.get(slug)
+        if a is None:
+            out[slug] = {"rank": None, "tied": False, "theSlug": None, **meta}
+            continue
+        row = rows.get(a.get("theSlug"))
+        if row is None:
+            raise ValueError(f"academic rank: {slug} claims theSlug {a.get('theSlug')!r}, which is not "
+                             f"in {os.path.basename(THE_ASSET_PATH)}; run tools/the_rank_check.py")
+        if a["theSlug"] in claimed:
+            raise ValueError(f"academic rank: asset row {a['theSlug']!r} is claimed by both "
+                             f"{claimed[a['theSlug']]} and {slug}; run tools/the_rank_check.py")
+        claimed[a["theSlug"]] = slug
+        out[slug] = {"rank": row["usRank"], "tied": bool(row.get("tied")), "theSlug": row["theSlug"], **meta}
+    return out
+
+
 # ---------- profile ----------
 
-def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict | None = None) -> dict:
+def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict | None = None,
+                  ranks: dict[str, dict] | None = None) -> dict:
     slug = program["slug"]
+    if ranks is None:
+        ranks = load_academic_ranks(registry)
     S = lambda n: common.load_source(slug, n)
     scorecard, climate, wiki, ath = S("scorecard"), S("climate"), S("wikipedia"), S("athletics")
     tds, sw, news, camps = S("commitments.tds"), S("commitments.soccerwire"), S("news"), S("camps")
@@ -508,6 +560,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
             "instagram": f"https://www.instagram.com/{program['social']['instagram']}/" if program.get("social", {}).get("instagram") else None,
         },
         "school": ({**scorecard["data"], "region": region_for(scorecard["data"].get("state")), "_meta": _meta(scorecard)} if scorecard else None),
+        "academicRank": ranks[slug],
         "climate": ({**climate["data"], "_meta": _meta(climate)} if climate else None),
         "program": build_program_section(program, wiki, ath),
         "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_cur, registry),
@@ -624,6 +677,7 @@ def search_names(p: dict) -> list[str]:
 
 def summary_row(p: dict) -> dict:
     school = p.get("school") or {}
+    rank = p.get("academicRank") or {}
     seasons = p.get("seasons") or []
     cur = next((s for s in seasons if s.get("inProgress")), None)
     last_final = next((s for s in seasons if not s.get("inProgress") and s.get("record")), None)
@@ -634,6 +688,7 @@ def summary_row(p: dict) -> dict:
         "city": school.get("city"), "state": school.get("state"), "region": school.get("region"),
         "ownership": school.get("ownership"), "undergradEnrollment": school.get("undergradEnrollment"),
         "admissionRate": school.get("admissionRate"), "sat25": school.get("sat25"), "sat75": school.get("sat75"),
+        "academicRank": rank.get("rank"), "academicRankTied": bool(rank.get("tied")),
         "tuitionInState": school.get("tuitionInState"), "tuitionOutOfState": school.get("tuitionOutOfState"),
         "headCoach": p["program"]["headCoach"].get("name"), "coachSince": p["program"]["headCoach"].get("since"),
         "nationalTitles": len(p["program"].get("nationalTitles") or []),
@@ -655,9 +710,10 @@ def build(registry: dict) -> list[dict]:
     rpi_hist = load_rpi_history()
     rpi_cur = load_rpi_current()
     state = common.load_refresh_state()
+    ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     rows, all_commits = [], []
     for program in common.iter_programs(registry):
-        profile = build_profile(program, registry, rpi_hist, rpi_cur, state)
+        profile = build_profile(program, registry, rpi_hist, rpi_cur, state, ranks)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
@@ -699,7 +755,54 @@ def validate(registry: dict, verbose: bool = False) -> bool:
             b = p["_build"]
             missing = [k for k, v in b["sections"].items() if not v]
             print(f"{program['slug']}: completeness {b['completeness']}; missing {missing or 'none'}; stale {b['stale'] or 'none'}")
-    return check_titles(registry) and ok
+    titles_ok = check_titles(registry)
+    ranks_ok = check_academic_ranks(registry)
+    return ok and titles_ok and ranks_ok
+
+
+def check_academic_ranks(registry: dict) -> bool:
+    """Every published rank must be the row the committed asset holds, and no row may be claimed by
+    two programs.
+
+    tools/the_rank_check.py --refetch is the annual guard against the ranking itself moving; this is
+    the cheap one that runs on every validate and catches a hand-edit to a profile or to the alias
+    table in between. A wrong rank is worse than N/A (issue #46), and #48 is what that looks like.
+    """
+    asset = common.read_json(THE_ASSET_PATH)
+    if not asset or not asset.get("rows"):
+        print(f"RANK: missing or empty ranking asset {THE_ASSET_PATH}")
+        return False
+    rows = {r["theSlug"]: r for r in asset["rows"] if r.get("theSlug")}
+    ok, claims = True, {}
+    for program in common.iter_programs(registry):
+        slug = program["slug"]
+        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        ar = p.get("academicRank")
+        if not isinstance(ar, dict):
+            print(f"RANK {slug}: profile carries no academicRank block")
+            ok = False
+            continue
+        if ar.get("rank") is None:
+            if ar.get("theSlug"):
+                print(f"RANK {slug}: no rank, yet it claims asset row {ar['theSlug']!r}")
+                ok = False
+            continue
+        row = rows.get(ar.get("theSlug"))
+        if row is None:
+            print(f"RANK {slug}: rank {ar['rank']} traces to theSlug {ar.get('theSlug')!r}, "
+                  f"which is not in {os.path.basename(THE_ASSET_PATH)}")
+            ok = False
+            continue
+        if (row.get("usRank"), bool(row.get("tied"))) != (ar["rank"], bool(ar.get("tied"))):
+            print(f"RANK {slug}: publishes {'=' if ar.get('tied') else ''}{ar['rank']}, but asset row "
+                  f"{ar['theSlug']} is {'=' if row.get('tied') else ''}{row.get('usRank')}")
+            ok = False
+        claims.setdefault(ar["theSlug"], []).append(slug)
+    for the_slug, slugs in sorted(claims.items()):
+        if len(slugs) > 1:
+            print(f"RANK: asset row {the_slug} is claimed by {', '.join(slugs)}")
+            ok = False
+    return ok
 
 
 def check_titles(registry: dict) -> bool:
