@@ -670,7 +670,7 @@ function syncToggles() { // refresh every star / compare control in place withou
 
 /* ---------- sidebar ---------- */
 const REGIONS = ['West', 'Midwest', 'South', 'Mid-Atlantic', 'Northeast'];
-const SORTS = [['rpi', `RPI ${RPI_SEASON}`], ['name', 'Name'], ['admit', 'Admission rate'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
+const SORTS = [['rpi', `RPI ${RPI_SEASON}`], ['name', 'Name'], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
@@ -894,6 +894,7 @@ function sortCmp(key) {
     : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
     : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
     : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
+    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || (a.shortName || a.name).localeCompare(b.shortName || b.name)
     : (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999);
 }
 async function renderList() {
