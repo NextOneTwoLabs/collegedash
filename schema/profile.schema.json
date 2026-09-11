@@ -3,7 +3,7 @@
   "$id": "https://collegedash.local/schema/profile.schema.json",
   "title": "CollegeDash program profile",
   "type": "object",
-  "required": ["slug", "name", "conference", "program", "seasons", "commitments", "curated", "_build"],
+  "required": ["slug", "name", "conference", "program", "seasons", "commitments", "curated", "academicRank", "_build"],
   "properties": {
     "slug": {"type": "string", "pattern": "^[a-z0-9-]+$"},
     "name": {"type": "string", "minLength": 1},
@@ -25,6 +25,21 @@
         "admissionRate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
         "undergradEnrollment": {"type": ["integer", "null"]},
         "_meta": {"$ref": "#/$defs/meta"}
+      }
+    },
+    "academicRank": {
+      "type": "object",
+      "description": "The university's place in Times Higher Education's Best universities in the United States table, from the committed data/the-us-rankings-2026.json. Required, and required even when rank is null: 224 of the 350 programs are genuinely unranked, so a block that is simply absent because the asset failed to load would be indistinguishable from one that is honestly empty.",
+      "required": ["rank", "tied", "theSlug", "year", "label", "source", "sourceUrl", "asOf"],
+      "properties": {
+        "rank": {"type": ["integer", "null"], "minimum": 1, "description": "US Rank 2026; null = not among the universities THE ranks"},
+        "tied": {"type": "boolean", "description": "THE prints a tied rank as '=39'; 124 of its 171 rows are ties"},
+        "theSlug": {"type": ["string", "null"], "description": "the asset row this rank came from; null when unranked"},
+        "year": {"type": "integer"},
+        "label": {"type": "string"},
+        "source": {"type": "string"},
+        "sourceUrl": {"type": "string"},
+        "asOf": {"type": ["string", "null"]}
       }
     },
     "climate": {

@@ -502,7 +502,7 @@ function tuitionHtml(inS, outS, state) { // one figure when equal or one side mi
   const away = S.residency && state && S.residency !== state;
   return `<small class="${away ? 'dim' : ''}">${fmtUsd(inS)} in</small><small class="${home ? 'dim' : ''}">${fmtUsd(outS)} out</small>`;
 }
-const fact = (label, value) => `<div><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`;
+const fact = (label, value, title) => `<div${title ? ` title="${esc(title)}"` : ''}><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`;
 
 /* ---------- search: word-prefix matching over school names (+ nickname), ranked ---------- */
 // "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st mary s", "Hawaiʻi" -> "hawaii"
@@ -631,6 +631,19 @@ const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
 // then whatever the program's own season rows carry
 const rpiOf = p => S.rpiByName?.get(p.shortName || p.name) ?? (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
 const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };
+/* ---------- academic rank (Times Higher Education) ----------
+   THE ranks 171 US universities and prints a tied rank with a leading '=' (124 of the 171 are ties),
+   so the card keeps that marker rather than implying Harvard and Stanford are not both third. The
+   224 programs THE does not rank read "N/A" -- the one fact on the card that spells out an empty
+   value instead of the em dash used everywhere else, at the owner's instruction (issue #46). Card
+   only: the table's Admit column, the sort options, the at-a-glance panel, the profile tabs and
+   compare all keep the admission rate. */
+const THE_RANK_URL = 'https://www.timeshighereducation.com/student/best-universities/best-universities-united-states';
+const THE_RANK_SOURCE = 'Times Higher Education, Best universities in the United States 2026';
+const rankHtml = p => p.academicRank == null ? 'N/A' : `${p.academicRankTied ? '=' : ''}#${p.academicRank}`;
+const rankTitle = p => p.academicRank == null ? `${THE_RANK_SOURCE} — this university is not among the 171 it ranks`
+  : p.academicRankTied ? `${THE_RANK_SOURCE} — = marks a rank shared with other universities`
+  : THE_RANK_SOURCE;
 
 /* ---------- favourites and compare ---------- */
 function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar(); }
@@ -916,7 +929,7 @@ function cardHtml(p) {
     <div class="body"><div class="meta">${meta}</div>
       <div class="facts">
         ${fact(`RPI ${RPI_SEASON}`, rpiCell(p))}
-        ${fact('Admit rate', fmtPct(p.admissionRate))}
+        ${fact('US rank (THE)', rankHtml(p), rankTitle(p))}
         ${fact('Undergrads', fmtNum(p.undergradEnrollment))}
         ${fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state))}
       </div></div>
@@ -1354,6 +1367,7 @@ async function renderFaq() {
   const sources = [
     ['Official athletics websites', 'Roster, coaching staff, schedule and results, news', 'Each program’s own site (linked at the top of every profile)'],
     [ext('https://collegescorecard.ed.gov/', 'College Scorecard'), 'Admission rate, SAT range, enrollment, tuition, net price, graduation rate', 'U.S. Department of Education'],
+    [ext(THE_RANK_URL, 'Times Higher Education'), 'The “US rank (THE)” on each program card, from their Best universities in the United States 2026 table; “=” marks a tie, “N/A” means the university is not one of the 171 they rank', 'Times Higher Education; the ranking is theirs and all rights are reserved'],
     [ext('https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA NCEI Climate Normals'), 'Monthly temperature and rainfall averages for 1991–2020 at the weather station nearest campus', 'U.S. National Oceanic and Atmospheric Administration'],
     [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, conference and NCAA honours, stadium (national titles are checked against the NCAA champions list)', 'Team articles, where one exists'],
     [ext('https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi', 'NCAA.com RPI') + ' and Chris Henderson’s RPI archive', 'Weekly RPI during the season; end-of-season RPI since 2007', 'NCAA; an independent, widely cited archive'],
