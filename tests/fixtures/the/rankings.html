@@ -1,0 +1,76 @@
+<!doctype html>
+<!--
+  Eight rows trimmed out of Times Higher Education's "Best universities in the United States"
+  table, kept as the parser's regression fixture. Every awkward shape on the real page is here:
+
+    row 1   a plain untied rank, an exact overall score
+    rows 2-3  "=3" twice, the tie marker that 124 of the 171 live rows carry
+    row 4   Purdue, with TWO &nbsp; inside the name
+    row 5   Northeastern, with one &nbsp; and THE's ", US" suffix
+    row 6   Hawai'i: a U+2019 apostrophe and a U+0101 macron, plus a banded world rank
+    row 7   Rutgers: a U+2013 en dash in the NAME, and a Drupal "-0" dedup suffix on the slug
+    row 8   the tail: world rank "1501+" and a banded overall score "10.3-27.2"
+
+  Rows 6 and 7 are our `hawaii` and `rutgers` programs. Before normalisation they did not match
+  anything and both cards would silently have read N/A, which is why they are pinned here.
+  Ranks and names are the real 2026 values; the other six columns are trimmed to keep it short.
+-->
+<html lang="en">
+<head><meta charset="utf-8"><title>Best universities in the United States (fixture)</title></head>
+<body>
+<div class="page">
+  <h1>Best universities in the United States 2026</h1>
+  <p>Trimmed fixture. The parser must find the table by id and ignore everything around it.</p>
+  <table id="rankingTable">
+    <thead>
+      <tr>
+        <th>US Rank 2026</th><th>WUR Rank 2026</th><th>University</th><th>Overall</th>
+        <th>Teaching</th><th>Research Environment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td><td>2</td>
+        <td><a href="/world-university-rankings/massachusetts-institute-technology">Massachusetts Institute of Technology</a></td>
+        <td>97.7</td><td>99.2</td><td>95.3</td>
+      </tr>
+      <tr>
+        <td>=3</td><td>=5</td>
+        <td><a href="/world-university-rankings/harvard-university">Harvard University</a></td>
+        <td>97.1</td><td>95.9</td><td>100</td>
+      </tr>
+      <tr>
+        <td>=3</td><td>=5</td>
+        <td><a href="/world-university-rankings/stanford-university">Stanford University</a></td>
+        <td>97.1</td><td>95.4</td><td>96.9</td>
+      </tr>
+      <tr>
+        <td>32</td><td>=91</td>
+        <td><a href="/world-university-rankings/purdue-university-west-lafayette">Purdue&nbsp;University&nbsp;West Lafayette</a></td>
+        <td>65.6</td><td>52.4</td><td>63.8</td>
+      </tr>
+      <tr>
+        <td>=56</td><td>=155</td>
+        <td><a href="/world-university-rankings/northeastern-university-us">Northeastern&nbsp;University, US</a></td>
+        <td>54.9</td><td>39.6</td><td>43.1</td>
+      </tr>
+      <tr>
+        <td>=63</td><td>251–300</td>
+        <td><a href="/world-university-rankings/university-hawaii-manoa">University of Hawai’i at Mānoa</a></td>
+        <td>54.3–56.3</td><td>32.4</td><td>44.5</td>
+      </tr>
+      <tr>
+        <td>=66</td><td>301–350</td>
+        <td><a href="/world-university-rankings/rutgers-university-new-brunswick-0">Rutgers University–New Brunswick</a></td>
+        <td>51.9–54.2</td><td>38.6</td><td>49.9</td>
+      </tr>
+      <tr>
+        <td>=166</td><td>1501+</td>
+        <td><a href="/world-university-rankings/morgan-state-university">Morgan State University</a></td>
+        <td>10.3–27.2</td><td>17.4</td><td>10.7</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

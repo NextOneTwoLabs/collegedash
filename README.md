@@ -29,6 +29,7 @@ python collegedash.py refresh                   # refresh all onboarded programs
 python collegedash.py refresh --only tds,news   # a subset: scorecard climate wikipedia athletics tds soccerwire news rpi
 python collegedash.py refresh --failed --dry-run # re-run only collectors whose last run failed (drop --dry-run to run)
 python tools/roster_check.py                    # offline: parse every cached roster page, report per-program outcome
+python tools/the_rank_check.py                  # offline: audit the Times Higher Education rank asset against its alias table
 python collegedash.py build                     # re-merge sources -> public/data (after editing curated.json)
 python collegedash.py validate                  # schema + completeness report
 python collegedash.py rpi history --force       # re-download the 2007-2024 RPI archive
@@ -55,8 +56,9 @@ the rate-limited `DEMO_KEY`.
 | `programs/<slug>/commitments.reviewed.json` | Your decisions: approved social records, merges, status overrides |
 | `programs/<slug>/sources/*.json` | Raw collector output with provenance (`collector`, `sourceUrl`, `fetchedAt`) |
 | `data/commitments/` | All-D1 commitment sweeps with firstSeen/lastSeen (phase 2) |
+| `data/the-us-rankings-2026.json` | Times Higher Education's US ranking, parsed and committed once a year rather than re-fetched; `data/the-rank-aliases.json` joins it to the 126 programs that appear on it |
 | `collect/` | Collectors; `adapters/` = athletics-site platforms (`sidearm`, `wmt`) |
-| `tools/` | Maintenance scripts: offline roster parser check, athletics URL probe, cache compaction |
+| `tools/` | Maintenance scripts: offline roster parser check, athletics URL probe, cache compaction, the annual ranking derive/check pair |
 | `build.py` | Merges sources + curated + reviewed into `public/data`, resolves commitment identities |
 | `serve.py` | Local server with `/api/curated/<slug>` and `/api/review/<slug>` write endpoints |
 | `scout/` | Social-media scout (phase 2): watchlist, keyword filter, review queue |
