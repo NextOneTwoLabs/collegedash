@@ -1,3 +1,5 @@
 # The badge artwork is copied byte for byte from nextonetwo-website.
 # Never line-ending convert it: git would rewrite badge.svg to CRLF on checkout.
+# The *.png rule protects any binary added outside public/assets/ too.
+*.png binary
 public/assets/** -text
