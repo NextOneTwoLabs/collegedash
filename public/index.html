@@ -894,7 +894,7 @@ function sortCmp(key) {
     : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
     : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
     : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
-    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || a.name.localeCompare(b.name)
+    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || (a.shortName || a.name).localeCompare(b.shortName || b.name)
     : (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999);
 }
 async function renderList() {
