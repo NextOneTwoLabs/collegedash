@@ -1,0 +1,772 @@
+{
+  "tool": "tools/the_rank_derive.py",
+  "derivedAt": "2026-09-11T14:14:42Z",
+  "asset": "data/the-us-rankings-2026.json",
+  "rankLabel": "US Rank 2026",
+  "rankYear": 2026,
+  "programs": 350,
+  "ranked": 126,
+  "evidenceCounts": {
+    "auto": 106,
+    "auto-alias-only": 5,
+    "reviewed": 15
+  },
+  "aliases": {
+    "alabama": {
+      "theSlug": "university-alabama",
+      "name": "The University of Alabama",
+      "evidence": "auto",
+      "matchedOn": "University of Alabama"
+    },
+    "albany": {
+      "theSlug": "suny-university-albany",
+      "name": "SUNY University at Albany",
+      "evidence": "reviewed",
+      "note": "THE prefixes the SUNY campuses; our unit 196060."
+    },
+    "american": {
+      "theSlug": "american-university",
+      "name": "American University",
+      "evidence": "auto",
+      "matchedOn": "American University"
+    },
+    "arizona": {
+      "theSlug": "university-arizona",
+      "name": "University of Arizona",
+      "evidence": "auto",
+      "matchedOn": "University of Arizona"
+    },
+    "arizona-state": {
+      "theSlug": "arizona-state-university-tempe",
+      "name": "Arizona State University (Tempe)",
+      "evidence": "reviewed",
+      "note": "'(Tempe)' is ASU's main campus, our unit 104151. NOT university-arizona, rank 45."
+    },
+    "arkansas": {
+      "theSlug": "university-arkansas",
+      "name": "University of Arkansas",
+      "evidence": "auto",
+      "matchedOn": "University of Arkansas"
+    },
+    "auburn": {
+      "theSlug": "auburn-university",
+      "name": "Auburn University",
+      "evidence": "auto",
+      "matchedOn": "Auburn University"
+    },
+    "baylor": {
+      "theSlug": "baylor-university",
+      "name": "Baylor University",
+      "evidence": "auto",
+      "matchedOn": "Baylor University"
+    },
+    "binghamton": {
+      "theSlug": "suny-binghamton-university",
+      "name": "SUNY Binghamton University",
+      "evidence": "reviewed",
+      "note": "THE prefixes the SUNY campuses; our unit 196079."
+    },
+    "boston-college": {
+      "theSlug": "boston-college",
+      "name": "Boston College",
+      "evidence": "auto",
+      "matchedOn": "Boston College"
+    },
+    "boston-university": {
+      "theSlug": "boston-university",
+      "name": "Boston University",
+      "evidence": "auto",
+      "matchedOn": "Boston University"
+    },
+    "brown": {
+      "theSlug": "brown-university",
+      "name": "Brown University",
+      "evidence": "auto",
+      "matchedOn": "Brown University"
+    },
+    "buffalo": {
+      "theSlug": "university-buffalo",
+      "name": "University at Buffalo",
+      "evidence": "auto",
+      "matchedOn": "University at Buffalo"
+    },
+    "california": {
+      "theSlug": "university-california-berkeley",
+      "name": "University of California, Berkeley",
+      "evidence": "auto",
+      "matchedOn": "University of California, Berkeley"
+    },
+    "central-michigan": {
+      "theSlug": "central-michigan-university",
+      "name": "Central Michigan University",
+      "evidence": "auto",
+      "matchedOn": "Central Michigan University"
+    },
+    "charlotte": {
+      "theSlug": "university-north-carolina-charlotte",
+      "name": "University of North Carolina at Charlotte",
+      "evidence": "auto",
+      "matchedOn": "University of North Carolina at Charlotte"
+    },
+    "colorado": {
+      "theSlug": "university-colorado-boulder",
+      "name": "University of Colorado Boulder",
+      "evidence": "auto",
+      "matchedOn": "University of Colorado Boulder"
+    },
+    "colorado-state": {
+      "theSlug": "colorado-state-university-fort-collins-0",
+      "name": "Colorado State University, Fort Collins",
+      "evidence": "reviewed",
+      "note": "'Fort Collins' is the main campus. Note the Drupal '-0' dedup suffix in the slug."
+    },
+    "columbia": {
+      "theSlug": "columbia-university",
+      "name": "Columbia University",
+      "evidence": "auto",
+      "matchedOn": "Columbia University"
+    },
+    "connecticut": {
+      "theSlug": "university-connecticut",
+      "name": "University of Connecticut",
+      "evidence": "auto",
+      "matchedOn": "University of Connecticut"
+    },
+    "cornell": {
+      "theSlug": "cornell-university",
+      "name": "Cornell University",
+      "evidence": "auto",
+      "matchedOn": "Cornell University"
+    },
+    "dartmouth": {
+      "theSlug": "dartmouth-college",
+      "name": "Dartmouth College",
+      "evidence": "auto",
+      "matchedOn": "Dartmouth College"
+    },
+    "delaware": {
+      "theSlug": "university-delaware",
+      "name": "University of Delaware",
+      "evidence": "auto",
+      "matchedOn": "University of Delaware"
+    },
+    "denver": {
+      "theSlug": "university-denver",
+      "name": "University of Denver",
+      "evidence": "auto",
+      "matchedOn": "University of Denver"
+    },
+    "drexel": {
+      "theSlug": "drexel-university",
+      "name": "Drexel University",
+      "evidence": "auto",
+      "matchedOn": "Drexel University"
+    },
+    "duke": {
+      "theSlug": "duke-university",
+      "name": "Duke University",
+      "evidence": "auto",
+      "matchedOn": "Duke University"
+    },
+    "florida": {
+      "theSlug": "university-florida",
+      "name": "University of Florida",
+      "evidence": "auto",
+      "matchedOn": "University of Florida"
+    },
+    "florida-atlantic": {
+      "theSlug": "florida-atlantic-university",
+      "name": "Florida Atlantic University",
+      "evidence": "auto",
+      "matchedOn": "Florida Atlantic University"
+    },
+    "florida-international": {
+      "theSlug": "florida-international-university",
+      "name": "Florida International University",
+      "evidence": "auto",
+      "matchedOn": "Florida International University"
+    },
+    "florida-state": {
+      "theSlug": "florida-state-university",
+      "name": "Florida State University",
+      "evidence": "reviewed",
+      "note": "Exact name, but Q861548 carries the historical alias 'University of Florida', which also matches THE's rank-44 row; pinned by hand so that cannot decide it."
+    },
+    "george-mason": {
+      "theSlug": "george-mason-university",
+      "name": "George Mason University",
+      "evidence": "auto",
+      "matchedOn": "George Mason University"
+    },
+    "george-washington": {
+      "theSlug": "george-washington-university",
+      "name": "George Washington University",
+      "evidence": "auto",
+      "matchedOn": "George Washington University"
+    },
+    "georgetown": {
+      "theSlug": "georgetown-university",
+      "name": "Georgetown University",
+      "evidence": "auto",
+      "matchedOn": "Georgetown University"
+    },
+    "georgia": {
+      "theSlug": "university-georgia",
+      "name": "University of Georgia",
+      "evidence": "auto",
+      "matchedOn": "University of Georgia"
+    },
+    "georgia-southern": {
+      "theSlug": "georgia-southern-university",
+      "name": "Georgia Southern University",
+      "evidence": "auto",
+      "matchedOn": "Georgia Southern University"
+    },
+    "georgia-state": {
+      "theSlug": "georgia-state-university",
+      "name": "Georgia State University",
+      "evidence": "auto",
+      "matchedOn": "Georgia State University"
+    },
+    "harvard": {
+      "theSlug": "harvard-university",
+      "name": "Harvard University",
+      "evidence": "auto",
+      "matchedOn": "Harvard University"
+    },
+    "hawaii": {
+      "theSlug": "university-hawaii-manoa",
+      "name": "University of Hawai’i at Mānoa",
+      "evidence": "auto",
+      "matchedOn": "University of Hawaiʻi at Mānoa"
+    },
+    "houston": {
+      "theSlug": "university-houston",
+      "name": "University of Houston",
+      "evidence": "auto",
+      "matchedOn": "University of Houston"
+    },
+    "illinois": {
+      "theSlug": "university-illinois-urbana-champaign",
+      "name": "University of Illinois at Urbana-Champaign",
+      "evidence": "auto",
+      "matchedOn": "University of Illinois Urbana-Champaign"
+    },
+    "indiana": {
+      "theSlug": "indiana-university",
+      "name": "Indiana University",
+      "evidence": "auto-alias-only",
+      "matchedOn": "Indiana University"
+    },
+    "iowa": {
+      "theSlug": "university-iowa",
+      "name": "University of Iowa",
+      "evidence": "auto",
+      "matchedOn": "University of Iowa"
+    },
+    "iowa-state": {
+      "theSlug": "iowa-state-university",
+      "name": "Iowa State University",
+      "evidence": "auto",
+      "matchedOn": "Iowa State University"
+    },
+    "kansas": {
+      "theSlug": "university-kansas",
+      "name": "University of Kansas",
+      "evidence": "auto",
+      "matchedOn": "University of Kansas"
+    },
+    "kansas-city": {
+      "theSlug": "university-missouri-kansas-city",
+      "name": "University of Missouri-Kansas City",
+      "evidence": "auto",
+      "matchedOn": "University of Missouri–Kansas City"
+    },
+    "kansas-state": {
+      "theSlug": "kansas-state-university",
+      "name": "Kansas State University",
+      "evidence": "auto",
+      "matchedOn": "Kansas State University"
+    },
+    "kentucky": {
+      "theSlug": "university-kentucky",
+      "name": "University of Kentucky",
+      "evidence": "auto",
+      "matchedOn": "University of Kentucky"
+    },
+    "lehigh": {
+      "theSlug": "lehigh-university",
+      "name": "Lehigh University",
+      "evidence": "auto",
+      "matchedOn": "Lehigh University"
+    },
+    "lsu": {
+      "theSlug": "louisiana-state-university",
+      "name": "Louisiana State University",
+      "evidence": "auto",
+      "matchedOn": "Louisiana State University"
+    },
+    "maryland": {
+      "theSlug": "university-maryland-college-park",
+      "name": "University of Maryland, College Park",
+      "evidence": "auto",
+      "matchedOn": "University of Maryland, College Park"
+    },
+    "massachusetts": {
+      "theSlug": "university-massachusetts",
+      "name": "University of Massachusetts",
+      "evidence": "reviewed",
+      "note": "THE's unsuffixed 'University of Massachusetts' row is Amherst, our unit 166629."
+    },
+    "memphis": {
+      "theSlug": "university-memphis",
+      "name": "University of Memphis",
+      "evidence": "auto",
+      "matchedOn": "University of Memphis"
+    },
+    "miami-fl": {
+      "theSlug": "university-miami",
+      "name": "University of Miami",
+      "evidence": "auto",
+      "matchedOn": "University of Miami"
+    },
+    "michigan": {
+      "theSlug": "university-michigan-ann-arbor",
+      "name": "University of Michigan-Ann Arbor",
+      "evidence": "auto-alias-only",
+      "matchedOn": "University of Michigan Ann Arbor"
+    },
+    "michigan-state": {
+      "theSlug": "michigan-state-university",
+      "name": "Michigan State University",
+      "evidence": "auto",
+      "matchedOn": "Michigan State University"
+    },
+    "minnesota": {
+      "theSlug": "university-minnesota",
+      "name": "University of Minnesota",
+      "evidence": "auto",
+      "matchedOn": "University of Minnesota"
+    },
+    "mississippi-state": {
+      "theSlug": "mississippi-state-university",
+      "name": "Mississippi State University",
+      "evidence": "auto",
+      "matchedOn": "Mississippi State University"
+    },
+    "missouri": {
+      "theSlug": "mizzou-university-missouri",
+      "name": "Mizzou - University of Missouri",
+      "evidence": "reviewed",
+      "note": "THE files Columbia as 'Mizzou'. NOT Missouri S&T or UMKC, both also =103."
+    },
+    "nc-state": {
+      "theSlug": "north-carolina-state-university",
+      "name": "North Carolina State University",
+      "evidence": "auto",
+      "matchedOn": "North Carolina State University"
+    },
+    "nebraska": {
+      "theSlug": "university-nebraska-lincoln",
+      "name": "University of Nebraska-Lincoln",
+      "evidence": "auto",
+      "matchedOn": "University of Nebraska–Lincoln"
+    },
+    "new-mexico-state": {
+      "theSlug": "new-mexico-state-university-main-campus",
+      "name": "New Mexico State University (Main campus)",
+      "evidence": "reviewed",
+      "note": "'(Main campus)' is Las Cruces, our unit 188030."
+    },
+    "njit": {
+      "theSlug": "new-jersey-institute-technology",
+      "name": "New Jersey Institute of Technology",
+      "evidence": "auto",
+      "matchedOn": "New Jersey Institute of Technology"
+    },
+    "north-carolina": {
+      "theSlug": "university-north-carolina-chapel-hill",
+      "name": "University of North Carolina at Chapel Hill",
+      "evidence": "auto",
+      "matchedOn": "University of North Carolina at Chapel Hill"
+    },
+    "northeastern": {
+      "theSlug": "northeastern-university-us",
+      "name": "Northeastern University, US",
+      "evidence": "auto",
+      "matchedOn": "Northeastern University"
+    },
+    "northern-illinois": {
+      "theSlug": "northern-illinois-university",
+      "name": "Northern Illinois University",
+      "evidence": "auto",
+      "matchedOn": "Northern Illinois University"
+    },
+    "northwestern": {
+      "theSlug": "northwestern-university",
+      "name": "Northwestern University",
+      "evidence": "auto",
+      "matchedOn": "Northwestern University"
+    },
+    "notre-dame": {
+      "theSlug": "university-notre-dame",
+      "name": "University of Notre Dame",
+      "evidence": "auto",
+      "matchedOn": "University of Notre Dame"
+    },
+    "oakland": {
+      "theSlug": "oakland-university",
+      "name": "Oakland University",
+      "evidence": "auto",
+      "matchedOn": "Oakland University"
+    },
+    "ohio-state": {
+      "theSlug": "ohio-state-university-main-campus",
+      "name": "Ohio State University (Main campus)",
+      "evidence": "reviewed",
+      "note": "'(Main campus)' is Columbus, our program's campus. Distinct from Ohio University below."
+    },
+    "ohio-university": {
+      "theSlug": "ohio-university-main-campus",
+      "name": "Ohio University (Main campus)",
+      "evidence": "reviewed",
+      "note": "Athens. Deliberately the row below ohio-state-university-main-campus."
+    },
+    "oklahoma-state": {
+      "theSlug": "oklahoma-state-university",
+      "name": "Oklahoma State University",
+      "evidence": "auto",
+      "matchedOn": "Oklahoma State University"
+    },
+    "old-dominion": {
+      "theSlug": "old-dominion-university",
+      "name": "Old Dominion University",
+      "evidence": "auto",
+      "matchedOn": "Old Dominion University"
+    },
+    "omaha": {
+      "theSlug": "university-nebraska-omaha",
+      "name": "University of Nebraska Omaha",
+      "evidence": "auto",
+      "matchedOn": "University of Nebraska Omaha"
+    },
+    "oregon": {
+      "theSlug": "university-oregon",
+      "name": "University of Oregon",
+      "evidence": "auto",
+      "matchedOn": "University of Oregon"
+    },
+    "penn": {
+      "theSlug": "university-pennsylvania",
+      "name": "University of Pennsylvania",
+      "evidence": "auto",
+      "matchedOn": "University of Pennsylvania"
+    },
+    "penn-state": {
+      "theSlug": "penn-state-main-campus",
+      "name": "Penn State (Main campus)",
+      "evidence": "reviewed",
+      "note": "'Penn State (Main campus)' is University Park. NOT university-pennsylvania, rank 8."
+    },
+    "pittsburgh": {
+      "theSlug": "university-pittsburgh-pittsburgh-campus",
+      "name": "University of Pittsburgh-Pittsburgh campus",
+      "evidence": "reviewed",
+      "note": "'-Pittsburgh campus' is the main campus, our unit 215293."
+    },
+    "portland-state": {
+      "theSlug": "portland-state-university",
+      "name": "Portland State University",
+      "evidence": "auto",
+      "matchedOn": "Portland State University"
+    },
+    "princeton": {
+      "theSlug": "princeton-university",
+      "name": "Princeton University",
+      "evidence": "auto",
+      "matchedOn": "Princeton University"
+    },
+    "purdue": {
+      "theSlug": "purdue-university-west-lafayette",
+      "name": "Purdue University West Lafayette",
+      "evidence": "reviewed",
+      "note": "THE names the West Lafayette campus; our purdue IS West Lafayette (unit 243780)."
+    },
+    "rhode-island": {
+      "theSlug": "university-rhode-island",
+      "name": "University of Rhode Island",
+      "evidence": "auto",
+      "matchedOn": "University of Rhode Island"
+    },
+    "rice": {
+      "theSlug": "rice-university",
+      "name": "Rice University",
+      "evidence": "auto",
+      "matchedOn": "Rice University"
+    },
+    "rutgers": {
+      "theSlug": "rutgers-university-new-brunswick-0",
+      "name": "Rutgers University–New Brunswick",
+      "evidence": "auto",
+      "matchedOn": "Rutgers University–New Brunswick"
+    },
+    "saint-louis": {
+      "theSlug": "saint-louis-university",
+      "name": "Saint Louis University",
+      "evidence": "auto",
+      "matchedOn": "Saint Louis University"
+    },
+    "san-diego-state": {
+      "theSlug": "san-diego-state-university",
+      "name": "San Diego State University",
+      "evidence": "auto",
+      "matchedOn": "San Diego State University"
+    },
+    "south-carolina": {
+      "theSlug": "university-south-carolina-columbia",
+      "name": "University of South Carolina-Columbia",
+      "evidence": "reviewed",
+      "note": "'-Columbia' is the flagship, our unit 218663. NOT university-southern-california."
+    },
+    "south-dakota": {
+      "theSlug": "university-south-dakota",
+      "name": "University of South Dakota",
+      "evidence": "auto",
+      "matchedOn": "University of South Dakota"
+    },
+    "south-florida": {
+      "theSlug": "university-south-florida",
+      "name": "University of South Florida",
+      "evidence": "auto",
+      "matchedOn": "University of South Florida"
+    },
+    "southern-illinois": {
+      "theSlug": "southern-illinois-university-carbondale",
+      "name": "Southern Illinois University Carbondale",
+      "evidence": "auto",
+      "matchedOn": "Southern Illinois University Carbondale"
+    },
+    "stanford": {
+      "theSlug": "stanford-university",
+      "name": "Stanford University",
+      "evidence": "auto",
+      "matchedOn": "Stanford University"
+    },
+    "stony-brook": {
+      "theSlug": "stony-brook-university",
+      "name": "Stony Brook University",
+      "evidence": "auto",
+      "matchedOn": "Stony Brook University"
+    },
+    "syracuse": {
+      "theSlug": "syracuse-university",
+      "name": "Syracuse University",
+      "evidence": "auto",
+      "matchedOn": "Syracuse University"
+    },
+    "temple": {
+      "theSlug": "temple-university",
+      "name": "Temple University",
+      "evidence": "auto",
+      "matchedOn": "Temple University"
+    },
+    "tennessee": {
+      "theSlug": "university-tennessee-knoxville",
+      "name": "The University of Tennessee-Knoxville",
+      "evidence": "auto-alias-only",
+      "matchedOn": "University of Tennessee, Knoxville"
+    },
+    "texas": {
+      "theSlug": "university-texas-austin",
+      "name": "University of Texas at Austin",
+      "evidence": "auto",
+      "matchedOn": "University of Texas at Austin"
+    },
+    "texas-am": {
+      "theSlug": "texas-am-university",
+      "name": "Texas A&M University",
+      "evidence": "auto",
+      "matchedOn": "Texas A&M University"
+    },
+    "texas-state": {
+      "theSlug": "texas-state-university",
+      "name": "Texas State University",
+      "evidence": "auto",
+      "matchedOn": "Texas State University"
+    },
+    "texas-tech": {
+      "theSlug": "texas-tech-university",
+      "name": "Texas Tech University",
+      "evidence": "auto",
+      "matchedOn": "Texas Tech University"
+    },
+    "toledo": {
+      "theSlug": "university-toledo",
+      "name": "University of Toledo",
+      "evidence": "auto",
+      "matchedOn": "University of Toledo"
+    },
+    "tulsa": {
+      "theSlug": "university-tulsa",
+      "name": "The University of Tulsa",
+      "evidence": "auto",
+      "matchedOn": "University of Tulsa"
+    },
+    "uc-davis": {
+      "theSlug": "university-california-davis",
+      "name": "University of California, Davis",
+      "evidence": "auto",
+      "matchedOn": "University of California, Davis"
+    },
+    "uc-irvine": {
+      "theSlug": "university-california-irvine",
+      "name": "University of California, Irvine",
+      "evidence": "auto",
+      "matchedOn": "University of California, Irvine"
+    },
+    "uc-riverside": {
+      "theSlug": "university-california-riverside",
+      "name": "University of California, Riverside",
+      "evidence": "auto",
+      "matchedOn": "University of California, Riverside"
+    },
+    "uc-san-diego": {
+      "theSlug": "university-california-san-diego",
+      "name": "University of California, San Diego",
+      "evidence": "auto",
+      "matchedOn": "University of California, San Diego"
+    },
+    "uc-santa-barbara": {
+      "theSlug": "university-california-santa-barbara",
+      "name": "University of California, Santa Barbara",
+      "evidence": "auto",
+      "matchedOn": "University of California, Santa Barbara"
+    },
+    "ucf": {
+      "theSlug": "university-central-florida",
+      "name": "University of Central Florida",
+      "evidence": "auto",
+      "matchedOn": "University of Central Florida"
+    },
+    "ucla": {
+      "theSlug": "university-california-los-angeles",
+      "name": "University of California, Los Angeles",
+      "evidence": "auto",
+      "matchedOn": "University of California, Los Angeles"
+    },
+    "uic": {
+      "theSlug": "university-illinois-chicago",
+      "name": "University of Illinois Chicago",
+      "evidence": "auto",
+      "matchedOn": "University of Illinois Chicago"
+    },
+    "umbc": {
+      "theSlug": "university-maryland-baltimore-county",
+      "name": "University of Maryland, Baltimore County",
+      "evidence": "auto",
+      "matchedOn": "University of Maryland, Baltimore County"
+    },
+    "unlv": {
+      "theSlug": "university-nevada-las-vegas",
+      "name": "University of Nevada, Las Vegas",
+      "evidence": "auto",
+      "matchedOn": "University of Nevada, Las Vegas"
+    },
+    "usc": {
+      "theSlug": "university-southern-california",
+      "name": "University of Southern California",
+      "evidence": "auto",
+      "matchedOn": "University of Southern California"
+    },
+    "utah": {
+      "theSlug": "university-utah",
+      "name": "University of Utah",
+      "evidence": "auto",
+      "matchedOn": "University of Utah"
+    },
+    "utep": {
+      "theSlug": "university-texas-el-paso",
+      "name": "University of Texas at El Paso",
+      "evidence": "auto",
+      "matchedOn": "University of Texas at El Paso"
+    },
+    "utrgv": {
+      "theSlug": "university-texas-rio-grande-valley",
+      "name": "University of Texas Rio Grande Valley",
+      "evidence": "auto",
+      "matchedOn": "University of Texas Rio Grande Valley"
+    },
+    "utsa": {
+      "theSlug": "university-texas-san-antonio",
+      "name": "The University of Texas at San Antonio",
+      "evidence": "auto",
+      "matchedOn": "University of Texas at San Antonio"
+    },
+    "vanderbilt": {
+      "theSlug": "vanderbilt-university",
+      "name": "Vanderbilt University",
+      "evidence": "auto",
+      "matchedOn": "Vanderbilt University"
+    },
+    "vcu": {
+      "theSlug": "virginia-commonwealth-university",
+      "name": "Virginia Commonwealth University",
+      "evidence": "auto",
+      "matchedOn": "Virginia Commonwealth University"
+    },
+    "virginia": {
+      "theSlug": "university-virginia-main-campus",
+      "name": "University of Virginia (Main campus)",
+      "evidence": "reviewed",
+      "note": "UVA, Charlottesville. NOT virginia-commonwealth-university (=80) or Virginia Tech (=63)."
+    },
+    "virginia-tech": {
+      "theSlug": "virginia-polytechnic-institute-and-state-university",
+      "name": "Virginia Polytechnic Institute and State University",
+      "evidence": "auto-alias-only",
+      "matchedOn": "Virginia Polytechnic Institute & State University"
+    },
+    "wake-forest": {
+      "theSlug": "wake-forest-university",
+      "name": "Wake Forest University",
+      "evidence": "auto",
+      "matchedOn": "Wake Forest University"
+    },
+    "washington": {
+      "theSlug": "university-washington",
+      "name": "University of Washington",
+      "evidence": "auto",
+      "matchedOn": "University of Washington"
+    },
+    "washington-state": {
+      "theSlug": "washington-state-university",
+      "name": "Washington State University",
+      "evidence": "auto",
+      "matchedOn": "Washington State University"
+    },
+    "william-mary": {
+      "theSlug": "william-mary",
+      "name": "William & Mary",
+      "evidence": "auto-alias-only",
+      "matchedOn": "William & Mary"
+    },
+    "wisconsin": {
+      "theSlug": "university-wisconsin-madison",
+      "name": "University of Wisconsin-Madison",
+      "evidence": "auto",
+      "matchedOn": "University of Wisconsin–Madison"
+    },
+    "wyoming": {
+      "theSlug": "university-wyoming",
+      "name": "University of Wyoming",
+      "evidence": "auto",
+      "matchedOn": "University of Wyoming"
+    },
+    "yale": {
+      "theSlug": "yale-university",
+      "name": "Yale University",
+      "evidence": "auto",
+      "matchedOn": "Yale University"
+    }
+  }
+}
