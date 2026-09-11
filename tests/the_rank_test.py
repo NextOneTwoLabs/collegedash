@@ -8,17 +8,23 @@ request, and writes only into a temporary directory. Exit 0 when every check pas
 
 Covers, in order:
   parser        the fixture: ties, the four normalisation cases, banded scores, "1501+", and the
-                shapes that must raise rather than be guessed at
-  asset         the committed data/the-us-rankings-2026.json: 171 rows, 124 tied, unique slugs
-  aliases       the committed data/the-rank-aliases.json: 126 entries, evidence tags, pinned names
+                shapes that must raise rather than be guessed at. Every fixture row is asserted to
+                be a verbatim copy of its committed asset row
+  asset         the committed data/the-us-rankings-2026.json: 171 rows, ties set on exactly the
+                shared ranks, unique slugs and nameKeys
+  aliases       the committed data/the-rank-aliases.json: 126 entries, evidence tags, pinned names,
+                and the 224 N/A count measured against the registry rather than its own header
   traps         the six fuzzy-match traps from issue #46, asserted one by one
-  derivation    group_items refuses to pick between two Wikidata items for one IPEDS unit id
-  check tool    exits 0 on the committed pair and non-zero on a corrupted copy
+  derivation    group_items refuses to pick between two Wikidata items for one IPEDS unit id, and
+                an acronym-shaped candidate cannot claim a row
+  check tool    exits 0 on the committed pair and non-zero on a corrupted copy, with every finding
+                type it can emit offline actually emitted
 """
 
 from __future__ import annotations
 
 import argparse
+import collections
 import contextlib
 import io
 import json
@@ -72,7 +78,7 @@ def raises(name: str, exc, fn, *a, **kw) -> None:
 
 # ---------- parser, against the fixture ----------
 
-def test_parser() -> None:
+def test_parser(asset: dict) -> None:
     print("parser: tests/fixtures/the/rankings.html")
     with open(FIXTURE, encoding="utf-8") as f:
         html = f.read()
@@ -80,7 +86,7 @@ def test_parser() -> None:
     rows = table["rows"]
     by_slug = {r["theSlug"]: r for r in rows}
 
-    ok("8 data rows, the header row skipped", len(rows) == 8, f"got {len(rows)}")
+    ok("12 data rows, the header row skipped", len(rows) == 12, f"got {len(rows)}")
     ok("rankLabel/rankYear", (table["rankLabel"], table["rankYear"]) == ("US Rank 2026", 2026))
 
     mit = by_slug["massachusetts-institute-technology"]
@@ -132,8 +138,22 @@ def test_parser() -> None:
     ok("exact overall not flagged", mit["overallBanded"] is False)
     ok("'1501+' world rank kept raw", by_slug["morgan-state-university"]["worldRank"] == "1501+")
     ok("banded world rank kept raw", hawaii["worldRank"] == "251–300", repr(hawaii["worldRank"]))
-    ok("3 of 8 fixture rows have a banded overall",
-       sum(1 for r in rows if r["overallBanded"]) == 3)
+
+    # Banding is the common case on this table (116 of 171, 68%), not the tail, so the fixture has
+    # to be banded in roughly that proportion or a parser that mishandled bands looks healthy here.
+    banded = sum(1 for r in rows if r["overallBanded"])
+    ok("8 of 12 fixture rows have a banded overall, as on the page (116 of 171)", banded == 8,
+       f"got {banded} of {len(rows)}")
+    ok("the fixture's banded share is within 5 points of the real 116/171",
+       abs(banded / len(rows) - 116 / 171) < 0.05, f"{banded}/{len(rows)} vs 116/171")
+    ok("two rows really do share =66, and =103", sum(1 for r in rows if r["usRank"] == 66) == 2
+       and sum(1 for r in rows if r["usRank"] == 103) == 2)
+
+    # "Trimmed out of the real table" has to stay literally true: every fixture row must parse to
+    # exactly the row the committed asset holds, or the fixture is testing invented values.
+    committed = {r["theSlug"]: r for r in asset["rows"]}
+    drift = [r["theSlug"] for r in rows if committed.get(r["theSlug"]) != r]
+    ok("every fixture row is its real row from the committed asset", not drift, str(drift))
 
     raises("no table -> ValueError", ValueError, the_rank.parse_table, "<html><body>nope</body></html>")
     raises("unparseable rank -> ValueError", ValueError, the_rank.parse_us_rank, "Top 10")
@@ -161,7 +181,19 @@ def test_asset(asset: dict) -> None:
            if not isinstance(r["usRank"], int) or not 1 <= r["usRank"] <= 166]
     ok("usRank is an int in 1..166 everywhere", not bad, str(bad[:5]))
     ok("usRank ascending", [r["usRank"] for r in rows] == sorted(r["usRank"] for r in rows))
-    ok("no banded usRank", all(isinstance(r["usRank"], int) for r in rows))
+    # A band ("=103" covering three schools) is carried by `tied`, never by the number, so `tied`
+    # has to be set on exactly the shared ranks. The old assertion here re-ran the isinstance check
+    # above it and could not fail. This one catches a row that claims a tie it is not in, or sits
+    # in one it does not admit to -- which is how a card would print "=39" against a unique rank.
+    shared = collections.Counter(r["usRank"] for r in rows)
+    mismarked = [(r["theSlug"], r["usRank"], r["tied"]) for r in rows
+                 if r["tied"] != (shared[r["usRank"]] > 1)]
+    ok("tied is set on exactly the shared ranks", not mismarked, str(mismarked[:5]))
+    ok("the ties really are groups: 124 rows across 15 shared ranks",
+       sum(1 for n in shared.values() if n > 1) == 15
+       and sum(n for n in shared.values() if n > 1) == 124,
+       f"{sum(1 for n in shared.values() if n > 1)} groups, "
+       f"{sum(n for n in shared.values() if n > 1)} rows")
     ok("provenance present", bool(asset.get("sourceUrl")) and bool(asset.get("fetchedAt")))
     ok("sourceUrl is the page the parser reads", asset["sourceUrl"] == the_rank.SOURCE_URL)
     ok("nameKey agrees with norm_key(name) on every row",
@@ -195,12 +227,25 @@ def test_aliases(asset: dict, table: dict) -> None:
        str(sorted(s for s, t in tags.items() if t == "auto-alias-only")))
     ok("every reviewed alias carries a note",
        all(a.get("note") for a in aliases.values() if a["evidence"] == "reviewed"))
-    counts = table.get("evidenceCounts") or {}
-    ok("evidenceCounts agrees with the entries",
-       all(sum(1 for a in aliases.values() if a["evidence"] == k) == v for k, v in counts.items()),
-       str(counts))
-    ok("224 programs are N/A", (table.get("programs") or 0) - len(aliases) == 224,
-       f"programs {table.get('programs')}")
+    # The old form iterated the header's own keys, so an empty or half-written evidenceCounts
+    # passed vacuously. Compare the two mappings whole, both directions, and require the tags to
+    # account for every alias.
+    counts = dict(table.get("evidenceCounts") or {})
+    actual = dict(collections.Counter(a["evidence"] for a in aliases.values()))
+    ok("evidenceCounts names every tag and counts every alias",
+       counts == actual and sum(counts.values()) == len(aliases) and bool(counts),
+       f"header {counts}, entries {actual}")
+    ok("the evidence split is 106 auto + 5 auto-alias-only + 15 reviewed",
+       actual == {"auto": 106, "auto-alias-only": 5, "reviewed": 15}, str(actual))
+
+    # The N/A count is the whole coverage claim on issue #46, so it is measured against the
+    # registry the build reads, not against the number this table wrote about itself.
+    programs = sum(1 for _ in common.iter_programs(common.load_registry()))
+    ok("350 programs in the registry", programs == 350, f"got {programs}")
+    ok("224 programs are N/A", programs - len(aliases) == 224,
+       f"{programs} programs - {len(aliases)} ranked")
+    ok("the header's program count is the registry's", table.get("programs") == programs,
+       f"header {table.get('programs')}, registry {programs}")
 
 
 def test_traps(asset: dict, table: dict) -> None:
@@ -293,6 +338,29 @@ def test_derivation(asset: dict) -> None:
     ok("the reviewed alias puts Penn State on =39",
        built2["penn-state"]["theSlug"] == "penn-state-main-campus"
        and built2["penn-state"]["evidence"] == "reviewed", str(built2.get("penn-state")))
+    # An acronym is never specific enough to claim a row: 42 norm_key values in the Wikidata name
+    # set are shared by two different programs of ours, all of them acronyms.
+    ok("a bare acronym is not a matchable key",
+       [the_rank_derive.matchable_key(s) for s in ("USC", "MSU", "UT", "NU")] == [None] * 4)
+    ok("a real name still is", the_rank_derive.matchable_key("University of Southern California")
+       == "university southern california")
+    ok("no committed THE row folds below the threshold, so the guard changes no match today",
+       min(len(r["nameKey"].split()) for r in rows) >= the_rank_derive.MIN_CANDIDATE_TOKENS,
+       str(min((len(r["nameKey"].split()), r["theSlug"]) for r in rows)))
+    # The hole, made concrete: if THE ever printed a row as a bare "USC", our usc program's
+    # Wikidata alias "USC" would fold onto it -- and so would south-carolina's. Neither may claim
+    # it. The label, the only authoritative name, does not match that row and is not enough.
+    acronym_row = [{"name": "USC", "nameKey": "usc", "theSlug": "usc", "usRank": 1, "tied": False}]
+    usc = the_rank_derive.group_items(
+        [_binding("123961", "Q4614", "University of Southern California", alias="USC")])
+    built3, report3 = the_rank_derive.derive(
+        [{"slug": "usc", "name": "University of Southern California",
+          "ids": {"scorecardUnitId": 123961}}], usc, acronym_row, reviewed={})
+    ok("a Wikidata alias of 'USC' cannot claim a THE row printed as 'USC'", built3 == {},
+       str(built3))
+    ok("and the program is reported unranked rather than matched",
+       [r["outcome"] for r in report3] == ["unranked"], str(report3))
+
     ok("conflicts() spots a row claimed twice",
        the_rank_derive.conflicts({"a": {"theSlug": "x"}, "b": {"theSlug": "x"}}) == {"x": ["a", "b"]})
     ok("conflicts() is empty on the committed table",
@@ -301,14 +369,27 @@ def test_derivation(asset: dict) -> None:
 
 # ---------- the check tool ----------
 
-def _run_check(*argv) -> tuple[int, str]:
+def _run_check(*argv) -> tuple[int | None, str]:
+    """(exit code, everything it printed). An exception comes back as code None rather than
+    unwinding the suite: the bug this file now guards against was the tool raising on a malformed
+    asset, and a test for it has to survive to report that."""
     buf = io.StringIO()
-    with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
-        code = the_rank_check.main(list(argv))
+    try:
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            code = the_rank_check.main(list(argv))
+    except Exception as e:  # noqa: BLE001 - any exception is the failure under test
+        return None, f"raised {type(e).__name__}: {e}\n{buf.getvalue()}"
     return code, buf.getvalue()
 
 
-def test_check_tool() -> None:
+def _kinds(out: str) -> collections.Counter:
+    """{finding kind: how many were printed}, read off the tool's own output. Only the finding
+    lines are indented, so --quiet output parses exactly."""
+    return collections.Counter(line.split()[0] for line in out.splitlines()
+                               if line.startswith("  ") and line.split())
+
+
+def test_check_tool(asset: dict) -> None:
     print("check tool: tools/the_rank_check.py")
     code, out = _run_check("--quiet")
     ok("exits 0 on the committed pair", code == 0, out)
@@ -346,8 +427,58 @@ def test_check_tool() -> None:
         code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
         ok("an unknown evidence tag exits non-zero", code == 1, out)
 
+        # bad-row. THE MUST-FIX: check_asset reported this row correctly and then check_aliases
+        # indexed the very key it had just reported missing, so the tool died with KeyError before
+        # printing anything. The finding has to reach stdout, not just the exit code.
+        common.write_json(asset_copy, {"rankYear": 2026, "rows": [{"name": "Nameless University"}]})
+        code, out = _run_check("--asset", asset_copy, "--aliases", ALIAS_PATH)
+        ok("a row with no theSlug exits non-zero", code == 1, out)
+        ok("and PRINTS bad-row rather than raising KeyError", "bad-row" in out, out)
+        ok("and names the row it is talking about", "Nameless University" in out, out)
+
+        # bad-row again, for the three checks that run on a row that does have a slug. An empty
+        # alias table keeps the output to the asset's own findings.
+        common.write_json(alias_copy, {"rankYear": 2026, "aliases": {}})
+        common.write_json(asset_copy, {"rankYear": 2026, "rows": [
+            {"name": "A", "theSlug": "a", "nameKey": "a", "usRank": "=3", "tied": "yes"},
+            {"name": "B", "theSlug": "b", "nameKey": "a", "usRank": 2, "tied": False}]})
+        code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
+        ok("a string usRank, a string tied and a colliding nameKey are three bad-rows",
+           _kinds(out) == {"bad-row": 3}, f"{dict(_kinds(out))}\n{out}")
+        ok("and the nameKey collision says which rows collided", "collides with" in out, out)
+
+        # duplicate-the-slug: two rows, one slug, which would make "the row" ambiguous.
+        common.write_json(asset_copy, dict(asset, rows=asset["rows"] + [dict(asset["rows"][0])]))
+        code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
+        ok("a repeated theSlug exits non-zero", code == 1, out)
+        ok("and reports duplicate-the-slug once, alongside the nameKey collision",
+           _kinds(out) == {"duplicate-the-slug": 1, "bad-row": 1}, f"{dict(_kinds(out))}\n{out}")
+
+        # missing-asset: an asset that parses but holds nothing.
+        common.write_json(asset_copy, {"rankYear": 2026, "rows": []})
+        code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
+        ok("an empty asset exits non-zero", code == 1, out)
+        ok("and reports missing-asset", _kinds(out) == {"missing-asset": 1},
+           f"{dict(_kinds(out))}\n{out}")
+
+        # year-mismatch: the alias table was derived against a different year's asset.
+        common.write_json(asset_copy, dict(asset, rankYear=2025))
+        code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
+        ok("an asset from another year exits non-zero", code == 1, out)
+        ok("and reports year-mismatch", _kinds(out) == {"year-mismatch": 1},
+           f"{dict(_kinds(out))}\n{out}")
+
+        # count-mismatch: the header stopped describing the entries under it.
+        shutil.copyfile(ASSET_PATH, asset_copy)
+        table = json.load(open(ALIAS_PATH, encoding="utf-8"))
+        table["ranked"] = 999
+        common.write_json(alias_copy, table)
+        code, out = _run_check("--quiet", "--asset", asset_copy, "--aliases", alias_copy)
+        ok("a header count that does not match the entries exits non-zero", code == 1, out)
+        ok("and reports count-mismatch", _kinds(out) == {"count-mismatch": 1},
+           f"{dict(_kinds(out))}\n{out}")
+
         # --refetch's diff, driven offline: the fixture stands in for "a freshly parsed table".
-        asset = json.load(open(ASSET_PATH, encoding="utf-8"))
         table = json.load(open(ALIAS_PATH, encoding="utf-8"))
         with open(FIXTURE, encoding="utf-8") as f:
             fresh = the_rank.parse_table(f.read())["rows"]
@@ -365,6 +496,16 @@ def test_check_tool() -> None:
            str(sorted(kinds)))
         ok("--refetch diff is silent when nothing moved",
            the_rank_check.diff_tables(asset, asset["rows"], table, None) == [])
+
+        # The must-fix's second site: diff_tables indexed the same missing key. A malformed row is
+        # check_asset's finding to report; here it must simply be skipped, not raise.
+        broken = dict(asset, rows=[{"name": "Nameless University"}] + asset["rows"])
+        try:
+            kinds = {f["finding"] for f in the_rank_check.diff_tables(broken, asset["rows"],
+                                                                      table, None)}
+        except Exception as e:  # noqa: BLE001 - raising is the regression
+            kinds = f"raised {type(e).__name__}: {e}"
+        ok("diff_tables skips a row with no theSlug instead of raising", kinds == set(), str(kinds))
         newcomer = asset["rows"] + [{"name": "Clemson University", "nameKey": "clemson university",
                                      "theSlug": "clemson-university", "usRank": 170, "tied": False,
                                      "worldRank": "1501+", "overall": "10.3–27.2",
@@ -388,12 +529,12 @@ def main(argv=None) -> int:
     asset = json.load(open(ASSET_PATH, encoding="utf-8"))
     table = json.load(open(ALIAS_PATH, encoding="utf-8"))
 
-    test_parser()
+    test_parser(asset)
     test_asset(asset)
     test_aliases(asset, table)
     test_traps(asset, table)
     test_derivation(asset)
-    test_check_tool()
+    test_check_tool(asset)
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed"
           + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))

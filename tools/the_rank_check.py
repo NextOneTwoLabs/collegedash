@@ -82,9 +82,14 @@ def check_asset(asset: dict) -> list[dict]:
 
 
 def check_aliases(asset: dict, table: dict) -> list[dict]:
-    """Every alias must name a row that is in the asset, exactly once, under the pinned name."""
+    """Every alias must name a row that is in the asset, exactly once, under the pinned name.
+
+    Rows are read with .get and the keyless ones skipped. check_asset has already reported those as
+    bad-row; indexing them here used to raise KeyError before a single finding reached stdout, so
+    the diagnostic vanished exactly on the malformed asset it exists to describe.
+    """
     out = []
-    rows = {r["theSlug"]: r for r in asset.get("rows") or []}
+    rows = {r["theSlug"]: r for r in asset.get("rows") or [] if r.get("theSlug")}
     aliases = table.get("aliases") or {}
 
     if table.get("rankYear") != asset.get("rankYear"):
@@ -108,12 +113,12 @@ def check_aliases(asset: dict, table: dict) -> list[dict]:
             out.append(finding("unknown-the-slug",
                                f"{slug}: theSlug {a.get('theSlug')!r} is not in the asset", slug=slug))
             continue
-        if row["name"] != a.get("name"):
+        if row.get("name") != a.get("name"):
             # The pin is the whole rot detector; a changed name means the row is not the row that
             # was reviewed, whatever the slug still says.
             out.append(finding("name-drift",
                                f"{slug}: pinned name {a.get('name')!r} but the asset row "
-                               f"{a['theSlug']} now reads {row['name']!r}",
+                               f"{a['theSlug']} now reads {row.get('name')!r}",
                                slug=slug, theSlug=a["theSlug"]))
     for the_slug, slugs in sorted(claims.items()):
         if len(slugs) > 1:
@@ -125,25 +130,31 @@ def check_aliases(asset: dict, table: dict) -> list[dict]:
 # ---------- --refetch ----------
 
 def diff_tables(asset: dict, fresh_rows: list[dict], table: dict, registry: dict | None) -> list[dict]:
-    """What changed between the committed asset and a freshly parsed copy of the page."""
+    """What changed between the committed asset and a freshly parsed copy of the page.
+
+    Like check_aliases, this reads rows with .get and skips the ones with no theSlug: a malformed
+    asset is check_asset's finding to report, not a KeyError that swallows the whole report.
+    """
     out = []
-    old = {r["theSlug"]: r for r in asset.get("rows") or []}
-    new = {r["theSlug"]: r for r in fresh_rows}
+    old = {r["theSlug"]: r for r in asset.get("rows") or [] if r.get("theSlug")}
+    new = {r["theSlug"]: r for r in fresh_rows if r.get("theSlug")}
     aliases = table.get("aliases") or {}
 
     for the_slug, r in sorted(new.items()):
         o = old.get(the_slug)
         if o is None:
-            out.append(finding("new-row", f"{the_slug}: {r['name']} at "
-                                          f"{'=' if r['tied'] else ''}{r['usRank']}", theSlug=the_slug))
-        elif (o["usRank"], o["tied"]) != (r["usRank"], r["tied"]):
+            out.append(finding("new-row", f"{the_slug}: {r.get('name')} at "
+                                          f"{'=' if r.get('tied') else ''}{r.get('usRank')}",
+                               theSlug=the_slug))
+        elif (o.get("usRank"), o.get("tied")) != (r.get("usRank"), r.get("tied")):
             out.append(finding("rank-change",
-                               f"{the_slug}: {'=' if o['tied'] else ''}{o['usRank']} -> "
-                               f"{'=' if r['tied'] else ''}{r['usRank']}", theSlug=the_slug))
+                               f"{the_slug}: {'=' if o.get('tied') else ''}{o.get('usRank')} -> "
+                               f"{'=' if r.get('tied') else ''}{r.get('usRank')}", theSlug=the_slug))
     for the_slug, o in sorted(old.items()):
         if the_slug not in new:
-            out.append(finding("dropped-row", f"{the_slug}: {o['name']} was "
-                                              f"{'=' if o['tied'] else ''}{o['usRank']}", theSlug=the_slug))
+            out.append(finding("dropped-row", f"{the_slug}: {o.get('name')} was "
+                                              f"{'=' if o.get('tied') else ''}{o.get('usRank')}",
+                               theSlug=the_slug))
 
     for slug, a in sorted(aliases.items()):
         r = new.get(a.get("theSlug"))
@@ -151,9 +162,9 @@ def diff_tables(asset: dict, fresh_rows: list[dict], table: dict, registry: dict
             out.append(finding("alias-row-gone",
                                f"{slug}: {a.get('theSlug')!r} is no longer in the table; "
                                f"re-run tools/the_rank_derive.py", slug=slug))
-        elif r["name"] != a.get("name"):
+        elif r.get("name") != a.get("name"):
             out.append(finding("alias-name-changed",
-                               f"{slug}: pinned {a.get('name')!r}, the page now says {r['name']!r}",
+                               f"{slug}: pinned {a.get('name')!r}, the page now says {r.get('name')!r}",
                                slug=slug, theSlug=a["theSlug"]))
 
     if registry is not None:
@@ -167,10 +178,10 @@ def diff_tables(asset: dict, fresh_rows: list[dict], table: dict, registry: dict
         for the_slug, r in sorted(new.items()):
             if the_slug in claimed:
                 continue
-            slug = by_name.get(r.get("nameKey") or the_rank.norm_key(r["name"]))
+            slug = by_name.get(r.get("nameKey") or the_rank.norm_key(r.get("name")))
             if slug:
                 out.append(finding("newly-matchable",
-                                   f"{the_slug} ({r['name']}) now folds onto program {slug}; "
+                                   f"{the_slug} ({r.get('name')}) now folds onto program {slug}; "
                                    f"re-run tools/the_rank_derive.py to confirm through Wikidata",
                                    slug=slug, theSlug=the_slug))
     return out

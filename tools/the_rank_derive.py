@@ -19,7 +19,8 @@ runs through an identifier instead:
     (IPEDS unit id)                                            en.wikipedia sitelink
 
 and a program is matched to a THE row only when one of those names is *exactly equal* to the row's
-name after collect.the_rank.norm_key folding (case, accents, punctuation, a handful of stopwords).
+name after collect.the_rank.norm_key folding (case, accents, punctuation, a handful of stopwords)
+and folds to at least MIN_CANDIDATE_TOKENS tokens, so a bare acronym can never claim a row.
 No similarity score exists anywhere in this file. Wikidata is a derivation-time tool only: the
 build reads the committed alias table and never queries anything.
 
@@ -119,6 +120,15 @@ REVIEWED = {
 }
 
 
+# A candidate name has to fold to at least this many tokens before it may claim a THE row. The
+# Wikidata name set holds 42 norm_key values shared by two *different* programs of ours -- usc, msu,
+# osu, ut, um, asu, nu and friends -- and every one of them is an acronym. Nothing fires today only
+# because no THE row is acronym-shaped (the shortest row key on the page is two tokens), which is a
+# property of this year's page rather than a rule. This makes it a rule: an acronym is never
+# specific enough to put one university's ranking on another's card (issues #46 and #48).
+MIN_CANDIDATE_TOKENS = 2
+
+
 class AmbiguousUnitId(RuntimeError):
     """One IPEDS unit id, more than one Wikidata item, and no pin saying which is which."""
 
@@ -172,6 +182,17 @@ def group_items(bindings, *, known=KNOWN_AMBIGUOUS) -> dict:
         out[unit] = {"qid": qid, "label": e["label"], "article": e["article"],
                      "aliases": sorted(e["aliases"]), "ambiguous": False}
     return out
+
+
+def matchable_key(name: str | None) -> str | None:
+    """the_rank.norm_key(name) when the fold is specific enough to claim a row, else None.
+
+        'University of Southern California' -> 'university southern california'
+        'USC'                               -> None   (shared with south-carolina)
+        'UT'                                -> None   (Texas, Tennessee, Toledo, Utah...)
+    """
+    key = the_rank.norm_key(name)
+    return key if len(key.split()) >= MIN_CANDIDATE_TOKENS else None
 
 
 def candidates(entry: dict) -> list[tuple[str, str]]:
@@ -231,7 +252,10 @@ def derive(programs, wikidata: dict, rows: list[dict], *, reviewed=REVIEWED) -> 
 
         hits = collections.defaultdict(list)
         for kind, name in candidates(entry):
-            row = by_key.get(the_rank.norm_key(name))
+            key = matchable_key(name)
+            if key is None:
+                continue  # an acronym; see MIN_CANDIDATE_TOKENS
+            row = by_key.get(key)
             if row:
                 hits[row["theSlug"]].append({"kind": kind, "name": name})
         if not hits:

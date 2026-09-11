@@ -1,19 +1,30 @@
 <!doctype html>
 <!--
-  Eight rows trimmed out of Times Higher Education's "Best universities in the United States"
+  Twelve rows trimmed out of Times Higher Education's "Best universities in the United States"
   table, kept as the parser's regression fixture. Every awkward shape on the real page is here:
 
-    row 1   a plain untied rank, an exact overall score
+    row 1     a plain untied rank, an exact overall score
     rows 2-3  "=3" twice, the tie marker that 124 of the 171 live rows carry
-    row 4   Purdue, with TWO &nbsp; inside the name
-    row 5   Northeastern, with one &nbsp; and THE's ", US" suffix
-    row 6   Hawai'i: a U+2019 apostrophe and a U+0101 macron, plus a banded world rank
-    row 7   Rutgers: a U+2013 en dash in the NAME, and a Drupal "-0" dedup suffix on the slug
-    row 8   the tail: world rank "1501+" and a banded overall score "10.3-27.2"
+    row 4     Purdue, with TWO &nbsp; inside the name
+    row 5     Northeastern, with one &nbsp; and THE's ", US" suffix
+    row 6     Hawai'i: a U+2019 apostrophe and a U+0101 macron, plus a banded world rank
+    row 7     Rutgers: a U+2013 en dash in the NAME, and a Drupal "-0" dedup suffix on the slug
+    row 8     Florida State, sharing =66 with Rutgers: a tie group of two, both banded
+    rows 9-10 Colorado State (the second "-0" dedup slug) and Mizzou, the other tie group
+    row 11    SUNY Binghamton: THE's SUNY prefix, world rank "601-800"
+    row 12    the tail: world rank "1501+" and a banded overall score "10.3-27.2"
 
   Rows 6 and 7 are our `hawaii` and `rutgers` programs. Before normalisation they did not match
   anything and both cards would silently have read N/A, which is why they are pinned here.
-  Ranks and names are the real 2026 values; the other six columns are trimmed to keep it short.
+
+  PROPORTION. 8 of these 12 rows carry a banded overall score (67%), against 116 of 171 on the live
+  page (68%). Banding is the common case on this table, not the tail, so a fixture where it was the
+  exception let a parser that mishandled bands look healthy. The four exact scores are the four
+  top-ranked rows; on the real page no row above =56 is banded and almost none below it is not.
+
+  Ranks, names, slugs, world ranks and overall scores are the real 2026 values. The page prints
+  several more columns; the two kept here are only so a row has the shape the parser skips a
+  header by, and nothing reads them.
 -->
 <html lang="en">
 <head><meta charset="utf-8"><title>Best universities in the United States (fixture)</title></head>
@@ -45,14 +56,14 @@
         <td>97.1</td><td>95.4</td><td>96.9</td>
       </tr>
       <tr>
-        <td>32</td><td>=91</td>
+        <td>32</td><td>85</td>
         <td><a href="/world-university-rankings/purdue-university-west-lafayette">Purdue&nbsp;University&nbsp;West Lafayette</a></td>
-        <td>65.6</td><td>52.4</td><td>63.8</td>
+        <td>68.8</td><td>52.4</td><td>63.8</td>
       </tr>
       <tr>
-        <td>=56</td><td>=155</td>
+        <td>=56</td><td>201–250</td>
         <td><a href="/world-university-rankings/northeastern-university-us">Northeastern&nbsp;University, US</a></td>
-        <td>54.9</td><td>39.6</td><td>43.1</td>
+        <td>56.4–58.6</td><td>39.6</td><td>43.1</td>
       </tr>
       <tr>
         <td>=63</td><td>251–300</td>
@@ -62,7 +73,27 @@
       <tr>
         <td>=66</td><td>301–350</td>
         <td><a href="/world-university-rankings/rutgers-university-new-brunswick-0">Rutgers University–New Brunswick</a></td>
-        <td>51.9–54.2</td><td>38.6</td><td>49.9</td>
+        <td>51.6–54.2</td><td>38.6</td><td>49.9</td>
+      </tr>
+      <tr>
+        <td>=66</td><td>301–350</td>
+        <td><a href="/world-university-rankings/florida-state-university">Florida State University</a></td>
+        <td>51.6–54.2</td><td>35.9</td><td>41.2</td>
+      </tr>
+      <tr>
+        <td>=103</td><td>501–600</td>
+        <td><a href="/world-university-rankings/colorado-state-university-fort-collins-0">Colorado State University, Fort Collins</a></td>
+        <td>43.6–46.1</td><td>30.7</td><td>36.4</td>
+      </tr>
+      <tr>
+        <td>=103</td><td>501–600</td>
+        <td><a href="/world-university-rankings/mizzou-university-missouri">Mizzou - University of Missouri</a></td>
+        <td>43.6–46.1</td><td>29.8</td><td>33.5</td>
+      </tr>
+      <tr>
+        <td>=116</td><td>601–800</td>
+        <td><a href="/world-university-rankings/suny-binghamton-university">SUNY Binghamton University</a></td>
+        <td>39.0–43.5</td><td>27.4</td><td>29.1</td>
       </tr>
       <tr>
         <td>=166</td><td>1501+</td>
