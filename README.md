@@ -46,6 +46,7 @@ the rate-limited `DEMO_KEY`.
 |---|---|
 | `public/` | Everything the site serves — Cloudflare output dir and local server root |
 | `public/index.html` | The dashboard (vanilla JS, no build step) |
+| `public/assets/` | Badge artwork copied byte for byte from `nextonetwo-website`: tab icon, touch icon, share image, and `badge.svg`, the full-badge source the two PNGs are rendered from |
 | `public/data/registry.json` | Program registry + every source URL template |
 | `public/data/programs/<slug>.json` | Built profile per program; `index.json` = list rows |
 | `public/data/rpi/<year>.json` | End-of-season RPI 2007–2024 (all D1); `current.json` + `weekly/` = NCAA weekly |
