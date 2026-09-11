@@ -22,8 +22,10 @@ Covers, in order:
   build         what build.py publishes: 126 ranked / 224 null in the profiles and in index.json,
                 the spot checks, the hard failure on a missing asset, the schema's required block
                 and the validate invariant that traces every published rank back to an asset row
-  card          public/index.html: the card renders the rank, and every other admission-rate
-                surface -- sort, table column, glance panel, tabs, compare -- is left alone
+  card          public/index.html: the card renders the rank as "#" plus a number with no tie
+                marker (issue #46), checked by running the page's own rankHtml over all 350
+                rows, and every other admission-rate surface -- sort, table column, glance
+                panel, tabs, compare -- is left alone
 """
 
 from __future__ import annotations
@@ -34,7 +36,9 @@ import contextlib
 import io
 import json
 import os
+import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -53,6 +57,10 @@ ALIAS_PATH = os.path.join(ROOT, "data", "the-rank-aliases.json")
 # The five programs whose only automatic evidence was a Wikidata alias -- nothing authoritative
 # agreed -- so they carry their own tag and a re-derivation re-surfaces them for review.
 ALIAS_ONLY = {"indiana", "michigan", "tennessee", "virginia-tech", "william-mary"}
+
+# The card check executes index.html's own rank helpers; node already ships as a test
+# dependency of this repo (tests/feedback.test.mjs).
+NODE = shutil.which("node") or "node"
 
 FAILS: list[str] = []
 TOTAL = 0
@@ -633,6 +641,31 @@ def test_build(asset: dict, table: dict) -> None:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _render_ranks(html: str) -> list[dict]:
+    """Run the page's own rankHtml/rankTitle over the committed index.json, via node.
+
+    Asserting on the source text alone would pass through a rendering bug, so the two arrow
+    functions are lifted verbatim out of index.html and executed against all 350 real rows.
+    """
+    start = html.index("const THE_RANK_SOURCE = ")
+    end = html.index("  : THE_RANK_SOURCE;", start) + len("  : THE_RANK_SOURCE;")
+    program = html[start:end] + """
+const rows = JSON.parse(require('fs').readFileSync(process.argv[2], 'utf8')).programs;
+console.log(JSON.stringify(rows.map(p => ({ slug: p.slug, html: rankHtml(p), title: rankTitle(p) }))));
+"""
+    tmp = tempfile.mkdtemp(prefix="the-rank-render-")
+    try:
+        js = os.path.join(tmp, "render.js")
+        io.open(js, "w", encoding="utf-8").write(program)
+        index = os.path.join(common.PROGRAMS_OUT_DIR, "index.json")
+        out = subprocess.run([NODE, js, index], capture_output=True, text=True, encoding="utf-8")
+        if out.returncode != 0:
+            raise RuntimeError(f"node failed rendering the rank fact: {out.stderr.strip()}")
+        return json.loads(out.stdout)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def test_card() -> None:
     """The card shows the rank; every other admission-rate surface is left alone (issue #46)."""
     print("card: public/index.html")
@@ -641,9 +674,33 @@ def test_card() -> None:
 
     ok("the card's fact names the source", "fact('US rank (THE)', rankHtml(p), rankTitle(p))" in card)
     ok("the card no longer reads the admission rate", "admissionRate" not in card, card)
-    ok("a tie renders with THE's '=' marker",
-       "p.academicRankTied ? '=' : ''" in html and "'#' " not in html.split("const rankHtml")[1][:200])
+    ok("the rank is always '#' plus the number, with no tie marker",
+       "const rankHtml = p => p.academicRank == null ? 'N/A' : `#${p.academicRank}`;" in html)
+    ok("rankHtml no longer consults academicRankTied",
+       "academicRankTied" not in html.split("const rankHtml")[1].splitlines()[0])
     ok("an unranked program renders N/A", "p.academicRank == null ? 'N/A'" in html)
+    ok("the tooltip still says a tied rank is shared, naming no symbol",
+       "this rank is shared with other universities" in html and "marks a rank shared" not in html)
+    ok("the tooltip still explains N/A", "is not among the 171 it ranks" in html)
+    ok("the FAQ no longer explains a tie marker", "marks a tie" not in html)
+
+    # Rendered output, not source text: run the page's own rankHtml/rankTitle over all 350 rows.
+    facts = _render_ranks(html)
+    ok("every program renders a fact", len(facts) == 350, str(len(facts)))
+    ok("no card fact carries the '=#' tie form across all 350",
+       not [f for f in facts if "=#" in f["html"]],
+       str([f["slug"] for f in facts if "=#" in f["html"]][:5]))
+    hashed = [f for f in facts if re.fullmatch(r"#\d+", f["html"])]
+    na = [f for f in facts if f["html"] == "N/A"]
+    ok("126 cards render '#' plus a number", len(hashed) == 126, str(len(hashed)))
+    ok("224 cards render N/A", len(na) == 224, str(len(na)))
+    ok("the three forms account for all 350", len(hashed) + len(na) == 350)
+    by_slug = {f["slug"]: f for f in facts}
+    for slug, want in (("stanford", "#3"), ("penn-state", "#39"), ("rutgers", "#66")):
+        f = by_slug[slug]
+        ok(f"previously tied {slug} renders {want}", f["html"] == want, str(f))
+        ok(f"{slug}'s title says the rank is shared, with no '='",
+           "shared with other universities" in f["title"] and "=" not in f["title"], f["title"])
     ok("the title attribute spells out the ranking",
        "Times Higher Education, Best universities in the United States 2026" in html)
     ok("fact() renders a title attribute when given one",
