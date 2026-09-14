@@ -11,6 +11,16 @@ name: Refresh program data
 #                       robots.txt); school facts and climate only on a manual "full" run
 #                       (Scorecard falls back to DEMO_KEY, 30 requests/hour, until the
 #                       SCORECARD_API_KEY secret is set)
+#
+# Manual dispatch, highest precedence first:
+#   build_only=true  -> no collector at all; rebuild public/data from the stored
+#                       programs/*/sources/*.json, validate, commit as "data: rebuild" (~1 min)
+#   only="a,b"       -> run just those collectors (validated against collegedash.py's COLLECTORS
+#                       plus rpi). Use it to republish one collector's data after a parser fix -
+#                       e.g. only=camps is 350 collector runs (one roster page plus the camp page
+#                       it finds) rather than the full run's ~1,400 runs and ~2,800 requests.
+#   full=true        -> every collector
+#   otherwise the schedule branches above.
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -20,6 +30,14 @@ on:
     inputs:
       full:
         description: "Run every collector (rosters, schedules, bios, school facts, climate, Wikipedia)"
+        type: boolean
+        default: false
+      only:
+        description: "Collectors to run, comma-separated (scorecard, climate, wikipedia, athletics, tds, soccerwire, news, camps, rpi). Empty = the scheduled set."
+        type: string
+        default: ""
+      build_only:
+        description: "Republish public/data from the stored programs/*/sources/*.json; run no collector at all (~1 min)"
         type: boolean
         default: false
       fail_threshold:
@@ -38,24 +56,81 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
+      # `only` is free text from the dispatch form, so it is never interpolated into a shell
+      # command: it travels in `env` and is read as "$ONLY_INPUT". This step additionally checks it
+      # against the collector list in collegedash.py (COLLECTORS, plus rpi) so a typo fails the run
+      # in seconds rather than quietly collecting nothing. `collegedash.py refresh` re-validates
+      # --only and exits 2 on an unknown name; this is the fast, pre-install guard.
+      - name: Validate dispatch inputs
+        if: inputs.only != ''
+        env:
+          ONLY_INPUT: ${{ inputs.only }}
+        run: |
+          known="scorecard climate wikipedia athletics tds soccerwire news camps rpi"
+          bad=""
+          set -f       # no pathname expansion: a '*' in the input is a token, not a glob
+          IFS=','
+          for raw in $ONLY_INPUT; do
+            # trim the ends only, exactly as collegedash.py does (`c.strip()`), so the string
+            # validated here is the string python is handed: `ca mps` stays bad
+            name="${raw#"${raw%%[![:space:]]*}"}"
+            name="${name%"${name##*[![:space:]]}"}"
+            # every collector name is one lowercase word, so check the shape before the
+            # membership test: `news camps` is a substring of $known but not a collector
+            case "$name" in
+              *[!a-z]*) bad="$bad '$name'" ;;
+              *) case " $known " in
+                   *" $name "*) ;;
+                   *) bad="$bad '$name'" ;;
+                 esac ;;
+            esac
+          done
+          # field splitting discards a *trailing* empty field where python's split(',') keeps
+          # it, so the commonest typo of all is caught here rather than in the loop above
+          case "$ONLY_INPUT" in *,) bad="$bad ''" ;; esac
+          unset IFS
+          if [ -n "$bad" ]; then
+            echo "::error title=refresh::unknown collector(s) in 'only':$bad (known: $known)"
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
 
+      # build_only (issue #40): republish public/data from the sources already in the repo. No
+      # collector runs, no external requests, no refresh-state write (cmd_build never touches it) -
+      # about a minute instead of two hours. Used to publish a build.py or curated.json change, or a
+      # merged data PR. validate's own non-zero exit fails the run before anything is committed.
+      - name: Rebuild data (build_only)
+        if: inputs.build_only == true || inputs.build_only == 'true'
+        run: |
+          python collegedash.py build
+          python collegedash.py validate
+
       # Individual collector failures are expected (a site is down, a page was redesigned); they are
       # reported as warnings. The run is marked failed only when more than the threshold share of
       # collector runs fail - a sign the flow itself needs attention - or when the command crashes.
       - name: Refresh data
         id: refresh
+        if: inputs.build_only != true && inputs.build_only != 'true'
         continue-on-error: true
         env:
           SCORECARD_API_KEY: ${{ secrets.SCORECARD_API_KEY }}
           COLLEGEDASH_FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
+          ONLY_INPUT: ${{ inputs.only }}
+          FULL_INPUT: ${{ inputs.full }}
         run: |
           set +e
-          if [ "${{ inputs.full }}" = "true" ]; then
+          if [ -n "$ONLY_INPUT" ]; then
+            # a hand-picked collector list (validated above); --mode is only the label recorded
+            # with the run summary, so `only` + `full` means "this list, logged as a full run"
+            mode=manual
+            if [ "$FULL_INPUT" = "true" ]; then mode=full; fi
+            python collegedash.py refresh --only "$ONLY_INPUT" --no-bios --mode "$mode"
+          elif [ "$FULL_INPUT" = "true" ]; then
             python collegedash.py refresh --no-bios --mode full
           elif [ "$(date -u +%u)" = "1" ]; then
             python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --mode weekly
@@ -74,15 +149,19 @@ jobs:
 
       - name: Commit changed data
         if: always()
+        env:
+          BUILD_ONLY: ${{ inputs.build_only }}
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "No data changed; nothing to commit."
             exit 0
           fi
+          verb=refresh
+          if [ "$BUILD_ONLY" = "true" ]; then verb=rebuild; fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "data: refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -m "data: $verb $(date -u +%Y-%m-%dT%H:%MZ)"
           # main may have moved while the collectors ran (a push from a developer machine), which
           # makes a plain push non-fast-forward. Rebase onto upstream first; on a data-file conflict the
           # freshly collected version wins (-X theirs = this commit during a rebase). Retry a few times
@@ -99,8 +178,11 @@ jobs:
           exit 1
 
       - name: Fail if too many collectors failed
-        if: steps.refresh.outputs.code != '0'
+        if: steps.refresh.outputs.code != '' && steps.refresh.outputs.code != '0'
+        env:
+          REFRESH_CODE: ${{ steps.refresh.outputs.code }}
+          FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
         run: |
-          echo "refresh exited with code ${{ steps.refresh.outputs.code }}: 1 = more than ${{ inputs.fail_threshold || '0.05' }} of collector runs failed, 2 = the command crashed."
+          echo "refresh exited with code $REFRESH_CODE: 1 = more than $FAIL_THRESHOLD of collector runs failed, 2 = the command crashed."
           echo "See the Summary tab for the failure table. The data that was collected has already been committed."
           exit 1
