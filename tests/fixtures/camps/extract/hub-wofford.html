@@ -1,0 +1,85 @@
+<!-- HAND-BUILT, and a HYPOTHESIS about page structure - read this before trusting it.
+
+     athletics.wofford.edu refused a non-browser User-Agent, and nobody on this PR or its review
+     has seen the page. The 20 row names, their dates and the registerUrl are the REAL stored
+     records from programs/wofford/sources/camps.json, and the title is the real short_title
+     ("Summer Camps @ Wofford - Wofford College Athletics" split at the first " - "). The
+     SECTION HEADINGS below are assumed, not observed: the assignment of rows to sports is the
+     most plausible reading of the names, nothing more.
+
+     One thing does anchor it: run through origin/main's parser, this file yields 20 rows whose
+     (name, startDate, endDate) are IDENTICAL to the 20 stored records - including the two rows
+     stored as "Summer Camps @ Wofford", which are bare date lines here and take their name from
+     the page-title fallback exactly as they must have on the real page. So the fixture is a
+     faithful model of what main saw. What remains assumed is only which sport each row sits
+     under, and that is the part the prediction turns on.
+
+     So this fixture does NOT evidence the PR's "wofford 20 -> 1" prediction. That prediction
+     still rests on unseen page structure, and the risks section says so. What it does pin is
+     the mechanism the prediction depends on, which was otherwise untested end-to-end:
+
+       - four rows all literally named "ID Camp" are separated only by the section they sit
+         under, so three go and the genuine 2026-11-22 one stays;
+       - "Summer Camps @ Wofford" does not name soccer, so _page_is_soccer is False and section
+         rejection still bites on a department hub (this is the guard on the cross-promo fix);
+       - "Rod Ray Tennis Camp" is rejected on its name alone - the one wofford row the corpus
+         replay could verify without seeing the page.
+
+     It also turned up something the corpus replay could not see, which is why the surviving row
+     below expects a registerUrl rather than null. _register_url keeps a link whose host names
+     another sport when the ROW SITS IN A SOCCER SECTION - a deliberate, documented exception, on
+     the reasoning that a soccer section's own link is probably the soccer one. On a department
+     hub that is exactly backwards: the single department-wide registration block is a basketball
+     domain, and the exception hands it to the one genuine soccer camp on the page. The corpus
+     replay nulls all 20 wofford links because it has no section information; with sections, this
+     one survives. 19 of the 20 rows are gated away so their links are moot, but the row that
+     matters most keeps a wrong link. Not changed here - the rule is verified corpus-wide with
+     zero false positives and this PR is not the place to re-open it - but it is called out in
+     the PR's risks section as a follow-up. If the real page has no sport headings, none of this
+     applies and the host rule nulls the link as the replay predicts.
+
+     If the real page turns out to have no sport headings, the mechanism here is still correct
+     and the 20 -> 1 number is simply wrong. Replace this file with a capture when the owner's
+     post-merge `only=camps` run makes one available. -->
+<html><head><title>Summer Camps @ Wofford - Wofford College Athletics</title></head><body>
+<div class="content">
+  <h1>Summer Camps @ Wofford</h1>
+
+  <h2>Men&rsquo;s Basketball</h2>
+  <p><strong>Full Day Camps (ages 6-12)</strong> June 8-11, 2026</p>
+  <p><strong>Middle School Elite Skills Camp (grades 6-8)</strong> July 20-23, 2026</p>
+  <p><strong>High School/Prospect Camps</strong> August 15-16, 2026</p>
+  <p><strong>Team Camp</strong> June 4-8, 2026</p>
+  <p><strong>Kids Camp 1</strong> June 15-18, 2026</p>
+  <p><strong>Kids Camp 2</strong> July 27-30, 2026</p>
+  <p><strong>Elite Camp 1</strong> August 23, 2026</p>
+  <p><strong>Elite Camp 2</strong> August 30, 2026</p>
+
+  <h2>Football</h2>
+  <p><strong>Team Camp - - SOLD OUT</strong> June 12-14, 2026</p>
+  <p><strong>Rising Stars Day Camp</strong> June 1-4, 2026</p>
+  <p><strong>7on7 Tournament and Big Man Camp</strong> June 10, 2026</p>
+  <p><strong>Specialist Camp</strong> June 20, 2026</p>
+  <p><strong>Thursday Night Elite Prospect Camp</strong> July 16, 2026</p>
+
+  <h2>Volleyball</h2>
+  <p>June 21-25, 2026</p>
+  <p>June 28 - July 2, 2026</p>
+
+  <h2>Tennis</h2>
+  <p><strong>Rod Ray Tennis Camp</strong> June 14-18, 2026</p>
+
+  <h2>Men&rsquo;s Soccer</h2>
+  <p><strong>ID Camp</strong> August 1, 2026</p>
+  <p><strong>ID Camp</strong> March 21, 2027</p>
+  <p><strong>ID Camp</strong> May 22, 2027</p>
+
+  <h2>Women&rsquo;s Soccer</h2>
+  <p><strong>ID Camp</strong> November 22, 2026</p>
+
+  <div class="camp-register">
+    <h2>Registration</h2>
+    <p><a href="https://kevingiltnerbasketballcamps.totalcamps.com/About">Register online</a></p>
+  </div>
+</div>
+</body></html>

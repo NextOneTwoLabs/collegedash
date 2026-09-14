@@ -483,7 +483,31 @@ SECTION_FILLER_RE = re.compile(r"\b(?:beach|indoor|outdoor|sand|youth|junior|jr|
 # women's soccer page ("Volleyball Skills Camp") would gate away every camp below it - the
 # catastrophic, invisible failure. montana names 5 sports, ut-chattanooga 7; a genuine single-sport
 # camps page names one.
+#
+# A count alone is not enough: an "Other Camps at X" block naming three sports above the rows is an
+# ordinary athletics-site layout, and it reaches this threshold on a page that is plainly one team's
+# own. _page_is_soccer is the second half of the test - see there.
 HUB_SPORT_COUNT = 3
+
+
+def _page_is_soccer(title: str | None) -> bool:
+    """True when the page's own title names soccer and is not a men's page.
+
+    Such a page is that team's camps page however many other sports it cross-promotes, so a section
+    heading must never gate its rows away: 'Other Camps at X' listing basketball, volleyball and
+    softball above the rows took a real 2-row women's soccer page to 0 rows, and to 2 rows carrying
+    the page title instead of their own names when the rows were in a table. Losing real camps
+    invisibly is worse than the status quo, so the count is not trusted on its own.
+
+    This suppresses only the SECTION test in _row_allowed. The row-name sport rule and the gender
+    rule stay unconditional, so a men's or a basketball row on this page is still rejected. None of
+    the four known hub titles names soccer - montana 'Camp Information', ut-chattanooga 'Chattanooga
+    Sports Camps', wofford 'Summer Camps @ Wofford', north-dakota 'University of North Dakota Sports
+    Camps and Clinics' - so every intended rejection still fires."""
+    t = common.clean(title or "")
+    if not t or not SOCCER_RE.search(t):
+        return False
+    return not (MALE_RE.search(t) and not FEMALE_RE.search(t))
 
 
 def _sport_section(line: str) -> dict | None:
@@ -897,11 +921,11 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     entries = _table_entries(root, page_url, published, sports) + _prose_entries(root, page_url, published, title, sports)
     day_months = {e["startDate"][:7] for e in entries if e["precision"] == "day"}
     entries = [e for e in entries if not (e["precision"] == "month" and e["startDate"] in day_months)]
-    # Sport and gender gating before the cap, not after: MAX_CAMPS is a defence against a runaway
-    # parse, but applied first it spends all 20 slots on whatever the page lists earliest. montana
-    # yields 28 rows and loses 8 to the cap; on a hub that put soccer last, the real camps would be
-    # the rows cut. Gate, then cap.
-    is_hub = len(sports) >= HUB_SPORT_COUNT
+    # Gating is inserted upstream of the cap, which already ran last. MAX_CAMPS is a defence against
+    # a runaway parse; ahead of a quality filter it would spend all 20 slots on whatever the page
+    # lists earliest, so on a hub that put soccer last the real camps would be the rows cut. montana
+    # yields 28 rows and loses 8 to the cap. Gate, then cap.
+    is_hub = len(sports) >= HUB_SPORT_COUNT and not _page_is_soccer(title)
     entries = [e for e in entries if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub)]
     if title and not _is_chrome_name(title):
         for e in entries:

@@ -382,6 +382,72 @@
      "name": "2025 Crimson Soccer Boys Youth Summer Camp"
     }
    ]
+  },
+  {
+   "file": "extract/cross-promo-soccer-page.html",
+   "pageUrl": "https://example.edu/sports/wsoc/camps",
+   "title": "2026 Women's Soccer Camps",
+   "_note": "The Reviewer's blocking case for this PR, kept as a regression test. An ordinary \"Other Camps at X\" block naming three sports ABOVE the rows reaches HUB_SPORT_COUNT, and before _page_is_soccer it took this page from 2 rows to 0 - and, with the rows in a table, to 2 rows carrying the page title instead of their own names. The page's own short_title names soccer, so section rejection is suppressed. The row-name and gender rules are NOT suppressed: the men's prospect day is still rejected.",
+   "count": 2,
+   "expect": [
+    {
+     "name": "Elite ID Camp",
+     "startDate": "2026-06-13"
+    },
+    {
+     "name": "Junior Academy Camp",
+     "startDate": "2026-07-10"
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2026-07-18"
+    },
+    {
+     "name": "2026 Women's Soccer Camps"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-wofford.html",
+   "pageUrl": "https://athletics.wofford.edu/sports/2008/5/5/summer camp.aspx",
+   "title": "Summer Camps @ Wofford",
+   "_note": "HAND-BUILT AND PART HYPOTHESIS - see the comment at the top of the file. The 20 row names, dates, registerUrl and title are the real stored wofford records, and through origin/main's parser this file reproduces all 20 of them identically on (name, startDate, endDate), so it is a faithful model of what main saw. The SPORT HEADINGS are assumed, because nobody has seen the page - and they are what the prediction turns on. So this does not evidence \"wofford 20 -> 1\"; it pins the mechanism that prediction needs: four rows all named \"ID Camp\" separated only by their section, and \"Summer Camps @ Wofford\" not tripping _page_is_soccer, so section rejection still bites on a department hub. The surviving row KEEPS the basketball registerUrl, because _register_url's documented exception spares a link on a row in a soccer section - a wart the corpus replay could not see, recorded in the risks section.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "ID Camp",
+     "startDate": "2026-11-22",
+     "endDate": "2026-11-22",
+     "registerUrl": "https://kevingiltnerbasketballcamps.totalcamps.com/About"
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2026-08-01"
+    },
+    {
+     "startDate": "2027-03-21"
+    },
+    {
+     "startDate": "2027-05-22"
+    },
+    {
+     "name": "Rod Ray Tennis Camp"
+    },
+    {
+     "name": "7on7 Tournament and Big Man Camp"
+    },
+    {
+     "name": "Kids Camp 1"
+    },
+    {
+     "name": "Summer Camps @ Wofford"
+    },
+    {
+     "startDate": "2026-06-21"
+    }
+   ]
   }
  ],
  "robots": [
@@ -1055,6 +1121,29 @@
     "See Prices below",
     "See Prices below"
    ]
+  ]
+ },
+ "pages": {
+  "_note": "_page_is_soccer. True suppresses SECTION rejection only. The four known hub titles must all be False, or the gating this PR adds stops working.",
+  "soccer": [
+   "2026 Women's Soccer Camps",
+   "Women's Soccer Camps",
+   "Soccer Camps",
+   "Girls Soccer ID Camps",
+   "Cal Girls Soccer Camp",
+   "WSOC Camps",
+   "Futbol Camps"
+  ],
+  "notSoccer": [
+   "Camp Information",
+   "Chattanooga Sports Camps",
+   "Summer Camps @ Wofford",
+   "University of North Dakota Sports Camps and Clinics",
+   "Men's Soccer Camps",
+   "Boys Soccer Camp",
+   "Camps and Clinics",
+   "Basketball Camps",
+   ""
   ]
  }
 }
