@@ -1,5 +1,5 @@
 {
- "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[]; sections: _sport_section on an all-sport hub's headings; rows: _row_allowed, the sport/gender gate; names: _is_chrome_name and _clean_name; prices: the price-label filter.",
+ "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[]; sections: _sport_section on an all-sport hub's headings; rows: _row_allowed, the sport/gender gate; rowsEvidence: _row_allowed on the text a page-named row was assembled from (issue #80); newRow: _starts_new_row, the lookahead's stop condition; names: _is_chrome_name and _clean_name; prices: the price-label filter.",
  "nav": [
   {
    "file": "nav/duke.html",
@@ -412,14 +412,14 @@
    "file": "extract/hub-wofford.html",
    "pageUrl": "https://athletics.wofford.edu/sports/2008/5/5/summer camp.aspx",
    "title": "Summer Camps @ Wofford",
-   "_note": "HAND-BUILT AND PART HYPOTHESIS - see the comment at the top of the file. The 20 row names, dates, registerUrl and title are the real stored wofford records, and through origin/main's parser this file reproduces all 20 of them identically on (name, startDate, endDate), so it is a faithful model of what main saw. The SPORT HEADINGS are assumed, because nobody has seen the page - and they are what the prediction turns on. So this does not evidence \"wofford 20 -> 1\"; it pins the mechanism that prediction needs: four rows all named \"ID Camp\" separated only by their section, and \"Summer Camps @ Wofford\" not tripping _page_is_soccer, so section rejection still bites on a department hub. The surviving row KEEPS the basketball registerUrl, because _register_url's documented exception spares a link on a row in a soccer section - a wart the corpus replay could not see, recorded in the risks section.",
+   "_note": "HAND-BUILT AND PART HYPOTHESIS - see the comment at the top of the file. The 20 row names, dates, registerUrl and title are the real stored wofford records, and through origin/main's parser this file reproduces all 20 of them identically on (name, startDate, endDate), so it is a faithful model of what main saw. The SPORT HEADINGS are assumed, because nobody has seen the page - and they are what the prediction turns on. So this does not evidence \"wofford 20 -> 1\"; it pins the mechanism that prediction needs: four rows all named \"ID Camp\" separated only by their section, and \"Summer Camps @ Wofford\" not tripping _page_is_soccer, so section rejection still bites on a department hub. The surviving row now LOSES the basketball registerUrl rather than keeping it (issue #80): this trimmed model carries no soccer-section link for the row to find, so the correct result here is null. extract/camps-wofford-real.html is the real page, where the right link exists and is found.",
    "count": 1,
    "expect": [
     {
      "name": "ID Camp",
      "startDate": "2026-11-22",
      "endDate": "2026-11-22",
-     "registerUrl": "https://kevingiltnerbasketballcamps.totalcamps.com/About"
+     "registerUrl": null
     }
    ],
    "reject": [
@@ -446,6 +446,105 @@
     },
     {
      "startDate": "2026-06-21"
+    },
+    {
+     "registerUrl": "https://kevingiltnerbasketballcamps.totalcamps.com/About"
+    }
+   ]
+  },
+  {
+   "file": "extract/camps-harvard.html",
+   "pageUrl": "https://gocrimson.com/sports/2020/5/5/information-camps-index.aspx",
+   "title": "Camp/Clinic Information",
+   "_note": "Issue #80 item 1, the P1. REAL PAGE - see the comment at the top of the file, which traces the accordion that detaches every panel body from its heading. origin/main publishes three rows here: a golf clinic, a boys' youth camp and a lacrosse/basketball chimera, all three past the sport and gender rules because a chrome name gives those rules nothing to read. The fix gates a page-named row on the text it was assembled from, and stops the date lookahead at a line that starts its own record.",
+   "count": 0,
+   "reject": [
+    {
+     "startDate": "2025-07-07"
+    },
+    {
+     "startDate": "2025-06-30"
+    },
+    {
+     "startDate": "2025-06-15"
+    },
+    {
+     "name": "Fall Youth Clinic"
+    },
+    {
+     "name": "Camp/Clinic Information"
+    }
+   ]
+  },
+  {
+   "file": "extract/camps-wofford-real.html",
+   "pageUrl": "https://woffordterriers.com/sports/2008/5/5/summer%20camp.aspx",
+   "title": "Summer Camps @ Wofford",
+   "_note": "Issue #80 item 2, on the REAL page rather than the hand-built model in extract/hub-wofford.html. The genuine 2026-11-22 women's soccer row must keep its own section's link, terrierwsoccamps.com, which sits one line below it - not kevingiltnerbasketballcamps, which is the first registration anchor on a page whose whole body is one element. Scoping anchors to the row's own lines is what finds the right one; dropping the soccer carve-out is what stops the wrong one.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "ID Camp",
+     "startDate": "2026-11-22",
+     "endDate": "2026-11-22",
+     "registerUrl": "https://www.terrierwsoccamps.com/index.cfm"
+    }
+   ],
+   "reject": [
+    {
+     "registerUrl": "https://kevingiltnerbasketballcamps.totalcamps.com/About%20Us"
+    },
+    {
+     "startDate": "2026-08-01"
+    },
+    {
+     "startDate": "2027-03-21"
+    },
+    {
+     "startDate": "2027-05-22"
+    },
+    {
+     "name": "Rod Ray Tennis Camp"
+    }
+   ]
+  },
+  {
+   "file": "extract/camps-tcu.html",
+   "pageUrl": "https://www.ericbellsocceracademy.com/",
+   "title": "Eric Bell Soccer Academy",
+   "_note": "Issue #80 item 3. REAL PAGE. '01/30/2027 - 01/31/2027' parsed as two unrelated single-day hits, and the prose branch keeps ds[:1], so the camp was published a day short. Fails on origin/main with endDate 2027-01-30.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "2027 Winter College ID Camp",
+     "startDate": "2027-01-30",
+     "endDate": "2027-01-31"
+    }
+   ]
+  },
+  {
+   "file": "extract/camps-northeastern.html",
+   "pageUrl": "https://nuhuskies.com/sports/2011/2/25/WSOC_0225113252.aspx",
+   "title": "Camps, Clinics and Tournaments",
+   "_note": "Issue #80 item 4. REAL PAGE. Three genuine clinics, right dates, wrong name: the bare-date branch names a row after the page title and the title is chrome. The page's own opening line carries the real name. All three rows stay - this is a rename, not a rejection - and they remain page-named, so they are still gated on their evidence.",
+   "count": 3,
+   "expect": [
+    {
+     "name": "Northeastern Women's Soccer ID Clinics",
+     "startDate": "2026-06-07"
+    },
+    {
+     "name": "Northeastern Women's Soccer ID Clinics",
+     "startDate": "2026-07-27"
+    },
+    {
+     "name": "Northeastern Women's Soccer ID Clinics",
+     "startDate": "2026-07-28"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Camps, Clinics and Tournaments"
     }
    ]
   }
@@ -696,6 +795,70 @@
      "day"
     ]
    ]
+  },
+  {
+   "text": "01/30/2027 - 01/31/2027",
+   "expect": [
+    [
+     "2027-01-30",
+     "2027-01-31",
+     "day"
+    ]
+   ],
+   "_note": "Issue #80 item 3: tcu. Two slash dates around a dash are one camp, not two."
+  },
+  {
+   "text": "6/15/2026 to 6/19/2026",
+   "expect": [
+    [
+     "2026-06-15",
+     "2026-06-19",
+     "day"
+    ]
+   ]
+  },
+  {
+   "text": "1/30 - 1/31/2027",
+   "expect": [
+    [
+     "2027-01-30",
+     "2027-01-31",
+     "day"
+    ]
+   ],
+   "_note": "The start's year may be left off; it is taken from the end."
+  },
+  {
+   "text": "7/10/2026",
+   "expect": [
+    [
+     "2026-07-10",
+     "2026-07-10",
+     "day"
+    ]
+   ],
+   "_note": "A lone slash date is still one day - the range pattern must not change it."
+  },
+  {
+   "text": "11/20/2026 - 03/05/2027",
+   "expect": [
+    [
+     "2026-11-20",
+     "2026-11-20",
+     "day"
+    ],
+    [
+     "2027-03-05",
+     "2027-03-05",
+     "day"
+    ]
+   ],
+   "_note": "Over the 31-day cap, so not a camp's run: the two dates stay separate, as before."
+  },
+  {
+   "text": "3/2/2026 4:30:00 PM - 3/2/2026 6:00:00 PM",
+   "expect": [],
+   "_note": "A Sidearm dateline, not a camp range. The ':\\d\\d' guard keeps both ends out."
   }
  ],
  "urls": [
@@ -1144,6 +1307,114 @@
    "Camps and Clinics",
    "Basketball Camps",
    ""
+  ]
+ },
+ "rowsEvidence": {
+  "_note": "Issue #80 item 1. A row whose name came from the page rather than from the row is gated on `evidence` - the text it was assembled from - because its name carries no sport and no gender for the two unconditional rules to read. Each case names the input that makes it fail: drop the evidence branch and every `false` row below turns true, which is exactly what origin/main does with harvard. The `named: row` cases pin that a row with a name of its own is judged on the name alone, evidence or no evidence, so nothing tightens for the 129 rows that were never the problem.",
+  "cases": [
+   {
+    "name": "Camp/Clinic Information",
+    "named": "page",
+    "evidence": "Camp/Clinic Information | July 7 - 8, 2025 | Hosted at Harvard Athletic's Murr Center and Granite Links Golf Club, this golf clinic is a unique collegiate golf immersion experience. | Register: https://www.crimsongolfcamps.com/",
+    "expect": false,
+    "why": "harvard's golf clinic: 'golf' is in the row's own window"
+   },
+   {
+    "name": "Camp/Clinic Information",
+    "named": "page",
+    "evidence": "9:00 AM to 3:00 PM | Hosted at Harvard's Newell Boathouse, this camp is for experienced athletes looking to gain deep insight into their rowing using Peach.",
+    "expect": false,
+    "why": "harvard's rowing panel, published as the boys' soccer row's window"
+   },
+   {
+    "name": "Camp/Clinic Information",
+    "named": "page",
+    "evidence": "Camp/Clinic Information | June 30 to July 5, 2025 | Register: https://www.crimsonsoccer.us/boys-youth-camps.html",
+    "expect": false,
+    "why": "a boys' camp: the gender rule reads the evidence too"
+   },
+   {
+    "name": "Camps, Clinics and Tournaments",
+    "named": "page",
+    "evidence": "Sunday, June 7, 2026 | To obtain more information about Northeastern women's soccer clinics, please contact assistant coach Abby Carchio.",
+    "expect": true,
+    "why": "northeastern: a real women's soccer clinic keeps its row"
+   },
+   {
+    "name": "Camp Dates",
+    "named": "page",
+    "evidence": "Camp Dates | June 6, 2026 | Grades 8-12",
+    "expect": true,
+    "why": "portland's chrome-named row: no contrary evidence, so it stays"
+   },
+   {
+    "name": "Camp Dates",
+    "named": "page",
+    "evidence": "Camp Dates | June 6, 2026 | Our volleyball camps also run in June.",
+    "pageIsSoccer": true,
+    "expect": true,
+    "why": "an 'Other Camps at X' block on the team's own soccer page must not gate a real row - the same suppression the section rule already has"
+   },
+   {
+    "name": "Camp Dates",
+    "named": "page",
+    "evidence": "Camp Dates | June 6, 2026 | Our volleyball camps also run in June.",
+    "pageIsSoccer": false,
+    "expect": false,
+    "why": "and the same evidence on a page that is NOT the team's own is a rejection"
+   },
+   {
+    "name": "Goalkeeper Camp",
+    "named": "row",
+    "evidence": "Goalkeeper Camp | June 13, 2026 | held in the Basketball Practice Facility",
+    "expect": true,
+    "why": "a row with its own name is judged on the name; a venue is not a sport"
+   }
+  ]
+ },
+ "newRow": {
+  "_note": "Issue #80 item 1, the chimera. The date lookahead used to stop only at a line naming a camp or a clinic, so harvard's lacrosse row ran on into a complete BASKETBALL row that uses neither word and took its date. A continuation carries the date and nothing else, or a label in front of it; its own record carries a name. Each `true` case is an input that makes the old guard fail; each `false` case is a continuation that must keep working, which is what stops this from being a condition that cannot fail.",
+  "cases": [
+   [
+    "2025 Sneak Peek | June 15, 2025 | 9:00 a.m-1:00 p.m | Grades 7-12",
+    true
+   ],
+   [
+    "Crimson Volleyball Prospect Camp | July 12, 2025 | 9:00 a.m-5:00 p.m",
+    true
+   ],
+   [
+    "Terrier College ID Camp - July 18-19, 2026",
+    true
+   ],
+   [
+    "Dates: June 28-29, 2025",
+    false
+   ],
+   [
+    "July 25-26, 2026",
+    false
+   ],
+   [
+    "Sunday, June 7, 2026",
+    false
+   ],
+   [
+    "Session 2 - July 12, 2026",
+    false
+   ],
+   [
+    "Week 1: June 8-11, 2026",
+    false
+   ],
+   [
+    "01/30/2027 - 01/31/2027",
+    false
+   ],
+   [
+    "When: August 15-16, 2026",
+    false
+   ]
   ]
  }
 }

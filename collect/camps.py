@@ -27,8 +27,34 @@ Row-level gating (issue #39; 119 of 250 stored rows were not camps at that progr
   - a registerUrl whose host names another sport is dropped from the row, not with it: a hub has one
     registration block for the whole department, and one of those 50 links sits on a real camp;
   - one camp emitted as several overlapping rows collapses into one spanning row;
-  - a name that is page chrome ("Camp Dates") is repaired from the page title, never rejected -
-    portland's and california's chrome-named rows are real camps.
+  - a name that is page chrome ("Camp Dates") is repaired, never rejected - portland's and
+    california's chrome-named rows are real camps.
+
+Issue #80, the residual defects the audit found after #39. All four are the same shape: a rule that
+reads less than the page offers.
+  - a row whose name came from the PAGE (page chrome, or the page title) names no sport and no
+    gender, so the two unconditional rules above had nothing to read and did not gate it at all.
+    harvard published a golf clinic and a boys' youth camp that way, with the evidence sitting in
+    the rows' own windows. Such a row now carries `_named = "page"` and `_evidence`, and is gated on
+    that text (see _row_allowed). The gate runs BEFORE the name repair, so it never reads the
+    repair's own output;
+  - the date lookahead stopped only at a line naming a camp or a clinic, so harvard's lacrosse row
+    ran on into a basketball row that used neither word and took its date - a row assembled from two
+    sports that never existed on the page. It now also stops at a line that starts its own dated
+    record (see _starts_new_row);
+  - a registration link was searched for across the whole enclosing element. On a page whose body is
+    one <br> run - wofford's and harvard's both are - that is the whole page, so wofford's one real
+    row got the first registration link on it, a basketball camp's. Anchors are now attributed to
+    the line they sit on (see _lines) and the row's own lines are searched first. The carve-out that
+    spared a foreign-sport host on a soccer-section row is gone: it corrupted the single row it
+    existed to protect;
+  - '01/30/2027 - 01/31/2027' was two unrelated slash dates, and the second was discarded, so tcu's
+    camp published a day short. NUMERIC_RANGE_RE is the numeric equivalent of the month-name path's
+    range branch;
+  - when the page title is itself chrome the repair had nothing to repair from, so northeastern's
+    three real clinics wore 'Camps, Clinics and Tournaments'. The name is read out of the page's own
+    opening lines instead (see _page_camp_name). Rows named that way stay `_named = "page"`, so the
+    rename cannot become another way past the gate.
 """
 
 from __future__ import annotations
@@ -333,6 +359,16 @@ DATE_RE = re.compile(
     rf"(?:\s*(?:-|–|—|to|through|thru)\s*(?:({_MON})\.?\s+)?{_DAY}(?![:\d]))?"
     rf"(?:,?\s+(20\d\d))?\b", re.I)
 NUMERIC_DATE_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(20\d\d|\d{2})\b(?!\s+\d{1,2}:\d{2})")  # not a '3/2/2026 4:30:00 PM' dateline
+# A slash-date RANGE, which the single-date pattern above can only see as two unrelated dates:
+# tcu's ryzer page reads '01/30/2027 - 01/31/2027' and the prose parser takes ds[:1], so the second
+# day was discarded outright and the camp published a day short (issue #80). The month-name path
+# has had a range branch all along; this is its numeric equivalent, with the same 31-day sanity cap.
+# The start's year is optional ('1/30 - 1/31/2027'); the ':\d\d' guards keep a
+# '3/2/2026 4:30:00 PM - 3/2/2026 6:00:00 PM' dateline out, as on the single-date pattern.
+NUMERIC_RANGE_RE = re.compile(
+    r"\b(\d{1,2})/(\d{1,2})(?:/(20\d\d|\d{2}))?\b(?!\s+\d{1,2}:\d{2})"
+    r"(?:\s*(?:-|–|—)\s*|\s+(?:to|through|thru)\s+)"
+    r"(\d{1,2})/(\d{1,2})/(20\d\d|\d{2})\b(?!\s+\d{1,2}:\d{2})")
 DATE_ONLY_LINE_RE = re.compile(rf"^\W*(?:{_WEEKDAY}{_MON}\.?\s+\d{{1,2}}(?:st|nd|rd|th)?(?:\s*(?:-|–|—|to|through)\s*(?:{_MON}\.?\s+)?\d{{1,2}}(?:st|nd|rd|th)?)?,?\s+20\d\d|\d{{1,2}}/\d{{1,2}}/20\d\d)\W*$", re.I)
 MONTH_YEAR_RE = re.compile(rf"\b({_MON})\.?\s+(20\d\d)\b")
 BARE_MONTH_RE = re.compile(r"\b(January|February|March|April|June|July|August|September|October|November|December|"
@@ -410,7 +446,25 @@ def parse_camp_dates(text: str, published: str | None = None, *, default_year: i
                     end = e
         out.append({"startDate": start.isoformat(), "endDate": end.isoformat(), "dateText": common.clean(m.group(0)),
                     "precision": "day", "yearInferred": inferred, "pos": m.start()})
+    ranges: list[tuple[int, int]] = []
+    for m in NUMERIC_RANGE_RE.finditer(text):
+        def _yr(g):
+            v = int(g)
+            return v + 2000 if v < 100 else v
+        y2 = _yr(m.group(6))
+        y1 = _yr(m.group(3)) if m.group(3) else y2
+        mo1, d1, mo2, d2 = int(m.group(1)), int(m.group(2)), int(m.group(4)), int(m.group(5))
+        if not (_valid(y1, mo1, d1) and _valid(y2, mo2, d2)):
+            continue
+        s, e = _dt.date(y1, mo1, d1), _dt.date(y2, mo2, d2)
+        if e < s or (e - s).days > 31:
+            continue
+        ranges.append((m.start(), m.end()))
+        out.append({"startDate": s.isoformat(), "endDate": e.isoformat(), "dateText": common.clean(m.group(0)),
+                    "precision": "day", "yearInferred": False, "pos": m.start()})
     for m in NUMERIC_DATE_RE.finditer(text):
+        if any(lo <= m.start() < hi for lo, hi in ranges):
+            continue  # already published as one end of a range
         mo, d, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
         y = y + 2000 if y < 100 else y
         if _valid(y, mo, d):
@@ -532,16 +586,38 @@ def _sport_section(line: str) -> dict | None:
             "token": (ms or mo).group(0).lower()}
 
 
-def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True) -> bool:
+def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named: str = "row",
+                 evidence: str | None = None, page_is_soccer: bool = False) -> bool:
     """False when a row is another sport's or another gender's. The name is checked on its own
     (safe anywhere: 'Rod Ray Tennis Camp', "ORU Winter College Men's ID Camp I"); the enclosing
-    section applies only on a page that is actually an all-sport hub (see HUB_SPORT_COUNT)."""
+    section applies only on a page that is actually an all-sport hub (see HUB_SPORT_COUNT).
+
+    `named` says where the row's name came from, and it is what issue #80 turns on. A name that is
+    page chrome ('Camp/Clinic Information') or that was taken from the page title names no sport
+    and no gender, so BOTH unconditional rules above are vacuous on it: the row is not gated, it is
+    waved through. The rule 'a chrome name is repaired, never rejected' therefore lifted those rows
+    out of the gate entirely, whether or not the repair fired. harvard published a golf clinic and a
+    boys' youth camp that way, with 'golf clinic', "Harvard Golf's coaching staff" and 'rowing'
+    sitting unread in the rows' own windows.
+
+    So when the name came from the page rather than from the row, the same two rules are applied to
+    `evidence` - the text the row was actually assembled from - because that is the only evidence
+    the row has. Scoped like the section rule they mirror: the gender rule is unconditional, and the
+    sport rule is suppressed on a page that is the team's own soccer page (`page_is_soccer`), where
+    an 'Other Camps at X' block would otherwise gate away every real row. A row with a name of its
+    own is judged on it exactly as before."""
     t = common.clean(name or "")
     soccer_name = bool(SOCCER_RE.search(t))
     if OTHER_SPORT_RE.search(t) and not soccer_name:
         return False
     if MALE_RE.search(t) and not FEMALE_RE.search(t):  # MALE_RE does not fire inside "Women's"
         return False
+    if named == "page":
+        ev = common.clean(evidence or "")
+        if MALE_RE.search(ev) and not FEMALE_RE.search(ev):
+            return False
+        if not page_is_soccer and OTHER_SPORT_RE.search(ev) and not SOCCER_RE.search(ev):
+            return False
     if section is None or not is_hub:
         return True
     if section["sport"] == "other" and not soccer_name:
@@ -579,36 +655,105 @@ def _sentences(text: str) -> list[str]:
     return [s for s in re.split(r"(?<=[.!?])\s+(?=[A-Z\"“(])", t) if s.strip()]
 
 
-def _lines(root) -> list[tuple[str, object]]:
-    """(text, element) per block element's own text (text nodes and inline children, so a lead
-    paragraph that sits directly in a <div> next to <p> siblings is not lost), split on <br>
-    (already newlines) and sentence ends."""
+def _lines(root) -> list[tuple[str, object, list]]:
+    """(text, element, anchors) per block element's own text (text nodes and inline children, so a
+    lead paragraph that sits directly in a <div> next to <p> siblings is not lost), split on <br>
+    (already newlines) and sentence ends.
+
+    `anchors` are the <a href> tags that sit on THAT line, not everywhere in the element. On a page
+    whose whole body is one <br>-separated run - wofford's and harvard's both are - the element is
+    the entire page, so an element-wide anchor search returns the first registration link on the
+    page whatever row asked for it. wofford's genuine women's soccer row was published with a
+    basketball camp's link for exactly that reason (issue #80). Offsets into the joined text are
+    tracked so each anchor can be attributed to the line it actually appears on."""
     out = []
     blocks = set(BLOCK_TAGS)
 
-    def add(el, raw):
+    def add(el, parts):
+        raw, spans = "", []
+        for text, anchors in parts:
+            if raw:
+                raw += " "
+            spans.append((len(raw), len(raw) + len(text), anchors))
+            raw += text
+        pos = 0
         for piece in raw.split("\n"):
+            lo, hi = pos, pos + len(piece)
+            pos = hi + 1
+            near = [a for s, e, anchors in spans if anchors and s < hi and e > lo for a in anchors]
             piece = common.clean(ZERO_WIDTH_RE.sub("", piece))
             if not piece:
                 continue
             for s in _sentences(piece):
                 s = common.clean(s)
                 if s and (not out or out[-1][0] != s):
-                    out.append((s, el))
+                    out.append((s, el, near))
 
     for el in root.find_all(BLOCK_TAGS):
         parts = []
         for child in el.children:
             name = getattr(child, "name", None)
             if name is None:
-                parts.append(str(child))
+                parts.append((str(child), []))
             elif name in blocks or child.find(BLOCK_TAGS):
-                add(el, " ".join(parts))
+                add(el, parts)
                 parts = []
             else:
-                parts.append(child.get_text(" "))
-        add(el, " ".join(parts))
+                own = [child] if name == "a" and child.get("href") else []
+                parts.append((child.get_text(" "), own + child.find_all("a", href=True)))
+        add(el, parts)
     return out
+
+
+# A label a continuation line can put in front of its date: 'Dates: June 28-29, 2025', 'Session 2 -
+# July 12'. Stripped before _starts_new_row counts words, so a label is not mistaken for a name.
+ROW_LABEL_RE = re.compile(r"^(?:dates?|day|days|when|time|times|session|week|camp|clinic|starts?|begins?|runs?)"
+                          r"\s*\d*\s*[:\-–—|]*\s*", re.I)
+
+
+def _starts_new_row(line: str, pos: int) -> bool:
+    """True when `line` is its own camp record rather than a continuation of the row above it.
+
+    The date lookahead used to stop only at a line naming a camp or a clinic. harvard's lacrosse row
+    carries no year of its own, so the lookahead ran on and reached
+    '2025 Sneak Peek | June 15, 2025 | 9:00 a.m-1:00 p.m | Grades 7-12' - a complete BASKETBALL row
+    that happens to use neither word - and read it as a continuation. The published row took its
+    name and ages from Women's Lacrosse and its date from Women's Basketball: a row that never
+    existed on the page (issue #80).
+
+    A continuation carries the date and nothing else, or a label in front of it. Its own record
+    carries a name: two or more alphabetic words before the date once a leading label is stripped.
+    So 'Dates: June 28-29, 2025' and 'July 25-26, 2026' stay continuations and '2025 Sneak Peek |
+    June 15, 2025' does not."""
+    head = ROW_LABEL_RE.sub("", common.clean(line[:pos]))
+    return len(re.findall(r"[A-Za-z]{2,}", head)) >= 2
+
+
+def _page_camp_name(lines: list[tuple[str, object, list]]) -> str | None:
+    """A camp name read out of a page whose own <title> is page chrome, or None.
+
+    northeastern's three ID clinics are real and correctly dated, and were published as 'Camps,
+    Clinics and Tournaments' because that is the page's title and the bare-date branch names a row
+    after the title unconditionally. The page's own opening line is 'Northeastern Women's Soccer ID
+    Clinics provide a unique camp experience...', so the name is on the page, just not in its title.
+
+    Only the page's first lines are read - a page introduces itself at the top, and reading further
+    on an all-sport hub would pick up somebody else's camp - and a candidate must be a real phrase:
+    not chrome itself, at least two words. Otherwise None, and the chrome title stands as today.
+    A row named from here still carries `_named = "page"` and is still gated on its evidence, so
+    this cannot become another way past the sport and gender rules."""
+    best = None
+    for text, _el, _anchors in lines[:12]:
+        if not CAMP_RE.search(NOT_CAMP_RE.sub(" ", text)):
+            continue
+        for m in CAMP_PHRASE_RE.finditer(NOT_CAMP_RE.sub(" ", text)):
+            cand = _clean_name(m.group(1))
+            if 4 <= len(cand) <= 80 and len(cand.split()) >= 2 and not _is_chrome_name(cand):
+                if best is None or len(cand) > len(best):
+                    best = cand
+        if best:
+            return best
+    return None
 
 
 def _camp_phrase(line: str, fallback: str | None) -> str:
@@ -628,27 +773,40 @@ def _camp_phrase(line: str, fallback: str | None) -> str:
     return fallback or "Camp"
 
 
-def _register_url(elements, page_url: str, section: dict | None = None) -> str | None:
+def _register_url(anchors, page_url: str, fallback=()) -> str | None:
     """The row's registration link, or None when the only candidate contradicts the sport.
 
-    A hub page carries one registration block for the whole department, so the same link lands on
-    every row: all 20 wofford rows point at a basketball camps domain, montana's at
-    montanabasketballcamps.com, harvard's at moorehoopsacademy. Fifty of the 131 stored
-    registerUrls name another sport. Dropping the *link* rather than the row is deliberate - exactly
-    one of those 50 sits on a genuine camp (wofford's 2026-11-22 ID Camp), and losing a real camp is
-    worse than losing a link. A soccer-named link, or one on a row in a soccer section, is kept."""
-    for el in elements:
-        for a in el.find_all("a", href=True) if hasattr(el, "find_all") else []:
+    `anchors` are the row's OWN anchors (see _lines); `fallback` is the enclosing elements, searched
+    only when the row's own lines carry no anchor at all. That order is the fix for issue #80:
+    wofford's one real women's soccer row sits in a page-wide <br> run, so an element-wide search
+    handed it the first registration link on the page - `kevingiltnerbasketballcamps` from the
+    Basketball section - while the correct `terrierwsoccamps.com` link sat on the very next line.
+
+    A hub page also carries one registration block for the whole department, so the same link lands
+    on every row: montana's at montanabasketballcamps.com, harvard's at moorehoopsacademy. Fifty of
+    the 131 stored registerUrls named another sport. Dropping the *link* rather than the row is
+    deliberate - exactly one of those 50 sat on a genuine camp (wofford's 2026-11-22 ID Camp), and
+    losing a real camp is worse than losing a link.
+
+    The other-sport-host guard is unconditional. It used to be suppressed on rows in a soccer
+    section, on the premise that all 20 wofford rows pointed at a basketball domain and the real one
+    had to be rescued. The premise was false - the page carries correct per-sport links throughout
+    (shawnwatsonfootballcamps, rodraytenniscamp, terriermenssoccercamps, chelseabutlersoftballcamps,
+    terriervolleyballcamps) - so the carve-out corrupted the single row it existed to protect."""
+    def pick(tags):
+        for a in tags:
             url = _http_url(a.get("href"), page_url)
             if not url:
                 continue
             if not (REGISTER_HREF_RE.search(url) or REGISTER_TEXT_RE.search(a.get_text(" ", strip=True) or "")):
                 continue
-            if OTHER_SPORT_HOST_RE.search(url) and not SOCCER_RE.search(url) \
-                    and not (section and section["sport"] == "soccer"):
+            if OTHER_SPORT_HOST_RE.search(url) and not SOCCER_RE.search(url):
                 continue
             return url
-    return None
+        return None
+
+    return pick(anchors) or pick([a for el in fallback if hasattr(el, "find_all")
+                                  for a in el.find_all("a", href=True)])
 
 
 def _details(window: list[str]) -> dict:
@@ -744,8 +902,10 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
             if c_loc is not None and texts[c_loc]:
                 details["location"] = texts[c_loc][:80]
             out.append({**_entry(name, _widen(dates[0], texts), details,
-                                 _register_url(cells, page_url, section), page_url),
-                        "_section": section})
+                                 _register_url([a for c in cells for a in c.find_all("a", href=True)], page_url),
+                                 page_url),
+                        "_section": section, "_evidence": " | ".join(texts),
+                        "_named": "page" if _is_chrome_name(name) else "row"})
     return out
 
 
@@ -763,14 +923,16 @@ def _widen(d: dict, texts: list[str]) -> dict:
     return d
 
 
-def _prose_entries(soup, page_url: str, published: str | None, title: str | None, sports: set | None = None) -> list[dict]:
-    lines = _lines(soup)
+def _prose_entries(lines, page_url: str, published: str | None, page_name: str | None,
+                   title: str | None, sports: set | None = None) -> list[dict]:
+    """`page_name` is the name a row falls back to when it has none of its own; `title` still
+    decides whether the page is a camp page at all (the bare-date branch below)."""
     camp_page = bool(title and CAMP_RE.search(NOT_CAMP_RE.sub(" ", title)))
     out = []
     section = None
     i = 0
     while i < len(lines):
-        text, el = lines[i]
+        text, el, anchors = lines[i]
         # An all-sport hub is one flat run of <br>-separated lines (montana is a single <div>), so
         # the section is tracked by line order rather than by element nesting. The heading line is
         # NOT skipped afterwards: on a single-sport page the heading and the camp's name are the
@@ -789,13 +951,18 @@ def _prose_entries(soup, page_url: str, published: str | None, title: str | None
             if camp_page and DATE_ONLY_LINE_RE.match(text):
                 ds = parse_camp_dates(text, published)
                 if ds:
-                    window = [t for t, _ in lines[i + 1:i + 6] if not CAMP_RE.search(t) or len(t) >= 90]
-                    out.append({**_entry(title, ds[0], _details(window), _register_url([e for _, e in lines[i:i + 6]], page_url, section), page_url),
-                                "_weak": True, "_section": section})
+                    window = [t for t, _e, _a in lines[i + 1:i + 6] if not CAMP_RE.search(t) or len(t) >= 90]
+                    near = [a for _t, _e, aa in lines[i:i + 6] for a in aa]
+                    out.append({**_entry(page_name, ds[0], _details(window),
+                                         _register_url(near, page_url, [e for _t, e, _a in lines[i:i + 6]]), page_url),
+                                "_weak": True, "_section": section,
+                                # named after the page, never after the row: gated on its evidence
+                                "_named": "page", "_evidence": " | ".join([text] + window)})
             i += 1
             continue
         window = [text]
         elems = [el]
+        near = list(anchors)
         # dates on the camp line itself, else (for a short heading-like line) on one of the next three
         # lines that carries a year or sits in the same block (FSU: name / date / grades / price)
         picked = []
@@ -805,34 +972,44 @@ def _prose_entries(soup, page_url: str, published: str | None, title: str | None
             picked.append(d)
         j = i + 1
         while not picked and len(text) <= 90 and not REGISTRATION_RE.search(text) and j < len(lines) and j <= i + 3:
-            t2, e2 = lines[j]
+            t2, e2, a2 = lines[j]
             if CAMP_RE.search(NOT_CAMP_RE.sub(" ", t2)) and len(t2) < 90:
                 break  # the next camp starts here
             if TBD_RE.search(t2):
                 break
-            ds = parse_camp_dates(t2, published)
-            ds = [d for d in ds if not REGISTRATION_RE.search(t2[max(0, d["pos"] - 60):d["pos"]])
+            raw = parse_camp_dates(t2, published)
+            if raw and _starts_new_row(t2, raw[0]["pos"]):
+                break  # so does this one, without using the word 'camp' - see _starts_new_row
+            ds = [d for d in raw if not REGISTRATION_RE.search(t2[max(0, d["pos"] - 60):d["pos"]])
                   and (YEAR_RE.search(t2) or e2 is el)]
             if ds and not REGISTRATION_RE.search(t2[:40]):
                 picked = ds[:1]
                 window.append(t2)
                 elems.append(e2)
+                near.extend(a2)
             j += 1
         if picked:
             k = max(j, i + 1)
             while k < len(lines) and k <= i + 6:
-                t3, e3 = lines[k]
+                t3, e3, a3 = lines[k]
                 if CAMP_RE.search(NOT_CAMP_RE.sub(" ", t3)) and len(t3) < 90:
                     break
+                d3 = parse_camp_dates(t3, published)
+                if d3 and _starts_new_row(t3, d3[0]["pos"]):
+                    break  # the details window must not absorb the next camp's ages and price either
                 window.append(t3)
                 elems.append(e3)
+                near.extend(a3)
                 k += 1
-            name = _camp_phrase(text, title)
+            name = _camp_phrase(text, page_name)
             details = _details(window)
-            register = _register_url(elems, page_url, section)
+            register = _register_url(near, page_url, elems)
+            weak = name == page_name
             for d in picked[:4]:
                 out.append({**_entry(name, d, details, register, page_url),
-                            "_weak": name == title, "_section": section})
+                            "_weak": weak, "_section": section,
+                            "_named": "page" if weak or _is_chrome_name(name) else "row",
+                            "_evidence": " | ".join(window) + (f" | {register}" if register else "")})
         i += 1
     return out
 
@@ -918,19 +1095,33 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     else:
         _content(soup)
     sports: set = set()
-    entries = _table_entries(root, page_url, published, sports) + _prose_entries(root, page_url, published, title, sports)
+    lines = _lines(root)
+    # The name a row falls back to when it has none of its own. A chrome page title used to be
+    # refused here, which left harvard's and northeastern's rows wearing the chrome instead; the
+    # page's own opening lines are read instead, and only then is the chrome title kept (issue #80).
+    page_name = _clean_name(title) if title and not _is_chrome_name(title) else None
+    if page_name is None and title:
+        page_name = _page_camp_name(lines) or _clean_name(title)
+    entries = _table_entries(root, page_url, published, sports) \
+        + _prose_entries(lines, page_url, published, page_name, title, sports)
     day_months = {e["startDate"][:7] for e in entries if e["precision"] == "day"}
     entries = [e for e in entries if not (e["precision"] == "month" and e["startDate"] in day_months)]
     # Gating is inserted upstream of the cap, which already ran last. MAX_CAMPS is a defence against
     # a runaway parse; ahead of a quality filter it would spend all 20 slots on whatever the page
     # lists earliest, so on a hub that put soccer last the real camps would be the rows cut. montana
     # yields 28 rows and loses 8 to the cap. Gate, then cap.
-    is_hub = len(sports) >= HUB_SPORT_COUNT and not _page_is_soccer(title)
-    entries = [e for e in entries if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub)]
-    if title and not _is_chrome_name(title):
+    page_is_soccer = _page_is_soccer(title)
+    is_hub = len(sports) >= HUB_SPORT_COUNT and not page_is_soccer
+    # Gate BEFORE the repair, and on `_named`/`_evidence` rather than on the displayed name: the
+    # repair below hands a row a clean name, and a gate reading that name would be reading the
+    # repair's own output. That ordering is what issue #80 turns on.
+    entries = [e for e in entries
+               if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
+                               evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)]
+    if page_name and not _is_chrome_name(page_name):
         for e in entries:
             if _is_chrome_name(e["name"]):
-                e["name"] = _clean_name(title)
+                e["name"] = page_name
     return _dedupe(entries)[:MAX_CAMPS]
 
 

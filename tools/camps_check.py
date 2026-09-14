@@ -134,12 +134,14 @@ def fixtures(args) -> int:
     spec = json.load(open(os.path.join(FIXTURES, "fixtures.json"), encoding="utf-8"))
     fails, total = [], 0
 
-    def ok(name: str, cond: bool, detail: str = ""):
+    def ok(name: str, cond: bool, detail: str = "") -> bool:
         nonlocal total
         total += 1
         print(f"  {'ok  ' if cond else 'FAIL'} {name}{(' - ' + detail) if detail and not cond else ''}")
         if not cond:
             fails.append(name)
+        return bool(cond)  # returned so a check can guard the one after it; it used to return None,
+        # which silently made `if not ok(...): continue` an unconditional skip
 
     print("nav: find_camps_link")
     for fx in spec["nav"]:
@@ -271,6 +273,36 @@ def fixtures(args) -> int:
         ok(f"{name!r} under {sec}, page is not a hub -> keep",
            _row_allowed is not None and got is True,
            missing("_row_allowed") if _row_allowed is None else f"got {got}")
+
+    # Issue #80's P1, as a unit. `named="page"` says the row's name came from the page and so names
+    # no sport and no gender; the gate then has to read the evidence the row was built from. These
+    # cases fail against origin/main, whose _row_allowed takes no evidence at all - reported as a
+    # FAIL per case by the same `helper` degradation the group above uses.
+    print("rowsEvidence: _row_allowed on the text a page-named row was assembled from")
+    for fx in (spec.get("rowsEvidence") or {}).get("cases") or []:
+        want = fx["expect"]
+        try:
+            got = _row_allowed(fx["name"], None, named=fx.get("named", "row"), evidence=fx.get("evidence"),
+                               page_is_soccer=bool(fx.get("pageIsSoccer"))) if _row_allowed else None
+        except TypeError as e:  # a parser whose _row_allowed has no evidence parameter
+            got, e = None, e
+            ok(f"{fx['why']} -> {'keep' if want else 'drop'}", False,
+               f"_row_allowed does not take evidence: {e}")
+            continue
+        ok(f"{fx['why']} -> {'keep' if want else 'drop'}",
+           _row_allowed is not None and got is want,
+           missing("_row_allowed") if _row_allowed is None else f"got {got}")
+
+    print("newRow: _starts_new_row")
+    _starts_new_row = helper("_starts_new_row")
+    for line, want in (spec.get("newRow") or {}).get("cases") or []:
+        ds = camps.parse_camp_dates(line)
+        if not ok(f"{line[:56]!r} parses a date at all", bool(ds), "no date, so the case proves nothing"):
+            continue
+        got = _starts_new_row(line, ds[0]["pos"]) if _starts_new_row else None
+        ok(f"{line[:56]!r} -> {'its own row' if want else 'a continuation'}",
+           _starts_new_row is not None and got is want,
+           missing("_starts_new_row") if _starts_new_row is None else f"got {got}")
 
     # _page_is_soccer decides whether a SECTION rejection bites at all. Every known hub title must
     # be False here, or the gating this issue adds stops working on the pages it was built for.
