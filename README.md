@@ -100,6 +100,26 @@ the failed collectors are printed at the end, recorded as `lastRun` in `public/a
 GitHub Actions shown as annotations and in the run's Summary tab. The workflow's `fail_threshold` input changes
 the limit for a manual run.
 
+### `rpi: no season table resolved for [<year>]`
+
+The build refuses to publish rather than blank a season. Every finished season after the RPI archive's last
+year (`public/data/rpi/<year>.json`, currently 2024) must resolve to a table — the last snapshot in
+`public/data/rpi/weekly/<year>/`, or `current.json` for the season being played. Checking the *gap* rather
+than "did anything load" is the point: once the NCAA posts the first table of a new season, a lost
+`weekly/<last year>/` would otherwise leave that season silently rankless and, for the ~173 programs
+Wikipedia does not cover, absent altogether from all 350 profiles.
+
+Almost always this means a snapshot went missing and the fix is to restore it — it is committed data, so
+`git log -- public/data/rpi/weekly` finds it. Re-running `python collegedash.py refresh --only rpi` will
+**not** bring back a past season: `collect/rpi.py` only ever writes the week the NCAA is currently showing.
+
+The one legitimate exception is a season that was never played, as in 2020 when COVID moved the women's
+championship to spring 2021. No table will ever exist for it, so add the year to `UNPLAYED_SEASONS` in
+`build.py` with a comment saying why, and the gap check will step over it. Do not fabricate a file under
+`weekly/<year>/` to quiet the error — that publishes ranks nobody awarded. A gap *inside* the archive needs
+nothing at all; only years after its last sheet are checked, which is why the absent 2020 sheet is silent
+today.
+
 ## Deploying
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo root:

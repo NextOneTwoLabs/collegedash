@@ -25,6 +25,14 @@ CURRENT_SEASON_FALLBACK = dt.date.today().year
 # not yet run) shows "not collected yet" in the UI instead of a stale banner. They are also not in
 # the completeness checks.
 OPTIONAL_ENVS = {"camps"}
+# Seasons that were never played, and so will never have an RPI table. load_rpi_finals otherwise
+# fails the build for any season after the archive's last year that resolves no table, which is
+# what stops a lost weekly/ snapshot from silently blanking a season on all 350 profiles - but a
+# cancelled season is the one case where nothing is wrong. 2020 is the precedent: COVID moved the
+# women's championship to spring 2021, and the Henderson archive has no 2020 sheet. It needs no
+# entry here, because the gap is only checked above the archive's last year. Add a year here (with
+# the reason) only when the NCAA played no season; never to quiet a missing snapshot.
+UNPLAYED_SEASONS: set[int] = set()
 GRADUATING = {"SR", "R-SR", "GR"}
 POS_ORDER = ["GK", "D", "M", "F"]
 CLASS_ORDER = ["FR", "R-FR", "SO", "R-SO", "JR", "R-JR", "SR", "R-SR", "GR"]
@@ -111,6 +119,75 @@ def load_rpi_history() -> dict[int, dict[str, dict]]:
 
 def load_rpi_current() -> dict | None:
     return common.read_json(os.path.join(common.RPI_OUT_DIR, "current.json"))
+
+
+def load_rpi_finals(cur_season: int) -> dict[int, dict]:
+    """season -> the NCAA RPI table that stands for that season, for every finished season a weekly
+    snapshot covers.
+
+    The archive (public/data/rpi/<year>.json) is one formula recomputed across every season it
+    holds, so its *rank* wins wherever it exists - but a season it covers is still resolved here,
+    because archive rows carry no record and build_seasons still needs the snapshot's one. Dropping
+    such a season from this dict is what made adding a 2025 Henderson sheet - an ordinary edit to
+    the 17 curated entries in registry.sources.rpiHistory.sheets - collapse lastSeason from 350 to
+    173 and re-dash the Record column for 177 programs. Seasons above the archive can only come
+    from the NCAA's own table, and current.json is not a home for them: collect/rpi.py
+    overwrites that file the day the NCAA posts the first weekly table of a new season, which would
+    erase the finished season from all 350 programs at once. The per-through-date snapshots under
+    weekly/<season>/ are immutable, so the last snapshot of a finished season is its final table;
+    current.json is read only for the season being played now, whose rows are marked in progress.
+
+    On semantics: the NCAA's record column counts Division I opponents only (its nonDiv1 games are
+    excluded), so it can differ from a schedule- or Wikipedia-sourced record. Those two stay
+    authoritative wherever they exist; this only fills a season that would otherwise carry none.
+
+    Raises rather than degrading, for the reason load_academic_ranks does: an empty weekly/ would
+    blank the most recent season for every program at once, and missing data must not be
+    indistinguishable from a program that simply did not play.
+
+    The escape hatch, for the one case where that distinction is real: if a season after the
+    archive's last year is genuinely never played - the 2020 precedent, when COVID moved the
+    women's season to spring 2021 - no table will ever exist for it and this will fail every build
+    until someone says so. Add the year to UNPLAYED_SEASONS above, with a comment saying why. Do
+    not fabricate a snapshot under weekly/<year>/ to quiet it: that publishes ranks nobody awarded.
+    A hole *inside* the archive needs nothing, because the gap is only checked above its last year
+    (which is why the missing 2020 sheet is already silent today). README, "Refresh runs and
+    failures", carries the same note for whoever meets the error at 03:00.
+    """
+    archived = set()
+    if os.path.isdir(common.RPI_OUT_DIR):
+        archived = {int(f[:4]) for f in os.listdir(common.RPI_OUT_DIR) if re.fullmatch(r"\d{4}\.json", f)}
+    weekly_dir = os.path.join(common.RPI_OUT_DIR, "weekly")
+    out: dict[int, dict] = {}
+    if os.path.isdir(weekly_dir):
+        for name in sorted(os.listdir(weekly_dir)):
+            season_dir = os.path.join(weekly_dir, name)
+            if not re.fullmatch(r"\d{4}", name) or not os.path.isdir(season_dir):
+                continue
+            season = int(name)
+            if season == cur_season:
+                continue  # the season being played comes from current.json, below
+            files = sorted(f for f in os.listdir(season_dir) if f.endswith(".json"))
+            doc = common.read_json(os.path.join(season_dir, files[-1])) if files else None
+            if doc and doc.get("teams"):
+                out[season] = doc
+    cur = load_rpi_current()
+    if cur and cur.get("teams") and cur.get("season") == cur_season:
+        out[cur_season] = cur
+    # Every finished season after the archive's last year must resolve to a table. Checking the gap
+    # rather than merely "did anything load" is what makes this a guard: once the NCAA posts the
+    # first table of a new season, a lost weekly/ would otherwise leave the previous season silently
+    # blank on all 350 profiles while current.json still supplied the new one.
+    missing = [y for y in range((max(archived) + 1) if archived else cur_season, cur_season)
+               if y not in out and y not in UNPLAYED_SEASONS]
+    if missing or not (archived or out):
+        raise FileNotFoundError(
+            f"rpi: no season table resolved for {missing or 'any season'} under {weekly_dir} or "
+            f"current.json. The Henderson archive stops at {max(archived, default='(nothing)')}, so "
+            f"those seasons would publish with no rank and, for a program Wikipedia does not cover, "
+            f"no season at all. If a season was genuinely never played, add it to "
+            f"UNPLAYED_SEASONS in build.py; do not fabricate a snapshot")
+    return out
 
 
 def rpi_weekly_for(school: str, season: int) -> list[dict]:
@@ -208,10 +285,19 @@ def _record_from_games(games: list[dict]) -> dict:
             "confText": f"{cw}-{cl}-{ct}" if conf else None, "exhibitions": len(games) - len(real)}
 
 
-def build_seasons(program, wiki, ath, rpi_hist, rpi_cur, registry) -> list[dict]:
+def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry) -> list[dict]:
+    """Every season this program has a record of, newest first.
+
+    The RPI tables create rows, they do not only decorate them: 173 of 350 programs have no
+    Wikipedia season table and no schedule history, and the RPI archive is the only record their
+    seasons ever had (issue #3). Both joins are exact matches on the curated ids and nothing else -
+    no shortName fallback, no normalisation - because a near-match here does not lose a season, it
+    publishes another school's one. Wikipedia and the athletics schedule stay authoritative for
+    record, headCoach, confRecord, confFinish and ncaaResult.
+    """
     ids = program["ids"]
-    hist_name = ids.get("rpiHistoryName") or program["shortName"]
-    ncaa_name = ids.get("ncaaName") or program["shortName"]
+    hist_name = ids.get("rpiHistoryName")
+    ncaa_name = ids.get("ncaaName")
     seasons = {s["year"]: dict(s) for s in ((wiki or {}).get("data", {}).get("seasons") or [])}
     cur_season = registry["season"]["current"]
     a = (ath or {}).get("data", {})
@@ -236,20 +322,37 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_cur, registry) -> list[dict]
             s.update({"record": rec["text"], "wins": rec["wins"], "losses": rec["losses"], "ties": rec["ties"]})
             if rec.get("confText") and rec["confText"] != "0-0-0" and not s.get("confRecord"):
                 s["confRecord"] = rec["confText"]
-    for y, s in seasons.items():
-        h = (rpi_hist.get(y) or {}).get(hist_name)
-        if h:
-            s["rpiRank"] = h.get("rpiRank")
-            s["rpi"] = {"rank": h.get("rpiRank"), "sosRank": h.get("sosRank"), "balancedRank": h.get("balancedRpiRank"),
-                        "kpiRank": h.get("kpiRank"), "masseyRank": h.get("masseyRank"), "ncaaSeed": h.get("ncaaSeed"),
-                        "source": "end-of-season (Henderson archive)"}
-        if rpi_cur and rpi_cur.get("season") == y:
-            row = next((t for t in rpi_cur["teams"] if t.get("school") == ncaa_name), None)
-            if row:
-                s["rpiRank"] = row["rank"]
-                s["rpi"] = {"rank": row["rank"], "record": row.get("record"), "through": rpi_cur.get("throughGames"),
-                            "prevRank": row.get("prevRank"), "source": "NCAA.com weekly RPI",
-                            "weekly": rpi_weekly_for(ncaa_name, y)}
+    # The Henderson archive, one recomputed formula across every season it covers.
+    from_archive = set()
+    for y, table in (rpi_hist.items() if hist_name else ()):
+        h = table.get(hist_name)
+        if not h:
+            continue
+        from_archive.add(y)
+        s = seasons.setdefault(y, {"year": y, "label": str(y)})
+        s["rpiRank"] = h.get("rpiRank")
+        s["rpi"] = {"rank": h.get("rpiRank"), "sosRank": h.get("sosRank"), "balancedRank": h.get("balancedRpiRank"),
+                    "kpiRank": h.get("kpiRank"), "masseyRank": h.get("masseyRank"), "ncaaSeed": h.get("ncaaSeed"),
+                    "source": "end-of-season (Henderson archive)"}
+    # The NCAA's own table (see load_rpi_finals). Where the archive already ranked this program's
+    # season the archive's rank stands, but the row is still read for the record: archive rows
+    # carry none, so skipping the season outright would blank lastSeason for the 177 programs that
+    # have no other source for it, the moment someone adds that year's Henderson sheet.
+    for y, doc in (rpi_finals.items() if ncaa_name else ()):
+        row = next((t for t in doc.get("teams") or [] if t.get("school") == ncaa_name), None)
+        if not row:
+            continue
+        s = seasons.setdefault(y, {"year": y, "label": str(y)})
+        if y not in from_archive:
+            s["rpiRank"] = row["rank"]
+            s["rpi"] = {"rank": row["rank"], "record": row.get("record"), "through": doc.get("throughGames"),
+                        "prevRank": row.get("prevRank"), "source": "NCAA.com weekly RPI",
+                        "weekly": rpi_weekly_for(ncaa_name, y)}
+        # not setdefault: a Wikipedia row can carry the key with a null in it (miami-fl 2023-2025).
+        if not s.get("record"):
+            s["record"] = row.get("record")
+        if y == cur_season:
+            s.setdefault("inProgress", True)  # a real schedule, where there is one, has the last word
     return [seasons[y] for y in sorted(seasons, reverse=True)]
 
 
@@ -532,7 +635,7 @@ def load_academic_ranks(registry: dict) -> dict[str, dict]:
 
 # ---------- profile ----------
 
-def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict | None = None,
+def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: dict | None = None,
                   ranks: dict[str, dict] | None = None) -> dict:
     slug = program["slug"]
     if ranks is None:
@@ -563,7 +666,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_cur, state: dict 
         "academicRank": ranks[slug],
         "climate": ({**climate["data"], "_meta": _meta(climate)} if climate else None),
         "program": build_program_section(program, wiki, ath),
-        "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_cur, registry),
+        "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry),
         "roster": roster,
         "rosterHistory": roster_hist,
         "schedule": build_schedule(ath),
@@ -708,12 +811,13 @@ def summary_row(p: dict) -> dict:
 
 def build(registry: dict) -> list[dict]:
     rpi_hist = load_rpi_history()
-    rpi_cur = load_rpi_current()
+    # raises if no season table resolves, rather than blanking the latest season for all 350
+    rpi_finals = load_rpi_finals(registry["season"]["current"])
     state = common.load_refresh_state()
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     rows, all_commits = [], []
     for program in common.iter_programs(registry):
-        profile = build_profile(program, registry, rpi_hist, rpi_cur, state, ranks)
+        profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
@@ -757,7 +861,90 @@ def validate(registry: dict, verbose: bool = False) -> bool:
             print(f"{program['slug']}: completeness {b['completeness']}; missing {missing or 'none'}; stale {b['stale'] or 'none'}")
     titles_ok = check_titles(registry)
     ranks_ok = check_academic_ranks(registry)
-    return ok and titles_ok and ranks_ok
+    seasons_ok = check_seasons(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok
+
+
+def check_seasons(registry: dict) -> bool:
+    """Every published RPI rank must be the rank the archive or the NCAA table holds under that
+    program's own curated id, and no id may be claimed by two programs.
+
+    build_seasons creates season rows from those tables rather than only decorating rows Wikipedia
+    already wrote, so a bad join no longer just mislabels a season that happened - it invents one,
+    with another school's rank and record on it. There is no fuzzy matching to blame for that; this
+    is the cheap guard that catches a hand-edited profile, a mistyped registry id, or two programs
+    pointed at the same row, on every validate.
+
+    It reports; it does not raise. Everything it reads is a file on disk that a hand-edit or a
+    half-written build can have left any shape at all, and a validator that dies on the malformed
+    input it exists to find tells you less than one that names it. Every value below is therefore
+    type-checked before it is used, and the loaders are allowed to fail without taking validate
+    down with them.
+    """
+    try:
+        rpi_hist = load_rpi_history()
+        finals = load_rpi_finals(registry["season"]["current"])
+    except Exception as e:  # noqa: BLE001 - report the failure, do not become it
+        print(f"SEASONS: cannot read the RPI tables to check against: {type(e).__name__}: {e}")
+        return False
+    ok, hist_claims, ncaa_claims = True, {}, {}
+    for program in common.iter_programs(registry):
+        slug = program.get("slug")
+        ids = program.get("ids") if isinstance(program.get("ids"), dict) else {}
+        hist_name, ncaa_name = ids.get("rpiHistoryName"), ids.get("ncaaName")
+        hist_name = hist_name if isinstance(hist_name, str) else None
+        ncaa_name = ncaa_name if isinstance(ncaa_name, str) else None
+        if hist_name:
+            hist_claims.setdefault(hist_name, []).append(slug)
+        if ncaa_name:
+            ncaa_claims.setdefault(ncaa_name, []).append(slug)
+        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        if not isinstance(p, dict):
+            print(f"SEASONS {slug}: the profile is a {type(p).__name__}, not an object")
+            ok = False
+            continue
+        rows = p.get("seasons") or []
+        if not isinstance(rows, list):
+            print(f"SEASONS {slug}: `seasons` is a {type(rows).__name__}, not a list of season objects")
+            ok = False
+            continue
+        for s in rows:
+            if not isinstance(s, dict):
+                print(f"SEASONS {slug}: a season entry is a {type(s).__name__}, not an object: {s!r:.60}")
+                ok = False
+                continue
+            rank, y = s.get("rpiRank"), s.get("year")
+            if rank is None:
+                continue
+            if not isinstance(rank, int) or isinstance(rank, bool):
+                print(f"SEASONS {slug}: {y} publishes rpiRank {rank!r}, a {type(rank).__name__} "
+                      f"where a whole number is required")
+                ok = False
+                continue
+            if not isinstance(y, int) or isinstance(y, bool):
+                print(f"SEASONS {slug}: a season publishing RPI #{rank} has year {y!r}, a "
+                      f"{type(y).__name__} where a whole number is required")
+                ok = False
+                continue
+            # the same precedence build_seasons applies: the archive's rank wins where this
+            # program has an archive row, and the NCAA table stands everywhere else
+            h = (rpi_hist.get(y) or {}).get(hist_name) if hist_name else None
+            row = next((t for t in (finals.get(y) or {}).get("teams") or []
+                        if isinstance(t, dict) and t.get("school") == ncaa_name), None) if ncaa_name else None
+            want = h.get("rpiRank") if isinstance(h, dict) else (row.get("rank") if isinstance(row, dict) else None)
+            if want is None:
+                print(f"SEASONS {slug}: {y} publishes RPI #{rank}, but no {y} row exists under this "
+                      f"program's own ids (rpiHistoryName {hist_name!r}, ncaaName {ncaa_name!r})")
+                ok = False
+            elif want != rank:
+                print(f"SEASONS {slug}: {y} publishes RPI #{rank}, but its own row is #{want}")
+                ok = False
+    for field, claims in (("rpiHistoryName", hist_claims), ("ncaaName", ncaa_claims)):
+        for name, slugs in sorted(claims.items()):
+            if len(slugs) > 1:
+                print(f"SEASONS: {field} {name!r} is claimed by {', '.join(slugs)}")
+                ok = False
+    return ok
 
 
 def check_academic_ranks(registry: dict) -> bool:
