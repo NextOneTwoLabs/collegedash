@@ -136,7 +136,11 @@ def rebuild(tmp: str, rpi_dir: str | None = None) -> tuple[str, str]:
     committed profiles are still the previous build's.
     """
     progs, commits = os.path.join(tmp, "programs"), os.path.join(tmp, "commitments")
-    swap = {"PROGRAMS_OUT_DIR": progs, "COMMITS_OUT_DIR": commits}
+    # Every directory build() writes to has to be in this swap. A published output missing from it
+    # is not a test that fails - it is a test run that overwrites live data in public/ on the way
+    # past, which is how CAMPS_OUT_DIR earned its place here the day the camps index was added.
+    swap = {"PROGRAMS_OUT_DIR": progs, "COMMITS_OUT_DIR": commits,
+            "CAMPS_OUT_DIR": os.path.join(tmp, "camps")}
     if rpi_dir:
         swap["RPI_OUT_DIR"] = rpi_dir
     buf = io.StringIO()
@@ -148,7 +152,8 @@ def rebuild(tmp: str, rpi_dir: str | None = None) -> tuple[str, str]:
 
 def complaints(log: str) -> str:
     """The lines build's own validate pass prints when an invariant fails."""
-    return "\n".join(l for l in log.splitlines() if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "MISSING")))
+    return "\n".join(l for l in log.splitlines()
+                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING")))
 
 
 def program(registry: dict, slug: str) -> dict:

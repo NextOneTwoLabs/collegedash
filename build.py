@@ -5,6 +5,7 @@ curated.json and commitments.reviewed.json into the published profiles under pub
   public/data/programs/<slug>.json   full profile (what the dashboard renders)
   public/data/programs/index.json    one summary row per program (list/filter views)
   public/data/commitments/index.json every resolved commitment across programs
+  public/data/camps/index.json       every published camp across programs, within the date window
 
 Every section carries _meta {source, url, asOf} so the UI can show provenance and staleness.
 Curated fields override machine fields; machines never write curated.json.
@@ -466,6 +467,64 @@ def build_camps(camps, news, curated) -> dict | None:
             "newsScanned": c.get("newsScanned", 0), "items": merged, "_meta": metas}
 
 
+# ---------- camps index ----------
+# public/data/camps/index.json: every program's camp items in one file, so a site-wide camp view
+# does not have to load 350 profiles. Rows carry the camp fields plus `slug` and nothing else -
+# program name, region, conference and colours are already on the programs index row the view holds,
+# and are joined by slug there.
+#
+# The emitter classifies nothing. Whether a row is a real women's soccer camp, another sport's camp
+# or a review widget is decided at source in collect/camps.py, where the page structure that proves
+# it is still available (issue #39); by the time a row reaches here that evidence is gone. The only
+# filter applied here is the date window.
+CAMPS_PAST_WINDOW_DAYS = 365
+CAMP_INDEX_FIELDS = ("name", "startDate", "endDate", "dateText", "precision", "yearInferred",
+                     "location", "ages", "price", "registerUrl", "sourceUrl", "kind", "confidence")
+
+
+def camps_window(today: dt.date | None = None) -> dict:
+    """The slice of the camp calendar the published index carries: every future camp, plus the past
+    `CAMPS_PAST_WINDOW_DAYS`. Written into the file so a stale publish is diagnosable from the file
+    alone. `to` is null because there is no upper bound - a camp announced for 2027 is published
+    today - and the key is still emitted so the shape never varies."""
+    d = today or dt.date.today()
+    return {"from": (d - dt.timedelta(days=CAMPS_PAST_WINDOW_DAYS)).isoformat(), "to": None}
+
+
+def camp_in_window(item, window: dict) -> bool:
+    """True when a camp item belongs in the published index.
+
+    The comparison mirrors the profile tab's own past/future rule (public/index.html, tabCamps), so
+    the index and the tab cannot disagree about what "past" means: a month-precision row compares at
+    month granularity, everything else compares `endDate or startDate`, which keeps a camp that is
+    running right now out of the past. An undated row is dropped: it cannot be placed in the window,
+    and a date-ordered view has nowhere to put it. Anything malformed is dropped rather than raised -
+    this reads a profile a hand-edit can have left any shape at all.
+    """
+    if not isinstance(item, dict) or not isinstance(window, dict):
+        return False
+    start = item.get("startDate")
+    if not isinstance(start, str) or not start:
+        return False
+    end = item.get("endDate") if isinstance(item.get("endDate"), str) else None
+    frm, to = window.get("from"), window.get("to")
+    month = item.get("precision") == "month"
+    last, first = ((end or start), start)
+    if month:
+        last, first = last[:7], first[:7]
+    if isinstance(frm, str) and frm and last < (frm[:7] if month else frm):
+        return False
+    if isinstance(to, str) and to and first > (to[:7] if month else to):
+        return False
+    return True
+
+
+def camp_row(slug: str, item: dict) -> dict:
+    """One published row: the camp fields, in a fixed order, plus the slug that joins it to a
+    program. Missing fields are published as null so the shape never varies between rows."""
+    return {"slug": slug, **{k: item.get(k) for k in CAMP_INDEX_FIELDS}}
+
+
 # ---------- commitments ----------
 
 def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> list[dict]:
@@ -815,7 +874,8 @@ def build(registry: dict) -> list[dict]:
     rpi_finals = load_rpi_finals(registry["season"]["current"])
     state = common.load_refresh_state()
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
-    rows, all_commits = [], []
+    rows, all_commits, all_camps = [], [], []
+    window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in common.iter_programs(registry):
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
@@ -823,6 +883,9 @@ def build(registry: dict) -> list[dict]:
         for c in profile["commitments"]:
             all_commits.append({**{k: v for k, v in c.items() if k != "sources"}, "sourceCount": len(c["sources"]),
                                 "collegeName": program.get("shortName") or program["name"]})
+        for it in ((profile.get("camps") or {}).get("items") or []):
+            if camp_in_window(it, window):
+                all_camps.append(camp_row(program["slug"], it))
         common.log(f"build: {program['slug']} completeness {profile['_build']['completeness']} "
                    f"({len(profile['commitments'])} commits, {len(profile['seasons'])} seasons)"
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
@@ -830,6 +893,10 @@ def build(registry: dict) -> list[dict]:
                       {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
+    common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
+                      {"updated": common.now_iso(), "window": window, "camps": all_camps})
+    common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
+               f"window from {window['from']}")
     if not validate(registry):
         common.log("!! build: schema validation reported errors (see SCHEMA lines above; `python collegedash.py validate`)")
     return rows
@@ -862,7 +929,110 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     titles_ok = check_titles(registry)
     ranks_ok = check_academic_ranks(registry)
     seasons_ok = check_seasons(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok
+    camps_ok = check_camps_index(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok
+
+
+def check_camps_index(registry: dict) -> bool:
+    """Everything public/data/camps/index.json claims must be true of the profiles it was built from.
+
+    The camps index is the first published file with no program of its own to sit on: a row that
+    names a slug nothing resolves, or that survived a window it should not have, is invisible on
+    every profile page and only shows up as a camp with no school in the site-wide view. This is the
+    cheap guard that runs on every validate.
+
+    It is checked against the window **the file declares**, not against today's window. A published
+    index is a day old by definition the morning after a refresh, and re-deriving the window here
+    would fail the check on correct data the first time a row aged out overnight. Staleness is what
+    `updated` and the declared `from` are for; this check is about internal consistency.
+
+    Like check_seasons it reports and does not raise: everything it reads is a file on disk that a
+    hand-edit or a half-written build can have left any shape at all.
+    """
+    path = os.path.join(common.CAMPS_OUT_DIR, "index.json")
+    try:
+        doc = common.read_json(path)
+    except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
+        print(f"CAMPS: {path} is not readable JSON: {type(e).__name__}: {e}")
+        return False
+    if not isinstance(doc, dict):
+        print(f"CAMPS: {path} is {'missing' if doc is None else 'a ' + type(doc).__name__ + ', not an object'}")
+        return False
+    ok = True
+    for key in ("updated", "window", "camps"):
+        if key not in doc:
+            print(f"CAMPS: the index declares no {key!r}")
+            ok = False
+    window = doc.get("window") if isinstance(doc.get("window"), dict) else {}
+    if not isinstance(doc.get("window"), dict):
+        print(f"CAMPS: `window` is a {type(doc.get('window')).__name__}, not an object with from/to")
+        ok = False
+    elif not isinstance(window.get("from"), str) or not window.get("from"):
+        print(f"CAMPS: the index declares window.from {window.get('from')!r}; without it no row can be "
+              f"placed and a stale publish is invisible")
+        ok = False
+    if isinstance(doc.get("window"), dict) and "to" not in window:
+        print("CAMPS: the index declares no window.to (null means no upper bound; the key is still required)")
+        ok = False
+    published = doc.get("camps")
+    if not isinstance(published, list):
+        print(f"CAMPS: `camps` is a {type(published).__name__}, not a list of rows")
+        return False
+    if not ok:  # without a usable window nothing below can be judged
+        return False
+
+    index_path = os.path.join(common.PROGRAMS_OUT_DIR, "index.json")
+    idx = common.read_json(index_path)
+    known = {r.get("slug") for r in ((idx or {}).get("programs") or []) if isinstance(r, dict)}
+    if not known:
+        print(f"CAMPS: cannot read program slugs from {index_path}, so no row's slug can be resolved")
+        return False
+    allowed = {"slug", *CAMP_INDEX_FIELDS}
+    for i, row in enumerate(published):
+        if not isinstance(row, dict):
+            print(f"CAMPS: row {i} is a {type(row).__name__}, not an object")
+            ok = False
+            continue
+        slug = row.get("slug")
+        if slug not in known:
+            print(f"CAMPS: row {i} ({row.get('name')!r}) names slug {slug!r}, which is not a program in "
+                  f"{os.path.basename(index_path)}")
+            ok = False
+        if not camp_in_window(row, window):
+            print(f"CAMPS: row {i} ({slug}, {row.get('name')!r}) starts {row.get('startDate')!r}, outside "
+                  f"the declared window from {window.get('from')!r} to {window.get('to')!r}")
+            ok = False
+        extra = sorted(set(row) - allowed)
+        missing = sorted(allowed - set(row))
+        if extra or missing:
+            print(f"CAMPS: row {i} ({slug}) carries {extra or 'no extra fields'} and is missing "
+                  f"{missing or 'nothing'}; the published shape is fixed")
+            ok = False
+
+    expected: list[dict] = []
+    for program in common.iter_programs(registry):
+        slug = program.get("slug")
+        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        camps = p.get("camps") if isinstance(p, dict) else None
+        items = (camps or {}).get("items") if isinstance(camps, dict) else None
+        for it in items if isinstance(items, list) else []:
+            if camp_in_window(it, window):
+                expected.append(camp_row(slug, it))
+    if len(published) != len(expected):
+        print(f"CAMPS: the index publishes {len(published)} rows, but the profiles hold {len(expected)} "
+              f"items inside the declared window")
+        ok = False
+    pub_keys = sorted((r.get("slug"), r.get("startDate"), r.get("name")) for r in published if isinstance(r, dict))
+    exp_keys = sorted((r["slug"], r["startDate"], r["name"]) for r in expected)
+    if pub_keys != exp_keys:
+        only_pub = [k for k in pub_keys if k not in set(exp_keys)][:5]
+        only_exp = [k for k in exp_keys if k not in set(pub_keys)][:5]
+        if only_pub:
+            print(f"CAMPS: published rows no profile holds inside the window: {only_pub}")
+        if only_exp:
+            print(f"CAMPS: profile items inside the window that the index does not publish: {only_exp}")
+        ok = False
+    return ok
 
 
 def check_seasons(registry: dict) -> bool:
