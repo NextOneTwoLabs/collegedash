@@ -1448,7 +1448,7 @@
   ]
  },
  "newRow": {
-  "_note": "Issue #80 item 1, the chimera. The date lookahead used to stop only at a line naming a camp or a clinic, so harvard's lacrosse row ran on into a complete BASKETBALL row that uses neither word and took its date. A continuation carries the date and nothing else, or a label in front of it; its own record carries a name. Each `true` case is an input that makes the old guard fail; each `false` case is a continuation that must keep working, which is what stops this from being a condition that cannot fail.",
+  "_note": "Issue #80 item 1, the chimera. The date lookahead used to stop only at a line naming a camp or a clinic, so harvard's lacrosse row ran on into a basketball row that uses neither word and took its date. A continuation carries the date and nothing else, or a label in front of it; its own record carries a name: two or more CAPITALISED words once a leading label is stripped. The first cut counted [A-Za-z]{2,}, which is case blind, and 7 of 20 ordinary prose continuations became their own record - 'Check in begins June 6, 2026', 'Rain date: June 7, 2026', 'Cost $350 due by June 1, 2026' - each of which is a date a row then never picks up, or a truncated detail window. Those seven are the `false` cases below and they are the input that makes the case-blind version fail. Each `true` case is an input that makes the pre-#80 guard fail, so the tightening cannot quietly become a condition that never fires.",
   "cases": [
    [
     "2025 Sneak Peek | June 15, 2025 | 9:00 a.m-1:00 p.m | Grades 7-12",
@@ -1489,7 +1489,89 @@
    [
     "When: August 15-16, 2026",
     false
+   ],
+   [
+    "Check in begins June 6, 2026",
+    false
+   ],
+   [
+    "Registration closes on June 1, 2026",
+    false
+   ],
+   [
+    "Rain date: June 7, 2026",
+    false
+   ],
+   [
+    "Arrival and check-in June 6, 2026",
+    false
+   ],
+   [
+    "The camp will be held June 6, 2026",
+    false
+   ],
+   [
+    "Cost $350 due by June 1, 2026",
+    false
+   ],
+   [
+    "Early bird pricing ends 5/1/2026",
+    false
+   ],
+   [
+    "Day 1 June 6, 2026",
+    false
+   ],
+   [
+    "Price: $350 per player, due June 1, 2026",
+    false
+   ],
+   [
+    "Doors open at 8am on June 6, 2026",
+    false
+   ],
+   [
+    "Boys Session June 20-21, 2027",
+    true
+   ],
+   [
+    "Elite Prospect ID Camp June 15, 2026",
+    true
+   ],
+   [
+    "Nike Soccer Camp at Example University - July 6-9, 2026",
+    true
    ]
+  ]
+ },
+ "pageName": {
+  "_note": "Issue #80 item 5. _page_camp_name reads a name out of the opening lines of a page whose own title is chrome. It takes the first CAMP_PHRASE_RE candidate it finds, so without a sanity check it adopts whatever that phrase names. The name is read FIRST and unconditionally by _row_allowed, so a boys' or another sport's page name rejects every page-named row on the page; and where rows survive, the repair stamps that name onto them and #78's classifier reads it as its only input. The guard is that the candidate must itself pass _row_allowed. Each `null` case below is an input that makes the unguarded version adopt a name that is worse than the chrome title it replaces.",
+  "cases": [
+   {
+    "line": "Register for our Nike Boys Soccer Camp today.",
+    "expect": null,
+    "why": "a boys' camp name would reject every page-named row on the page"
+   },
+   {
+    "line": "The Example Volleyball Prospect Camp is popular.",
+    "expect": null,
+    "why": "another sport's camp name, same consequence"
+   },
+   {
+    "line": "Skip to main content Main Navigation Basketball Camps Football Camps",
+    "expect": null,
+    "why": "a nav crumb: not chrome by _is_chrome_name, but it names basketball and football"
+   },
+   {
+    "line": "Northeastern Women's Soccer ID Clinics provide a unique camp experience for players.",
+    "expect": "Northeastern Women's Soccer ID Clinics",
+    "why": "the real case the function exists for: it must still pass"
+   },
+   {
+    "line": "The Hoya Winter Soccer ID Clinic is open to all high school players.",
+    "expect": "The Hoya Winter Soccer ID Clinic",
+    "why": "a soccer page name with no gender word is fine"
+   }
   ]
  }
 }

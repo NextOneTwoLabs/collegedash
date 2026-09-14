@@ -729,9 +729,17 @@ def _lines(root) -> list[tuple[str, object, list]]:
 
 
 # A label a continuation line can put in front of its date: 'Dates: June 28-29, 2025', 'Session 2 -
-# July 12'. Stripped before _starts_new_row counts words, so a label is not mistaken for a name.
-ROW_LABEL_RE = re.compile(r"^(?:dates?|day|days|when|time|times|session|week|camp|clinic|starts?|begins?|runs?)"
+# July 12', 'Rain date: June 7, 2026'. Stripped before _starts_new_row counts words, so a label is
+# not mistaken for a name. The second alternation is the prose a row's own detail lines open with -
+# these are things that happen TO a camp, never the name of one.
+ROW_LABEL_RE = re.compile(r"^(?:dates?|day|days|when|time|times|session|week|camp|clinic|starts?|begins?|runs?"
+                          r"|rain\s+dates?|check[-\s]?in|checkin|arrival|cost|costs|price|prices|fees?"
+                          r"|registration|register|deadlines?|held)"
                           r"\s*\d*\s*[:\-–—|]*\s*", re.I)
+
+# Two CAPITALISED words: 'Sneak Peek', 'Crimson Volleyball'. Case-blind counting is what made this
+# over-fire - see _starts_new_row.
+NAMEY_WORD_RE = re.compile(r"\b[A-Z][A-Za-z]+")
 
 
 def _starts_new_row(line: str, pos: int) -> bool:
@@ -745,11 +753,20 @@ def _starts_new_row(line: str, pos: int) -> bool:
     existed on the page (issue #80).
 
     A continuation carries the date and nothing else, or a label in front of it. Its own record
-    carries a name: two or more alphabetic words before the date once a leading label is stripped.
+    carries a name: two or more CAPITALISED words before the date once a leading label is stripped.
     So 'Dates: June 28-29, 2025' and 'July 25-26, 2026' stay continuations and '2025 Sneak Peek |
-    June 15, 2025' does not."""
+    June 15, 2025' does not.
+
+    Capitalised is the tightening. The first cut of this counted `[A-Za-z]{2,}`, which is case
+    BLIND, so it read any two alphabetic words as a name and 7 of 20 ordinary prose continuations
+    became their own dated record: 'Check in begins June 6, 2026', 'Rain date: June 7, 2026', 'Cost
+    $350 due by June 1, 2026', 'The camp will be held June 6, 2026'. On the heading-line/date-line
+    shape that is a date the row never picks up, so the row disappears; in the trailing window it
+    truncates the ages, the price and the registration link. Losing a real camp is the expensive
+    direction, and a camp name on an athletics page is capitalised. ROW_LABEL_RE was widened at the
+    same time, so the same seven fail on both counts rather than on one."""
     head = ROW_LABEL_RE.sub("", common.clean(line[:pos]))
-    return len(re.findall(r"[A-Za-z]{2,}", head)) >= 2
+    return len(NAMEY_WORD_RE.findall(head)) >= 2
 
 
 def _page_camp_name(lines: list[tuple[str, object, list]]) -> str | None:
@@ -762,16 +779,27 @@ def _page_camp_name(lines: list[tuple[str, object, list]]) -> str | None:
 
     Only the page's first lines are read - a page introduces itself at the top, and reading further
     on an all-sport hub would pick up somebody else's camp - and a candidate must be a real phrase:
-    not chrome itself, at least two words. Otherwise None, and the chrome title stands as today.
-    A row named from here still carries `_named = "page"` and is still gated on its evidence, so
-    this cannot become another way past the sport and gender rules."""
+    not chrome itself, at least two words, and it must pass _row_allowed on its own name. That last
+    test is the sanity check: without it the first CAMP_PHRASE_RE hit in the opening lines was
+    adopted whatever it named, so 'Register for our Nike Boys Soccer Camp today.' yielded 'Nike Boys
+    Soccer Camp' and a nav crumb yielded 'Main Navigation Basketball Camps Football Camps'. Both are
+    worse than the chrome title they replace, in both directions: the name is read FIRST and
+    unconditionally by _row_allowed, so a boys' or another sport's page name rejects every
+    page-named row on the page, and where rows survive the repair stamps that name onto them, so a
+    real women's soccer camp publishes wearing another programme's name - which is the only input
+    #78's classifier gets. "Northeastern Women's Soccer ID Clinics" passes.
+
+    Otherwise None, and the chrome title stands as today. A row named from here still carries
+    `_named = "page"` and is still gated on its evidence, so this cannot become another way past
+    the sport and gender rules."""
     best = None
     for text, _el, _anchors in lines[:12]:
         if not CAMP_RE.search(NOT_CAMP_RE.sub(" ", text)):
             continue
         for m in CAMP_PHRASE_RE.finditer(NOT_CAMP_RE.sub(" ", text)):
             cand = _clean_name(m.group(1))
-            if 4 <= len(cand) <= 80 and len(cand.split()) >= 2 and not _is_chrome_name(cand):
+            if 4 <= len(cand) <= 80 and len(cand.split()) >= 2 and not _is_chrome_name(cand) \
+                    and _row_allowed(cand, None):
                 if best is None or len(cand) > len(best):
                     best = cand
         if best:

@@ -357,6 +357,14 @@ def fixtures(args) -> int:
            _starts_new_row is not None and got is want,
            missing("_starts_new_row") if _starts_new_row is None else f"got {got}")
 
+    print("pageName: _page_camp_name adopts a name only if the name itself passes the gate")
+    _page_camp_name = helper("_page_camp_name")
+    for fx in (spec.get("pageName") or {}).get("cases") or []:
+        got = _page_camp_name([(fx["line"], None, [])]) if _page_camp_name else None
+        ok(f"{fx['why']} -> {fx['expect']!r}",
+           _page_camp_name is not None and got == fx["expect"],
+           missing("_page_camp_name") if _page_camp_name is None else f"got {got!r}")
+
     # _page_is_soccer decides whether a SECTION rejection bites at all. Every known hub title must
     # be False here, or the gating this issue adds stops working on the pages it was built for.
     print("pages: _page_is_soccer")
