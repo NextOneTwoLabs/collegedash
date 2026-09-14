@@ -331,7 +331,28 @@
       }
     }
   },
-  "seasons": [],
+  "seasons": [
+    {
+      "year": 2025,
+      "label": "2025",
+      "rpiRank": 345,
+      "rpi": {
+        "rank": 345,
+        "record": "0-13-1",
+        "through": "2025-12-08",
+        "prevRank": 345,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 345,
+            "record": "0-13-1"
+          }
+        ]
+      },
+      "record": "0-13-1"
+    }
+  ],
   "roster": {
     "season": 2026,
     "count": 44,
@@ -2288,7 +2309,7 @@
       {
         "source": "camps",
         "url": "https://newhavenwomenssoccer.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-14T18:44:48Z"
+        "asOf": "2026-09-14T20:56:10Z"
       }
     ]
   },
@@ -2298,14 +2319,14 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-14T18:46:34Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-14T20:56:27Z",
+    "completeness": 0.89,
     "sections": {
       "school": true,
       "climate": true,
       "program": false,
-      "seasons": false,
-      "rpi": false,
+      "seasons": true,
+      "rpi": true,
       "roster": true,
       "schedule": true,
       "commitments": true,

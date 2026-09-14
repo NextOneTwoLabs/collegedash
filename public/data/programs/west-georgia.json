@@ -261,7 +261,42 @@
       "athletics": null
     }
   },
-  "seasons": [],
+  "seasons": [
+    {
+      "year": 2025,
+      "label": "2025",
+      "rpiRank": 320,
+      "rpi": {
+        "rank": 320,
+        "record": "4-13-2",
+        "through": "2025-12-08",
+        "prevRank": 321,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 320,
+            "record": "4-13-2"
+          }
+        ]
+      },
+      "record": "4-13-2"
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "rpiRank": 335,
+      "rpi": {
+        "rank": 335,
+        "sosRank": 337,
+        "balancedRank": 337,
+        "kpiRank": 336,
+        "masseyRank": 337,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
   "roster": null,
   "rosterHistory": {},
   "schedule": null,
@@ -454,14 +489,14 @@
     "2027": 3
   },
   "_build": {
-    "builtAt": "2026-09-14T18:46:33Z",
-    "completeness": 0.33,
+    "builtAt": "2026-09-14T20:56:27Z",
+    "completeness": 0.56,
     "sections": {
       "school": true,
       "climate": true,
       "program": false,
-      "seasons": false,
-      "rpi": false,
+      "seasons": true,
+      "rpi": true,
       "roster": false,
       "schedule": false,
       "commitments": true,
@@ -478,7 +513,7 @@
       {
         "collector": "camps",
         "reason": "camps: https://uwgsports.com is a PrestoSports-style site; no adapter yet (registry athletics.skipReason)",
-        "at": "2026-09-14T18:35:38Z"
+        "at": "2026-09-14T20:54:57Z"
       },
       {
         "collector": "news",

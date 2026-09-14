@@ -261,7 +261,42 @@
       "athletics": null
     }
   },
-  "seasons": [],
+  "seasons": [
+    {
+      "year": 2025,
+      "label": "2025",
+      "rpiRank": 326,
+      "rpi": {
+        "rank": 326,
+        "record": "3-13-3",
+        "through": "2025-12-08",
+        "prevRank": 324,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2025-12-08",
+            "rank": 326,
+            "record": "3-13-3"
+          }
+        ]
+      },
+      "record": "3-13-3"
+    },
+    {
+      "year": 2024,
+      "label": "2024",
+      "rpiRank": 325,
+      "rpi": {
+        "rank": 325,
+        "sosRank": 308,
+        "balancedRank": 314,
+        "kpiRank": 325,
+        "masseyRank": 328,
+        "ncaaSeed": 0,
+        "source": "end-of-season (Henderson archive)"
+      }
+    }
+  ],
   "roster": null,
   "rosterHistory": {},
   "schedule": null,
@@ -477,7 +512,7 @@
       {
         "source": "camps",
         "url": "https://hurstcamps.com",
-        "asOf": "2026-09-14T18:37:58Z"
+        "asOf": "2026-09-14T20:55:20Z"
       }
     ]
   },
@@ -486,14 +521,14 @@
     "2026": 3
   },
   "_build": {
-    "builtAt": "2026-09-14T18:46:34Z",
-    "completeness": 0.44,
+    "builtAt": "2026-09-14T20:56:27Z",
+    "completeness": 0.67,
     "sections": {
       "school": true,
       "climate": true,
       "program": false,
-      "seasons": false,
-      "rpi": false,
+      "seasons": true,
+      "rpi": true,
       "roster": false,
       "schedule": false,
       "commitments": true,
