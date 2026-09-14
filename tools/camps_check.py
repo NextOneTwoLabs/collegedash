@@ -23,6 +23,7 @@ import glob
 import gzip
 import json
 import os
+import re
 import sys
 import tempfile
 from urllib.parse import urlparse
@@ -130,6 +131,52 @@ def _read(rel: str) -> str:
         return f.read()
 
 
+# ---------- privacy: no third party's contact details in a fixture ----------
+#
+# The camps fixtures are trims of real athletics pages, and those pages carry named staff members'
+# work email addresses and telephone numbers. Twelve of them reached a fixture on a PUBLIC
+# repository before anyone noticed, because nothing looks at a fixture except the parser, and the
+# parser does not care. This scan is the thing that looks.
+#
+# Redaction form: an address at a reserved example domain, and a number in the 555-01xx range
+# reserved for fiction. Anything else email-shaped or telephone-shaped is a FAIL naming the file and
+# the value, so a new fixture pasted in from a live page cannot land its contact block quietly.
+# Deliberately not a regex over "PII" in general - names, cities and prices stay, because a fixture
+# has to keep reproducing the real page's extraction to be worth anything.
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# A reserved domain: RFC 2606's example.com/.net/.org and .invalid/.test/.example/.localhost, plus
+# example.edu, which fixtures.json already uses for a stub page URL.
+FAKE_EMAIL_RE = re.compile(r"@example\.(?:com|net|org|edu)$|\.(?:invalid|test|example|localhost)$", re.I)
+# '617-817-3589', '(423) 425-2107', '406.243.4346'. Both separators must be '-' or '.', which is
+# what keeps the inline SVG path data in the nav fixtures ('714.163 519.284 1160') out of it.
+PHONE_RE = re.compile(r"\(?\b[0-9]{3}\)?[-. ]?[0-9]{3}[-.][0-9]{4}\b")
+FAKE_PHONE_RE = re.compile(r"^55555501[0-9]{2}$")
+
+
+def _fixture_files() -> list[str]:
+    out = []
+    for dirpath, _dirs, names in os.walk(FIXTURES):
+        for n in sorted(names):
+            out.append(os.path.join(dirpath, n))
+    return sorted(out)
+
+
+def scan_contact_details() -> tuple[list[str], list[str]]:
+    """(offending emails, offending telephone numbers), each as 'file: value'."""
+    emails, phones = [], []
+    for path in _fixture_files():
+        rel = os.path.relpath(path, FIXTURES).replace(os.sep, "/")
+        with open(path, encoding="utf-8", errors="replace") as f:
+            text = f.read()
+        for v in dict.fromkeys(EMAIL_RE.findall(text)):
+            if not FAKE_EMAIL_RE.search(v):
+                emails.append(f"{rel}: {v}")
+        for v in dict.fromkeys(PHONE_RE.findall(text)):
+            if not FAKE_PHONE_RE.match(re.sub(r"[^0-9]", "", v)):
+                phones.append(f"{rel}: {v}")
+    return emails, phones
+
+
 def fixtures(args) -> int:
     spec = json.load(open(os.path.join(FIXTURES, "fixtures.json"), encoding="utf-8"))
     fails, total = [], 0
@@ -142,6 +189,11 @@ def fixtures(args) -> int:
             fails.append(name)
         return bool(cond)  # returned so a check can guard the one after it; it used to return None,
         # which silently made `if not ok(...): continue` an unconditional skip
+
+    print("privacy: no contact details in tests/fixtures/camps/")
+    bad_emails, bad_phones = scan_contact_details()
+    ok("no real email address in any fixture", not bad_emails, "; ".join(bad_emails))
+    ok("no real telephone number in any fixture", not bad_phones, "; ".join(bad_phones))
 
     print("nav: find_camps_link")
     for fx in spec["nav"]:
@@ -283,6 +335,7 @@ def fixtures(args) -> int:
         want = fx["expect"]
         try:
             got = _row_allowed(fx["name"], None, named=fx.get("named", "row"), evidence=fx.get("evidence"),
+                               own_evidence=fx.get("ownEvidence"),
                                page_is_soccer=bool(fx.get("pageIsSoccer"))) if _row_allowed else None
         except TypeError as e:  # a parser whose _row_allowed has no evidence parameter
             got, e = None, e
@@ -303,6 +356,14 @@ def fixtures(args) -> int:
         ok(f"{line[:56]!r} -> {'its own row' if want else 'a continuation'}",
            _starts_new_row is not None and got is want,
            missing("_starts_new_row") if _starts_new_row is None else f"got {got}")
+
+    print("pageName: _page_camp_name adopts a name only if the name itself passes the gate")
+    _page_camp_name = helper("_page_camp_name")
+    for fx in (spec.get("pageName") or {}).get("cases") or []:
+        got = _page_camp_name([(fx["line"], None, [])]) if _page_camp_name else None
+        ok(f"{fx['why']} -> {fx['expect']!r}",
+           _page_camp_name is not None and got == fx["expect"],
+           missing("_page_camp_name") if _page_camp_name is None else f"got {got!r}")
 
     # _page_is_soccer decides whether a SECTION rejection bites at all. Every known hub title must
     # be False here, or the gating this issue adds stops working on the pages it was built for.
