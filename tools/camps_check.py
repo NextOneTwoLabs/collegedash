@@ -229,6 +229,88 @@ def fixtures(args) -> int:
         for exp in fx["expect"]:
             match = [e for e in items if all(e.get(k) == v for k, v in exp.items())]
             ok(f"curated {exp}", bool(match), f"items: {[{k: e.get(k) for k in exp} for e in items]}")
+
+    # ---- issue #39: the row-level gate, the name repairs and the price filter ----
+    # These groups name private helpers directly, so they cannot discriminate against a parser that
+    # does not have them. `helper` makes that degrade to a reported FAIL per check instead of an
+    # AttributeError that aborts the suite partway through and takes the remaining groups with it -
+    # which is what a swap-back against origin/main used to do, leaving the extract group's result
+    # as the only real evidence. `missing` is the detail line those failures carry.
+    def helper(attr: str):
+        return getattr(camps, attr, None)
+
+    def missing(attr: str) -> str:
+        return f"collect.camps has no {attr} - this check cannot run"
+
+    print("sections: _sport_section")
+    _sport_section = helper("_sport_section")
+    for fx in spec.get("sections") or []:
+        for text, sport, male in fx.get("cases") or []:
+            got = _sport_section(text) if _sport_section else None
+            ok(f"{text!r} -> {sport}{' male' if male else ''}",
+               _sport_section is not None and bool(got) and got["sport"] == sport and got["male"] is male,
+               missing("_sport_section") if _sport_section is None else f"got {got!r}")
+        for text in fx.get("notSections") or []:
+            got = _sport_section(text) if _sport_section else None
+            ok(f"{text!r} is not a section heading",
+               _sport_section is not None and got is None,
+               missing("_sport_section") if _sport_section is None else f"got {got!r}")
+
+    print("rows: _row_allowed")
+    _row_allowed = helper("_row_allowed")
+    rows = spec.get("rows") or {}
+    named = rows.get("sections") or {}
+    for name, sec, want in rows.get("cases") or []:
+        got = _row_allowed(name, named.get(sec) if sec else None) if _row_allowed else None
+        ok(f"{name!r} under {sec or 'no section'} -> {'keep' if want else 'drop'}",
+           _row_allowed is not None and got is want,
+           missing("_row_allowed") if _row_allowed is None else f"got {got}")
+    # the same rows on a page that is not an all-sport hub: the section must not bite
+    for name, sec in rows.get("notHub") or []:
+        got = _row_allowed(name, named.get(sec), is_hub=False) if _row_allowed else None
+        ok(f"{name!r} under {sec}, page is not a hub -> keep",
+           _row_allowed is not None and got is True,
+           missing("_row_allowed") if _row_allowed is None else f"got {got}")
+
+    # _page_is_soccer decides whether a SECTION rejection bites at all. Every known hub title must
+    # be False here, or the gating this issue adds stops working on the pages it was built for.
+    print("pages: _page_is_soccer")
+    _page_is_soccer = helper("_page_is_soccer")
+    pages = spec.get("pages") or {}
+    for t in pages.get("soccer") or []:
+        got = _page_is_soccer(t) if _page_is_soccer else None
+        ok(f"{t!r} is the page's own soccer page", _page_is_soccer is not None and got is True,
+           missing("_page_is_soccer") if _page_is_soccer is None else f"got {got}")
+    for t in pages.get("notSoccer") or []:
+        got = _page_is_soccer(t) if _page_is_soccer else None
+        ok(f"{t!r} does not suppress section gating", _page_is_soccer is not None and got is False,
+           missing("_page_is_soccer") if _page_is_soccer is None else f"got {got}")
+
+    print("names: _is_chrome_name / _clean_name")
+    _is_chrome_name, _clean_name = helper("_is_chrome_name"), helper("_clean_name")
+    names = spec.get("names") or {}
+    for n in names.get("chrome") or []:
+        ok(f"{n!r} is page chrome",
+           _is_chrome_name is not None and _is_chrome_name(n) is True,
+           missing("_is_chrome_name") if _is_chrome_name is None else "")
+    for n in names.get("notChrome") or []:
+        ok(f"{n!r} is a real camp name",
+           _is_chrome_name is not None and _is_chrome_name(n) is False,
+           missing("_is_chrome_name") if _is_chrome_name is None else "")
+    for raw, want in names.get("clean") or []:
+        got = _clean_name(raw) if _clean_name else None
+        ok(f"clean {raw!r}", _clean_name is not None and got == want,
+           missing("_clean_name") if _clean_name is None else f"got {got!r}, expected {want!r}")
+
+    print("prices: the price-label filter")
+    _entry = helper("_entry")
+    for raw, want in (spec.get("prices") or {}).get("cases") or []:
+        got = _entry("X", {"startDate": "2026-01-01", "endDate": "2026-01-01", "dateText": "",
+                           "precision": "day"}, {"price": raw}, None,
+                     "https://example.edu")["price"] if _entry else None
+        ok(f"price {raw!r} -> {want!r}", _entry is not None and got == want,
+           missing("_entry") if _entry is None else f"got {got!r}")
+
     print(f"\n{total - len(fails)} of {total} checks passed" + (f"; FAILED: {fails}" if fails else ""))
     return 1 if fails else 0
 

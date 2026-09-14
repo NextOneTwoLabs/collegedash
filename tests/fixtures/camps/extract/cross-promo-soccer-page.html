@@ -1,0 +1,31 @@
+<!-- HAND-BUILT, not a capture. This is the Reviewer's blocking case for PR #72, kept as a
+     regression test: a women's soccer camps page carrying an ordinary "Other Camps at X"
+     cross-promotional block that names THREE other sports ABOVE its own camp rows.
+
+     Three sports is all it takes to reach HUB_SPORT_COUNT, so before the _page_is_soccer fix
+     this page lost every camp: 2 rows on origin/main became 0. With the rows in a <table>
+     under the same block it failed worse - the real rows were gated away and only the
+     page-title fallback survived, so both rows came back named "2026 Women's Soccer Camps"
+     instead of their own names.
+
+     The page's own short_title names soccer and is not male-gendered, so section rejection is
+     suppressed here and both rows survive with their real names. The row-name and gender rules
+     are NOT suppressed: the men's row below must still be rejected on its name alone. -->
+<html><head><title>2026 Women's Soccer Camps | Example University</title></head><body>
+<div class="content">
+  <h1>2026 Women's Soccer Camps</h1>
+
+  <h2>Other Camps at Example</h2>
+  <h3>Basketball Camps</h3>
+  <p>Held at the arena each July.</p>
+  <h3>Volleyball Camps</h3>
+  <p>Held at the arena each June.</p>
+  <h3>Softball Camps</h3>
+  <p>Held at the complex each May.</p>
+
+  <h2>Our Camps</h2>
+  <p><strong>Elite ID Camp</strong> June 13, 2026</p>
+  <p><strong>Junior Academy Camp</strong> July 10, 2026</p>
+  <p><strong>Men&rsquo;s Prospect Day</strong> July 18, 2026</p>
+</div>
+</body></html>
