@@ -71,13 +71,23 @@ jobs:
           set -f       # no pathname expansion: a '*' in the input is a token, not a glob
           IFS=','
           for raw in $ONLY_INPUT; do
-            name="$(printf '%s' "$raw" | tr -d '[:space:]')"
-            if [ -z "$name" ]; then continue; fi
-            case " $known " in
-              *" $name "*) ;;
-              *) bad="$bad $name" ;;
+            # trim the ends only, exactly as collegedash.py does (`c.strip()`), so the string
+            # validated here is the string python is handed: `ca mps` stays bad
+            name="${raw#"${raw%%[![:space:]]*}"}"
+            name="${name%"${name##*[![:space:]]}"}"
+            # every collector name is one lowercase word, so check the shape before the
+            # membership test: `news camps` is a substring of $known but not a collector
+            case "$name" in
+              *[!a-z]*) bad="$bad '$name'" ;;
+              *) case " $known " in
+                   *" $name "*) ;;
+                   *) bad="$bad '$name'" ;;
+                 esac ;;
             esac
           done
+          # field splitting discards a *trailing* empty field where python's split(',') keeps
+          # it, so the commonest typo of all is caught here rather than in the loop above
+          case "$ONLY_INPUT" in *,) bad="$bad ''" ;; esac
           unset IFS
           if [ -n "$bad" ]; then
             echo "::error title=refresh::unknown collector(s) in 'only':$bad (known: $known)"
