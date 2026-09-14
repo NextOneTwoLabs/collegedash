@@ -494,12 +494,21 @@ def camps_window(today: dt.date | None = None) -> dict:
 def camp_in_window(item, window: dict) -> bool:
     """True when a camp item belongs in the published index.
 
-    The comparison mirrors the profile tab's own past/future rule (public/index.html, tabCamps), so
-    the index and the tab cannot disagree about what "past" means: a month-precision row compares at
-    month granularity, everything else compares `endDate or startDate`, which keeps a camp that is
-    running right now out of the past. An undated row is dropped: it cannot be placed in the window,
-    and a date-ordered view has nowhere to put it. Anything malformed is dropped rather than raised -
-    this reads a profile a hand-edit can have left any shape at all.
+    A row is placed by when it finishes, not by when it starts: the comparison is on
+    `endDate or startDate`, so a camp that is running right now is not past. Month-precision rows
+    compare at month granularity, everything else by day.
+
+    This is close to, but not the same as, the profile tab's past/future rule (public/index.html,
+    tabCamps), which compares a month-precision row on `startDate` alone. A month row running
+    2026-08 to 2026-09 is therefore past to the tab and in-window here. The rule here is the
+    deliberate one - a camp still running has not happened yet - and no row in today's corpus falls
+    in the gap (one item of 250 is month-precision and it ends in the month it starts). Reconciling
+    the tab is issue #65's second PR, which is where the difference would first become visible to a
+    visitor; tests/camps_index_test.py pins the case so it cannot be silently "fixed" either way.
+
+    An undated row is dropped: it cannot be placed in the window, and a date-ordered view has
+    nowhere to put it. Anything malformed is dropped rather than raised - this reads a profile a
+    hand-edit can have left any shape at all.
     """
     if not isinstance(item, dict) or not isinstance(window, dict):
         return False
@@ -1022,16 +1031,45 @@ def check_camps_index(registry: dict) -> bool:
         print(f"CAMPS: the index publishes {len(published)} rows, but the profiles hold {len(expected)} "
               f"items inside the declared window")
         ok = False
-    pub_keys = sorted((r.get("slug"), r.get("startDate"), r.get("name")) for r in published if isinstance(r, dict))
-    exp_keys = sorted((r["slug"], r["startDate"], r["name"]) for r in expected)
-    if pub_keys != exp_keys:
-        only_pub = [k for k in pub_keys if k not in set(exp_keys)][:5]
-        only_exp = [k for k in exp_keys if k not in set(pub_keys)][:5]
-        if only_pub:
-            print(f"CAMPS: published rows no profile holds inside the window: {only_pub}")
-        if only_exp:
-            print(f"CAMPS: profile items inside the window that the index does not publish: {only_exp}")
+    # Whole rows, not an identity key. A key of (slug, startDate, name) leaves ten of the thirteen
+    # published fields unchecked, among them registerUrl and sourceUrl - attacker-controllable
+    # strings from camp vendors' pages that a view renders as links. Rows are grouped by identity
+    # first so a mismatch can be reported as "this camp's price is wrong" rather than as two opaque
+    # blobs, one missing and one unexpected.
+    def ident(r: dict) -> tuple:
+        return (r.get("slug"), r.get("startDate"), r.get("name"))
+
+    def sort_key(k: tuple) -> tuple:
+        return tuple(f"{v!r}" for v in k)  # slug/startDate/name can be null; None < str would raise
+
+    pub_by_id: dict[tuple, list[dict]] = defaultdict(list)
+    for row in published:
+        if isinstance(row, dict):
+            pub_by_id[ident(row)].append(row)
+    exp_by_id: dict[tuple, list[dict]] = defaultdict(list)
+    for row in expected:
+        exp_by_id[ident(row)].append(row)
+
+    only_pub = sorted(set(pub_by_id) - set(exp_by_id), key=sort_key)
+    only_exp = sorted(set(exp_by_id) - set(pub_by_id), key=sort_key)
+    if only_pub:
+        print(f"CAMPS: published rows no profile holds inside the window: {only_pub[:5]}")
         ok = False
+    if only_exp:
+        print(f"CAMPS: profile items inside the window that the index does not publish: {only_exp[:5]}")
+        ok = False
+    for key in sorted(set(pub_by_id) & set(exp_by_id), key=sort_key):
+        pubs, exps = pub_by_id[key], exp_by_id[key]
+        if len(pubs) != len(exps):
+            print(f"CAMPS: {key} is published {len(pubs)} time(s) but the profiles hold it {len(exps)} time(s)")
+            ok = False
+        for pub, exp in zip(pubs, exps):
+            differs = sorted(f for f in set(pub) | set(exp) if pub.get(f) != exp.get(f))
+            if differs:
+                print(f"CAMPS: {key} does not match the profile item it was built from, in "
+                      f"{differs}: the index says {[pub.get(f) for f in differs]}, the profile says "
+                      f"{[exp.get(f) for f in differs]}")
+                ok = False
     return ok
 
 

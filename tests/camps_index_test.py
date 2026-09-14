@@ -13,21 +13,25 @@ sit on. A row that names a slug nothing resolves, or one that survived a window 
 is invisible on every profile page and only surfaces in the site-wide view as a camp with no school.
 
 Covers, in order:
-  guard       the output-directory hazard: build() under a swapped CAMPS_OUT_DIR must leave the real
-              public/data/camps/index.json exactly as it found it. rebuild() in seasons_test.py
-              swaps output directories so the suite never writes to live data, and a published
-              output missing from that swap is not a failing test - it is a test run that quietly
-              overwrites published data on its way past
+  guard       the output-directory hazard, exercised through the function that actually carries it:
+              this suite's one build is run by seasons_test.rebuild(), whose swap is what keeps a
+              test run out of live data, and every file under public/ is hashed before and after.
+              A published output missing from that swap is not a failing test - it is a test run
+              that quietly overwrites published data on its way past, and nothing else would catch
+              it: no workflow runs these suites (issue #63), so they are run by hand in real
+              checkouts and refresh.yml commits whatever it finds with `git add -A`
   window      camp_in_window: the cutoff is inclusive, a camp that is running right now is not past,
-              month precision compares months, undated and malformed rows are dropped, and an upper
-              bound is honoured if one is ever declared
+              month precision compares months on `endDate or startDate` - which is where the rule
+              deliberately parts company with tabCamps, and the case is pinned here - undated and
+              malformed rows are dropped, and an upper bound is honoured if one is ever declared
   emitter     what build() publishes: the declared shape and nothing denormalised, every slug
               resolving, the row count equal to the windowed items across the profiles, no row
               outside the window, and out-of-window rows genuinely dropped rather than hidden
   invariant   check_camps_index: an unknown slug, a row outside the window, a foreign or missing
-              field, a row the profiles do not hold and an item the index does not publish are each
-              caught by name - and a missing or malformed index is reported rather than raised,
-              because a validator that dies is not a validator
+              field, a row the profiles do not hold, an item the index does not publish and any
+              field of a matched row that drifted from the profile it came from are each caught by
+              name - and a missing or malformed index is reported rather than raised, because a
+              validator that dies is not a validator
 """
 
 from __future__ import annotations
@@ -36,6 +40,7 @@ import argparse
 import contextlib
 import copy
 import datetime as dt
+import hashlib
 import io
 import json
 import os
@@ -43,12 +48,18 @@ import shutil
 import sys
 import tempfile
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
+sys.path.insert(0, HERE)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 import build  # noqa: E402
 from collect import common  # noqa: E402
+# Imported, not copied: seasons_test.rebuild() owns the output-directory swap that keeps a test run
+# out of public/, so it is the function the guard below has to exercise. A local copy of it would
+# only ever guard itself, and the swap that can actually clobber live data would go unwatched.
+import seasons_test  # noqa: E402
 
 LIVE_INDEX = os.path.join(common.PUBLIC_DATA_DIR, "camps", "index.json")
 
@@ -82,23 +93,31 @@ def swapped(**dirs):
 
 
 def rebuild(tmp: str) -> tuple[str, str, str]:
-    """Build the whole site into a scratch directory; return (profiles dir, camps dir, log)."""
-    progs = os.path.join(tmp, "programs")
-    camps = os.path.join(tmp, "camps")
-    buf = io.StringIO()
-    with swapped(PROGRAMS_OUT_DIR=progs, COMMITS_OUT_DIR=os.path.join(tmp, "commitments"),
-                 CAMPS_OUT_DIR=camps):
-        with contextlib.redirect_stdout(buf):
-            build.build(common.load_registry())
-    return progs, camps, buf.getvalue()
+    """Build the whole site into a scratch directory; return (profiles dir, camps dir, log).
+
+    The build is run by seasons_test.rebuild() rather than by a swap of this module's own, so that
+    the one build this suite performs goes through the real swap - the one a future edit can break.
+    Drop CAMPS_OUT_DIR from it and two things happen here, both loudly: the guard sees public/
+    change, and the emitter checks find no index at the scratch path.
+    """
+    progs, log = seasons_test.rebuild(tmp)
+    return progs, os.path.join(tmp, "camps"), log
 
 
-def live_state() -> bytes | None:
-    """The bytes of the real published camps index, or None when it does not exist yet."""
-    if not os.path.exists(LIVE_INDEX):
-        return None
-    with open(LIVE_INDEX, "rb") as f:
-        return f.read()
+def public_state() -> dict[str, str]:
+    """A digest of every file under public/, keyed by path: what a test run must leave untouched.
+
+    Hashing the whole published tree rather than the camps index alone states the actual invariant -
+    a test build writes to scratch and to nowhere else - so the next output added to build() is
+    covered by this guard on the day it is added, without anyone remembering to extend it.
+    """
+    out = {}
+    for root, _dirs, files in os.walk(common.PUBLIC_DIR):
+        for f in files:
+            path = os.path.join(root, f)
+            with open(path, "rb") as fh:
+                out[os.path.relpath(path, common.PUBLIC_DIR).replace("\\", "/")] = hashlib.md5(fh.read()).hexdigest()
+    return out
 
 
 def captured(fn, *a, **kw) -> tuple[bool, str]:
@@ -110,11 +129,15 @@ def captured(fn, *a, **kw) -> tuple[bool, str]:
 
 # ---------- the hazard guard ----------
 
-def test_guard(before: bytes | None, after: bytes | None) -> None:
-    print("guard: a build under a swapped CAMPS_OUT_DIR leaves the published index alone")
+def test_guard(before: dict[str, str], after: dict[str, str]) -> None:
+    print("guard: a build through seasons_test.rebuild() leaves the published tree alone")
+    changed = sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
+    live = os.path.relpath(LIVE_INDEX, common.PUBLIC_DIR).replace("\\", "/")
     ok("the real public/data/camps/index.json is byte-for-byte what it was before the build",
-       before == after,
-       "the test suite wrote to live data - CAMPS_OUT_DIR is missing from an output-directory swap")
+       live not in changed,
+       "the suite wrote to live data - CAMPS_OUT_DIR is missing from seasons_test.rebuild()'s swap")
+    ok("and nothing else under public/ was written either, whatever build() gains next",
+       not changed, f"{len(changed)} file(s) changed: {changed[:5]}")
 
 
 # ---------- the window ----------
@@ -144,6 +167,15 @@ def test_window() -> None:
          {"name": "x", "startDate": "2025-09", "precision": "month"}, True),
         ("a month-precision row in the month before is out",
          {"name": "x", "startDate": "2025-08", "precision": "month"}, False),
+        # The divergence finding 4 named, pinned as deliberate rather than left to be rediscovered:
+        # tabCamps in public/index.html calls a month row past on `startDate` alone, so it would
+        # call this one past. The emitter judges a camp by when it finishes, so a camp still
+        # running in the cutoff month stays in. Aligning the tab is PR 2's job (issue #65).
+        ("a month-precision row that began before the cutoff month but runs into it is in, which is "
+         "where this rule deliberately parts company with tabCamps",
+         {"name": "x", "startDate": "2025-08", "endDate": "2025-09", "precision": "month"}, True),
+        ("a month-precision row that had ended before the cutoff month is out, endDate or no endDate",
+         {"name": "x", "startDate": "2025-06", "endDate": "2025-07", "precision": "month"}, False),
         ("a row whose startDate is not a string is dropped, not raised on",
          {"name": "x", "startDate": 20260914, "precision": "day"}, False),
         ("a row that is not an object at all is dropped, not raised on", "June 3", False),
@@ -310,6 +342,18 @@ def test_invariant() -> None:
                             items={"clemson": [item()]})
         ok("a published row no profile holds is caught", not passed and "Ghost Camp" in out, out[:400])
 
+        # Rows are compared whole, not on (slug, startDate, name): the other ten fields are the ones
+        # a view renders, and registerUrl and sourceUrl are third-party strings it renders as links.
+        passed, out = check(tmp, index_doc=doc([{**GOOD_ROW, "registerUrl": "https://elsewhere.example/pay"}]),
+                            items={"clemson": [item(registerUrl="https://clemson.example/camp")]})
+        ok("a published registerUrl the profile does not hold is caught, by field name",
+           not passed and "registerUrl" in out, out[:400])
+
+        passed, out = check(tmp, index_doc=doc([{**GOOD_ROW, "endDate": "2026-05-11"}]),
+                            items={"clemson": [item()]})
+        ok("and an endDate quietly extended past the profile's is caught, not waved through on a "
+           "matching start date", not passed and "endDate" in out, out[:400])
+
         passed, out = check(tmp, index_doc=None, items={"clemson": [item()]})
         ok("a missing index is reported, not raised", not passed and "missing" in out.lower(), out[:300])
 
@@ -354,11 +398,11 @@ def main(argv=None) -> int:
     VERBOSE = args.verbose
 
     test_window()
-    before = live_state()
+    before = public_state()
     tmp = tempfile.mkdtemp(prefix="camps-build-")
     try:
         progs, camps_dir, log = rebuild(tmp)
-        test_guard(before, live_state())
+        test_guard(before, public_state())
         test_emitter(progs, camps_dir, log)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
