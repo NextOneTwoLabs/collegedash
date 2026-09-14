@@ -229,6 +229,45 @@ def fixtures(args) -> int:
         for exp in fx["expect"]:
             match = [e for e in items if all(e.get(k) == v for k, v in exp.items())]
             ok(f"curated {exp}", bool(match), f"items: {[{k: e.get(k) for k in exp} for e in items]}")
+
+    # ---- issue #39: the row-level gate, the name repairs and the price filter ----
+    print("sections: _sport_section")
+    for fx in spec.get("sections") or []:
+        for text, sport, male in fx.get("cases") or []:
+            got = camps._sport_section(text)
+            ok(f"{text!r} -> {sport}{' male' if male else ''}",
+               bool(got) and got["sport"] == sport and got["male"] is male, f"got {got!r}")
+        for text in fx.get("notSections") or []:
+            got = camps._sport_section(text)
+            ok(f"{text!r} is not a section heading", got is None, f"got {got!r}")
+
+    print("rows: _row_allowed")
+    rows = spec.get("rows") or {}
+    named = rows.get("sections") or {}
+    for name, sec, want in rows.get("cases") or []:
+        got = camps._row_allowed(name, named.get(sec) if sec else None)
+        ok(f"{name!r} under {sec or 'no section'} -> {'keep' if want else 'drop'}", got is want, f"got {got}")
+    # the same rows on a page that is not an all-sport hub: the section must not bite
+    for name, sec in rows.get("notHub") or []:
+        got = camps._row_allowed(name, named.get(sec), is_hub=False)
+        ok(f"{name!r} under {sec}, page is not a hub -> keep", got is True, f"got {got}")
+
+    print("names: _is_chrome_name / _clean_name")
+    names = spec.get("names") or {}
+    for n in names.get("chrome") or []:
+        ok(f"{n!r} is page chrome", camps._is_chrome_name(n) is True)
+    for n in names.get("notChrome") or []:
+        ok(f"{n!r} is a real camp name", camps._is_chrome_name(n) is False)
+    for raw, want in names.get("clean") or []:
+        got = camps._clean_name(raw)
+        ok(f"clean {raw!r}", got == want, f"got {got!r}, expected {want!r}")
+
+    print("prices: the price-label filter")
+    for raw, want in (spec.get("prices") or {}).get("cases") or []:
+        got = camps._entry("X", {"startDate": "2026-01-01", "endDate": "2026-01-01", "dateText": "",
+                                 "precision": "day"}, {"price": raw}, None, "https://example.edu")["price"]
+        ok(f"price {raw!r} -> {want!r}", got == want, f"got {got!r}")
+
     print(f"\n{total - len(fails)} of {total} checks passed" + (f"; FAILED: {fails}" if fails else ""))
     return 1 if fails else 0
 

@@ -1,5 +1,5 @@
 {
- "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[].",
+ "_comment": "Read by tools/camps_check.py --fixtures. nav: find_camps_link on trimmed roster-page markup; hub: find_hub_hop on trimmed hub content; extract: extract_camps; robots: fetch_checked with seeded robots.txt, a stubbed fetch and a temporary .cache/http; news: mine_camp_news on the 42 archived titles; dates: parse_camp_dates; urls: _http_url (the scheme filter every emitted URL passes); curated: build_camps precision for hand-written curated.camps[]; sections: _sport_section on an all-sport hub's headings; rows: _row_allowed, the sport/gender gate; names: _is_chrome_name and _clean_name; prices: the price-label filter.",
  "nav": [
   {
    "file": "nav/duke.html",
@@ -188,6 +188,198 @@
      "name": "Goalkeeper ID Camp",
      "startDate": "2026-07-18",
      "registerUrl": "http://www.example.com/register"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-montana.html",
+   "pageUrl": "http://gogriz.com/sports/2015/3/3/GEN_201401012",
+   "title": "Camp Information",
+   "_note": "Issue #39 class 2. Every one of the 20 stored montana rows came off this hub, from the Men's Basketball, Women's Basketball, Football, Softball and Volleyball sections. The Soccer section says the program cannot host soccer camps in 2026, so the correct answer is zero. Before the fix this yielded 20 (28 uncapped).",
+   "count": 0,
+   "reject": [
+    {
+     "name": "Griz Big Man Camp"
+    },
+    {
+     "name": "Advanced Skills Camp (Grades 5-12)"
+    },
+    {
+     "name": "Team Camp"
+    },
+    {
+     "name": "Specialist Camp (kickers, punters, and long snappers)"
+    },
+    {
+     "startDate": "2026-06-13"
+    },
+    {
+     "startDate": "2026-08-22"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-ut-chattanooga.html",
+   "pageUrl": "https://gomocs.com/sports/2015/4/22/camps",
+   "title": "2025-26 UTC CAMP SCHEDULE",
+   "_note": "Issue #39 class 2, second hub shape: the sport headings carry no camp word ('Soccer - 2026'), so they are found by the 'nothing but the sport's own name is left' test rather than by a camp word. Before the fix: 6 rows, all volleyball, softball, spirit or men's basketball.",
+   "count": 0,
+   "reject": [
+    {
+     "name": "Prospect Camp"
+    },
+    {
+     "name": "Spirit Camps"
+    },
+    {
+     "name": "Father Daughter Camp"
+    },
+    {
+     "name": "Team Camp 1"
+    },
+    {
+     "name": "2025-26 UTC CAMP SCHEDULE"
+    }
+   ]
+  },
+  {
+   "file": "extract/reviews-ussportscamps.html",
+   "pageUrl": "https://www.ussportscamps.com/soccer/nike/nike-soccer-camp-northern-arizona-university-flagstaff",
+   "title": "Nike Soccer Camp at Northern Arizona University",
+   "_note": "Issue #39 class 1 and class 5 together. The rd-google-review-card blocks are Google reviews whose post dates became 18 camps; the one real camp above them was named after the 'CAMP DETAILS' heading. Before the fix: 19 rows. The real camp must SURVIVE with a repaired name - this is the over-rejection guard for class 1.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Nike Soccer Camp at Northern Arizona University",
+     "startDate": "2026-06-15",
+     "endDate": "2026-06-19"
+    }
+   ],
+   "reject": [
+    {
+     "name": "He will be back for the next camp!"
+    },
+    {
+     "name": "My daughter loved this soccer camp!"
+    },
+    {
+     "name": "CAMP DETAILS"
+    },
+    {
+     "startDate": "2025-06-23"
+    },
+    {
+     "startDate": "2024-08-03"
+    },
+    {
+     "startDate": "2025-08-09"
+    }
+   ]
+  },
+  {
+   "file": "extract/dedupe-nicholls.html",
+   "pageUrl": "https://contedu.nicholls.edu/wconnect/ace/CourseStatus.awp?&course=25SU_SOCCER",
+   "title": "Soccer Youth Camp",
+   "_note": "Issue #39 class 4. One camp listed as the July 21-24 range and as each of its four days = 5 stored rows. The merge keeps one row spanning the whole range.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Soccer Youth Camp",
+     "startDate": "2025-07-21",
+     "endDate": "2025-07-24"
+    }
+   ]
+  },
+  {
+   "file": "extract/dedupe-smu.html",
+   "pageUrl": "https://www.nelsonsoccercamps.com/",
+   "title": "Nelson Girls Soccer Camps at SMU",
+   "_note": "Issue #39 class 4, the other duplicate shape: three overlapping ranges (Jun 13-16, 15-19, 17-20) for one camp series, all named after the page. They merge to one; the four distinct camps must all survive, which is what the count of 5 asserts.",
+   "count": 5,
+   "expect": [
+    {
+     "name": "Nelson Girls Soccer Camps at SMU",
+     "startDate": "2026-06-13",
+     "endDate": "2026-06-20"
+    },
+    {
+     "name": "Half Day Camps",
+     "startDate": "2026-06-01"
+    },
+    {
+     "name": "Full Day Camps",
+     "startDate": "2026-06-01"
+    },
+    {
+     "name": "Residential Camps",
+     "startDate": "2026-06-03"
+    },
+    {
+     "name": "ID Camps",
+     "startDate": "2026-04-11"
+    }
+   ]
+  },
+  {
+   "file": "extract/ryzer-table.html",
+   "pageUrl": "https://www.hailstatecamps.com/soccer/",
+   "title": "Hailstate Soccer Camps",
+   "_note": "Issue #39 classes 6 and 7. Hand-built (hailstatecamps.com refuses a non-browser User-Agent) from the four stored mississippi-state rows. Ryzer puts a single day in the date column and the span in the name, so endDate collapsed; the cost column is the button label 'See Prices'. A genuine single-day row must NOT be widened and a genuine price must NOT be nulled - the Goalkeeper Clinic row asserts both.",
+   "count": 4,
+   "expect": [
+    {
+     "startDate": "2026-11-21",
+     "endDate": "2026-11-22",
+     "price": null
+    },
+    {
+     "startDate": "2026-12-12",
+     "endDate": "2026-12-13",
+     "price": null
+    },
+    {
+     "startDate": "2027-01-23",
+     "endDate": "2027-01-24",
+     "price": null
+    },
+    {
+     "name": "Goalkeeper Clinic",
+     "startDate": "2027-02-14",
+     "endDate": "2027-02-14",
+     "price": "$175"
+    }
+   ],
+   "reject": [
+    {
+     "price": "See Prices"
+    }
+   ]
+  },
+  {
+   "file": "extract/wrong-gender.html",
+   "pageUrl": "https://www.soccersynergycamps.com/",
+   "title": "ORU Soccer Camps",
+   "_note": "Issue #39 classes 2 and 3 with NO sport-section headings on the page, so the row's own name is the only signal. Hand-built from the oral-roberts and harvard stored rows. The men's and boys' rows go; the women's row and the ungendered youth clinic stay. The basketball registerUrl (moorehoopsacademy) is dropped FROM the row, not with it - that is what keeps wofford's genuine 2026-11-22 ID Camp alive.",
+   "count": 2,
+   "expect": [
+    {
+     "startDate": "2026-12-13"
+    },
+    {
+     "name": "Fall Youth Clinic",
+     "startDate": "2026-06-15",
+     "registerUrl": null
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2026-12-11"
+    },
+    {
+     "startDate": "2027-02-19"
+    },
+    {
+     "name": "2025 Crimson Soccer Boys Youth Summer Camp"
     }
    ]
   }
@@ -537,5 +729,332 @@
     }
    ]
   }
- ]
+ ],
+ "sections": [
+  {
+   "_note": "Issue #39 class 2. Headings taken from the montana and ut-chattanooga pages; the men's/women's soccer pair is wofford's, whose four rows are all named 'ID Camp'.",
+   "cases": [
+    [
+     "Men's Basketball Camps",
+     "other",
+     true
+    ],
+    [
+     "Women's Basketball Camps",
+     "other",
+     false
+    ],
+    [
+     "Football Camps",
+     "other",
+     false
+    ],
+    [
+     "Soccer Camps",
+     "soccer",
+     false
+    ],
+    [
+     "Softball Camps",
+     "other",
+     false
+    ],
+    [
+     "Volleyball Camps",
+     "other",
+     false
+    ],
+    [
+     "Men's Basketball - 2026",
+     "other",
+     true
+    ],
+    [
+     "Soccer - 2026",
+     "soccer",
+     false
+    ],
+    [
+     "Spirit Camp - 2026",
+     "other",
+     false
+    ],
+    [
+     "Beach Volleyball",
+     "other",
+     false
+    ],
+    [
+     "Wrestling",
+     "other",
+     false
+    ],
+    [
+     "Men's Soccer",
+     "soccer",
+     true
+    ],
+    [
+     "Women's Soccer",
+     "soccer",
+     false
+    ],
+    [
+     "Men's Soccer ID Camps",
+     "soccer",
+     true
+    ],
+    [
+     "Girls Soccer Camps",
+     "soccer",
+     false
+    ]
+   ]
+  },
+  {
+   "_note": "Must NOT be read as section headings: a camp's own name, a facility, a page heading. Reading one of these as a section would gate away every row below it.",
+   "notSections": [
+    "Cal Girls Soccer Camp",
+    "Soccer & Lacrosse Complex",
+    "2025-26 UTC CAMP SCHEDULE",
+    "Nelson Girls Soccer Camps at SMU",
+    "Elite Camp (Grades 9-12):",
+    "Rod Ray Tennis Camp June 14-18, 2026",
+    "Youth Soccer Camp June 22nd - 26th, 2026",
+    "Register for the volleyball camp today."
+   ]
+  }
+ ],
+ "rows": {
+  "_note": "_row_allowed. wofford's four rows are all called exactly 'ID Camp' and only the enclosing section separates the three men's ones from the genuine 2026-11-22 camp - that is the case the whole section machinery exists for. A page with no headings (section null) must let everything through except rows that name another sport or gender themselves.",
+  "sections": {
+   "mens-soccer": {
+    "sport": "soccer",
+    "male": true,
+    "token": "soccer"
+   },
+   "womens-soccer": {
+    "sport": "soccer",
+    "male": false,
+    "token": "soccer"
+   },
+   "softball": {
+    "sport": "other",
+    "male": false,
+    "token": "softball"
+   },
+   "football": {
+    "sport": "other",
+    "male": false,
+    "token": "football"
+   }
+  },
+  "cases": [
+   [
+    "ID Camp",
+    "mens-soccer",
+    false
+   ],
+   [
+    "ID Camp",
+    "womens-soccer",
+    true
+   ],
+   [
+    "ID Camp",
+    null,
+    true
+   ],
+   [
+    "Prospect Camp",
+    "softball",
+    false
+   ],
+   [
+    "Flagship Camp #1",
+    "football",
+    false
+   ],
+   [
+    "Girls Soccer Camp",
+    "softball",
+    true
+   ],
+   [
+    "Rod Ray Tennis Camp",
+    null,
+    false
+   ],
+   [
+    "Cheer Clinic",
+    null,
+    false
+   ],
+   [
+    "ORU Winter College Men’s ID Camp I",
+    null,
+    false
+   ],
+   [
+    "ORU Winter College Men�s ID Camp II",
+    null,
+    false
+   ],
+   [
+    "2025 Crimson Soccer Boys Youth Summer Camp",
+    null,
+    false
+   ],
+   [
+    "Women's Soccer ID Camp",
+    null,
+    true
+   ],
+   [
+    "Goalkeeper Camp",
+    null,
+    true
+   ],
+   [
+    "Boys & Girls Club Camp",
+    null,
+    true
+   ],
+   [
+    "Elite Prospect ID Camp",
+    null,
+    true
+   ],
+   [
+    "Summer ID Camp",
+    "womens-soccer",
+    true
+   ]
+  ],
+  "notHub": [
+   [
+    "ID Camp",
+    "mens-soccer"
+   ],
+   [
+    "Prospect Camp",
+    "softball"
+   ],
+   [
+    "Flagship Camp #1",
+    "football"
+   ]
+  ]
+ },
+ "names": {
+  "_note": "Page chrome mistaken for a camp name (issue #39 class 5). These rows are usually REAL camps - portland's only camp and california's two are genuine - so the name is repaired from the page title, never rejected. Season words are deliberately not in the vocabulary, so 'Fall Clinic' keeps its own name.",
+  "chrome": [
+   "Camp Dates",
+   "Camp Dates: (Sunday)",
+   "Camp Dates: (Sun)",
+   "Camps, Clinics and Tournaments",
+   "Camp/Clinic Information",
+   "CAMP DETAILS",
+   "2025-26 UTC CAMP SCHEDULE",
+   "Camp",
+   "Camps"
+  ],
+  "notChrome": [
+   "Fall Clinic",
+   "Sunday Clinic",
+   "Soccer ID Clinic",
+   "Summer ID Camp",
+   "Goalkeeper Camp",
+   "Elite Camp",
+   "Nelson Girls Soccer Camps at SMU",
+   "Winter Premiere Camp"
+  ],
+  "clean": [
+   [
+    "2026 Elite College ID Clinic &",
+    "2026 Elite College ID Clinic"
+   ],
+   [
+    "2026 Elite College ID Clinic &amp;",
+    "2026 Elite College ID Clinic"
+   ],
+   [
+    "ID Clinic & Showcase",
+    "ID Clinic & Showcase"
+   ],
+   [
+    "Summer ID Camp -",
+    "Summer ID Camp"
+   ],
+   [
+    "Fall Clinic",
+    "Fall Clinic"
+   ]
+  ]
+ },
+ "prices": {
+  "_note": "'See Prices' is a button label, not a price: exactly 14 stored rows carry it (issue #39 class 7). A real amount, and a sentence that merely starts with those words, must survive.",
+  "cases": [
+   [
+    "See Prices",
+    null
+   ],
+   [
+    "see prices",
+    null
+   ],
+   [
+    "SEE PRICES",
+    null
+   ],
+   [
+    "Prices",
+    null
+   ],
+   [
+    "Pricing",
+    null
+   ],
+   [
+    "TBD",
+    null
+   ],
+   [
+    "TBA",
+    null
+   ],
+   [
+    "Register",
+    null
+   ],
+   [
+    "Sign Up",
+    null
+   ],
+   [
+    "Varies",
+    null
+   ],
+   [
+    "-",
+    null
+   ],
+   [
+    "$250",
+    "$250"
+   ],
+   [
+    "$145 Day Camper",
+    "$145 Day Camper"
+   ],
+   [
+    "$1,200",
+    "$1,200"
+   ],
+   [
+    "See Prices below",
+    "See Prices below"
+   ]
+  ]
+ }
 }
