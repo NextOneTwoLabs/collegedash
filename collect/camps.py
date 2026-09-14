@@ -1141,6 +1141,55 @@ def _article_body(soup):
     return None
 
 
+# ---------- id / youth classification (issue #78) ----------
+# The owner's rule for the camp view: "make sure only female soccer ID camp are shown. not other
+# sports, not camps for kids." Other sports are already rejected at extraction (issue #39); a YOUTH
+# camp is not a defect and must not be rejected - it is a real camp the program runs, and the
+# program's own page goes on showing it. So this is a label the view filters on, not a rejection.
+#
+# Read the NAME only, deliberately. `ages` is richer than it was (46.2% coverage overall, 53.8% on
+# the id class) but it is free text in dozens of shapes and it is not needed: the name token carries
+# the signal now that #39 and #80 have removed the expired youth and other-sport rows that used to
+# make names look unreliable. Reading a second, weaker signal would only add ways to disagree.
+#
+# An AGE token wins over an ID token where a name carries both: "2026 Denver Women's Soccer Youth ID
+# Camp" is a youth camp however often it says ID. The instruction is "make sure only", so a tie is
+# broken towards showing less - a kids' camp in the view is the thing that was asked against, while
+# an ID camp missing from it is still one click away on the program page.
+#
+# "Day camp" is NOT an age token. It describes the format - no overnight stay - and seattle's "ELITE
+# DAY CAMP PROGRAM" is an elite camp that happens not to board. So it is a weaker signal: it means
+# youth only when nothing in the name says ID. It still catches florida-state's "Day Camp",
+# western-kentucky's "Half Day Camp" and navy's "Girls Soccer Day Camp", which have no ID token.
+CAMP_ID_RE = re.compile(r"\bID\b|\bI\.D\.|(?i:\b(?:prospect|elite|showcase|recruit|college|collegiate|"
+                        r"high[- ]school|identification)\b)")
+CAMP_AGE_RE = re.compile(
+    r"\b(?:youth|junior|juniors|jr|kid|kids|child|children|little|mini|tot|tots|peewee|pee[- ]wee|"
+    r"elementary|grade[- ]school|middle[- ]school|micro)\b|"
+    r"\bgrades?\s*(?:k|pre-?k|[1-8])\s*(?:-|–|to|through)\s*[1-8]\b|"                # 'Grades 1-6', 'Grades K-8'
+    r"\bages?\s*\d{1,2}\s*(?:-|–|to|through)\s*(?:[1-9]|1[0-2])\b|"                  # 'ages 6-12'
+    r"\bu-?(?:[6-9]|1[0-2])\b", re.I)                                                # 'U10'
+CAMP_DAY_RE = re.compile(r"\bday camps?\b", re.I)  # adjacent, so '2 Day ID Camp' is not one
+
+
+def classify_camp(name: str | None) -> str:
+    """'id', 'youth' or 'unknown' for a camp name.
+
+    'unknown' is a real answer, not a failure: "Cal Girls Soccer Camp" and "2026 Women's Soccer
+    Camps" are genuine women's soccer camps whose names say nothing about who they are for. The view
+    excludes them, because "make sure only" is the instruction; the program page still shows them.
+    Keeping them out of `id` is what makes the unknown count worth publishing - a classifier that
+    guessed would hide its own drift behind a confident label."""
+    t = common.clean(name or "")
+    if not t:
+        return "unknown"
+    if CAMP_AGE_RE.search(t):
+        return "youth"
+    if CAMP_ID_RE.search(t):
+        return "id"
+    return "youth" if CAMP_DAY_RE.search(t) else "unknown"
+
+
 # ---------- news mining ----------
 NEWS_BLACKLIST_RE = re.compile(
     r"national team|training camp|base camp|called[- ]?up|call[- ]?ups?\b|named to|selected|invited|preseason|pre-season|"

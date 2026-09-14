@@ -12,6 +12,12 @@ Issue #65. public/data/camps/index.json is the first published file with no prog
 sit on. A row that names a slug nothing resolves, or one that survived a window it should not have,
 is invisible on every profile page and only surfaces in the site-wide view as a camp with no school.
 
+Issue #78 narrows what the index carries: upcoming camps only, each labelled id / youth / unknown so
+the site-wide view can show ID camps alone. A youth camp is correct data and is never deleted - it
+stays on the profile the program page renders - so the label is a filter for one view, not a
+rejection. The index also declares `counts`, because a view that hides rows without saying how many
+is how a drifting classifier would never be noticed.
+
 Covers, in order:
   guard       the output-directory hazard, exercised through the function that actually carries it:
               this suite's one build is run by seasons_test.rebuild(), whose swap is what keeps a
@@ -20,6 +26,10 @@ Covers, in order:
               that quietly overwrites published data on its way past, and nothing else would catch
               it: no workflow runs these suites (issue #63), so they are run by hand in real
               checkouts and refresh.yml commits whatever it finds with `git add -A`
+  classify    classify_camp and camp_counts: the id/youth/unknown vocabulary on real corpus names,
+              the precedence rule (an age token beats an ID token, because "make sure only" breaks
+              ties towards showing less), 'day camp' as a format rather than an age, and a tally
+              that names every class even at zero
   window      camp_in_window: the cutoff is inclusive, a camp that is running right now is not past,
               month precision compares months on `endDate or startDate` - which is where the rule
               deliberately parts company with tabCamps, and the case is pinned here - undated and
@@ -145,42 +155,48 @@ def test_guard(before: dict[str, str], after: dict[str, str]) -> None:
 def test_window() -> None:
     print("window: camps_window and camp_in_window")
     w = build.camps_window(dt.date(2026, 9, 14))
-    ok("the window opens 12 months back", w["from"] == "2025-09-14", str(w))
+    # The owner's rule (#78): "only show upcoming camps, drop the past year." The failing input for
+    # this check is any reinstated lower bound - set the old 365 back and `from` moves to 2025-09-14.
+    ok("the window opens today: the published index is upcoming-only", w["from"] == "2026-09-14", str(w))
     ok("and declares an explicit, unbounded upper end", "to" in w and w["to"] is None, str(w))
     ok("the window is a rolling one, anchored on the day it is built",
-       build.camps_window(dt.date(2026, 1, 1))["from"] == "2025-01-01")
+       build.camps_window(dt.date(2026, 1, 1))["from"] == "2026-01-01")
+    ok("no past-window constant survives for someone to turn back up",
+       not hasattr(build, "CAMPS_PAST_WINDOW_DAYS"),
+       "CAMPS_PAST_WINDOW_DAYS is still defined; the upcoming-only rule is one edit from being undone")
 
     def day(start, end=None, **kw):
         return {"name": "x", "startDate": start, "endDate": end, "precision": "day", **kw}
 
     cases = [
-        ("a camp on the cutoff day is in the window", day("2025-09-14"), True),
-        ("the day before the cutoff is out", day("2025-09-13"), False),
-        ("a camp later today is in", day("2026-09-14"), True),
+        ("a camp today is in the window", day("2026-09-14"), True),
+        ("a camp that finished yesterday is out: the past year goes", day("2026-09-13"), False),
+        ("last season's camp, which the 365-day window used to publish, is out",
+         day("2026-06-07"), False),
         ("a camp two seasons out is in, because the window has no upper end", day("2027-08-21"), True),
-        ("a multi-day camp that began before the cutoff but is still running is in",
-         day("2025-09-01", "2025-09-20"), True),
-        ("a multi-day camp that ended before the cutoff is out", day("2025-08-01", "2025-08-20"), False),
+        ("a multi-day camp that began before today but is still running is in - it has not happened "
+         "yet, so 'upcoming' has to include it", day("2026-09-10", "2026-09-20"), True),
+        ("a multi-day camp that ended yesterday is out", day("2026-08-01", "2026-09-13"), False),
         ("an undated row is dropped: it cannot be placed in the window",
          {"name": "x", "startDate": None, "dateText": "Camp dates TBD"}, False),
-        ("a month-precision row in the cutoff month is in",
-         {"name": "x", "startDate": "2025-09", "precision": "month"}, True),
+        ("a month-precision row in the current month is in",
+         {"name": "x", "startDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row in the month before is out",
-         {"name": "x", "startDate": "2025-08", "precision": "month"}, False),
+         {"name": "x", "startDate": "2026-08", "precision": "month"}, False),
         # The divergence finding 4 named, pinned as deliberate rather than left to be rediscovered:
         # tabCamps in public/index.html calls a month row past on `startDate` alone, so it would
         # call this one past. The emitter judges a camp by when it finishes, so a camp still
         # running in the cutoff month stays in. Aligning the tab is PR 2's job (issue #65).
         ("a month-precision row that began before the cutoff month but runs into it is in, which is "
          "where this rule deliberately parts company with tabCamps",
-         {"name": "x", "startDate": "2025-08", "endDate": "2025-09", "precision": "month"}, True),
+         {"name": "x", "startDate": "2026-08", "endDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row that had ended before the cutoff month is out, endDate or no endDate",
-         {"name": "x", "startDate": "2025-06", "endDate": "2025-07", "precision": "month"}, False),
+         {"name": "x", "startDate": "2026-06", "endDate": "2026-07", "precision": "month"}, False),
         ("a row whose startDate is not a string is dropped, not raised on",
          {"name": "x", "startDate": 20260914, "precision": "day"}, False),
         ("a row that is not an object at all is dropped, not raised on", "June 3", False),
         ("a row whose endDate is the wrong type falls back to startDate",
-         day("2026-06-03", end=3), True),
+         day("2026-09-14", end=3), True),
     ]
     for name, item, want in cases:
         ok(name, build.camp_in_window(item, w) is want)
@@ -191,6 +207,57 @@ def test_window() -> None:
     ok("and a row inside that bound still passes", build.camp_in_window(day("2026-06-03"), bounded) is True)
     ok("a window declaring no bounds excludes nothing, which is exactly why check_camps_index "
        "refuses an index that declares none", build.camp_in_window(day("2020-01-01"), {}) is True)
+
+
+# ---------- the id / youth classification ----------
+
+def test_classify() -> None:
+    """classify_camp and camp_counts. Issue #78.
+
+    Every case is a real name from the corpus, and every one of them changes answer if the rule it
+    exercises is removed - which is what keeps this from being a list of things that cannot fail.
+    The precedence pair is the point: an age token beats an ID token, because "make sure only" means
+    ties break towards showing less.
+    """
+    print("classify: classify_camp and camp_counts")
+    cases = [
+        ("Fall ID Camp", "id"),
+        ("Elite Prospect ID Camp | November 21st - 22nd", "id"),
+        ("Wildcats Fall Elite ID Clinic", "id"),
+        ("College ID Camp", "id"),
+        ("WOMEN'S SOCCER TO HOLD ID CLINIC", "id"),
+        ("2 Day ID Camp", "id"),  # 'Day ID Camp' is not 'day camp'
+        ("ELITE DAY CAMP PROGRAM", "id"),  # a day camp is a format, not an age
+        ("Youth Camps (Ages 5-12)", "youth"),
+        ("Spring Break Kids Camp", "youth"),
+        ("Mini Vaqueros Camp", "youth"),
+        ("SUMMER GIRLS YOUTH DAY CAMP 1", "youth"),
+        ("Half Day Camp", "youth"),
+        ("Girls Soccer Day Camp - Session 1", "youth"),
+        ("Middle School Elite Skills Camp (grades 6-8)", "youth"),
+        # The precedence rule, named. denver's camp says ID twice and is still a youth camp.
+        ("2026 DENVER WOMEN'S SOCCER YOUTH ID CAMP", "youth"),
+        ("Cal Girls Soccer Camp", "unknown"),
+        ("2026 Women's Soccer Camps", "unknown"),
+        ("Goalkeeper Camp", "unknown"),
+        ("Nike Soccer Camp at Seattle University", "unknown"),
+        ("", "unknown"),
+        (None, "unknown"),
+    ]
+    for name, want in cases:
+        got = build.classify_camp(name)
+        ok(f"{(name or '')[:52]!r} -> {want}", got == want, f"got {got!r}")
+
+    rows = [{"campType": "id"}, {"campType": "id"}, {"campType": "youth"}, {"campType": "unknown"}]
+    ok("camp_counts tallies the rows it is given", build.camp_counts(rows) ==
+       {"total": 4, "id": 2, "youth": 1, "unknown": 0 + 1}, str(build.camp_counts(rows)))
+    ok("every class is named even at zero, so a class that stopped being produced is visible "
+       "rather than a missing key", set(build.camp_counts([])) == {"total", "id", "youth", "unknown"}
+       and build.camp_counts([])["youth"] == 0, str(build.camp_counts([])))
+    odd = build.camp_counts([{"campType": "prospect"}, {}])
+    ok("a campType outside the three classes lands in no bucket, so `total` stops matching the sum "
+       "instead of quietly inventing a fourth class nobody reads",
+       odd["total"] == 2 and odd["id"] + odd["youth"] + odd["unknown"] == 0, str(odd))
 
 
 # ---------- what build publishes ----------
@@ -216,8 +283,9 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     if not ok("public/data/camps/index.json is published", os.path.isfile(path), path):
         return
     doc = json.load(open(path, encoding="utf-8"))
-    ok("it is an object carrying updated, window and camps",
-       isinstance(doc, dict) and {"updated", "window", "camps"} <= set(doc), str(sorted(doc))[:200])
+    ok("it is an object carrying updated, window, counts and camps",
+       isinstance(doc, dict) and {"updated", "window", "counts", "camps"} <= set(doc),
+       str(sorted(doc))[:200])
     window = doc["window"]
     ok("the window it declares is the one build would declare today",
        window == build.camps_window(), str(window))
@@ -252,12 +320,46 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     ok("out-of-window rows are dropped at build, not published and hidden",
        len(dropped) > 0 and len(rows) == len(items) - len(dropped),
        f"{len(items)} items, {len(dropped)} dropped, {len(rows)} published")
-    ok("the dropped set is dated rows older than the window plus any undated ones",
-       all((it.get("startDate") or "") < window["from"] or not it.get("startDate") for _, it in dropped),
-       str([(s, it.get("startDate")) for s, it in dropped if (it.get("startDate") or "") >= window["from"]][:3]))
+    ok("the dropped set is rows that had finished before the window opened, plus any undated ones",
+       all((it.get("endDate") or it.get("startDate") or "") < window["from"] or not it.get("startDate")
+           for _, it in dropped),
+       str([(s, it.get("startDate")) for s, it in dropped
+            if (it.get("endDate") or it.get("startDate") or "") >= window["from"]][:3]))
+    # The window is upcoming-only, so this is the check that it actually bit. Its failing input is
+    # the old 365-day lower bound: reinstate it and most of the past season comes back.
+    ok("the upcoming-only window drops the bulk of the corpus, which is what the owner asked for",
+       len(dropped) > len(rows),
+       f"{len(rows)} published vs {len(dropped)} dropped - the window is not doing what #78 asked")
+
+    # ---- the classification, on real published rows ----
+    ok("every published row carries a campType from the three declared classes",
+       all(r.get("campType") in ("id", "youth", "unknown") for r in rows),
+       str(sorted({r.get("campType") for r in rows}))[:200])
+    ok("each row's campType is what the classifier says about its name, not something the emitter "
+       "made up on the way past",
+       all(r["campType"] == build.classify_camp(r["name"]) for r in rows),
+       str([(r["slug"], r["name"], r["campType"]) for r in rows
+            if r["campType"] != build.classify_camp(r["name"])][:3])[:300])
+    tally = build.camp_counts(rows)
+    ok("the index declares counts, and they are the tally of the rows it published",
+       doc["counts"] == tally, f"declared {doc['counts']}, rows tally {tally}")
+    ok("so the number the camp view hides is derivable from the file alone",
+       doc["counts"]["total"] - doc["counts"]["id"] ==
+       sum(1 for r in rows if r["campType"] != "id"))
+    # Youth rows are a classification, never a deletion (#78). They must still reach the profile the
+    # program page renders. The failing input is any extractor or emitter that starts dropping them.
+    youth_items = [(s, it) for s, it in items if build.classify_camp(it.get("name")) == "youth"]
+    ok("youth camps are still in the profiles the program page renders - classified, not deleted",
+       len(youth_items) > 0,
+       "no youth camp survives anywhere in the profiles, so this PR deleted data it was told to keep")
+    ok("and every profile item carries the label too, not only the published index rows",
+       all(it.get("campType") == build.classify_camp(it.get("name")) for _s, it in items),
+       str([(s, it.get("name"), it.get("campType")) for s, it in items
+            if it.get("campType") != build.classify_camp(it.get("name"))][:3])[:300])
     if VERBOSE:
         print(f"       {len(items)} items across {len({s for s, _ in items})} programs; "
-              f"{len(rows)} published, {len(dropped)} dropped; "
+              f"{len(rows)} published, {len(dropped)} dropped; counts {doc['counts']}; "
+              f"{len(youth_items)} youth items kept on profiles; "
               f"{os.path.getsize(path) / 1024:.1f} KB raw")
 
 
@@ -266,7 +368,8 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
 GOOD_ROW = {"slug": "clemson", "name": "Spring ID Camp", "startDate": "2026-04-11",
             "endDate": "2026-04-11", "dateText": "April 11, 2026", "precision": "day",
             "yearInferred": False, "location": None, "ages": None, "price": None,
-            "registerUrl": None, "sourceUrl": None, "kind": "camp", "confidence": "heuristic"}
+            "registerUrl": None, "sourceUrl": None, "kind": "camp", "campType": "id",
+            "confidence": "heuristic"}
 WINDOW = {"from": "2025-09-14", "to": None}
 
 
@@ -299,8 +402,9 @@ def check(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> tuple[bool, s
         return captured(build.check_camps_index, reg)
 
 
-def doc(rows, window=WINDOW) -> dict:
-    return {"updated": "2026-09-14T00:00:00Z", "window": window, "camps": rows}
+def doc(rows, window=WINDOW, counts=None) -> dict:
+    return {"updated": "2026-09-14T00:00:00Z", "window": window,
+            "counts": build.camp_counts(rows) if counts is None else counts, "camps": rows}
 
 
 def item(**kw) -> dict:
@@ -368,6 +472,35 @@ def test_invariant() -> None:
         ok("a window with no `from` is caught: a stale publish would otherwise be invisible",
            not passed and "window.from" in out, out[:300])
 
+        # ---- issue #78: the hidden count, and #69's allow-list hazard ----
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW], counts={"total": 9, "id": 9, "youth": 0,
+                                                                  "unknown": 0}),
+                            items={"clemson": [item()]})
+        ok("counts that do not match the rows are caught: the view reports its hidden number from "
+           "them, so a stale tally would understate what is hidden",
+           not passed and "counts" in out, out[:400])
+
+        passed, out = check(tmp, index_doc={"updated": "x", "window": WINDOW, "camps": [GOOD_ROW]},
+                            items={"clemson": [item()]})
+        ok("an index declaring no counts at all is caught, so silent exclusion cannot come back",
+           not passed and "counts" in out, out[:300])
+
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW]),
+                            items={"clemson": [item(sponsorTier="gold")]})
+        ok("a per-item field the index publishes on no row is caught by name - the allow-list "
+           "hazard #69 filed, which `campType` is the first field to make real",
+           not passed and "sponsorTier" in out, out[:400])
+
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW]),
+                            items={"clemson": [item(newsTitle="Tigers to host ID camp")]})
+        ok("but a field declared as deliberately withheld is not reported, so the guard cannot be "
+           "trained to be ignored", passed and not out, out[:400])
+
+        passed, out = check(tmp, index_doc=doc([{**GOOD_ROW, "campType": "youth"}]),
+                            items={"clemson": [item()]})
+        ok("a campType the profile does not hold is caught like any other drifted field, by name",
+           not passed and "campType" in out, out[:400])
+
         passed, out = check(tmp, index_doc={"updated": "x", "window": WINDOW, "camps": {}},
                             items={"clemson": [item()]})
         ok("a `camps` that is not a list is reported, not iterated",
@@ -398,6 +531,7 @@ def main(argv=None) -> int:
     VERBOSE = args.verbose
 
     test_window()
+    test_classify()
     before = public_state()
     tmp = tempfile.mkdtemp(prefix="camps-build-")
     try:

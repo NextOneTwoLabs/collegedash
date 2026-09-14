@@ -19,6 +19,7 @@ import re
 from collections import defaultdict
 
 from collect import common
+from collect.camps import classify_camp
 from collect.commitments_tds import record_key
 
 CURRENT_SEASON_FALLBACK = dt.date.today().year
@@ -433,7 +434,14 @@ def build_camps(camps, news, curated) -> dict | None:
     entries with `kind`: "camp" (extracted from the camp page), "news" (announced in a news
     release), "curated" (hand-written curated.camps[]). Dated entries first by start date, undated
     last; a news entry that repeats a camp-page entry (same start date, same name) is dropped.
-    `upcoming` is not computed here: the site is static, so the UI splits on today's date."""
+    `upcoming` is not computed here: the site is static, so the UI splits on today's date.
+
+    Every entry also carries `campType`: "id", "youth" or "unknown" (issue #78). It is a LABEL, not
+    a filter - nothing is dropped for carrying it, and this section, which is what the program page
+    renders, keeps showing youth camps exactly as before. Only the site-wide camp view filters on
+    it, because the owner's rule for that view is women's soccer ID and prospect camps only. A youth
+    camp at a program is correct data; deleting it to sharpen one view would damage the page a
+    family actually lands on."""
     if not camps and not (curated.get("camps") or []):
         return None
     c = (camps or {}).get("data") or {}
@@ -455,7 +463,7 @@ def build_camps(camps, news, curated) -> dict | None:
         if it.get("startDate") and key in seen:
             continue
         seen.add(key)
-        merged.append(it)
+        merged.append({**it, "campType": classify_camp(it.get("name"))})
     merged.sort(key=lambda it: (it.get("startDate") is None, it.get("startDate") or "", it.get("name") or ""))
     metas = [_meta(camps)] if camps else []
     if news and any(it["kind"] == "news" for it in merged):
@@ -473,22 +481,40 @@ def build_camps(camps, news, curated) -> dict | None:
 # program name, region, conference and colours are already on the programs index row the view holds,
 # and are joined by slug there.
 #
-# The emitter classifies nothing. Whether a row is a real women's soccer camp, another sport's camp
-# or a review widget is decided at source in collect/camps.py, where the page structure that proves
-# it is still available (issue #39); by the time a row reaches here that evidence is gone. The only
-# filter applied here is the date window.
-CAMPS_PAST_WINDOW_DAYS = 365
+# Whether a row is a real women's soccer camp, another sport's camp or a review widget is decided at
+# source in collect/camps.py, where the page structure that proves it is still available (issues #39
+# and #80); by the time a row reaches here that evidence is gone. The emitter applies the date
+# window, and carries the id/youth/unknown label the collector's classifier produced.
+#
+# CAMP_INDEX_FIELDS is an ALLOW-LIST: a per-item field that is not named here never reaches the
+# published file, and until #78 nothing said so. `campType` is the field that made that hazard real
+# (#69), so check_camps_index now reports an item field that is neither published nor listed as
+# deliberately withheld - see CAMP_ITEM_UNPUBLISHED.
 CAMP_INDEX_FIELDS = ("name", "startDate", "endDate", "dateText", "precision", "yearInferred",
-                     "location", "ages", "price", "registerUrl", "sourceUrl", "kind", "confidence")
+                     "location", "ages", "price", "registerUrl", "sourceUrl", "kind", "campType",
+                     "confidence")
+# Per-item fields build_camps produces that the index deliberately does not carry. A news entry's
+# provenance belongs on the profile, where the release can be linked in context; the camp view joins
+# by slug and links `sourceUrl`. Listed rather than ignored so the guard below can tell "withheld on
+# purpose" from "forgotten", which is the whole point of #69.
+CAMP_ITEM_UNPUBLISHED = ("newsTitle", "newsUrl", "newsDate")
 
 
 def camps_window(today: dt.date | None = None) -> dict:
-    """The slice of the camp calendar the published index carries: every future camp, plus the past
-    `CAMPS_PAST_WINDOW_DAYS`. Written into the file so a stale publish is diagnosable from the file
-    alone. `to` is null because there is no upper bound - a camp announced for 2027 is published
-    today - and the key is still emitted so the shape never varies."""
-    d = today or dt.date.today()
-    return {"from": (d - dt.timedelta(days=CAMPS_PAST_WINDOW_DAYS)).isoformat(), "to": None}
+    """The slice of the camp calendar the published index carries: upcoming camps only.
+
+    The owner's rule, 2026-09-14: "only show upcoming camps, drop the past year." So `from` is
+    today, not today minus a year, and the 365-day constant that produced the old lower bound is
+    gone rather than set to zero - a constant nothing varies is a knob that invites being turned
+    back. Written into the file so a stale publish is diagnosable from the file alone.
+
+    A camp that is running RIGHT NOW is upcoming, not past: camp_in_window compares on
+    `endDate or startDate`, so a camp that began last week and ends tomorrow is still carried. Only
+    a camp that has finished drops out.
+
+    `to` is null because there is no upper bound - a camp announced for 2027 is published today -
+    and the key is still emitted so the shape never varies."""
+    return {"from": (today or dt.date.today()).isoformat(), "to": None}
 
 
 def camp_in_window(item, window: dict) -> bool:
@@ -532,6 +558,26 @@ def camp_row(slug: str, item: dict) -> dict:
     """One published row: the camp fields, in a fixed order, plus the slug that joins it to a
     program. Missing fields are published as null so the shape never varies between rows."""
     return {"slug": slug, **{k: item.get(k) for k in CAMP_INDEX_FIELDS}}
+
+
+def camp_counts(rows: list) -> dict:
+    """The published rows tallied by `campType`, with every class named even at zero.
+
+    The camp view shows only `campType == "id"`, so it hides rows. This is what makes the number it
+    hides derivable without running the view, and what makes classifier drift visible in the file
+    itself: if the id share moves, this moves with it. Today's upcoming corpus is 34 id, 0 youth,
+    3 unknown - and `youth: 0` is exactly the kind of fact that has to be stated rather than
+    inferred from a missing key, because a class that stopped being produced would otherwise look
+    identical to a class that legitimately has no rows this month.
+
+    The classes are fixed, not derived from the rows, so a typo'd campType shows up as a `total`
+    that does not equal the sum rather than as a fourth bucket nobody reads."""
+    counted = {"id": 0, "youth": 0, "unknown": 0}
+    for r in rows:
+        t = r.get("campType") if isinstance(r, dict) else None
+        if t in counted:
+            counted[t] += 1
+    return {"total": len(rows), **counted}
 
 
 # ---------- commitments ----------
@@ -902,10 +948,13 @@ def build(registry: dict) -> list[dict]:
                       {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
+    camp_tally = camp_counts(all_camps)
     common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "window": window, "camps": all_camps})
+                      {"updated": common.now_iso(), "window": window, "counts": camp_tally, "camps": all_camps})
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
-               f"window from {window['from']}")
+               f"window from {window['from']}; "
+               f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
+               f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view)")
     if not validate(registry):
         common.log("!! build: schema validation reported errors (see SCHEMA lines above; `python collegedash.py validate`)")
     return rows
@@ -957,6 +1006,12 @@ def check_camps_index(registry: dict) -> bool:
 
     Like check_seasons it reports and does not raise: everything it reads is a file on disk that a
     hand-edit or a half-written build can have left any shape at all.
+
+    Two of the checks below exist because the camp view hides rows (issue #78). `counts` must equal
+    the tally of the rows actually published, so the number the view reports as hidden cannot drift
+    away from the rows; and a per-item field that reaches no row and is not on
+    CAMP_ITEM_UNPUBLISHED is reported by name, which is the latent allow-list hazard in #69 finally
+    getting a voice.
     """
     path = os.path.join(common.CAMPS_OUT_DIR, "index.json")
     try:
@@ -968,7 +1023,7 @@ def check_camps_index(registry: dict) -> bool:
         print(f"CAMPS: {path} is {'missing' if doc is None else 'a ' + type(doc).__name__ + ', not an object'}")
         return False
     ok = True
-    for key in ("updated", "window", "camps"):
+    for key in ("updated", "window", "counts", "camps"):
         if key not in doc:
             print(f"CAMPS: the index declares no {key!r}")
             ok = False
@@ -987,6 +1042,15 @@ def check_camps_index(registry: dict) -> bool:
     if not isinstance(published, list):
         print(f"CAMPS: `camps` is a {type(published).__name__}, not a list of rows")
         return False
+    if "counts" in doc:
+        declared, actual = doc.get("counts"), camp_counts(published)
+        if not isinstance(declared, dict):
+            print(f"CAMPS: `counts` is a {type(declared).__name__}, not the id/youth/unknown tally")
+            ok = False
+        elif declared != actual:
+            print(f"CAMPS: the index declares counts {declared}, but its rows tally {actual}; the camp "
+                  f"view reports {actual['total'] - actual['id']} hidden rows from this number")
+            ok = False
     if not ok:  # without a usable window nothing below can be judged
         return False
 
@@ -1019,14 +1083,27 @@ def check_camps_index(registry: dict) -> bool:
             ok = False
 
     expected: list[dict] = []
+    item_fields: set = set()
     for program in common.iter_programs(registry):
         slug = program.get("slug")
         p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
         camps = p.get("camps") if isinstance(p, dict) else None
         items = (camps or {}).get("items") if isinstance(camps, dict) else None
         for it in items if isinstance(items, list) else []:
+            if isinstance(it, dict):
+                item_fields |= set(it)
             if camp_in_window(it, window):
                 expected.append(camp_row(slug, it))
+    # Issue #69: CAMP_INDEX_FIELDS is an allow-list, so a per-item field added to build_camps is
+    # dropped on the way out and nothing said so - which is how `campType` would have reached no
+    # row at all while every other check here passed. Withheld-on-purpose is declared, so the only
+    # thing this can report is a field nobody decided about.
+    forgotten = sorted(item_fields - set(CAMP_INDEX_FIELDS) - set(CAMP_ITEM_UNPUBLISHED))
+    if forgotten:
+        print(f"CAMPS: the profiles carry per-item field(s) {forgotten} that the index publishes on no "
+              f"row; add them to CAMP_INDEX_FIELDS, or to CAMP_ITEM_UNPUBLISHED if withholding them "
+              f"is deliberate")
+        ok = False
     if len(published) != len(expected):
         print(f"CAMPS: the index publishes {len(published)} rows, but the profiles hold {len(expected)} "
               f"items inside the declared window")
