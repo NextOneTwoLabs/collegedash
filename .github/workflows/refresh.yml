@@ -21,6 +21,10 @@ name: Refresh program data
 #                       it finds) rather than the full run's ~1,400 runs and ~2,800 requests.
 #   full=true        -> every collector
 #   otherwise the schedule branches above.
+# Whatever the mode, the commit step rebuilds public/data from the stored sources after it rebases
+# onto the current main and before it pushes, so a run always publishes data built by the code it is
+# committing onto, never by the code it checked out hours earlier (issue #75). validate gates that
+# push: if the rebuilt corpus breaks an invariant, nothing is published and the previous data stays.
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -160,15 +164,55 @@ jobs:
           if [ "$BUILD_ONLY" = "true" ]; then verb=rebuild; fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          stamp=$(date -u +%Y-%m-%dT%H:%MZ)
           git add -A
-          git commit -m "data: $verb $(date -u +%Y-%m-%dT%H:%MZ)"
-          # main may have moved while the collectors ran (a push from a developer machine), which
-          # makes a plain push non-fast-forward. Rebase onto upstream first; on a data-file conflict the
-          # freshly collected version wins (-X theirs = this commit during a rebase). Retry a few times
-          # in case another push lands in between.
+          git commit -m "data: $verb $stamp"
+          # main may have moved while the collectors ran (a push from a developer machine, or a PR
+          # merged mid-run), which makes a plain push non-fast-forward. Rebase onto upstream first;
+          # on a data-file conflict the freshly collected version wins (-X theirs = this commit
+          # during a rebase). Retry a few times in case another push lands in between.
+          #
+          # Issue #75: the rebase brings in newly merged *code* but rebuilds nothing, so without the
+          # rebuild below the commit publishes public/data built by the code checked out up to two
+          # hours ago - and -X theirs makes that stale data overwrite what the merged PR published.
+          # So rebuild from the stored sources after every rebase and before every push, and amend
+          # the data commit with the result. The rebuild is inside the loop on purpose: a rejected
+          # push means a second rebase onto a different main, which needs a second rebuild.
+          # It runs unconditionally, build_only included - a build_only run races the same way, just
+          # over one minute instead of two hours - so that every run exercises this path rather than
+          # only the rare one where it matters. Measured at 5.3s for all 350 profiles on the runner.
           for attempt in 1 2 3; do
-            if git pull --rebase -X theirs origin main && git push; then
-              exit 0
+            if git pull --rebase -X theirs origin main; then
+              # A rebase drops a commit that came out empty. That cannot happen while _build.builtAt
+              # is a fresh timestamp on every profile, but if it ever did, HEAD would be upstream's
+              # tip and the amend below would rewrite someone else's commit. FETCH_HEAD rather than
+              # origin/main: it is written by the pull itself, whatever refspec checkout configured.
+              if [ "$(git rev-parse HEAD)" = "$(git rev-parse FETCH_HEAD)" ]; then
+                echo "The rebase dropped the data commit as empty; main already holds this data."
+                exit 0
+              fi
+              onto=$(git rev-parse --short FETCH_HEAD)
+              if ! python collegedash.py build; then
+                echo "::error title=refresh::build failed after rebasing onto $onto; nothing pushed"
+                exit 1
+              fi
+              # Deliberate behaviour change (see the PR for #75): validate now gates the push on
+              # every path, not just build_only. The rebuild is what first runs merged-mid-run code
+              # against the full corpus, so publishing its output unchecked would swap one silent
+              # corruption for another. A failure here leaves the previous good data live.
+              if ! python collegedash.py validate; then
+                echo "::error title=refresh::validate failed on data rebuilt onto $onto; nothing pushed. The previous data is still live; fix the code on main and re-run (build_only=true republishes in about a minute)."
+                exit 1
+              fi
+              git add -A
+              # --amend, not a second commit: one run stays one commit, and a retry re-amends the
+              # same commit instead of stacking one per attempt. The body records what it was built
+              # onto, which is the only thing a second commit would have made more visible.
+              git commit --amend -m "data: $verb $stamp" \
+                -m "Rebuilt from the stored sources onto $onto after rebasing, so the published data is the output of the code it is committed onto (issue #75)."
+              if git push; then
+                exit 0
+              fi
             fi
             echo "push rejected (attempt $attempt); retrying in 15s"
             git rebase --abort 2>/dev/null || true
