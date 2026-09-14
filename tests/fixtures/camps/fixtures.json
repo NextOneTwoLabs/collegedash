@@ -547,6 +547,55 @@
      "name": "Camps, Clinics and Tournaments"
     }
    ]
+  },
+  {
+   "file": "extract/synth-gender-window.html",
+   "pageUrl": "https://example.edu/sports/womens-soccer/camps",
+   "title": "2026 Women's Soccer Camps",
+   "_note": "Issue #80, the over-rejection the first cut of the evidence gate introduced. 'Boys Session' carries no date, so it is not a new row and it lands in the GIRLS' row's detail window; an unconditional gender rule over that window dropped the girls' row and kept the boys' one, on a page whose own title says Women's Soccer. The input that makes this fail is applying the gender rule to `_evidence` instead of `_evidenceOwn`: do that and 2027-06-12 disappears and the count goes to 1.",
+   "count": 2,
+   "expect": [
+    {
+     "startDate": "2027-06-12",
+     "endDate": "2027-06-13"
+    },
+    {
+     "startDate": "2027-06-20",
+     "endDate": "2027-06-21"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-agegroups.html",
+   "pageUrl": "https://www.ussportscamps.com/soccer/nike/nike-soccer-camp-example-university",
+   "title": "Nike Soccer Camp at Example University",
+   "_note": "Issue #80. The ussportscamps/Nike template with its age-group line written 'Age Groups: Boys U8-U10' - one word away from the committed reviews-ussportscamps.html. The gender rule over the whole window took this page to ZERO rows; three programs sit on this template and carry 6 of the 20 page-named rows. Bounding the gender rule to the row's own lines publishes it, as it already did when the line read 'Boys & Girls'.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Nike Soccer Camp at Example University",
+     "startDate": "2027-06-15",
+     "endDate": "2027-06-19"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-chrome-sports.html",
+   "pageUrl": "https://example.edu/sports/2020/5/5/information-camps-index.aspx",
+   "title": "Camp/Clinic Information",
+   "_note": "Issue #80, the general case the gate exists for, and the guard that the gender fix did not weaken it. Two rows with the SAME chrome name, distinguished only by their windows: the soccer one is published, the volleyball one is rejected. This is the sport half, which is the half that closes harvard's P1 - ablate it and both rows publish.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Camp Information",
+     "startDate": "2027-06-12"
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2027-07-18"
+    }
+   ]
   }
  ],
  "robots": [
@@ -1310,7 +1359,7 @@
   ]
  },
  "rowsEvidence": {
-  "_note": "Issue #80 item 1. A row whose name came from the page rather than from the row is gated on `evidence` - the text it was assembled from - because its name carries no sport and no gender for the two unconditional rules to read. Each case names the input that makes it fail: drop the evidence branch and every `false` row below turns true, which is exactly what origin/main does with harvard. The `named: row` cases pin that a row with a name of its own is judged on the name alone, evidence or no evidence, so nothing tightens for the 129 rows that were never the problem.",
+  "_note": "Issue #80 item 1. A row whose name came from the page rather than from the row is gated on the text it was assembled from, because its name carries no sport and no gender for the two unconditional rules to read. The two halves read different spans, and that is the point: the SPORT rule reads `evidence`, the row's whole window; the GENDER rule reads `ownEvidence`, the row's own heading line and date line, and never the trailing window. Each case names the input that makes it fail: drop the evidence branch and every `false` row below turns true, which is what origin/main does with harvard; widen the gender rule back to `evidence` and the three `true` window-bleed rows turn false, which is what the first cut of this PR did to real girls' camps. The `named: row` cases pin that a row with a name of its own is judged on the name alone, evidence or no evidence, so nothing tightens for the 129 rows that were never the problem.",
   "cases": [
    {
     "name": "Camp/Clinic Information",
@@ -1329,9 +1378,35 @@
    {
     "name": "Camp/Clinic Information",
     "named": "page",
-    "evidence": "Camp/Clinic Information | June 30 to July 5, 2025 | Register: https://www.crimsonsoccer.us/boys-youth-camps.html",
+    "ownEvidence": "Boys Youth Summer Camp | June 30 to July 5, 2025",
+    "evidence": "Boys Youth Summer Camp | June 30 to July 5, 2025 | Register: https://www.crimsonsoccer.us/boys-youth-camps.html",
     "expect": false,
-    "why": "a boys' camp: the gender rule reads the evidence too"
+    "why": "a boys' camp whose OWN heading line says so: the gender rule still fires, on the row's own lines"
+   },
+   {
+    "name": "Camp Dates",
+    "named": "page",
+    "ownEvidence": "Camp Dates | June 12-13, 2027",
+    "evidence": "Camp Dates | June 12-13, 2027 | Cost: $350 | Boys Session | June 20-21, 2027 | Cost: $350",
+    "pageIsSoccer": true,
+    "expect": true,
+    "why": "the girls' row on a women's soccer page whose window ran into the next row's undated 'Boys Session' heading - over the whole window this row was deleted and the boys' row kept"
+   },
+   {
+    "name": "CAMP DETAILS",
+    "named": "page",
+    "ownEvidence": "CAMP DETAILS | June 15-19, 2027 (Mon-Fri)",
+    "evidence": "CAMP DETAILS | June 15-19, 2027 (Mon-Fri) | Ages: 6-16 | Age Groups: Boys U8-U10, U11-U13",
+    "pageIsSoccer": true,
+    "expect": true,
+    "why": "the ussportscamps/Nike template: one age-group line reading 'Boys U8-U10' took the whole page to zero rows"
+   },
+   {
+    "name": "Camp Dates",
+    "named": "page",
+    "evidence": "Camp Dates | June 6, 2026 | Boys Session",
+    "expect": true,
+    "why": "no ownEvidence at all: the caller cannot say which lines are the row's own, so the gender rule does not run rather than guess"
    },
    {
     "name": "Camps, Clinics and Tournaments",

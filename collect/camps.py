@@ -35,9 +35,11 @@ reads less than the page offers.
   - a row whose name came from the PAGE (page chrome, or the page title) names no sport and no
     gender, so the two unconditional rules above had nothing to read and did not gate it at all.
     harvard published a golf clinic and a boys' youth camp that way, with the evidence sitting in
-    the rows' own windows. Such a row now carries `_named = "page"` and `_evidence`, and is gated on
-    that text (see _row_allowed). The gate runs BEFORE the name repair, so it never reads the
-    repair's own output;
+    the rows' own windows. Such a row now carries `_named = "page"`, `_evidence` (its whole window)
+    and `_evidenceOwn` (its heading line and its date line), and is gated on that text - the sport
+    rule on the window, the gender rule on the row's own lines only, because a window runs into the
+    next row's heading and an unconditional gender rule over it deleted real girls' camps (see
+    _row_allowed). The gate runs BEFORE the name repair, so it never reads the repair's own output;
   - the date lookahead stopped only at a line naming a camp or a clinic, so harvard's lacrosse row
     ran on into a basketball row that used neither word and took its date - a row assembled from two
     sports that never existed on the page. It now also stops at a line that starts its own dated
@@ -587,7 +589,8 @@ def _sport_section(line: str) -> dict | None:
 
 
 def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named: str = "row",
-                 evidence: str | None = None, page_is_soccer: bool = False) -> bool:
+                 evidence: str | None = None, own_evidence: str | None = None,
+                 page_is_soccer: bool = False) -> bool:
     """False when a row is another sport's or another gender's. The name is checked on its own
     (safe anywhere: 'Rod Ray Tennis Camp', "ORU Winter College Men's ID Camp I"); the enclosing
     section applies only on a page that is actually an all-sport hub (see HUB_SPORT_COUNT).
@@ -600,12 +603,31 @@ def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named:
     boys' youth camp that way, with 'golf clinic', "Harvard Golf's coaching staff" and 'rowing'
     sitting unread in the rows' own windows.
 
-    So when the name came from the page rather than from the row, the same two rules are applied to
-    `evidence` - the text the row was actually assembled from - because that is the only evidence
-    the row has. Scoped like the section rule they mirror: the gender rule is unconditional, and the
-    sport rule is suppressed on a page that is the team's own soccer page (`page_is_soccer`), where
-    an 'Other Camps at X' block would otherwise gate away every real row. A row with a name of its
-    own is judged on it exactly as before."""
+    So when the name came from the page rather than from the row, the two rules are applied to the
+    text the row was actually assembled from, because that is the only evidence the row has. The
+    two halves read DIFFERENT spans of it, and the difference is the point:
+
+      * the SPORT rule reads `evidence`, the row's whole window. A sport named anywhere near a row
+        is what the harvard rows had and what nothing else on the page contradicted. Suppressed on
+        a page that is the team's own soccer page (`page_is_soccer`), where an 'Other Camps at X'
+        block would otherwise gate away every real row - the same suppression the section rule has;
+      * the GENDER rule reads `own_evidence`, the row's OWN heading line and date line, and never
+        the trailing detail window.
+
+    The bound on the gender half is not tidiness, it is a bug fix. `evidence` runs to i+6 and stops
+    only at a camp-word line or at _starts_new_row, so an undated heading belonging to the NEXT row
+    lands in THIS row's window. On '2026 Women's Soccer Camps' listing a girls' session and then a
+    'Boys Session', an unconditional gender rule over the whole window deleted the girls' row and
+    kept the boys' one, and left it wearing the women's page title with the boys' dates. On the
+    ussportscamps/Nike template one age-group line reading 'Boys U8-U10' took the page to zero rows;
+    three programs carry 6 of the 20 page-named rows on that template. Over-rejection is the worse
+    failure - nobody sees a camp that is not listed - and the half that closes issue #80's P1 is the
+    sport half: ablating the gender half leaves harvard at 0 rows and the suite one synthetic case
+    from clean, while ablating the sport half puts harvard back to 2.
+
+    `own_evidence` absent means the caller cannot say which lines are the row's own, so the gender
+    rule does not run at all rather than guess. A row with a name of its own is judged on the name
+    exactly as before, evidence or no evidence."""
     t = common.clean(name or "")
     soccer_name = bool(SOCCER_RE.search(t))
     if OTHER_SPORT_RE.search(t) and not soccer_name:
@@ -613,9 +635,10 @@ def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named:
     if MALE_RE.search(t) and not FEMALE_RE.search(t):  # MALE_RE does not fire inside "Women's"
         return False
     if named == "page":
-        ev = common.clean(evidence or "")
-        if MALE_RE.search(ev) and not FEMALE_RE.search(ev):
+        own = common.clean(own_evidence or "")
+        if own and MALE_RE.search(own) and not FEMALE_RE.search(own):
             return False
+        ev = common.clean(evidence or "")
         if not page_is_soccer and OTHER_SPORT_RE.search(ev) and not SOCCER_RE.search(ev):
             return False
     if section is None or not is_hub:
@@ -905,6 +928,9 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
                                  _register_url([a for c in cells for a in c.find_all("a", href=True)], page_url),
                                  page_url),
                         "_section": section, "_evidence": " | ".join(texts),
+                        # a table row's cells ARE its own lines: nothing can bleed in from the row
+                        # below, so the gender rule reads the same span the sport rule does
+                        "_evidenceOwn": " | ".join(texts),
                         "_named": "page" if _is_chrome_name(name) else "row"})
     return out
 
@@ -956,8 +982,12 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
                     out.append({**_entry(page_name, ds[0], _details(window),
                                          _register_url(near, page_url, [e for _t, e, _a in lines[i:i + 6]]), page_url),
                                 "_weak": True, "_section": section,
-                                # named after the page, never after the row: gated on its evidence
-                                "_named": "page", "_evidence": " | ".join([text] + window)})
+                                # named after the page, never after the row: gated on its evidence.
+                                # Its own line is the bare date and nothing else - it has no heading
+                                # of its own to read a gender off, and `window` is the NEXT lines,
+                                # so the gender rule is given the date line alone and stays quiet.
+                                "_named": "page", "_evidence": " | ".join([text] + window),
+                                "_evidenceOwn": text})
             i += 1
             continue
         window = [text]
@@ -989,6 +1019,10 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
                 near.extend(a2)
             j += 1
         if picked:
+            # The row's OWN lines, fixed before the detail window is collected: the heading line and
+            # the date line it took its date from. Everything appended below is the trailing window,
+            # which can and does run into the next row's undated heading - see _row_allowed.
+            own = list(window)
             k = max(j, i + 1)
             while k < len(lines) and k <= i + 6:
                 t3, e3, a3 = lines[k]
@@ -1009,7 +1043,8 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
                 out.append({**_entry(name, d, details, register, page_url),
                             "_weak": weak, "_section": section,
                             "_named": "page" if weak or _is_chrome_name(name) else "row",
-                            "_evidence": " | ".join(window) + (f" | {register}" if register else "")})
+                            "_evidence": " | ".join(window) + (f" | {register}" if register else ""),
+                            "_evidenceOwn": " | ".join(own)})
         i += 1
     return out
 
@@ -1117,7 +1152,8 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     # repair's own output. That ordering is what issue #80 turns on.
     entries = [e for e in entries
                if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
-                               evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)]
+                               evidence=e.get("_evidence"), own_evidence=e.get("_evidenceOwn"),
+                               page_is_soccer=page_is_soccer)]
     if page_name and not _is_chrome_name(page_name):
         for e in entries:
             if _is_chrome_name(e["name"]):
