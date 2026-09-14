@@ -1157,14 +1157,26 @@ def _article_body(soup):
 # broken towards showing less - a kids' camp in the view is the thing that was asked against, while
 # an ID camp missing from it is still one click away on the program page.
 #
-# "Day camp" is NOT an age token. It describes the format - no overnight stay - and seattle's "ELITE
-# DAY CAMP PROGRAM" is an elite camp that happens not to board. So it is a weaker signal: it means
-# youth only when nothing in the name says ID. It still catches florida-state's "Day Camp",
+# "Day camp" is NOT an age token. It describes the format - no overnight stay - so it is a weaker
+# signal: it means youth only when nothing in the name says ID. That is what lets '2 Day ID Camp'
+# and 'One Day ID Camp' classify `id`, and it still catches florida-state's "Day Camp",
 # western-kentucky's "Half Day Camp" and navy's "Girls Soccer Day Camp", which have no ID token.
+# (The rule was originally justified by seattle's "ELITE DAY CAMP PROGRAM"; that was the wrong
+# exemplar - see classify_camp - but the rule holds on its own cases.)
+#
+# `little`, `junior`, `juniors` and `jr` were dropped from the age vocabulary. They matched ZERO of
+# the 130 stored names, and each misfires on input this registry can produce: `little` classifies
+# "Little Rock Fall ID Camp" as youth and `little-rock` IS a program here, with 0 camp rows today
+# only because the collector has found no page for it; `junior` classifies "Junior College ID Camp"
+# and "Junior Varsity ID Clinic" as youth, and in this domain `junior` more often means a school
+# year - an ID-eligible one - than a small child. Dropping them moves none of the 130: the split is
+# 78 id / 23 youth / 29 unknown either way. `youth`, `kids` and `mini` earn their place with 15, 1
+# and 1 hits; the rest of the vocabulary is unexercised but harmless, because it names no place and
+# no school year.
 CAMP_ID_RE = re.compile(r"\bID\b|\bI\.D\.|(?i:\b(?:prospect|elite|showcase|recruit|college|collegiate|"
                         r"high[- ]school|identification)\b)")
 CAMP_AGE_RE = re.compile(
-    r"\b(?:youth|junior|juniors|jr|kid|kids|child|children|little|mini|tot|tots|peewee|pee[- ]wee|"
+    r"\b(?:youth|kid|kids|child|children|mini|tot|tots|peewee|pee[- ]wee|"
     r"elementary|grade[- ]school|middle[- ]school|micro)\b|"
     r"\bgrades?\s*(?:k|pre-?k|[1-8])\s*(?:-|–|to|through)\s*[1-8]\b|"                # 'Grades 1-6', 'Grades K-8'
     r"\bages?\s*\d{1,2}\s*(?:-|–|to|through)\s*(?:[1-9]|1[0-2])\b|"                  # 'ages 6-12'
@@ -1179,7 +1191,22 @@ def classify_camp(name: str | None) -> str:
     Camps" are genuine women's soccer camps whose names say nothing about who they are for. The view
     excludes them, because "make sure only" is the instruction; the program page still shows them.
     Keeping them out of `id` is what makes the unknown count worth publishing - a classifier that
-    guessed would hide its own drift behind a confident label."""
+    guessed would hide its own drift behind a confident label.
+
+    Known false `id`, 2 of the 78 and 0 of the 34 upcoming, both resting SOLELY on the `elite`
+    token - every other ID token has no sole-support false positive, and 39 of the 78 rest on a bare
+    `\\bID\\b`:
+
+      * clemson's 'Summer Pre-Elite Camp' - 'Pre-Elite' is normally the developmental, younger tier;
+      * seattle's 'ELITE DAY CAMP PROGRAM'. This one was cited the wrong way round when the "day
+        camp is a format, not an age" rule was written. seattle's camps page is
+        ussportscamps.com/soccer/nike/nike-soccer-camp-seattle-university and its sibling rows are
+        'ALL SKILLS DAY CAMP PROGRAM' and 'Nike Soccer Camp at Seattle University' x3 - on a Nike
+        page 'Elite Day Camp' is a youth PRODUCT TIER, not a college ID event. So the rule added to
+        prevent a false `youth` produces a false `id` here, which is the direction the owner's "make
+        sure only" rules against. The rule stands on its other cases ('2 Day ID Camp', 'One Day ID
+        Camp'), not on this one; fixing seattle needs the URL or the sibling rows, which a name-only
+        classifier does not have."""
     t = common.clean(name or "")
     if not t:
         return "unknown"

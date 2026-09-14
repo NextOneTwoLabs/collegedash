@@ -218,6 +218,12 @@ def test_classify() -> None:
     exercises is removed - which is what keeps this from being a list of things that cannot fail.
     The precedence pair is the point: an age token beats an ID token, because "make sure only" means
     ties break towards showing less.
+
+    The `little` / `junior` block is the exception to "a real name from the corpus", deliberately:
+    those two tokens matched ZERO of the 130 stored names and were dropped, and the cases below are
+    the input that makes putting them back fail. `little-rock` is a program in this registry with 0
+    camp rows today only because the collector has found no page for it, so "Little Rock Fall ID
+    Camp" is not a hypothetical - it is what that program's first parsed page will produce.
     """
     print("classify: classify_camp and camp_counts")
     cases = [
@@ -243,6 +249,15 @@ def test_classify() -> None:
         ("Nike Soccer Camp at Seattle University", "unknown"),
         ("", "unknown"),
         (None, "unknown"),
+        # `little` and `junior` dropped from CAMP_AGE_RE: zero hits on the corpus, and each hides a
+        # real ID camp. little-rock is a program in this registry.
+        ("Little Rock Fall ID Camp", "id"),
+        ("UA Little Rock ID Clinic", "id"),
+        ("Junior College ID Camp", "id"),
+        ("Junior Varsity ID Clinic", "id"),
+        ("Bill Smith Jr. Soccer Camp", "unknown"),
+        # and the tokens that do earn their place still fire: youth 15 hits, kids 1, mini 1
+        ("Little Kickers Youth Camp", "youth"),
     ]
     for name, want in cases:
         got = build.classify_camp(name)
