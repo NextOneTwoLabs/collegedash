@@ -43,9 +43,24 @@ COMMITS_DATA_DIR = os.path.join(DATA_DIR, "commitments")
 SCHEMA_PATH = os.path.join(ROOT, "schema", "profile.schema.json")
 CACHE_DIR = os.path.join(ROOT, ".cache", "http")
 
+# The collector says what it is instead of impersonating a browser (issue #73). A site operator
+# reading their logs can tell this traffic from a person's, look the project up at the URL, and --
+# because ROBOTS_AGENT below is this same product token -- write a robots.txt rule addressed to us
+# that robots_allowed() will actually honour. Naming ourselves is also what gets us *through*:
+# a Chrome string arriving without a Chrome TLS and header fingerprint is a classic bot signature,
+# and the WAF that five of the refusing camp hosts share rejects it while letting a self-declared
+# agent past -- seven of the eight hosts that 403'd the browser string answered 200 to this one.
+#
+# Shape follows Googlebot/CCBot: product token, version, +URL, plain-language purpose. Deliberately
+# not browser-shaped with a project name bolted on, which reads as neither one thing nor the other.
+# Bump USER_AGENT_VERSION when the crawl behaviour changes, not per commit. Keep the string here:
+# every collector inherits it through DEFAULT_HEADERS and nothing should hand-write a second one.
+USER_AGENT_PRODUCT = "CollegeDashBot"
+USER_AGENT_VERSION = "1.0"
+USER_AGENT_URL = "https://github.com/NextOneTwoLabs/collegedash"
 USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+    f"{USER_AGENT_PRODUCT}/{USER_AGENT_VERSION} "
+    f"(+{USER_AGENT_URL}; automated collector for a public college soccer dashboard)"
 )
 DEFAULT_HEADERS = {
     "User-Agent": USER_AGENT,
@@ -183,11 +198,19 @@ def _polite_wait(url: str) -> None:
 # Hosts outside the athletics sites (camp vendors, coaches' own sites) are checked against their
 # robots.txt before a request is made. Cached per host for the life of the process (never on disk,
 # so a denied host leaves no trace in .cache/http; a redirect onto a denied host is fetched once and
-# the entry is then removed with forget_cached). A Crawl-delay for '*' raises that host's gap
-# between requests above MIN_GAP_SECONDS.
+# the entry is then removed with forget_cached). A Crawl-delay that applies to us raises that host's
+# gap between requests above MIN_GAP_SECONDS.
+#
+# Rules are evaluated as our own product token, not as '*' (issue #73). Once the User-Agent names
+# the project a site operator can write a group addressed to CollegeDashBot, and ignoring it would
+# be worse than the anonymity it replaced: we would have advertised an identity and then disregarded
+# instructions given to it. robotparser resolves this the way RFC 9309 asks -- a group naming us
+# wins outright, and only when no group names us does the '*' group apply -- for can_fetch and for
+# crawl_delay alike, so passing the token here is the whole change. Pinned in tests/robots_ua_test.py
+# rather than assumed. Token only, no '/1.0': that is what a robots.txt group is written against.
 _robots: dict[str, "robotparser.RobotFileParser"] = {}
 _host_delay: dict[str, float] = {}
-ROBOTS_AGENT = "*"
+ROBOTS_AGENT = USER_AGENT_PRODUCT
 
 
 def set_robots_txt(host: str, text: str | None) -> None:
@@ -235,8 +258,10 @@ def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
 
 
 def robots_allowed(url: str) -> bool:
-    """True when `url` may be fetched under the host's robots.txt (agent '*'). 4xx = allowed;
-    unreachable or 5xx = disallowed. Records the host's Crawl-delay for _polite_wait."""
+    """True when `url` may be fetched under the host's robots.txt, evaluated as ROBOTS_AGENT --
+    the product token this collector puts in its User-Agent -- falling back to the '*' group when
+    no group names us. 4xx = allowed; unreachable or 5xx = disallowed. Records the host's
+    Crawl-delay for _polite_wait."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False

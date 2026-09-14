@@ -49,10 +49,12 @@ RANK_YEAR = 2026
 TABLE_ID = "rankingTable"
 RANKING_HREF = re.compile(r"/world-university-rankings/([^/?#]+)")
 
-# A descriptive agent rather than the browser string collect.common sends by default: this is one
-# annual read of one public page, and the publisher should be able to see who asked for it.
+# This path used to hand-write its own descriptive agent because collect.common sent a browser
+# string. common.USER_AGENT is now descriptive itself (issue #73), so there is one agent for the
+# whole collector and this is the shared one. Kept as a dict because tools/the_rank_derive.py
+# extends it with an Accept header for the SPARQL endpoint.
 HEADERS = {
-    "User-Agent": "CollegeDashBot/1.0 (+https://college.nextonetwo.com; annual ranking asset refresh)",
+    "User-Agent": common.USER_AGENT,
 }
 
 US_RANK_RE = re.compile(r"^(=?)(\d+)$")
