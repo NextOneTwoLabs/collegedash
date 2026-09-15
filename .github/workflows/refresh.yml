@@ -21,6 +21,16 @@ name: Refresh program data
 #                       it finds) rather than the full run's ~1,400 runs and ~2,800 requests.
 #   full=true        -> every collector
 #   otherwise the schedule branches above.
+# Whatever the mode, the commit step rebuilds public/data from the stored sources after it rebases
+# onto the current main and before it pushes, so a run always publishes data built by the code it is
+# committing onto, never by the code it checked out hours earlier (issue #75). build and validate
+# both gate that push: if the rebuild crashes or breaks an invariant, main is not touched at all -
+# not the rebuilt profiles, and not that run's freshly collected rpi tables or registry.json either -
+# so the live site keeps serving exactly what it served before. The run's whole collection is pushed
+# to a per-run branch, refresh-sources/<run id>-<run attempt>-<push attempt>, where it can be
+# inspected and reproduced, merged deliberately once the cause is known, and - the point of keeping
+# it off main - cannot poison the next day's rebuild. Nothing deletes those branches: they are one
+# commit each and are meant to be deleted by hand once the failure has been triaged.
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -160,17 +170,150 @@ jobs:
           if [ "$BUILD_ONLY" = "true" ]; then verb=rebuild; fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          stamp=$(date -u +%Y-%m-%dT%H:%MZ)
           git add -A
-          git commit -m "data: $verb $(date -u +%Y-%m-%dT%H:%MZ)"
-          # main may have moved while the collectors ran (a push from a developer machine), which
-          # makes a plain push non-fast-forward. Rebase onto upstream first; on a data-file conflict the
-          # freshly collected version wins (-X theirs = this commit during a rebase). Retry a few times
-          # in case another push lands in between.
-          for attempt in 1 2 3; do
-            if git pull --rebase -X theirs origin main && git push; then
-              exit 0
+          git commit -m "data: $verb $stamp"
+          # main may have moved while the collectors ran (a push from a developer machine, or a PR
+          # merged mid-run), which makes a plain push non-fast-forward. Rebase onto upstream first;
+          # on a data-file conflict the freshly collected version wins (-X theirs = this commit
+          # during a rebase). Retry a few times in case another push lands in between.
+          #
+          # Issue #75: the rebase brings in newly merged *code* but rebuilds nothing, so without the
+          # rebuild below the commit publishes public/data built by the code checked out up to two
+          # hours ago - and -X theirs makes that stale data overwrite what the merged PR published.
+          # So rebuild from the stored sources after every rebase and before every push, and amend
+          # the data commit with the result. The rebuild is inside the loop on purpose: a rejected
+          # push means a second rebase onto a different main, which needs a second rebuild.
+          # It runs unconditionally, build_only included - a build_only run races the same way, just
+          # over one minute instead of two hours - so that every run exercises this path rather than
+          # only the rare one where it matters. Measured at 5.3s for all 350 profiles on the runner.
+          #
+          # Both gates below refuse to publish data. Neither should throw the run's collection away
+          # with it: the sources are the expensive half (two hours of HTTP) and on a build crash they
+          # are also the only evidence of what broke. But the collection must not go to *main*
+          # either. A source that fails a gate fails it again on every later run, and only the daily
+          # collectors (tds, soccerwire, news, rpi) re-collect the program the next morning and
+          # overwrite it. camps and wikipedia run on Mondays, so a bad one of those left on main
+          # wedges every rebuild until the following Monday - six days of frozen program data and
+          # seven red runs; scorecard and climate have no scheduled run at all, so the wedge is
+          # unbounded. Two defects that do exactly this are reachable today from one field of one
+          # stored camps source (price: 250 fails validate; startDate: 20260601 crashes build.py:459).
+          #
+          # So the whole commit goes to a per-run branch instead, and main is left exactly as the
+          # rebase found it. The collection survives, is reproducible by checking the branch out, and
+          # is merged by a human who knows which of the two causes it was; the daily runs keep
+          # publishing in the meantime. One branch per run attempt *and* per push attempt, because
+          # GITHUB_RUN_ID is stable across a "Re-run all jobs" and a stale ref would then reject the
+          # push - losing the collection in the one place it must not be lost. All three components
+          # are digits, so the ref name is always valid and always unique.
+          #
+          # public/data is still restored before the commit, so that what lands on the branch is a
+          # clean "sources ahead of data" snapshot rather than a half-written build. Only what
+          # build() writes is restored: public/data/programs/**, commitments/index.json,
+          # camps/index.json. public/data/rpi/** and registry.json look derived but are *collected* -
+          # collect/rpi.py writes current.json and the weekly snapshots, and the site fetches
+          # rpi/current.json directly - so restoring all of public/data would discard part of the
+          # very collection this exists to save, and would leave a later build_only joining fresh
+          # program sources onto a stale RPI table: issue 75's own shape, one level down.
+          # rm -rf first because `git checkout <rev> -- <path>` restores what <rev> has and never
+          # deletes the extras, and a crashed build can leave a profile upstream has no file for.
+          #
+          # The assertion after the restore is the load-bearing guard, not the `if ! git checkout`
+          # above it: it is what catches a restore that failed *and* a restore that silently did
+          # nothing, and it is stated as "public/data, except the collected parts" rather than as the
+          # list just restored, so a fifth build() output added later is a hard stop here instead of
+          # a silent publish. The exclusions are the machine-checked version of the paragraph above.
+          #
+          # `bash -e` is suspended for the whole dynamic extent of a function invoked as an `if`
+          # condition, so nothing in here fails the step by itself and every command that must not be
+          # skipped is checked. The amend is the one to understand: the rebuild is never committed,
+          # so an unguarded failure leaves HEAD holding the *pre-rebase* tree - issue 75 itself,
+          # built by the code checked out hours ago - and pushes it under the subject
+          # "data: refresh <stamp>" while the annotation describes a sources-only snapshot. Measured.
+          # That lands on the branch, not on main, so it is a mislabelled branch rather than the
+          # silent inversion it would be if this pushed to main; it is still worth the guard.
+          #
+          # Returns 0 when the collection is safe on its branch (the caller then fails the run) and 1
+          # when the push was rejected and the caller should retry. Every other failure annotates and
+          # exits from in here, because the retry loop cannot recover from a dirty index - git pull
+          # --rebase refuses outright - and would otherwise spend 30s printing "retrying" at an
+          # operator who is owed a diagnosis instead.
+          publish_sources_only() {
+            branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-$2"
+            rm -rf public/data/programs
+            if ! git checkout FETCH_HEAD -- public/data/programs public/data/commitments/index.json public/data/camps/index.json; then
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data could not then be restored to what $onto holds. Nothing was pushed anywhere: main is still $onto and the live site is unchanged - but this run's collection was NOT saved either, it exists only on this runner. Re-dispatch this workflow to collect again."
+              exit 1
             fi
-            echo "push rejected (attempt $attempt); retrying in 15s"
+            git add -A
+            if ! git diff --quiet FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json and camps/index.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+              exit 1
+            fi
+            if git diff --quiet FETCH_HEAD --; then
+              echo "::error title=refresh::$1 on the data rebuilt onto $onto. Nothing was published: main is still $onto and the live site is unchanged. This run collected nothing of its own - build_only does not - so there is nothing to preserve and no sources branch was created. Fix the cause on main and dispatch build_only=true again."
+              exit 1
+            fi
+            if ! git commit --amend -m "data: sources only $stamp" \
+              -m "$1 on the rebuild onto $onto. Nothing here was published to main, which is still $onto. This commit holds the run's collected programs/*/sources, public/data/rpi and registry.json; everything build() writes is exactly as $onto has it, so checking this branch out and running build then validate reproduces the failure. Merge it only once you know the cause was bad code and not a bad source (issue 75)."; then
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and the sources-only commit could not be created. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+              exit 1
+            fi
+            if ! git push origin "HEAD:refs/heads/$branch"; then
+              echo "::warning title=refresh::$1 on the rebuild onto $onto, and pushing the collection to $branch was rejected. Retrying."
+              return 1
+            fi
+            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json, with everything build() writes (public/data/programs, commitments/index.json, camps/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
+            return 0
+          }
+          for attempt in 1 2 3; do
+            if git pull --rebase -X theirs origin main; then
+              # A rebase drops a commit that came out empty, leaving HEAD at upstream's tip - and the
+              # amend below would then be amending someone else's commit. This is reachable, in two
+              # ways: the collector pass can crash before its own build, so public/data is untouched
+              # and _build.builtAt is not refreshed, and a human pushing an identical source edit
+              # meanwhile makes the replayed commit empty; or a push lands but its acknowledgement is
+              # lost, and the next attempt finds its own commit already upstream.
+              # The remote is not at risk either way - there is no --force here, so git would reject
+              # the push as non-fast-forward and the next attempt would rebase the amended commit
+              # into an ordinary one on top. What the guard actually saves is that wasted cycle and a
+              # spurious duplicate data commit, which is worth three lines on its own.
+              # FETCH_HEAD rather than origin/main: it is written by the pull itself, whatever
+              # refspec checkout configured.
+              if [ "$(git rev-parse HEAD)" = "$(git rev-parse FETCH_HEAD)" ]; then
+                echo "The rebase dropped the data commit as empty; main already holds this data."
+                exit 0
+              fi
+              onto=$(git rev-parse --short FETCH_HEAD)
+              # Deliberate behaviour change (see the PR for #75): build and validate both gate the
+              # data publish now, on every path rather than only build_only. The rebuild is what
+              # first runs merged-mid-run code against the full corpus, so publishing its output
+              # unchecked would swap one silent corruption for another. `build` raising is a
+              # documented event here (README, "Refresh runs and failures": rpi: no season table
+              # resolved), which is exactly why a gate failure keeps the run's collection on a
+              # branch rather than discarding it.
+              if ! python collegedash.py build; then
+                if publish_sources_only "build failed" "$attempt"; then exit 1; fi
+              elif ! python collegedash.py validate; then
+                if publish_sources_only "validate failed" "$attempt"; then exit 1; fi
+              else
+                git add -A
+                # --amend, not a second commit: one run stays one commit, and a retry re-amends the
+                # same commit instead of stacking one per attempt. The body records what it was built
+                # onto, which is the only thing a second commit would have made more visible. No "#"
+                # on the issue number: GitHub would cross-reference issue 75 from every daily commit.
+                # No `|| ...` on this amend, unlike the ones in the function above: errexit applies
+                # normally in this `else` *body*, so a failed amend aborts the step before the push.
+                # Do not "fix the inconsistency" in either direction - both shapes fail closed only
+                # where they are.
+                git commit --amend -m "data: $verb $stamp" \
+                  -m "Rebuilt from the stored sources onto $onto after rebasing, so the published data is the output of the code it is committed onto (issue 75)."
+                if git push; then
+                  exit 0
+                fi
+              fi
+            fi
+            echo "attempt $attempt did not publish; retrying in 15s"
             git rebase --abort 2>/dev/null || true
             sleep 15
           done
