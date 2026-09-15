@@ -143,7 +143,7 @@ REVIEWED_NOT_LISTED = {
 # to leave Pensacola null because Florida spans two zones.
 #
 # Source: the timezone-boundary-builder polygons (built from OpenStreetMap, ODbL), looked up offline by
-# the `timezonefinder` package, which bundles them. The coordinates are the College Scorecard row's.
+# the `timezonefinder` package, which bundles them (requirements-registry.txt). The coordinates are the College Scorecard row's.
 _TZ_FINDER = None
 
 
@@ -155,7 +155,10 @@ def timezone_at(lat, lon) -> str | None:
     if lat is None or lon is None:
         return None
     if _TZ_FINDER is None:
-        from timezonefinder import TimezoneFinder
+        try:
+            from timezonefinder import TimezoneFinder
+        except ImportError as e:  # the registry build's own extra, not part of requirements.txt (PR #112 review, F6)
+            raise ImportError("timezonefinder is not installed: pip install -r requirements-registry.txt") from e
         _TZ_FINDER = TimezoneFinder()
     return _TZ_FINDER.timezone_at(lat=float(lat), lng=float(lon))
 

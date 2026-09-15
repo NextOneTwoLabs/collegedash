@@ -408,7 +408,7 @@ def test_timezones() -> None:
     print("timezones: boundaries, not states")
     # Real lookups through timezonefinder. Each pair is two campuses in ONE state on different clocks,
     # so any state-based rule gets at least one of them wrong. An ImportError here is a failure, not a
-    # skip: CI installs requirements.txt, and a missing library must not look like a null timezone.
+    # skip: CI installs requirements-registry.txt (tests.yml), and a missing library must not look like a null timezone.
     try:
         cases = (("Pensacola, FL (West Florida)", 30.549076, -87.218511, "America/Chicago"),
                  ("Tallahassee, FL (Florida State)", 30.443147, -84.295064, "America/New_York"),
@@ -421,8 +421,17 @@ def test_timezones() -> None:
             got = rb.timezone_at(lat, lon)
             ok(f"{label} is {want}", got == want, str(got))
     except ImportError as e:
-        ok("timezonefinder is installed (requirements.txt)", False, str(e))
+        ok("timezonefinder is installed (requirements-registry.txt)", False, str(e))
     ok("no coordinates, no timezone", rb.timezone_at(None, -87.2) is None and rb.timezone_at(30.5, None) is None)
+    # F6: the refresh installs requirements.txt only, so the lookup must not be in it, and the extra must be capped
+    req = open(os.path.join(ROOT, "requirements.txt"), encoding="utf-8").read()
+    extra = open(os.path.join(ROOT, "requirements-registry.txt"), encoding="utf-8").read()
+    ok("timezonefinder is not in requirements.txt, which the data refresh installs", "timezonefinder" not in req)
+    ok("requirements-registry.txt pins timezonefinder below 10", "timezonefinder>=6.5,<10" in extra, extra)
+    refresh = open(os.path.join(ROOT, ".github", "workflows", "refresh.yml"), encoding="utf-8").read()
+    tests_yml = open(os.path.join(ROOT, ".github", "workflows", "tests.yml"), encoding="utf-8").read()
+    ok("the refresh does not install the registry extra, and the Tests workflow does",
+       "requirements-registry.txt" not in refresh and "-r requirements-registry.txt" in tests_yml)
 
     with with_pins():
         registry, directory = world()

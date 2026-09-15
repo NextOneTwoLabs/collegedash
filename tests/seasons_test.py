@@ -28,7 +28,9 @@ Covers, in order:
               (issue #110): a lastSeason with a record for every program with a record for 2025,
               an RPI rank exactly where the program has a row under its own ids, and both absent -
               correctly, and checked as such - for a program with none (a new D1 program, any D2 or D3
-              one). Plus the per-program coverage of #3's examples
+              one). Plus the per-program coverage of #3's examples, and an anchor that does not come
+              from the ids or the loaders at all: every long-standing D1 program keeps its RPI ids, every RPI
+              season it published before #110, and its 2025 lastSeason (PR #112 review, M1)
   flip        the time bomb: relabelling current.json as the next season must not erase the last
               one, because the finished season comes from its immutable weekly snapshot
   archive+    the maintenance landmine: extending the archive over a season a snapshot covers takes
@@ -64,6 +66,10 @@ from collect import common  # noqa: E402
 # season that only exists because of this change.
 FINISHED = 2025
 SNAPSHOT = os.path.join(common.RPI_OUT_DIR, "weekly", str(FINISHED), f"{FINISHED}-12-08.json")
+
+# Long-standing D1 programs and the RPI seasons each published before issue #110 (PR #112 review, M1).
+PRE_100 = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-100-programs.json")
+RPI_ANCHOR = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-110-rpi-seasons.json")
 
 FAILS: list[str] = []
 TOTAL = 0
@@ -214,6 +220,37 @@ def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
 
 def _last(rows: dict, slug: str) -> dict:
     return (rows.get(slug) or {}).get("lastSeason") or {}
+
+
+def check_anchor(registry: dict, rows: dict[str, dict], label: str) -> None:
+    """What the entitlements cannot see (PR #112 review, M1). They are computed from the registry ids and the
+    RPI loaders, the same inputs the build reads, so a fault in either moves the expectation with the output:
+    nulling rpiHistoryName and ncaaName on 40 programs passed every entitlement check while 40 profiles lost
+    their RPI history. These checks do not use either input. The anchor is a fixed list, independent of the
+    data under test: the long-standing D1 programs (tests/fixtures/registry/pre-100-programs.json) and the RPI
+    seasons each of them published before this change. Past seasons do not disappear, so a program still
+    published in D1 must keep its ids, keep at least those seasons, and keep a 2025 lastSeason with a record.
+    A new program (West Florida) or a non-D1 one is not in the anchor and is not affected."""
+    pre = {p["slug"] for p in json.load(open(PRE_100, encoding="utf-8"))["programs"]}
+    anchor = json.load(open(RPI_ANCHOR, encoding="utf-8"))["programs"]
+    progs = [p for p in build.published_programs(registry) if p["slug"] in pre and p.get("division") == "D1"]
+    ok(f"{label}: the anchor covers the long-standing D1 programs still published", bool(progs)
+       and all(p["slug"] in anchor for p in progs), str([p["slug"] for p in progs if p["slug"] not in anchor][:5]))
+    # ncaaName for every one; rpiHistoryName for those with archive seasons (new-haven joined D1 in 2025 and has none)
+    lost_ids = [p["slug"] for p in progs
+                if not (p.get("ids") or {}).get("ncaaName")
+                or (any(y < FINISHED for y in anchor.get(p["slug"], {}).get("rpiYears", [])) and not (p.get("ids") or {}).get("rpiHistoryName"))]
+    ok(f"{label}: every long-standing D1 program keeps its RPI ids", not lost_ids, f"{len(lost_ids)}: {lost_ids[:6]}")
+    lost_years = {p["slug"]: sorted(set(anchor[p["slug"]]["rpiYears"]) - {h["year"] for h in (rows.get(p["slug"]) or {}).get("rpiHistory") or []})
+                  for p in progs if p["slug"] in anchor}
+    lost_years = {k: v for k, v in lost_years.items() if v}
+    ok(f"{label}: every long-standing D1 program still publishes every RPI season it published before", not lost_years,
+       f"{len(lost_years)}: {dict(list(lost_years.items())[:4])}")
+    lost_last = [p["slug"] for p in progs if anchor.get(p["slug"], {}).get("lastSeasonRecord")
+                 and not (((rows.get(p["slug"]) or {}).get("lastSeason") or {}).get("year") == FINISHED
+                          and rows[p["slug"]]["lastSeason"].get("record"))]
+    ok(f"{label}: every long-standing D1 program still publishes a {FINISHED} lastSeason with a record", not lost_last,
+       f"{len(lost_last)}: {lost_last[:6]}")
 
 
 def check_published_against(ent: dict[str, dict], rows: dict[str, dict], built: str | None, label: str) -> None:
@@ -412,6 +449,7 @@ def test_build(registry: dict, built: str, log: str) -> None:
     ok("index.json carries a row for each published program", bool(rows) and
        sorted(rows) == sorted(p["slug"] for p in build.published_programs(registry)), f"{len(rows)} rows")
     check_published_against(entitlements(registry), rows, built, "build")
+    check_anchor(registry, rows, "build")
 
     # Issue #3's own examples, and the coverage each one is expected to have.
     for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
@@ -454,6 +492,7 @@ def test_flip(registry: dict) -> None:
         ok("the rebuild still validates", not complaints(log), complaints(log)[:400])
         # entitlements are read from the relabelled tables, the same ones the rebuild read
         check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "flip")
+        check_anchor(registry, rows, "flip")
         ok(f"no lastSeason is the newly labelled {cur_season}",
            not [r for r in rows.values() if (r.get("lastSeason") or {}).get("year") == cur_season])
         s = season_of(vandy["seasons"], FINISHED)
@@ -489,6 +528,8 @@ def test_archive_extended(registry: dict) -> None:
         # The Record column must not lose a single entitled program to the new sheet: publishing 173
         # lastSeasons instead of 350 was the bug. Entitlements read the same extended tables.
         check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "archive+snapshot")
+        # the synthesised sheet re-ranks 2025 but must not cost any program a season, an id or its lastSeason
+        check_anchor(registry, rows, "archive+snapshot")
 
         # The synthesised sheet's ranks are deliberately wrong, so a published rank names its source.
         v = season_of(profile(built, "vanderbilt")["seasons"], FINISHED)

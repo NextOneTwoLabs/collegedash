@@ -77,11 +77,8 @@ def _age_days(iso: str | None) -> float | None:
 
 # ---------- the published set ----------
 
-# pruning refuses to delete more than this share of the profiles on disk in one build, unless
-# COLLEGEDASH_PRUNE_MAX_SHARE says otherwise: a registry that loads short, or an onboardedDivisions
-# typo, looks exactly like hundreds of programs leaving at once, and those are live pages.
-PRUNE_MAX_SHARE = float(os.environ.get("COLLEGEDASH_PRUNE_MAX_SHARE", "0.10"))
-_PROFILE_FILE = re.compile(r"^([a-z0-9][a-z0-9-]*)\.json$")
+KNOWN_DIVISIONS = {"D1", "D2", "D3"}
+_PROFILE_FILE = re.compile(r"([a-z0-9][a-z0-9-]*)\.json")
 
 
 def published_programs(registry: dict) -> list[dict]:
@@ -96,42 +93,87 @@ def published_programs(registry: dict) -> list[dict]:
 
 
 def profile_slugs_on_disk(out_dir: str) -> set[str]:
-    """Slugs of the <slug>.json profiles in out_dir. index.json and anything not shaped like a slug
-    (temp files, stray names) are not profiles and are never touched."""
+    """Slugs of the <slug>.json profiles in out_dir: regular files whose whole name is a slug plus
+    `.json`. index.json, temp files, stray names, and anything that is not a regular file (a directory
+    or a symlink carrying a profile's name) are not profiles and are never touched."""
     if not os.path.isdir(out_dir):
         return set()
-    return {m.group(1) for f in os.listdir(out_dir) if (m := _PROFILE_FILE.match(f)) and f != "index.json"}
+    with os.scandir(out_dir) as it:
+        return {m.group(1) for e in it
+                if e.name != "index.json" and (m := _PROFILE_FILE.fullmatch(e.name)) and e.is_file(follow_symlinks=False)}
 
 
-def prune_profiles(published: set[str], out_dir: str, *, max_share: float | None = None) -> list[str]:
-    """Delete out_dir/<slug>.json for every slug outside `published`; return the slugs deleted.
+def prune_explanations(registry: dict) -> dict[str, str]:
+    """slug -> why the registry says this program is not published. Deliberately written without
+    published_programs(), so a bug in that function cannot explain its own deletions:
+      - an entry of heldPrograms (reclassified out, or in no Directory list);
+      - an entry of programs that is not onboarded;
+      - an entry of programs whose division is not in onboardedDivisions."""
+    out: dict[str, str] = {}
+    onboarded = registry.get("onboardedDivisions")
+    for p in registry.get("heldPrograms") or []:
+        out[p["slug"]] = f"held ({(p.get('hold') or {}).get('reason', 'no reason recorded')})"
+    for p in registry.get("programs") or []:
+        if not p.get("onboarded"):
+            out[p["slug"]] = "in the registry but not onboarded"
+        elif onboarded is not None and p.get("division") not in onboarded:
+            out[p["slug"]] = f"division {p.get('division')} is not onboarded"
+    return out
 
-    Guards, each against a bug that would delete live pages rather than stale ones:
-      - an empty published set raises (a registry that failed to load is not "no programs");
-      - every published slug must already have its profile on disk, i.e. pruning runs after the
-        writes, so a crash half-way through a build cannot be followed by a prune;
-      - more than max_share of the profiles on disk raises and deletes nothing;
-      - a published slug is never deleted, checked again per file.
+
+def plan_prune(registry: dict, published: set[str], out_dir: str, *, allow_unexplained: frozenset[str] = frozenset()) -> dict[str, str]:
+    """slug -> reason, for every profile in out_dir that pruning will delete. Raises, deleting nothing,
+    unless every profile outside the published set is explained by the registry (see
+    prune_explanations). No share cap: a D2 switch-off is fully explained and needs no override,
+    while a registry that loaded short leaves slugs nothing explains and is refused whatever the count.
+
+    Refused outright:
+      - an empty published set (a registry that failed to load is not "no programs");
+      - onboardedDivisions naming a division that does not exist, which would explain every program away;
+      - a slug that is both published and explained, which means the two readings of the registry disagree;
+      - a profile the registry does not explain. `allow_unexplained` names such slugs one by one for a
+        single run (`python build.py --allow-unexplained-prune a,b`); a slug in it that is not actually
+        stale on disk also raises, so an override cannot outlive the files it was written for.
     """
-    max_share = PRUNE_MAX_SHARE if max_share is None else max_share
     if not published:
         raise RuntimeError("prune: the published set is empty; refusing to delete any profile")
-    on_disk = profile_slugs_on_disk(out_dir)
-    unwritten = sorted(published - on_disk)
-    if unwritten:
-        raise RuntimeError(f"prune: {len(unwritten)} published programs have no profile on disk "
-                           f"({', '.join(unwritten[:5])}); pruning runs only after every profile is written")
-    stale = sorted(on_disk - published)
-    if stale and len(stale) > max_share * len(on_disk):
-        raise RuntimeError(f"prune: {len(stale)} of {len(on_disk)} profiles are outside the published set "
-                           f"(limit {max_share:.0%}); refusing to delete any. If this is a real membership change, "
-                           f"rebuild with COLLEGEDASH_PRUNE_MAX_SHARE set. First few: {', '.join(stale[:8])}")
-    for slug in stale:
-        if slug in published:  # unreachable by construction; kept because the cost of being wrong is a live page
+    onboarded = registry.get("onboardedDivisions")
+    if onboarded is not None and (not onboarded or set(onboarded) - KNOWN_DIVISIONS):
+        raise RuntimeError(f"prune: onboardedDivisions {onboarded!r} is not a non-empty list of {sorted(KNOWN_DIVISIONS)}; "
+                           f"refusing to delete any profile")
+    explained = prune_explanations(registry)
+    both = sorted(published & set(explained))
+    if both:
+        raise RuntimeError(f"prune: {len(both)} programs are both published and explained as unpublished "
+                           f"({', '.join(both[:5])}); refusing to delete any profile")
+    stale = profile_slugs_on_disk(out_dir) - published
+    unexplained = sorted(stale - set(explained) - set(allow_unexplained))
+    if unexplained:
+        raise RuntimeError(f"prune: {len(unexplained)} profiles are outside the published set and nothing in the registry "
+                           f"explains why ({', '.join(unexplained[:8])}); refusing to delete any. A registry that loaded "
+                           f"short looks exactly like this. If these programs really were removed, name them for one run: "
+                           f"python build.py --allow-unexplained-prune {','.join(unexplained[:3])}")
+    unused = sorted(set(allow_unexplained) - (stale - set(explained)))
+    if unused:
+        raise RuntimeError(f"prune: --allow-unexplained-prune names {', '.join(unused)}, which is not an unexplained "
+                           f"stale profile here; refusing to delete any profile")
+    return {slug: explained.get(slug, "named by --allow-unexplained-prune") for slug in sorted(stale)}
+
+
+def prune_profiles(plan: dict[str, str], published: set[str], out_dir: str) -> list[str]:
+    """Delete the profiles plan_prune decided on; return the slugs deleted. Every target is re-checked
+    before anything is removed: it must not be published and must still be a regular profile file, so
+    a directory or symlink that appeared since planning stops the prune before the first deletion."""
+    for slug in plan:
+        path = os.path.join(out_dir, f"{slug}.json")
+        if slug in published:  # plan_prune cannot produce this; the cost of being wrong is a live page
             raise RuntimeError(f"prune: refusing to delete published profile {slug}")
+        if not (os.path.isfile(path) and not os.path.islink(path)):
+            raise RuntimeError(f"prune: {path} is no longer a regular profile file; refusing to delete any profile")
+    for slug, why in plan.items():
         os.remove(os.path.join(out_dir, f"{slug}.json"))
-        common.log(f"build: pruned {slug}.json (not in the published set)")
-    return stale
+        common.log(f"build: pruned {slug}.json ({why})")
+    return list(plan)
 
 
 def check_no_stale_profiles(registry: dict) -> bool:
@@ -991,7 +1033,11 @@ def summary_row(p: dict) -> dict:
     }
 
 
-def build(registry: dict) -> list[dict]:
+def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset()) -> list[dict]:
+    # The prune plan is decided before the first write, so a refused prune leaves the published tree untouched.
+    published = [p for p in published_programs(registry)]
+    prune_plan = plan_prune(registry, {p["slug"] for p in published}, common.PROGRAMS_OUT_DIR,
+                            allow_unexplained=frozenset(allow_unexplained_prune))
     rpi_hist = load_rpi_history()
     # raises if no season table resolves, rather than blanking the latest season for all 350
     rpi_finals = load_rpi_finals(registry["season"]["current"])
@@ -999,7 +1045,7 @@ def build(registry: dict) -> list[dict]:
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
-    for program in published_programs(registry):
+    for program in published:
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
@@ -1014,7 +1060,7 @@ def build(registry: dict) -> list[dict]:
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
     common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
-    prune_profiles({r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
+    prune_profiles(prune_plan, {r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
     camp_tally = camp_counts(all_camps)
@@ -1368,4 +1414,10 @@ def check_titles(registry: dict) -> bool:
 
 
 if __name__ == "__main__":
-    build(common.load_registry())
+    import argparse
+    ap = argparse.ArgumentParser(description="Rebuild public/data from the stored sources.")
+    ap.add_argument("--allow-unexplained-prune", default="", metavar="SLUG[,SLUG]",
+                    help="for this run only, delete these profiles although the registry does not explain why they are "
+                         "unpublished (e.g. a program removed from the registry outright); each must be an unexplained stale profile")
+    args = ap.parse_args()
+    build(common.load_registry(), allow_unexplained_prune=frozenset(s for s in args.allow_unexplained_prune.split(",") if s))
