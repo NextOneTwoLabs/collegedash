@@ -13,17 +13,17 @@ Covers, in order:
   asset         the committed data/the-us-rankings-2026.json: 171 rows, ties set on exactly the
                 shared ranks, unique slugs and nameKeys
   aliases       the committed data/the-rank-aliases.json: 126 entries, evidence tags, pinned names,
-                and the 224 N/A count measured against the registry rather than its own header
+                and the 222 N/A count measured against the registry rather than its own header
   traps         the six fuzzy-match traps from issue #46, asserted one by one
   derivation    group_items refuses to pick between two Wikidata items for one IPEDS unit id, and
                 an acronym-shaped candidate cannot claim a row
   check tool    exits 0 on the committed pair and non-zero on a corrupted copy, with every finding
                 type it can emit offline actually emitted
-  build         what build.py publishes: 126 ranked / 224 null in the profiles and in index.json,
+  build         what build.py publishes: 126 ranked / 222 null in the profiles and in index.json,
                 the spot checks, the hard failure on a missing asset, the schema's required block
                 and the validate invariant that traces every published rank back to an asset row
   card          public/index.html: the card renders the rank as "#" plus a number with no tie
-                marker (issue #46), checked by running the page's own rankHtml over all 350
+                marker (issue #46), checked by running the page's own rankHtml over all 348
                 rows, and every other admission-rate surface -- sort, table column, glance
                 panel, tabs, compare -- is left alone
 """
@@ -254,9 +254,11 @@ def test_aliases(asset: dict, table: dict) -> None:
 
     # The N/A count is the whole coverage claim on issue #46, so it is measured against the
     # registry the build reads, not against the number this table wrote about itself.
+    # 350 when the table was derived; 348 since issue #100 moved Saint Francis (now D3) and Mississippi
+    # Valley State (in no Directory list) out of the published set. Neither had a row in the table.
     programs = sum(1 for _ in common.iter_programs(common.load_registry()))
-    ok("350 programs in the registry", programs == 350, f"got {programs}")
-    ok("224 programs are N/A", programs - len(aliases) == 224,
+    ok("348 programs in the registry", programs == 348, f"got {programs}")
+    ok("222 programs are N/A", programs - len(aliases) == 222,
        f"{programs} programs - {len(aliases)} ranked")
     ok("the header's program count is the registry's", table.get("programs") == programs,
        f"header {table.get('programs')}, registry {programs}")
@@ -561,9 +563,9 @@ def test_build(asset: dict, table: dict) -> None:
     index = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), encoding="utf-8"))
     rows = index["programs"]
     ranked = [r for r in rows if r.get("academicRank") is not None]
-    ok("index.json carries 350 rows", len(rows) == 350, str(len(rows)))
+    ok("index.json carries 348 rows", len(rows) == 348, str(len(rows)))
     ok("126 ranked in index.json", len(ranked) == 126, str(len(ranked)))
-    ok("224 unranked in index.json", len(rows) - len(ranked) == 224, str(len(rows) - len(ranked)))
+    ok("222 unranked in index.json", len(rows) - len(ranked) == 222, str(len(rows) - len(ranked)))
     ok("every row carries the key, so undefined never means unranked",
        all("academicRank" in r and "academicRankTied" in r for r in rows))
 
@@ -579,7 +581,7 @@ def test_build(asset: dict, table: dict) -> None:
         else:
             n_null += 1
     ok("126 ranked profiles", n_ranked == 126, str(n_ranked))
-    ok("224 null profiles", n_null == 224, str(n_null))
+    ok("222 null profiles", n_null == 222, str(n_null))
     ok("every profile carries the block", all(isinstance(v, dict) for v in by_slug.values()))
 
     for slug, want in (("stanford", (3, True)), ("virginia", (50, False)), ("penn-state", (39, True)),
@@ -595,7 +597,7 @@ def test_build(asset: dict, table: dict) -> None:
        by_slug["stanford"]["source"] == "Times Higher Education"
        and by_slug["stanford"]["sourceUrl"] == asset["sourceUrl"], str(by_slug["stanford"]))
 
-    # Losing the asset must not look like 224 unranked programs turning into 350.
+    # Losing the asset must not look like 222 unranked programs turning into 348.
     tmp = tempfile.mkdtemp(prefix="the-rank-build-")
     try:
         reg = common.load_registry()
@@ -603,7 +605,7 @@ def test_build(asset: dict, table: dict) -> None:
             real = getattr(build, attr)
             setattr(build, attr, os.path.join(tmp, "gone.json"))
             try:
-                raises(f"a missing {name} raises rather than emitting 350 nulls",
+                raises(f"a missing {name} raises rather than emitting 348 nulls",
                        FileNotFoundError, build.load_academic_ranks, reg)
             finally:
                 setattr(build, attr, real)
@@ -645,7 +647,7 @@ def _render_ranks(html: str) -> list[dict]:
     """Run the page's own rankHtml/rankTitle over the committed index.json, via node.
 
     Asserting on the source text alone would pass through a rendering bug, so the two arrow
-    functions are lifted verbatim out of index.html and executed against all 350 real rows.
+    functions are lifted verbatim out of index.html and executed against all 348 real rows.
     """
     start = html.index("const THE_RANK_SOURCE = ")
     end = html.index("  : THE_RANK_SOURCE;", start) + len("  : THE_RANK_SOURCE;")
@@ -684,17 +686,17 @@ def test_card() -> None:
     ok("the tooltip still explains N/A", "is not among the 171 it ranks" in html)
     ok("the FAQ no longer explains a tie marker", "marks a tie" not in html)
 
-    # Rendered output, not source text: run the page's own rankHtml/rankTitle over all 350 rows.
+    # Rendered output, not source text: run the page's own rankHtml/rankTitle over all 348 rows.
     facts = _render_ranks(html)
-    ok("every program renders a fact", len(facts) == 350, str(len(facts)))
-    ok("no card fact carries the '=#' tie form across all 350",
+    ok("every program renders a fact", len(facts) == 348, str(len(facts)))
+    ok("no card fact carries the '=#' tie form across all 348",
        not [f for f in facts if "=#" in f["html"]],
        str([f["slug"] for f in facts if "=#" in f["html"]][:5]))
     hashed = [f for f in facts if re.fullmatch(r"#\d+", f["html"])]
     na = [f for f in facts if f["html"] == "N/A"]
     ok("126 cards render '#' plus a number", len(hashed) == 126, str(len(hashed)))
-    ok("224 cards render N/A", len(na) == 224, str(len(na)))
-    ok("the three forms account for all 350", len(hashed) + len(na) == 350)
+    ok("222 cards render N/A", len(na) == 222, str(len(na)))
+    ok("the three forms account for all 348", len(hashed) + len(na) == 348)
     by_slug = {f["slug"]: f for f in facts}
     for slug, want in (("stanford", "#3"), ("penn-state", "#39"), ("rutgers", "#66")):
         f = by_slug[slug]

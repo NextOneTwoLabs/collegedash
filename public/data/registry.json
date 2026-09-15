@@ -1,7 +1,9 @@
 {
-  "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>. Optional per-program athletics.campsUrl points the camps collector straight at the program's camp page (skips the nav search and any skipReason); athletics.campsNote is free text for humans.",
-  "updated": "2026-09-07",
-  "division": "D1",
+  "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>. Optional per-program athletics.campsUrl points the camps collector straight at the program's camp page (skips the nav search and any skipReason); athletics.campsNote is free text for humans. Membership comes from the NCAA Directory (collect/registry_builder.py): onboardedDivisions is the set of divisions the site publishes, and turning a division on is adding it there. A program whose Directory division is not onboarded, or that no Directory list carries, is moved whole to heldPrograms with a `hold` block; refresh, onboard and build read `programs` only, so it is neither collected nor published, and it returns unchanged with the same slug.",
+  "updated": "2026-09-15",
+  "onboardedDivisions": [
+    "D1"
+  ],
   "season": {
     "_comment": "current = the fall season being played; gradYears = high-school classes tracked for commitments",
     "current": 2026,
@@ -13,6 +15,10 @@
     ]
   },
   "sources": {
+    "ncaaDirectory": {
+      "_comment": "NCAA Directory sport-sponsorship member lists, one JSON request per division, for the current academic year. The registry's master list: ids.ncaaOrgId is its orgId, and division and conference come from it. No people are in these rows; the Directory's org-detail and contact endpoints list staff and are not used.",
+      "memberList": "https://web3.ncaa.org/directory/api/directory/memberList?type=12&division={roman}&sportCode=WSO"
+    },
     "tds": {
       "_comment": "TopDrawerSoccer. Team commitments tab is public HTML (no dates). The commitments search lists every girls commit per class, 25 per page, paginated with pageNo (0-based).",
       "team": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/{tdsSlug}/clgid-{tdsClgId}",
@@ -115,7 +121,8 @@
         "wikipedia": "Florida_State_Seminoles_women's_soccer",
         "ncaaName": "Florida St.",
         "ncaaSlug": "florida-st",
-        "rpiHistoryName": "FloridaState"
+        "rpiHistoryName": "FloridaState",
+        "ncaaOrgId": 234
       },
       "social": {
         "x": null,
@@ -153,7 +160,8 @@
         "tdsSlug": "stanford",
         "wikipedia": "Stanford_Cardinal_women's_soccer",
         "ncaaName": "Stanford",
-        "rpiHistoryName": "Stanford"
+        "rpiHistoryName": "Stanford",
+        "ncaaOrgId": 674
       },
       "social": {
         "x": "StanfordWSoccer",
@@ -189,7 +197,8 @@
         "wikipedia": "Virginia_Cavaliers_women's_soccer",
         "ncaaName": "Virginia",
         "ncaaSlug": "virginia",
-        "rpiHistoryName": "VirginiaU"
+        "rpiHistoryName": "VirginiaU",
+        "ncaaOrgId": 746
       },
       "social": {
         "x": null,
@@ -228,7 +237,8 @@
         "wikipedia": "Notre_Dame_Fighting_Irish_women's_soccer",
         "ncaaName": "Notre Dame",
         "ncaaSlug": "notre-dame",
-        "rpiHistoryName": "NotreDame"
+        "rpiHistoryName": "NotreDame",
+        "ncaaOrgId": 513
       },
       "social": {
         "x": null,
@@ -267,7 +277,8 @@
         "wikipedia": "TCU_Horned_Frogs_women's_soccer",
         "ncaaName": "TCU",
         "ncaaSlug": "tcu",
-        "rpiHistoryName": "TCU"
+        "rpiHistoryName": "TCU",
+        "ncaaOrgId": 698
       },
       "social": {
         "x": null,
@@ -305,7 +316,8 @@
         "tdsSlug": "duke",
         "wikipedia": "Duke_Blue_Devils_women's_soccer",
         "ncaaName": "Duke",
-        "rpiHistoryName": "Duke"
+        "rpiHistoryName": "Duke",
+        "ncaaOrgId": 193
       },
       "social": {
         "x": "DukeWSOC",
@@ -341,7 +353,8 @@
         "wikipedia": "Michigan_State_Spartans_women's_soccer",
         "ncaaName": "Michigan St.",
         "ncaaSlug": "michigan-st",
-        "rpiHistoryName": "MichiganState"
+        "rpiHistoryName": "MichiganState",
+        "ncaaOrgId": 416
       },
       "social": {
         "x": null,
@@ -380,7 +393,8 @@
         "wikipedia": "Vanderbilt_Commodores_women's_soccer",
         "ncaaName": "Vanderbilt",
         "ncaaSlug": "vanderbilt",
-        "rpiHistoryName": "Vanderbilt"
+        "rpiHistoryName": "Vanderbilt",
+        "ncaaOrgId": 736
       },
       "social": {
         "x": null,
@@ -419,7 +433,8 @@
         "wikipedia": "Colorado_Buffaloes_women's_soccer",
         "ncaaName": "Colorado",
         "ncaaSlug": "colorado",
-        "rpiHistoryName": "ColoradoU"
+        "rpiHistoryName": "ColoradoU",
+        "ncaaOrgId": 157
       },
       "social": {
         "x": null,
@@ -458,7 +473,8 @@
         "wikipedia": "Kansas_Jayhawks_women's_soccer",
         "ncaaName": "Kansas",
         "ncaaSlug": "kansas",
-        "rpiHistoryName": "KansasU"
+        "rpiHistoryName": "KansasU",
+        "ncaaOrgId": 328
       },
       "social": {
         "x": null,
@@ -497,7 +513,8 @@
         "wikipedia": "Georgetown_Hoyas_women's_soccer",
         "ncaaName": "Georgetown",
         "ncaaSlug": "georgetown",
-        "rpiHistoryName": "Georgetown"
+        "rpiHistoryName": "Georgetown",
+        "ncaaOrgId": 251
       },
       "social": {
         "x": null,
@@ -536,7 +553,8 @@
         "wikipedia": "West_Virginia_Mountaineers_women's_soccer",
         "ncaaName": "West Virginia",
         "ncaaSlug": "west-virginia",
-        "rpiHistoryName": "WestVirginiaU"
+        "rpiHistoryName": "WestVirginiaU",
+        "ncaaOrgId": 768
       },
       "social": {
         "x": null,
@@ -575,7 +593,8 @@
         "wikipedia": "Tennessee_Lady_Volunteers_soccer",
         "ncaaName": "Tennessee",
         "ncaaSlug": "tennessee",
-        "rpiHistoryName": "TennesseeU"
+        "rpiHistoryName": "TennesseeU",
+        "ncaaOrgId": 694
       },
       "social": {
         "x": null,
@@ -614,7 +633,8 @@
         "wikipedia": "North_Carolina_Tar_Heels_women's_soccer",
         "ncaaName": "North Carolina",
         "ncaaSlug": "north-carolina",
-        "rpiHistoryName": "NorthCarolinaU"
+        "rpiHistoryName": "NorthCarolinaU",
+        "ncaaOrgId": 457
       },
       "social": {
         "x": null,
@@ -653,7 +673,8 @@
         "wikipedia": "Baylor_Bears_women's_soccer",
         "ncaaName": "Baylor",
         "ncaaSlug": "baylor",
-        "rpiHistoryName": "Baylor"
+        "rpiHistoryName": "Baylor",
+        "ncaaOrgId": 51
       },
       "social": {
         "x": null,
@@ -692,7 +713,8 @@
         "wikipedia": "LSU_Tigers_women's_soccer",
         "ncaaName": "LSU",
         "ncaaSlug": "lsu",
-        "rpiHistoryName": "LSU"
+        "rpiHistoryName": "LSU",
+        "ncaaOrgId": 365
       },
       "social": {
         "x": null,
@@ -731,7 +753,8 @@
         "wikipedia": "Texas_Tech_Red_Raiders_women's_soccer",
         "ncaaName": "Texas Tech",
         "ncaaSlug": "texas-tech",
-        "rpiHistoryName": "TexasTech"
+        "rpiHistoryName": "TexasTech",
+        "ncaaOrgId": 700
       },
       "social": {
         "x": null,
@@ -770,7 +793,8 @@
         "wikipedia": "Xavier_Musketeers_women's_soccer",
         "ncaaName": "Xavier",
         "ncaaSlug": "xavier",
-        "rpiHistoryName": "Xavier"
+        "rpiHistoryName": "Xavier",
+        "ncaaOrgId": 812
       },
       "social": {
         "x": null,
@@ -809,7 +833,8 @@
         "wikipedia": "Ohio_State_Buckeyes_women's_soccer",
         "ncaaName": "Ohio St.",
         "ncaaSlug": "ohio-st",
-        "rpiHistoryName": "OhioState"
+        "rpiHistoryName": "OhioState",
+        "ncaaOrgId": 518
       },
       "social": {
         "x": null,
@@ -848,7 +873,8 @@
         "wikipedia": null,
         "ncaaName": "Memphis",
         "ncaaSlug": "memphis",
-        "rpiHistoryName": "Memphis"
+        "rpiHistoryName": "Memphis",
+        "ncaaOrgId": 404
       },
       "social": {
         "x": null,
@@ -887,7 +913,8 @@
         "wikipedia": "Wisconsin_Badgers_women's_soccer",
         "ncaaName": "Wisconsin",
         "ncaaSlug": "wisconsin",
-        "rpiHistoryName": "WisconsinU"
+        "rpiHistoryName": "WisconsinU",
+        "ncaaOrgId": 796
       },
       "social": {
         "x": null,
@@ -926,7 +953,8 @@
         "wikipedia": "Washington_Huskies_women's_soccer",
         "ncaaName": "Washington",
         "ncaaSlug": "washington",
-        "rpiHistoryName": "WashingtonU"
+        "rpiHistoryName": "WashingtonU",
+        "ncaaOrgId": 756
       },
       "social": {
         "x": null,
@@ -965,7 +993,8 @@
         "wikipedia": "Louisville_Cardinals_women's_soccer",
         "ncaaName": "Louisville",
         "ncaaSlug": "louisville",
-        "rpiHistoryName": "Louisville"
+        "rpiHistoryName": "Louisville",
+        "ncaaOrgId": 367
       },
       "social": {
         "x": null,
@@ -1004,7 +1033,8 @@
         "wikipedia": null,
         "ncaaName": "Iowa",
         "ncaaSlug": "iowa",
-        "rpiHistoryName": "IowaU"
+        "rpiHistoryName": "IowaU",
+        "ncaaOrgId": 312
       },
       "social": {
         "x": null,
@@ -1042,7 +1072,8 @@
         "tdsSlug": "ucla",
         "wikipedia": "UCLA_Bruins_women's_soccer",
         "ncaaName": "UCLA",
-        "rpiHistoryName": "UCLA"
+        "rpiHistoryName": "UCLA",
+        "ncaaOrgId": 110
       },
       "social": {
         "x": "UCLAWSoccer",
@@ -1078,7 +1109,8 @@
         "wikipedia": "BYU_Cougars_women's_soccer",
         "ncaaName": "BYU",
         "ncaaSlug": "byu",
-        "rpiHistoryName": "BYU"
+        "rpiHistoryName": "BYU",
+        "ncaaOrgId": 77
       },
       "social": {
         "x": null,
@@ -1117,7 +1149,8 @@
         "wikipedia": "Wake_Forest_Demon_Deacons_women's_soccer",
         "ncaaName": "Wake Forest",
         "ncaaSlug": "wake-forest",
-        "rpiHistoryName": "WakeForest"
+        "rpiHistoryName": "WakeForest",
+        "ncaaOrgId": 749
       },
       "social": {
         "x": null,
@@ -1156,7 +1189,8 @@
         "wikipedia": "Arkansas_Razorbacks_women's_soccer",
         "ncaaName": "Arkansas",
         "ncaaSlug": "arkansas",
-        "rpiHistoryName": "ArkansasU"
+        "rpiHistoryName": "ArkansasU",
+        "ncaaOrgId": 31
       },
       "social": {
         "x": null,
@@ -1195,7 +1229,8 @@
         "wikipedia": "Dayton_Flyers_women's_soccer",
         "ncaaName": "Dayton",
         "ncaaSlug": "dayton",
-        "rpiHistoryName": "Dayton"
+        "rpiHistoryName": "Dayton",
+        "ncaaOrgId": 175
       },
       "social": {
         "x": null,
@@ -1234,7 +1269,8 @@
         "wikipedia": "Penn_State_Nittany_Lions_women's_soccer",
         "ncaaName": "Penn St.",
         "ncaaSlug": null,
-        "rpiHistoryName": "PennState"
+        "rpiHistoryName": "PennState",
+        "ncaaOrgId": 539
       },
       "social": {
         "x": null,
@@ -1273,7 +1309,8 @@
         "wikipedia": "Clemson_Tigers_women's_soccer",
         "ncaaName": "Clemson",
         "ncaaSlug": "clemson",
-        "rpiHistoryName": "Clemson"
+        "rpiHistoryName": "Clemson",
+        "ncaaOrgId": 147
       },
       "social": {
         "x": null,
@@ -1312,7 +1349,8 @@
         "wikipedia": "UCF_Knights_women's_soccer",
         "ncaaName": "UCF",
         "ncaaSlug": "ucf",
-        "rpiHistoryName": "UCF"
+        "rpiHistoryName": "UCF",
+        "ncaaOrgId": 128
       },
       "social": {
         "x": null,
@@ -1351,7 +1389,8 @@
         "wikipedia": "Alabama_Crimson_Tide_women's_soccer",
         "ncaaName": "Alabama",
         "ncaaSlug": "alabama",
-        "rpiHistoryName": "AlabamaU"
+        "rpiHistoryName": "AlabamaU",
+        "ncaaOrgId": 8
       },
       "social": {
         "x": null,
@@ -1390,7 +1429,8 @@
         "wikipedia": "Saint_Louis_Billikens_women's_soccer",
         "ncaaName": "Saint Louis",
         "ncaaSlug": null,
-        "rpiHistoryName": "StLouis"
+        "rpiHistoryName": "StLouis",
+        "ncaaOrgId": 609
       },
       "social": {
         "x": null,
@@ -1429,7 +1469,8 @@
         "wikipedia": "Northwestern_Wildcats",
         "ncaaName": "Northwestern",
         "ncaaSlug": "northwestern",
-        "rpiHistoryName": "NorthwesternU"
+        "rpiHistoryName": "NorthwesternU",
+        "ncaaOrgId": 509
       },
       "social": {
         "x": null,
@@ -1468,7 +1509,8 @@
         "wikipedia": "Western_Michigan_Broncos_women's_soccer",
         "ncaaName": "Western Mich.",
         "ncaaSlug": "western-mich",
-        "rpiHistoryName": "WesternMichigan"
+        "rpiHistoryName": "WesternMichigan",
+        "ncaaOrgId": 774
       },
       "social": {
         "x": null,
@@ -1490,7 +1532,7 @@
       "shortName": "Fairfield",
       "nickname": "Stags",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#E0143E",
         "#231F20"
@@ -1507,7 +1549,8 @@
         "wikipedia": null,
         "ncaaName": "Fairfield",
         "ncaaSlug": "fairfield",
-        "rpiHistoryName": "Fairfield"
+        "rpiHistoryName": "Fairfield",
+        "ncaaOrgId": 220
       },
       "social": {
         "x": null,
@@ -1546,7 +1589,8 @@
         "wikipedia": null,
         "ncaaName": "Illinois",
         "ncaaSlug": "illinois",
-        "rpiHistoryName": "IllinoisU"
+        "rpiHistoryName": "IllinoisU",
+        "ncaaOrgId": 301
       },
       "social": {
         "x": null,
@@ -1585,7 +1629,8 @@
         "wikipedia": null,
         "ncaaName": "Mississippi St.",
         "ncaaSlug": "mississippi-st",
-        "rpiHistoryName": "MississippiState"
+        "rpiHistoryName": "MississippiState",
+        "ncaaOrgId": 430
       },
       "social": {
         "x": null,
@@ -1607,7 +1652,7 @@
       "shortName": "Utah Valley",
       "nickname": "Wolverines",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "Big West",
       "colors": [
         "#275D38",
         "#000000"
@@ -1624,7 +1669,8 @@
         "wikipedia": null,
         "ncaaName": "Utah Valley",
         "ncaaSlug": "utah-valley",
-        "rpiHistoryName": "UtahValley"
+        "rpiHistoryName": "UtahValley",
+        "ncaaOrgId": 30024
       },
       "social": {
         "x": null,
@@ -1663,7 +1709,8 @@
         "wikipedia": null,
         "ncaaName": "Saint Mary's (CA)",
         "ncaaSlug": null,
-        "rpiHistoryName": "StMarys"
+        "rpiHistoryName": "StMarys",
+        "ncaaOrgId": 610
       },
       "social": {
         "x": null,
@@ -1702,7 +1749,8 @@
         "wikipedia": "South_Carolina_Gamecocks_women's_soccer",
         "ncaaName": "South Carolina",
         "ncaaSlug": "south-carolina",
-        "rpiHistoryName": "SouthCarolinaU"
+        "rpiHistoryName": "SouthCarolinaU",
+        "ncaaOrgId": 648
       },
       "social": {
         "x": null,
@@ -1741,7 +1789,8 @@
         "wikipedia": "UConn_Huskies_women's_soccer",
         "ncaaName": "UConn",
         "ncaaSlug": null,
-        "rpiHistoryName": "ConnecticutU"
+        "rpiHistoryName": "ConnecticutU",
+        "ncaaOrgId": 164
       },
       "social": {
         "x": null,
@@ -1780,7 +1829,8 @@
         "wikipedia": "Georgia_Bulldogs",
         "ncaaName": "Georgia",
         "ncaaSlug": "georgia",
-        "rpiHistoryName": "GeorgiaU"
+        "rpiHistoryName": "GeorgiaU",
+        "ncaaOrgId": 257
       },
       "social": {
         "x": null,
@@ -1819,7 +1869,8 @@
         "wikipedia": "California_Golden_Bears_women's_soccer",
         "ncaaName": "California",
         "ncaaSlug": "california",
-        "rpiHistoryName": "CaliforniaU"
+        "rpiHistoryName": "CaliforniaU",
+        "ncaaOrgId": 107
       },
       "social": {
         "x": null,
@@ -1858,7 +1909,8 @@
         "wikipedia": "Lipscomb_Bisons_women's_soccer",
         "ncaaName": "Lipscomb",
         "ncaaSlug": "lipscomb",
-        "rpiHistoryName": "Lipscomb"
+        "rpiHistoryName": "Lipscomb",
+        "ncaaOrgId": 28600
       },
       "social": {
         "x": null,
@@ -1897,7 +1949,8 @@
         "wikipedia": null,
         "ncaaName": "Samford",
         "ncaaSlug": "samford",
-        "rpiHistoryName": "Samford"
+        "rpiHistoryName": "Samford",
+        "ncaaOrgId": 625
       },
       "social": {
         "x": null,
@@ -1936,7 +1989,8 @@
         "wikipedia": null,
         "ncaaName": "Liberty",
         "ncaaSlug": "liberty",
-        "rpiHistoryName": "Liberty"
+        "rpiHistoryName": "Liberty",
+        "ncaaOrgId": 355
       },
       "social": {
         "x": null,
@@ -1975,7 +2029,8 @@
         "wikipedia": null,
         "ncaaName": "Rhode Island",
         "ncaaSlug": "rhode-island",
-        "rpiHistoryName": "RhodeIslandU"
+        "rpiHistoryName": "RhodeIslandU",
+        "ncaaOrgId": 572
       },
       "social": {
         "x": null,
@@ -2014,7 +2069,8 @@
         "wikipedia": null,
         "ncaaName": "Kentucky",
         "ncaaSlug": "kentucky",
-        "rpiHistoryName": "KentuckyU"
+        "rpiHistoryName": "KentuckyU",
+        "ncaaOrgId": 334
       },
       "social": {
         "x": null,
@@ -2053,7 +2109,8 @@
         "wikipedia": null,
         "ncaaName": "Charlotte",
         "ncaaSlug": "charlotte",
-        "rpiHistoryName": "Charlotte"
+        "rpiHistoryName": "Charlotte",
+        "ncaaOrgId": 458
       },
       "social": {
         "x": null,
@@ -2092,7 +2149,8 @@
         "wikipedia": "Old_Dominion_Monarchs_men's_soccer",
         "ncaaName": "Old Dominion",
         "ncaaSlug": "old-dominion",
-        "rpiHistoryName": "OldDominion"
+        "rpiHistoryName": "OldDominion",
+        "ncaaOrgId": 523
       },
       "social": {
         "x": null,
@@ -2131,7 +2189,8 @@
         "wikipedia": null,
         "ncaaName": "James Madison",
         "ncaaSlug": "james-madison",
-        "rpiHistoryName": "JamesMadison"
+        "rpiHistoryName": "JamesMadison",
+        "ncaaOrgId": 317
       },
       "social": {
         "x": null,
@@ -2170,7 +2229,8 @@
         "wikipedia": null,
         "ncaaName": "UNCW",
         "ncaaSlug": "unc-wilmington",
-        "rpiHistoryName": "UNCWilmington"
+        "rpiHistoryName": "UNCWilmington",
+        "ncaaOrgId": 460
       },
       "social": {
         "x": null,
@@ -2209,7 +2269,8 @@
         "wikipedia": null,
         "ncaaName": "Cal St. Fullerton",
         "ncaaSlug": "cal-st-fullerton",
-        "rpiHistoryName": "CalStateFullerton"
+        "rpiHistoryName": "CalStateFullerton",
+        "ncaaOrgId": 97
       },
       "social": {
         "x": null,
@@ -2248,7 +2309,8 @@
         "wikipedia": null,
         "ncaaName": "South Alabama",
         "ncaaSlug": null,
-        "rpiHistoryName": "SouthAlabama"
+        "rpiHistoryName": "SouthAlabama",
+        "ncaaOrgId": 646
       },
       "social": {
         "x": null,
@@ -2289,7 +2351,8 @@
         "wikipedia": "Oklahoma_Sooners_women's_soccer",
         "ncaaName": "Oklahoma",
         "ncaaSlug": "oklahoma",
-        "rpiHistoryName": "OklahomaU"
+        "rpiHistoryName": "OklahomaU",
+        "ncaaOrgId": 522
       },
       "social": {
         "x": null,
@@ -2328,7 +2391,8 @@
         "wikipedia": null,
         "ncaaName": "Army West Point",
         "ncaaSlug": null,
-        "rpiHistoryName": "Army"
+        "rpiHistoryName": "Army",
+        "ncaaOrgId": 725
       },
       "social": {
         "x": null,
@@ -2350,7 +2414,7 @@
       "shortName": "Texas State",
       "nickname": "Bobcats",
       "division": "D1",
-      "conference": "Sun Belt",
+      "conference": "Pac-12",
       "colors": [
         "#501214",
         "#6A5638"
@@ -2367,7 +2431,8 @@
         "wikipedia": null,
         "ncaaName": "Texas St.",
         "ncaaSlug": "texas-st",
-        "rpiHistoryName": "TexasState"
+        "rpiHistoryName": "TexasState",
+        "ncaaOrgId": 670
       },
       "social": {
         "x": null,
@@ -2406,7 +2471,8 @@
         "wikipedia": null,
         "ncaaName": "Kansas St.",
         "ncaaSlug": "kansas-st",
-        "rpiHistoryName": "KansasState"
+        "rpiHistoryName": "KansasState",
+        "ncaaOrgId": 327
       },
       "social": {
         "x": null,
@@ -2428,7 +2494,7 @@
       "shortName": "Utah State",
       "nickname": "Aggies",
       "division": "D1",
-      "conference": "Mountain West",
+      "conference": "Pac-12",
       "colors": [
         "#00263A",
         "#8A8D8F"
@@ -2447,7 +2513,8 @@
         "wikipedia": null,
         "ncaaName": "Utah St.",
         "ncaaSlug": "utah-st",
-        "rpiHistoryName": "UtahState"
+        "rpiHistoryName": "UtahState",
+        "ncaaOrgId": 731
       },
       "social": {
         "x": null,
@@ -2486,7 +2553,8 @@
         "wikipedia": "Louisiana–Monroe_Warhawks_women's_soccer",
         "ncaaName": "ULM",
         "ncaaSlug": null,
-        "rpiHistoryName": "LouisianaMonroe"
+        "rpiHistoryName": "LouisianaMonroe",
+        "ncaaOrgId": 498
       },
       "social": {
         "x": null,
@@ -2525,7 +2593,8 @@
         "wikipedia": null,
         "ncaaName": "Pepperdine",
         "ncaaSlug": "pepperdine",
-        "rpiHistoryName": "Pepperdine"
+        "rpiHistoryName": "Pepperdine",
+        "ncaaOrgId": 541
       },
       "social": {
         "x": null,
@@ -2564,7 +2633,8 @@
         "wikipedia": "UTSA_Roadrunners_women's_soccer",
         "ncaaName": "UTSA",
         "ncaaSlug": null,
-        "rpiHistoryName": "UTSA"
+        "rpiHistoryName": "UTSA",
+        "ncaaOrgId": 706
       },
       "social": {
         "x": null,
@@ -2603,7 +2673,8 @@
         "wikipedia": null,
         "ncaaName": "Seattle U",
         "ncaaSlug": null,
-        "rpiHistoryName": "Seattle"
+        "rpiHistoryName": "Seattle",
+        "ncaaOrgId": 1356
       },
       "social": {
         "x": null,
@@ -2625,7 +2696,7 @@
       "shortName": "Eastern Kentucky",
       "nickname": "Colonels",
       "division": "D1",
-      "conference": "ASUN",
+      "conference": "UAC",
       "colors": [
         "#861F41",
         "#87909A"
@@ -2642,7 +2713,8 @@
         "wikipedia": null,
         "ncaaName": "Eastern Ky.",
         "ncaaSlug": "eastern-ky",
-        "rpiHistoryName": "EasternKentucky"
+        "rpiHistoryName": "EasternKentucky",
+        "ncaaOrgId": 202
       },
       "social": {
         "x": null,
@@ -2681,7 +2753,8 @@
         "wikipedia": null,
         "ncaaName": "Loyola Chicago",
         "ncaaSlug": null,
-        "rpiHistoryName": "LoyolaChicago"
+        "rpiHistoryName": "LoyolaChicago",
+        "ncaaOrgId": 371
       },
       "social": {
         "x": null,
@@ -2720,7 +2793,8 @@
         "wikipedia": "Pittsburgh_Panthers_women's_soccer",
         "ncaaName": "Pittsburgh",
         "ncaaSlug": "pittsburgh",
-        "rpiHistoryName": "Pittsburgh"
+        "rpiHistoryName": "Pittsburgh",
+        "ncaaOrgId": 545
       },
       "social": {
         "x": null,
@@ -2759,7 +2833,8 @@
         "wikipedia": null,
         "ncaaName": "Buffalo",
         "ncaaSlug": "buffalo",
-        "rpiHistoryName": "Buffalo"
+        "rpiHistoryName": "Buffalo",
+        "ncaaOrgId": 86
       },
       "social": {
         "x": null,
@@ -2797,7 +2872,8 @@
         "tdsSlug": "usc",
         "wikipedia": "USC_Trojans_women's_soccer",
         "ncaaName": "Southern California",
-        "rpiHistoryName": "SouthernCalifornia"
+        "rpiHistoryName": "SouthernCalifornia",
+        "ncaaOrgId": 657
       },
       "social": {
         "x": "USC_WSoccer",
@@ -2833,7 +2909,8 @@
         "wikipedia": "SMU_Mustangs_women's_soccer",
         "ncaaName": "SMU",
         "ncaaSlug": "smu",
-        "rpiHistoryName": "SMU"
+        "rpiHistoryName": "SMU",
+        "ncaaOrgId": 663
       },
       "social": {
         "x": null,
@@ -2872,7 +2949,8 @@
         "wikipedia": null,
         "ncaaName": "Arizona St.",
         "ncaaSlug": "arizona-st",
-        "rpiHistoryName": "ArizonaState"
+        "rpiHistoryName": "ArizonaState",
+        "ncaaOrgId": 28
       },
       "social": {
         "x": null,
@@ -2911,7 +2989,8 @@
         "wikipedia": "Stony_Brook_Seawolves_women's_soccer",
         "ncaaName": "Stony Brook",
         "ncaaSlug": "stony-brook",
-        "rpiHistoryName": "StonyBrook"
+        "rpiHistoryName": "StonyBrook",
+        "ncaaOrgId": 683
       },
       "social": {
         "x": null,
@@ -2933,7 +3012,7 @@
       "shortName": "Denver",
       "nickname": "Pioneers",
       "division": "D1",
-      "conference": "Summit League",
+      "conference": "WCC",
       "colors": [
         "#BA0C2F",
         "#A89968"
@@ -2950,7 +3029,8 @@
         "wikipedia": null,
         "ncaaName": "Denver",
         "ncaaSlug": "denver",
-        "rpiHistoryName": "Denver"
+        "rpiHistoryName": "Denver",
+        "ncaaOrgId": 183
       },
       "social": {
         "x": null,
@@ -2989,7 +3069,8 @@
         "wikipedia": "Portland_Pilots_women's_soccer",
         "ncaaName": "Portland",
         "ncaaSlug": "portland",
-        "rpiHistoryName": "PortlandU"
+        "rpiHistoryName": "PortlandU",
+        "ncaaOrgId": 551
       },
       "social": {
         "x": null,
@@ -3028,7 +3109,8 @@
         "wikipedia": "Miami_Hurricanes_women's_soccer",
         "ncaaName": "Miami (FL)",
         "ncaaSlug": null,
-        "rpiHistoryName": "MiamiFL"
+        "rpiHistoryName": "MiamiFL",
+        "ncaaOrgId": 415
       },
       "social": {
         "x": null,
@@ -3067,7 +3149,8 @@
         "wikipedia": null,
         "ncaaName": "Duquesne",
         "ncaaSlug": "duquesne",
-        "rpiHistoryName": "Duquesne"
+        "rpiHistoryName": "Duquesne",
+        "ncaaOrgId": 194
       },
       "social": {
         "x": null,
@@ -3106,7 +3189,8 @@
         "wikipedia": null,
         "ncaaName": "South Dakota St.",
         "ncaaSlug": "south-dakota-st",
-        "rpiHistoryName": "SouthDakotaState"
+        "rpiHistoryName": "SouthDakotaState",
+        "ncaaOrgId": 649
       },
       "social": {
         "x": null,
@@ -3145,7 +3229,8 @@
         "wikipedia": null,
         "ncaaName": "Brown",
         "ncaaSlug": "brown",
-        "rpiHistoryName": "Brown"
+        "rpiHistoryName": "Brown",
+        "ncaaOrgId": 80
       },
       "social": {
         "x": null,
@@ -3184,7 +3269,8 @@
         "wikipedia": null,
         "ncaaName": "Rice",
         "ncaaSlug": "rice",
-        "rpiHistoryName": "Rice"
+        "rpiHistoryName": "Rice",
+        "ncaaOrgId": 574
       },
       "social": {
         "x": null,
@@ -3223,7 +3309,8 @@
         "wikipedia": null,
         "ncaaName": "Boston U.",
         "ncaaSlug": "boston-u",
-        "rpiHistoryName": "BostonU"
+        "rpiHistoryName": "BostonU",
+        "ncaaOrgId": 68
       },
       "social": {
         "x": null,
@@ -3262,7 +3349,8 @@
         "wikipedia": "Florida_Gators_women's_soccer",
         "ncaaName": "Florida",
         "ncaaSlug": "florida",
-        "rpiHistoryName": "FloridaU"
+        "rpiHistoryName": "FloridaU",
+        "ncaaOrgId": 235
       },
       "social": {
         "x": null,
@@ -3301,7 +3389,8 @@
         "wikipedia": "Utah_Utes_women's_soccer",
         "ncaaName": "Utah",
         "ncaaSlug": "utah",
-        "rpiHistoryName": "UtahU"
+        "rpiHistoryName": "UtahU",
+        "ncaaOrgId": 732
       },
       "social": {
         "x": null,
@@ -3340,7 +3429,8 @@
         "wikipedia": "Texas_A&M_Aggies_women's_soccer",
         "ncaaName": "Texas A&M",
         "ncaaSlug": "texas-am",
-        "rpiHistoryName": "TexasA&M"
+        "rpiHistoryName": "TexasA&M",
+        "ncaaOrgId": 697
       },
       "social": {
         "x": null,
@@ -3379,7 +3469,8 @@
         "wikipedia": "Santa_Clara_Broncos_women's_soccer",
         "ncaaName": "Santa Clara",
         "ncaaSlug": "santa-clara",
-        "rpiHistoryName": "SantaClara"
+        "rpiHistoryName": "SantaClara",
+        "ncaaOrgId": 631
       },
       "social": {
         "x": null,
@@ -3418,7 +3509,8 @@
         "wikipedia": null,
         "ncaaName": "Houston",
         "ncaaSlug": "houston",
-        "rpiHistoryName": "Houston"
+        "rpiHistoryName": "Houston",
+        "ncaaOrgId": 288
       },
       "social": {
         "x": null,
@@ -3457,7 +3549,8 @@
         "wikipedia": "Nebraska_Cornhuskers_women's_soccer",
         "ncaaName": "Nebraska",
         "ncaaSlug": "nebraska",
-        "rpiHistoryName": "NebraskaU"
+        "rpiHistoryName": "NebraskaU",
+        "ncaaOrgId": 463
       },
       "social": {
         "x": null,
@@ -3496,7 +3589,8 @@
         "wikipedia": "South_Florida_Bulls_women's_soccer",
         "ncaaName": "South Fla.",
         "ncaaSlug": "south-fla",
-        "rpiHistoryName": "SouthFlorida"
+        "rpiHistoryName": "SouthFlorida",
+        "ncaaOrgId": 651
       },
       "social": {
         "x": null,
@@ -3535,7 +3629,8 @@
         "wikipedia": "Virginia_Tech_Hokies_women's_soccer",
         "ncaaName": "Virginia Tech",
         "ncaaSlug": "virginia-tech",
-        "rpiHistoryName": "VirginiaTech"
+        "rpiHistoryName": "VirginiaTech",
+        "ncaaOrgId": 742
       },
       "social": {
         "x": null,
@@ -3574,7 +3669,8 @@
         "wikipedia": null,
         "ncaaName": "Auburn",
         "ncaaSlug": "auburn",
-        "rpiHistoryName": "Auburn"
+        "rpiHistoryName": "Auburn",
+        "ncaaOrgId": 37
       },
       "social": {
         "x": null,
@@ -3596,7 +3692,7 @@
       "shortName": "Boise State",
       "nickname": "Broncos",
       "division": "D1",
-      "conference": "Mountain West",
+      "conference": "Pac-12",
       "colors": [
         "#0033A0",
         "#D64309"
@@ -3613,7 +3709,8 @@
         "wikipedia": null,
         "ncaaName": "Boise St.",
         "ncaaSlug": "boise-st",
-        "rpiHistoryName": "BoiseState"
+        "rpiHistoryName": "BoiseState",
+        "ncaaOrgId": 66
       },
       "social": {
         "x": null,
@@ -3652,7 +3749,8 @@
         "wikipedia": null,
         "ncaaName": "Weber St.",
         "ncaaSlug": "weber-st",
-        "rpiHistoryName": "WeberState"
+        "rpiHistoryName": "WeberState",
+        "ncaaOrgId": 758
       },
       "social": {
         "x": null,
@@ -3691,7 +3789,8 @@
         "wikipedia": "Bowling_Green_Falcons_women's_soccer",
         "ncaaName": "Bowling Green",
         "ncaaSlug": "bowling-green",
-        "rpiHistoryName": "BowlingGreen"
+        "rpiHistoryName": "BowlingGreen",
+        "ncaaOrgId": 71
       },
       "social": {
         "x": null,
@@ -3730,7 +3829,8 @@
         "wikipedia": "Dartmouth_Big_Green_women's_soccer",
         "ncaaName": "Dartmouth",
         "ncaaSlug": "dartmouth",
-        "rpiHistoryName": "Dartmouth"
+        "rpiHistoryName": "Dartmouth",
+        "ncaaOrgId": 172
       },
       "social": {
         "x": null,
@@ -3769,7 +3869,8 @@
         "wikipedia": null,
         "ncaaName": "Montana",
         "ncaaSlug": "montana",
-        "rpiHistoryName": "MontanaU"
+        "rpiHistoryName": "MontanaU",
+        "ncaaOrgId": 441
       },
       "social": {
         "x": null,
@@ -3791,7 +3892,7 @@
       "shortName": "San Diego State",
       "nickname": "Aztecs",
       "division": "D1",
-      "conference": "Mountain West",
+      "conference": "Pac-12",
       "colors": [
         "#C41230",
         "#000000"
@@ -3808,7 +3909,8 @@
         "wikipedia": "San_Diego_State_Aztecs_women's_soccer",
         "ncaaName": "San Diego St.",
         "ncaaSlug": "san-diego-st",
-        "rpiHistoryName": "SanDiegoState"
+        "rpiHistoryName": "SanDiegoState",
+        "ncaaOrgId": 626
       },
       "social": {
         "x": null,
@@ -3847,7 +3949,8 @@
         "wikipedia": "Cal_Poly_Mustangs_women's_soccer",
         "ncaaName": "Cal Poly",
         "ncaaSlug": "cal-poly",
-        "rpiHistoryName": "CalPoly"
+        "rpiHistoryName": "CalPoly",
+        "ncaaOrgId": 90
       },
       "social": {
         "x": null,
@@ -3886,7 +3989,8 @@
         "wikipedia": "East_Tennessee_State_Buccaneers_men's_soccer",
         "ncaaName": "ETSU",
         "ncaaSlug": null,
-        "rpiHistoryName": "EastTennesseeState"
+        "rpiHistoryName": "EastTennesseeState",
+        "ncaaOrgId": 198
       },
       "social": {
         "x": null,
@@ -3925,7 +4029,8 @@
         "wikipedia": null,
         "ncaaName": "Princeton",
         "ncaaSlug": "princeton",
-        "rpiHistoryName": "Princeton"
+        "rpiHistoryName": "Princeton",
+        "ncaaOrgId": 554
       },
       "social": {
         "x": null,
@@ -3964,7 +4069,8 @@
         "wikipedia": null,
         "ncaaName": "Miami (OH)",
         "ncaaSlug": "miami-oh",
-        "rpiHistoryName": "MiamiOH"
+        "rpiHistoryName": "MiamiOH",
+        "ncaaOrgId": 414
       },
       "social": {
         "x": null,
@@ -4003,7 +4109,8 @@
         "wikipedia": null,
         "ncaaName": "Creighton",
         "ncaaSlug": "creighton",
-        "rpiHistoryName": "Creighton"
+        "rpiHistoryName": "Creighton",
+        "ncaaOrgId": 169
       },
       "social": {
         "x": null,
@@ -4042,7 +4149,8 @@
         "wikipedia": "Milwaukee_Panthers_women's_soccer",
         "ncaaName": "Milwaukee",
         "ncaaSlug": "milwaukee",
-        "rpiHistoryName": "Milwaukee"
+        "rpiHistoryName": "Milwaukee",
+        "ncaaOrgId": 797
       },
       "social": {
         "x": null,
@@ -4081,7 +4189,8 @@
         "wikipedia": "Arizona_Wildcats_women's_soccer",
         "ncaaName": "Arizona",
         "ncaaSlug": "arizona",
-        "rpiHistoryName": "ArizonaU"
+        "rpiHistoryName": "ArizonaU",
+        "ncaaOrgId": 29
       },
       "social": {
         "x": null,
@@ -4120,7 +4229,8 @@
         "wikipedia": "Rutgers_Scarlet_Knights_women's_soccer",
         "ncaaName": "Rutgers",
         "ncaaSlug": "rutgers",
-        "rpiHistoryName": "Rutgers"
+        "rpiHistoryName": "Rutgers",
+        "ncaaOrgId": 587
       },
       "social": {
         "x": null,
@@ -4159,7 +4269,8 @@
         "wikipedia": null,
         "ncaaName": "Indiana",
         "ncaaSlug": "indiana",
-        "rpiHistoryName": "IndianaU"
+        "rpiHistoryName": "IndianaU",
+        "ncaaOrgId": 306
       },
       "social": {
         "x": null,
@@ -4198,7 +4309,8 @@
         "wikipedia": null,
         "ncaaName": "Furman",
         "ncaaSlug": "furman",
-        "rpiHistoryName": "Furman"
+        "rpiHistoryName": "Furman",
+        "ncaaOrgId": 244
       },
       "social": {
         "x": null,
@@ -4237,7 +4349,8 @@
         "wikipedia": "NC_State_Wolfpack_women's_soccer",
         "ncaaName": "NC State",
         "ncaaSlug": null,
-        "rpiHistoryName": "NCState"
+        "rpiHistoryName": "NCState",
+        "ncaaOrgId": 490
       },
       "social": {
         "x": null,
@@ -4276,7 +4389,8 @@
         "wikipedia": "Michigan_Wolverines_women's_soccer",
         "ncaaName": "Michigan",
         "ncaaSlug": "michigan",
-        "rpiHistoryName": "MichiganU"
+        "rpiHistoryName": "MichiganU",
+        "ncaaOrgId": 418
       },
       "social": {
         "x": null,
@@ -4315,7 +4429,8 @@
         "wikipedia": null,
         "ncaaName": "Binghamton",
         "ncaaSlug": "binghamton",
-        "rpiHistoryName": "Binghamton"
+        "rpiHistoryName": "Binghamton",
+        "ncaaOrgId": 62
       },
       "social": {
         "x": null,
@@ -4354,7 +4469,8 @@
         "wikipedia": null,
         "ncaaName": "Chattanooga",
         "ncaaSlug": null,
-        "rpiHistoryName": "Chattanooga"
+        "rpiHistoryName": "Chattanooga",
+        "ncaaOrgId": 693
       },
       "social": {
         "x": null,
@@ -4393,7 +4509,8 @@
         "wikipedia": "Marshall_Thundering_Herd_women's_soccer",
         "ncaaName": "Marshall",
         "ncaaSlug": "marshall",
-        "rpiHistoryName": "Marshall"
+        "rpiHistoryName": "Marshall",
+        "ncaaOrgId": 388
       },
       "social": {
         "x": null,
@@ -4432,7 +4549,8 @@
         "wikipedia": null,
         "ncaaName": "Western Caro.",
         "ncaaSlug": "western-caro",
-        "rpiHistoryName": "WesternCarolina"
+        "rpiHistoryName": "WesternCarolina",
+        "ncaaOrgId": 769
       },
       "social": {
         "x": null,
@@ -4471,7 +4589,8 @@
         "wikipedia": "Syracuse_Orange_women's_soccer",
         "ncaaName": "Syracuse",
         "ncaaSlug": "syracuse",
-        "rpiHistoryName": "Syracuse"
+        "rpiHistoryName": "Syracuse",
+        "ncaaOrgId": 688
       },
       "social": {
         "x": null,
@@ -4493,7 +4612,7 @@
       "shortName": "Colorado State",
       "nickname": "Rams",
       "division": "D1",
-      "conference": "Mountain West",
+      "conference": "Pac-12",
       "colors": [
         "#1E4D2B",
         "#C8C372"
@@ -4510,7 +4629,8 @@
         "wikipedia": null,
         "ncaaName": "Colorado St.",
         "ncaaSlug": "colorado-st",
-        "rpiHistoryName": "ColoradoState"
+        "rpiHistoryName": "ColoradoState",
+        "ncaaOrgId": 156
       },
       "social": {
         "x": null,
@@ -4549,7 +4669,8 @@
         "wikipedia": null,
         "ncaaName": "Oral Roberts",
         "ncaaSlug": "oral-roberts",
-        "rpiHistoryName": "OralRoberts"
+        "rpiHistoryName": "OralRoberts",
+        "ncaaOrgId": 527
       },
       "social": {
         "x": null,
@@ -4588,7 +4709,8 @@
         "wikipedia": null,
         "ncaaName": "Bellarmine",
         "ncaaSlug": "bellarmine",
-        "rpiHistoryName": "Bellarmine"
+        "rpiHistoryName": "Bellarmine",
+        "ncaaOrgId": 52
       },
       "social": {
         "x": null,
@@ -4627,7 +4749,8 @@
         "wikipedia": null,
         "ncaaName": "Tulsa",
         "ncaaSlug": "tulsa",
-        "rpiHistoryName": "Tulsa"
+        "rpiHistoryName": "Tulsa",
+        "ncaaOrgId": 719
       },
       "social": {
         "x": null,
@@ -4666,7 +4789,8 @@
         "wikipedia": null,
         "ncaaName": "Murray St.",
         "ncaaSlug": "murray-st",
-        "rpiHistoryName": "MurrayState"
+        "rpiHistoryName": "MurrayState",
+        "ncaaOrgId": 454
       },
       "social": {
         "x": null,
@@ -4705,7 +4829,8 @@
         "wikipedia": null,
         "ncaaName": "UC Santa Barbara",
         "ncaaSlug": "uc-santa-barbara",
-        "rpiHistoryName": "UCSantaBarbara"
+        "rpiHistoryName": "UCSantaBarbara",
+        "ncaaOrgId": 104
       },
       "social": {
         "x": null,
@@ -4744,7 +4869,8 @@
         "wikipedia": null,
         "ncaaName": "Middle Tenn.",
         "ncaaSlug": "middle-tenn",
-        "rpiHistoryName": "MiddleTennessee"
+        "rpiHistoryName": "MiddleTennessee",
+        "ncaaOrgId": 419
       },
       "social": {
         "x": null,
@@ -4783,7 +4909,8 @@
         "wikipedia": null,
         "ncaaName": "Fordham",
         "ncaaSlug": "fordham",
-        "rpiHistoryName": "Fordham"
+        "rpiHistoryName": "Fordham",
+        "ncaaOrgId": 236
       },
       "social": {
         "x": null,
@@ -4805,7 +4932,7 @@
       "shortName": "Gonzaga",
       "nickname": "Bulldogs",
       "division": "D1",
-      "conference": "WCC",
+      "conference": "Pac-12",
       "colors": [
         "#041E42",
         "#C8102E"
@@ -4822,7 +4949,8 @@
         "wikipedia": null,
         "ncaaName": "Gonzaga",
         "ncaaSlug": "gonzaga",
-        "rpiHistoryName": "Gonzaga"
+        "rpiHistoryName": "Gonzaga",
+        "ncaaOrgId": 260
       },
       "social": {
         "x": null,
@@ -4861,7 +4989,8 @@
         "wikipedia": null,
         "ncaaName": "UAB",
         "ncaaSlug": "uab",
-        "rpiHistoryName": "UAB"
+        "rpiHistoryName": "UAB",
+        "ncaaOrgId": 9
       },
       "social": {
         "x": null,
@@ -4900,7 +5029,8 @@
         "wikipedia": null,
         "ncaaName": "Providence",
         "ncaaSlug": "providence",
-        "rpiHistoryName": "Providence"
+        "rpiHistoryName": "Providence",
+        "ncaaOrgId": 556
       },
       "social": {
         "x": null,
@@ -4939,7 +5069,8 @@
         "wikipedia": null,
         "ncaaName": "FIU",
         "ncaaSlug": "fiu",
-        "rpiHistoryName": "FIU"
+        "rpiHistoryName": "FIU",
+        "ncaaOrgId": 231
       },
       "social": {
         "x": null,
@@ -4978,7 +5109,8 @@
         "wikipedia": null,
         "ncaaName": "Missouri",
         "ncaaSlug": "missouri",
-        "rpiHistoryName": "MissouriU"
+        "rpiHistoryName": "MissouriU",
+        "ncaaOrgId": 434
       },
       "social": {
         "x": null,
@@ -5000,7 +5132,7 @@
       "shortName": "Quinnipiac",
       "nickname": "Bobcats",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#0A2240",
         "#FFB819"
@@ -5017,7 +5149,8 @@
         "wikipedia": null,
         "ncaaName": "Quinnipiac",
         "ncaaSlug": "quinnipiac",
-        "rpiHistoryName": "Quinnipiac"
+        "rpiHistoryName": "Quinnipiac",
+        "ncaaOrgId": 562
       },
       "social": {
         "x": null,
@@ -5056,7 +5189,8 @@
         "wikipedia": "Minnesota_Golden_Gophers_women's_soccer",
         "ncaaName": "Minnesota",
         "ncaaSlug": "minnesota",
-        "rpiHistoryName": "MinnesotaU"
+        "rpiHistoryName": "MinnesotaU",
+        "ncaaOrgId": 428
       },
       "social": {
         "x": null,
@@ -5095,7 +5229,8 @@
         "wikipedia": "Elon_Phoenix_women's_soccer",
         "ncaaName": "Elon",
         "ncaaSlug": "elon",
-        "rpiHistoryName": "Elon"
+        "rpiHistoryName": "Elon",
+        "ncaaOrgId": 1068
       },
       "social": {
         "x": null,
@@ -5134,7 +5269,8 @@
         "wikipedia": null,
         "ncaaName": "App State",
         "ncaaSlug": null,
-        "rpiHistoryName": "AppalachianState"
+        "rpiHistoryName": "AppalachianState",
+        "ncaaOrgId": 27
       },
       "social": {
         "x": null,
@@ -5173,7 +5309,8 @@
         "wikipedia": null,
         "ncaaName": "Colgate",
         "ncaaSlug": "colgate",
-        "rpiHistoryName": "Colgate"
+        "rpiHistoryName": "Colgate",
+        "ncaaOrgId": 153
       },
       "social": {
         "x": null,
@@ -5212,7 +5349,8 @@
         "wikipedia": null,
         "ncaaName": "Hofstra",
         "ncaaSlug": "hofstra",
-        "rpiHistoryName": "Hofstra"
+        "rpiHistoryName": "Hofstra",
+        "ncaaOrgId": 283
       },
       "social": {
         "x": null,
@@ -5234,7 +5372,7 @@
       "shortName": "Sacred Heart",
       "nickname": "Pioneers",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#CD1041",
         "#3C3C3C"
@@ -5251,7 +5389,8 @@
         "wikipedia": "Sacred_Heart_Pioneers_women's_soccer",
         "ncaaName": "Sacred Heart",
         "ncaaSlug": "sacred-heart",
-        "rpiHistoryName": "SacredHeart"
+        "rpiHistoryName": "SacredHeart",
+        "ncaaOrgId": 590
       },
       "social": {
         "x": null,
@@ -5290,7 +5429,8 @@
         "wikipedia": "Kent_State_Golden_Flashes_women's_soccer",
         "ncaaName": "Kent St.",
         "ncaaSlug": "kent-st",
-        "rpiHistoryName": "KentState"
+        "rpiHistoryName": "KentState",
+        "ncaaOrgId": 331
       },
       "social": {
         "x": null,
@@ -5329,7 +5469,8 @@
         "wikipedia": null,
         "ncaaName": "Villanova",
         "ncaaSlug": "villanova",
-        "rpiHistoryName": "Villanova"
+        "rpiHistoryName": "Villanova",
+        "ncaaOrgId": 739
       },
       "social": {
         "x": null,
@@ -5368,7 +5509,8 @@
         "wikipedia": null,
         "ncaaName": "Air Force",
         "ncaaSlug": "air-force",
-        "rpiHistoryName": "AirForce"
+        "rpiHistoryName": "AirForce",
+        "ncaaOrgId": 721
       },
       "social": {
         "x": null,
@@ -5407,7 +5549,8 @@
         "wikipedia": "Florida_Gulf_Coast_Eagles_women's_soccer",
         "ncaaName": "FGCU",
         "ncaaSlug": "fgcu",
-        "rpiHistoryName": "FloridaGulfCoast"
+        "rpiHistoryName": "FloridaGulfCoast",
+        "ncaaOrgId": 28755
       },
       "social": {
         "x": null,
@@ -5446,7 +5589,8 @@
         "wikipedia": null,
         "ncaaName": "Monmouth",
         "ncaaSlug": "monmouth",
-        "rpiHistoryName": "Monmouth"
+        "rpiHistoryName": "Monmouth",
+        "ncaaOrgId": 439
       },
       "social": {
         "x": null,
@@ -5485,7 +5629,8 @@
         "wikipedia": "Iowa_State_Cyclones_women's_soccer",
         "ncaaName": "Iowa St.",
         "ncaaSlug": "iowa-st",
-        "rpiHistoryName": "IowaState"
+        "rpiHistoryName": "IowaState",
+        "ncaaOrgId": 311
       },
       "social": {
         "x": null,
@@ -5507,7 +5652,7 @@
       "shortName": "Washington State",
       "nickname": "Cougars",
       "division": "D1",
-      "conference": "WCC",
+      "conference": "Pac-12",
       "colors": [
         "#981E32",
         "#53565A"
@@ -5524,7 +5669,8 @@
         "wikipedia": null,
         "ncaaName": "Washington St.",
         "ncaaSlug": "washington-st",
-        "rpiHistoryName": "WashingtonState"
+        "rpiHistoryName": "WashingtonState",
+        "ncaaOrgId": 754
       },
       "social": {
         "x": null,
@@ -5563,7 +5709,8 @@
         "wikipedia": null,
         "ncaaName": "Oklahoma St.",
         "ncaaSlug": "oklahoma-st",
-        "rpiHistoryName": "OklahomaState"
+        "rpiHistoryName": "OklahomaState",
+        "ncaaOrgId": 521
       },
       "social": {
         "x": null,
@@ -5602,7 +5749,8 @@
         "wikipedia": "Maine_Black_Bears_women's_soccer",
         "ncaaName": "Maine",
         "ncaaSlug": "maine",
-        "rpiHistoryName": "MaineU"
+        "rpiHistoryName": "MaineU",
+        "ncaaOrgId": 380
       },
       "social": {
         "x": null,
@@ -5641,7 +5789,8 @@
         "wikipedia": null,
         "ncaaName": "La Salle",
         "ncaaSlug": "la-salle",
-        "rpiHistoryName": "LaSalle"
+        "rpiHistoryName": "LaSalle",
+        "ncaaOrgId": 340
       },
       "social": {
         "x": null,
@@ -5680,7 +5829,8 @@
         "wikipedia": null,
         "ncaaName": "Delaware",
         "ncaaSlug": "delaware",
-        "rpiHistoryName": "DelawareU"
+        "rpiHistoryName": "DelawareU",
+        "ncaaOrgId": 180
       },
       "social": {
         "x": null,
@@ -5719,7 +5869,8 @@
         "wikipedia": null,
         "ncaaName": "East Carolina",
         "ncaaSlug": "east-carolina",
-        "rpiHistoryName": "EastCarolina"
+        "rpiHistoryName": "EastCarolina",
+        "ncaaOrgId": 196
       },
       "social": {
         "x": null,
@@ -5758,7 +5909,8 @@
         "wikipedia": "Harvard_Crimson_women's_soccer",
         "ncaaName": "Harvard",
         "ncaaSlug": "harvard",
-        "rpiHistoryName": "Harvard"
+        "rpiHistoryName": "Harvard",
+        "ncaaOrgId": 275
       },
       "social": {
         "x": null,
@@ -5797,7 +5949,8 @@
         "wikipedia": null,
         "ncaaName": "Sam Houston",
         "ncaaSlug": null,
-        "rpiHistoryName": "SamHoustonState"
+        "rpiHistoryName": "SamHoustonState",
+        "ncaaOrgId": 624
       },
       "social": {
         "x": null,
@@ -5838,7 +5991,8 @@
         "wikipedia": null,
         "ncaaName": "Wyoming",
         "ncaaSlug": "wyoming",
-        "rpiHistoryName": "WyomingU"
+        "rpiHistoryName": "WyomingU",
+        "ncaaOrgId": 811
       },
       "social": {
         "x": null,
@@ -5877,7 +6031,8 @@
         "wikipedia": null,
         "ncaaName": "Col. of Charleston",
         "ncaaSlug": "col-of-charleston",
-        "rpiHistoryName": "CollegeofCharleston"
+        "rpiHistoryName": "CollegeofCharleston",
+        "ncaaOrgId": 1014
       },
       "social": {
         "x": null,
@@ -5916,7 +6071,8 @@
         "wikipedia": "UC_Irvine_Anteaters_women's_soccer",
         "ncaaName": "UC Irvine",
         "ncaaSlug": "uc-irvine",
-        "rpiHistoryName": "UCIrvine"
+        "rpiHistoryName": "UCIrvine",
+        "ncaaOrgId": 109
       },
       "social": {
         "x": null,
@@ -5955,7 +6111,8 @@
         "wikipedia": null,
         "ncaaName": "Vermont",
         "ncaaSlug": "vermont",
-        "rpiHistoryName": "VermontU"
+        "rpiHistoryName": "VermontU",
+        "ncaaOrgId": 738
       },
       "social": {
         "x": null,
@@ -5994,7 +6151,8 @@
         "wikipedia": "Ball_State_Cardinals_women's_soccer",
         "ncaaName": "Ball St.",
         "ncaaSlug": "ball-st",
-        "rpiHistoryName": "BallState"
+        "rpiHistoryName": "BallState",
+        "ncaaOrgId": 47
       },
       "social": {
         "x": null,
@@ -6033,7 +6191,8 @@
         "wikipedia": "Boston_College_Eagles_women's_soccer",
         "ncaaName": "Boston College",
         "ncaaSlug": "boston-college",
-        "rpiHistoryName": "BostonCollege"
+        "rpiHistoryName": "BostonCollege",
+        "ncaaOrgId": 67
       },
       "social": {
         "x": null,
@@ -6072,7 +6231,8 @@
         "wikipedia": null,
         "ncaaName": "Cincinnati",
         "ncaaSlug": "cincinnati",
-        "rpiHistoryName": "Cincinnati"
+        "rpiHistoryName": "Cincinnati",
+        "ncaaOrgId": 140
       },
       "social": {
         "x": null,
@@ -6111,7 +6271,8 @@
         "wikipedia": null,
         "ncaaName": "Ole Miss",
         "ncaaSlug": null,
-        "rpiHistoryName": "MississippiU"
+        "rpiHistoryName": "MississippiU",
+        "ncaaOrgId": 433
       },
       "social": {
         "x": null,
@@ -6150,7 +6311,8 @@
         "wikipedia": null,
         "ncaaName": "Columbia",
         "ncaaSlug": "columbia",
-        "rpiHistoryName": "Columbia"
+        "rpiHistoryName": "Columbia",
+        "ncaaOrgId": 158
       },
       "social": {
         "x": null,
@@ -6189,7 +6351,8 @@
         "wikipedia": null,
         "ncaaName": "Drake",
         "ncaaSlug": "drake",
-        "rpiHistoryName": "Drake"
+        "rpiHistoryName": "Drake",
+        "ncaaOrgId": 189
       },
       "social": {
         "x": null,
@@ -6228,7 +6391,8 @@
         "wikipedia": "Houston_Christian_Huskies_women's_soccer",
         "ncaaName": "Houston Christian",
         "ncaaSlug": "houston-christian",
-        "rpiHistoryName": "HoustonBaptist"
+        "rpiHistoryName": "HoustonBaptist",
+        "ncaaOrgId": 287
       },
       "social": {
         "x": null,
@@ -6250,7 +6414,7 @@
       "shortName": "Siena",
       "nickname": "Saints",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#006B54",
         "#FCC917"
@@ -6267,7 +6431,8 @@
         "wikipedia": null,
         "ncaaName": "Siena",
         "ncaaSlug": "siena",
-        "rpiHistoryName": "Siena"
+        "rpiHistoryName": "Siena",
+        "ncaaOrgId": 639
       },
       "social": {
         "x": null,
@@ -6306,7 +6471,8 @@
         "wikipedia": null,
         "ncaaName": "Georgia St.",
         "ncaaSlug": "georgia-st",
-        "rpiHistoryName": "GeorgiaState"
+        "rpiHistoryName": "GeorgiaState",
+        "ncaaOrgId": 254
       },
       "social": {
         "x": null,
@@ -6345,7 +6511,8 @@
         "wikipedia": null,
         "ncaaName": "CSU Bakersfield",
         "ncaaSlug": "bakersfield",
-        "rpiHistoryName": "CalStateBakersfield"
+        "rpiHistoryName": "CalStateBakersfield",
+        "ncaaOrgId": 94
       },
       "social": {
         "x": null,
@@ -6367,7 +6534,7 @@
       "shortName": "California Baptist",
       "nickname": "Lancers",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "Big West",
       "colors": [
         "#002554",
         "#A07400"
@@ -6384,7 +6551,8 @@
         "wikipedia": null,
         "ncaaName": "California Baptist",
         "ncaaSlug": null,
-        "rpiHistoryName": "CaliforniaBaptist"
+        "rpiHistoryName": "CaliforniaBaptist",
+        "ncaaOrgId": 30135
       },
       "social": {
         "x": null,
@@ -6423,7 +6591,8 @@
         "wikipedia": null,
         "ncaaName": "Marquette",
         "ncaaSlug": "marquette",
-        "rpiHistoryName": "Marquette"
+        "rpiHistoryName": "Marquette",
+        "ncaaOrgId": 387
       },
       "social": {
         "x": null,
@@ -6462,7 +6631,8 @@
         "wikipedia": "VCU_Rams_women's_soccer",
         "ncaaName": "VCU",
         "ncaaSlug": "vcu",
-        "rpiHistoryName": "VCU"
+        "rpiHistoryName": "VCU",
+        "ncaaOrgId": 740
       },
       "social": {
         "x": null,
@@ -6501,7 +6671,8 @@
         "wikipedia": null,
         "ncaaName": "Coastal Carolina",
         "ncaaSlug": null,
-        "rpiHistoryName": "CoastalCarolina"
+        "rpiHistoryName": "CoastalCarolina",
+        "ncaaOrgId": 149
       },
       "social": {
         "x": null,
@@ -6540,7 +6711,8 @@
         "wikipedia": "William_&_Mary_Tribe_women's_soccer",
         "ncaaName": "William & Mary",
         "ncaaSlug": "william-mary",
-        "rpiHistoryName": "William&Mary"
+        "rpiHistoryName": "William&Mary",
+        "ncaaOrgId": 786
       },
       "social": {
         "x": null,
@@ -6562,7 +6734,7 @@
       "shortName": "North Alabama",
       "nickname": "Lions",
       "division": "D1",
-      "conference": "ASUN",
+      "conference": "UAC",
       "colors": [
         "#592B8A",
         "#FFB92A"
@@ -6579,7 +6751,8 @@
         "wikipedia": null,
         "ncaaName": "North Ala.",
         "ncaaSlug": "north-ala",
-        "rpiHistoryName": "NorthAlabama"
+        "rpiHistoryName": "NorthAlabama",
+        "ncaaOrgId": 487
       },
       "social": {
         "x": null,
@@ -6618,7 +6791,8 @@
         "wikipedia": null,
         "ncaaName": "Illinois St.",
         "ncaaSlug": "illinois-st",
-        "rpiHistoryName": "IllinoisState"
+        "rpiHistoryName": "IllinoisState",
+        "ncaaOrgId": 299
       },
       "social": {
         "x": null,
@@ -6640,7 +6814,7 @@
       "shortName": "Tennessee Tech",
       "nickname": "Golden Eagles",
       "division": "D1",
-      "conference": "OVC",
+      "conference": "SoCon",
       "colors": [
         "#4F2984",
         "#FFDD00"
@@ -6658,7 +6832,8 @@
         "wikipedia": null,
         "ncaaName": "Tennessee Tech",
         "ncaaSlug": "tennessee-tech",
-        "rpiHistoryName": "TennesseeTech"
+        "rpiHistoryName": "TennesseeTech",
+        "ncaaOrgId": 692
       },
       "social": {
         "x": null,
@@ -6697,7 +6872,8 @@
         "wikipedia": null,
         "ncaaName": "Northwestern St.",
         "ncaaSlug": "northwestern-st",
-        "rpiHistoryName": "NorthwesternState"
+        "rpiHistoryName": "NorthwesternState",
+        "ncaaOrgId": 508
       },
       "social": {
         "x": null,
@@ -6736,7 +6912,8 @@
         "wikipedia": null,
         "ncaaName": "UIC",
         "ncaaSlug": null,
-        "rpiHistoryName": "IllinoisChicago"
+        "rpiHistoryName": "IllinoisChicago",
+        "ncaaOrgId": 302
       },
       "social": {
         "x": null,
@@ -6775,7 +6952,8 @@
         "wikipedia": null,
         "ncaaName": "Missouri St.",
         "ncaaSlug": "missouri-st",
-        "rpiHistoryName": "MissouriState"
+        "rpiHistoryName": "MissouriState",
+        "ncaaOrgId": 669
       },
       "social": {
         "x": null,
@@ -6797,7 +6975,7 @@
       "shortName": "Manhattan",
       "nickname": "Jaspers",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#00703C",
         "#A39161"
@@ -6814,7 +6992,8 @@
         "wikipedia": "Manhattan_Jaspers_men's_soccer",
         "ncaaName": "Manhattan",
         "ncaaSlug": "manhattan",
-        "rpiHistoryName": "Manhattan"
+        "rpiHistoryName": "Manhattan",
+        "ncaaOrgId": 381
       },
       "social": {
         "x": null,
@@ -6853,7 +7032,8 @@
         "wikipedia": null,
         "ncaaName": "Louisiana",
         "ncaaSlug": null,
-        "rpiHistoryName": "LouisianaLafayette"
+        "rpiHistoryName": "LouisianaLafayette",
+        "ncaaOrgId": 671
       },
       "social": {
         "x": null,
@@ -6892,7 +7072,8 @@
         "wikipedia": "Butler_Bulldogs_women's_soccer",
         "ncaaName": "Butler",
         "ncaaSlug": "butler",
-        "rpiHistoryName": "Butler"
+        "rpiHistoryName": "Butler",
+        "ncaaOrgId": 87
       },
       "social": {
         "x": null,
@@ -6931,7 +7112,8 @@
         "wikipedia": null,
         "ncaaName": "Cornell",
         "ncaaSlug": "cornell",
-        "rpiHistoryName": "Cornell"
+        "rpiHistoryName": "Cornell",
+        "ncaaOrgId": 167
       },
       "social": {
         "x": null,
@@ -6970,7 +7152,8 @@
         "wikipedia": "Texas_Longhorns_women's_soccer",
         "ncaaName": "Texas",
         "ncaaSlug": "texas",
-        "rpiHistoryName": "TexasU"
+        "rpiHistoryName": "TexasU",
+        "ncaaOrgId": 703
       },
       "social": {
         "x": null,
@@ -7009,7 +7192,8 @@
         "wikipedia": null,
         "ncaaName": "Wagner",
         "ncaaSlug": "wagner",
-        "rpiHistoryName": "Wagner"
+        "rpiHistoryName": "Wagner",
+        "ncaaOrgId": 748
       },
       "social": {
         "x": null,
@@ -7048,7 +7232,8 @@
         "wikipedia": null,
         "ncaaName": "Mercer",
         "ncaaSlug": "mercer",
-        "rpiHistoryName": "Mercer"
+        "rpiHistoryName": "Mercer",
+        "ncaaOrgId": 406
       },
       "social": {
         "x": null,
@@ -7087,7 +7272,8 @@
         "wikipedia": null,
         "ncaaName": "New Mexico",
         "ncaaSlug": "new-mexico",
-        "rpiHistoryName": "NewMexicoU"
+        "rpiHistoryName": "NewMexicoU",
+        "ncaaOrgId": 473
       },
       "social": {
         "x": null,
@@ -7126,7 +7312,8 @@
         "wikipedia": null,
         "ncaaName": "Purdue",
         "ncaaSlug": "purdue",
-        "rpiHistoryName": "Purdue"
+        "rpiHistoryName": "Purdue",
+        "ncaaOrgId": 559
       },
       "social": {
         "x": null,
@@ -7165,7 +7352,8 @@
         "wikipedia": null,
         "ncaaName": "Western Ky.",
         "ncaaSlug": "western-ky",
-        "rpiHistoryName": "WesternKentucky"
+        "rpiHistoryName": "WesternKentucky",
+        "ncaaOrgId": 772
       },
       "social": {
         "x": null,
@@ -7204,7 +7392,8 @@
         "wikipedia": null,
         "ncaaName": "Kansas City",
         "ncaaSlug": "umkc",
-        "rpiHistoryName": "UMKC"
+        "rpiHistoryName": "UMKC",
+        "ncaaOrgId": 2707
       },
       "social": {
         "x": null,
@@ -7243,7 +7432,8 @@
         "wikipedia": null,
         "ncaaName": "Southern Ill.",
         "ncaaSlug": "southern-ill",
-        "rpiHistoryName": "SIUCarbondale"
+        "rpiHistoryName": "SIUCarbondale",
+        "ncaaOrgId": 659
       },
       "social": {
         "x": null,
@@ -7282,7 +7472,8 @@
         "wikipedia": null,
         "ncaaName": "USC Upstate",
         "ncaaSlug": null,
-        "rpiHistoryName": "USCUpstate"
+        "rpiHistoryName": "USCUpstate",
+        "ncaaOrgId": 10411
       },
       "social": {
         "x": null,
@@ -7321,7 +7512,8 @@
         "wikipedia": null,
         "ncaaName": "Colorado Col.",
         "ncaaSlug": "colorado-col",
-        "rpiHistoryName": "ColoradoCollege"
+        "rpiHistoryName": "ColoradoCollege",
+        "ncaaOrgId": 154
       },
       "social": {
         "x": null,
@@ -7360,7 +7552,8 @@
         "wikipedia": null,
         "ncaaName": "Lindenwood",
         "ncaaSlug": "lindenwood-mo",
-        "rpiHistoryName": "Lindenwood"
+        "rpiHistoryName": "Lindenwood",
+        "ncaaOrgId": 30136
       },
       "social": {
         "x": null,
@@ -7399,7 +7592,8 @@
         "wikipedia": null,
         "ncaaName": "Belmont",
         "ncaaSlug": "belmont",
-        "rpiHistoryName": "Belmont"
+        "rpiHistoryName": "Belmont",
+        "ncaaOrgId": 14927
       },
       "social": {
         "x": null,
@@ -7438,7 +7632,8 @@
         "wikipedia": null,
         "ncaaName": "CSUN",
         "ncaaSlug": null,
-        "rpiHistoryName": "CalStateNorthridge"
+        "rpiHistoryName": "CalStateNorthridge",
+        "ncaaOrgId": 101
       },
       "social": {
         "x": null,
@@ -7460,7 +7655,7 @@
       "shortName": "Canisius",
       "nickname": "Golden Griffins",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#0E2756",
         "#FFBA00"
@@ -7477,7 +7672,8 @@
         "wikipedia": null,
         "ncaaName": "Canisius",
         "ncaaSlug": "canisius",
-        "rpiHistoryName": "Canisius"
+        "rpiHistoryName": "Canisius",
+        "ncaaOrgId": 116
       },
       "social": {
         "x": null,
@@ -7516,7 +7712,8 @@
         "wikipedia": "Yale_Bulldogs_women's_soccer",
         "ncaaName": "Yale",
         "ncaaSlug": "yale",
-        "rpiHistoryName": "Yale"
+        "rpiHistoryName": "Yale",
+        "ncaaOrgId": 813
       },
       "social": {
         "x": null,
@@ -7555,7 +7752,8 @@
         "wikipedia": null,
         "ncaaName": "San Francisco",
         "ncaaSlug": "san-francisco",
-        "rpiHistoryName": "SanFrancisco"
+        "rpiHistoryName": "SanFrancisco",
+        "ncaaOrgId": 629
       },
       "social": {
         "x": null,
@@ -7594,7 +7792,8 @@
         "wikipedia": null,
         "ncaaName": "Davidson",
         "ncaaSlug": "davidson",
-        "rpiHistoryName": "Davidson"
+        "rpiHistoryName": "Davidson",
+        "ncaaOrgId": 173
       },
       "social": {
         "x": null,
@@ -7633,7 +7832,8 @@
         "wikipedia": null,
         "ncaaName": "Oregon",
         "ncaaSlug": "oregon",
-        "rpiHistoryName": "OregonU"
+        "rpiHistoryName": "OregonU",
+        "ncaaOrgId": 529
       },
       "social": {
         "x": null,
@@ -7672,7 +7872,8 @@
         "wikipedia": "Maryland_Terrapins_women's_soccer",
         "ncaaName": "Maryland",
         "ncaaSlug": "maryland",
-        "rpiHistoryName": "MarylandU"
+        "rpiHistoryName": "MarylandU",
+        "ncaaOrgId": 392
       },
       "social": {
         "x": null,
@@ -7711,7 +7912,8 @@
         "wikipedia": null,
         "ncaaName": "LMU (CA)",
         "ncaaSlug": null,
-        "rpiHistoryName": "LoyolaMarymount"
+        "rpiHistoryName": "LoyolaMarymount",
+        "ncaaOrgId": 370
       },
       "social": {
         "x": null,
@@ -7750,7 +7952,8 @@
         "wikipedia": "East_Texas_A&M_Lions_women's_soccer",
         "ncaaName": "East Texas A&M",
         "ncaaSlug": null,
-        "rpiHistoryName": "TexasCommerce"
+        "rpiHistoryName": "TexasCommerce",
+        "ncaaOrgId": 199
       },
       "social": {
         "x": null,
@@ -7789,7 +7992,8 @@
         "wikipedia": null,
         "ncaaName": "Grand Canyon",
         "ncaaSlug": "grand-canyon",
-        "rpiHistoryName": "GrandCanyon"
+        "rpiHistoryName": "GrandCanyon",
+        "ncaaOrgId": 1104
       },
       "social": {
         "x": null,
@@ -7828,7 +8032,8 @@
         "wikipedia": "Radford_Highlanders_women's_soccer",
         "ncaaName": "Radford",
         "ncaaSlug": "radford",
-        "rpiHistoryName": "Radford"
+        "rpiHistoryName": "Radford",
+        "ncaaOrgId": 563
       },
       "social": {
         "x": null,
@@ -7867,7 +8072,8 @@
         "wikipedia": null,
         "ncaaName": "SFA",
         "ncaaSlug": null,
-        "rpiHistoryName": "StephenFAustin"
+        "rpiHistoryName": "StephenFAustin",
+        "ncaaOrgId": 676
       },
       "social": {
         "x": null,
@@ -7906,7 +8112,8 @@
         "wikipedia": null,
         "ncaaName": "North Texas",
         "ncaaSlug": "north-texas",
-        "rpiHistoryName": "NorthTexas"
+        "rpiHistoryName": "NorthTexas",
+        "ncaaOrgId": 497
       },
       "social": {
         "x": null,
@@ -7945,7 +8152,8 @@
         "wikipedia": null,
         "ncaaName": "North Florida",
         "ncaaSlug": "north-florida",
-        "rpiHistoryName": "NorthFlorida"
+        "rpiHistoryName": "NorthFlorida",
+        "ncaaOrgId": 2711
       },
       "social": {
         "x": null,
@@ -7984,7 +8192,8 @@
         "wikipedia": null,
         "ncaaName": "UMass Lowell",
         "ncaaSlug": null,
-        "rpiHistoryName": "UMassLowell"
+        "rpiHistoryName": "UMassLowell",
+        "ncaaOrgId": 368
       },
       "social": {
         "x": null,
@@ -8023,7 +8232,8 @@
         "wikipedia": null,
         "ncaaName": "Fla. Atlantic",
         "ncaaSlug": null,
-        "rpiHistoryName": "FloridaAtlantic"
+        "rpiHistoryName": "FloridaAtlantic",
+        "ncaaOrgId": 229
       },
       "social": {
         "x": null,
@@ -8045,7 +8255,7 @@
       "shortName": "Fresno State",
       "nickname": "Bulldogs",
       "division": "D1",
-      "conference": "Mountain West",
+      "conference": "Pac-12",
       "colors": [
         "#C41230",
         "#13284C"
@@ -8062,7 +8272,8 @@
         "wikipedia": null,
         "ncaaName": "Fresno St.",
         "ncaaSlug": "fresno-st",
-        "rpiHistoryName": "FresnoState"
+        "rpiHistoryName": "FresnoState",
+        "ncaaOrgId": 96
       },
       "social": {
         "x": null,
@@ -8101,7 +8312,8 @@
         "wikipedia": null,
         "ncaaName": "Navy",
         "ncaaSlug": "navy",
-        "rpiHistoryName": "Navy"
+        "rpiHistoryName": "Navy",
+        "ncaaOrgId": 726
       },
       "social": {
         "x": null,
@@ -8140,7 +8352,8 @@
         "wikipedia": "North_Dakota_Fighting_Hawks_women's_soccer",
         "ncaaName": "North Dakota",
         "ncaaSlug": "north-dakota",
-        "rpiHistoryName": "NorthDakotaU"
+        "rpiHistoryName": "NorthDakotaU",
+        "ncaaOrgId": 494
       },
       "social": {
         "x": null,
@@ -8162,7 +8375,7 @@
       "shortName": "Central Arkansas",
       "nickname": "Sugar Bears",
       "division": "D1",
-      "conference": "ASUN",
+      "conference": "UAC",
       "colors": [
         "#582C83",
         "#7C878E"
@@ -8179,7 +8392,8 @@
         "wikipedia": null,
         "ncaaName": "Central Ark.",
         "ncaaSlug": "central-ark",
-        "rpiHistoryName": "CentralArkansas"
+        "rpiHistoryName": "CentralArkansas",
+        "ncaaOrgId": 1004
       },
       "social": {
         "x": null,
@@ -8218,7 +8432,8 @@
         "wikipedia": null,
         "ncaaName": "NJIT",
         "ncaaSlug": null,
-        "rpiHistoryName": "NJIT"
+        "rpiHistoryName": "NJIT",
+        "ncaaOrgId": 471
       },
       "social": {
         "x": null,
@@ -8257,7 +8472,8 @@
         "wikipedia": null,
         "ncaaName": "Massachusetts",
         "ncaaSlug": null,
-        "rpiHistoryName": "MassachusettsU"
+        "rpiHistoryName": "MassachusettsU",
+        "ncaaOrgId": 400
       },
       "social": {
         "x": null,
@@ -8296,7 +8512,8 @@
         "wikipedia": "Holy_Cross_Crusaders_women's_soccer",
         "ncaaName": "Holy Cross",
         "ncaaSlug": "holy-cross",
-        "rpiHistoryName": "HolyCross"
+        "rpiHistoryName": "HolyCross",
+        "ncaaOrgId": 285
       },
       "social": {
         "x": null,
@@ -8335,7 +8552,8 @@
         "wikipedia": null,
         "ncaaName": "Longwood",
         "ncaaSlug": "longwood",
-        "rpiHistoryName": "Longwood"
+        "rpiHistoryName": "Longwood",
+        "ncaaOrgId": 363
       },
       "social": {
         "x": null,
@@ -8374,7 +8592,8 @@
         "wikipedia": null,
         "ncaaName": "Ga. Southern",
         "ncaaSlug": null,
-        "rpiHistoryName": "GeorgiaSouthern"
+        "rpiHistoryName": "GeorgiaSouthern",
+        "ncaaOrgId": 253
       },
       "social": {
         "x": null,
@@ -8396,7 +8615,7 @@
       "shortName": "Utah Tech",
       "nickname": "Trailblazers",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "Big Sky",
       "colors": [
         "#003058",
         "#BA1C21"
@@ -8413,7 +8632,8 @@
         "wikipedia": null,
         "ncaaName": "Utah Tech",
         "ncaaSlug": "utah-tech",
-        "rpiHistoryName": "UtahTech"
+        "rpiHistoryName": "UtahTech",
+        "ncaaOrgId": 30095
       },
       "social": {
         "x": null,
@@ -8452,7 +8672,8 @@
         "wikipedia": null,
         "ncaaName": "Penn",
         "ncaaSlug": "penn",
-        "rpiHistoryName": "PennsylvaniaU"
+        "rpiHistoryName": "PennsylvaniaU",
+        "ncaaOrgId": 540
       },
       "social": {
         "x": null,
@@ -8491,7 +8712,8 @@
         "wikipedia": null,
         "ncaaName": "Idaho",
         "ncaaSlug": "idaho",
-        "rpiHistoryName": "IdahoU"
+        "rpiHistoryName": "IdahoU",
+        "ncaaOrgId": 295
       },
       "social": {
         "x": null,
@@ -8530,7 +8752,8 @@
         "wikipedia": "Northeastern_Huskies_women's_soccer",
         "ncaaName": "Northeastern",
         "ncaaSlug": "northeastern",
-        "rpiHistoryName": "Northeastern"
+        "rpiHistoryName": "Northeastern",
+        "ncaaOrgId": 500
       },
       "social": {
         "x": null,
@@ -8569,7 +8792,8 @@
         "wikipedia": null,
         "ncaaName": "Bryant",
         "ncaaSlug": "bryant",
-        "rpiHistoryName": "Bryant"
+        "rpiHistoryName": "Bryant",
+        "ncaaOrgId": 81
       },
       "social": {
         "x": null,
@@ -8608,7 +8832,8 @@
         "wikipedia": null,
         "ncaaName": "Northern Ky.",
         "ncaaSlug": "northern-ky",
-        "rpiHistoryName": "NorthernKentucky"
+        "rpiHistoryName": "NorthernKentucky",
+        "ncaaOrgId": 505
       },
       "social": {
         "x": null,
@@ -8649,7 +8874,8 @@
         "wikipedia": null,
         "ncaaName": "Ohio",
         "ncaaSlug": "ohio",
-        "rpiHistoryName": "OhioU"
+        "rpiHistoryName": "OhioU",
+        "ncaaOrgId": 519
       },
       "social": {
         "x": null,
@@ -8689,7 +8915,8 @@
         "wikipedia": "Central_Connecticut_Blue_Devils_women's_soccer",
         "ncaaName": "Central Conn. St.",
         "ncaaSlug": "central-conn-st",
-        "rpiHistoryName": "CentralConnecticut"
+        "rpiHistoryName": "CentralConnecticut",
+        "ncaaOrgId": 127
       },
       "social": {
         "x": null,
@@ -8728,7 +8955,8 @@
         "wikipedia": null,
         "ncaaName": "UC San Diego",
         "ncaaSlug": "uc-san-diego",
-        "rpiHistoryName": "UCSanDiego"
+        "rpiHistoryName": "UCSanDiego",
+        "ncaaOrgId": 112
       },
       "social": {
         "x": null,
@@ -8767,7 +8995,8 @@
         "wikipedia": null,
         "ncaaName": "San Diego",
         "ncaaSlug": "san-diego",
-        "rpiHistoryName": "SanDiegoU"
+        "rpiHistoryName": "SanDiegoU",
+        "ncaaOrgId": 627
       },
       "social": {
         "x": null,
@@ -8806,7 +9035,8 @@
         "wikipedia": null,
         "ncaaName": "Eastern Mich.",
         "ncaaSlug": "eastern-mich",
-        "rpiHistoryName": "EasternMichigan"
+        "rpiHistoryName": "EasternMichigan",
+        "ncaaOrgId": 204
       },
       "social": {
         "x": null,
@@ -8845,7 +9075,8 @@
         "wikipedia": null,
         "ncaaName": "Evansville",
         "ncaaSlug": "evansville",
-        "rpiHistoryName": "Evansville"
+        "rpiHistoryName": "Evansville",
+        "ncaaOrgId": 219
       },
       "social": {
         "x": null,
@@ -8884,7 +9115,8 @@
         "wikipedia": null,
         "ncaaName": "Akron",
         "ncaaSlug": "akron",
-        "rpiHistoryName": "Akron"
+        "rpiHistoryName": "Akron",
+        "ncaaOrgId": 5
       },
       "social": {
         "x": null,
@@ -8923,7 +9155,8 @@
         "wikipedia": null,
         "ncaaName": "Loyola Maryland",
         "ncaaSlug": "loyola-maryland",
-        "rpiHistoryName": "LoyolaMD"
+        "rpiHistoryName": "LoyolaMD",
+        "ncaaOrgId": 369
       },
       "social": {
         "x": null,
@@ -8962,7 +9195,8 @@
         "wikipedia": null,
         "ncaaName": "UNC Greensboro",
         "ncaaSlug": "unc-greensboro",
-        "rpiHistoryName": "UNCGreensboro"
+        "rpiHistoryName": "UNCGreensboro",
+        "ncaaOrgId": 459
       },
       "social": {
         "x": null,
@@ -8984,7 +9218,7 @@
       "shortName": "Marist",
       "nickname": "Red Foxes",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#C8102E",
         "#231F20"
@@ -9001,7 +9235,8 @@
         "wikipedia": null,
         "ncaaName": "Marist",
         "ncaaSlug": "marist",
-        "rpiHistoryName": "Marist"
+        "rpiHistoryName": "Marist",
+        "ncaaOrgId": 386
       },
       "social": {
         "x": null,
@@ -9040,7 +9275,8 @@
         "wikipedia": null,
         "ncaaName": "Indiana St.",
         "ncaaSlug": "indiana-st",
-        "rpiHistoryName": "IndianaState"
+        "rpiHistoryName": "IndianaState",
+        "ncaaOrgId": 305
       },
       "social": {
         "x": null,
@@ -9062,7 +9298,7 @@
       "shortName": "Abilene Christian",
       "nickname": "Wildcats",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "UAC",
       "colors": [
         "#4F2170",
         "#C4C6C8"
@@ -9079,7 +9315,8 @@
         "wikipedia": null,
         "ncaaName": "Abilene Christian",
         "ncaaSlug": "abilene-christian",
-        "rpiHistoryName": "AbileneChristian"
+        "rpiHistoryName": "AbileneChristian",
+        "ncaaOrgId": 2
       },
       "social": {
         "x": null,
@@ -9101,7 +9338,7 @@
       "shortName": "Little Rock",
       "nickname": "Trojans",
       "division": "D1",
-      "conference": "OVC",
+      "conference": "UAC",
       "colors": [
         "#6E2639",
         "#A7A9AC"
@@ -9118,7 +9355,8 @@
         "wikipedia": null,
         "ncaaName": "Little Rock",
         "ncaaSlug": null,
-        "rpiHistoryName": "UALR"
+        "rpiHistoryName": "UALR",
+        "ncaaOrgId": 32
       },
       "social": {
         "x": null,
@@ -9157,7 +9395,8 @@
         "wikipedia": null,
         "ncaaName": "Eastern Wash.",
         "ncaaSlug": "eastern-wash",
-        "rpiHistoryName": "EasternWashington"
+        "rpiHistoryName": "EasternWashington",
+        "ncaaOrgId": 207
       },
       "social": {
         "x": null,
@@ -9196,7 +9435,8 @@
         "wikipedia": null,
         "ncaaName": "Jacksonville",
         "ncaaSlug": "jacksonville",
-        "rpiHistoryName": "JacksonvilleU"
+        "rpiHistoryName": "JacksonvilleU",
+        "ncaaOrgId": 316
       },
       "social": {
         "x": null,
@@ -9235,7 +9475,8 @@
         "wikipedia": null,
         "ncaaName": "Omaha",
         "ncaaSlug": "neb-omaha",
-        "rpiHistoryName": "UNOmaha"
+        "rpiHistoryName": "UNOmaha",
+        "ncaaOrgId": 464
       },
       "social": {
         "x": null,
@@ -9274,7 +9515,8 @@
         "wikipedia": null,
         "ncaaName": "FDU",
         "ncaaSlug": "fdu",
-        "rpiHistoryName": "FairleighDickinson"
+        "rpiHistoryName": "FairleighDickinson",
+        "ncaaOrgId": 222
       },
       "social": {
         "x": null,
@@ -9313,7 +9555,8 @@
         "wikipedia": null,
         "ncaaName": "South Dakota",
         "ncaaSlug": "south-dakota",
-        "rpiHistoryName": "SouthDakotaU"
+        "rpiHistoryName": "SouthDakotaU",
+        "ncaaOrgId": 650
       },
       "social": {
         "x": null,
@@ -9352,7 +9595,8 @@
         "wikipedia": null,
         "ncaaName": "Towson",
         "ncaaSlug": "towson",
-        "rpiHistoryName": "Towson"
+        "rpiHistoryName": "Towson",
+        "ncaaOrgId": 711
       },
       "social": {
         "x": null,
@@ -9391,7 +9635,8 @@
         "wikipedia": null,
         "ncaaName": "UMBC",
         "ncaaSlug": null,
-        "rpiHistoryName": "UMBC"
+        "rpiHistoryName": "UMBC",
+        "ncaaOrgId": 391
       },
       "social": {
         "x": null,
@@ -9430,7 +9675,8 @@
         "wikipedia": null,
         "ncaaName": "Grambling",
         "ncaaSlug": "grambling",
-        "rpiHistoryName": "Grambling"
+        "rpiHistoryName": "Grambling",
+        "ncaaOrgId": 261
       },
       "social": {
         "x": null,
@@ -9469,7 +9715,8 @@
         "wikipedia": "Lamar_Lady_Cardinals_soccer",
         "ncaaName": "Lamar University",
         "ncaaSlug": null,
-        "rpiHistoryName": "Lamar"
+        "rpiHistoryName": "Lamar",
+        "ncaaOrgId": 346
       },
       "social": {
         "x": null,
@@ -9508,7 +9755,8 @@
         "wikipedia": null,
         "ncaaName": "Troy",
         "ncaaSlug": "troy",
-        "rpiHistoryName": "Troy"
+        "rpiHistoryName": "Troy",
+        "ncaaOrgId": 716
       },
       "social": {
         "x": null,
@@ -9547,7 +9795,8 @@
         "wikipedia": null,
         "ncaaName": "George Washington",
         "ncaaSlug": "george-washington",
-        "rpiHistoryName": "GeorgeWashington"
+        "rpiHistoryName": "GeorgeWashington",
+        "ncaaOrgId": 249
       },
       "social": {
         "x": null,
@@ -9586,7 +9835,8 @@
         "wikipedia": null,
         "ncaaName": "Long Beach St.",
         "ncaaSlug": "long-beach-st",
-        "rpiHistoryName": "LongBeachState"
+        "rpiHistoryName": "LongBeachState",
+        "ncaaOrgId": 99
       },
       "social": {
         "x": null,
@@ -9608,7 +9858,7 @@
       "shortName": "Niagara",
       "nickname": "Purple Eagles",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#582C83",
         "#C7C8CA"
@@ -9625,7 +9875,8 @@
         "wikipedia": null,
         "ncaaName": "Niagara",
         "ncaaSlug": "niagara",
-        "rpiHistoryName": "Niagara"
+        "rpiHistoryName": "Niagara",
+        "ncaaOrgId": 482
       },
       "social": {
         "x": null,
@@ -9664,7 +9915,8 @@
         "wikipedia": null,
         "ncaaName": "Jacksonville St.",
         "ncaaSlug": "jacksonville-st",
-        "rpiHistoryName": "JacksonvilleState"
+        "rpiHistoryName": "JacksonvilleState",
+        "ncaaOrgId": 315
       },
       "social": {
         "x": null,
@@ -9703,7 +9955,8 @@
         "wikipedia": null,
         "ncaaName": "Northern Ariz.",
         "ncaaSlug": "northern-ariz",
-        "rpiHistoryName": "NorthernArizona"
+        "rpiHistoryName": "NorthernArizona",
+        "ncaaOrgId": 501
       },
       "social": {
         "x": null,
@@ -9742,7 +9995,8 @@
         "wikipedia": null,
         "ncaaName": "DePaul",
         "ncaaSlug": "depaul",
-        "rpiHistoryName": "DePaul"
+        "rpiHistoryName": "DePaul",
+        "ncaaOrgId": 176
       },
       "social": {
         "x": null,
@@ -9781,7 +10035,8 @@
         "wikipedia": null,
         "ncaaName": "Southeastern La.",
         "ncaaSlug": "southeastern-la",
-        "rpiHistoryName": "SELouisiana"
+        "rpiHistoryName": "SELouisiana",
+        "ncaaOrgId": 655
       },
       "social": {
         "x": null,
@@ -9820,7 +10075,8 @@
         "wikipedia": null,
         "ncaaName": "New Hampshire",
         "ncaaSlug": "new-hampshire",
-        "rpiHistoryName": "NewHampshireU"
+        "rpiHistoryName": "NewHampshireU",
+        "ncaaOrgId": 469
       },
       "social": {
         "x": null,
@@ -9842,7 +10098,7 @@
       "shortName": "Hawaii",
       "nickname": "Rainbow Wahine",
       "division": "D1",
-      "conference": "Big West",
+      "conference": "Mountain West",
       "colors": [
         "#005838",
         "#231F20"
@@ -9859,7 +10115,8 @@
         "wikipedia": null,
         "ncaaName": "Hawaii",
         "ncaaSlug": "hawaii",
-        "rpiHistoryName": "HawaiiU"
+        "rpiHistoryName": "HawaiiU",
+        "ncaaOrgId": 277
       },
       "social": {
         "x": null,
@@ -9898,7 +10155,8 @@
         "wikipedia": "Campbell_Fighting_Camels_men's_soccer",
         "ncaaName": "Campbell",
         "ncaaSlug": "campbell",
-        "rpiHistoryName": "Campbell"
+        "rpiHistoryName": "Campbell",
+        "ncaaOrgId": 115
       },
       "social": {
         "x": null,
@@ -9939,7 +10197,8 @@
         "wikipedia": null,
         "ncaaName": "George Mason",
         "ncaaSlug": "george-mason",
-        "rpiHistoryName": "GeorgeMason"
+        "rpiHistoryName": "GeorgeMason",
+        "ncaaOrgId": 248
       },
       "social": {
         "x": null,
@@ -9978,7 +10237,8 @@
         "wikipedia": null,
         "ncaaName": "Lafayette",
         "ncaaSlug": "lafayette",
-        "rpiHistoryName": "Lafayette"
+        "rpiHistoryName": "Lafayette",
+        "ncaaOrgId": 342
       },
       "social": {
         "x": null,
@@ -10000,7 +10260,7 @@
       "shortName": "Oregon State",
       "nickname": "Beavers",
       "division": "D1",
-      "conference": "WCC",
+      "conference": "Pac-12",
       "colors": [
         "#D73F09",
         "#000000"
@@ -10017,7 +10277,8 @@
         "wikipedia": null,
         "ncaaName": "Oregon St.",
         "ncaaSlug": null,
-        "rpiHistoryName": "OregonState"
+        "rpiHistoryName": "OregonState",
+        "ncaaOrgId": 528
       },
       "social": {
         "x": null,
@@ -10056,7 +10317,8 @@
         "wikipedia": "St._John's_Red_Storm_women's_soccer",
         "ncaaName": "St. John's (NY)",
         "ncaaSlug": "st-johns-ny",
-        "rpiHistoryName": "StJohns"
+        "rpiHistoryName": "StJohns",
+        "ncaaOrgId": 603
       },
       "social": {
         "x": null,
@@ -10095,7 +10357,8 @@
         "wikipedia": null,
         "ncaaName": "Wright St.",
         "ncaaSlug": "wright-st",
-        "rpiHistoryName": "WrightState"
+        "rpiHistoryName": "WrightState",
+        "ncaaOrgId": 810
       },
       "social": {
         "x": null,
@@ -10134,7 +10397,8 @@
         "wikipedia": null,
         "ncaaName": "Bucknell",
         "ncaaSlug": "bucknell",
-        "rpiHistoryName": "Bucknell"
+        "rpiHistoryName": "Bucknell",
+        "ncaaOrgId": 83
       },
       "social": {
         "x": null,
@@ -10173,7 +10437,8 @@
         "wikipedia": null,
         "ncaaName": "New Mexico St.",
         "ncaaSlug": "new-mexico-st",
-        "rpiHistoryName": "NewMexicoState"
+        "rpiHistoryName": "NewMexicoState",
+        "ncaaOrgId": 472
       },
       "social": {
         "x": null,
@@ -10212,7 +10477,8 @@
         "wikipedia": null,
         "ncaaName": "Arkansas St.",
         "ncaaSlug": "arkansas-st",
-        "rpiHistoryName": "ArkansasState"
+        "rpiHistoryName": "ArkansasState",
+        "ncaaOrgId": 30
       },
       "social": {
         "x": null,
@@ -10251,7 +10517,8 @@
         "wikipedia": null,
         "ncaaName": "Saint Joseph's",
         "ncaaSlug": "saint-josephs",
-        "rpiHistoryName": "StJosephs"
+        "rpiHistoryName": "StJosephs",
+        "ncaaOrgId": 606
       },
       "social": {
         "x": null,
@@ -10290,7 +10557,8 @@
         "wikipedia": null,
         "ncaaName": "Idaho St.",
         "ncaaSlug": "idaho-st",
-        "rpiHistoryName": "IdahoState"
+        "rpiHistoryName": "IdahoState",
+        "ncaaOrgId": 294
       },
       "social": {
         "x": null,
@@ -10329,7 +10597,8 @@
         "wikipedia": null,
         "ncaaName": "Richmond",
         "ncaaSlug": "richmond",
-        "rpiHistoryName": "Richmond"
+        "rpiHistoryName": "Richmond",
+        "ncaaOrgId": 575
       },
       "social": {
         "x": null,
@@ -10351,7 +10620,7 @@
       "shortName": "Louisiana Tech",
       "nickname": "Lady Techsters",
       "division": "D1",
-      "conference": "CUSA",
+      "conference": "Sun Belt",
       "colors": [
         "#69B3E7",
         "#CB333B"
@@ -10368,7 +10637,8 @@
         "wikipedia": null,
         "ncaaName": "Louisiana Tech",
         "ncaaSlug": "louisiana-tech",
-        "rpiHistoryName": "LouisianaTech"
+        "rpiHistoryName": "LouisianaTech",
+        "ncaaOrgId": 366
       },
       "social": {
         "x": null,
@@ -10390,7 +10660,7 @@
       "shortName": "Tarleton State",
       "nickname": "Texans",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "UAC",
       "colors": [
         "#4F2D7F",
         "#000000"
@@ -10407,7 +10677,8 @@
         "wikipedia": null,
         "ncaaName": "Tarleton St.",
         "ncaaSlug": "tarleton-st",
-        "rpiHistoryName": "Tarleton"
+        "rpiHistoryName": "Tarleton",
+        "ncaaOrgId": 1395
       },
       "social": {
         "x": null,
@@ -10446,7 +10717,8 @@
         "wikipedia": null,
         "ncaaName": "Pacific",
         "ncaaSlug": "pacific",
-        "rpiHistoryName": "Pacific"
+        "rpiHistoryName": "Pacific",
+        "ncaaOrgId": 534
       },
       "social": {
         "x": null,
@@ -10468,7 +10740,7 @@
       "shortName": "Northern Illinois",
       "nickname": "Huskies",
       "division": "D1",
-      "conference": "MAC",
+      "conference": "Horizon",
       "colors": [
         "#BA0C2F",
         "#27251F"
@@ -10485,7 +10757,8 @@
         "wikipedia": "Northern_Illinois_Huskies_women's_soccer",
         "ncaaName": "NIU",
         "ncaaSlug": null,
-        "rpiHistoryName": "NorthernIllinois"
+        "rpiHistoryName": "NorthernIllinois",
+        "ncaaOrgId": 503
       },
       "social": {
         "x": null,
@@ -10524,7 +10797,8 @@
         "wikipedia": null,
         "ncaaName": "Howard",
         "ncaaSlug": "howard",
-        "rpiHistoryName": "Howard"
+        "rpiHistoryName": "Howard",
+        "ncaaOrgId": 290
       },
       "social": {
         "x": null,
@@ -10563,7 +10837,8 @@
         "wikipedia": "High_Point_Panthers_women's_soccer",
         "ncaaName": "High Point",
         "ncaaSlug": "high-point",
-        "rpiHistoryName": "HighPoint"
+        "rpiHistoryName": "HighPoint",
+        "ncaaOrgId": 19651
       },
       "social": {
         "x": null,
@@ -10602,7 +10877,8 @@
         "wikipedia": null,
         "ncaaName": "Southern Ind.",
         "ncaaSlug": "southern-ind",
-        "rpiHistoryName": "SouthernIndiana"
+        "rpiHistoryName": "SouthernIndiana",
+        "ncaaOrgId": 661
       },
       "social": {
         "x": null,
@@ -10641,7 +10917,8 @@
         "wikipedia": null,
         "ncaaName": "Seton Hall",
         "ncaaSlug": "seton-hall",
-        "rpiHistoryName": "SetonHall"
+        "rpiHistoryName": "SetonHall",
+        "ncaaOrgId": 635
       },
       "social": {
         "x": null,
@@ -10663,7 +10940,7 @@
       "shortName": "Merrimack",
       "nickname": "Warriors",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#003768",
         "#F1C400"
@@ -10680,7 +10957,8 @@
         "wikipedia": null,
         "ncaaName": "Merrimack",
         "ncaaSlug": "merrimack",
-        "rpiHistoryName": "Merrimack"
+        "rpiHistoryName": "Merrimack",
+        "ncaaOrgId": 410
       },
       "social": {
         "x": null,
@@ -10719,7 +10997,8 @@
         "wikipedia": null,
         "ncaaName": "Northern Colo.",
         "ncaaSlug": "northern-colo",
-        "rpiHistoryName": "NorthernColorado"
+        "rpiHistoryName": "NorthernColorado",
+        "ncaaOrgId": 502
       },
       "social": {
         "x": null,
@@ -10758,7 +11037,8 @@
         "wikipedia": null,
         "ncaaName": "Wofford",
         "ncaaSlug": "wofford",
-        "rpiHistoryName": "Wofford"
+        "rpiHistoryName": "Wofford",
+        "ncaaOrgId": 2915
       },
       "social": {
         "x": null,
@@ -10797,7 +11077,8 @@
         "wikipedia": null,
         "ncaaName": "Youngstown St.",
         "ncaaSlug": "youngstown-st",
-        "rpiHistoryName": "YoungstownState"
+        "rpiHistoryName": "YoungstownState",
+        "ncaaOrgId": 817
       },
       "social": {
         "x": null,
@@ -10819,7 +11100,7 @@
       "shortName": "UTEP",
       "nickname": "Miners",
       "division": "D1",
-      "conference": "CUSA",
+      "conference": "Mountain West",
       "colors": [
         "#041E42",
         "#FF8200"
@@ -10836,7 +11117,8 @@
         "wikipedia": null,
         "ncaaName": "UTEP",
         "ncaaSlug": null,
-        "rpiHistoryName": "UTEP"
+        "rpiHistoryName": "UTEP",
+        "ncaaOrgId": 704
       },
       "social": {
         "x": null,
@@ -10858,7 +11140,7 @@
       "shortName": "Austin Peay",
       "nickname": "Governors",
       "division": "D1",
-      "conference": "ASUN",
+      "conference": "UAC",
       "colors": [
         "#C41E3A",
         "#000000"
@@ -10875,7 +11157,8 @@
         "wikipedia": null,
         "ncaaName": "Austin Peay",
         "ncaaSlug": "austin-peay",
-        "rpiHistoryName": "AustinPeay"
+        "rpiHistoryName": "AustinPeay",
+        "ncaaOrgId": 43
       },
       "social": {
         "x": null,
@@ -10914,7 +11197,8 @@
         "wikipedia": null,
         "ncaaName": "Jackson St.",
         "ncaaSlug": "jackson-st",
-        "rpiHistoryName": "JacksonState"
+        "rpiHistoryName": "JacksonState",
+        "ncaaOrgId": 314
       },
       "social": {
         "x": null,
@@ -10953,7 +11237,8 @@
         "wikipedia": null,
         "ncaaName": "Eastern Ill.",
         "ncaaSlug": "eastern-ill",
-        "rpiHistoryName": "EasternIllinois"
+        "rpiHistoryName": "EasternIllinois",
+        "ncaaOrgId": 201
       },
       "social": {
         "x": null,
@@ -10992,7 +11277,8 @@
         "wikipedia": null,
         "ncaaName": "Toledo",
         "ncaaSlug": "toledo",
-        "rpiHistoryName": "Toledo"
+        "rpiHistoryName": "Toledo",
+        "ncaaOrgId": 709
       },
       "social": {
         "x": null,
@@ -11031,7 +11317,8 @@
         "wikipedia": null,
         "ncaaName": "Stonehill",
         "ncaaSlug": "stonehill",
-        "rpiHistoryName": "Stonehill"
+        "rpiHistoryName": "Stonehill",
+        "ncaaOrgId": 682
       },
       "social": {
         "x": null,
@@ -11070,7 +11357,8 @@
         "wikipedia": null,
         "ncaaName": "UIW",
         "ncaaSlug": "incarnate-word",
-        "rpiHistoryName": "IncarnateWord"
+        "rpiHistoryName": "IncarnateWord",
+        "ncaaOrgId": 2743
       },
       "social": {
         "x": null,
@@ -11092,7 +11380,7 @@
       "shortName": "Saint Peter's",
       "nickname": "Peacocks",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#003C71",
         "#FFFFFF"
@@ -11109,7 +11397,8 @@
         "wikipedia": null,
         "ncaaName": "Saint Peter's",
         "ncaaSlug": "st-peters",
-        "rpiHistoryName": "StPeters"
+        "rpiHistoryName": "StPeters",
+        "ncaaOrgId": 617
       },
       "social": {
         "x": null,
@@ -11148,7 +11437,8 @@
         "wikipedia": null,
         "ncaaName": "Portland St.",
         "ncaaSlug": "portland-st",
-        "rpiHistoryName": "PortlandState"
+        "rpiHistoryName": "PortlandState",
+        "ncaaOrgId": 550
       },
       "social": {
         "x": null,
@@ -11187,7 +11477,8 @@
         "wikipedia": null,
         "ncaaName": "Green Bay",
         "ncaaSlug": "green-bay",
-        "rpiHistoryName": "GreenBay"
+        "rpiHistoryName": "GreenBay",
+        "ncaaOrgId": 794
       },
       "social": {
         "x": null,
@@ -11226,7 +11517,8 @@
         "wikipedia": null,
         "ncaaName": "UNLV",
         "ncaaSlug": "unlv",
-        "rpiHistoryName": "UNLV"
+        "rpiHistoryName": "UNLV",
+        "ncaaOrgId": 465
       },
       "social": {
         "x": null,
@@ -11248,7 +11540,7 @@
       "shortName": "Iona",
       "nickname": "Gaels",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#661E2B",
         "#EAAF0F"
@@ -11265,7 +11557,8 @@
         "wikipedia": null,
         "ncaaName": "Iona",
         "ncaaSlug": "iona",
-        "rpiHistoryName": "Iona"
+        "rpiHistoryName": "Iona",
+        "ncaaOrgId": 310
       },
       "social": {
         "x": null,
@@ -11287,7 +11580,7 @@
       "shortName": "Sacramento State",
       "nickname": "Hornets",
       "division": "D1",
-      "conference": "Big Sky",
+      "conference": "Big West",
       "colors": [
         "#043927",
         "#C4B581"
@@ -11304,7 +11597,8 @@
         "wikipedia": null,
         "ncaaName": "Sacramento St.",
         "ncaaSlug": "sacramento-st",
-        "rpiHistoryName": "SacramentoState"
+        "rpiHistoryName": "SacramentoState",
+        "ncaaOrgId": 102
       },
       "social": {
         "x": null,
@@ -11343,7 +11637,8 @@
         "wikipedia": null,
         "ncaaName": "Drexel",
         "ncaaSlug": "drexel",
-        "rpiHistoryName": "Drexel"
+        "rpiHistoryName": "Drexel",
+        "ncaaOrgId": 191
       },
       "social": {
         "x": null,
@@ -11365,7 +11660,7 @@
       "shortName": "UC Davis",
       "nickname": "Aggies",
       "division": "D1",
-      "conference": "Big West",
+      "conference": "Mountain West",
       "colors": [
         "#002855",
         "#B3A369"
@@ -11382,7 +11677,8 @@
         "wikipedia": null,
         "ncaaName": "UC Davis",
         "ncaaSlug": "uc-davis",
-        "rpiHistoryName": "UCDavis"
+        "rpiHistoryName": "UCDavis",
+        "ncaaOrgId": 108
       },
       "social": {
         "x": null,
@@ -11421,7 +11717,8 @@
         "wikipedia": null,
         "ncaaName": "A&M-Corpus Christi",
         "ncaaSlug": null,
-        "rpiHistoryName": "TexasCorpusChristi"
+        "rpiHistoryName": "TexasCorpusChristi",
+        "ncaaOrgId": 26172
       },
       "social": {
         "x": null,
@@ -11460,7 +11757,8 @@
         "wikipedia": null,
         "ncaaName": "Kennesaw St.",
         "ncaaSlug": "kennesaw-st",
-        "rpiHistoryName": "KennesawState"
+        "rpiHistoryName": "KennesawState",
+        "ncaaOrgId": 1157
       },
       "social": {
         "x": null,
@@ -11499,7 +11797,8 @@
         "wikipedia": null,
         "ncaaName": "Lehigh",
         "ncaaSlug": "lehigh",
-        "rpiHistoryName": "Lehigh"
+        "rpiHistoryName": "Lehigh",
+        "ncaaOrgId": 352
       },
       "social": {
         "x": null,
@@ -11538,7 +11837,8 @@
         "wikipedia": null,
         "ncaaName": "Valparaiso",
         "ncaaSlug": "valparaiso",
-        "rpiHistoryName": "Valparaiso"
+        "rpiHistoryName": "Valparaiso",
+        "ncaaOrgId": 735
       },
       "social": {
         "x": null,
@@ -11577,7 +11877,8 @@
         "wikipedia": null,
         "ncaaName": "American",
         "ncaaSlug": "american",
-        "rpiHistoryName": "American"
+        "rpiHistoryName": "American",
+        "ncaaOrgId": 23
       },
       "social": {
         "x": null,
@@ -11616,7 +11917,8 @@
         "wikipedia": null,
         "ncaaName": "UTRGV",
         "ncaaSlug": null,
-        "rpiHistoryName": "TexasRGV"
+        "rpiHistoryName": "TexasRGV",
+        "ncaaOrgId": 536
       },
       "social": {
         "x": null,
@@ -11655,7 +11957,8 @@
         "wikipedia": null,
         "ncaaName": "LIU",
         "ncaaSlug": null,
-        "rpiHistoryName": "LongIsland"
+        "rpiHistoryName": "LongIsland",
+        "ncaaOrgId": 361
       },
       "social": {
         "x": null,
@@ -11677,7 +11980,7 @@
       "shortName": "Southern Utah",
       "nickname": "Thunderbirds",
       "division": "D1",
-      "conference": "WAC",
+      "conference": "Big Sky",
       "colors": [
         "#E91D2D",
         "#000000"
@@ -11694,7 +11997,8 @@
         "wikipedia": null,
         "ncaaName": "Southern Utah",
         "ncaaSlug": "southern-utah",
-        "rpiHistoryName": "SouthernUtah"
+        "rpiHistoryName": "SouthernUtah",
+        "ncaaOrgId": 667
       },
       "social": {
         "x": null,
@@ -11716,7 +12020,7 @@
       "shortName": "Rider",
       "nickname": "Broncs",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#981E32",
         "#6C6F70"
@@ -11733,7 +12037,8 @@
         "wikipedia": null,
         "ncaaName": "Rider",
         "ncaaSlug": "rider",
-        "rpiHistoryName": "Rider"
+        "rpiHistoryName": "Rider",
+        "ncaaOrgId": 576
       },
       "social": {
         "x": null,
@@ -11772,7 +12077,8 @@
         "wikipedia": null,
         "ncaaName": "San Jose St.",
         "ncaaSlug": "san-jose-st",
-        "rpiHistoryName": "SanJoseState"
+        "rpiHistoryName": "SanJoseState",
+        "ncaaOrgId": 630
       },
       "social": {
         "x": null,
@@ -11811,7 +12117,8 @@
         "wikipedia": null,
         "ncaaName": "Oakland",
         "ncaaSlug": "oakland",
-        "rpiHistoryName": "Oakland"
+        "rpiHistoryName": "Oakland",
+        "ncaaOrgId": 514
       },
       "social": {
         "x": null,
@@ -11850,7 +12157,8 @@
         "wikipedia": null,
         "ncaaName": "Charleston So.",
         "ncaaSlug": "charleston-so",
-        "rpiHistoryName": "CharlestonSouthern"
+        "rpiHistoryName": "CharlestonSouthern",
+        "ncaaOrgId": 48
       },
       "social": {
         "x": null,
@@ -11889,7 +12197,8 @@
         "wikipedia": null,
         "ncaaName": "Queens (NC)",
         "ncaaSlug": "queens-nc",
-        "rpiHistoryName": "Queens"
+        "rpiHistoryName": "Queens",
+        "ncaaOrgId": 11504
       },
       "social": {
         "x": null,
@@ -11928,7 +12237,8 @@
         "wikipedia": null,
         "ncaaName": "UT Martin",
         "ncaaSlug": null,
-        "rpiHistoryName": "TennesseeMartin"
+        "rpiHistoryName": "TennesseeMartin",
+        "ncaaOrgId": 695
       },
       "social": {
         "x": null,
@@ -11967,7 +12277,8 @@
         "wikipedia": null,
         "ncaaName": "Southern Miss.",
         "ncaaSlug": "southern-miss",
-        "rpiHistoryName": "SouthernMississippi"
+        "rpiHistoryName": "SouthernMississippi",
+        "ncaaOrgId": 664
       },
       "social": {
         "x": null,
@@ -12006,7 +12317,8 @@
         "wikipedia": null,
         "ncaaName": "Cleveland St.",
         "ncaaSlug": "cleveland-st",
-        "rpiHistoryName": "ClevelandState"
+        "rpiHistoryName": "ClevelandState",
+        "ncaaOrgId": 148
       },
       "social": {
         "x": null,
@@ -12045,7 +12357,8 @@
         "wikipedia": null,
         "ncaaName": "Alabama A&M",
         "ncaaSlug": "alabama-am",
-        "rpiHistoryName": "AlabamaA&M"
+        "rpiHistoryName": "AlabamaA&M",
+        "ncaaOrgId": 6
       },
       "social": {
         "x": null,
@@ -12084,7 +12397,8 @@
         "wikipedia": null,
         "ncaaName": "UAlbany",
         "ncaaSlug": null,
-        "rpiHistoryName": "Albany"
+        "rpiHistoryName": "Albany",
+        "ncaaOrgId": 14
       },
       "social": {
         "x": null,
@@ -12123,7 +12437,8 @@
         "wikipedia": null,
         "ncaaName": "Nevada",
         "ncaaSlug": "nevada",
-        "rpiHistoryName": "NevadaU"
+        "rpiHistoryName": "NevadaU",
+        "ncaaOrgId": 466
       },
       "social": {
         "x": null,
@@ -12162,7 +12477,8 @@
         "wikipedia": "North_Dakota_State_Bison_women's_soccer",
         "ncaaName": "North Dakota St.",
         "ncaaSlug": "north-dakota-st",
-        "rpiHistoryName": "NorthDakotaState"
+        "rpiHistoryName": "NorthDakotaState",
+        "ncaaOrgId": 493
       },
       "social": {
         "x": null,
@@ -12201,7 +12517,8 @@
         "wikipedia": null,
         "ncaaName": "Central Mich.",
         "ncaaSlug": "central-mich",
-        "rpiHistoryName": "CentralMichigan"
+        "rpiHistoryName": "CentralMichigan",
+        "ncaaOrgId": 129
       },
       "social": {
         "x": null,
@@ -12223,7 +12540,7 @@
       "shortName": "Mount St. Mary's",
       "nickname": "Mountaineers",
       "division": "D1",
-      "conference": "MAAC",
+      "conference": "Metro",
       "colors": [
         "#002F6C",
         "#84754E"
@@ -12240,7 +12557,8 @@
         "wikipedia": "Mount_St._Mary's_Mountaineers_women's_soccer",
         "ncaaName": "Mount St. Mary's",
         "ncaaSlug": null,
-        "rpiHistoryName": "MountStMary"
+        "rpiHistoryName": "MountStMary",
+        "ncaaOrgId": 450
       },
       "social": {
         "x": null,
@@ -12279,7 +12597,8 @@
         "wikipedia": null,
         "ncaaName": "Winthrop",
         "ncaaSlug": "winthrop",
-        "rpiHistoryName": "Winthrop"
+        "rpiHistoryName": "Winthrop",
+        "ncaaOrgId": 792
       },
       "social": {
         "x": null,
@@ -12318,7 +12637,8 @@
         "wikipedia": null,
         "ncaaName": "McNeese",
         "ncaaSlug": null,
-        "rpiHistoryName": "McNeeseState"
+        "rpiHistoryName": "McNeeseState",
+        "ncaaOrgId": 402
       },
       "social": {
         "x": null,
@@ -12357,7 +12677,8 @@
         "wikipedia": null,
         "ncaaName": "UNC Asheville",
         "ncaaSlug": "unc-asheville",
-        "rpiHistoryName": "UNCAsheville"
+        "rpiHistoryName": "UNCAsheville",
+        "ncaaOrgId": 456
       },
       "social": {
         "x": null,
@@ -12396,7 +12717,8 @@
         "wikipedia": null,
         "ncaaName": "UNI",
         "ncaaSlug": null,
-        "rpiHistoryName": "UNI"
+        "rpiHistoryName": "UNI",
+        "ncaaOrgId": 504
       },
       "social": {
         "x": null,
@@ -12435,7 +12757,8 @@
         "wikipedia": null,
         "ncaaName": "Robert Morris",
         "ncaaSlug": "robert-morris",
-        "rpiHistoryName": "RobertMorris"
+        "rpiHistoryName": "RobertMorris",
+        "ncaaOrgId": 579
       },
       "social": {
         "x": null,
@@ -12474,7 +12797,8 @@
         "wikipedia": null,
         "ncaaName": "Morehead St.",
         "ncaaSlug": "morehead-st",
-        "rpiHistoryName": "Morehead"
+        "rpiHistoryName": "Morehead",
+        "ncaaOrgId": 444
       },
       "social": {
         "x": null,
@@ -12513,7 +12837,8 @@
         "wikipedia": "Nicholls_Colonels_women's_soccer",
         "ncaaName": "Nicholls",
         "ncaaSlug": null,
-        "rpiHistoryName": "NichollsState"
+        "rpiHistoryName": "NichollsState",
+        "ncaaOrgId": 483
       },
       "social": {
         "x": null,
@@ -12535,7 +12860,7 @@
       "shortName": "West Georgia",
       "nickname": "Wolves",
       "division": "D1",
-      "conference": "ASUN",
+      "conference": "UAC",
       "colors": [
         "#0033A1",
         "#DB1A21"
@@ -12553,7 +12878,8 @@
         "wikipedia": null,
         "ncaaName": "West Ga.",
         "ncaaSlug": "west-ga",
-        "rpiHistoryName": "WestGeorgia"
+        "rpiHistoryName": "WestGeorgia",
+        "ncaaOrgId": 766
       },
       "social": {
         "x": null,
@@ -12592,7 +12918,8 @@
         "wikipedia": null,
         "ncaaName": "Temple",
         "ncaaSlug": "temple",
-        "rpiHistoryName": "Temple"
+        "rpiHistoryName": "Temple",
+        "ncaaOrgId": 690
       },
       "social": {
         "x": null,
@@ -12631,7 +12958,8 @@
         "wikipedia": null,
         "ncaaName": "Stetson",
         "ncaaSlug": "stetson",
-        "rpiHistoryName": "Stetson"
+        "rpiHistoryName": "Stetson",
+        "ncaaOrgId": 678
       },
       "social": {
         "x": null,
@@ -12670,7 +12998,8 @@
         "wikipedia": null,
         "ncaaName": "St. Bonaventure",
         "ncaaSlug": "st-bonaventure",
-        "rpiHistoryName": "StBonaventure"
+        "rpiHistoryName": "StBonaventure",
+        "ncaaOrgId": 596
       },
       "social": {
         "x": null,
@@ -12709,7 +13038,8 @@
         "wikipedia": null,
         "ncaaName": "IU Indy",
         "ncaaSlug": "iu-indy",
-        "rpiHistoryName": "IUPUI"
+        "rpiHistoryName": "IUPUI",
+        "ncaaOrgId": 2699
       },
       "social": {
         "x": null,
@@ -12748,7 +13078,8 @@
         "wikipedia": "The_Citadel_Bulldogs_women's_soccer",
         "ncaaName": "The Citadel",
         "ncaaSlug": null,
-        "rpiHistoryName": "Citadel"
+        "rpiHistoryName": "Citadel",
+        "ncaaOrgId": 141
       },
       "social": {
         "x": null,
@@ -12789,7 +13120,8 @@
         "wikipedia": null,
         "ncaaName": "Mercyhurst",
         "ncaaSlug": "mercyhurst",
-        "rpiHistoryName": "Mercyhurst"
+        "rpiHistoryName": "Mercyhurst",
+        "ncaaOrgId": 408
       },
       "social": {
         "x": null,
@@ -12828,7 +13160,8 @@
         "wikipedia": "SIU_Edwardsville_Cougars_women's_soccer",
         "ncaaName": "SIUE",
         "ncaaSlug": "siu-edwardsville",
-        "rpiHistoryName": "SIUEdwardsville"
+        "rpiHistoryName": "SIUEdwardsville",
+        "ncaaOrgId": 660
       },
       "social": {
         "x": null,
@@ -12867,7 +13200,8 @@
         "wikipedia": null,
         "ncaaName": "Alcorn",
         "ncaaSlug": null,
-        "rpiHistoryName": "AlcornState"
+        "rpiHistoryName": "AlcornState",
+        "ncaaOrgId": 17
       },
       "social": {
         "x": null,
@@ -12906,7 +13240,8 @@
         "wikipedia": null,
         "ncaaName": "Detroit Mercy",
         "ncaaSlug": null,
-        "rpiHistoryName": "Detroit"
+        "rpiHistoryName": "Detroit",
+        "ncaaOrgId": 184
       },
       "social": {
         "x": null,
@@ -12945,7 +13280,8 @@
         "wikipedia": null,
         "ncaaName": "Chicago St.",
         "ncaaSlug": "chicago-st",
-        "rpiHistoryName": "ChicagoState"
+        "rpiHistoryName": "ChicagoState",
+        "ncaaOrgId": 136
       },
       "social": {
         "x": null,
@@ -12986,7 +13322,8 @@
         "wikipedia": null,
         "ncaaName": "St. Thomas (MN)",
         "ncaaSlug": "st-thomas-mn",
-        "rpiHistoryName": "StThomas"
+        "rpiHistoryName": "StThomas",
+        "ncaaOrgId": 620
       },
       "social": {
         "x": null,
@@ -13025,7 +13362,8 @@
         "wikipedia": null,
         "ncaaName": "Southeast Mo. St.",
         "ncaaSlug": "southeast-mo-st",
-        "rpiHistoryName": "SoutheastMissouriState"
+        "rpiHistoryName": "SoutheastMissouriState",
+        "ncaaOrgId": 654
       },
       "social": {
         "x": null,
@@ -13064,7 +13402,8 @@
         "wikipedia": null,
         "ncaaName": "Texas Southern",
         "ncaaSlug": "texas-southern",
-        "rpiHistoryName": "TexasSouthern"
+        "rpiHistoryName": "TexasSouthern",
+        "ncaaOrgId": 699
       },
       "social": {
         "x": null,
@@ -13103,7 +13442,8 @@
         "wikipedia": null,
         "ncaaName": "Prairie View",
         "ncaaSlug": "prairie-view",
-        "rpiHistoryName": "PrairieViewA&M"
+        "rpiHistoryName": "PrairieViewA&M",
+        "ncaaOrgId": 553
       },
       "social": {
         "x": null,
@@ -13142,7 +13482,8 @@
         "wikipedia": null,
         "ncaaName": "VMI",
         "ncaaSlug": "vmi",
-        "rpiHistoryName": "VMI"
+        "rpiHistoryName": "VMI",
+        "ncaaOrgId": 741
       },
       "social": {
         "x": null,
@@ -13181,7 +13522,8 @@
         "wikipedia": "Presbyterian_Blue_Hose_women's_soccer",
         "ncaaName": "Presbyterian",
         "ncaaSlug": "presbyterian",
-        "rpiHistoryName": "Presbyterian"
+        "rpiHistoryName": "Presbyterian",
+        "ncaaOrgId": 1320
       },
       "social": {
         "x": null,
@@ -13220,7 +13562,8 @@
         "wikipedia": null,
         "ncaaName": "Delaware St.",
         "ncaaSlug": "delaware-st",
-        "rpiHistoryName": "DelawareState"
+        "rpiHistoryName": "DelawareState",
+        "ncaaOrgId": 178
       },
       "social": {
         "x": null,
@@ -13259,7 +13602,8 @@
         "wikipedia": null,
         "ncaaName": "Gardner-Webb",
         "ncaaSlug": "gardner-webb",
-        "rpiHistoryName": "GardnerWebb"
+        "rpiHistoryName": "GardnerWebb",
+        "ncaaOrgId": 1092
       },
       "social": {
         "x": null,
@@ -13298,7 +13642,8 @@
         "wikipedia": null,
         "ncaaName": "UC Riverside",
         "ncaaSlug": "uc-riverside",
-        "rpiHistoryName": "UCRiverside"
+        "rpiHistoryName": "UCRiverside",
+        "ncaaOrgId": 111
       },
       "social": {
         "x": null,
@@ -13337,7 +13682,8 @@
         "wikipedia": null,
         "ncaaName": "Hampton",
         "ncaaSlug": "hampton",
-        "rpiHistoryName": "Hampton"
+        "rpiHistoryName": "Hampton",
+        "ncaaOrgId": 270
       },
       "social": {
         "x": null,
@@ -13376,7 +13722,8 @@
         "wikipedia": null,
         "ncaaName": "Southern U.",
         "ncaaSlug": "southern-u",
-        "rpiHistoryName": "SouthernU"
+        "rpiHistoryName": "SouthernU",
+        "ncaaOrgId": 665
       },
       "social": {
         "x": null,
@@ -13387,45 +13734,6 @@
         "state": "LA",
         "lat": 30.524558,
         "lon": -91.190105,
-        "timezone": "America/Chicago"
-      },
-      "onboardedAt": "2026-09-07"
-    },
-    {
-      "slug": "mississippi-val",
-      "onboarded": true,
-      "name": "Mississippi Val.",
-      "shortName": "Mississippi Val.",
-      "nickname": null,
-      "division": "D1",
-      "conference": "SWAC",
-      "colors": [
-        "#046A38",
-        "#C8102E"
-      ],
-      "athletics": {
-        "platform": "sidearm",
-        "baseUrl": "https://mvsusports.com",
-        "sportPath": "/sports/womens-soccer"
-      },
-      "ids": {
-        "scorecardUnitId": 176044,
-        "tdsClgId": null,
-        "tdsSlug": null,
-        "wikipedia": null,
-        "ncaaName": "Mississippi Val.",
-        "ncaaSlug": "mississippi-val",
-        "rpiHistoryName": "MississippiValley"
-      },
-      "social": {
-        "x": null,
-        "instagram": null
-      },
-      "location": {
-        "city": "Itta Bena",
-        "state": "MS",
-        "lat": 33.514142,
-        "lon": -90.341274,
         "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
@@ -13454,7 +13762,8 @@
         "wikipedia": null,
         "ncaaName": "Le Moyne",
         "ncaaSlug": "le-moyne",
-        "rpiHistoryName": "LeMoyne"
+        "rpiHistoryName": "LeMoyne",
+        "ncaaOrgId": 349
       },
       "social": {
         "x": null,
@@ -13493,7 +13802,8 @@
         "wikipedia": null,
         "ncaaName": "Purdue Fort Wayne",
         "ncaaSlug": null,
-        "rpiHistoryName": "IPFW"
+        "rpiHistoryName": "IPFW",
+        "ncaaOrgId": 308
       },
       "social": {
         "x": null,
@@ -13532,7 +13842,8 @@
         "wikipedia": null,
         "ncaaName": "New Haven",
         "ncaaSlug": "new-haven",
-        "rpiHistoryName": null
+        "rpiHistoryName": null,
+        "ncaaOrgId": 470
       },
       "social": {
         "x": null,
@@ -13543,45 +13854,6 @@
         "state": "CT",
         "lat": 41.291314,
         "lon": -72.961472,
-        "timezone": "America/New_York"
-      },
-      "onboardedAt": "2026-09-07"
-    },
-    {
-      "slug": "saint-francis",
-      "onboarded": true,
-      "name": "Saint Francis",
-      "shortName": "Saint Francis",
-      "nickname": null,
-      "division": "D1",
-      "conference": "NEC",
-      "colors": [
-        "#BD1F25",
-        "#000000"
-      ],
-      "athletics": {
-        "platform": "sidearm",
-        "baseUrl": "https://sfuathletics.com",
-        "sportPath": "/sports/womens-soccer"
-      },
-      "ids": {
-        "scorecardUnitId": 215743,
-        "tdsClgId": null,
-        "tdsSlug": null,
-        "wikipedia": null,
-        "ncaaName": "Saint Francis",
-        "ncaaSlug": null,
-        "rpiHistoryName": "StFrancis"
-      },
-      "social": {
-        "x": null,
-        "instagram": null
-      },
-      "location": {
-        "city": "Loretto",
-        "state": "PA",
-        "lat": 40.506734,
-        "lon": -78.63904,
         "timezone": "America/New_York"
       },
       "onboardedAt": "2026-09-07"
@@ -13610,7 +13882,8 @@
         "wikipedia": null,
         "ncaaName": "Western Ill.",
         "ncaaSlug": "western-ill",
-        "rpiHistoryName": "WesternIllinois"
+        "rpiHistoryName": "WesternIllinois",
+        "ncaaOrgId": 771
       },
       "social": {
         "x": null,
@@ -13649,7 +13922,8 @@
         "wikipedia": null,
         "ncaaName": "South Carolina St.",
         "ncaaSlug": "south-carolina-st",
-        "rpiHistoryName": "SouthCarolinaState"
+        "rpiHistoryName": "SouthCarolinaState",
+        "ncaaOrgId": 647
       },
       "social": {
         "x": null,
@@ -13688,7 +13962,8 @@
         "wikipedia": null,
         "ncaaName": "Alabama St.",
         "ncaaSlug": "alabama-st",
-        "rpiHistoryName": "AlabamaState"
+        "rpiHistoryName": "AlabamaState",
+        "ncaaOrgId": 7
       },
       "social": {
         "x": null,
@@ -13727,7 +14002,8 @@
         "wikipedia": null,
         "ncaaName": "Ark.-Pine Bluff",
         "ncaaSlug": "ark-pine-bluff",
-        "rpiHistoryName": "ArkansasPineBluff"
+        "rpiHistoryName": "ArkansasPineBluff",
+        "ncaaOrgId": 2678
       },
       "social": {
         "x": null,
@@ -13741,6 +14017,136 @@
         "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
+    },
+    {
+      "slug": "west-florida",
+      "onboarded": false,
+      "name": "University of West Florida",
+      "shortName": "West Florida",
+      "nickname": "Argonauts",
+      "division": "D1",
+      "conference": "ASUN",
+      "colors": null,
+      "athletics": {
+        "platform": "auto",
+        "baseUrl": "https://www.goargos.com",
+        "sportPath": "/sports/womens-soccer"
+      },
+      "ids": {
+        "ncaaOrgId": 11740,
+        "scorecardUnitId": 138354,
+        "tdsClgId": 742,
+        "tdsSlug": "west-florida",
+        "wikipedia": null,
+        "ncaaName": null,
+        "ncaaSlug": null,
+        "rpiHistoryName": null
+      },
+      "social": {
+        "x": null,
+        "instagram": null
+      },
+      "location": {
+        "city": "Pensacola",
+        "state": "FL",
+        "lat": 30.549076,
+        "lon": -87.218511,
+        "timezone": null
+      }
+    }
+  ],
+  "heldPrograms": [
+    {
+      "slug": "mississippi-val",
+      "onboarded": true,
+      "name": "Mississippi Val.",
+      "shortName": "Mississippi Val.",
+      "nickname": null,
+      "division": "D1",
+      "conference": "SWAC",
+      "colors": [
+        "#046A38",
+        "#C8102E"
+      ],
+      "athletics": {
+        "platform": "sidearm",
+        "baseUrl": "https://mvsusports.com",
+        "sportPath": "/sports/womens-soccer"
+      },
+      "ids": {
+        "scorecardUnitId": 176044,
+        "tdsClgId": null,
+        "tdsSlug": null,
+        "wikipedia": null,
+        "ncaaName": "Mississippi Val.",
+        "ncaaSlug": "mississippi-val",
+        "rpiHistoryName": "MississippiValley"
+      },
+      "social": {
+        "x": null,
+        "instagram": null
+      },
+      "location": {
+        "city": "Itta Bena",
+        "state": "MS",
+        "lat": 33.514142,
+        "lon": -90.341274,
+        "timezone": "America/Chicago"
+      },
+      "onboardedAt": "2026-09-07",
+      "hold": {
+        "reason": "not-in-directory",
+        "division": null,
+        "orgId": null,
+        "evidence": "2026-27 lists D1 349, D2 261, D3 416: no row for mvsu.edu or mvsusports.com, and no Mississippi Valley State under any name",
+        "since": "2026-09-15"
+      }
+    },
+    {
+      "slug": "saint-francis",
+      "onboarded": true,
+      "name": "Saint Francis",
+      "shortName": "Saint Francis",
+      "nickname": null,
+      "division": "D3",
+      "conference": "Presidents' Athletic Conference",
+      "colors": [
+        "#BD1F25",
+        "#000000"
+      ],
+      "athletics": {
+        "platform": "sidearm",
+        "baseUrl": "https://sfuathletics.com",
+        "sportPath": "/sports/womens-soccer"
+      },
+      "ids": {
+        "scorecardUnitId": 215743,
+        "tdsClgId": null,
+        "tdsSlug": null,
+        "wikipedia": null,
+        "ncaaName": "Saint Francis",
+        "ncaaSlug": null,
+        "rpiHistoryName": "StFrancis",
+        "ncaaOrgId": 600
+      },
+      "social": {
+        "x": null,
+        "instagram": null
+      },
+      "location": {
+        "city": "Loretto",
+        "state": "PA",
+        "lat": 40.506734,
+        "lon": -78.63904,
+        "timezone": "America/New_York"
+      },
+      "onboardedAt": "2026-09-07",
+      "hold": {
+        "reason": "division-not-onboarded",
+        "division": "D3",
+        "orgId": 600,
+        "since": "2026-09-15"
+      }
     }
   ]
 }

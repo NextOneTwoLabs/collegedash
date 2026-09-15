@@ -1,32 +1,59 @@
 """
-Build registry entries for every NCAA Division I women's soccer program.
+Build the program registry from the NCAA Directory, keyed by the Directory's stable `orgId`.
 
-Master list: the NCAA weekly RPI table (public/data/rpi/current.json, 350 teams with the NCAA's
-short names and conferences). Each team is then matched to:
-  - Wikipedia's "List of NCAA Division I women's soccer programs" (city, state, nickname, articles)
-  - TopDrawerSoccer conference pages (tdsSlug, tdsClgId)
-  - NCAA.com schools index + school page (athletics website)
-  - College Scorecard (unit id, coordinates) via ~20 paged API calls cached in data/scorecard-bulk.json
-  - Chris Thomas's RPI archive team names (public/data/rpi/2024.json)
+Master list: the NCAA Directory's women's soccer sport-sponsorship lists, one request per division
+(`memberList?type=12&division=I|II|III&sportCode=WSO`). Every row carries `orgId`, the official
+name, the institution's primary conference, its website and athletics URLs and its state. The
+lists are for one academic year, so a reclassified program shows up in its new division and a
+program that dropped the sport is in no list at all (issue #100: the previous master list, last
+season's final RPI table, still had Saint Francis in D1, Mississippi Valley State in D1 and no
+West Florida).
 
-Matching is by normalised name with a small override table; everything unmatched is written to
-data/registry-build-report.json for review. Existing registry entries are preserved.
+Nothing on the master list is matched by name. Identity is:
+  - `ids.ncaaOrgId`, once a program has one;
+  - otherwise (a program from before #100, or one added by hand) three signals that are not names:
+    state, the website domain of the program's College Scorecard row, and its athletics-site
+    domain. A program is given an orgId only when every signal it has agrees on exactly one row,
+    or when a person has reviewed it into REVIEWED_ORG_IDS. Anything else is `unresolved`: it stays
+    exactly where it is and is reported. It is never removed on a guess.
+
+Membership policy (the owner's decisions on issue #94), applied on every build:
+  - `onboardedDivisions` in registry.json is the set of divisions the site publishes. Turning on a
+    division is adding it to that list.
+  - A program moves to whatever division the Directory lists it in; it does not keep a label.
+  - A program whose division is not onboarded, or that no list carries, leaves `programs` for
+    `heldPrograms`. The entry is kept whole, slug included, with a `hold` block saying why. refresh,
+    onboard and build read `programs` only, so a held program is not collected or published.
+    It moves back unchanged when its division is onboarded or it reappears in a list.
+  - A Directory row in an onboarded division that no registry entry holds is a new program. Its
+    fields come from keyed sources only (the Directory row, the Scorecard row joined by website
+    domain in the same state); Wikipedia and TopDrawerSoccer fill a field only when the name
+    matches exactly AND an independent signal (state for Wikipedia, conference for TDS) agrees.
+    Anything a source does not establish is null and listed in the report.
+
+Existing entries are preserved: a build writes only `division`, `conference` and `ids.ncaaOrgId`
+on a program that stays. data/registry-build-report.json records every decision.
 
     python collegedash.py registry build        # writes registry + report
 """
 
 from __future__ import annotations
 
+import collections
+import copy
+import functools
 import json
 import os
 import re
-import time
 import urllib.parse
 
 from bs4 import BeautifulSoup
 
 from . import common
 
+DIRECTORY_URL = "https://web3.ncaa.org/directory/api/directory/memberList?type=12&division={roman}&sportCode=WSO"
+DIVISION_ROMAN = {"D1": "I", "D2": "II", "D3": "III"}
+WIKI_LIST = {"D1": "https://en.wikipedia.org/api/rest_v1/page/html/List_of_NCAA_Division_I_women%27s_soccer_programs"}
 TDS_CONFERENCES = [
     ("america-east", 1), ("american-athletic", 1047), ("asun", 22), ("atlantic-10", 2), ("atlantic-coast", 3),
     ("big-12", 23), ("big-east", 5), ("big-sky", 24), ("big-south", 6), ("big-ten", 7), ("big-west", 8),
@@ -36,10 +63,79 @@ TDS_CONFERENCES = [
     ("sec", 1044), ("southern", 19), ("southland", 29), ("southwestern-athletic", 30), ("summit-league", 31),
     ("sun-belt", 32), ("united-athletic-conference", 1056), ("west-coast", 21),
 ]
-WIKI_LIST = "https://en.wikipedia.org/api/rest_v1/page/html/List_of_NCAA_Division_I_women%27s_soccer_programs"
-NCAA_INDEX = "https://www.ncaa.com/schools-index"
 SCORECARD_BULK = os.path.join(common.DATA_DIR, "scorecard-bulk.json")
 REPORT_PATH = os.path.join(common.DATA_DIR, "registry-build-report.json")
+
+# A build that would take more than this share of the published programs out of `programs` raises
+# instead of writing. A truncated or failed Directory response looks exactly like a mass departure.
+MAX_DEPARTURE_SHARE = 0.05
+
+# Directory conferenceName (whitespace-trimmed) -> the label the registry and the conference pills use.
+# Every D1 label that existed before #100 is kept for the conference it named. Three are new with
+# the 2026-27 lists: Pac-12, UAC and Metro (the Directory's name for the 13 former MAAC members).
+# A name missing here is published as the Directory spells it and listed in the report.
+CONFERENCE_LABELS = {
+    "America East Conference": "America East", "American Conference": "American", "Atlantic 10 Conference": "Atlantic 10",
+    "Atlantic Coast Conference": "ACC", "Atlantic Sun Conference": "ASUN", "BIG EAST Conference": "Big East",
+    "Big 12 Conference": "Big 12", "Big Sky Conference": "Big Sky", "Big South Conference": "Big South",
+    "Big Ten Conference": "Big Ten", "Big West Conference": "Big West", "Coastal Athletic Association": "CAA",
+    "Conference USA": "CUSA", "Horizon League": "Horizon", "Independent": "DI Independent", "The Ivy League": "Ivy League",
+    "Metro Conference": "Metro", "Mid-American Conference": "MAC", "Missouri Valley Conference": "MVC",
+    "Mountain West Conference": "Mountain West", "Northeast Conference": "NEC", "Ohio Valley Conference": "OVC",
+    "Pac-12 Conference": "Pac-12", "Patriot League": "Patriot", "Southeastern Conference": "SEC",
+    "Southern Conference": "SoCon", "Southland Conference": "Southland", "Southwestern Athletic Conf.": "SWAC",
+    "The Summit League": "Summit League", "Sun Belt Conference": "Sun Belt", "United Athletic Conference": "UAC",
+    "West Coast Conference": "WCC",
+}
+# The same conferences as TopDrawerSoccer names them, for the conference check on a TDS team match.
+LABEL_TDS_CONFERENCE = {
+    "America East": "america-east", "American": "american-athletic", "Atlantic 10": "atlantic-10", "ACC": "atlantic-coast",
+    "ASUN": "asun", "Big East": "big-east", "Big 12": "big-12", "Big Sky": "big-sky", "Big South": "big-south",
+    "Big Ten": "big-ten", "Big West": "big-west", "CAA": "coastal-athletic-association", "CUSA": "conference-usa",
+    "Horizon": "horizon-league", "DI Independent": "independent", "Ivy League": "ivy-league",
+    "Metro": "metro-atlantic-athletic-conference", "MAC": "mid-american", "MVC": "missouri-valley",
+    "Mountain West": "mountain-west", "NEC": "northeast", "OVC": "ohio-valley", "Pac-12": "pacific-12",
+    "Patriot": "patriot-league", "SEC": "sec", "SoCon": "southern", "Southland": "southland",
+    "SWAC": "southwestern-athletic", "Summit League": "summit-league", "Sun Belt": "sun-belt", "UAC": "united-athletic-conference",
+    "WCC": "west-coast",
+}
+
+# Reviewed by hand on issue #100 (2026-09-15, Directory lists for 2026-27): the registry programs
+# whose three identity signals did not all agree. State and one domain agree in every case, and the
+# other domain points at no other institution; each was read and is the same institution.
+# slug -> (orgId, what differed). Only consulted for a program that has no ids.ncaaOrgId yet.
+REVIEWED_ORG_IDS = {
+    "rhode-island": (572, "Scorecard site web.uri.edu, Directory uri.edu; athletics gorhody.com agrees"),
+    "texas-state": (670, "Scorecard site txst.edu, Directory txstate.edu; athletics txstatebobcats.com agrees"),
+    "rutgers": (587, "Scorecard site newbrunswick.rutgers.edu, Directory rutgers.edu (New Brunswick); athletics agrees"),
+    "indiana": (306, "Scorecard site bloomington.iu.edu, Directory iub.edu (Bloomington); athletics iuhoosiers.com agrees"),
+    "quinnipiac": (562, "Scorecard site qu.edu, Directory quinnipiac.edu; athletics gobobcats.com agrees"),
+    "minnesota": (428, "Scorecard site twin-cities.umn.edu, Directory umn.edu (Twin Cities); athletics agrees"),
+    "college-of-charleston": (1014, "Scorecard site charleston.edu, Directory cofc.edu; athletics cofcsports.com agrees"),
+    "southern-illinois": (659, "Scorecard site siu.edu, Directory siuc.edu (Carbondale); athletics siusalukis.com agrees"),
+    "indiana-state": (305, "Scorecard site indianastate.edu, Directory indstate.edu; athletics gosycamores.com agrees"),
+    "unc-asheville": (456, "Scorecard site new.unca.edu, Directory unca.edu; athletics uncabulldogs.com agrees"),
+    "arizona-state": (28, "website asu.edu agrees; athletics thesundevils.com, Directory sundevils.com"),
+    "colgate": (153, "website colgate.edu agrees; athletics colgateathletics.com, Directory gocolgateraiders.com"),
+    "houston-christian": (287, "website hc.edu agrees; athletics hbuhuskies.com, Directory hcuhuskies.com"),
+    "texas": (703, "website utexas.edu agrees; athletics texassports.com, Directory texaslonghorns.com"),
+    "northeastern": (500, "website northeastern.edu agrees; athletics gonu.com, Directory nuhuskies.com"),
+    "little-rock": (32, "website ualr.edu agrees; the Directory has no athletics URL"),
+    "southern-indiana": (661, "website usi.edu agrees; athletics gousieagles.com, Directory usiscreamingeagles.com"),
+    "wofford": (2915, "website wofford.edu agrees; athletics athletics.wofford.edu, Directory wofford.edu"),
+    "iona-university": (310, "website iona.edu agrees; athletics icgaels.com, Directory ionagaels.com"),
+    "west-georgia": (766, "website westga.edu agrees; athletics uwgsports.com, Directory uwgathletics.com"),
+    "texas-southern": (699, "website tsu.edu agrees; athletics athletics.tsu.edu, Directory tsusports.com"),
+    "fairleigh-dickinson": (222, "fdu.edu is both the Metropolitan campus (222, D1) and Florham (221, D3); "
+                                 "athletics fduknights.com and the registry's Teaneck team are 222"),
+}
+# Reviewed on issue #100: registry programs that no Directory list carries, by id, website domain or
+# athletics domain, in any division. slug -> evidence. A program with no orgId leaves the published
+# set only when it is listed here; without review it is `unresolved` and stays put.
+REVIEWED_NOT_LISTED = {
+    "mississippi-val": "2026-27 lists D1 349, D2 261, D3 416: no row for mvsu.edu or mvsusports.com, and no "
+                       "Mississippi Valley State under any name",
+}
 
 STATE_TZ = {
     "CA": "America/Los_Angeles", "WA": "America/Los_Angeles", "OR": "America/Los_Angeles", "NV": "America/Los_Angeles",
@@ -50,87 +146,15 @@ STATE_TZ = {
     "LA": "America/Chicago", "MS": "America/Chicago", "AL": "America/Chicago", "WI": "America/Chicago", "IL": "America/Chicago",
     "TN": "America/Chicago",
 }
+# States with more than one time zone. A new program in one of these gets timezone null rather than
+# the state's majority zone: Pensacola (West Florida) is Central, and the old default wrote Eastern.
+SPLIT_TZ_STATES = {"AK", "FL", "ID", "IN", "KS", "KY", "MI", "ND", "NE", "OR", "SD", "TN", "TX"}
 
-# NCAA short name -> per-source targets that no normalisation can reach.
-#   wiki: institution as in the Wikipedia list; tds: TopDrawerSoccer slug; hist: RPI-archive team name;
-#   site: athletics website; scorecard: Scorecard school name
-ALIASES = {
-    "UConn": {"wiki": "UConn", "hist": "ConnecticutU"}, "Ole Miss": {"wiki": "Ole Miss", "tds": "mississippi", "hist": "MississippiU"},
-    "UCF": {"wiki": "UCF", "tds": "ucf"}, "ULM": {"wiki": "Louisiana–Monroe", "tds": "louisiana-monroe", "hist": "LouisianaMonroe"},
-    "Miami (FL)": {"wiki": "Miami (FL)", "tds": "miami-(fl)"}, "Miami (OH)": {"wiki": "Miami (OH)", "tds": "miami-(oh)"},
-    "South Fla.": {"wiki": "South Florida", "tds": "south-florida", "hist": "SouthFlorida"},
-    "ETSU": {"wiki": "East Tennessee State", "tds": "east-tennessee-state", "hist": "EastTennesseeState"},
-    "FIU": {"wiki": "FIU", "tds": "fiu"}, "FGCU": {"wiki": "FGCU", "tds": "fgcu", "hist": "FloridaGulfCoast"},
-    "Col. of Charleston": {"wiki": "Charleston", "tds": "charleston", "hist": "CollegeofCharleston"},
-    "CSU Bakersfield": {"wiki": "Cal State Bakersfield", "tds": "cal-state-bakersfield", "hist": "CalStateBakersfield"},
-    "CSUN": {"wiki": "Cal State Northridge", "tds": "csun", "hist": "CalStateNorthridge"},
-    "Massachusetts": {"wiki": "UMass", "tds": "massachusetts", "hist": "Massachusetts"},
-    "UMass Lowell": {"wiki": "UMass Lowell", "tds": "massachusetts-lowell"},
-    "Penn": {"wiki": "Penn", "tds": "penn", "hist": "PennsylvaniaU"}, "Loyola Maryland": {"wiki": "Loyola (MD)", "tds": "loyola-(md)", "hist": "LoyolaMD"},
-    "LMU (CA)": {"wiki": "Loyola Marymount", "tds": "loyola-marymount", "hist": "LoyolaMarymount"},
-    "Loyola Chicago": {"tds": "loyola-chicago"}, "Grambling": {"wiki": "Grambling State", "tds": "grambling-state", "hist": "Grambling"},
-    "NIU": {"wiki": "Northern Illinois", "tds": "northern-illinois", "hist": "NorthernIllinois"},
-    "UNI": {"wiki": "Northern Iowa", "tds": "northern-iowa", "hist": "NorthernIowa"},
-    "UIW": {"wiki": "Incarnate Word", "tds": "incarnate-word", "hist": "IncarnateWord"},
-    "UTRGV": {"wiki": "UT Rio Grande Valley", "tds": "utrgv", "hist": "TexasRGV"}, "UTSA": {"wiki": "UTSA", "tds": "utsa"},
-    "UTEP": {"wiki": "UTEP", "tds": "utep"}, "LIU": {"wiki": "LIU", "tds": "liu", "hist": "LongIsland"},
-    "Queens (NC)": {"wiki": "Queens", "tds": "queens-(nc)", "hist": "Queens"},
-    "IU Indy": {"wiki": "IU Indianapolis", "tds": "iu-indianapolis", "hist": "IUPUI"},
-    "Prairie View": {"wiki": "Prairie View A&M", "tds": "prairie-view-am", "hist": "PrairieViewA&M"},
-    "Saint Francis": {"wiki": "Saint Francis", "tds": "saint-francis", "hist": "StFrancis"},
-    "Milwaukee": {"tds": "wisconsin-milwaukee"}, "Green Bay": {"tds": "wisconsin-green-bay", "site": "https://greenbayphoenix.com"},
-    "Chattanooga": {"tds": "ut-chattanooga"}, "Siena": {"tds": "siena-college"}, "Sam Houston": {"tds": "sam-houston-state"},
-    "San Diego St.": {"tds": "san-diego-state"},
-    "Southern Miss.": {"tds": "southern-mississippi", "hist": "SouthernMississippi"}, "McNeese": {"tds": "mcneese-state", "hist": "McNeeseState"},
-    "SIUE": {"wiki": "SIU Edwardsville", "tds": "siue", "hist": "SIUEdwardsville"}, "Southern Ill.": {"hist": "SIUCarbondale"},
-    "St. Thomas (MN)": {"wiki": "St. Thomas", "tds": "st-thomas-(minn)", "hist": "StThomas"}, "Saint Louis": {"tds": "saint-louis", "hist": "StLouis"},
-    "Saint Mary's (CA)": {"wiki": "Saint Mary's", "tds": "st-marys-(ca)", "hist": "StMarys"},
-    "St. John's (NY)": {"tds": "st-johns", "hist": "StJohns"},
-    "Saint Joseph's": {"tds": "saint-josephs", "hist": "StJosephs"}, "Saint Peter's": {"tds": "saint-peters", "hist": "StPeters"},
-    "Mount St. Mary's": {"tds": "mount-st-marys", "hist": "MountStMary"}, "St. Bonaventure": {"tds": "st-bonaventure", "hist": "StBonaventure"},
-    "NC State": {"wiki": "NC State", "tds": "nc-state", "hist": "NCState"},
-    "App State": {"wiki": "Appalachian State", "tds": "appalachian-state", "hist": "AppalachianState"},
-    "Army West Point": {"wiki": "Army", "tds": "army", "hist": "Army"},
-    "UNCW": {"wiki": "UNC Wilmington", "tds": "unc-wilmington", "hist": "UNCWilmington"},
-    "UIC": {"wiki": "UIC", "tds": "uic", "hist": "IllinoisChicago"}, "Kansas City": {"wiki": "Kansas City", "tds": "kansas-city", "hist": "UMKC"},
-    "USC Upstate": {"wiki": "USC Upstate", "tds": "usc-upstate", "hist": "USCUpstate"},
-    "SFA": {"wiki": "Stephen F. Austin", "tds": "stephen-f-austin", "hist": "StephenFAustin"},
-    "Little Rock": {"wiki": "Little Rock", "tds": "little-rock", "hist": "UALR"}, "Omaha": {"wiki": "Omaha", "tds": "omaha", "hist": "UNOmaha"},
-    "FDU": {"wiki": "Fairleigh Dickinson", "tds": "fairleigh-dickinson", "hist": "FairleighDickinson"},
-    "Southeastern La.": {"hist": "SELouisiana"}, "UT Martin": {"wiki": "UT Martin", "tds": "ut-martin", "hist": "TennesseeMartin"},
-    "UAlbany": {"wiki": "Albany", "tds": "albany", "hist": "Albany"}, "Purdue Fort Wayne": {"hist": "IPFW"},
-    "Houston Christian": {"hist": "HoustonBaptist"}, "East Texas A&M": {"tds": "east-texas-am", "hist": "TexasCommerce"},
-    "A&M-Corpus Christi": {"wiki": "Texas A&M–Corpus Christi", "tds": "texas-am-corpus-christi", "hist": "TexasCorpusChristi"},
-    "Louisiana": {"wiki": "Louisiana", "tds": "louisiana", "hist": "LouisianaLafayette"},
-    "Southern U.": {"wiki": "Southern", "tds": "southern", "hist": "SouthernU"},
-    "Mississippi Val.": {"wiki": "Mississippi Valley State", "tds": "mississippi-valley-state", "hist": "MississippiValley"},
-    "Alcorn": {"wiki": "Alcorn State", "tds": "alcorn-state"}, "Detroit Mercy": {"tds": "detroit-mercy"}, "Seattle U": {"wiki": "Seattle", "tds": "seattle"},
-    "California Baptist": {"tds": "cal-baptist"}, "Boston U.": {"wiki": "Boston University", "hist": "BostonU"},
-    "The Citadel": {"wiki": "The Citadel", "tds": "the-citadel", "scorecard": "Citadel Military College of South Carolina"},
-    "Virginia Tech": {"scorecard": "Virginia Polytechnic Institute and State University"},
-    "Columbia": {"scorecard": "Columbia University in the City of New York"},
-    "Hawaii": {"wiki": "Hawaii", "scorecard": "University of Hawaii at Manoa"}, "Weber St.": {"scorecard": "Weber State University"},
-    "Southern Ind.": {"scorecard": "University of Southern Indiana", "hist": "SouthernIndiana"},
-    "BYU": {"site": "https://byucougars.com"}, "Elon": {"site": "https://elonphoenix.com"}, "North Dakota": {"site": "https://fightinghawks.com"},
-    "UIW": {"wiki": "Incarnate Word", "tds": "incarnate-word", "hist": "IncarnateWord", "site": "https://uiwcardinals.com"},
-    "FGCU": {"wiki": "Florida Gulf Coast", "tds": "fgcu", "hist": "FloridaGulfCoast", "scorecard": "Florida Gulf Coast University"},
-    "Central Conn. St.": {"wiki": "Central Connecticut", "tds": "central-connecticut", "hist": "CentralConnecticut", "scorecard": "Central Connecticut State University"},
-    "St. John's (NY)": {"wiki": "St. John's", "tds": "st-johns", "hist": "StJohns", "scorecard": "St. John's University-New York"},
-    "Southern Miss.": {"wiki": "Southern Miss", "tds": "southern-mississippi", "hist": "SouthernMississippi", "scorecard": "University of Southern Mississippi"},
-    "Mississippi Val.": {"hist": "MississippiValley", "scorecard": "Mississippi Valley State University"},
-    "Saint Francis": {"hist": "StFrancis", "scorecard": "Saint Francis University", "site": "https://sfuathletics.com"},
-    "Ark.-Pine Bluff": {"wiki": "Arkansas\u2013Pine Bluff", "tds": "arkansas-pine-bluff", "hist": "ArkansasPineBluff", "scorecard": "University of Arkansas at Pine Bluff"},
-    "Miami (OH)": {"wiki": "Miami (OH)", "scorecard": "Miami University-Oxford"},
-    "Southern U.": {"wiki": "Southern", "hist": "SouthernU", "scorecard": "Southern University and A & M College"},
-    "UConn": {"wiki": "UConn", "tds": "connecticut", "hist": "ConnecticutU", "site": "https://uconnhuskies.com"},
-    "FIU": {"wiki": "FIU", "tds": "florida-international"},
-    "UMass Lowell": {"wiki": "UMass Lowell", "tds": "massachusetts-lowell", "hist": "UMassLowell"},
-    "Tarleton St.": {"hist": "Tarleton"}, "Morehead St.": {"hist": "Morehead"}, "Nicholls": {"hist": "NichollsState", "site": "https://geauxcolonels.com"},
-    "Detroit Mercy": {"tds": "detroit-mercy", "hist": "Detroit"},
-    "Penn St.": {"site": "https://gopsusports.com"}, "LMU (CA)": {"wiki": "Loyola Marymount", "tds": "loyola-marymount", "hist": "LoyolaMarymount", "site": "https://lmulions.com"},
-    "East Texas A&M": {"tds": "east-texas-am", "hist": "TexasCommerce", "site": "https://lionathletics.com"},
-    "Lamar University": {"site": "https://lamarcardinals.com"}, "Oregon St.": {"site": "https://osubeavers.com"},
-}
+
+def timezone_for(state: str | None) -> str | None:
+    if not state or state in SPLIT_TZ_STATES or len(state) != 2:
+        return None
+    return STATE_TZ.get(state, "America/New_York")
 
 
 EXPAND = {
@@ -154,155 +178,83 @@ SAINT_NAMES = r"(john|joseph|mary|peter|francis|thomas|bonaventure|louis|leo|mic
 
 
 def norm_school(s: str) -> str:
-    s = common.strip_accents(expand_ncaa(s or "")).lower().replace("&", " and ").replace("\u2019", "'")
+    s = common.strip_accents(expand_ncaa(s or "")).lower().replace("&", " and ").replace("’", "'")
     s = re.sub(r"\bst\.?\s+(?=" + SAINT_NAMES + r")", "saint ", s)      # St. John's -> saint john's
     s = re.sub(r"\bst\.", "state", s)                                    # Florida St. -> florida state
     s = re.sub(r"\bmt\.?\s+", "mount ", s)
     s = s.replace("univ.", "").replace("u.", "")
-    s = re.sub(r"[().,'\-\u2013/]", " ", s)
+    s = re.sub(r"[().,'\-–/]", " ", s)
     # keep 'college' - it disambiguates Colorado vs Colorado College, Boston College, etc.
     s = re.sub(r"\b(university|univ|of|the|at|campus|u)\b", " ", s)
     return re.sub(r"\s+", " ", s).strip()
-
-
-def split_camel(s: str) -> str:
-    """'NorthCarolinaU' -> 'North Carolina U', 'UCSantaBarbara' -> 'UC Santa Barbara'."""
-    return re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", s or "")
 
 
 def tokens(s: str) -> set[str]:
     return set(norm_school(s).split())
 
 
-def best_match(name: str, candidates: dict[str, dict], *, min_score: float = 0.8) -> tuple[str | None, float]:
-    """candidates: {normalised name: row}. Exact normalised match, then compact (space-less) match,
-    then token overlap above min_score."""
-    n = norm_school(name)
-    if n in candidates:
-        return n, 1.0
-    nc = n.replace(" ", "")
-    for cn in candidates:
-        if cn.replace(" ", "") == nc:
-            return cn, 0.95
-    t = set(n.split())
-    best, score = None, 0.0
-    for cn in candidates:
-        ct = set(cn.split())
-        if not t or not ct:
-            continue
-        j = len(t & ct) / len(t | ct)
-        if j > score:
-            best, score = cn, j
-    return (best, score) if score >= min_score else (None, score)
+# ---------- domains ----------
+
+@functools.lru_cache(maxsize=None)
+def site_domain(url: str | None) -> str | None:
+    """'https://www.GoArgos.com/sports/' -> 'goargos.com'; 'saintpeters.edu.' -> 'saintpeters.edu'."""
+    if not url or not str(url).strip():
+        return None
+    u = re.sub(r"^[a-z][a-z0-9+.-]*://", "", str(url).strip().lower())
+    host = re.split(r"[/?#]", u, maxsplit=1)[0].split("@")[-1].split(":")[0].rstrip(".")
+    host = re.sub(r"^www\d?\.", "", host)
+    return host or None
 
 
-# ---------- sources ----------
+def registrable(domain: str | None) -> str | None:
+    """Last two labels: 'bloomington.iu.edu' -> 'iu.edu'. Every US institution domain in the Directory
+    and Scorecard is a two-label .edu/.com/.org/.net name, so no public-suffix list is needed."""
+    return ".".join(domain.split(".")[-2:]) if domain and "." in domain else None
 
-def load_ncaa_master() -> list[dict]:
-    cur = common.read_json(os.path.join(common.RPI_OUT_DIR, "current.json"), {}) or {}
-    return [{"ncaaName": t["school"], "conference": t["conference"]} for t in cur.get("teams", [])]
 
+# ---------- the NCAA Directory ----------
 
-def fetch_wiki_list() -> list[dict]:
-    html, _ = common.fetch_text(WIKI_LIST, max_age_hours=24 * 30)
-    soup = BeautifulSoup(html, "html.parser")
-    t = soup.find_all("table", "wikitable")[0]
+def parse_directory(raw: list[dict], division: str) -> list[dict]:
+    """The fields the registry uses, from one division's member list. Raises on a shape change rather
+    than guessing: a row without orgId cannot be keyed."""
+    if not isinstance(raw, list):
+        raise common.FetchError(f"directory {division}: expected a list, got {type(raw).__name__}")
     rows = []
-    for tr in t.find_all("tr")[1:]:
-        c = tr.find_all(["td", "th"])
-        if len(c) < 6:
-            continue
-
-        def cell(i):
-            return re.sub(r"\s*\[\s*\w+\s*\]", "", c[i].get_text(" ", strip=True)).strip()
-
-        def link(i):
-            a = c[i].find("a")
-            return urllib.parse.unquote(a["href"].replace("./", "")) if a and a.get("href", "").startswith("./") else None
-
-        rows.append({"institution": cell(0), "institutionArticle": link(0), "city": cell(1), "state": cell(2),
-                     "type": cell(3), "nickname": cell(4), "athleticsArticle": link(4), "conference": cell(5)})
+    for x in raw:
+        if not isinstance(x, dict) or not isinstance(x.get("orgId"), int):
+            raise common.FetchError(f"directory {division}: a row has no integer orgId: {str(x)[:120]}")
+        roman = DIVISION_ROMAN[division]
+        if x.get("divisionRoman") not in (None, roman):
+            raise common.FetchError(f"directory {division}: orgId {x['orgId']} is listed as division {x.get('divisionRoman')}")
+        rows.append({
+            "orgId": x["orgId"], "division": division, "name": (x.get("nameOfficial") or "").strip(),
+            "conference": (x.get("conferenceName") or "").strip() or None,
+            "website": (x.get("webSiteUrl") or "").strip() or None, "athleticsUrl": (x.get("athleticWebUrl") or "").strip() or None,
+            "state": ((x.get("memberOrgAddress") or {}).get("state") or "").strip().upper() or None,
+            "academicYear": x.get("academicYear"),
+        })
     return rows
 
 
-def fetch_tds_teams() -> dict[str, dict]:
+def fetch_directory(registry: dict | None = None) -> dict[str, list[dict]]:
+    """division -> parsed rows, for all three divisions. All three are always fetched, onboarded or
+    not: a program that leaves D1 for D3 has to be found in D3 to be held rather than removed."""
+    template = ((registry or {}).get("sources") or {}).get("ncaaDirectory", {}).get("memberList") or DIRECTORY_URL
     out = {}
-    for slug, cfid in TDS_CONFERENCES:
-        url = f"https://www.topdrawersoccer.com/college-soccer/college-conferences/conference-details/women/{slug}/cfid-{cfid}"
-        try:
-            html, _ = common.fetch_text(url, max_age_hours=24 * 30)
-        except common.FetchError as e:
-            common.log(f"registry: tds conference {slug} failed: {e}")
-            continue
-        soup = BeautifulSoup(html, "html.parser")
-        for a in soup.find_all("a", href=re.compile(r"/college-soccer-details/women/([a-z0-9()'.-]+)/clgid-(\d+)")):
-            m = re.search(r"/women/([a-z0-9-]+)/clgid-(\d+)", a["href"])
-            name = a.get_text(" ", strip=True)
-            if name and len(name) > 1:
-                out[m.group(1)] = {"tdsSlug": m.group(1), "tdsClgId": int(m.group(2)), "tdsName": name, "tdsConf": slug}
+    for division, roman in DIVISION_ROMAN.items():
+        payload, _ = common.fetch_json(template.format(roman=roman), max_age_hours=24)
+        out[division] = parse_directory(payload, division)
+        common.log(f"registry: NCAA Directory {division}: {len(out[division])} women's soccer programs")
     return out
 
 
-def fetch_ncaa_index() -> dict[str, str]:
-    """NCAA short name -> ncaa.com school slug"""
-    out = {}
-    for p in range(0, 24):
-        url = f"{NCAA_INDEX}/{p}" if p else NCAA_INDEX
-        try:
-            html, _ = common.fetch_text(url, max_age_hours=24 * 30)
-        except common.FetchError:
-            continue
-        soup = BeautifulSoup(html, "html.parser")
-        for a in soup.find_all("a", href=re.compile(r"^/schools/[a-z0-9-]+$")):
-            nm = a.get_text(" ", strip=True)
-            if nm:
-                out.setdefault(nm, a["href"].split("/")[-1])
-    return out
-
-
-def fetch_athletics_url(ncaa_slug: str) -> str | None:
-    try:
-        html, _ = common.fetch_text(f"https://www.ncaa.com/schools/{ncaa_slug}", max_age_hours=24 * 90)
-    except common.FetchError:
+def conference_label(directory_name: str | None) -> str | None:
+    if not directory_name:
         return None
-    soup = BeautifulSoup(html, "html.parser")
-    for a in soup.select(".layout-content a[href^='http'], a[href^='http'][target='_blank']"):
-        href = a["href"].strip()
-        if re.search(r"ncaa\.com|facebook|twitter|x\.com|instagram|youtube|tiktok|amazon|apple|google", href):
-            continue
-        if re.match(r"https?://[a-z0-9.-]+\.(com|edu|org|net)/?$", href):
-            return href.rstrip("/")
-    return None
+    return CONFERENCE_LABELS.get(directory_name, directory_name)
 
 
-def wiki_canonical(title: str) -> str | None:
-    """Canonical article title (follows redirects), or None if the page does not exist."""
-    url = "https://en.wikipedia.org/api/rest_v1/page/summary/" + urllib.parse.quote(title, safe="")
-    try:
-        body, meta = common.fetch(url, max_age_hours=24 * 90, allow_status=(200, 404))
-    except common.FetchError:
-        return None
-    if meta.get("status") != 200:
-        return None
-    try:
-        return json.loads(body.decode("utf-8", "replace")).get("title", title).replace(" ", "_")
-    except ValueError:
-        return title
-
-
-def soccer_article_for(athletics_article: str | None) -> str | None:
-    """The list's nickname link is either the athletics article ('Colorado_Buffaloes') or already
-    the soccer article ('Florida_State_Seminoles_women's_soccer')."""
-    if not athletics_article:
-        return None
-    if "soccer" in athletics_article.lower():
-        return wiki_canonical(athletics_article)
-    for suffix in ("_women's_soccer", "_soccer"):
-        t = wiki_canonical(athletics_article + suffix)
-        if t and "soccer" in t.lower():
-            return t
-    return None
-
+# ---------- College Scorecard ----------
 
 # College Scorecard bulk CSV column -> the API field name the rest of the code uses
 SCORECARD_COLS = {
@@ -339,7 +291,7 @@ def _num(v: str, as_int: bool):
     return int(f) if as_int else f
 
 
-def fetch_scorecard_bulk(registry: dict) -> list[dict]:
+def fetch_scorecard_bulk(registry: dict | None = None) -> list[dict]:
     """Every predominantly-bachelor's institution from the Department of Education's bulk file
     (Most-Recent-Cohorts-Institution_<date>.zip, no API key), reshaped to API field names and
     cached in data/scorecard-bulk.json."""
@@ -381,185 +333,434 @@ def fetch_scorecard_bulk(registry: dict) -> list[dict]:
     return results
 
 
-def match_scorecard(wiki_row: dict, bulk: list[dict]) -> dict | None:
-    state = common.state_code(wiki_row.get("state"))
-    if not state and wiki_row.get("state"):
-        state = None
-    full = (wiki_row.get("institutionArticle") or wiki_row["institution"]).replace("_", " ")
-    full = re.sub(r"\s*\(.*?\)\s*$", "", full)
-    want = tokens(full) | tokens(wiki_row["institution"])
-    best, score = None, 0.0
-    for r in bulk:
-        if state and r.get("school.state") != state:
+def scorecard_by_domain(website: str | None, state: str | None, bulk: list[dict]) -> tuple[dict | None, str]:
+    """The one Scorecard row for an institution website, in the same state. Exact host first, then
+    the registrable domain. Returns (row, 'exact'|'registrable') or (None, reason). Never picks
+    between two rows: `ewu.edu` is Eastern Washington (WA) and Edward Waters (FL), `fdu.edu` two
+    New Jersey campuses, and choosing by size or name is how a card ends up with another school's
+    facts."""
+    d = site_domain(website)
+    if not d:
+        return None, "no-website"
+    if not state:
+        return None, "no-state"
+    exact = [r for r in bulk if site_domain(r.get("school.school_url")) == d and r.get("school.state") == state]
+    if len(exact) == 1:
+        return exact[0], "exact"
+    if exact:
+        return None, "ambiguous:" + ",".join(str(r.get("id")) for r in exact)
+    base = registrable(d)
+    loose = [r for r in bulk if base and registrable(site_domain(r.get("school.school_url"))) == base
+             and r.get("school.state") == state]
+    if len(loose) == 1:
+        return loose[0], "registrable"
+    if loose:
+        return None, "ambiguous:" + ",".join(str(r.get("id")) for r in loose)
+    return None, "none"
+
+
+# ---------- identity ----------
+
+def _program_state(program: dict, bulk_by_id: dict) -> str | None:
+    st = (program.get("location") or {}).get("state")
+    if st:
+        return st
+    sc = bulk_by_id.get((program.get("ids") or {}).get("scorecardUnitId"))
+    return sc.get("school.state") if sc else None
+
+
+def resolve_identity(program: dict, rows_by_org: dict[int, dict], bulk_by_id: dict) -> tuple[int | None, str, str]:
+    """(orgId or None, status, evidence) for one registry program.
+
+    status: 'keyed' (ids.ncaaOrgId present and listed), 'keyed-unlisted' (ids.ncaaOrgId present, in no
+    list), 'agreed' (every signal agrees on one row), 'reviewed' (REVIEWED_ORG_IDS), 'reviewed-unlisted'
+    (REVIEWED_NOT_LISTED), or 'unresolved'."""
+    ids = program.get("ids") or {}
+    slug = program.get("slug")
+    org = ids.get("ncaaOrgId")
+    if isinstance(org, int):
+        return (org, "keyed", "ids.ncaaOrgId") if org in rows_by_org else (org, "keyed-unlisted", "ids.ncaaOrgId is in no list")
+    state = _program_state(program, bulk_by_id)
+    sc = bulk_by_id.get(ids.get("scorecardUnitId"))
+    web = site_domain(sc.get("school.school_url")) if sc else None
+    ath = site_domain((program.get("athletics") or {}).get("baseUrl"))
+    by_web = {o for o, r in rows_by_org.items() if web and site_domain(r["website"]) == web and r["state"] == state}
+    by_ath = {o for o, r in rows_by_org.items() if ath and site_domain(r["athleticsUrl"]) == ath and r["state"] == state}
+    signals = [s for s in (by_web if web else None, by_ath if ath else None) if s is not None]
+    if state and len(signals) == 2 and len(by_web) == 1 and by_web == by_ath:
+        return next(iter(by_web)), "agreed", f"state {state}, website {web}, athletics {ath}"
+    if slug in REVIEWED_ORG_IDS:
+        org, why = REVIEWED_ORG_IDS[slug]
+        row = rows_by_org.get(org)
+        if row is None:
+            return None, "unresolved", f"reviewed orgId {org} is in no list"
+        if state and row["state"] != state:
+            return None, "unresolved", f"reviewed orgId {org} is in {row['state']}, the program in {state}"
+        return org, "reviewed", why
+    if slug in REVIEWED_NOT_LISTED:
+        if by_web or by_ath:
+            return None, "unresolved", f"reviewed as not listed, but rows {sorted(by_web | by_ath)} now match"
+        return None, "reviewed-unlisted", REVIEWED_NOT_LISTED[slug]
+    return None, "unresolved", (f"state {state}, website {web} -> {sorted(by_web)}, athletics {ath} -> {sorted(by_ath)}")
+
+
+# ---------- membership ----------
+
+def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: list[dict], *, today: str,
+                     new_entries: dict[int, dict] | None = None, max_departure_share: float = MAX_DEPARTURE_SHARE) -> dict:
+    """Apply the Directory lists and the membership policy to `registry` in place. Pure: no network,
+    no file access. Returns the membership part of the build report.
+
+    `new_entries`: orgId -> a fully built registry entry, for Directory rows in an onboarded division
+    that no registry entry holds (see new_program_entry). A row with none is reported, not added."""
+    onboarded = registry.get("onboardedDivisions")
+    if not isinstance(onboarded, list) or not onboarded or any(d not in DIVISION_ROMAN for d in onboarded):
+        raise ValueError(f"registry.onboardedDivisions must be a non-empty list drawn from {sorted(DIVISION_ROMAN)}, got {onboarded!r}")
+    rows_by_org: dict[int, dict] = {}
+    for division, rows in directory.items():
+        for r in rows:
+            if r["orgId"] in rows_by_org:
+                raise ValueError(f"orgId {r['orgId']} is listed in both {rows_by_org[r['orgId']]['division']} and {division}")
+            rows_by_org[r["orgId"]] = r
+    bulk_by_id = {r.get("id"): r for r in bulk}
+    new_entries = new_entries or {}
+    rep = {"onboardedDivisions": list(onboarded), "directoryCounts": {d: len(rows) for d, rows in directory.items()},
+           "identity": collections.Counter(), "unresolved": [], "reviewed": [], "duplicateOrgId": [],
+           "reclassified": [], "held": [], "returned": [], "added": [], "notAdded": [], "conferenceChanged": [],
+           "conferenceUnlabelled": [], "stateDisagreement": [], "scorecardDomainDisagreement": [], "slugs": {}}
+
+    # work on copies: a build that raises (the departure guard below) must leave `registry` untouched
+    current = copy.deepcopy(list(registry.get("programs") or []))
+    held_before = copy.deepcopy(list(registry.get("heldPrograms") or []))
+    entries = [(p, False) for p in current] + [(p, True) for p in held_before]
+    resolved = []
+    for p, was_held in entries:
+        org, status, why = resolve_identity(p, rows_by_org, bulk_by_id)
+        rep["identity"][status] += 1
+        if status == "unresolved":
+            rep["unresolved"].append({"slug": p["slug"], "held": was_held, "evidence": why})
+        elif status in ("reviewed", "reviewed-unlisted"):
+            rep["reviewed"].append({"slug": p["slug"], "status": status, "orgId": org, "evidence": why})
+        resolved.append([p, was_held, org, status, why])
+    # one orgId, one program: two entries claiming the same row are both left untouched
+    claims = collections.defaultdict(list)
+    for item in resolved:
+        if item[2] is not None and item[3] in ("keyed", "agreed", "reviewed"):
+            claims[item[2]].append(item)
+    for org, items in claims.items():
+        if len(items) > 1:
+            rep["duplicateOrgId"].append({"orgId": org, "slugs": [i[0]["slug"] for i in items]})
+            for i in items:
+                rep["identity"][i[3]] -= 1
+                rep["identity"]["unresolved"] += 1
+                i[3], i[4] = "unresolved", f"orgId {org} is claimed by more than one entry"
+                rep["unresolved"].append({"slug": i[0]["slug"], "held": i[1], "evidence": f"orgId {org} is claimed by more than one entry"})
+
+    programs, held = [], []
+    departures = 0
+    for p, was_held, org, status, why in resolved:
+        slug = p["slug"]
+        if status == "unresolved":
+            (held if was_held else programs).append(p)
             continue
-        have = tokens(r.get("school.name", ""))
-        if not have:
+        row = rows_by_org.get(org) if status in ("keyed", "agreed", "reviewed") else None
+        if row is not None:
+            p.setdefault("ids", {})["ncaaOrgId"] = org
+            state = _program_state(p, bulk_by_id)
+            if state and row["state"] and state != row["state"]:
+                rep["stateDisagreement"].append({"slug": slug, "orgId": org, "registry": state, "directory": row["state"]})
+            sc, how = scorecard_by_domain(row["website"], row["state"], bulk)
+            unit = (p.get("ids") or {}).get("scorecardUnitId")
+            if sc and unit and sc.get("id") != unit:
+                rep["scorecardDomainDisagreement"].append({"slug": slug, "registry": unit, "domainJoin": sc.get("id"), "how": how})
+            if p.get("division") != row["division"]:
+                rep["reclassified"].append({"slug": slug, "from": p.get("division"), "to": row["division"], "orgId": org})
+                p["division"] = row["division"]
+            label = conference_label(row["conference"])
+            if row["conference"] and row["conference"] not in CONFERENCE_LABELS:
+                rep["conferenceUnlabelled"].append({"slug": slug, "directory": row["conference"]})
+            if label and p.get("conference") != label:
+                rep["conferenceChanged"].append({"slug": slug, "from": p.get("conference"), "to": label, "directory": row["conference"]})
+                p["conference"] = label
+        if row is not None and row["division"] in onboarded:
+            if was_held:
+                p.pop("hold", None)
+                rep["returned"].append({"slug": slug, "division": row["division"]})
+            programs.append(p)
             continue
-        j = len(want & have) / len(want | have)
-        # exact normalised full-name match wins outright
-        if norm_school(r.get("school.name", "")) == norm_school(full):
-            j = 1.0
-        if j > score or (j == score and best and (r.get("latest.student.size") or 0) > (best.get("latest.student.size") or 0)):
-            best, score = r, j
-    return best if score >= 0.5 else None
+        hold = ({"reason": "division-not-onboarded", "division": row["division"], "orgId": org} if row is not None
+                else {"reason": "not-in-directory", "division": None, "orgId": org, "evidence": why})
+        previous = p.get("hold") or {}
+        hold["since"] = previous.get("since") if previous.get("reason") == hold["reason"] else today
+        p["hold"] = hold
+        if not was_held:
+            departures += 1
+            rep["held"].append({"slug": slug, **hold})
+        held.append(p)
+
+    published_before = len(current)
+    if published_before and departures > max_departure_share * published_before:
+        raise RuntimeError(f"registry build would take {departures} of {published_before} programs out of the published set "
+                           f"(limit {max_departure_share:.0%}); refusing to write. A failed or truncated Directory response "
+                           f"looks exactly like this. Report so far: held {[h['slug'] for h in rep['held']]}")
+
+    taken = {p["slug"] for p in programs} | {p["slug"] for p in held}
+    held_orgs = {(p.get("ids") or {}).get("ncaaOrgId") for p in programs + held}
+    for division in onboarded:
+        for row in directory.get(division, []):
+            if row["orgId"] in held_orgs:
+                continue
+            entry = new_entries.get(row["orgId"])
+            if rep["unresolved"]:
+                # an unresolved entry may be this very row under an identity nobody has confirmed;
+                # adding it would publish the school twice
+                rep["notAdded"].append({"orgId": row["orgId"], "name": row["name"], "division": division,
+                                        "reason": f"{len(rep['unresolved'])} registry entries have an unresolved identity"})
+                continue
+            if entry is None:
+                rep["notAdded"].append({"orgId": row["orgId"], "name": row["name"], "division": division,
+                                        "reason": "no entry was built for it (build limit, or it appeared after the fetch)"})
+                continue
+            if entry["slug"] in taken:
+                raise ValueError(f"new program {row['name']} (orgId {row['orgId']}) was given slug {entry['slug']!r}, which is taken")
+            taken.add(entry["slug"])
+            programs.append(entry)
+            rep["added"].append({"slug": entry["slug"], "orgId": row["orgId"], "name": row["name"], "division": division})
+
+    registry["programs"] = programs
+    registry["heldPrograms"] = held
+    rep["identity"] = {k: v for k, v in rep["identity"].items() if v}
+    rep["slugs"] = {"published": len(programs), "held": len(held)}
+    return rep
+
+
+def missing_org_rows(registry: dict, directory: dict[str, list[dict]], bulk: list[dict]) -> list[dict]:
+    """Directory rows in an onboarded division that no registry entry will hold after this build --
+    the programs new_program_entry must build. Uses the same identity rules as apply_membership."""
+    rows_by_org = {r["orgId"]: r for rows in directory.values() for r in rows}
+    bulk_by_id = {r.get("id"): r for r in bulk}
+    held = set()
+    for p in list(registry.get("programs") or []) + list(registry.get("heldPrograms") or []):
+        org, status, _ = resolve_identity(p, rows_by_org, bulk_by_id)
+        if org is not None:
+            held.add(org)
+    return [r for d in registry.get("onboardedDivisions") or [] for r in directory.get(d, []) if r["orgId"] not in held]
+
+
+def new_slug(name: str, state: str | None, org_id: int, taken: set[str]) -> str:
+    """slugify(name); on a collision '<slug>-<state>'; then '<slug>-<orgId>'. Every candidate comes
+    from the source row, and a slug already in the registry (published or held) is never reused."""
+    base = common.slugify(name) or f"program-{org_id}"
+    for cand in (base, f"{base}-{state.lower()}" if state else None, f"{base}-{org_id}"):
+        if cand and cand not in taken:
+            return cand
+    raise ValueError(f"no free slug for {name} (orgId {org_id})")
+
+
+# ---------- enrichment of a new program ----------
+
+def fetch_wiki_list(division: str = "D1") -> list[dict]:
+    url = WIKI_LIST.get(division)
+    if not url:
+        return []
+    html, _ = common.fetch_text(url, max_age_hours=24 * 30)
+    soup = BeautifulSoup(html, "html.parser")
+    t = soup.find_all("table", "wikitable")[0]
+    rows = []
+    for tr in t.find_all("tr")[1:]:
+        c = tr.find_all(["td", "th"])
+        if len(c) < 6:
+            continue
+
+        def cell(i):
+            return re.sub(r"\s*\[\s*\w+\s*\]", "", c[i].get_text(" ", strip=True)).strip()
+
+        def link(i):
+            a = c[i].find("a")
+            return urllib.parse.unquote(a["href"].replace("./", "")) if a and a.get("href", "").startswith("./") else None
+
+        rows.append({"institution": cell(0), "institutionArticle": link(0), "city": cell(1), "state": cell(2),
+                     "type": cell(3), "nickname": cell(4), "athleticsArticle": link(4), "conference": cell(5)})
+    return rows
+
+
+def fetch_tds_teams() -> dict[str, dict]:
+    out = {}
+    for slug, cfid in TDS_CONFERENCES:
+        url = f"https://www.topdrawersoccer.com/college-soccer/college-conferences/conference-details/women/{slug}/cfid-{cfid}"
+        try:
+            html, _ = common.fetch_text(url, max_age_hours=24 * 30)
+        except common.FetchError as e:
+            common.log(f"registry: tds conference {slug} failed: {e}")
+            continue
+        soup = BeautifulSoup(html, "html.parser")
+        for a in soup.find_all("a", href=re.compile(r"/college-soccer-details/women/([a-z0-9()'.-]+)/clgid-(\d+)")):
+            m = re.search(r"/women/([a-z0-9-]+)/clgid-(\d+)", a["href"])
+            name = a.get_text(" ", strip=True)
+            if m and name and len(name) > 1:
+                out[m.group(1)] = {"tdsSlug": m.group(1), "tdsClgId": int(m.group(2)), "tdsName": name, "tdsConf": slug}
+    return out
+
+
+def wiki_canonical(title: str) -> str | None:
+    """Canonical article title (follows redirects), or None if the page does not exist."""
+    url = "https://en.wikipedia.org/api/rest_v1/page/summary/" + urllib.parse.quote(title, safe="")
+    try:
+        body, meta = common.fetch(url, max_age_hours=24 * 90, allow_status=(200, 404))
+    except common.FetchError:
+        return None
+    if meta.get("status") != 200:
+        return None
+    try:
+        return json.loads(body.decode("utf-8", "replace")).get("title", title).replace(" ", "_")
+    except ValueError:
+        return title
+
+
+def soccer_article_for(athletics_article: str | None) -> str | None:
+    """The list's nickname link is either the athletics article ('Colorado_Buffaloes') or already
+    the soccer article ('Florida_State_Seminoles_women's_soccer')."""
+    if not athletics_article:
+        return None
+    if "soccer" in athletics_article.lower():
+        return wiki_canonical(athletics_article)
+    for suffix in ("_women's_soccer", "_soccer"):
+        t = wiki_canonical(athletics_article + suffix)
+        if t and "soccer" in t.lower():
+            return t
+    return None
+
+
+def _name_forms(name: str) -> set[str]:
+    """Normalised forms of an official name: 'University of West Florida' -> {'west florida'};
+    'College of Charleston (South Carolina)' also yields 'college charleston'."""
+    forms = {norm_school(name)}
+    forms.add(norm_school(re.sub(r"\s*\([^)]*\)\s*", " ", name)))
+    return {f for f in forms if f}
+
+
+def wiki_row_for(row: dict, wiki: list[dict]) -> tuple[dict | None, str]:
+    """The Wikipedia list row for a Directory row: exact normalised name (institution cell or its
+    article title) AND the same state, and only one such row. Otherwise (None, reason)."""
+    forms = _name_forms(row["name"])
+    hits = []
+    for w in wiki:
+        names = {norm_school(w["institution"])}
+        if w.get("institutionArticle"):
+            names.add(norm_school(re.sub(r"\s*\(.*?\)\s*$", "", w["institutionArticle"].replace("_", " "))))
+        if forms & names:
+            hits.append(w)
+    same_state = [w for w in hits if common.state_code(w.get("state")) == row["state"]]
+    if len(same_state) == 1:
+        return same_state[0], "name+state"
+    if len(same_state) > 1:
+        return None, f"ambiguous: {len(same_state)} rows"
+    if hits:
+        return None, "name matches, state disagrees: " + ", ".join(f"{w['institution']} ({w.get('state')})" for w in hits)
+    return None, "no row"
+
+
+def tds_team_for(row: dict, label: str | None, wiki_row: dict | None, tds: dict[str, dict]) -> tuple[dict | None, str]:
+    """The TopDrawerSoccer team for a Directory row: exact normalised name (official name, or the
+    verified Wikipedia short name) AND TDS files the team under the same conference; unique."""
+    forms = _name_forms(row["name"]) | ({norm_school(wiki_row["institution"])} if wiki_row else set())
+    want_conf = LABEL_TDS_CONFERENCE.get(label or "")
+    hits = [t for t in tds.values() if norm_school(t["tdsName"]) in forms]
+    agree = [t for t in hits if want_conf and t["tdsConf"] == want_conf]
+    if len(agree) == 1:
+        return agree[0], "name+conference"
+    if len(agree) > 1:
+        return None, f"ambiguous: {[t['tdsSlug'] for t in agree]}"
+    if hits:
+        return None, "name matches, conference disagrees: " + ", ".join(f"{t['tdsSlug']} ({t['tdsConf']})" for t in hits)
+    return None, "no team"
+
+
+def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dict[str, dict], taken: set[str],
+                      article_lookup=soccer_article_for) -> tuple[dict, dict]:
+    """(registry entry, what each source established) for a Directory row the registry does not hold.
+    Every field is from a source or null; nothing is supplied from memory."""
+    label = conference_label(row["conference"])
+    sc, sc_how = scorecard_by_domain(row["website"], row["state"], bulk)
+    w, w_how = wiki_row_for(row, wiki)
+    t, t_how = tds_team_for(row, label, w, tds)
+    article = article_lookup(w.get("athleticsArticle")) if w else None
+    ath_host = site_domain(row["athleticsUrl"])
+    raw_ath = (row["athleticsUrl"] or "").strip()
+    base_url = None
+    if ath_host:
+        host = re.split(r"[/?#]", re.sub(r"^[a-z][a-z0-9+.-]*://", "", raw_ath.lower()), maxsplit=1)[0].rstrip(".")
+        base_url = "https://" + host
+    short = w["institution"] if w else None
+    slug = new_slug(short or row["name"], row["state"], row["orgId"], taken)
+    city = sc.get("school.city") if sc else None
+    entry = {
+        "slug": slug, "onboarded": False, "name": row["name"], "shortName": short, "nickname": w["nickname"] if w else None,
+        "division": row["division"], "conference": label, "colors": None,
+        "athletics": {"platform": "auto", "baseUrl": base_url, "sportPath": "/sports/womens-soccer"},
+        "ids": {"ncaaOrgId": row["orgId"], "scorecardUnitId": sc.get("id") if sc else None,
+                "tdsClgId": t["tdsClgId"] if t else None, "tdsSlug": t["tdsSlug"] if t else None,
+                "wikipedia": article, "ncaaName": None, "ncaaSlug": None, "rpiHistoryName": None},
+        "social": {"x": None, "instagram": None},
+        "location": {"city": city, "state": row["state"], "lat": sc.get("location.lat") if sc else None,
+                     "lon": sc.get("location.lon") if sc else None, "timezone": timezone_for(row["state"])},
+    }
+    evidence = {"slug": slug, "orgId": row["orgId"], "name": row["name"], "scorecard": sc_how, "wikipediaList": w_how,
+                "tds": t_how, "wikipediaArticle": bool(article), "athleticsUrl": bool(base_url),
+                "null": sorted(k for k, v in {**{f"ids.{k}": v for k, v in entry["ids"].items()},
+                                              **{f"location.{k}": v for k, v in entry["location"].items()},
+                                              "shortName": short, "nickname": entry["nickname"], "colors": None,
+                                              "athletics.baseUrl": base_url}.items() if v is None)}
+    if w and city and common.clean(w.get("city") or "").lower() != city.lower():
+        evidence["cityDisagreement"] = {"wikipedia": w.get("city"), "scorecard": city}
+    return entry, evidence
 
 
 # ---------- build ----------
 
-CONF_WORDS = {
-    "ACC": {"atlantic-coast", "acc"}, "Big Ten": {"big-ten", "bigten"}, "SEC": {"sec"}, "Big 12": {"big-12", "big12", "bigtwelve"},
-    "Big East": {"big-east", "bigeast"}, "American": {"american-athletic", "american"}, "Independent": {"independent"}, "Sun Belt": {"sun-belt", "sunbelt"},
-    "MAC": {"mid-american", "mac"}, "WCC": {"west-coast", "westcoast"}, "Ivy League": {"ivy-league", "ivy"},
-    "Mountain West": {"mountain-west", "mountainwest"}, "Big West": {"big-west", "bigwest"}, "A-10": {"atlantic-10", "atlantic10", "atlanticten"},
-    "CAA": {"coastal-athletic-association", "caa", "colonial"}, "C-USA": {"conference-usa", "cusa"}, "Horizon": {"horizon-league", "horizon"},
-    "MAAC": {"metro-atlantic-athletic-conference", "maac", "metroatlantic"}, "MVC": {"missouri-valley", "mvc"}, "NEC": {"northeast", "nec"},
-    "OVC": {"ohio-valley", "ovc"}, "Patriot": {"patriot-league", "patriot"}, "SoCon": {"southern", "socon"},
-    "Southland": {"southland"}, "SWAC": {"southwestern-athletic", "swac", "southwestern"}, "Summit League": {"summit-league", "summit"},
-    "UAC": {"united-athletic-conference", "uac", "wac", "asun", "atlanticsun"}, "ASUN": {"asun", "uac", "atlanticsun", "wac"}, "Big Sky": {"big-sky", "bigsky"},
-    "Big South": {"big-south", "bigsouth"}, "America East": {"america-east", "americaeast"}, "Pac-12": {"pacific-12", "pac-12", "pactwelve"},
-}
-
-
-def conf_consistent(ncaa_conf: str, other: str | None) -> bool | None:
-    """Loose check that a matched source row sits in the same conference; None when unknown."""
-    if not other:
-        return None
-    words = CONF_WORDS.get(ncaa_conf)
-    if not words:
-        return None
-    o = other.lower().replace(" ", "").replace("-", "")
-    return any(w.replace("-", "") in o or o in w.replace("-", "") for w in words)
-
-
-def wiki_infobox_site(article: str | None) -> str | None:
-    """Athletics website from the athletics-program article infobox (e.g. 'BYU_Cougars')."""
-    if not article:
-        return None
-    url = "https://en.wikipedia.org/api/rest_v1/page/html/" + urllib.parse.quote(article, safe="")
-    try:
-        html, _ = common.fetch_text(url, max_age_hours=24 * 90)
-    except common.FetchError:
-        return None
-    soup = BeautifulSoup(html, "html.parser")
-    ib = soup.find("table", class_=re.compile(r"\binfobox\b"))
-    if not ib:
-        return None
-    for tr in ib.find_all("tr"):
-        th = tr.find("th")
-        if th and "website" in th.get_text(" ", strip=True).lower():
-            a = tr.find("a", href=True)
-            if a and a["href"].startswith("http"):
-                m = re.match(r"(https?://[^/]+)", a["href"])
-                return m.group(1).replace("http://", "https://") if m else None
-    return None
-
-
 def build(registry: dict, *, limit: int | None = None) -> dict:
-    master = load_ncaa_master()
-    if not master:
-        raise RuntimeError("no NCAA RPI table; run: python collegedash.py rpi current")
-    wiki = fetch_wiki_list()
-    tds = fetch_tds_teams()
-    ncaa_index = fetch_ncaa_index()
+    """Fetch the Directory (3 requests), build entries for new programs in onboarded divisions, then
+    apply the membership policy to a freshly locked registry and write it with the report.
+    `limit` caps how many new programs are built in one run (the rest are reported as notAdded)."""
+    if not registry.get("onboardedDivisions"):
+        raise ValueError("registry.onboardedDivisions is missing; it names the divisions the site publishes")
+    directory = fetch_directory(registry)
+    years = sorted({r["academicYear"] for rows in directory.values() for r in rows})
     bulk = fetch_scorecard_bulk(registry)
-    hist = common.read_json(os.path.join(common.RPI_OUT_DIR, "2024.json"), {}) or {}
-    hist_rows = {t["team"]: t for t in hist.get("teams", [])}
-    hist_by_norm = {norm_school(split_camel(t)): t for t in hist_rows}
-    wiki_by_norm = {norm_school(r["institution"]): r for r in wiki}
-    wiki_by_inst = {r["institution"]: r for r in wiki}
-    tds_by_norm = {norm_school(r["tdsName"]): r for r in tds.values()}
-    bulk_by_name = {r.get("school.name"): r for r in bulk}
-    existing = {p["slug"]: p for p in registry["programs"]}
-    existing_ncaa = {p["ids"].get("ncaaName"): p for p in registry["programs"]}
-    report = {"builtAt": common.now_iso(), "total": len(master),
-              "unmatched": {"wikipedia": [], "tds": [], "athleticsUrl": [], "scorecard": [], "rpiHistory": [], "wikiArticle": []},
-              "lowConfidence": [], "conferenceMismatch": []}
-    programs, used_slugs = [], set()
-    for i, m in enumerate(master):
-        if limit and i >= limit:
-            break
-        name, conf = m["ncaaName"], m["conference"]
-        if name in existing_ncaa:
-            programs.append(existing_ncaa[name])
-            used_slugs.add(existing_ncaa[name]["slug"])
-            continue
-        al = ALIASES.get(name, {})
-        # --- Wikipedia list row
-        w = wiki_by_inst.get(al["wiki"]) if al.get("wiki") else None
-        ws = 1.0 if w else 0.0
-        if not w:
-            wn, ws = best_match(name, wiki_by_norm)
-            w = wiki_by_norm.get(wn) if wn else None
-        # --- TopDrawerSoccer
-        t = tds.get(al["tds"]) if al.get("tds") else None
-        ts = 1.0 if t else 0.0
-        if not t:
-            tn, ts = best_match(name, tds_by_norm)
-            t = tds_by_norm.get(tn) if tn else None
-        # --- RPI archive name
-        hist_name = al.get("hist") if al.get("hist") in hist_rows else None
-        if not hist_name:
-            hn, hs = best_match(name, {k: {"team": v} for k, v in hist_by_norm.items()}, min_score=0.66)
-            hist_name = hist_by_norm.get(hn) if hn else None
-        # consistency checks against the NCAA conference
-        for label, other in (("rpiHistory", hist_name and hist_rows[hist_name].get("conference")),):
-            ok = conf_consistent(conf, other)
-            if ok is False:
-                report["conferenceMismatch"].append({"ncaaName": name, "conference": conf, "source": label, "matched": other,
-                                                     "matchedName": (t["tdsName"] if label == "tds" else w["institution"] if label == "wiki" else hist_name)})
-        if not w:
-            report["unmatched"]["wikipedia"].append(name)
-        if not t:
-            report["unmatched"]["tds"].append(name)
-        if not hist_name:
-            report["unmatched"]["rpiHistory"].append(name)
-        if (w and ws < 1.0) or (t and ts < 1.0):
-            report["lowConfidence"].append({"ncaaName": name, "wiki": w and w["institution"], "wikiScore": round(ws, 2),
-                                            "tds": t and t["tdsName"], "tdsScore": round(ts, 2)})
-        # --- slug
-        slug = t["tdsSlug"] if t else common.slugify(w["institution"] if w else name)
-        if slug in used_slugs or (slug in existing and existing[slug]["ids"].get("ncaaName") != name):
-            slug = common.slugify(name)
-        used_slugs.add(slug)
-        # --- athletics website: alias > NCAA.com school page > Wikipedia athletics infobox
-        ncaa_slug = ncaa_index.get(name)
-        ath_url = al.get("site") or (fetch_athletics_url(ncaa_slug) if ncaa_slug else None) or wiki_infobox_site(w.get("athleticsArticle") if w else None)
-        if not ath_url:
-            report["unmatched"]["athleticsUrl"].append(name)
-        # --- Scorecard
-        sc = bulk_by_name.get(al["scorecard"]) if al.get("scorecard") else None
-        if not sc and w:
-            sc = match_scorecard(w, bulk)
-        if not sc:
-            report["unmatched"]["scorecard"].append(name)
-        # --- Wikipedia soccer article
-        wiki_title = soccer_article_for(w.get("athleticsArticle")) if w else None
-        if not wiki_title:
-            report["unmatched"]["wikiArticle"].append(name)
-        state = common.state_code(w["state"]) if w else (sc.get("school.state") if sc else None)
-        entry = {
-            "slug": slug, "onboarded": False,
-            "name": (w["institutionArticle"].replace("_", " ") if w and w.get("institutionArticle") else (w["institution"] if w else name)),
-            "shortName": w["institution"] if w else name, "nickname": w["nickname"] if w else None,
-            "division": "D1", "conference": conf, "colors": None,
-            "athletics": {"platform": "auto", "baseUrl": ath_url, "sportPath": "/sports/womens-soccer"},
-            "ids": {"scorecardUnitId": sc.get("id") if sc else None, "tdsClgId": t["tdsClgId"] if t else None,
-                    "tdsSlug": t["tdsSlug"] if t else None, "wikipedia": wiki_title, "ncaaName": name,
-                    "ncaaSlug": ncaa_slug, "rpiHistoryName": hist_name},
-            "social": {"x": None, "instagram": None},
-            "location": {"city": w["city"] if w else (sc.get("school.city") if sc else None), "state": state,
-                         "lat": sc.get("location.lat") if sc else None, "lon": sc.get("location.lon") if sc else None,
-                         "timezone": STATE_TZ.get(state or "", "America/New_York")},
-        }
-        programs.append(entry)
-        common.log(f"registry: {name:<24} slug={slug:<22} tds={'ok' if t else '--'} wiki={'ok' if w else '--'} "
-                   f"site={'ok' if ath_url else '--'} scorecard={'ok' if sc else '--'} rpiHist={'ok' if hist_name else '--'} article={'ok' if wiki_title else '--'}")
-    registry["programs"] = programs
-    common.save_registry(registry)
+    missing = missing_org_rows(registry, directory, bulk)
+    if limit is not None:
+        missing = missing[:limit]
+    new_entries, evidence = {}, []
+    if missing:
+        wiki = {d: fetch_wiki_list(d) for d in sorted({r["division"] for r in missing})}
+        tds = fetch_tds_teams() if any(r["division"] == "D1" for r in missing) else {}
+        taken = {p["slug"] for p in list(registry.get("programs") or []) + list(registry.get("heldPrograms") or [])}
+        for row in missing:
+            entry, ev = new_program_entry(row, bulk=bulk, wiki=wiki.get(row["division"], []), tds=tds, taken=taken)
+            taken.add(entry["slug"])
+            new_entries[row["orgId"]] = entry
+            evidence.append(ev)
+            common.log(f"registry: new {row['division']} program {row['name']} -> {entry['slug']} "
+                       f"(scorecard {ev['scorecard']}, wikipedia {ev['wikipediaList']}, tds {ev['tds']})")
+    holder = {}
+
+    def mutate(reg):
+        holder["membership"] = apply_membership(reg, directory, bulk, today=common.today(), new_entries=new_entries)
+
+    common.update_registry(mutate)
+    m = holder["membership"]
+    unmatched = collections.defaultdict(list)
+    for ev in evidence:
+        for field in ev["null"]:
+            unmatched[field].append(ev["slug"])
+    report = {"builtAt": common.now_iso(), "source": DIRECTORY_URL, "academicYears": years, **m,
+              "newPrograms": evidence, "unmatched": dict(unmatched),
+              "lowConfidence": [{"slug": u["slug"], "evidence": u["evidence"]} for u in m["unresolved"]]}
     report["counts"] = {k: len(v) for k, v in report["unmatched"].items()}
     common.write_json(REPORT_PATH, report)
-    common.log(f"registry: {len(programs)} programs; unmatched {report['counts']}; low-confidence {len(report['lowConfidence'])}; "
-               f"conference mismatches {len(report['conferenceMismatch'])}")
+    common.log(f"registry: {m['slugs']['published']} published, {m['slugs']['held']} held; identity {m['identity']}; "
+               f"added {len(m['added'])}, held now {len(m['held'])}, returned {len(m['returned'])}, reclassified "
+               f"{len(m['reclassified'])}, conference changes {len(m['conferenceChanged'])}, unresolved {len(m['unresolved'])}")
     return report
 
 

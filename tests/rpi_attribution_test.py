@@ -142,8 +142,12 @@ def test_scan() -> None:
     ok("the scan covers the whole repository (over 1000 files)", len(files) > 1000, str(len(files)))
     for m in must:
         ok(f"the scan reads {m}", m in files)
-    ok("the scan reads the published program profiles",
-       sum(1 for f in files if f.startswith("public/data/programs/")) >= 350)
+    # one profile per published program plus index.json, counted from the registry (350 programs
+    # before issue #100 held Saint Francis and Mississippi Valley State out of the published set)
+    published = [p["slug"] for p in json.loads(read("public/data/registry.json"))["programs"] if p.get("onboarded")]
+    ok(f"the scan reads the published program profiles ({len(published)} and index.json)",
+       bool(published) and all(f"public/data/programs/{s}.json" in files for s in published)
+       and "public/data/programs/index.json" in files)
     bad = []
     for rel in files:
         text = read(rel)
