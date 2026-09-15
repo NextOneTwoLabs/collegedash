@@ -1,0 +1,113 @@
+name: Tests
+
+# Every check suite in the repository, on every pull request and every push to main (issue #63).
+#
+# Before this existed, `.github/workflows/refresh.yml` was the only workflow and it never ran a
+# test file: 801 checks ran only when a person remembered to run them. The cost of that is not
+# hypothetical - a privacy check written to stop real email addresses reaching a public repository
+# scored 380 of 380 with three real addresses in front of it, and nothing would have caught it on
+# merge.
+#
+# Each suite is its own step, and each step runs even after an earlier one has failed
+# (`if: ${{ !cancelled() }}`), so one red suite never hides the state of the other five. The run's
+# Summary tab carries a table of all six with their check counts and times.
+#
+# Every suite is offline: no network, no token, no HTTP cache, and the ones that build do so into a
+# temporary directory rather than touching public/data. Nothing here writes to the repository.
+#
+# What is deliberately NOT run here, and why it is not an oversight
+# -----------------------------------------------------------------
+# `tools/roster_check.py` and `tools/camps_check.py`'s discovery sweep both read roster pages from
+# a local HTTP cache (.cache/http) that a fresh checkout - i.e. every CI runner - does not have.
+# Absent the cache they skip every program and still exit 0: roster_check.py prints
+# `summary: not-cached 350 (of 350)` and succeeds. That is issue #81. Wiring either in as it stands
+# would paint a green tick over zero coverage, which is worse than not running them, because it
+# turns an absence of testing into a positive signal. `camps_check.py --fixtures` is a different
+# mode and is genuinely cacheless - 390 real checks against tests/fixtures/camps - so that is the
+# one that runs. When #81 makes "checked nothing" a non-zero outcome in the tools themselves, the
+# sweep can be added here with a --min-ok floor.
+#
+# The floors below are the other half of the same argument: see .github/scripts/run_suite.py.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A pull request that gets a second push does not need the first run finished. Pushes to main are
+# never cancelled: the daily data refresh commits there, and its result is the one worth keeping.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  suites:
+    name: Check suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # 3.12 matches refresh.yml, so a suite cannot pass here and fail in the workflow that
+      # publishes data.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      # 24, not the runner default: tests/feedback.test.mjs imports ../worker.js, which is ESM in a
+      # .js file with no package.json declaring "type": "module". Node resolves that only through
+      # module-syntax detection, unflagged since 22.7. Pinning 24 keeps it off the edge of that.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start the suite table
+        if: ${{ !cancelled() }}
+        run: |
+          {
+            echo "## Check suites"
+            echo
+            echo "| suite | result | checks | time |"
+            echo "| --- | --- | ---: | ---: |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # One step per suite. The --min-checks floor is the count the suite reported when the step was
+      # written; a suite that starts running fewer goes red here rather than green. Raising a floor
+      # after adding checks is optional; lowering one is a deliberate, reviewable edit.
+
+      - name: seasons (tests/seasons_test.py)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name seasons --min-checks 81 -- python tests/seasons_test.py
+
+      - name: the rank (tests/the_rank_test.py)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name the-rank --min-checks 177 -- python tests/the_rank_test.py
+
+      - name: camps index (tests/camps_index_test.py)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name camps-index --min-checks 94 -- python tests/camps_index_test.py
+
+      - name: robots and User-Agent (tests/robots_ua_test.py)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name robots-ua --min-checks 44 -- python tests/robots_ua_test.py
+
+      # --fixtures only. The default sweep needs an HTTP cache this runner does not have; see the
+      # note at the top of this file and issue #81.
+      - name: camps fixtures (tools/camps_check.py --fixtures)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name camps-fixtures --min-checks 390 -- python tools/camps_check.py --fixtures
+
+      # --test-reporter=tap so the count line is stable: node's default reporter depends on whether
+      # stdout is a terminal, and the wrapper has to find "# pass <n>" either way.
+      - name: feedback worker (node --test tests/feedback.test.mjs)
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_suite.py --name feedback --min-checks 15 -- node --test --test-reporter=tap tests/feedback.test.mjs
