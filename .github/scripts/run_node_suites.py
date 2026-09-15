@@ -63,7 +63,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 # What counts as a Node suite, and where one could hide. DISCOVERY is what node is handed; SCOPE is
 # the wider net the orphan check sweeps, so a test file named off-pattern is caught rather than
 # quietly skipped.
-DISCOVERY = "tests/**/*.test.mjs"
+DISCOVERY = "tests/**/*.spec.mjs"
 SCOPE = ("tests/**/*.mjs", "tests/**/*.js", "tests/**/*.cjs")
 
 # A file that registers tests names the built-in runner somewhere, whether by `import ... from`,
