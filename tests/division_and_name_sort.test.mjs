@@ -167,7 +167,9 @@ const REAL = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
 const D3_CONFS = ['NESCAC', 'Centennial', 'UAA', 'DIII Independent'];
 const D2_CONFS = ['Peach Belt', 'GLIAC'];
 // Real rows with division and conference reassigned, so every other field stays real and the views
-// render as they really would. Rows 0-199 stay D1, 200-299 become D3, 300-349 become D2.
+// render as they really would. Rows 0-199 stay D1, 200-299 become D3, the rest (300 on) become D2. The
+// D2 count is taken from the real index, which changes size when membership does (issue #100).
+const D2_ROWS = REAL.programs.length - 300;
 function multiDivisionIndex() {
   const doc = JSON.parse(JSON.stringify(REAL));
   doc.programs.forEach((p, i) => {
@@ -310,13 +312,14 @@ const mApp = () => multi.sandbox.document.querySelector('#app').innerHTML;
 test('three divisions in the data put a Division pill row on the page, with counts', async () => {
   await ready(multi.sandbox);
   assert.deepEqual(plain(M.index.divisions), ['D1', 'D2', 'D3'], 'the divisions were not derived from the rows');
-  assert.deepEqual(plain(M.index.byDiv), { D1: 200, D3: 100, D2: 50 });
+  assert.ok(D2_ROWS > 0, `the real index has ${REAL.programs.length} rows, too few to put any in D2`);
+  assert.deepEqual(plain(M.index.byDiv), { D1: 200, D3: 100, D2: D2_ROWS });
   multi.sandbox.location.hash = '#/';
   multi.sandbox.renderSidebar();
   const html = mSidebar();
   assert.ok(html.includes('aria-label="Division"'), 'the Division pill row is missing');
   assert.ok(html.includes('>Division</div>'), 'the Division browse label is missing');
-  for (const [d, n] of [['D1', 200], ['D2', 50], ['D3', 100]]) {
+  for (const [d, n] of [['D1', 200], ['D2', D2_ROWS], ['D3', 100]]) {
     assert.ok(html.includes(`data-division="${d}"`), `the ${d} pill is missing`);
     assert.ok(html.includes(`>${d}<span class="pill-sub">${n}</span></button>`), `the ${d} pill does not carry its count`);
   }
@@ -432,7 +435,7 @@ test('the list names the divisions it is showing', async () => {
   multi.sandbox.location.hash = '#/';
   await multi.sandbox.renderList();
   assert.ok(mApp().includes("NCAA women's soccer · Division I, Division III"), 'the list does not say which divisions it shows');
-  assert.ok(mApp().includes('300 of 350 programs'), 'the list miscounts under a division filter');
+  assert.ok(mApp().includes(`300 of ${REAL.programs.length} programs`), 'the list miscounts under a division filter');
   M.filters.division = [];
   // a division code the spelling table does not know prints itself rather than vanishing
   assert.equal(multi.sandbox.divisionName('DII'), 'DII');

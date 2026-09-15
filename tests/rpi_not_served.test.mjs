@@ -241,7 +241,10 @@ test('every program shows the RPI it showed when the page read the table, on the
   const bySchool = table.season === sandbox.RPI_SEASON ? new Map(table.teams.map(t => [t.school, t.rank])) : new Map();
   const programs = idx.programs;
   const registry = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'registry.json'), 'utf8'));
-  assert.equal(programs.length, registry.programs.length, 'the index does not hold every registry program');
+  // build.py publishes the onboarded entries of registry.programs only; a new program waits for its
+  // onboard run, and heldPrograms (issue #100) are never published
+  assert.deepEqual(programs.map(p => p.slug).sort(), registry.programs.filter(p => p.onboarded).map(p => p.slug).sort(),
+    'the index does not hold every published registry program');
   assert.ok(programs.length > 0);
   const wrong = [];
   for (const p of programs) {

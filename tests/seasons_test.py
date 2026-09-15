@@ -322,10 +322,14 @@ def test_build(registry: dict, built: str, log: str) -> None:
     ok("the build's own validate pass reports nothing", not complaints(log), complaints(log)[:400])
     index = json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))
     rows = {r["slug"]: r for r in index["programs"]}
-    ok("index.json carries 350 rows", len(rows) == 350, str(len(rows)))
-    ok("350 rows have a lastSeason", sum(1 for r in rows.values() if r.get("lastSeason")) == 350,
+    # Every published program, counted from the registry the build read (350 before issue #100 moved
+    # Saint Francis and Mississippi Valley State out of the published set), not a number to maintain.
+    n = sum(1 for _ in common.iter_programs(registry))
+    ok(f"index.json carries a row for each of the registry's {n} published programs",
+       n > 0 and sorted(rows) == sorted(p["slug"] for p in common.iter_programs(registry)), f"{len(rows)} rows, {n} programs")
+    ok(f"all {n} rows have a lastSeason", sum(1 for r in rows.values() if r.get("lastSeason")) == n,
        str(sum(1 for r in rows.values() if r.get("lastSeason"))))
-    ok("350 rows have an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == 350,
+    ok(f"all {n} rows have an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
        str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
     ok(f"every lastSeason is {FINISHED}",
        all(r["lastSeason"]["year"] == FINISHED for r in rows.values()),
@@ -342,8 +346,8 @@ def test_build(registry: dict, built: str, log: str) -> None:
         ss = profile(built, slug)["seasons"]
         n_seasons += bool(ss)
         n_rank += any(s.get("rpiRank") for s in ss)
-    ok("350 profiles have season history", n_seasons == 350, str(n_seasons))
-    ok("350 profiles have at least one RPI rank", n_rank == 350, str(n_rank))
+    ok(f"all {n} profiles have season history", n_seasons == n, str(n_seasons))
+    ok(f"all {n} profiles have at least one RPI rank", n_rank == n, str(n_rank))
 
     # Issue #3's own examples, and the coverage each one is expected to have.
     for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
@@ -384,10 +388,11 @@ def test_flip(registry: dict) -> None:
         rows = {r["slug"]: r for r in json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))["programs"]}
         vandy = profile(built, "vanderbilt")
         ok("the rebuild still validates", not complaints(log), complaints(log)[:400])
-        ok("still 350 rows with a lastSeason",
-           sum(1 for r in rows.values() if r.get("lastSeason")) == 350,
+        n = sum(1 for _ in common.iter_programs(registry))
+        ok(f"still all {n} rows with a lastSeason",
+           n > 0 and sum(1 for r in rows.values() if r.get("lastSeason")) == n,
            str(sum(1 for r in rows.values() if r.get("lastSeason"))))
-        ok("still 350 with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == 350,
+        ok(f"still all {n} with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
            str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
         ok(f"lastSeason is still {FINISHED} everywhere, not the newly labelled season",
            {r["lastSeason"]["year"] for r in rows.values()} == {FINISHED},
@@ -424,8 +429,9 @@ def test_archive_extended(registry: dict) -> None:
         built, log = rebuild(tmp, scratch_rpi(tmp, cur_season=cur_season, archive_year=FINISHED))
         rows = {r["slug"]: r for r in json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))["programs"]}
         ok("the rebuild still validates", not complaints(log), complaints(log)[:400])
-        ok("still 350 rows with a lastSeason, not 173",
-           sum(1 for r in rows.values() if r.get("lastSeason")) == 350,
+        n = sum(1 for _ in common.iter_programs(registry))
+        ok(f"still all {n} rows with a lastSeason, not 173",
+           n > 0 and sum(1 for r in rows.values() if r.get("lastSeason")) == n,
            str(sum(1 for r in rows.values() if r.get("lastSeason"))))
         ok(f"every lastSeason is still {FINISHED}",
            {r["lastSeason"]["year"] for r in rows.values()} == {FINISHED},
@@ -434,7 +440,7 @@ def test_archive_extended(registry: dict) -> None:
         ok("and the Record column stays full: 0 dashes, not 177", not dashes, f"{len(dashes)}: {dashes[:5]}")
         ok("every row still has a rank too", all(r["lastSeason"].get("rpiRank") for r in rows.values()),
            str([s for s, r in rows.items() if not r["lastSeason"].get("rpiRank")][:5]))
-        ok("still 350 with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == 350,
+        ok(f"still all {n} with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
            str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
 
         # The synthesised sheet's ranks are deliberately wrong, so a published rank names its source.
