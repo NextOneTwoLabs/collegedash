@@ -27,6 +27,8 @@ from urllib import robotparser
 
 import requests
 from requests.adapters import HTTPAdapter
+from urllib3.connection import HTTPConnection, HTTPSConnection
+from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUBLIC_DIR = os.path.join(ROOT, "public")
@@ -123,6 +125,22 @@ def set_log_context(label: str | None) -> None:
     _log_context.label = label
 
 
+def log_traceback() -> None:
+    """Print the current exception's traceback to stderr as one block, each line prefixed with this
+    thread's log label (the program slug under refresh --workers N), so it cannot interleave with
+    another worker's lines and says whose it is. Without a label it prints exactly what
+    traceback.print_exc() did."""
+    import sys
+    import traceback
+    label = getattr(_log_context, "label", None)
+    text = traceback.format_exc()
+    if label:
+        text = "".join(f"{label} | {line}\n" for line in text.rstrip("\n").split("\n"))
+    with _log_lock:
+        sys.stderr.write(text)
+        sys.stderr.flush()
+
+
 def log(msg: str) -> None:
     label = getattr(_log_context, "label", None)
     line = f"[{_dt.datetime.now().strftime('%H:%M:%S')}] " + (f"{label} | " if label else "") + msg
@@ -171,11 +189,16 @@ def _locked(path: str, *, timeout: float = 15.0, stale_after: float = 60.0):
     O_EXCL create racing another thread's delete of the lock file raises PermissionError (the file is
     delete-pending), not FileExistsError, and the refresh crashed within two minutes. PermissionError
     is also treated as "held" below, which covers the same race between two processes (serve +
-    refresh) that predates the workers."""
+    refresh) that predates the workers.
+
+    The in-process lock has NO timeout, on purpose (PR #105 review). A queue of N workers on a large
+    file can wait longer than any fixed bound, and a timeout there turned successful collector runs
+    into recorded failures and crashed 32- and 64-worker runs. A thread only ever waits here for
+    another thread of this process that is making progress. `timeout` still bounds the wait for the
+    lock FILE, i.e. for another process, which is what it was written for."""
     with _path_locks_lock:
         plock = _path_locks.setdefault(os.path.abspath(path), threading.Lock())
-    if not plock.acquire(timeout=timeout):
-        raise RuntimeError(f"could not lock {path} within {timeout}s (held by another thread)")
+    plock.acquire()
     try:
         with _file_locked(path, timeout=timeout, stale_after=stale_after):
             yield
@@ -244,38 +267,59 @@ def forget_cached(url: str, *, method: str = "GET", json_body=None) -> bool:
 # ---------- per-host politeness gate (issue #94) ----------
 # Every live request, and every redirect hop inside one, passes through the gate of the host it
 # actually contacts. The gate is a lock held for the whole request -- body included -- so two requests
-# to one host never overlap, plus the same start-to-start gap the sequential collector always kept:
-# max(MIN_GAP_SECONDS, that host's Crawl-delay) + uniform(0, JITTER_SECONDS), measured from the start
-# of the previous request. A sequential run therefore behaves as before (a redirect hop now waits
-# its gap too, which only ever slows us down), and `refresh --workers N` can run programs side by side
-# without any host receiving two requests at once or two requests closer than that gap.
+# to one host never overlap, plus the same gap the sequential collector always kept:
+# max(MIN_GAP_SECONDS, that host's Crawl-delay) + uniform(0, JITTER_SECONDS).
+#
+# The gap is measured from the moment the previous request finished SENDING, not from when it was
+# allowed to start (PR #105 review). Building, connecting and sending all need the GIL, so with other
+# threads parsing pages the time between "allowed to start" and "bytes on the wire" varies by hundreds
+# of milliseconds; measured from the earlier stamp, a host saw 13 of 99 intervals under 1.2 s, the
+# shortest 0.765 s. The later stamp is taken by the urllib3 connection itself right after the request
+# is written (_StampingHTTPConnection). The next request cannot start before that stamp + gap, so the
+# host cannot see two requests closer than the gap, network jitter aside. Where no stamp is taken (a
+# proxy, an error part-way) the moment the request finished is used instead, which is later still.
+# Measuring from the response END instead would put shared hosts at latency + gap (~1.9-2.0 s); the
+# send stamp costs next to nothing.
+#
+# A sequential run therefore behaves as before, only fractionally more spaced (a redirect hop now
+# waits its gap too), and `refresh --workers N` can run programs side by side without any host
+# receiving two requests at once or two requests closer than that gap.
 #
 # What this does NOT preserve: in a sequential walk a host every program uses (TopDrawerSoccer,
-# SoccerWire) was visited once per program, i.e. about every 18 s on a daily run, far slower than the
-# gap requires. With workers those hosts receive the same number of requests at the gap itself, about
-# one every 1.6 s. Raising a shared host's spacing is a policy choice with a direct cost in wall time
-# (issue #94 has the numbers); the gate is where it would be set.
+# SoccerWire) was visited once per program, i.e. about every 16-19 s on a daily run, far slower than
+# the gap requires. With workers those hosts receive the same number of requests at the gap itself,
+# about one every 1.7 s. Raising a shared host's spacing is a policy choice with a direct cost in wall
+# time (issue #94 has the numbers); the gate is where it would be set.
 #
-# Hosts shared by every program (TopDrawerSoccer, SoccerWire, Wikipedia, ...) need no list: they are
-# serialised because all workers queue on the same gate. Backoffs after a 429/5xx or a network error
-# are recorded on the gate as well (`not_before`), because sequentially that sleep paused the whole
-# process and nobody touched the host meanwhile; with workers, another thread would otherwise hit a
-# host that just asked us to slow down.
+# Backoffs after a 429/5xx or a network error are recorded on the gate of the host that answered (the
+# hop, not the URL the caller asked for), inside the gate, before it is released. Sequentially that
+# sleep paused the whole process and nobody touched the host meanwhile; with workers another thread is
+# usually already queued on the gate, and a hold recorded after release would race it. Because every
+# write to `not_before` happens under the gate lock, a thread waiting in the gate is never overtaken by
+# a hold recorded while it sleeps, so the wait needs no re-check.
 #
 # The gap is per process. Two refresh processes at once (not something the workflow does: its
 # concurrency group forbids it) would each keep their own gates, exactly as before this change.
+#
+# A robots.txt check (issue #101, deliberately not done here) would go in _PoliteAdapter.send, before
+# the gate: it sees the first request and every redirect hop, keyed by the host actually contacted.
+
+RETRY_STATUSES = (429, 500, 502, 503, 504)
+
 
 class _HostGate:
     __slots__ = ("lock", "last", "not_before")
 
     def __init__(self) -> None:
         self.lock = threading.Lock()
-        self.last: float | None = None
-        self.not_before = 0.0
+        self.last: float | None = None      # when the previous request finished sending
+        self.not_before = 0.0               # a backoff; written only while `lock` is held
 
 
 _gates: dict[str, _HostGate] = {}
 _gates_lock = threading.Lock()
+_sending = threading.local()   # the request this thread is sending: .gate, .sent_at
+_retry = threading.local()     # fetch()'s attempt number (1-based), so the gate can scale a backoff
 
 
 def _gate(host: str) -> _HostGate:
@@ -286,48 +330,95 @@ def _gate(host: str) -> _HostGate:
         return g
 
 
+def _mark_sent() -> None:
+    """Called by the connection once a request has been written to the socket."""
+    if getattr(_sending, "gate", None) is not None:
+        _sending.sent_at = time.monotonic()
+
+
 @contextlib.contextmanager
 def _polite(url: str):
     """Hold `url`'s host for one request: wait for its turn, then keep every other thread off the host
-    until the block exits."""
+    until the block exits. Yields the gate so the caller can record a backoff while still holding it."""
     host = _host(url)
     g = _gate(host)
     with g.lock:
-        gap = None
+        wait_until = g.not_before
         if g.last is not None:
             gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, JITTER_SECONDS)
-        while True:  # re-read not_before after every sleep: another thread may record a backoff meanwhile
-            wait_until = g.not_before if gap is None else max(g.not_before, g.last + gap)
-            delay = wait_until - time.monotonic()
-            if delay <= 0:
-                break
+            wait_until = max(wait_until, g.last + gap)
+        delay = wait_until - time.monotonic()
+        if delay > 0:
             time.sleep(delay)
-        g.last = _last_request_at[host] = time.monotonic()
-        yield
+        _sending.gate, _sending.sent_at = g, None
+        try:
+            yield g
+        finally:
+            sent = _sending.sent_at
+            _sending.gate = _sending.sent_at = None
+            g.last = _last_request_at[host] = sent if sent is not None else time.monotonic()
 
 
-def _hold_host(url: str, seconds: float) -> None:
-    """Keep every thread off `url`'s host for `seconds` from now (a retry backoff)."""
-    g = _gate(_host(url))
+def _hold(g: _HostGate, seconds: float) -> None:
+    """Keep every thread off gate `g`'s host for `seconds` from now. Call only inside _polite."""
     g.not_before = max(g.not_before, time.monotonic() + seconds)
 
 
-def _back_off(url: str, seconds: float) -> None:
-    """Pause before a retry: this thread sleeps, as the sequential collector always did, and the host
-    is held for the same span so no other worker's request lands on it in the meantime."""
-    _hold_host(url, seconds)
-    time.sleep(seconds)
+def _backoff_seconds(status: int | None) -> float:
+    """The retry pause for a response status (None = a network error), scaled by fetch()'s attempt."""
+    attempt = getattr(_retry, "attempt", 1)
+    if status is None:
+        base = BACKOFF_NETWORK_SECONDS
+    elif status == 429:
+        base = BACKOFF_429_SECONDS
+    else:
+        base = BACKOFF_5XX_SECONDS
+    return base * attempt
+
+
+class _StampingHTTPConnection(HTTPConnection):
+    def request(self, *args, **kwargs):
+        try:
+            return super().request(*args, **kwargs)
+        finally:
+            _mark_sent()
+
+
+class _StampingHTTPSConnection(HTTPSConnection):
+    def request(self, *args, **kwargs):
+        try:
+            return super().request(*args, **kwargs)
+        finally:
+            _mark_sent()
+
+
+class _StampingHTTPPool(HTTPConnectionPool):
+    ConnectionCls = _StampingHTTPConnection
+
+
+class _StampingHTTPSPool(HTTPSConnectionPool):
+    ConnectionCls = _StampingHTTPSConnection
 
 
 class _PoliteAdapter(HTTPAdapter):
     """requests transport that passes each request -- the first and every redirect hop, since
     Session.resolve_redirects sends each hop through the adapter -- through its host's gate."""
 
+    def init_poolmanager(self, *args, **kwargs):
+        super().init_poolmanager(*args, **kwargs)
+        self.poolmanager.pool_classes_by_scheme = {"http": _StampingHTTPPool, "https": _StampingHTTPSPool}
+
     def send(self, request, **kwargs):
-        with _polite(request.url):
-            resp = super().send(request, **kwargs)
-            if not kwargs.get("stream"):
-                resp.content  # read the body while the host is still held; Session reads it later otherwise
+        with _polite(request.url) as g:
+            try:
+                resp = super().send(request, **kwargs)
+                if resp.status_code in RETRY_STATUSES:
+                    _hold(g, _backoff_seconds(resp.status_code))
+                if not kwargs.get("stream"):
+                    resp.content  # read the body while the host is still held; Session reads it later otherwise
+            except requests.RequestException:
+                _hold(g, _backoff_seconds(None))
+                raise
             return resp
 
 
@@ -538,13 +629,16 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
 
     last_err: Exception | None = None
     for attempt in range(retries):
+        _retry.attempt = attempt + 1  # the gate scales the answering host's hold by it
         try:
             with _session() as s:  # what requests.request() does, plus the per-host gate on every hop
                 resp = s.request(method, url, headers=hdrs, data=body_str, timeout=timeout)
-        except requests.RequestException as e:  # network
+        except requests.RequestException as e:  # network; the host that failed is already held
             last_err = e
-            _back_off(url, BACKOFF_NETWORK_SECONDS * (attempt + 1))
+            time.sleep(_backoff_seconds(None))  # and this thread pauses too, as it always did
             continue
+        finally:
+            _retry.attempt = 1
         if resp.status_code in allow_status:
             meta = {"url": url, "status": resp.status_code, "fetchedAt": now_iso(), "fromCache": False,
                     "contentType": resp.headers.get("Content-Type", ""), "finalUrl": resp.url}
@@ -563,10 +657,13 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
                 os.remove(body_path)
             write_json(meta_path, meta)
             return resp.content, meta
-        if resp.status_code in (429, 500, 502, 503, 504):
+        if resp.status_code in RETRY_STATUSES:
             last_err = FetchError(f"HTTP {resp.status_code} for {url}")
-            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one
-            _back_off(url, (BACKOFF_429_SECONDS if resp.status_code == 429 else BACKOFF_5XX_SECONDS) * (attempt + 1))
+            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
+            # gate already holds the host that answered for this long; this thread pauses with it.
+            _retry.attempt = attempt + 1
+            time.sleep(_backoff_seconds(resp.status_code))
+            _retry.attempt = 1
             continue
         raise FetchError(f"HTTP {resp.status_code} for {url}")
     raise FetchError(f"giving up after {retries} attempts: {last_err}")  # last_err names the URL
@@ -658,12 +755,22 @@ def load_reviewed(slug: str) -> dict:
 # ---------- refresh state ----------
 
 def update_refresh_state(key: str, info: dict) -> None:
+    update_refresh_state_many({key: info})
+
+
+def update_refresh_state_many(entries: dict[str, dict]) -> None:
+    """Record several refresh-state entries in one locked read-modify-write. An entry that already
+    carries "at" keeps it (the time its collector finished); the others are stamped now. `refresh`
+    records each program's collectors with one call: the file is ~300 KB at 350 programs and ~800 KB
+    at 1,050, and rewriting it once per collector run is what made the lock contended (PR #105)."""
     with _locked(REFRESH_STATE_PATH):
         state = read_json(REFRESH_STATE_PATH, {}) or {}
-        entry = dict(info)
-        entry["at"] = now_iso()
-        state[key] = entry
-        state["updated"] = now_iso()
+        stamp = now_iso()
+        for key, info in entries.items():
+            entry = dict(info)
+            entry.setdefault("at", stamp)
+            state[key] = entry
+        state["updated"] = stamp
         write_json(REFRESH_STATE_PATH, state)
 
 
