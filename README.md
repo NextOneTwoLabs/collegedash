@@ -73,7 +73,7 @@ the rate-limited `DEMO_KEY`.
 | School facts | College Scorecard API | admission rate, test bands, size, cost, outcomes |
 | Climate | NOAA NCEI 1991–2020 U.S. Climate Normals (monthly) | nearest airport/coop station to campus; no key, no quota |
 | History, honours | Wikipedia team article | infobox + year-by-year table; national titles are cross-checked against the NCAA champions list in `build.py` |
-| RPI 2007–2024 | Chris Henderson, *RPI for Division I Women's Soccer* | end-of-season, recomputed under the 2024 formula (XLSX export; the CSV export loses formula values for 2021–24) |
+| RPI 2007–2024 | Chris Thomas, [*RPI for Division I Women's Soccer*](https://sites.google.com/site/rpifordivisioniwomenssoccer/Home) | end-of-season; from 2010 restated as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so not the ranks that stood at the time (2007–2009 use that era's overtime rules and formula) (XLSX export; the CSV export loses formula values for 2021–24) |
 | RPI weekly | NCAA.com RPI page | only the latest week is published; each refresh archives a snapshot |
 | Commitments | TopDrawerSoccer team tab; SoccerWire directory (Elasticsearch proxy) | no dates on either; SoccerWire profile date is an approximation |
 

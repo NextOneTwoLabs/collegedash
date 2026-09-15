@@ -31,7 +31,7 @@ OPTIONAL_ENVS = {"camps"}
 # fails the build for any season after the archive's last year that resolves no table, which is
 # what stops a lost weekly/ snapshot from silently blanking a season on all 350 profiles - but a
 # cancelled season is the one case where nothing is wrong. 2020 is the precedent: COVID moved the
-# women's championship to spring 2021, and the Henderson archive has no 2020 sheet. It needs no
+# women's championship to spring 2021, and the Chris Thomas archive has no 2020 sheet. It needs no
 # entry here, because the gap is only checked above the archive's last year. Add a year here (with
 # the reason) only when the NCAA played no season; never to quiet a missing snapshot.
 UNPLAYED_SEASONS: set[int] = set()
@@ -127,10 +127,10 @@ def load_rpi_finals(cur_season: int) -> dict[int, dict]:
     """season -> the NCAA RPI table that stands for that season, for every finished season a weekly
     snapshot covers.
 
-    The archive (public/data/rpi/<year>.json) is one formula recomputed across every season it
+    The archive (public/data/rpi/<year>.json) is the source of record for every season it
     holds, so its *rank* wins wherever it exists - but a season it covers is still resolved here,
     because archive rows carry no record and build_seasons still needs the snapshot's one. Dropping
-    such a season from this dict is what made adding a 2025 Henderson sheet - an ordinary edit to
+    such a season from this dict is what made adding a 2025 archive sheet - an ordinary edit to
     the 17 curated entries in registry.sources.rpiHistory.sheets - collapse lastSeason from 350 to
     173 and re-dash the Record column for 177 programs. Seasons above the archive can only come
     from the NCAA's own table, and current.json is not a home for them: collect/rpi.py
@@ -185,7 +185,7 @@ def load_rpi_finals(cur_season: int) -> dict[int, dict]:
     if missing or not (archived or out):
         raise FileNotFoundError(
             f"rpi: no season table resolved for {missing or 'any season'} under {weekly_dir} or "
-            f"current.json. The Henderson archive stops at {max(archived, default='(nothing)')}, so "
+            f"current.json. The Chris Thomas archive stops at {max(archived, default='(nothing)')}, so "
             f"those seasons would publish with no rank and, for a program Wikipedia does not cover, "
             f"no season at all. If a season was genuinely never played, add it to "
             f"UNPLAYED_SEASONS in build.py; do not fabricate a snapshot")
@@ -324,7 +324,7 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry) -> list[di
             s.update({"record": rec["text"], "wins": rec["wins"], "losses": rec["losses"], "ties": rec["ties"]})
             if rec.get("confText") and rec["confText"] != "0-0-0" and not s.get("confRecord"):
                 s["confRecord"] = rec["confText"]
-    # The Henderson archive, one recomputed formula across every season it covers.
+    # Chris Thomas's archive (from 2010 restated as if the No Overtime rule and the 2024 formula had applied).
     from_archive = set()
     for y, table in (rpi_hist.items() if hist_name else ()):
         h = table.get(hist_name)
@@ -335,11 +335,11 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry) -> list[di
         s["rpiRank"] = h.get("rpiRank")
         s["rpi"] = {"rank": h.get("rpiRank"), "sosRank": h.get("sosRank"), "balancedRank": h.get("balancedRpiRank"),
                     "kpiRank": h.get("kpiRank"), "masseyRank": h.get("masseyRank"), "ncaaSeed": h.get("ncaaSeed"),
-                    "source": "end-of-season (Henderson archive)"}
+                    "source": "end-of-season (Chris Thomas archive)"}
     # The NCAA's own table (see load_rpi_finals). Where the archive already ranked this program's
     # season the archive's rank stands, but the row is still read for the record: archive rows
     # carry none, so skipping the season outright would blank lastSeason for the 177 programs that
-    # have no other source for it, the moment someone adds that year's Henderson sheet.
+    # have no other source for it, the moment someone adds that year's archive sheet.
     for y, doc in (rpi_finals.items() if ncaa_name else ()):
         row = next((t for t in doc.get("teams") or [] if t.get("school") == ncaa_name), None)
         if not row:

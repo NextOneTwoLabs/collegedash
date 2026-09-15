@@ -196,7 +196,7 @@ Every section carries `_meta: {source, url, asOf}`; `curated` overrides same-nam
 | School facts | College Scorecard API `api.data.gov/ed/collegescorecard/v1/schools` | Verified; **you request a free key** (`SCORECARD_API_KEY`). |
 | Climate | Open-Meteo Historical Weather API (ERA5), 1991–2020 daily → monthly normals | Verified, no key. |
 | Year-by-year, titles, stadium | Wikipedia `Stanford_Cardinal_women's_soccer` all-time table | Verified. |
-| RPI history 2007–2024 | Chris Henderson "RPI for D1 Women's Soccer" Google Sheets (CSV export) | Verified; one-time load. Recomputed under 2024 formula (documented). |
+| RPI history 2007–2024 | Chris Thomas "RPI for D1 Women's Soccer" Google Sheets (CSV export) | Verified; one-time load. From 2010 restated as if the No Overtime rule and the 2024 formula had been in effect (documented). |
 | RPI weekly (current season) | ncaa.com is JS-rendered; stats.ncaa.org nitty-gritty returned 403 to a plain client | **Spike**: browser headers → underlying JSON → Playwright fallback (we'll have it anyway). |
 
 ### CLI

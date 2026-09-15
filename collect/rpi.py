@@ -1,13 +1,13 @@
 """
 NCAA RPI for Division I women's soccer.
 
-history(registry)  End-of-season RPI 2007-2024 from Chris Henderson's "RPI for Division I Women's
+history(registry)  End-of-season RPI 2007-2024 from Chris Thomas's "RPI for Division I Women's
                    Soccer" Google Sheets (Teams tab, CSV export). -> public/data/rpi/<year>.json
 current(registry)  Latest weekly RPI table from ncaa.com (server-rendered). -> public/data/rpi/current.json
                    and an immutable snapshot public/data/rpi/weekly/<season>/<through-date>.json so the
                    repo accumulates the in-season history the NCAA does not publish.
 
-Team names differ between the two sources (Henderson: 'NorthCarolinaU', NCAA: 'North Carolina');
+Team names differ between the two sources (Thomas archive: 'NorthCarolinaU', NCAA: 'North Carolina');
 build.py joins them to programs via registry ids.rpiHistoryName / ids.ncaaName.
 """
 
@@ -128,9 +128,11 @@ def history(registry: dict, years: list[int] | None = None, *, force: bool = Fal
             continue
         common.write_json(out_path, {
             "year": y, "kind": "end-of-season",
-            "provider": src.get("provider", "RPI for Division I Women's Soccer (Chris Henderson)"),
+            "provider": src.get("provider", "RPI for Division I Women's Soccer (Chris Thomas)"),
             "sourceUrl": f"https://docs.google.com/spreadsheets/d/{sheet_id}/",
-            "note": "Ranks recomputed by the provider under the 2024 NCAA RPI formula; may differ slightly from the NCAA's published ranks of that season.",
+            "note": ("Restated by the provider as if the No Overtime rule and the 2024 NCAA RPI formula had been in "
+                     "effect, so not the ratings that stood at the time." if y >= 2010 else
+                     "As the provider calculated it with overtimes and the NCAA RPI formula then in effect."),
             "fetchedAt": meta.get("fetchedAt"), "teams": teams,
         })
         summary[y] = f"{len(teams)} teams"

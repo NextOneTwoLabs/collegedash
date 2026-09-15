@@ -7,7 +7,7 @@ short names and conferences). Each team is then matched to:
   - TopDrawerSoccer conference pages (tdsSlug, tdsClgId)
   - NCAA.com schools index + school page (athletics website)
   - College Scorecard (unit id, coordinates) via ~20 paged API calls cached in data/scorecard-bulk.json
-  - Chris Henderson's RPI archive team names (public/data/rpi/2024.json)
+  - Chris Thomas's RPI archive team names (public/data/rpi/2024.json)
 
 Matching is by normalised name with a small override table; everything unmatched is written to
 data/registry-build-report.json for review. Existing registry entries are preserved.
