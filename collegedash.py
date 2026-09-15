@@ -5,6 +5,7 @@ CollegeDash command line.
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
+                                [--workers 16]          programs collected side by side; per-host politeness holds
                                 [--fail-threshold 0.05] exit 1 only when more than this share of runs fail; 2 = crash
   python collegedash.py registry build|tidy|fix-wiki|colors [--apply] [--slug a,b]
   python collegedash.py sweep [tds|soccerwire|all] [--years 2027,2028]
@@ -175,15 +176,52 @@ def cmd_refresh(args):
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
             results.append({"program": "-", "collector": "rpi", "outcome": "failed", "error": str(e)[:300]})
-    for p, cs in plan:
-        for c in cs:
-            results.append(run_collector_outcome(c, p, reg, bios=not args.no_bios))
+    results += collect_plan(plan, reg, bios=not args.no_bios, workers=args.workers)
     if not plan and not run_rpi:
         common.log("nothing to refresh")
         return 0
     import build
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
+
+
+def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, workers: int) -> list[dict]:
+    """Run every (program, collectors) pair of the plan and return the outcomes in plan order.
+
+    workers <= 1 is the sequential walk, unchanged. With more, up to `workers` programs are collected
+    at once (issue #94). Almost all of a sequential run is spent in the politeness gap of one athletics
+    site while every other host sits idle; running programs side by side removes that idle time and
+    nothing else, because the gap is enforced per host inside collect.common, for every request and
+    redirect hop, whichever thread sends it. Hosts every program uses (TopDrawerSoccer, SoccerWire,
+    Wikipedia) stay one request at a time at today's spacing and become the pace of the run.
+
+    Within a program the collectors still run one after another in COLLECTORS order (camps mines the
+    archive news just wrote), and a program's files are written only by its own worker. Registry and
+    refresh-state writes go through common._locked: an in-process lock per path for the workers, then
+    the O_EXCL lock file that already kept serve and onboard --all from overwriting a refresh. The
+    returned list is in plan order whatever order programs finish in, so the summary,
+    lastRun and the exit code are the ones a sequential run would produce."""
+    def one(program: dict, collectors: list[str]) -> list[dict]:
+        return [run_collector_outcome(c, program, reg, bios=bios) for c in collectors]
+
+    if workers <= 1 or len(plan) <= 1:
+        return [r for p, cs in plan for r in one(p, cs)]
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    def worker(item):
+        program, collectors = item
+        common.set_log_context(program["slug"])
+        try:
+            return one(program, collectors)
+        finally:
+            common.set_log_context(None)
+
+    common.log(f"refresh: {len(plan)} programs on {min(workers, len(plan))} workers")
+    with ThreadPoolExecutor(max_workers=min(workers, len(plan)), thread_name_prefix="collect") as pool:
+        # map() yields in submission order; run_collector_outcome never raises (it records failures),
+        # so one program cannot abort the others
+        return [r for rs in pool.map(worker, plan) for r in rs]
 
 
 def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
@@ -296,6 +334,9 @@ def main(argv=None):
     p.add_argument("--fail-threshold", type=float, default=float(os.environ.get("COLLEGEDASH_FAIL_THRESHOLD", "0.05")),
                    help="share of collector runs allowed to fail before the run counts as failed (default 0.05, env COLLEGEDASH_FAIL_THRESHOLD)")
     p.add_argument("--mode", default="manual", help="label recorded with the run summary (daily, weekly, full, manual)")
+    p.add_argument("--workers", type=int, default=int(os.environ.get("COLLEGEDASH_WORKERS", "16")),
+                   help="programs collected at once (default 16, env COLLEGEDASH_WORKERS; 1 = the sequential walk). "
+                        "Per-host politeness is the same at any value")
     p.set_defaults(fn=cmd_refresh)
     p = sub.add_parser("sweep"); p.add_argument("source", nargs="?", default="all", choices=["tds", "soccerwire", "all"]); p.add_argument("--years"); p.set_defaults(fn=cmd_sweep)
     p = sub.add_parser("rpi"); p.add_argument("what", nargs="?", default="all", choices=["history", "current", "all"]); p.add_argument("--force", action="store_true"); p.set_defaults(fn=cmd_rpi)
