@@ -5,6 +5,7 @@ CollegeDash command line.
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
+                                [--workers 16]          programs collected side by side; per-host politeness holds
                                 [--fail-threshold 0.05] exit 1 only when more than this share of runs fail; 2 = crash
   python collegedash.py registry build|tidy|fix-wiki|colors [--apply] [--slug a,b]
   python collegedash.py sweep [tds|soccerwire|all] [--years 2027,2028]
@@ -22,6 +23,7 @@ import argparse
 import json
 import os
 import sys
+import time
 import traceback
 
 from collect import common
@@ -35,7 +37,18 @@ def run_collector(name: str, program: dict, registry: dict, **kw) -> bool:
 
 
 def run_collector_outcome(name: str, program: dict, registry: dict, **kw) -> dict:
-    """{"program", "collector", "outcome": ok|skipped|failed, "error"} - records the result in refresh-state."""
+    """{"program", "collector", "outcome": ok|skipped|failed, "error"} - records the result in refresh-state.
+    Never raises for an Exception: neither the collector's nor a failure to record the outcome."""
+    r, entry = collect_one(name, program, registry, **kw)
+    if entry is not None:
+        record_outcomes(program["slug"], {f"{program['slug']}.{name}": entry})
+    return r
+
+
+def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, dict | None]:
+    """Run one collector for one program and return (outcome, refresh-state entry) without writing
+    refresh-state. The entry is None when there is nothing to record (an unknown collector name).
+    Every Exception the collector raises becomes a failed outcome; nothing else here can raise one."""
     r = {"program": program["slug"], "collector": name, "outcome": "ok", "error": ""}
     try:
         if name == "scorecard":
@@ -65,20 +78,40 @@ def run_collector_outcome(name: str, program: dict, registry: dict, **kw) -> dic
         else:
             common.log(f"unknown collector {name}")
             r.update(outcome="failed", error=f"unknown collector {name}")
-            return r
-        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": True})
-        return r
+            return r, None
+        entry = {"ok": True}
     except common.SkipCollector as e:  # nothing to collect for this program; not a failure
         common.log(f"-- {name} skipped for {program['slug']}: {e}")
-        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": True, "skipped": str(e)[:300]})
         r.update(outcome="skipped", error=str(e)[:300])
-        return r
+        entry = {"ok": True, "skipped": str(e)[:300]}
     except Exception as e:  # keep going; partial progress is still committed
         common.log(f"!! {name} failed for {program['slug']}: {e}")
-        traceback.print_exc()
-        common.update_refresh_state(f"{program['slug']}.{name}", {"ok": False, "error": str(e)[:300]})
+        common.log_traceback()
         r.update(outcome="failed", error=str(e)[:300])
-        return r
+        entry = {"ok": False, "error": str(e)[:300]}
+    entry["at"] = common.now_iso()  # when the collector finished, not when the batch was written
+    return r, entry
+
+
+RECORD_ATTEMPTS = 3
+
+
+def record_outcomes(slug: str, entries: dict[str, dict]) -> bool:
+    """Write refresh-state entries in one locked read-modify-write. Never raises for an Exception:
+    the run's outcomes live in memory and drive the summary and exit code, so a refresh-state write
+    that fails must not turn a success into a failure (it used to: the ok path's write raising was
+    caught as the collector failing) or escape and cancel the programs still queued. Retried, then
+    logged. False when the entries could not be recorded."""
+    for attempt in range(1, RECORD_ATTEMPTS + 1):
+        try:
+            common.update_refresh_state_many(entries)
+            return True
+        except Exception as e:
+            if attempt == RECORD_ATTEMPTS:
+                common.log(f"!! refresh-state not recorded for {slug} ({', '.join(entries)}): {e}")
+                return False
+            time.sleep(0.2 * attempt)
+    return False
 
 
 def _mark_onboarded(slug: str) -> dict:
@@ -175,15 +208,68 @@ def cmd_refresh(args):
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
             results.append({"program": "-", "collector": "rpi", "outcome": "failed", "error": str(e)[:300]})
-    for p, cs in plan:
-        for c in cs:
-            results.append(run_collector_outcome(c, p, reg, bios=not args.no_bios))
+    results += collect_plan(plan, reg, bios=not args.no_bios, workers=args.workers)
     if not plan and not run_rpi:
         common.log("nothing to refresh")
         return 0
     import build
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
+
+
+def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, workers: int) -> list[dict]:
+    """Run every (program, collectors) pair of the plan and return the outcomes in plan order.
+
+    workers <= 1 walks the programs one at a time, as before. With more, up to `workers` programs are
+    collected at once (issue #94). Almost all of a sequential run is spent in the politeness gap of one
+    athletics site while every other host sits idle; running programs side by side removes that idle
+    time and nothing else, because the gap is enforced per host inside collect.common, for every
+    request and redirect hop, whichever thread sends it. Hosts every program uses (SoccerWire,
+    TopDrawerSoccer, Wikipedia) stay one request at a time at the configured gap and set the pace.
+
+    Within a program the collectors run strictly one after another in COLLECTORS order (camps mines
+    the archive news just wrote), and a program's files are written only by its own worker. Each
+    program's refresh-state entries are written in ONE locked read-modify-write when its collectors
+    are done, not one per collector: at 1,050 programs the file is ~800 KB, and a write per collector
+    run made the lock the bottleneck and, with the old timeout, a way to crash the run (PR #105).
+    Nothing a program does can raise out of its worker, so one program cannot cancel the programs
+    still queued. The returned list is in plan order whatever order programs finish in, so the
+    summary, lastRun and the exit code are the ones a sequential run would produce."""
+    def one(program: dict, collectors: list[str]) -> list[dict]:
+        results, entries = [], {}
+        try:
+            for c in collectors:
+                r, entry = collect_one(c, program, reg, bios=bios)
+                results.append(r)
+                if entry is not None:
+                    entries[f"{program['slug']}.{c}"] = entry
+        except Exception as e:  # collect_one does not raise; this is the belt to its braces
+            common.log(f"!! {program['slug']}: worker error after {len(results)} of {len(collectors)} collectors: {e}")
+            common.log_traceback()
+            for c in collectors[len(results):]:
+                results.append({"program": program["slug"], "collector": c, "outcome": "failed", "error": str(e)[:300]})
+        finally:
+            if entries:
+                record_outcomes(program["slug"], entries)
+        return results
+
+    if workers <= 1 or len(plan) <= 1:
+        return [r for p, cs in plan for r in one(p, cs)]
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    def worker(item):
+        program, collectors = item
+        common.set_log_context(program["slug"])
+        try:
+            return one(program, collectors)
+        finally:
+            common.set_log_context(None)
+
+    common.log(f"refresh: {len(plan)} programs on {min(workers, len(plan))} workers")
+    with ThreadPoolExecutor(max_workers=min(workers, len(plan)), thread_name_prefix="collect") as pool:
+        # map() yields in submission order; `one` raises no Exception, so no program is cancelled
+        return [r for rs in pool.map(worker, plan) for r in rs]
 
 
 def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
@@ -296,6 +382,9 @@ def main(argv=None):
     p.add_argument("--fail-threshold", type=float, default=float(os.environ.get("COLLEGEDASH_FAIL_THRESHOLD", "0.05")),
                    help="share of collector runs allowed to fail before the run counts as failed (default 0.05, env COLLEGEDASH_FAIL_THRESHOLD)")
     p.add_argument("--mode", default="manual", help="label recorded with the run summary (daily, weekly, full, manual)")
+    p.add_argument("--workers", type=int, default=int(os.environ.get("COLLEGEDASH_WORKERS", "16")),
+                   help="programs collected at once (default 16, env COLLEGEDASH_WORKERS; 1 = the sequential walk). "
+                        "Per-host politeness is the same at any value")
     p.set_defaults(fn=cmd_refresh)
     p = sub.add_parser("sweep"); p.add_argument("source", nargs="?", default="all", choices=["tds", "soccerwire", "all"]); p.add_argument("--years"); p.set_defaults(fn=cmd_sweep)
     p = sub.add_parser("rpi"); p.add_argument("what", nargs="?", default="all", choices=["history", "current", "all"]); p.add_argument("--force", action="store_true"); p.set_defaults(fn=cmd_rpi)
