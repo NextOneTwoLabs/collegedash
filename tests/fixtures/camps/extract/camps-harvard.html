@@ -1,0 +1,206 @@
+<!-- REAL PAGE, trimmed. gocrimson.com/sports/2020/5/5/information-camps-index.aspx,
+     fetched 2026-09-14 for issue #80. The <article> only, with scripts, styles and images dropped
+     and attributes reduced to class/id/href; it reproduces the full page's extraction exactly.
+
+     Three of the rows origin/main published here were not Harvard women's soccer camps, and this
+     file is the proof of the mechanism, not just of the rows:
+
+       * the page is an accordion whose panel BODIES are all flattened into one
+         div.article-content while the <h4> panel headings ('2025 Crimson Golf Clinics', '2025
+         Crimson Soccer Boys Youth Summer Camp') are emitted AFTER them. So a body never gets its
+         own heading's name - it gets the page's chrome <h2>, 'Camp/Clinic Information';
+       * a chrome name names no sport and no gender, so _row_allowed's two unconditional rules were
+         vacuous on those rows and did not gate them at all. 'this golf clinic', "Harvard Golf's
+         coaching staff" and 'rowing' were sitting in the rows' own windows, unread;
+       * the page title is chrome too, so the repair-from-title never even fired. The rows were
+         published wearing the chrome.
+
+     The third row is the chimera: 'Fall Youth Clinic | Sunday, September 29th | ... | 1st to 7th
+     Grade' is Women's LACROSSE and its own date carries no year, so the lookahead ran on to
+     '2025 Sneak Peek | June 15, 2025 | ...' - a complete Women's BASKETBALL row that uses neither
+     the word camp nor clinic, so the 'next camp starts here' guard did not fire - and took its
+     date. Name and ages from one sport, date from another, a row that never existed on the page.
+
+     Expected: zero rows. origin/main yields three.
+
+     CONTACT DETAILS REDACTED. Every email address and telephone number on this page has been
+     replaced with an obviously-fake value (an example.com address, a 555-01xx number from the
+     range reserved for fiction). No check reads them - the suite scores the same either way -
+     and `python tools/camps_check.py --fixtures` now fails if a real-looking one comes back.
+-->
+<html><head><title>Camp/Clinic Information</title></head><body>
+<article class="article-wrapper sportfile">
+<div class="sidearm-common-promotion">
+<ads-component></ads-component>
+</div>
+<h2 class="article-headline" id="ctl00_cplhMainContent_headline_h2">Camp/Clinic Information</h2>
+<div class="sidearm-common-promotion">
+<ads-component></ads-component>
+</div>
+<p class="article-subheadline">
+<p class="article-byline">
+<div class="article-content">
+<h4><b>HSquash Junior Programs - Groups Available for All Levels Year-Round</b>
+
+
+
+
+For all junior programming and private lesson information, visit <a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__www.hsquash.com_&amp;d=DwMFaQ&amp;c=WO-RGvefibhHBZq3fL85hQ&amp;r=YxUr9Mg2V4nNmvw3t0QHeNW7mIk2bumr8ipKY_0e_8c&amp;m=WmtqlMzsBVNJTN4ofTuc_6wv4rbes4JiG_AxUmSWwWfMt5PESVACCdMxtQpL998o&amp;s=6Ws37V5rVkvOLPzUe-oi2kqxyI1v-3k4ngtvyP6imB8&amp;e=">www.hsquash.com</a>. 
+
+
+
+
+Coach Profiles:
+
+
+<a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__gocrimson.com_sports_mens-2Dsquash_roster_coaches_hameed-2Dahmed_1958&amp;d=DwMFaQ&amp;c=WO-RGvefibhHBZq3fL85hQ&amp;r=YxUr9Mg2V4nNmvw3t0QHeNW7mIk2bumr8ipKY_0e_8c&amp;m=pF_XkmFyZz0nIlsvvTBLRMtT6e_xaejkNplOMeQ8NDAsL3mB62CyjWWnkcAuD33S&amp;s=7Z5OD_wjNEu5aOoG6l4owmyD67EMAMv-WxqLK8ritOk&amp;e=">Hameed Ahmed</a> (Harvard Squash Assoc. Head Coach)
+
+
+<a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__gocrimson.com_sports_mens-2Dsquash_roster_coaches_luke-2Dhammond_1959&amp;d=DwMFaQ&amp;c=WO-RGvefibhHBZq3fL85hQ&amp;r=YxUr9Mg2V4nNmvw3t0QHeNW7mIk2bumr8ipKY_0e_8c&amp;m=pF_XkmFyZz0nIlsvvTBLRMtT6e_xaejkNplOMeQ8NDAsL3mB62CyjWWnkcAuD33S&amp;s=cgI4h087fMexIZVLfypc4Pt0hRM-yeKzM6ThC-17m3A&amp;e=">Luke Hammond</a> (Harvard Squash Asst. Coach) 
+
+
+ </h4>
+<hr/>
+<h4>
+<strong>2025 Crimson Golf Clinics</strong></h4>
+
+July 7 - 8, 2025
+
+
+Hosted at Harvard Athletic's Murr Center campus and Granite Links Golf Club, this golf clinic is a unique collegiate golf immersion experience.  Led by Harvard Golf's coaching staff, the clinic is open to all student-athletes age 14 and above. 
+
+
+ 
+
+
+Register: <u><a href="https://www.crimsongolfcamps.com/">https://www.crimsongolfcamps.com/</a></u> 
+
+
+
+<hr/>
+<h4>
+<strong>CRIMSON SQUASH CAMPS </strong></h4>
+<strong>with Harvard University Head Coach, Mike Way</strong>
+
+
+3 Sessions with Day or Overnight options
+
+
+July 13-17; July 20-24; July 27-31
+
+
+Contact: Camp Director, Beth Zeitlin
+
+
+<u><a href="mailto:redacted1@example.com">redacted1@example.com</a></u>
+
+
+555-555-0100
+
+<hr/>
+<h4>
+<strong>Crimson Baseball Academy - 2026 Fall Camp</strong></h4>
+
+Saturday, September 26
+
+
+<strong>Register:</strong> <a href="http://www.crimsonbaseballacademy.com/">www.crimsonbaseballacademy.com</a>
+<strong>Early registration recommended!</strong>
+
+
+Contact Information: <u>redacted2@example.com</u>
+
+
+ 
+
+<hr/>
+<h4><strong>2025 Crimson Soccer Boys Youth Summer Camp</strong></h4>
+
+June 30 to July 5, 2025
+
+
+9:00 AM to 3:00 PM
+
+
+Register: <a href="https://www.crimsonsoccer.us/boys-youth-camps.html">https://www.crimsonsoccer.us/boys-youth-camps.html</a>
+<hr/>
+<h4><strong>Charles River Rowing</strong></h4>
+<i></i>Hosted at Harvard's Newell Boathouse, this camp is for experienced athletes (1+ season) looking to gain deep insight into their rowing using Peach telemetry! You'll work closely with Pat Lapage and Tom Siddall to understand the key to unlocking more speed, both technically and physiologically.
+
+
+
+
+Dates: June 16-18, July 13-16, Aug 17-20
+
+
+Register: <a href="https://www.charlesriverrowing.org/">www.charlesriverrowing.org</a>
+<div id="content">
+<div id="content">
+<div id="content">
+<hr/>
+<h4>
+<strong>Ascent Track &amp; Field Clinic - Summer 2025</strong></h4>
+
+
+
+Dates: June 28-29, 2025
+
+<div>Register: <a href="https://www.ascenttrackclinics.com/clinics/harvard">https://www.ascenttrackclinics.com/clinics/harvard</a></div>
+<div><em>Early registration strongly recommended</em></div>
+<hr/>
+<h4><strong>Women's Lacrosse</strong></h4>
+
+Fall Elite ID Clinic | Sunday, September 29th | 1:00 PM - 5:00 PM | 2026-2029
+
+
+Fall Youth Clinic | Sunday, September 29th | 9:00 AM - 11:30 AM | 1st to 7th Grade 
+
+
+Register | <a href="https://www.willslax.com/">https://www.willslax.com/</a>
+<hr/>
+<h4><strong>Women's Basketball | Moore Hoops Academy</strong></h4>
+
+2025 Sneak Peek | June 15, 2025 | 9:00 a.m.-1:00 p.m. | Grades 7-12
+
+
+2025 Elite Summer Debut | June 21, 2025 | 9:00 a.m.-6:00 p.m. | Grades 7-12
+
+
+2025 Crimson + White Elite | June 28 &amp; 29, 2025 | 9:00 a.m.-6:00 p.m. | Grades 9-12
+
+
+2025 Crimson Kids Hoops | July 7, 8 &amp; 9, 2025 | 9:00 a.m.-3:00 p.m. | Grades 1-6
+
+
+2025 Elite Summer Finale | August 3, 2025 | 9:00 a.m.-6:00 p.m. | Grades 7-12
+
+
+2025 Last Call | August 4, 2025 | 9:00 a.m.-1:00 p.m. | Grades 7-12
+
+
+
+
+Register: <a href="https://moorehoopsacademy.totalcamps.com/shop/EVENT">https://moorehoopsacademy.totalcamps.com/shop/EVENT</a>
+<hr/>
+<h4><strong>Women's Volleyball | Crimson Volleyball Camps</strong></h4>
+
+Crimson Volleyball Prospect Camp | June 14 &amp; 15, 2025 | 9:00 a.m.-11:30 a.m. &amp; 1:00 p.m.-5:00 p.m. (June 14), 9:00 a.m.-11:30 a.m. &amp; 1:00 p.m.-4:00 p.m. (June 15)
+
+
+Crimson Volleyball Prospect Camp Session 2 | July 12 &amp; 13, 2025 | 9:00 a.m.-11:30 a.m. &amp; 1:00 p.m.-5:00 p.m. (July 12), 9:00 a.m.-11:30 a.m. &amp; 1:00 p.m.-4:00 p.m. (July 13)
+
+
+
+
+Register: <a href="https://crimsonvolleyballcamps.totalcamps.com/About%20Us">https://crimsonvolleyballcamps.totalcamps.com/About%20Us</a>
+
+
+ </div>
+</div>
+</div>
+</div>
+<div class="sidearm-common-promotion">
+<ads-component></ads-component>
+</div>
+</p></p></article>
+</body></html>

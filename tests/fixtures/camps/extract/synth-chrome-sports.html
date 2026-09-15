@@ -1,0 +1,26 @@
+<!-- SYNTHETIC, not a trim of any real page. The general case issue #80's evidence gate exists for,
+     and the one that must keep working after the gender half was bounded: a chrome-titled page with
+     two chrome-named rows whose ONLY distinguishing evidence is in their detail windows.
+
+     Both rows are named 'Camp Information', so both unconditional name rules are vacuous on them -
+     the name carries no sport and no gender. The June row's window says women's soccer and it is
+     published; the July row's window says volleyball and it is rejected. That is the sport half of
+     the gate, read over the whole window, and it is the half that closes harvard's P1: ablating it
+     puts harvard back to 2 published rows, while ablating the gender half leaves harvard at 0.
+
+     The page title is chrome, so `page_is_soccer` is False and the sport half is live. On a page
+     whose own title named soccer it would be suppressed, which is what stops an 'Other Camps at X'
+     block gating away a real team's rows.
+
+     No contact details: nothing on this page is real. -->
+<html><head><title>Camp/Clinic Information</title></head><body>
+<article>
+<h2>Camp/Clinic Information</h2>
+<p>Camp Information</p>
+<p>June 12-13, 2027</p>
+<p>Our women's soccer staff run this session at the Example Soccer Complex.</p>
+<p>Camp Information</p>
+<p>July 18-19, 2027</p>
+<p>Run by the volleyball coaching staff in the Example Arena.</p>
+</article>
+</body></html>

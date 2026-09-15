@@ -23,9 +23,11 @@ import glob
 import gzip
 import json
 import os
+import html
+import re
 import sys
 import tempfile
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -130,16 +132,148 @@ def _read(rel: str) -> str:
         return f.read()
 
 
+# ---------- privacy: no third party's contact details in a fixture ----------
+#
+# The camps fixtures are trims of real athletics pages, and those pages carry named staff members'
+# work email addresses and telephone numbers. Twelve of them reached a fixture on a PUBLIC
+# repository before anyone noticed, because nothing looks at a fixture except the parser, and the
+# parser does not care. This scan is the thing that looks.
+#
+# Redaction form: an address at a reserved example domain, and a number in the 555-01xx range
+# reserved for fiction. Anything else email-shaped or telephone-shaped is a FAIL naming the file and
+# the value, so a new fixture pasted in from a live page cannot land its contact block quietly.
+# Deliberately not a regex over "PII" in general - names, cities and prices stay, because a fixture
+# has to keep reproducing the real page's extraction to be worth anything.
+#
+# The first cut of this scan read the RAW file text only, and three real addresses were green under
+# it - the precise data it was written to catch. A contact block pasted in from a live page is not
+# plain text: it is tag-split, entity-escaped or percent-encoded, because that is how Sidearm,
+# Weebly and Outlook render one. So the scan reads THREE views of every file and reports a hit in
+# any of them:
+#
+#   raw        the bytes on disk, as before
+#   decoded    HTML entities unescaped, percent-escapes decoded, zero-width characters removed,
+#              TAGS LEFT IN PLACE - this is the only view that sees an address inside an attribute,
+#              e.g. 'WilliamsonDB%40wofford.edu' in an Outlook Safe Links href
+#   flattened  'decoded' with tags stripped - this is the only view that sees an address split
+#              ACROSS elements, e.g. 'naomi.meiburger@<wbr/>georgetown.edu' in link text or
+#              '<span>x@gmail</span><span>.com</span>' in prose
+#
+# 'decoded' and 'flattened' are both required and neither subsumes the other: stripping tags after
+# decoding deletes the attribute the Safe Links address lives in, and not stripping them leaves the
+# tag-split ones broken. Over tests/fixtures/ the pair adds zero email and zero telephone false
+# positives, so the inline SVG path data in the nav fixtures stays out of it.
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# A reserved domain: RFC 2606's example.com/.net/.org and .invalid/.test/.example/.localhost, plus
+# example.edu, which fixtures.json already uses for a stub page URL.
+FAKE_EMAIL_RE = re.compile(r"@example\.(?:com|net|org|edu)$|\.(?:invalid|test|example|localhost)$", re.I)
+# '617-817-3589', '(423) 425-2107', '406.243.4346'. Both separators must be '-' or '.', which is
+# what keeps the inline SVG path data in the nav fixtures ('714.163 519.284 1160') out of it.
+PHONE_RE = re.compile(r"\(?\b[0-9]{3}\)?[-. ]?[0-9]{3}[-.][0-9]{4}\b")
+FAKE_PHONE_RE = re.compile(r"^55555501[0-9]{2}$")
+# A naive `<[^>]+>` is wrong here in a way that matters: `[^>]` matches newlines, so one unmatched
+# '<' - an '<!--' opening a fixture's header comment, say - swallows every character up to the next
+# '>' anywhere in the file, taking any address in between with it. Bounded to a single line, and
+# the comment delimiters are dropped rather than treated as tags so a header's own text is scanned.
+_TAG_RE = re.compile(r"<!--|-->|<[^<>\n]{0,400}>")
+# Zero-width and invisible separators: soft hyphen, ZWSP/ZWNJ/ZWJ, the bidi marks, word joiner, BOM.
+_ZERO_WIDTH_RE = re.compile("[­​-‏⁠﻿]")
+
+
+def contact_scan_views(raw: str) -> dict[str, str]:
+    """The three views of a fixture's text the contact scan reads. See the note above."""
+    decoded = _ZERO_WIDTH_RE.sub("", unquote(html.unescape(raw)))
+    return {"raw": raw, "decoded": decoded, "flattened": _TAG_RE.sub("", decoded)}
+
+
+def _fixture_files() -> list[str]:
+    out = []
+    for dirpath, _dirs, names in os.walk(FIXTURES):
+        for n in sorted(names):
+            out.append(os.path.join(dirpath, n))
+    return sorted(out)
+
+
+def contact_hits(raw: str) -> tuple[list[str], list[str]]:
+    """(offending emails, offending telephone numbers) in one piece of text, across all three views.
+
+    Each hit is reported as 'value [view]' so a failure says which shape defeated the raw scan.
+    """
+    emails, phones, seen_e, seen_p = [], [], set(), set()
+    for view, text in contact_scan_views(raw).items():
+        for v in dict.fromkeys(EMAIL_RE.findall(text)):
+            if not FAKE_EMAIL_RE.search(v) and v not in seen_e:
+                seen_e.add(v)
+                emails.append(f"{v} [{view}]")
+        for v in dict.fromkeys(PHONE_RE.findall(text)):
+            digits = re.sub(r"[^0-9]", "", v)
+            if not FAKE_PHONE_RE.match(digits) and digits not in seen_p:
+                seen_p.add(digits)
+                phones.append(f"{v} [{view}]")
+    return emails, phones
+
+
+def scan_contact_details() -> tuple[list[str], list[str]]:
+    """(offending emails, offending telephone numbers), each as 'file: value [view]'."""
+    emails, phones = [], []
+    for path in _fixture_files():
+        rel = os.path.relpath(path, FIXTURES).replace(os.sep, "/")
+        with open(path, encoding="utf-8", errors="replace") as f:
+            raw = f.read()
+        e, p = contact_hits(raw)
+        emails += [f"{rel}: {v}" for v in e]
+        phones += [f"{rel}: {v}" for v in p]
+    return emails, phones
+
+
+# The shapes the raw-text-only scan was blind to, each taken from the fixture it was actually found
+# in and each with the value replaced by a synthetic one. These are SYNTHETIC PROBES, not real
+# addresses: they exist so that a future simplification of the scan back to raw text fails here
+# instead of shipping green. The last three must NOT hit - they are the redacted forms now in the
+# tree, and they are what stops the probes above being satisfied by a scan that flags everything.
+CONTACT_PROBES: list[tuple[str, str, bool]] = [
+    ("tag-split in link text (georgetown, <wbr/>)",
+     '<a href="mailto:x@y.z">probe.person@<wbr/>example-college.edu</a>', True),
+    ("element-split across two spans (florida-state)",
+     "<span>probecamp@somemail</span><span>.com*</span>", True),
+    ("percent-encoded inside an Outlook Safe Links href (wofford)",
+     '<a href="https://nam11.safelinks.protection.outlook.com/?url=x'
+     '&amp;data=05%7C02%7CProbePR%40example-college.edu%7C4d8f11a5">Register</a>', True),
+    ("HTML entity for '@' (&#64;)", "mail us at probe&#64;example-college.edu", True),
+    ("zero-width space inside the address", "probe​@example-college.edu", True),
+    ("tag-split telephone number", "<span>423-425</span><span>-2107</span>", True),
+    ("redacted tag-split address does not hit",
+     '<a href="mailto:redacted1@example.com">redacted1@<wbr/>example.com</a>', False),
+    ("redacted percent-encoded address does not hit", "%7Credacted10%40example.com%7C", False),
+    ("inline SVG path data is not a telephone number",
+     '<path d="M714.163 519.284 1160.89 0H1055.03L667.137 450.887"/>', False),
+    ("an unmatched '<' does not swallow the address after it",
+     "<!-- a header comment mentioning probe.person@<wbr/>example-college.edu -->", True),
+]
+
+
 def fixtures(args) -> int:
     spec = json.load(open(os.path.join(FIXTURES, "fixtures.json"), encoding="utf-8"))
     fails, total = [], 0
 
-    def ok(name: str, cond: bool, detail: str = ""):
+    def ok(name: str, cond: bool, detail: str = "") -> bool:
         nonlocal total
         total += 1
         print(f"  {'ok  ' if cond else 'FAIL'} {name}{(' - ' + detail) if detail and not cond else ''}")
         if not cond:
             fails.append(name)
+        return bool(cond)  # returned so a check can guard the one after it; it used to return None,
+        # which silently made `if not ok(...): continue` an unconditional skip
+
+    print("privacy: no contact details in tests/fixtures/camps/")
+    bad_emails, bad_phones = scan_contact_details()
+    ok("no real email address in any fixture", not bad_emails, "; ".join(bad_emails))
+    ok("no real telephone number in any fixture", not bad_phones, "; ".join(bad_phones))
+    for label, probe, want in CONTACT_PROBES:
+        e, p = contact_hits(probe)
+        got = bool(e or p)
+        ok(f"contact scan {'catches' if want else 'ignores'}: {label}", got is want,
+           f"got {'a hit: ' + '; '.join(e + p) if got else 'no hit'}")
 
     print("nav: find_camps_link")
     for fx in spec["nav"]:
@@ -271,6 +405,44 @@ def fixtures(args) -> int:
         ok(f"{name!r} under {sec}, page is not a hub -> keep",
            _row_allowed is not None and got is True,
            missing("_row_allowed") if _row_allowed is None else f"got {got}")
+
+    # Issue #80's P1, as a unit. `named="page"` says the row's name came from the page and so names
+    # no sport and no gender; the gate then has to read the evidence the row was built from. These
+    # cases fail against origin/main, whose _row_allowed takes no evidence at all - reported as a
+    # FAIL per case by the same `helper` degradation the group above uses.
+    print("rowsEvidence: _row_allowed on the text a page-named row was assembled from")
+    for fx in (spec.get("rowsEvidence") or {}).get("cases") or []:
+        want = fx["expect"]
+        try:
+            got = _row_allowed(fx["name"], None, named=fx.get("named", "row"), evidence=fx.get("evidence"),
+                               page_is_soccer=bool(fx.get("pageIsSoccer"))) if _row_allowed else None
+        except TypeError as e:  # a parser whose _row_allowed has no evidence parameter
+            got, e = None, e
+            ok(f"{fx['why']} -> {'keep' if want else 'drop'}", False,
+               f"_row_allowed does not take evidence: {e}")
+            continue
+        ok(f"{fx['why']} -> {'keep' if want else 'drop'}",
+           _row_allowed is not None and got is want,
+           missing("_row_allowed") if _row_allowed is None else f"got {got}")
+
+    print("newRow: _starts_new_row")
+    _starts_new_row = helper("_starts_new_row")
+    for line, want in (spec.get("newRow") or {}).get("cases") or []:
+        ds = camps.parse_camp_dates(line)
+        if not ok(f"{line[:56]!r} parses a date at all", bool(ds), "no date, so the case proves nothing"):
+            continue
+        got = _starts_new_row(line, ds[0]["pos"]) if _starts_new_row else None
+        ok(f"{line[:56]!r} -> {'its own row' if want else 'a continuation'}",
+           _starts_new_row is not None and got is want,
+           missing("_starts_new_row") if _starts_new_row is None else f"got {got}")
+
+    print("pageName: _page_camp_name adopts a name only if the name itself passes the gate")
+    _page_camp_name = helper("_page_camp_name")
+    for fx in (spec.get("pageName") or {}).get("cases") or []:
+        got = _page_camp_name([(fx["line"], None, [])]) if _page_camp_name else None
+        ok(f"{fx['why']} -> {fx['expect']!r}",
+           _page_camp_name is not None and got == fx["expect"],
+           missing("_page_camp_name") if _page_camp_name is None else f"got {got!r}")
 
     # _page_is_soccer decides whether a SECTION rejection bites at all. Every known hub title must
     # be False here, or the gating this issue adds stops working on the pages it was built for.
