@@ -129,6 +129,10 @@ tr:hover td { background: var(--row-hover); }
 .season-select:hover { border-color: var(--accent-text); }
 .season-select:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 .pill-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 16px 10px; }
+/* Division headings over the conference pills. Rendered only when two or more divisions are on screen:
+   a single group carries no heading and the row is the flat one the sidebar has always had. */
+.pill-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); padding: 6px 16px 0; }
+.pill-row.pill-row-all { padding-bottom: 0; }
 .pill { padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 999px; cursor: pointer; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-primary); transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); text-align: center; line-height: 1.25; font-family: var(--font); }
 .pill:hover { border-color: var(--accent); color: var(--accent-text); }
 .pill.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
@@ -461,7 +465,12 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 const S = {
   index: null, profiles: {}, camps: null, refresh: null, local: false,
   favorites: new Set(), compare: [], q: '', qRaw: '',
-  filters: { conf: [], region: [], sort: 'rpi', classYear: [], view: 'cards', moreStats: false }, // conf/region/classYear: [] = all
+  /* sort: 'name' is THE default - this line is what a visitor with no saved cd.filters gets, and
+     SORTS[0] only decides which option the select lists first. RPI exists for Division I and for
+     nothing else, so an RPI default would drop every D3 and D2 program to the bottom of the first
+     screen the moment they are published; Name is the one ordering that means the same thing in
+     every division (owner's decision on #94). A visitor who already has a sort saved keeps it. */
+  filters: { conf: [], region: [], division: [], sort: 'name', classYear: [], view: 'cards', moreStats: false }, // conf/region/division/classYear: [] = all
   sidebarTab: 'programs', residency: '',
 };
 const RPI_SEASON = 2025;
@@ -477,6 +486,23 @@ const fmtDay = iso => { if (!iso) return '—'; const d = new Date(iso.length ==
 const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }; // local calendar date, not UTC
 const ordinal = n => n == null ? '—' : n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4 === n % 10 ? n % 10 : 0] || 'th');
 const rankStr = n => n == null ? '—' : '#' + n;
+/* ---------- the name a reader actually sees ----------
+   Every list, card, table row and panel labels a program with `shortName || name`, and the two differ
+   on 343 of the 350 programs published today. Anything that claims to be about what the reader sees -
+   an alphabetical sort above all - has to use THIS string and not the stored `name`, or it produces
+   "Fresno State" ahead of "Cal State Fullerton" and reads as unsorted (issue #60; the same mismatch
+   had already been corrected once in the US-rank tiebreak, issue #57). It is one helper rather than a
+   repeated expression so the rule cannot be applied to some orderings and not others a sixth time.
+   Not used by rpiOf or prepareSearch: those key into the NCAA's RPI table and the search index by the
+   same text, which is a lookup key and not a label, and conflating the two would hide a real bug. */
+const displayName = p => p.shortName || p.name || '';
+/* Alphabetical the way a reader reads it. `sensitivity: 'accent'` is case-insensitive and NOTHING
+   else: accents still separate two names, punctuation is still significant, and no article or
+   ampersand is stripped - normalising further ("William & Mary" against "Holy Cross") is a product
+   decision nobody has made, and doing it quietly would surprise someone. The exact compare breaks
+   the ties case-insensitivity leaves, so the order is total and identical on every rebuild. */
+const byDisplayName = (a, b) => { const x = displayName(a), y = displayName(b);
+  return x.localeCompare(y, undefined, { sensitivity: 'accent' }) || x.localeCompare(y); };
 const EXT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
 const extLink = (href, text) => `<a class="open-external" href="${esc(href)}" target="_blank" rel="noopener">${EXT_ICON}${esc(text)}</a>`;
 
@@ -560,7 +586,10 @@ function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 S.favorites = new Set(lsGet('cd.favorites', []));
 S.compare = (lsGet('cd.compare', []) || []).slice(0, 4);
 Object.assign(S.filters, lsGet('cd.filters', {}) || {});
-for (const k of ['conf', 'region', 'classYear']) { const v = S.filters[k]; S.filters[k] = Array.isArray(v) ? v.map(String) : v ? [String(v)] : []; } // older saves held one value
+// Every pill group is an array of strings on the way in, whatever a saved cd.filters actually holds:
+// an older save with one value, a save written before the group existed at all (`undefined`, which is
+// what every cd.filters on a visitor's machine today carries for `division`), or a null.
+for (const k of ['conf', 'region', 'division', 'classYear']) { const v = S.filters[k]; S.filters[k] = Array.isArray(v) ? v.map(String) : v ? [String(v)] : []; } // older saves held one value
 // multi-select pill groups: toggling a value removes it or adds it; "All" clears the group, so All and a value are never both active
 function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
 const pillAttrs = (attr, value, on) => `class="pill${on ? ' active' : ''}" data-${attr}="${esc(value)}" aria-pressed="${on}"`;
@@ -610,8 +639,26 @@ async function loadIndex() {
     const rpi = await getJSON('data/rpi/current.json');
     if (rpi?.season === RPI_SEASON && Array.isArray(rpi.teams)) S.rpiByName = new Map(rpi.teams.map(t => [t.school, t.rank]));
   } catch { /* the weekly table is optional */ }
-  S.index.byConf = {};
-  S.index.programs.forEach(p => { S.index.byConf[p.conference || 'Other'] = (S.index.byConf[p.conference || 'Other'] || 0) + 1; });
+  /* Conference and division tallies, both derived from the rows that actually loaded and never from a
+     list of divisions written down here. `divisions` is every distinct value of p.division, sorted, so
+     it reads ['D1'] today and grows by itself the day D3 or D2 is published - which is what decides
+     whether the Division pill row and the conference group headings exist at all. `byConf` stays the
+     site-wide per-conference count it has always been; `byDivConf` is that same count split by
+     division, so with one division every number in it equals the matching byConf number. */
+  S.index.byConf = {}; S.index.byDivConf = {};
+  S.index.programs.forEach(p => {
+    const c = p.conference || 'Other', d = p.division || 'Other';
+    S.index.byConf[c] = (S.index.byConf[c] || 0) + 1;
+    (S.index.byDivConf[d] = S.index.byDivConf[d] || {})[c] = (S.index.byDivConf[d][c] || 0) + 1;
+  });
+  S.index.byDiv = {}; S.index.programs.forEach(p => { const d = p.division || 'Other'; S.index.byDiv[d] = (S.index.byDiv[d] || 0) + 1; });
+  S.index.divisions = Object.keys(S.index.byDiv).sort();
+  /* A saved division the loaded data does not carry is dropped. The pill row is hidden whenever the
+     data holds a single division, so a stale ['D3'] against a D1-only index would filter every program
+     away behind a control the visitor cannot see to clear. Conference is deliberately not pruned here:
+     that is how it already behaves and changing it is not this change's business. */
+  const live = new Set(S.index.divisions);
+  if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
   getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
   getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
   return S.index;
@@ -687,15 +734,69 @@ function syncToggles() { // refresh every star / compare control in place withou
 
 /* ---------- sidebar ---------- */
 const REGIONS = ['West', 'Midwest', 'South', 'Mid-Atlantic', 'Northeast'];
-const SORTS = [['rpi', `RPI ${RPI_SEASON}`], ['name', 'Name'], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
+/* How a division code is spelled out in prose. This is a spelling table, NOT the list of divisions:
+   which divisions exist is always S.index.divisions, derived from the loaded rows, and a code that is
+   not in this table prints itself rather than disappearing. */
+const DIVISION_NAMES = { D1: 'Division I', D2: 'Division II', D3: 'Division III' };
+const divisionName = d => DIVISION_NAMES[d] || d;
+// The divisions on screen: the selection when there is one, otherwise everything the data carries.
+function shownDivisions() {
+  const all = S.index?.divisions || [];
+  const sel = S.filters.division;
+  return sel.length ? all.filter(d => sel.includes(d)) : all;
+}
+/* The corpus this page is describing, in words. With one division this is the sentence the page has
+   always printed, character for character; it only changes shape once a second division is published. */
+function corpusLabel() {
+  const ds = shownDivisions();
+  if (ds.length === 1) return `NCAA ${divisionName(ds[0])} women's soccer`;
+  if (!ds.length) return `NCAA women's soccer`;
+  return `NCAA women's soccer · ${ds.map(divisionName).join(', ')}`;
+}
+/* The conference pills, grouped under the divisions currently on screen, every group and every count
+   read off the loaded rows. ONE group renders flat with no heading - a lone heading is chrome that
+   tells the visitor nothing - which is why today's D1-only sidebar is unchanged by this. */
+function conferenceGroups() {
+  return shownDivisions().map(d => [d, Object.entries(S.index.byDivConf[d] || {}).sort((a, b) => a[0].localeCompare(b[0]))]);
+}
+/* A conference pill only exists underneath a division that is on screen, so when the division
+   selection changes, a selected conference that just lost its group goes with it. Leaving it set
+   would narrow the list by a filter the visitor can no longer see or clear: the list would go empty
+   with nothing on the page to explain why. Clearing the division filter shows every group again and
+   prunes nothing, because shownDivisions() is then every division in the data. */
+function pruneConfToDivisions() {
+  if (!S.index) return;
+  const visible = new Set(shownDivisions().flatMap(d => Object.keys(S.index.byDivConf[d] || {})));
+  S.filters.conf = S.filters.conf.filter(c => visible.has(c));
+}
+// Name first, to match the default in S.filters. The select's order is cosmetic; the default is there.
+const SORTS = [['name', 'Name'], ['rpi', `RPI ${RPI_SEASON}`], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
   const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${S.favorites.size ? ` (${S.favorites.size})` : ''}`], ['compare', `⇄ Compare${S.compare.length ? ` (${S.compare.length})` : ''}`]];
   let body = '';
   if (tab === 'programs') {
-    const confs = Object.entries(S.index.byConf).sort((a, b) => a[0].localeCompare(b[0]));
     const years = S.index.season?.gradYears || [];
+    /* Division. The row exists only when the loaded data actually holds more than one division - with
+       today's D1-only index it is a control with a single option, which is nothing but chrome, the same
+       reasoning that omits the sort select and the class pills in the camp view. It appears by itself
+       the day D3 is published and again when D2 is, because `divisions` is derived in loadIndex. */
+    const divs = S.index.divisions || [];
+    const divisionBlock = divs.length > 1 ? `<div class="browse-label">Division</div>
+      <div class="pill-row" role="group" aria-label="Division"><button ${pillAttrs('division', '', !f.division.length)}>All</button>${divs.map(d => {
+        const n = S.index.byDiv[d] || 0;
+        return `<button ${pillAttrs('division', d, f.division.includes(d))} title="${esc(divisionName(d))} · ${n} programs">${esc(d)}<span class="pill-sub">${n}</span></button>`;
+      }).join('')}</div>` : '';
+    // Conference, grouped under the divisions on screen. One group -> the flat row this page has always had.
+    const groups = conferenceGroups();
+    const confPill = ([c, n]) => `<button ${pillAttrs('conf', c, f.conf.includes(c))} title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`;
+    const confAll = `<button ${pillAttrs('conf', '', !f.conf.length)}>All</button>`;
+    const confBlock = groups.length <= 1
+      ? `<div class="pill-row" role="group" aria-label="Conference">${confAll}${(groups[0]?.[1] || []).map(confPill).join('')}</div>`
+      : `<div class="pill-row pill-row-all" role="group" aria-label="Conference">${confAll}</div>`
+        + groups.map(([d, list]) => `<div class="pill-group-label">${esc(divisionName(d))}</div>
+          <div class="pill-row" role="group" aria-label="${esc(divisionName(d))} conferences">${list.map(confPill).join('')}</div>`).join('');
     /* The ID Camp View is filtered by region and conference only (issue #65). Sort is a program
        attribute and does not survive one program contributing several camps; the recruiting-class
        pills filter nothing anywhere today (#15), so leaving them here would be a second silent
@@ -708,22 +809,23 @@ function renderSidebar() {
       <div class="search-status" id="qStatus"></div>
       <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`}
+      ${divisionBlock}
       <div class="browse-label">Region</div>
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
       ${onCamps ? '' : `<div class="browse-label">Recruiting class</div>
       <div class="pill-row" role="group" aria-label="Recruiting class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>`}
       <div class="browse-label">Conference</div>
-      <div class="pill-row" role="group" aria-label="Conference"><button ${pillAttrs('conf', '', !f.conf.length)}>All</button>${confs.map(([c, n]) => `<button ${pillAttrs('conf', c, f.conf.includes(c))} title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`).join('')}</div>`;
+      ${confBlock}`;
   } else if (tab === 'shortlist') {
     const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999));
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
-      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(p.shortName || p.name)}</span><span class="meta">${rpiCell(p)}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${rpiCell(p)}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
       : `<div class="side-empty">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
   } else {
     const rows = S.compare.map(programBySlug).filter(Boolean);
     body = `<div class="sidebar-section-title">Comparing</div>` + (rows.length
-      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(p.shortName || p.name)}</span><span class="meta">${esc(p.conference || '')}</span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${esc(p.conference || '')}</span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn primary" href="#/compare/${S.compare.map(esc).join(',')}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
       : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
   }
@@ -734,6 +836,9 @@ function renderSidebar() {
   // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
   sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
+  // selection to what is still on screen before the sidebar is rebuilt.
+  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
@@ -796,10 +901,15 @@ function route() {
   syncSidebarForView(view);
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
   if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
-    const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; saveState(); renderSidebar();
+    // The division filter is cleared with it: a link naming a conference has to land on that
+    // conference, not on an empty list because a division that excludes it happened to be selected.
+    // That also keeps the conference's own pill on screen, so the visitor can see and clear it.
+    const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; S.filters.division = []; saveState(); renderSidebar();
     history.replaceState(null, '', '#/'); return go(renderList());
   }
-  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = ''; saveState(); location.replace('#/'); return; }
+  // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
+  // string until the next reload normalised it back (issue #21).
+  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = []; saveState(); location.replace('#/'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
@@ -916,12 +1026,17 @@ function wireCharts(root) {
    is none and the search clause falls back to matchScore directly.
    Extracted verbatim from filteredPrograms - same three clauses, same conjunction, same order.
    Recruiting class and sort are deliberately absent: classYear filters nothing anywhere today
-   (#15), and sort is not a filter. */
+   (#15), and sort is not a filter.
+   Division (#94) is the fourth clause and lives HERE rather than in either view, so the Program View
+   and the ID Camp View cannot disagree about it. It is vacuous while f.division is empty - which is
+   every visitor today, because the pill row that writes it does not render against single-division
+   data - so with the D1-only index this predicate returns exactly what it returned before. */
 const matchesFilters = (p, score) => {
   const f = S.filters;
   return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q)))
     && (!f.conf.length || f.conf.includes(p.conference))
-    && (!f.region.length || f.region.includes(p.region));
+    && (!f.region.length || f.region.includes(p.region))
+    && (!f.division.length || f.division.includes(p.division));
 };
 function filteredPrograms() {
   const idx = S.index, f = S.filters;
@@ -937,7 +1052,7 @@ const commitsFor = (p, years) => Object.entries(p.commitmentsByYear || {}).filte
 const classLabel = years => years.length ? `Commits ${years.map(y => `'${String(y).slice(2)}`).join('+')}` : 'Commits';
 function sortCmp(key) {
   const cy = S.filters.classYear;
-  return (a, b) => key === 'name' ? a.name.localeCompare(b.name)
+  return (a, b) => key === 'name' ? byDisplayName(a, b)
     : key === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
     : key === 'titles' ? b.nationalTitles - a.nationalTitles
     : key === 'tuition' ? tuitionOf(a) - tuitionOf(b)
@@ -945,7 +1060,7 @@ function sortCmp(key) {
     : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
     : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
     : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
-    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || (a.shortName || a.name).localeCompare(b.shortName || b.name)
+    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || byDisplayName(a, b)
     : (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999);
 }
 async function renderList() {
@@ -953,7 +1068,9 @@ async function renderList() {
   const f = S.filters;
   const rows = filteredPrograms();
   const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
-  const bits = [`NCAA Division I women's soccer`, `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
+  // The corpus is named from the divisions actually on screen: hardcoding "Division I" was true of a
+  // single-division index and becomes a plain falsehood the moment a second division is published.
+  const bits = [corpusLabel(), `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
   if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
@@ -978,7 +1095,7 @@ function cardHtml(p) {
   const commits = years.length ? years.map(([y, n]) => cy.includes(y) ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
   const meta = [p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc).join(' · ');
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
-    <div ${bandAttrs(tc)}><h3>${esc(p.shortName || p.name)}<span class="nick">${esc(p.nickname || '')}</span></h3>
+    <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
       ${p.nationalTitles > 0 ? `<span class="titles">${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}</span>` : ''}</div>
     ${stripeHtml(tc)}
     <div class="body"><div class="meta">${meta}</div>
@@ -997,7 +1114,7 @@ function tableHtml(rows) {
   const cols = [
     ['rank', '#', 'num', p => { const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
-    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(p.shortName || p.name)}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
+    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
     ['record', `Record ${RPI_SEASON}`, 'num', p => p.lastSeason?.year === RPI_SEASON ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
@@ -1094,7 +1211,7 @@ function campRowHtml(c, p) {
   return `<tr class="team-row" data-slug="${esc(c.slug)}">
     <td>${campWhen(c)}</td>
     <td><b>${esc(c.name)}</b> ${campBadges(c, false)}</td>
-    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(p.shortName || p.name)}</a><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span>${starBtn(c.slug)}</div></td>
+    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span>${starBtn(c.slug)}</div></td>
     <td class="small">${esc(details) || '<span class="muted">—</span>'}</td>
     <td class="small">${links || '<span class="muted">—</span>'}</td></tr>`;
 }
@@ -1110,9 +1227,9 @@ async function renderCamps() {
   const rows = resolved.filter(c => matchesFilters(byProgram.get(c.slug), null)).sort(campCmp);
   const tally = campTally(doc);
   const nProg = new Set(rows.map(c => c.slug)).size;
-  const filtered = !!(f.conf.length || f.region.length || S.q);
+  const filtered = !!(f.conf.length || f.region.length || f.division.length || S.q);
 
-  const bits = [`NCAA Division I women's soccer`,
+  const bits = [corpusLabel(),
     `${rows.length} upcoming ID camp${rows.length === 1 ? '' : 's'}${filtered ? ` of ${resolved.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`];
   if (f.conf.length) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
@@ -1142,7 +1259,7 @@ async function renderCamps() {
   } else if (filtered && resolved.length) {
     // The common empty case, not an exceptional one: the list is small and regional coverage is thin.
     body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
-      <p class="muted">Nothing is scheduled yet for ${esc([f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
+      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
       ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
       <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/">All programs</a></p>
       <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
@@ -1164,7 +1281,7 @@ async function renderCamps() {
   app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
   const clr = $('#campsClear');
   // Clears everything that narrowed the list, search included - otherwise "clear filters" leaves one on.
-  if (clr) clr.onclick = () => { f.conf = []; f.region = []; S.q = ''; S.qRaw = ''; saveState(); renderSidebar(); renderCamps(); };
+  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; S.q = ''; S.qRaw = ''; saveState(); renderSidebar(); renderCamps(); };
 }
 
 /* ---------- profile ---------- */
@@ -1190,7 +1307,7 @@ function glanceHtml(p, row) {
   const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—';
   return `<div class="glance-head">
       <div class="glance-eyebrow">Program at a glance</div>
-      <div class="glance-name">${swatchesHtml(row || p, true)}<span title="${esc(p.name)}">${esc(p.shortName || p.name)}</span></div>
+      <div class="glance-name">${swatchesHtml(row || p, true)}<span title="${esc(p.name)}">${esc(displayName(p))}</span></div>
       <div class="glance-meta">${esc(p.conference || '')}${sch.city ? ` · ${esc(sch.city)}, ${esc(sch.state || '')}` : ''}</div>
       <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
     </div>
@@ -1234,7 +1351,7 @@ async function renderProfile(slug, tab) {
   const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? `${titles} national title${titles === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([, v]) => v).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = TABS.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${l}</a>`).join('');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: p.shortName || p.name }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
@@ -1526,7 +1643,7 @@ async function renderCompare() {
   const bar = `<div class="cmp-bar">${chips}
       ${picked.length < 4 ? `<div class="cmp-add"><input type="search" class="search-input" id="cmpAdd" placeholder="Add a school…" aria-label="Add a school to compare" autocomplete="off"><div class="cmp-results" id="cmpResults" hidden></div></div>` : ''}
       <label class="small muted">I live in <select class="season-select" id="residency" style="flex:none;width:auto"><option value="">(not set)</option>${US_STATES.map(s => `<option ${home === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label></div>`;
-  const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(p.shortName || p.name)}</a></th>`).join('')}</tr>
+  const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(displayName(p))}</a></th>`).join('')}</tr>
       ${groups.map(([g, rowsDef]) => `<tr><th class="group" colspan="${profiles.length + 1}">${g}</th></tr>` + rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')).join('')}</table></div></div>`
     : '<div class="card"><p class="muted">Add up to four programs with ⇄ Compare on any card or program page, or type a school name above.</p></div>';
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
@@ -1536,7 +1653,7 @@ async function renderCompare() {
     add.addEventListener('input', () => {
       const hits = searchMatches(normText(add.value), 8).filter(h => !S.compare.includes(h.p.slug));
       res.hidden = !add.value || !hits.length;
-      res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span>${esc(h.p.shortName || h.p.name)}</span><span class="meta">${esc(h.p.conference || '')}</span></button>`).join('');
+      res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span>${esc(displayName(h.p))}</span><span class="meta">${esc(h.p.conference || '')}</span></button>`).join('');
       res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = `#/compare/${S.compare.join(',')}`; });
     });
     add.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = res.querySelector('[data-add]'); if (first) first.click(); } });
