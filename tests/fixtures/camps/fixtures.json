@@ -1359,7 +1359,7 @@
   ]
  },
  "rowsEvidence": {
-  "_note": "Issue #80 item 1. A row whose name came from the page rather than from the row is gated on the text it was assembled from, because its name carries no sport and no gender for the two unconditional rules to read. The two halves read different spans, and that is the point: the SPORT rule reads `evidence`, the row's whole window; the GENDER rule reads `ownEvidence`, the row's own heading line and date line, and never the trailing window. Each case names the input that makes it fail: drop the evidence branch and every `false` row below turns true, which is what origin/main does with harvard; widen the gender rule back to `evidence` and the three `true` window-bleed rows turn false, which is what the first cut of this PR did to real girls' camps. The `named: row` cases pin that a row with a name of its own is judged on the name alone, evidence or no evidence, so nothing tightens for the 129 rows that were never the problem.",
+  "_note": "Issue #80 item 1. A row whose name came from the page rather than from the row is gated on the text it was assembled from, because its name carries no sport and no gender for the two unconditional rules to read. ONE rule reads it: the SPORT rule, over `evidence`, the row's whole window. There is deliberately no gender rule on evidence - two cuts of one were tried and both removed. Over the whole window it turned the three `true` window-bleed rows below false, deleting real girls' camps. Bounded to the row's own heading and date lines it changed no fixture at all, was pinned by this group's third case alone, and opened two over-rejection channels that are regressions against pre-#80 main: a 'Men's' token on a row's own date line, and a lower-case heading merged in by _starts_new_row donating its gender token into the row's own lines. Each case names the input that makes it fail: drop the evidence branch and every `false` row below turns true, which is what origin/main does with harvard; add a gender rule over `evidence` and the three `true` window-bleed rows turn false. The `named: row` cases pin that a row with a name of its own is judged on the name alone, evidence or no evidence, so nothing tightens for the 129 rows that were never the problem.",
   "cases": [
    {
     "name": "Camp/Clinic Information",
@@ -1378,15 +1378,13 @@
    {
     "name": "Camp/Clinic Information",
     "named": "page",
-    "ownEvidence": "Boys Youth Summer Camp | June 30 to July 5, 2025",
     "evidence": "Boys Youth Summer Camp | June 30 to July 5, 2025 | Register: https://www.crimsonsoccer.us/boys-youth-camps.html",
-    "expect": false,
-    "why": "a boys' camp whose OWN heading line says so: the gender rule still fires, on the row's own lines"
+    "expect": true,
+    "why": "THE PRICE OF REMOVING THE GENDER HALF, recorded rather than deleted: a boys' camp on a chrome-titled page, whose own heading says so and whose window names no other sport, is no longer rejected by the evidence gate - it publishes under the page name. The unconditional NAME rule still rejects it the moment the row has that name of its own, which is harvard's actual case; harvard's real boys' row is rejected by the SPORT half anyway, on the rowing text two cases up. Flip this to false and the gender half is back, with it the two over-rejection channels in the note"
    },
    {
     "name": "Camp Dates",
     "named": "page",
-    "ownEvidence": "Camp Dates | June 12-13, 2027",
     "evidence": "Camp Dates | June 12-13, 2027 | Cost: $350 | Boys Session | June 20-21, 2027 | Cost: $350",
     "pageIsSoccer": true,
     "expect": true,
@@ -1395,7 +1393,6 @@
    {
     "name": "CAMP DETAILS",
     "named": "page",
-    "ownEvidence": "CAMP DETAILS | June 15-19, 2027 (Mon-Fri)",
     "evidence": "CAMP DETAILS | June 15-19, 2027 (Mon-Fri) | Ages: 6-16 | Age Groups: Boys U8-U10, U11-U13",
     "pageIsSoccer": true,
     "expect": true,
@@ -1406,7 +1403,7 @@
     "named": "page",
     "evidence": "Camp Dates | June 6, 2026 | Boys Session",
     "expect": true,
-    "why": "no ownEvidence at all: the caller cannot say which lines are the row's own, so the gender rule does not run rather than guess"
+    "why": "an undated 'Boys Session' heading bled in from the next row: with no gender rule on evidence this row survives, which is the whole point - over the window it did not"
    },
    {
     "name": "Camps, Clinics and Tournaments",

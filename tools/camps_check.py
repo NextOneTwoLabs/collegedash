@@ -415,7 +415,6 @@ def fixtures(args) -> int:
         want = fx["expect"]
         try:
             got = _row_allowed(fx["name"], None, named=fx.get("named", "row"), evidence=fx.get("evidence"),
-                               own_evidence=fx.get("ownEvidence"),
                                page_is_soccer=bool(fx.get("pageIsSoccer"))) if _row_allowed else None
         except TypeError as e:  # a parser whose _row_allowed has no evidence parameter
             got, e = None, e
