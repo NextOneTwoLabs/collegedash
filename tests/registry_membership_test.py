@@ -504,6 +504,15 @@ def test_committed() -> None:
     # fails if a value supplied from memory enters the registry (the spike's gogusties.com)
     ok("no athletics URL came from memory", "gogusties" not in json.dumps(reg))
 
+    # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
+    # to heldPrograms), which pruning would then delete with build and validate otherwise passing
+    import build  # noqa: E402 - only here, so the rest of this suite does not need build's imports
+    long_standing = {p["slug"] for p in pre}
+    unpublished = long_standing - {p["slug"] for p in build.published_programs(reg)}
+    ok("the long-standing D1 programs not published are exactly build.REVIEWED_UNPUBLISHED", unpublished == set(build.REVIEWED_UNPUBLISHED),
+       f"unreviewed {sorted(unpublished - set(build.REVIEWED_UNPUBLISHED))[:8]}, listed but published {sorted(set(build.REVIEWED_UNPUBLISHED) - unpublished)}")
+    ok("and validate agrees", _quiet(build.check_membership_anchor, reg))
+
     # fails if held programs reach the collectors or the build
     listed = {p["slug"] for p in common.iter_programs(reg, onboarded_only=False)}
     ok("iter_programs never yields a held program", not (listed & {p["slug"] for p in held}), str(listed & {p["slug"] for p in held}))
@@ -527,6 +536,12 @@ def test_committed() -> None:
     tds = {slug for slug, _ in rb.TDS_CONFERENCES}
     ok("and each of those is a conference page the builder fetches", set(rb.LABEL_TDS_CONFERENCE.values()) <= tds,
        str(sorted(set(rb.LABEL_TDS_CONFERENCE.values()) - tds)))
+
+
+def _quiet(fn, *a):
+    import contextlib, io
+    with contextlib.redirect_stdout(io.StringIO()):
+        return fn(*a)
 
 
 def main(argv=None) -> int:

@@ -176,6 +176,38 @@ def prune_profiles(plan: dict[str, str], published: set[str], out_dir: str) -> l
     return list(plan)
 
 
+# Long-standing D1 programs (in the registry before issue #100) that may be absent from the published set, each
+# reviewed. PR #112 review, R1: pruning deletes whatever the registry explains, so a registry mistake that makes
+# live programs look explained (onboarded: false, a move to heldPrograms) would delete their pages with build and
+# validate passing. validate therefore requires the unpublished long-standing programs to be exactly this list.
+# A real reclassification or removal is a one-line edit here, in its own reviewed PR; so is a program returning
+# (Saint Francis leaves this list the day D3 is onboarded).
+LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", "pre-100-programs.json")
+REVIEWED_UNPUBLISHED = {
+    "saint-francis": "issue #100: the NCAA Directory lists it in D3 for 2026-27; held until D3 is onboarded",
+    "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
+}
+
+
+def check_membership_anchor(registry: dict) -> bool:
+    """The long-standing D1 programs missing from the published set are exactly REVIEWED_UNPUBLISHED."""
+    doc = common.read_json(LONG_STANDING_PATH)
+    if not doc or not doc.get("programs"):
+        print(f"MEMBERSHIP: cannot read the long-standing program list {LONG_STANDING_PATH}")
+        return False
+    long_standing = {p["slug"] for p in doc["programs"]}
+    unpublished = long_standing - {p["slug"] for p in published_programs(registry)}
+    ok = True
+    for slug in sorted(unpublished - set(REVIEWED_UNPUBLISHED)):
+        print(f"MEMBERSHIP {slug}: a long-standing D1 program is no longer published and is not in build.REVIEWED_UNPUBLISHED "
+              f"- if this is a real reclassification or removal, add it there in a reviewed PR; otherwise the registry is wrong")
+        ok = False
+    for slug in sorted(set(REVIEWED_UNPUBLISHED) - unpublished):
+        print(f"MEMBERSHIP {slug}: listed in build.REVIEWED_UNPUBLISHED but published again - remove it from that list")
+        ok = False
+    return ok
+
+
 def check_no_stale_profiles(registry: dict) -> bool:
     """Every profile on disk belongs to a published program (issue #110: a program that leaves the
     published set must not stay reachable by URL)."""
@@ -1104,7 +1136,8 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     seasons_ok = check_seasons(registry)
     camps_ok = check_camps_index(registry)
     stale_ok = check_no_stale_profiles(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok
+    membership_ok = check_membership_anchor(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok
 
 
 def check_camps_index(registry: dict) -> bool:

@@ -501,7 +501,9 @@ test('the Name sort orders by the name the page renders, not the stored one', ()
   // the check has to be able to fail: the old comparator really does leave visible inversions
   const wasWrong = adjacentInversions(before);
   assert.ok(wasWrong > 0, 'the pre-#60 comparator produced no inversions - this check cannot fail and proves nothing');
-  assert.equal(wasWrong, 50, 'the number of visible inversions in the OLD order changed; re-measure before trusting the new one');
+  // No fixed count (PR #112 review): the old comparator's inversion count moves with every membership change to
+  // the largest division - it was 50, and one legitimate reclassification changed it. What must hold is that the
+  // old order is visibly wrong on today's data (above) and the new order is not (below).
   assert.equal(adjacentInversions(after), 0, 'the Name sort still leaves rows out of alphabetical order');
 
   // the specific programs issue #60 measured on the live site

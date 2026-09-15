@@ -162,7 +162,7 @@ def rebuild(tmp: str, rpi_dir: str | None = None) -> tuple[str, str]:
 def complaints(log: str) -> str:
     """The lines build's own validate pass prints when an invariant fails."""
     return "\n".join(l for l in log.splitlines()
-                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING", "STALE ")))
+                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING", "STALE ", "MEMBERSHIP")))
 
 
 def program(registry: dict, slug: str) -> dict:
@@ -232,7 +232,11 @@ def check_anchor(registry: dict, rows: dict[str, dict], label: str) -> None:
     published in D1 must keep its ids, keep at least those seasons, and keep a 2025 lastSeason with a record.
     A new program (West Florida) or a non-D1 one is not in the anchor and is not affected."""
     pre = {p["slug"] for p in json.load(open(PRE_100, encoding="utf-8"))["programs"]}
-    anchor = json.load(open(RPI_ANCHOR, encoding="utf-8"))["programs"]
+    anchor_doc = json.load(open(RPI_ANCHOR, encoding="utf-8"))
+    anchor = anchor_doc["programs"]
+    # the fixture's lastSeason flags were measured for one season; a rollover must re-measure it, not reinterpret it
+    ok(f"{label}: the RPI seasons fixture was measured for the finished season {FINISHED}", anchor_doc.get("finished") == FINISHED,
+       f"fixture finished {anchor_doc.get('finished')}, FINISHED {FINISHED}")
     progs = [p for p in build.published_programs(registry) if p["slug"] in pre and p.get("division") == "D1"]
     ok(f"{label}: the anchor covers the long-standing D1 programs still published", bool(progs)
        and all(p["slug"] in anchor for p in progs), str([p["slug"] for p in progs if p["slug"] not in anchor][:5]))

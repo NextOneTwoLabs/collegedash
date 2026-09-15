@@ -280,6 +280,9 @@ def test_build() -> None:
     for p in reg2["programs"]:
         if p["slug"] == moved:
             p["division"] = "D3"
+    # a real reclassification of a long-standing program is a reviewed edit to build.REVIEWED_UNPUBLISHED (R1);
+    # the scenario makes that edit for its duration
+    build.REVIEWED_UNPUBLISHED = {**build.REVIEWED_UNPUBLISHED, moved: "test: reclassified to D3"}
     tmp = tempfile.mkdtemp(prefix="prune-build-")
     progs = os.path.join(tmp, "programs")
     swap = dict(PROGRAMS_OUT_DIR=progs, COMMITS_OUT_DIR=os.path.join(tmp, "commitments"), CAMPS_OUT_DIR=os.path.join(tmp, "camps"))
@@ -326,6 +329,7 @@ def test_build() -> None:
                 passed = build.validate(reg2)
             ok("which fails validate as a whole", not passed and "STALE ghost-program" in out.getvalue())
     finally:
+        build.REVIEWED_UNPUBLISHED = {k: v for k, v in build.REVIEWED_UNPUBLISHED.items() if k != moved}
         shutil.rmtree(tmp, ignore_errors=True)
 
 
