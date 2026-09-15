@@ -137,24 +137,30 @@ REVIEWED_NOT_LISTED = {
                        "Mississippi Valley State under any name",
 }
 
-STATE_TZ = {
-    "CA": "America/Los_Angeles", "WA": "America/Los_Angeles", "OR": "America/Los_Angeles", "NV": "America/Los_Angeles",
-    "AZ": "America/Phoenix", "UT": "America/Denver", "CO": "America/Denver", "NM": "America/Denver", "ID": "America/Boise",
-    "MT": "America/Denver", "WY": "America/Denver", "HI": "Pacific/Honolulu", "AK": "America/Anchorage",
-    "TX": "America/Chicago", "OK": "America/Chicago", "KS": "America/Chicago", "NE": "America/Chicago", "SD": "America/Chicago",
-    "ND": "America/Chicago", "MN": "America/Chicago", "IA": "America/Chicago", "MO": "America/Chicago", "AR": "America/Chicago",
-    "LA": "America/Chicago", "MS": "America/Chicago", "AL": "America/Chicago", "WI": "America/Chicago", "IL": "America/Chicago",
-    "TN": "America/Chicago",
-}
-# States with more than one time zone. A new program in one of these gets timezone null rather than
-# the state's majority zone: Pensacola (West Florida) is Central, and the old default wrote Eastern.
-SPLIT_TZ_STATES = {"AK", "FL", "ID", "IN", "KS", "KY", "MI", "ND", "NE", "OR", "SD", "TN", "TX"}
+# Time zones come from the coordinates, never from the state (issue #110). The state table this
+# replaces put Knoxville, Chattanooga and Johnson City on Central time, Murray, Bowling Green,
+# Evansville and Valparaiso on Eastern, El Paso on Central and Moscow (Idaho) on Mountain, and it had
+# to leave Pensacola null because Florida spans two zones.
+#
+# Source: the timezone-boundary-builder polygons (built from OpenStreetMap, ODbL), looked up offline by
+# the `timezonefinder` package, which bundles them (requirements-registry.txt). The coordinates are the College Scorecard row's.
+_TZ_FINDER = None
 
 
-def timezone_for(state: str | None) -> str | None:
-    if not state or state in SPLIT_TZ_STATES or len(state) != 2:
+def timezone_at(lat, lon) -> str | None:
+    """The IANA zone whose boundary contains (lat, lon), or None without coordinates or for a point in
+    no zone polygon. Raises ImportError if timezonefinder is not installed: a missing library must not
+    look like a program with no time zone."""
+    global _TZ_FINDER
+    if lat is None or lon is None:
         return None
-    return STATE_TZ.get(state, "America/New_York")
+    if _TZ_FINDER is None:
+        try:
+            from timezonefinder import TimezoneFinder
+        except ImportError as e:  # the registry build's own extra, not part of requirements.txt (PR #112 review, F6)
+            raise ImportError("timezonefinder is not installed: pip install -r requirements-registry.txt") from e
+        _TZ_FINDER = TimezoneFinder()
+    return _TZ_FINDER.timezone_at(lat=float(lat), lng=float(lon))
 
 
 EXPAND = {
@@ -407,7 +413,8 @@ def resolve_identity(program: dict, rows_by_org: dict[int, dict], bulk_by_id: di
 # ---------- membership ----------
 
 def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: list[dict], *, today: str,
-                     new_entries: dict[int, dict] | None = None, max_departure_share: float = MAX_DEPARTURE_SHARE) -> dict:
+                     new_entries: dict[int, dict] | None = None, max_departure_share: float = MAX_DEPARTURE_SHARE,
+                     timezone_lookup=None) -> dict:
     """Apply the Directory lists and the membership policy to `registry` in place. Pure: no network,
     no file access. Returns the membership part of the build report.
 
@@ -427,7 +434,8 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
     rep = {"onboardedDivisions": list(onboarded), "directoryCounts": {d: len(rows) for d, rows in directory.items()},
            "identity": collections.Counter(), "unresolved": [], "reviewed": [], "duplicateOrgId": [],
            "reclassified": [], "held": [], "returned": [], "added": [], "notAdded": [], "conferenceChanged": [],
-           "conferenceUnlabelled": [], "stateDisagreement": [], "scorecardDomainDisagreement": [], "slugs": {}}
+           "conferenceUnlabelled": [], "stateDisagreement": [], "scorecardDomainDisagreement": [],
+           "timezoneFilled": [], "timezoneDisagreement": [], "slugs": {}}
 
     # work on copies: a build that raises (the departure guard below) must leave `registry` untouched
     current = copy.deepcopy(list(registry.get("programs") or []))
@@ -526,6 +534,20 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
             taken.add(entry["slug"])
             programs.append(entry)
             rep["added"].append({"slug": entry["slug"], "orgId": row["orgId"], "name": row["name"], "division": division})
+
+    # A null timezone is filled from the program's own coordinates. A stored one that disagrees is
+    # reported and left alone: correcting existing values is a reviewed change, not a side effect.
+    if timezone_lookup is not None:
+        for p in programs + held:
+            loc = p.get("location") or {}
+            tz = timezone_lookup(loc.get("lat"), loc.get("lon"))
+            if tz is None:
+                continue
+            if loc.get("timezone") is None:
+                loc["timezone"] = tz
+                rep["timezoneFilled"].append({"slug": p["slug"], "timezone": tz})
+            elif loc["timezone"] != tz:
+                rep["timezoneDisagreement"].append({"slug": p["slug"], "registry": loc["timezone"], "coordinates": tz})
 
     registry["programs"] = programs
     registry["heldPrograms"] = held
@@ -677,7 +699,7 @@ def tds_team_for(row: dict, label: str | None, wiki_row: dict | None, tds: dict[
 
 
 def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dict[str, dict], taken: set[str],
-                      article_lookup=soccer_article_for) -> tuple[dict, dict]:
+                      article_lookup=soccer_article_for, timezone_lookup=timezone_at) -> tuple[dict, dict]:
     """(registry entry, what each source established) for a Directory row the registry does not hold.
     Every field is from a source or null; nothing is supplied from memory."""
     label = conference_label(row["conference"])
@@ -703,7 +725,8 @@ def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dic
                 "wikipedia": article, "ncaaName": None, "ncaaSlug": None, "rpiHistoryName": None},
         "social": {"x": None, "instagram": None},
         "location": {"city": city, "state": row["state"], "lat": sc.get("location.lat") if sc else None,
-                     "lon": sc.get("location.lon") if sc else None, "timezone": timezone_for(row["state"])},
+                     "lon": sc.get("location.lon") if sc else None,
+                     "timezone": timezone_lookup(sc.get("location.lat"), sc.get("location.lon")) if sc else None},
     }
     evidence = {"slug": slug, "orgId": row["orgId"], "name": row["name"], "scorecard": sc_how, "wikipediaList": w_how,
                 "tds": t_how, "wikipediaArticle": bool(article), "athleticsUrl": bool(base_url),
@@ -745,7 +768,8 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     holder = {}
 
     def mutate(reg):
-        holder["membership"] = apply_membership(reg, directory, bulk, today=common.today(), new_entries=new_entries)
+        holder["membership"] = apply_membership(reg, directory, bulk, today=common.today(), new_entries=new_entries,
+                                                timezone_lookup=timezone_at)
 
     common.update_registry(mutate)
     m = holder["membership"]

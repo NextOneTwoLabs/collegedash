@@ -1,0 +1,6 @@
+# Only for `python collegedash.py registry build` and the tests that cover it, on top of requirements.txt:
+#   pip install -r requirements.txt -r requirements-registry.txt
+# Kept out of requirements.txt on purpose: the data refresh (.github/workflows/refresh.yml) installs only that file
+# and never imports collect/registry_builder, so the ~50 MB of boundary data and native wheels below stay off the path
+# that publishes data (PR #112 review, F6).
+timezonefinder>=6.5,<10  # time zones from coordinates: timezone-boundary-builder / OpenStreetMap polygons, offline
