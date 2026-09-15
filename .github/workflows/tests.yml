@@ -106,8 +106,17 @@ jobs:
         if: ${{ !cancelled() }}
         run: python .github/scripts/run_suite.py --name camps-fixtures --min-checks 390 -- python tools/camps_check.py --fixtures
 
-      # --test-reporter=tap so the count line is stable: node's default reporter depends on whether
-      # stdout is a terminal, and the wrapper has to find "# pass <n>" either way.
-      - name: feedback worker (node --test tests/feedback.test.mjs)
+      # Every Node suite, discovered rather than named. This step used to name
+      # tests/feedback.test.mjs, which meant a second Node suite would not have run and this
+      # workflow would have been green while skipping it - the failure #63 exists to end. The
+      # discovery glob and the guards that go with it live in the script, which is also why this
+      # step carries no list of files to keep in step with the repository.
+      #
+      # --min-checks here is only an aggregate backstop against tests disappearing from inside an
+      # existing file. Unlike the floors above it is NOT what catches a missing suite: the script
+      # requires every discovered file to have reported tests, and requires every file under tests/
+      # that imports node:test to be discoverable in the first place. Neither needs raising when a
+      # suite is added, which is the point.
+      - name: node suites (every tests/*.test.mjs, discovered)
         if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name feedback --min-checks 15 -- node --test --test-reporter=tap tests/feedback.test.mjs
+        run: python .github/scripts/run_node_suites.py --min-checks 15
