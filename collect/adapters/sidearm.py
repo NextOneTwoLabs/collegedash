@@ -37,7 +37,7 @@ HEAD_COACH_RE = re.compile(r"head coach", re.I)
 NOT_HEAD_RE = re.compile(r"assoc|assist|volunteer|director of (?:operations|ops)", re.I)
 
 MONTH_NAMES = "January|February|March|April|May|June|July|August|September|October|November|December"
-LEGACY_SIDE_CLASSES = {"sidearm-schedule-home-game": "H", "sidearm-schedule-away-game": "H",
+LEGACY_SIDE_CLASSES = {"sidearm-schedule-home-game": "H", "sidearm-schedule-away-game": "A",
                        "sidearm-schedule-neutral-game": "N"}
 # Legacy schedule rows date themselves 'Aug 16 (Sun)' - the weekday suffix is what stops DATE_RE,
 # which anchors at end of string, from matching. Measured across all 3,226 legacy rows in the
