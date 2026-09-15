@@ -157,16 +157,11 @@ def main() -> int:
         return 2
 
     files = discovered_files()
-    if not files:
-        annotate(
-            "error",
-            SUITE_NAME,
-            f"{DISCOVERY} matched no files, so no Node suite ran. Discovery finding nothing is a "
-            f"failure here, not an empty pass (issue #81).",
-        )
-        summarise(f"| {SUITE_NAME} | FAIL (discovered nothing) | 0 | 0.0s |")
-        return 1
 
+    # Orphans are reported before "nothing was discovered", because when the glob matches nothing
+    # the interesting fact is almost never that the directory is empty - it is that the suites are
+    # right there and the pattern stopped reaching them. Naming those files is the diagnosis; "no
+    # files matched" is only the symptom.
     orphans = orphaned_files(set(files))
     if orphans:
         annotate(
@@ -180,6 +175,16 @@ def main() -> int:
             f"nothing runs.",
         )
         summarise(f"| {SUITE_NAME} | FAIL (undiscovered suite) | ? | 0.0s |")
+        return 1
+
+    if not files:
+        annotate(
+            "error",
+            SUITE_NAME,
+            f"{DISCOVERY} matched no files, so no Node suite ran. Discovery finding nothing is a "
+            f"failure here, not an empty pass (issue #81).",
+        )
+        summarise(f"| {SUITE_NAME} | FAIL (discovered nothing) | 0 | 0.0s |")
         return 1
 
     print(f"discovered {len(files)} Node suite(s) via {DISCOVERY}:")
