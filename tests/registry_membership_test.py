@@ -450,7 +450,11 @@ def test_committed() -> None:
     print("committed: public/data/registry.json")
     reg = common.load_registry()
     programs, held = reg["programs"], reg.get("heldPrograms")
-    ok("onboardedDivisions is explicit data, D1 only", reg.get("onboardedDivisions") == ["D1"], str(reg.get("onboardedDivisions")))
+    # Which divisions are on is the owner's call and changes with onboarding (issue #110), so this checks
+    # the shape, not a value: a non-empty list of known divisions, with D1 among them.
+    od = reg.get("onboardedDivisions")
+    ok("onboardedDivisions is explicit data: a non-empty list of known divisions including D1",
+       isinstance(od, list) and "D1" in od and set(od) <= set(rb.DIVISION_ROMAN) and len(od) == len(set(od)), str(od))
     ok("the old top-level division label is gone", "division" not in reg)
     ok("heldPrograms is a list", isinstance(held, list))
     held = held or []
@@ -478,8 +482,12 @@ def test_committed() -> None:
 
     by = {p["slug"]: p for p in everything}
     sf, mvsu, uwf = by.get("saint-francis"), by.get("mississippi-val"), by.get("west-florida")
-    ok("Saint Francis is held as D3, waiting for D3", sf in held and sf["division"] == "D3"
-       and sf["hold"]["reason"] == "division-not-onboarded" and sf["ids"].get("ncaaOrgId") == 600, str(sf and sf.get("hold")))
+    # held exactly while D3 is not onboarded; published (and hold-free) once it is
+    d3_on = "D3" in (reg.get("onboardedDivisions") or [])
+    ok("Saint Francis is D3, held exactly while D3 is not onboarded", bool(sf) and sf["division"] == "D3"
+       and sf["ids"].get("ncaaOrgId") == 600 and ((sf in programs and "hold" not in sf) if d3_on
+                                                   else (sf in held and sf["hold"]["reason"] == "division-not-onboarded")),
+       str(sf and sf.get("hold")))
     ok("Mississippi Valley State is held as in no list", mvsu in held and mvsu["hold"]["reason"] == "not-in-directory", str(mvsu and mvsu.get("hold")))
     # onboarded is deliberately not asserted: `onboard west-florida` flips it, and that must not turn this red
     ok("West Florida is a D1 entry in registry.programs with its orgId", uwf in programs and uwf["ids"].get("ncaaOrgId") == 11740
@@ -497,8 +505,14 @@ def test_committed() -> None:
        all(((by.get(s) or {}).get("hold") or {}).get("reason") == "not-in-directory" for s in rb.REVIEWED_NOT_LISTED),
        str([s for s in rb.REVIEWED_NOT_LISTED if s not in by]))
     labels = set(rb.CONFERENCE_LABELS.values())
-    ok("every published conference is a label from the table", all(p["conference"] in labels for p in programs),
-       str(sorted({p["conference"] for p in programs} - labels)))
+    # The label table covers D1 today; a division without labels yet publishes the Directory's own name
+    # (reported by the builder), which must still be a non-empty string.
+    ok("every published D1 conference is a label from the table",
+       all(p["conference"] in labels for p in programs if p["division"] == "D1"),
+       str(sorted({p["conference"] for p in programs if p["division"] == "D1"} - labels)))
+    ok("every published program has a conference", all(isinstance(p.get("conference"), str) and p["conference"].strip()
+                                                        for p in programs),
+       str([p["slug"] for p in programs if not (isinstance(p.get("conference"), str) and p["conference"].strip())][:5]))
     ok("every label has a TopDrawerSoccer conference for the new-program check", labels <= set(rb.LABEL_TDS_CONFERENCE),
        str(sorted(labels - set(rb.LABEL_TDS_CONFERENCE))))
     tds = {slug for slug, _ in rb.TDS_CONFERENCES}
