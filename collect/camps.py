@@ -1252,9 +1252,17 @@ def classify_camp(name: str | None) -> str:
     Keeping them out of `id` is what makes the unknown count worth publishing - a classifier that
     guessed would hide its own drift behind a confident label.
 
+    The age-beats-ID precedence is exercised by the real corpus, not only by a unit case: denver's
+    '2026 DENVER WOMEN'S SOCCER YOUTH ID CAMP' (ages 5-13) lands in `youth`.
+
+    Sole-support histogram over the whole `id` class, measured in review: `{ID: 39, elite: 2,
+    prospect: 2}` - i.e. 39 of the 78 rest on a bare `\\bID\\b` and nothing else. The two sole-
+    `prospect` rows are louisiana-tech's 'Prospect camps' (ages '8th graders') x2 and are judged
+    CORRECT: 8th grade sits inside the range several published ID camps declare ('8th - 12th',
+    '7th - College Sophomore'). Named here because a reader checking "sole support" will find them.
+
     Known false `id`, 2 of the 78 and 0 of the 34 upcoming, both resting SOLELY on the `elite`
-    token - every other ID token has no sole-support false positive, and 39 of the 78 rest on a bare
-    `\\bID\\b`:
+    token - so every other ID token has no sole-support false positive:
 
       * clemson's 'Summer Pre-Elite Camp' - 'Pre-Elite' is normally the developmental, younger tier;
       * seattle's 'ELITE DAY CAMP PROGRAM'. This one was cited the wrong way round when the "day
