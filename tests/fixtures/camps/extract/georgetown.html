@@ -4,6 +4,15 @@
      replaced with an obviously-fake value (an example.com address, a 555-01xx number from the
      range reserved for fiction). No check reads them - the suite scores the same either way -
      and `python tools/camps_check.py --fixtures` now fails if a real-looking one comes back.
+
+     THAT CLAIM WAS FALSE WHEN IT WAS FIRST WRITTEN, AND IS TRUE ONLY AS OF THIS COMMIT. A named
+     individual's work address at georgetown.edu survived below, as the LINK TEXT of the anchor
+     whose mailto: href had been redacted - the href was replaced and the visible text was not.
+     Sidearm breaks a long address with a <wbr/>, so the link text never matched an email regex
+     reading the raw file: the scan was green on it and this header asserted a redaction that had
+     not happened. The scan now also reads a tag-stripped, entity-decoded, percent-decoded copy of
+     every fixture. The <wbr/> is kept in the redacted value below on purpose - it is the shape
+     that defeated the check, and it should stay in the tree where the check meets it.
 -->
 <html><head><title>Women's Soccer Hoya ID Clinic - Georgetown University Athletics</title></head><body>
 <article class="article-wrapper sportfile">
@@ -47,7 +56,7 @@ $275</font><br/>
 <p dir="ltr"><font face="georgia, serif">We are requiring proof of physical within the last year in order to participate in camp. </font></p>
 <ul>
 <li dir="ltr">
-<p dir="ltr" role="presentation"><font face="georgia, serif">Please email to: <a href="mailto:redacted1@example.com" target="_blank">naomi.meiburger@<wbr/>georgetown.edu</a> </font></p>
+<p dir="ltr" role="presentation"><font face="georgia, serif">Please email to: <a href="mailto:redacted1@example.com" target="_blank">redacted1@<wbr/>example.com</a> </font></p>
 </li>
 <li dir="ltr">
 <p dir="ltr" role="presentation"><font face="georgia, serif">Include player name and Hoya ID Clinic Physical in the subject or body of the email.</font></p>
