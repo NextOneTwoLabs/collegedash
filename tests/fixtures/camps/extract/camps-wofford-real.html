@@ -24,6 +24,14 @@
      replaced with an obviously-fake value (an example.com address, a 555-01xx number from the
      range reserved for fiction). No check reads them - the suite scores the same either way -
      and `python tools/camps_check.py --fixtures` now fails if a real-looking one comes back.
+
+     One more was found after that sweep and is redacted as of this commit: a staff address
+     PERCENT-ENCODED inside a Microsoft Safe Links tracking URL, in the '&data=...%7C<addr>%7C...'
+     segment, now 'redacted10%40example.com'. '%40' is not '@', so the raw scan was green on it -
+     and writing the original value into this very comment makes the fixed scan fail, which is the
+     shortest demonstration that it now works.
+     The Safe Links wrapper is kept below: it is how a forwarded registration link actually looks,
+     and it is the shape that defeated the check.
 -->
 <html><head><title>Summer Camps @ Wofford</title></head><body>
 <article class="article-wrapper sportfile">
@@ -122,7 +130,7 @@ To be added to the waitlist, please email Coach Mike Merrill at <a href="mailto:
 <em><strong>Rising Stars Day Camp - June 1-4, 2026</strong></em>
 
 
-Registration Link: <a href="https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.hubcitylocker.com%2Fwofford&amp;data=05%7C02%7CWilliamsonDB%40wofford.edu%7C4d8f11a57c5040cf3f7208de8039510b%7Cddc49e5d0f0740439ddd408d78122303%7C0%7C0%7C639089180863727229%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&amp;sdata=JqsdNBHubzqJdXQcM9f6ePX3x7NTSYoi7Yuh712PF68%3D&amp;reserved=0">https://www.hubcitylocker.com/wofford</a>
+Registration Link: <a href="https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.hubcitylocker.com%2Fwofford&amp;data=05%7C02%7Credacted10%40example.com%7C4d8f11a57c5040cf3f7208de8039510b%7Cddc49e5d0f0740439ddd408d78122303%7C0%7C0%7C639089180863727229%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&amp;sdata=JqsdNBHubzqJdXQcM9f6ePX3x7NTSYoi7Yuh712PF68%3D&amp;reserved=0">https://www.hubcitylocker.com/wofford</a>
 
 
 2025 Rising Stars Day Camp <a href="https://www.dropbox.com/scl/fi/c4wrowp7ncnpgv1vx5ejh/Camp-Video-V1.mp4?rlkey=8wwto5lsst1zrdx6xkfdnqdlx&amp;st=yfcea13h&amp;dl=0">Video</a><br/>
