@@ -13,17 +13,18 @@ Covers, in order:
   asset         the committed data/the-us-rankings-2026.json: 171 rows, ties set on exactly the
                 shared ranks, unique slugs and nameKeys
   aliases       the committed data/the-rank-aliases.json: 126 entries, evidence tags, pinned names,
-                and the 222 N/A count measured against the registry rather than its own header
+                and the N/A set derived from the registry's published programs, never a stored count
   traps         the six fuzzy-match traps from issue #46, asserted one by one
   derivation    group_items refuses to pick between two Wikidata items for one IPEDS unit id, and
                 an acronym-shaped candidate cannot claim a row
   check tool    exits 0 on the committed pair and non-zero on a corrupted copy, with every finding
                 type it can emit offline actually emitted
-  build         what build.py publishes: 126 ranked / 222 null in the profiles and in index.json,
+  build         what build.py publishes: the aliased programs ranked, every other published program
+                null, by slug, in the profiles and in index.json,
                 the spot checks, the hard failure on a missing asset, the schema's required block
                 and the validate invariant that traces every published rank back to an asset row
   card          public/index.html: the card renders the rank as "#" plus a number with no tie
-                marker (issue #46), checked by running the page's own rankHtml over all 348
+                marker (issue #46), checked by running the page's own rankHtml over every
                 rows, and every other admission-rate surface -- sort, table column, glance
                 panel, tabs, compare -- is left alone
 """
@@ -252,16 +253,20 @@ def test_aliases(asset: dict, table: dict) -> None:
     ok("the evidence split is 106 auto + 5 auto-alias-only + 15 reviewed",
        actual == {"auto": 106, "auto-alias-only": 5, "reviewed": 15}, str(actual))
 
-    # The N/A count is the whole coverage claim on issue #46, so it is measured against the
-    # registry the build reads, not against the number this table wrote about itself.
-    # 350 when the table was derived; 348 since issue #100 moved Saint Francis (now D3) and Mississippi
-    # Valley State (in no Directory list) out of the published set. Neither had a row in the table.
-    programs = sum(1 for _ in common.iter_programs(common.load_registry()))
-    ok("348 programs in the registry", programs == 348, f"got {programs}")
-    ok("222 programs are N/A", programs - len(aliases) == 222,
-       f"{programs} programs - {len(aliases)} ranked")
-    ok("the header's program count is the registry's", table.get("programs") == programs,
-       f"header {table.get('programs')}, registry {programs}")
+    # The N/A set is the whole coverage claim on issue #46. It used to be a literal (350, then 348) and a
+    # `programs` header, and both went stale on every membership change (issue #110). It is now derived:
+    # every published program without an alias is N/A. What can still go wrong, and is checked, is an
+    # alias that names no program at all, which is how a renamed or dropped slug would show.
+    reg = common.load_registry()
+    published = {p["slug"] for p in build.published_programs(reg)}
+    known = {p["slug"] for p in reg["programs"]} | {p["slug"] for p in reg.get("heldPrograms") or []}
+    orphans = sorted(set(aliases) - known)
+    ok("every alias names a program in the registry, published or held", not orphans, str(orphans))
+    ranked_now = set(aliases) & published
+    ok("some published programs are ranked and some are N/A, so the build checks below test both",
+       bool(ranked_now) and bool(published - ranked_now), f"{len(ranked_now)} ranked of {len(published)}")
+    ok("the alias table carries no program count to go stale", "programs" not in table,
+       f"header programs {table.get('programs')}")
 
 
 def test_traps(asset: dict, table: dict) -> None:
@@ -562,26 +567,37 @@ def test_build(asset: dict, table: dict) -> None:
     print("build: profiles, index.json, and the validate invariant")
     index = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), encoding="utf-8"))
     rows = index["programs"]
-    ranked = [r for r in rows if r.get("academicRank") is not None]
-    ok("index.json carries 348 rows", len(rows) == 348, str(len(rows)))
-    ok("126 ranked in index.json", len(ranked) == 126, str(len(ranked)))
-    ok("222 unranked in index.json", len(rows) - len(ranked) == 222, str(len(rows) - len(ranked)))
+    # Expected sets derived from the registry and the alias table (issue #110), compared by slug: a count
+    # can balance while the wrong programs are ranked.
+    published = {p["slug"] for p in build.published_programs(common.load_registry())}
+    want_ranked = set(table["aliases"]) & published
+    ranked = {r["slug"] for r in rows if r.get("academicRank") is not None}
+    ok("index.json carries exactly the published programs", {r["slug"] for r in rows} == published,
+       f"{len(rows)} rows, {len(published)} published")
+    ok(f"the {len(want_ranked)} aliased published programs are ranked in index.json, and no other",
+       bool(want_ranked) and ranked == want_ranked, f"extra {sorted(ranked - want_ranked)[:5]}, missing {sorted(want_ranked - ranked)[:5]}")
+    ok(f"the other {len(published - want_ranked)} are unranked in index.json",
+       bool(published - want_ranked) and {r["slug"] for r in rows} - ranked == published - want_ranked)
     ok("every row carries the key, so undefined never means unranked",
        all("academicRank" in r and "academicRankTied" in r for r in rows))
 
     asset_rows = {r["theSlug"]: r for r in asset["rows"]}
-    by_slug, n_ranked, n_null = {}, 0, 0
+    by_slug, p_ranked, p_null = {}, set(), set()
     for f in sorted(os.listdir(common.PROGRAMS_OUT_DIR)):
         if f == "index.json" or not f.endswith(".json"):
             continue
         p = json.load(open(os.path.join(common.PROGRAMS_OUT_DIR, f), encoding="utf-8"))
         by_slug[p["slug"]] = p.get("academicRank")
         if isinstance(p.get("academicRank"), dict) and p["academicRank"].get("rank") is not None:
-            n_ranked += 1
+            p_ranked.add(p["slug"])
         else:
-            n_null += 1
-    ok("126 ranked profiles", n_ranked == 126, str(n_ranked))
-    ok("222 null profiles", n_null == 222, str(n_null))
+            p_null.add(p["slug"])
+    ok("the profiles on disk are exactly the published programs", set(by_slug) == published,
+       f"not published {sorted(set(by_slug) - published)[:5]}, missing {sorted(published - set(by_slug))[:5]}")
+    ok("ranked profiles are exactly the aliased published programs", p_ranked == want_ranked,
+       f"extra {sorted(p_ranked - want_ranked)[:5]}, missing {sorted(want_ranked - p_ranked)[:5]}")
+    ok("null profiles are exactly the rest", p_null == published - want_ranked,
+       f"{len(p_null)} null, want {len(published - want_ranked)}")
     ok("every profile carries the block", all(isinstance(v, dict) for v in by_slug.values()))
 
     for slug, want in (("stanford", (3, True)), ("virginia", (50, False)), ("penn-state", (39, True)),
@@ -597,7 +613,7 @@ def test_build(asset: dict, table: dict) -> None:
        by_slug["stanford"]["source"] == "Times Higher Education"
        and by_slug["stanford"]["sourceUrl"] == asset["sourceUrl"], str(by_slug["stanford"]))
 
-    # Losing the asset must not look like 222 unranked programs turning into 348.
+    # Losing the asset must not look like every published program turning unranked.
     tmp = tempfile.mkdtemp(prefix="the-rank-build-")
     try:
         reg = common.load_registry()
@@ -605,7 +621,7 @@ def test_build(asset: dict, table: dict) -> None:
             real = getattr(build, attr)
             setattr(build, attr, os.path.join(tmp, "gone.json"))
             try:
-                raises(f"a missing {name} raises rather than emitting 348 nulls",
+                raises(f"a missing {name} raises rather than emitting a null for every program",
                        FileNotFoundError, build.load_academic_ranks, reg)
             finally:
                 setattr(build, attr, real)
@@ -647,7 +663,7 @@ def _render_ranks(html: str) -> list[dict]:
     """Run the page's own rankHtml/rankTitle over the committed index.json, via node.
 
     Asserting on the source text alone would pass through a rendering bug, so the two arrow
-    functions are lifted verbatim out of index.html and executed against all 348 real rows.
+    functions are lifted verbatim out of index.html and executed against every real row.
     """
     start = html.index("const THE_RANK_SOURCE = ")
     end = html.index("  : THE_RANK_SOURCE;", start) + len("  : THE_RANK_SOURCE;")
@@ -686,17 +702,21 @@ def test_card() -> None:
     ok("the tooltip still explains N/A", "is not among the 171 it ranks" in html)
     ok("the FAQ no longer explains a tie marker", "marks a tie" not in html)
 
-    # Rendered output, not source text: run the page's own rankHtml/rankTitle over all 348 rows.
+    # Rendered output, not source text: run the page's own rankHtml/rankTitle over every published row.
     facts = _render_ranks(html)
-    ok("every program renders a fact", len(facts) == 348, str(len(facts)))
-    ok("no card fact carries the '=#' tie form across all 348",
+    published = {p["slug"] for p in build.published_programs(common.load_registry())}
+    want_ranked = set(json.load(open(ALIAS_PATH, encoding="utf-8"))["aliases"]) & published
+    ok("every published program renders a fact", {f["slug"] for f in facts} == published and len(facts) == len(published),
+       f"{len(facts)} facts, {len(published)} published")
+    ok("no card fact carries the '=#' tie form on any card",
        not [f for f in facts if "=#" in f["html"]],
        str([f["slug"] for f in facts if "=#" in f["html"]][:5]))
     hashed = [f for f in facts if re.fullmatch(r"#\d+", f["html"])]
     na = [f for f in facts if f["html"] == "N/A"]
-    ok("126 cards render '#' plus a number", len(hashed) == 126, str(len(hashed)))
-    ok("222 cards render N/A", len(na) == 222, str(len(na)))
-    ok("the three forms account for all 348", len(hashed) + len(na) == 348)
+    ok("exactly the aliased published programs render '#' plus a number",
+       bool(want_ranked) and {f["slug"] for f in hashed} == want_ranked, str(len(hashed)))
+    ok("exactly the rest render N/A", {f["slug"] for f in na} == published - want_ranked, str(len(na)))
+    ok("the two forms account for every card", len(hashed) + len(na) == len(facts))
     by_slug = {f["slug"]: f for f in facts}
     for slug, want in (("stanford", "#3"), ("penn-state", "#39"), ("rutgers", "#66")):
         f = by_slug[slug]

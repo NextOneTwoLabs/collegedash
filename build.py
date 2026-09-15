@@ -75,6 +75,74 @@ def _age_days(iso: str | None) -> float | None:
     return (dt.datetime.now(dt.timezone.utc) - t).total_seconds() / 86400
 
 
+# ---------- the published set ----------
+
+# pruning refuses to delete more than this share of the profiles on disk in one build, unless
+# COLLEGEDASH_PRUNE_MAX_SHARE says otherwise: a registry that loads short, or an onboardedDivisions
+# typo, looks exactly like hundreds of programs leaving at once, and those are live pages.
+PRUNE_MAX_SHARE = float(os.environ.get("COLLEGEDASH_PRUNE_MAX_SHARE", "0.10"))
+_PROFILE_FILE = re.compile(r"^([a-z0-9][a-z0-9-]*)\.json$")
+
+
+def published_programs(registry: dict) -> list[dict]:
+    """The programs the site publishes: onboarded entries of registry.programs whose division is in
+    registry.onboardedDivisions. heldPrograms are never here (issue #100). A registry without
+    onboardedDivisions predates that field and publishes every onboarded program."""
+    onboarded = registry.get("onboardedDivisions")
+    programs = list(common.iter_programs(registry))
+    if onboarded is None:
+        return programs
+    return [p for p in programs if p.get("division") in onboarded]
+
+
+def profile_slugs_on_disk(out_dir: str) -> set[str]:
+    """Slugs of the <slug>.json profiles in out_dir. index.json and anything not shaped like a slug
+    (temp files, stray names) are not profiles and are never touched."""
+    if not os.path.isdir(out_dir):
+        return set()
+    return {m.group(1) for f in os.listdir(out_dir) if (m := _PROFILE_FILE.match(f)) and f != "index.json"}
+
+
+def prune_profiles(published: set[str], out_dir: str, *, max_share: float | None = None) -> list[str]:
+    """Delete out_dir/<slug>.json for every slug outside `published`; return the slugs deleted.
+
+    Guards, each against a bug that would delete live pages rather than stale ones:
+      - an empty published set raises (a registry that failed to load is not "no programs");
+      - every published slug must already have its profile on disk, i.e. pruning runs after the
+        writes, so a crash half-way through a build cannot be followed by a prune;
+      - more than max_share of the profiles on disk raises and deletes nothing;
+      - a published slug is never deleted, checked again per file.
+    """
+    max_share = PRUNE_MAX_SHARE if max_share is None else max_share
+    if not published:
+        raise RuntimeError("prune: the published set is empty; refusing to delete any profile")
+    on_disk = profile_slugs_on_disk(out_dir)
+    unwritten = sorted(published - on_disk)
+    if unwritten:
+        raise RuntimeError(f"prune: {len(unwritten)} published programs have no profile on disk "
+                           f"({', '.join(unwritten[:5])}); pruning runs only after every profile is written")
+    stale = sorted(on_disk - published)
+    if stale and len(stale) > max_share * len(on_disk):
+        raise RuntimeError(f"prune: {len(stale)} of {len(on_disk)} profiles are outside the published set "
+                           f"(limit {max_share:.0%}); refusing to delete any. If this is a real membership change, "
+                           f"rebuild with COLLEGEDASH_PRUNE_MAX_SHARE set. First few: {', '.join(stale[:8])}")
+    for slug in stale:
+        if slug in published:  # unreachable by construction; kept because the cost of being wrong is a live page
+            raise RuntimeError(f"prune: refusing to delete published profile {slug}")
+        os.remove(os.path.join(out_dir, f"{slug}.json"))
+        common.log(f"build: pruned {slug}.json (not in the published set)")
+    return stale
+
+
+def check_no_stale_profiles(registry: dict) -> bool:
+    """Every profile on disk belongs to a published program (issue #110: a program that leaves the
+    published set must not stay reachable by URL)."""
+    stale = sorted(profile_slugs_on_disk(common.PROGRAMS_OUT_DIR) - {p["slug"] for p in published_programs(registry)})
+    for slug in stale:
+        print(f"STALE {slug}: public/data/programs/{slug}.json is not a published program")
+    return not stale
+
+
 # ---------- name matching ----------
 
 def _name_parts(name: str) -> tuple[str, str]:
@@ -729,7 +797,7 @@ def load_academic_ranks(registry: dict) -> dict[str, dict]:
     meta = {"year": asset.get("rankYear"), "label": asset.get("rankLabel"), "source": THE_SOURCE,
             "sourceUrl": asset.get("sourceUrl"), "asOf": asset.get("fetchedAt")}
     aliases, claimed, out = table["aliases"], {}, {}
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         slug = program["slug"]
         a = aliases.get(slug)
         if a is None:
@@ -931,7 +999,7 @@ def build(registry: dict) -> list[dict]:
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
@@ -946,6 +1014,7 @@ def build(registry: dict) -> list[dict]:
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
     common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
+    prune_profiles({r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
     camp_tally = camp_counts(all_camps)
@@ -968,7 +1037,7 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     except ImportError:
         jsonschema = None
         common.log("!! jsonschema not installed; skipping schema validation (pip install jsonschema)")
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json")
         p = common.read_json(path)
         if not p:
@@ -988,7 +1057,8 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     ranks_ok = check_academic_ranks(registry)
     seasons_ok = check_seasons(registry)
     camps_ok = check_camps_index(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok
+    stale_ok = check_no_stale_profiles(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok
 
 
 def check_camps_index(registry: dict) -> bool:
@@ -1084,7 +1154,7 @@ def check_camps_index(registry: dict) -> bool:
 
     expected: list[dict] = []
     item_fields: set = set()
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         slug = program.get("slug")
         p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
         camps = p.get("camps") if isinstance(p, dict) else None
@@ -1173,7 +1243,7 @@ def check_seasons(registry: dict) -> bool:
         print(f"SEASONS: cannot read the RPI tables to check against: {type(e).__name__}: {e}")
         return False
     ok, hist_claims, ncaa_claims = True, {}, {}
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         slug = program.get("slug")
         ids = program.get("ids") if isinstance(program.get("ids"), dict) else {}
         hist_name, ncaa_name = ids.get("rpiHistoryName"), ids.get("ncaaName")
@@ -1246,7 +1316,7 @@ def check_academic_ranks(registry: dict) -> bool:
         return False
     rows = {r["theSlug"]: r for r in asset["rows"] if r.get("theSlug")}
     ok, claims = True, {}
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         slug = program["slug"]
         p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
         ar = p.get("academicRank")
@@ -1280,7 +1350,7 @@ def check_academic_ranks(registry: dict) -> bool:
 def check_titles(registry: dict) -> bool:
     """Every NCAA title year must be claimed by exactly the champion in NCAA_D1_WOMENS_CHAMPIONS."""
     claimed: dict[int, list[str]] = {}
-    for program in common.iter_programs(registry):
+    for program in published_programs(registry):
         p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"))
         for y in ((p or {}).get("program") or {}).get("nationalTitles") or []:
             claimed.setdefault(y, []).append(program["slug"])

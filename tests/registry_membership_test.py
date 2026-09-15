@@ -18,7 +18,7 @@ Covers, in order:
               held only when reviewed, unresolved stays put, a new program only in an onboarded
               division, duplicate claims, the departure guard, hold evidence belongs to its program
   new entry   every field from a source or null: Wikipedia needs the state, TDS the conference,
-              a split-zone state gets no timezone, a slug collision takes the state suffix
+              the timezone comes from the coordinates, a slug collision takes the state suffix
   committed   public/data/registry.json: every pre-#100 slug survives with the same ids, the three
               programs #100 names are where the policy puts them, held programs are invisible to
               iter_programs, and the reviewed pins are the ids the registry carries
@@ -356,42 +356,92 @@ def test_new_entry() -> None:
     wiki = [{"institution": "Epsilon", "institutionArticle": "Epsilon_University", "city": "Pensacola", "state": "Florida",
              "nickname": "Argos", "athleticsArticle": "Epsilon_Argos"}]
     tds = {"epsilon": {"tdsSlug": "epsilon", "tdsClgId": 742, "tdsName": "Epsilon", "tdsConf": "asun"}}
-    looked = []
+    looked, asked = [], []
     entry, ev = rb.new_program_entry(row, bulk=BULK, wiki=wiki, tds=tds, taken={"alpha"},
-                                     article_lookup=lambda a: looked.append(a) or None)
+                                     article_lookup=lambda a: looked.append(a) or None,
+                                     timezone_lookup=lambda lat, lon: asked.append((lat, lon)) or "Zone/FromCoordinates")
     ok("Scorecard by domain gives unit id, city and coordinates", entry["ids"]["scorecardUnitId"] == 8
        and entry["location"]["city"] == "Pensacola" and entry["location"]["lat"] == 1.0, str(entry))
     ok("Wikipedia row with name and state gives short name and nickname", entry["shortName"] == "Epsilon" and entry["nickname"] == "Argos")
     ok("TDS with name and conference gives the team ids", (entry["ids"]["tdsSlug"], entry["ids"]["tdsClgId"]) == ("epsilon", 742))
     # fails if the athletics URL keeps a path (the Directory's /landing/index) or invents a scheme+www it did not give
     ok("the athletics base URL is the Directory host", entry["athletics"]["baseUrl"] == "https://www.goepsilon.com", entry["athletics"]["baseUrl"])
-    # fails if a split-zone state gets its majority zone (Pensacola is Central; the old default wrote Eastern)
-    ok("Florida gets no timezone", entry["location"]["timezone"] is None, str(entry["location"]["timezone"]))
-    ok("a single-zone state still gets one", rb.timezone_for("PA") == "America/New_York" and rb.timezone_for("CO") == "America/Denver")
+    # fails if the timezone comes from anywhere but the Scorecard coordinates (a state table, a default)
+    ok("the timezone is looked up from the Scorecard row's coordinates", asked == [(1.0, 2.0)]
+       and entry["location"]["timezone"] == "Zone/FromCoordinates", f"{asked} {entry['location']['timezone']}")
+    ok("the state table is gone", not hasattr(rb, "STATE_TZ") and not hasattr(rb, "timezone_for"))
     ok("colours, NCAA name and RPI-archive name are null, and reported", entry["colors"] is None and entry["ids"]["ncaaName"] is None
-       and entry["ids"]["rpiHistoryName"] is None and {"colors", "ids.ncaaName", "ids.rpiHistoryName", "location.timezone"} <= set(ev["null"]), str(ev))
+       and entry["ids"]["rpiHistoryName"] is None and {"colors", "ids.ncaaName", "ids.rpiHistoryName"} <= set(ev["null"]), str(ev))
     ok("not onboarded until its collectors run", entry["onboarded"] is False and entry["slug"] == "epsilon" and entry["division"] == "D1")
 
     wrong_state = [{**wiki[0], "state": "Texas"}]
-    entry, ev = rb.new_program_entry(row, bulk=BULK, wiki=wrong_state, tds={}, taken=set(), article_lookup=lambda a: "X")
+    entry, ev = rb.new_program_entry(row, bulk=BULK, wiki=wrong_state, tds={}, taken=set(), article_lookup=lambda a: "X",
+                                     timezone_lookup=lambda lat, lon: None)
     # fails if a same-named Wikipedia row in another state fills the fields
     ok("a Wikipedia name match in another state fills nothing", entry["shortName"] is None and entry["nickname"] is None
        and entry["ids"]["wikipedia"] is None and ev["wikipediaList"].startswith("name matches, state disagrees"), str(ev))
     entry, ev = rb.new_program_entry(row, bulk=BULK, wiki=wiki, tds={"epsilon": {**tds["epsilon"], "tdsConf": "big-sky"}},
-                                     taken=set(), article_lookup=lambda a: None)
+                                     taken=set(), article_lookup=lambda a: None, timezone_lookup=lambda lat, lon: None)
     # fails if a same-named TDS team in another conference is accepted (Trinity CT / Trinity DC)
     ok("a TDS name match in another conference fills nothing", entry["ids"]["tdsClgId"] is None and ev["tds"].startswith("name matches"), str(ev))
-    entry, ev = rb.new_program_entry({**row, "website": "delta.edu", "state": "NJ"}, bulk=BULK, wiki=[], tds={}, taken=set())
+    entry, ev = rb.new_program_entry({**row, "website": "delta.edu", "state": "NJ"}, bulk=BULK, wiki=[], tds={}, taken=set(),
+                                     timezone_lookup=lambda lat, lon: "Zone/Should/Not/Be/Asked")
     # fails if an ambiguous Scorecard domain is tie-broken
     ok("an ambiguous Scorecard domain leaves unit id and coordinates null", entry["ids"]["scorecardUnitId"] is None
        and entry["location"]["lat"] is None and ev["scorecard"].startswith("ambiguous"), str(ev))
-    entry, ev = rb.new_program_entry({**row, "athleticsUrl": None}, bulk=BULK, wiki=[], tds={}, taken=set())
+    # fails if a timezone is supplied for a program whose coordinates no source established
+    ok("and with no coordinates there is no timezone", entry["location"]["timezone"] is None
+       and "location.timezone" in ev["null"], str(entry["location"]))
+    entry, ev = rb.new_program_entry({**row, "athleticsUrl": None}, bulk=BULK, wiki=[], tds={}, taken=set(),
+                                     timezone_lookup=lambda lat, lon: None)
     # fails if a missing athletics URL is filled from anywhere but the Directory
     ok("no Directory athletics URL means baseUrl null", entry["athletics"]["baseUrl"] is None and "athletics.baseUrl" in ev["null"])
     ok("with no Wikipedia row the slug comes from the official name", entry["slug"] == "epsilon-university", entry["slug"])
     # fails if a new program can take a slug that is already published or held
     ok("a slug collision takes the state, then the orgId", rb.new_slug("Wheaton College", "MA", 9, {"wheaton-college"}) == "wheaton-college-ma"
        and rb.new_slug("Wheaton College", "MA", 9, {"wheaton-college", "wheaton-college-ma"}) == "wheaton-college-9")
+
+
+# ---------- time zones ----------
+
+def test_timezones() -> None:
+    print("timezones: boundaries, not states")
+    # Real lookups through timezonefinder. Each pair is two campuses in ONE state on different clocks,
+    # so any state-based rule gets at least one of them wrong. An ImportError here is a failure, not a
+    # skip: CI installs requirements.txt, and a missing library must not look like a null timezone.
+    try:
+        cases = (("Pensacola, FL (West Florida)", 30.549076, -87.218511, "America/Chicago"),
+                 ("Tallahassee, FL (Florida State)", 30.443147, -84.295064, "America/New_York"),
+                 ("Knoxville, TN (Tennessee)", 35.9544, -83.9295, "America/New_York"),
+                 ("Memphis, TN", 35.1187, -89.9375, "America/Chicago"),
+                 ("El Paso, TX (UTEP)", 31.7719, -106.5047, "America/Denver"),
+                 ("Moscow, ID (Idaho)", 46.7271, -117.0152, "America/Los_Angeles"),
+                 ("Boise, ID (Boise State)", 43.6027, -116.2014, "America/Boise"))
+        for label, lat, lon, want in cases:
+            got = rb.timezone_at(lat, lon)
+            ok(f"{label} is {want}", got == want, str(got))
+    except ImportError as e:
+        ok("timezonefinder is installed (requirements.txt)", False, str(e))
+    ok("no coordinates, no timezone", rb.timezone_at(None, -87.2) is None and rb.timezone_at(30.5, None) is None)
+
+    with with_pins():
+        registry, directory = world()
+        registry["programs"] = [prog("alpha", 1, "https://goalpha.com", "TX"), prog("ewu", 4, "https://goeags.com", "WA")]
+        registry["programs"][0]["location"]["timezone"] = None
+        rep = run(registry, directory, timezone_lookup=lambda lat, lon: "Zone/Looked/Up")
+        pub = {p["slug"]: p for p in registry["programs"]}
+        # fails if a null timezone is left null when the coordinates settle it
+        ok("a null timezone is filled from the coordinates", pub["alpha"]["location"]["timezone"] == "Zone/Looked/Up"
+           and rep["timezoneFilled"] == [{"slug": "alpha", "timezone": "Zone/Looked/Up"}], str(rep["timezoneFilled"]))
+        # fails if a stored timezone is silently overwritten (correcting existing values is a reviewed change)
+        ok("a stored timezone that disagrees is reported and kept", pub["ewu"]["location"]["timezone"] == "America/Chicago"
+           and rep["timezoneDisagreement"] == [{"slug": "ewu", "registry": "America/Chicago", "coordinates": "Zone/Looked/Up"}],
+           str(rep["timezoneDisagreement"]))
+        registry, directory = world()
+        registry["programs"] = [prog("alpha", 1, "https://goalpha.com", "TX")]
+        registry["programs"][0]["location"]["timezone"] = None
+        run(registry, directory)
+        ok("without a lookup nothing is filled", registry["programs"][0]["location"]["timezone"] is None)
 
 
 # ---------- the committed registry ----------
@@ -466,6 +516,7 @@ def main(argv=None) -> int:
     test_identity()
     test_policy()
     test_new_entry()
+    test_timezones()
     test_committed()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
     if FAILS:
