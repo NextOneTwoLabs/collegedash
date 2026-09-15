@@ -5,10 +5,11 @@
 
 Why this exists
 ---------------
-tests.yml named its Python suites: five steps, each spelling out one file. The Node step next to
-them had the same shape until it was changed to discover `tests/**/*.test.mjs`, for exactly the
-reason that applies here - a second Node suite would not have run and the workflow would have been
-green while skipping it.
+tests.yml named its Python suites: five steps, each spelling out one command - four of them a
+`tests/*_test.py` file, the fifth `tools/camps_check.py --fixtures`, which is still named on
+purpose and is discussed below. The Node step next to them had the same shape until it was changed
+to discover `tests/**/*.test.mjs`, for exactly the reason that applies here - a second Node suite
+would not have run and the workflow would have been green while skipping it.
 
 Naming left the same hole on the Python half, and it was not hypothetical: `main` carried four
 `tests/*_test.py` files and the workflow named four, so PR #96's `tests/sidearm_schedule_test.py`
