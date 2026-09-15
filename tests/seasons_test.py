@@ -17,7 +17,7 @@ actually being there -- hence the two guards these tests exist to hold down.
 
 Covers, in order:
   loader      load_rpi_finals: the last snapshot per weekly/<season>/ stands as that season's final
-              table, a season the Henderson archive also covers still resolves its snapshot,
+              table, a season the archive also covers still resolves its snapshot,
               current.json is read only for the season being played, a season after the archive
               with no table raises instead of publishing 350 blank seasons, and UNPLAYED_SEASONS is
               the way past that for a season nobody played
@@ -57,7 +57,7 @@ import build  # noqa: E402
 from collect import common  # noqa: E402
 
 # The season snapshot every finished-season assertion below is anchored to. 2025 is the last
-# completed season and the first one the Henderson archive does not cover, so it is exactly the
+# completed season and the first one the archive does not cover, so it is exactly the
 # season that only exists because of this change.
 FINISHED = 2025
 SNAPSHOT = os.path.join(common.RPI_OUT_DIR, "weekly", str(FINISHED), f"{FINISHED}-12-08.json")
@@ -106,7 +106,7 @@ def swapped(**dirs):
 def scratch_rpi(tmp: str, *, weekly: bool = True, cur_season: int | None = None,
                 archive_year: int | None = None) -> str:
     """A copy of public/data/rpi under tmp, optionally with weekly/ emptied, current.json
-    relabelled, or a synthesised Henderson sheet added for a season a snapshot also covers."""
+    relabelled, or a synthesised archive sheet added for a season a snapshot also covers."""
     dst = os.path.join(tmp, "rpi")
     shutil.copytree(common.RPI_OUT_DIR, dst)
     if not weekly:
@@ -198,12 +198,12 @@ def test_loader(registry: dict) -> None:
         ok("and the finished season still comes from its own snapshot",
            f[FINISHED]["throughGames"] == snap["throughGames"], str(f[FINISHED].get("throughGames")))
 
-        # A Henderson sheet takes the rank, but must not take the snapshot away: archive rows carry
+        # A archive sheet takes the rank, but must not take the snapshot away: archive rows carry
         # no record, and the snapshot is where the record for those seasons lives.
         with swapped(RPI_OUT_DIR=scratch_rpi(tmp + "/arch", cur_season=cur_season, archive_year=FINISHED)):
             f = build.load_rpi_finals(cur_season)
             hist = build.load_rpi_history()
-        ok("a season covered by both a Henderson sheet and a snapshot still resolves its snapshot",
+        ok("a season covered by both a archive sheet and a snapshot still resolves its snapshot",
            FINISHED in f and FINISHED in hist, str(sorted(f)))
         ok("and it is still the real snapshot, not the synthesised sheet",
            f[FINISHED]["teams"] == snap["teams"], str(len(f[FINISHED].get("teams") or [])))
@@ -241,7 +241,7 @@ def test_loader(registry: dict) -> None:
            build.UNPLAYED_SEASONS == set(), str(build.UNPLAYED_SEASONS))
         ok("a hole inside the archive needs no entry: only years above its last sheet are checked",
            2020 not in build.load_rpi_history() and build.load_rpi_finals(cur_season) is not None,
-           "2020 has no Henderson sheet, and today's build is clean")
+           "2020 has no archive sheet, and today's build is clean")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -265,8 +265,8 @@ def test_join(registry: dict) -> None:
     ok(f"vanderbilt {FINISHED} is #8 at 18-4-2 from the NCAA table",
        (s.get("rpiRank"), s.get("record")) == (8, "18-4-2"), str(s))
     ok("a finished season is not marked in progress", not s.get("inProgress"), str(s.get("inProgress")))
-    ok("its 2024 rank carries the Henderson provenance",
-       season_of(rows, 2024).get("rpi", {}).get("source") == "end-of-season (Henderson archive)",
+    ok("its 2024 rank carries the Chris Thomas provenance",
+       season_of(rows, 2024).get("rpi", {}).get("source") == "end-of-season (Chris Thomas archive)",
        str(season_of(rows, 2024).get("rpi", {}).get("source")))
 
     # No shortName fallback: an unknown id must lose the rank, never borrow another school's.
@@ -306,8 +306,8 @@ def test_join(registry: dict) -> None:
             rows2 = build.build_seasons(vandy, wiki, ath, build.load_rpi_history(),
                                         build.load_rpi_finals(registry["season"]["current"]), registry)
         s2 = season_of(rows2, FINISHED)
-        ok("where a Henderson sheet exists for a snapshotted season, the archive's rank is published",
-           s2.get("rpi", {}).get("source") == "end-of-season (Henderson archive)" and s2.get("rpiRank") != 8,
+        ok("where a archive sheet exists for a snapshotted season, the archive's rank is published",
+           s2.get("rpi", {}).get("source") == "end-of-season (Chris Thomas archive)" and s2.get("rpiRank") != 8,
            str({k: s2.get(k) for k in ("rpiRank", "rpi")}))
         ok("and the snapshot's record is still read, which archive rows do not carry",
            s2.get("record") == "18-4-2", str(s2.get("record")))
@@ -407,7 +407,7 @@ def test_flip(registry: dict) -> None:
 # ---------- the maintenance landmine ----------
 
 def test_archive_extended(registry: dict) -> None:
-    """Someone adds next year's Henderson sheet to registry.sources.rpiHistory.sheets - 17 curated
+    """Someone adds next year's archive sheet to registry.sources.rpiHistory.sheets - 17 curated
     entries, and extending them is the ordinary maintenance action - and the archive starts covering
     a season a weekly snapshot also covers.
 
@@ -417,7 +417,7 @@ def test_archive_extended(registry: dict) -> None:
     because the data got *better*, with no guard firing. The archive's rank still wins; the
     snapshot's record is still read.
     """
-    print("archive+snapshot: adding a Henderson sheet for a snapshotted season must not blank records")
+    print("archive+snapshot: adding a archive sheet for a snapshotted season must not blank records")
     cur_season = registry["season"]["current"]
     tmp = tempfile.mkdtemp(prefix="seasons-arch-")
     try:
@@ -441,7 +441,7 @@ def test_archive_extended(registry: dict) -> None:
         v = season_of(profile(built, "vanderbilt")["seasons"], FINISHED)
         ok(f"vanderbilt {FINISHED} publishes the archive's rank, not the snapshot's #8",
            v.get("rpiRank") not in (None, 8)
-           and v.get("rpi", {}).get("source") == "end-of-season (Henderson archive)", str(v))
+           and v.get("rpi", {}).get("source") == "end-of-season (Chris Thomas archive)", str(v))
         ok("while its record still comes from the snapshot", v.get("record") == "18-4-2", str(v.get("record")))
         ok("and the list row agrees with the profile",
            (rows["vanderbilt"]["lastSeason"]["rpiRank"], rows["vanderbilt"]["lastSeason"]["record"])
