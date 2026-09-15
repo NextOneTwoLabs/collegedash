@@ -48,9 +48,31 @@ LEGACY_DATE_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov
 LEGACY_ARIA_DATE_RE = re.compile(rf"\b({MONTH_NAMES})\s+(\d{{1,2}}),?\s+((?:19|20)\d\d)\b", re.I)
 LEGACY_RESULT_RE = re.compile(r"^([WLT]),?$")
 LEGACY_SCORE_RE = re.compile(r"\b(\d+)\s*-\s*(\d+)\b")
-LEGACY_EXHIBITION_RE = re.compile(r"\bexhibition\b|\bexh\.", re.I)
+# Exhibitions and scrimmages, marked however the site writes it (issues #122, #25). Measured over
+# the 24,740 games on the 1,220 cached Sidearm schedule pages: 'exhibition' 1,090 rows, '(Exh.)' 288,
+# '(Exhib.)/(Exhib)/(Exhi.)' 45, '(EX)/(Ex.)' 43, '(EXH)' 31, '(EXB)/(Exb.)' 8, an unparenthesised
+# 'EXH' ('South Florida - EXH', or alone in the location column) 11, 'scrimmage' 100. Before this,
+# the legacy branch matched 'exhibition' and 'exh.' and the current-theme branch only 'exhibition',
+# and 336 rows -- 87 of them with a result, so 61 published season records -- were counted as real
+# games.
+#
+# What is deliberately NOT a marker, both measured on the same corpus:
+#   * 'alumni', 381 rows. Every one is a venue or a promotion: Notre Dame's ground is Alumni Stadium
+#     (where NCAA rounds are played), and 'Alumni Day' / 'Alumni Game' are giveaways. None is an
+#     exhibition.
+#   * 'spring', 65 rows: the note 'Spring Schedule', and towns such as BOILING SPRINGS, NC.
+# 'ex' is only a marker inside parentheses, and every other token must be a whole word, so 'Exeter'
+# and 'Essex' are not markers either. tests/sidearm_schedule_test.py pins all of this.
+# 'Exhibitions' (plural) is what radford and missouri-state print in the card's own label, so the
+# plural is part of the word, not an afterthought: the pre-change current-theme branch matched it
+# only because its regex had no word boundary at all.
+EXHIBITION_RE = re.compile(r"\bexhibitions?\b|\bexh(?:i|ib)?\b\.?|\bexb\b\.?|\(ex\.?\)|\bscrimmages?\b", re.I)
+# The same markers where they decorate the opponent's name: '(Exh.)', '(Scrimmage)', 'Florida - EXH'.
+# A bare 'Scrimmage' is not stripped: it is part of names like 'Blue vs. Yellow Scrimmage'.
+OPPONENT_MARKER_RE = re.compile(r"\s*[-\u2013]\s*(?:exhibitions?|exh(?:i|ib)?|exb)\.?\s*$"
+                                r"|\((?:exhibitions?|exh(?:i|ib)?|exb|ex|scrimmages?)\.?\)", re.I)
 # Tokens that sit in the location column but are not a place.
-LEGACY_NON_PLACE_RE = re.compile(r"^(exhibition|exh\.?|tv|radio|live stats|watch|listen|tickets)\b[:.]?$", re.I)
+LEGACY_NON_PLACE_RE = re.compile(r"^(exhibitions?|exh(?:i|ib)?\.?|exb\.?|scrimmages?|tv|radio|live stats|watch|listen|tickets)\b[:.]?$", re.I)
 GAME_LINK_LABELS = ("box score", "recap", "live stats", "history", "watch", "listen", "tickets")
 
 
@@ -370,7 +392,31 @@ def parse_schedule(html: str, base_url: str) -> dict:
     if not games:
         # the legacy branch can recover a season the <title> did not state, so it reports one back
         season, games = _parse_legacy_games(soup, base_url, season)
-    return {"season": season, "games": games}
+    return {"season": season, "games": _spring_after_fall(games)}
+
+
+def _spring_after_fall(games: list[dict]) -> list[dict]:
+    """A January-July game listed after an August-December one is in the NEXT calendar year, and
+    both branches date a game by the page's season (the rows give month and day only). The
+    '2025-26' page ends with spring 2026 (issues #122, #97).
+
+    Measured over the cached pages: 173 games fall in January-July and 169 of them are listed after
+    the fall block. The current theme embeds every game in the page's Nuxt payload with a full ISO
+    datetime, and for all 74 current-theme games this moves, the payload holds the moved date and
+    never the stored one. Two legacy rows (portland 2025) say the same in their own aria-labels. The
+    four that come BEFORE the fall block (gonzaga 2024) are a spring block printed first and are
+    already right, which is why the rule is "after a fall game" and not "any spring date".
+    """
+    seen_fall = False
+    for g in games:
+        d = g.get("date")
+        if not d:
+            continue
+        if int(d[5:7]) >= 8:
+            seen_fall = True
+        elif seen_fall:
+            g["date"] = f"{int(d[:4]) + 1}{d[4:]}"
+    return games
 
 
 def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
@@ -388,8 +434,8 @@ def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) ->
         m = re.match(r"#\s*(\d+)\s+(.*)", opp_raw)
         if m:
             rank, opp_raw = int(m.group(1)), m.group(2)
-        exhibition = bool(re.search(r"exhibition", text, re.I))
-        opponent = common.clean(re.sub(r"\((?:exhibition|exh\.?)\)", "", opp_raw, flags=re.I))
+        exhibition = bool(EXHIBITION_RE.search(text))
+        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw))
         loc_toks = [t for t in toks[1:] if not t.lower().startswith("tv:") and not t.lower().startswith("radio")]
         location = ", ".join(loc_toks[:2]) if loc_toks else None
         sc = c.select_one(".s-game-card__header__game-score-time")
@@ -534,13 +580,13 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
         m = re.match(r"#\s*(\d+)\s+(.*)", opp_raw)
         if m:
             rank, opp_raw = int(m.group(1)), m.group(2)
-        opponent = common.clean(re.sub(r"\((?:exhibition|exh\.?)\)", "", opp_raw, flags=re.I))
+        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw))
         if not opponent:
             continue
 
         # "Exhibition" is as likely to sit in the location column as in the opponent's name, so
         # the whole row is searched - and then the word is kept out of `location`.
-        exhibition = bool(LEGACY_EXHIBITION_RE.search(li.get_text(" ", strip=True)))
+        exhibition = bool(EXHIBITION_RE.search(li.get_text(" ", strip=True)))
 
         # One of these three classes is on every one of the 3,226 legacy rows in the corpus. The
         # row also says 'at' or 'vs' in .sidearm-schedule-game-conference-vs, and an earlier draft
