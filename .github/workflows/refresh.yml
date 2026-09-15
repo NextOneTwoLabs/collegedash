@@ -266,8 +266,54 @@ jobs:
             echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json, with everything build() writes (public/data/programs, commitments/index.json, camps/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
             return 0
           }
+          # Issue #117: -X theirs settles content conflicts but not modify/delete. Every rebuild rewrites
+          # every profile (_build.builtAt changes), so a PR merged mid-run that deletes a profile - which
+          # every membership change now does - stops the rebase with "CONFLICT (modify/delete)". Before
+          # this, all three attempts then failed the same way and the run ended with its collection only
+          # on the runner.
+          #
+          # A conflict confined to profiles is resolved in favour of the deletion. That is safe because
+          # profiles are build() output and nothing more: the rebuild that follows every rebase writes a
+          # profile for every published program and prunes the rest (issue 110), so whatever this
+          # resolution leaves is overwritten by the output of main's own code and registry, and the gates
+          # below still decide whether it is published. Any other conflict - a collected source,
+          # registry.json, code - is not this step's to settle.
+          rebase_stopped() {
+            [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]
+          }
+          # Returns 0 once the rebase has completed. Returns non-zero, leaving the rebase stopped, when
+          # there is no stopped rebase, when any conflict is outside public/data/programs/<slug>.json, or
+          # when resolving fails. Called only as a condition, so errexit is off in here and each step is checked.
+          resolve_profile_conflicts() {
+            rebase_stopped || return 1
+            conflicted=$(git diff --name-only --diff-filter=U)
+            [ -n "$conflicted" ] || return 1
+            if printf '%s\n' "$conflicted" | grep -qvE '^public/data/programs/[a-z0-9][a-z0-9-]*\.json$'; then
+              return 1
+            fi
+            for f in $conflicted; do
+              git rm -q -- "$f" || return 1
+            done
+            echo "::notice title=refresh::main changed or deleted program profiles this run had rewritten; keeping the deletion and rebuilding onto main: $(echo $conflicted)"
+            GIT_EDITOR=true git rebase --continue || return 1
+          }
+          # Never drop a collection (issue 117). When the step cannot publish and has no gate path for the
+          # reason, push the run's commit as it stands to a per-run branch and fail the run. Unlike
+          # publish_sources_only above, this commit was not rebased onto main and not rebuilt or gated, so
+          # the annotation says so: the branch is a place the collection is safe, not something to merge.
+          save_collection() {
+            git rebase --abort 2>/dev/null || true
+            branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-unpublished"
+            base=$(git rev-parse --short HEAD~1 2>/dev/null || echo "an unknown commit")
+            if git push origin "HEAD:refs/heads/$branch"; then
+              echo "::error title=refresh::$1. NOTHING WAS PUBLISHED: this run did not update main. Its collection is safe on branch $branch, as one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand, run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
+            else
+              echo "::error title=refresh::$1, and pushing the collection to $branch was rejected too. NOTHING WAS PUBLISHED and this run's collection was NOT saved: it exists only on this runner. Re-dispatch this workflow to collect again."
+            fi
+            exit 1
+          }
           for attempt in 1 2 3; do
-            if git pull --rebase -X theirs origin main; then
+            if git pull --rebase -X theirs origin main || resolve_profile_conflicts; then
               # A rebase drops a commit that came out empty, leaving HEAD at upstream's tip - and the
               # amend below would then be amending someone else's commit. This is reachable, in two
               # ways: the collector pass can crash before its own build, so public/data is untouched
@@ -312,13 +358,14 @@ jobs:
                   exit 0
                 fi
               fi
+            elif rebase_stopped; then
+              save_collection "The rebase onto main stopped on a conflict this step does not resolve: $(git diff --name-only --diff-filter=U | tr '\n' ' ')"
             fi
             echo "attempt $attempt did not publish; retrying in 15s"
             git rebase --abort 2>/dev/null || true
             sleep 15
           done
-          echo "could not push after 3 attempts"
-          exit 1
+          save_collection "Could not publish after 3 attempts (see the attempts above for why)"
 
       - name: Fail if too many collectors failed
         if: steps.refresh.outputs.code != '' && steps.refresh.outputs.code != '0'
