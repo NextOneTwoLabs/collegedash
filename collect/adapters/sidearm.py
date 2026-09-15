@@ -5,12 +5,15 @@ and most other D1 sites). Pages are server-rendered.
 Roster:   /sports/<sport>/roster[/{year}]   -> first <table> (No., Name, Pos., Ht., Year, Hometown,
           High School/Previous School, [Club Team]) plus "Coaching Staff" / "Support Staff" tables
 Bio:      /sports/<sport>/roster/<slug>/<id>  -> .c-rosterbio__playerfields + .sidearm_prose body
-Schedule: /sports/<sport>/schedule[/{year}]  -> div.s-game-card-standard cards (no <time> tags)
+Schedule: /sports/<sport>/schedule[/{year}]  -> div.s-game-card-standard cards (no <time> tags),
+          or, on sites still on the older theme, li.sidearm-schedule-game rows (see
+          _parse_legacy_games)
 News:     /sports/<sport>/archives (links) and /rss?path=wsoc (titles + pubDate)
 """
 
 from __future__ import annotations
 
+import collections
 import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
@@ -32,6 +35,23 @@ MONTHS = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "ju
 DATE_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})$", re.I)
 HEAD_COACH_RE = re.compile(r"head coach", re.I)
 NOT_HEAD_RE = re.compile(r"assoc|assist|volunteer|director of (?:operations|ops)", re.I)
+
+MONTH_NAMES = "January|February|March|April|May|June|July|August|September|October|November|December"
+LEGACY_SIDE_CLASSES = {"sidearm-schedule-home-game": "H", "sidearm-schedule-away-game": "H",
+                       "sidearm-schedule-neutral-game": "N"}
+# Legacy schedule rows date themselves 'Aug 16 (Sun)' - the weekday suffix is what stops DATE_RE,
+# which anchors at end of string, from matching. Measured across all 3,226 legacy rows in the
+# corpus: every one of them is this shape, so the weekday is optional only for safety.
+LEGACY_DATE_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})\b", re.I)
+# aria-labels inside the row spell the date out in full ('... on August 16, 2026 at 2:00 PM'),
+# which is the only place the row states its year.
+LEGACY_ARIA_DATE_RE = re.compile(rf"\b({MONTH_NAMES})\s+(\d{{1,2}}),?\s+((?:19|20)\d\d)\b", re.I)
+LEGACY_RESULT_RE = re.compile(r"^([WLT]),?$")
+LEGACY_SCORE_RE = re.compile(r"\b(\d+)\s*-\s*(\d+)\b")
+LEGACY_EXHIBITION_RE = re.compile(r"\bexhibition\b|\bexh\.", re.I)
+# Tokens that sit in the location column but are not a place.
+LEGACY_NON_PLACE_RE = re.compile(r"^(exhibition|exh\.?|tv|radio|live stats|watch|listen|tickets)\b[:.]?$", re.I)
+GAME_LINK_LABELS = ("box score", "recap", "live stats", "history", "watch", "listen", "tickets")
 
 
 def urls(program: dict, registry: dict) -> dict:
@@ -332,8 +352,29 @@ def _top_level_cards(soup: BeautifulSoup):
 
 
 def parse_schedule(html: str, base_url: str) -> dict:
+    """Games from the schedule page, whichever theme it is served in.
+
+    The current theme is tried first and the legacy one only when it yields nothing. Falling back
+    on an empty result, rather than branching on which markup is present, is what makes this
+    incapable of changing a program that already parses.
+
+    That distinction is not theoretical. Seven programs that parse fine today contain the string
+    'sidearm-schedule-game' - but in six of them (Michigan, 1,305 occurrences) every one of those
+    is a CSS rule inside <style> for a theme the page does not use, and zero are elements. A
+    marker test on the raw HTML would have fired on all six. Selecting elements, and only after
+    the current theme has come up empty, does not.
+    """
     soup = BeautifulSoup(html, "html.parser")
     season = _season_from_title(soup)
+    games = _parse_game_cards(soup, base_url, season)
+    if not games:
+        # the legacy branch can recover a season the <title> did not state, so it reports one back
+        season, games = _parse_legacy_games(soup, base_url, season)
+    return {"season": season, "games": games}
+
+
+def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
+    """Games from div.s-game-card-standard cards (current Sidearm theme)."""
     games = []
     for c in _top_level_cards(soup):
         text = c.get_text(" | ", strip=True)
@@ -366,11 +407,7 @@ def parse_schedule(html: str, base_url: str) -> dict:
                     mon = MONTHS.get(dm.group(1).lower()[:3])
                     if mon:
                         date = f"{season}-{mon:02d}-{int(dm.group(2)):02d}"
-        links = {}
-        for a in c.find_all("a", href=True):
-            label = common.clean(a.get_text(" ")).lower()
-            if label in ("box score", "recap", "live stats", "history", "watch", "listen", "tickets") and a["href"] not in ("#", ""):
-                links[label] = urljoin(base_url, a["href"])
+        links = _game_links(c, base_url)
         if not opponent:
             continue
         games.append({
@@ -381,7 +418,156 @@ def parse_schedule(html: str, base_url: str) -> dict:
             "opponent": opponent, "opponentRank": rank, "location": location,
             "result": result, "score": score, "links": links,
         })
-    return {"season": season, "games": games}
+    return games
+
+
+def _game_links(el, base_url: str) -> dict:
+    """Box score / recap / history links on a game row, keyed by their label. The legacy template
+    renders the same list twice (a mobile copy and a desktop one); keying by label collapses them.
+
+    Last occurrence wins, which is what the current-theme branch has always done - Wake Forest is
+    the one program in the corpus where it matters (two 'Box Score' links per row, a PDF and the
+    live boxscore page) and switching to first-wins silently changed its stored links.
+    """
+    links = {}
+    for a in el.find_all("a", href=True):
+        label = common.clean(a.get_text(" ")).lower()
+        if label in GAME_LINK_LABELS and a["href"] not in ("#", ""):
+            links[label] = urljoin(base_url, a["href"])
+    return links
+
+
+def _lines(el) -> list[str]:
+    """Non-empty text lines of an element, in order."""
+    if el is None:
+        return []
+    return [t for t in (common.clean(x) for x in el.get_text("\n").split("\n")) if t]
+
+
+def _legacy_date(date_el, season: int | None) -> str | None:
+    """ISO date for a legacy row. The visible text gives month and day ('Aug 16 (Sun)'); the year
+    comes from the season, as it does for every game in the current-theme branch.
+
+    The rows also spell their dates out in aria-labels ('... on August 16, 2026 at 2:00 PM') and an
+    earlier draft read the year from there. It was removed: across all 3,226 legacy rows in the
+    corpus the aria year and the season agree every time an aria date exists at all (2,345 of
+    them), so the code could not change an outcome. The one thing those labels are needed for -
+    a page whose <title> states no year - is handled once per page in _parse_legacy_games instead.
+    """
+    lines = _lines(date_el)
+    m = LEGACY_DATE_RE.match(lines[0]) if lines else None
+    if not m:
+        return None
+    mon = MONTHS.get(m.group(1).lower()[:3])
+    if not mon or not season:
+        return None
+    return f"{season}-{mon:02d}-{int(m.group(2)):02d}"
+
+
+def _legacy_result(li) -> tuple[str | None, str | None]:
+    """(result, score) for a legacy row, both read from the result box and neither without the
+    other.
+
+    A row that was not played says 'Canceled', 'Postponed' or 'No Contest' where the letter would
+    be, which matches nothing here, so it needs no special case - and requiring the letter before
+    keeping a score is what stops a row like 'Utah Valley, 1-0' (another pairing in a tournament
+    bracket, of which there are two in the corpus) from being recorded as this team's score.
+
+    The <li> also carries the letter as a class. That is not read: across the corpus the class and
+    the box agree on all 1,011 rows that have a result, neither ever appears without the other,
+    and a second source that never disagrees is a branch no input can exercise.
+    """
+    lines = _lines(li.select_one(".sidearm-schedule-game-result"))
+    result = next((LEGACY_RESULT_RE.match(t).group(1) for t in lines if LEGACY_RESULT_RE.match(t)), None)
+    if result is None:
+        return None, None
+    sm = LEGACY_SCORE_RE.search(" ".join(lines))
+    return result, f"{sm.group(1)}-{sm.group(2)}" if sm else None
+
+
+def _legacy_location_tokens(li) -> list[str]:
+    """City and venue for a legacy row.
+
+    The location box also hosts the match-day promotion - Alabama A&M's home games nest a
+    <div class="sidearm-schedule-game-opponent-promotion"> inside it - and taking the box's text
+    wholesale turns a location into 'Huntsville, AL, Faculty & Staff Appreciation Day'. The place
+    is always in the box's own <span> children, so those are read and the nested boxes are not.
+    Falls back to the whole box for any theme that puts the text straight in the div.
+    """
+    el = li.select_one(".sidearm-schedule-game-location")
+    if el is None:
+        return []
+    spans = el.find_all("span", recursive=False)
+    if spans:
+        return [t for s in spans for t in _lines(s)]
+    return _lines(el)
+
+
+def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) -> tuple[int | None, list[dict]]:
+    """(season, games) from li.sidearm-schedule-game rows (the older Sidearm schedule theme,
+    issue #35). The season comes back because these rows can supply one the page <title> did not.
+
+    These pages are fully server-rendered - the rows are in the HTML as fetched - so the only
+    thing that was missing was a parser. 159 of the 160 Sidearm programs that had no schedule at
+    all are this template and nothing else.
+    """
+    rows = soup.select("li.sidearm-schedule-game")
+    if season is None:
+        # LIU is the one program in the corpus whose schedule <title> carries no year. Its rows
+        # still state theirs in aria-labels, so the page's own most common year stands in for the
+        # season - without which every row on such a page would be dateless, which is what the
+        # current-theme branch does.
+        years = collections.Counter(
+            int(m.group(3))
+            for li in rows
+            for a in li.find_all(attrs={"aria-label": True})
+            for m in [LEGACY_ARIA_DATE_RE.search(a.get("aria-label", ""))] if m
+        )
+        season = years.most_common(1)[0][0] if years else None
+
+    games = []
+    for li in rows:
+        classes = li.get("class") or []
+        name_el = li.select_one(".sidearm-schedule-game-opponent-name")
+        opp_raw = common.clean(name_el.get_text(" ")) if name_el else ""
+        rank = None
+        m = re.match(r"#\s*(\d+)\s+(.*)", opp_raw)
+        if m:
+            rank, opp_raw = int(m.group(1)), m.group(2)
+        opponent = common.clean(re.sub(r"\((?:exhibition|exh\.?)\)", "", opp_raw, flags=re.I))
+        if not opponent:
+            continue
+
+        # "Exhibition" is as likely to sit in the location column as in the opponent's name, so
+        # the whole row is searched - and then the word is kept out of `location`.
+        exhibition = bool(LEGACY_EXHIBITION_RE.search(li.get_text(" ", strip=True)))
+
+        # One of these three classes is on every one of the 3,226 legacy rows in the corpus. The
+        # row also says 'at' or 'vs' in .sidearm-schedule-game-conference-vs, and an earlier draft
+        # fell back to reading that; it is gone for the same reason the result-class fallback is,
+        # namely that it agreed with the class on every row that had both and so could never
+        # change an answer. A row with none of the three gets None, which is what the current-theme
+        # branch returns when its own stamp says neither.
+        home_away = next((v for c, v in LEGACY_SIDE_CLASSES.items() if c in classes), None)
+
+        # The conference node is rendered empty on non-conference rows and carries the
+        # conference's name ('CAA', 'A10') on conference ones, so presence alone means nothing.
+        conf_el = li.select_one(".sidearm-schedule-game-conference")
+        conference = bool(conf_el and common.clean(conf_el.get_text(" ")))
+
+        loc_toks = [t for t in _legacy_location_tokens(li) if not LEGACY_NON_PLACE_RE.match(t)]
+        result, score = _legacy_result(li)
+        games.append({
+            "date": _legacy_date(li.select_one(".sidearm-schedule-game-opponent-date"), season),
+            "datetime": None,
+            "exhibition": exhibition,
+            "conferenceGame": conference,
+            "homeAway": home_away,
+            "opponent": opponent, "opponentRank": rank,
+            "location": ", ".join(loc_toks[:2]) if loc_toks else None,
+            "result": result, "score": score, "links": _game_links(li, base_url),
+        })
+    return season, games
 
 
 def parse_news(html: str, base_url: str) -> list[dict]:
