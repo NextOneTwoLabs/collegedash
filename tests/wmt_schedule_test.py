@@ -28,14 +28,15 @@ trap, noted in the fixture's own header comment:
   redesign-grid-date        'Aug 23 (Sun)' dates, a venue link, a tournament card with no result
   redesign-own-rank-first   '#24 at South Carolina': the #24 is Clemson's
   redesign-item-block       .schedule-item-block with 'vs. #21/20 Memphis' in __heading
+  redesign-spring-after-fall  a '2025-26' page whose spring game, listed after the fall, is in 2026
   wordpress-table-row       gamecocksonline.com rows
   wordpress-item            ukathletics.com items
   bordeaux                  arkansasrazorbacks.com: season only in the <h1>, winner-first scores
   original-time-datetime    CONTROL, gostanford.com: must still go down the original branch
 
 `test_origin_finds_nothing` is the swap-back proof kept in the suite: `_parse_schedule_original` is
-origin/main's parse_schedule body, unmodified, and it must find zero games on every new fixture. The
-file was also run against origin/main's collect/adapters/wmt.py itself; the PR records that result.
+origin/main's parse_schedule body, unmodified, and it must find zero games on every new fixture.
+The PR's before-and-after run loaded origin/main's wmt.py itself over every cached page.
 """
 
 from __future__ import annotations
@@ -134,7 +135,12 @@ EXPECTED = {
         ("2026-08-12", "H", "Baylor", None, "L", "1-4"),
         ("2026-08-08", "A", "Memphis", None, "L", "0-2"),
     ],
+    "redesign-spring-after-fall": [
+        ("2025-11-21", "A", "Vanderbilt", None, "L", "2-3"),
+        ("2026-03-07", "A", "Georgia Southern", None, None, None),
+    ],
 }
+SEASON = {name: 2026 for name in EXPECTED} | {"redesign-spring-after-fall": 2025}
 NEW_FIXTURES = list(EXPECTED)
 
 
@@ -145,7 +151,7 @@ def test_games() -> None:
         got = [row(g) for g in out["games"]]
         ok(f"{name}: {len(want)} games with date, home/away, opponent, rank, result and score", got == want,
            f"got {got}")
-        ok(f"{name}: season 2026", out["season"] == 2026, f"got {out['season']}")
+        ok(f"{name}: season {SEASON[name]}", out["season"] == SEASON[name], f"got {out['season']}")
 
 
 def test_origin_finds_nothing() -> None:
@@ -180,8 +186,17 @@ def test_details() -> None:
     virginia = parse("redesign-default-event")["games"]
     ok("default-event: an image-only link with only screen-reader text gets no key",
        virginia and "opens in a new window" not in virginia[0]["links"], f"links {list(virginia[0]['links']) if virginia else None}")
-    ok("default-event: '(EXH)' alone does not set exhibition, as in the Sidearm branches (the word 'exhibition' does)",
-       len(virginia) > 1 and virginia[1]["exhibition"] is False)
+    ok("default-event: 'Maryland (EXH)' is an exhibition; 'Liberty' and 'College Cup' are not",
+       [g["exhibition"] for g in virginia] == [True if "(EXH)" in g["opponent"] else False for g in virginia] == [False, True, False],
+       f"got {[g['exhibition'] for g in virginia]}")
+    ky = parse("wordpress-item")["games"]
+    ok("wordpress-item: 'Lexington SC (EXH)' is an exhibition", len(ky) > 1 and ky[1]["exhibition"] is True)
+    for label, want in (("Kansas State (Exh.)", True), ("Omaha (exhib.)", True), ("Auburn (Exhi.)", True),
+                        ("British Columbia (EXHIBITION)", True), ("Exeter", False), ("Texas Tech", False)):
+        ok(f"exhibition label {label!r} -> {want}", bool(wmt.EXHIBITION_RE.search(label)) is want)
+    spring = parse("redesign-spring-after-fall")["games"]
+    ok("spring-after-fall: the March game after the November one is dated the next calendar year",
+       [g["date"] for g in spring] == ["2025-11-21", "2026-03-07"], f"got {[g['date'] for g in spring]}")
     utsa = parse("redesign-teams-name")["games"]
     ok("teams-name: a card whose promo says 'Exhibition' is flagged", len(utsa) > 1 and utsa[1]["exhibition"] is True)
     ark = parse("bordeaux")
@@ -211,7 +226,7 @@ def test_no_contact_details() -> None:
     cc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cc)
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
-    ok("fixtures present (12 new + 1 control)", len(names) == 13, f"{len(names)}")
+    ok("fixtures present (13 new + 1 control)", len(names) == 14, f"{len(names)}")
     for f in names:
         with open(os.path.join(FIXTURES, f), encoding="utf-8") as h:
             emails, phones = cc.contact_hits(h.read())

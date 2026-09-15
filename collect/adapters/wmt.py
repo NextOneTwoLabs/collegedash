@@ -397,8 +397,25 @@ def parse_schedule(html: str, base_url: str) -> dict:
     for parse in (_parse_redesign_cards, _parse_wordpress_rows, _parse_bordeaux):
         games = parse(soup, base_url, season)
         if games:
-            return {"season": season, "games": games}
+            return {"season": season, "games": _spring_after_fall(games)}
     return out
+
+
+def _spring_after_fall(games: list[dict]) -> list[dict]:
+    """These pages give month and day only, and list a season's spring games (March-April) after its
+    fall games: the '2025-26' page ends with spring 2026. A January-July date that comes after an
+    August-December one on the page is therefore in the next calendar year. Measured: 17 such games
+    on 4 cached pages, every one listed after the fall; none before."""
+    seen_fall = False
+    for g in games:
+        d = g.get("date")
+        if not d:
+            continue
+        if int(d[5:7]) >= 8:
+            seen_fall = True
+        elif seen_fall:
+            g["date"] = f"{int(d[:4]) + 1}{d[4:]}"
+    return games
 
 
 def _parse_schedule_original(html: str, base_url: str) -> dict:
@@ -460,6 +477,10 @@ def _parse_schedule_original(html: str, base_url: str) -> dict:
 MONTH_DAY_RE = re.compile(r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?,?\s+(\d{1,2})\b", re.I)
 # a whole word: "at" must not eat the start of "Atlantic 10 Championship"
 DIVIDER_RE = re.compile(r"^(vs\b\.?|at\b|@)\s*", re.I)
+# 'exhibition', and the abbreviations these sites put after a name: '(EXH)', '(Exh.)', '(exhib.)'.
+# The Sidearm branches and the original WMT branch match the full word only; on these pages ten past
+# exhibitions with results are labelled only '(EXH)' or '(Exh.)', and build.py would count them.
+EXHIBITION_RE = re.compile(r"exhibition|\(exh[a-z]*\.?\)", re.I)
 RANK_PREFIX_RE = re.compile(r"^#\s*(\d{1,2})(?:/\d{1,2})?\s+")
 CARD_SELECTORS = (".schedule-event-item", ".schedule-event", ".schedule-event-block", ".schedule-item-block")
 OPPONENT_ROLES = ("opponent-name", "opponent-heading", "name", "heading", "title")
@@ -612,7 +633,7 @@ def _parse_redesign_cards(soup: BeautifulSoup, base_url: str, season: int | None
         loc_el = card.select_one(".schedule-event-location")
         games.append({
             "date": _date_from_text(date_el.get_text(" ") if date_el else "", season), "datetime": None,
-            "exhibition": bool(re.search(r"exhibition", card.get_text(" "), re.I)),
+            "exhibition": bool(EXHIBITION_RE.search(card.get_text(" "))),
             "conferenceGame": bool(card.select_one("[class*='conference-image']")
                                    or any(e.find("img") for e in card.select("[class*='conference']"))),
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
@@ -645,7 +666,7 @@ def _parse_wordpress_rows(soup: BeautifulSoup, base_url: str, season: int | None
         t = row.select_one("time")
         games.append({
             "date": _date_from_text(t.get_text(" ") if t else "", season), "datetime": None,
-            "exhibition": bool(re.search(r"exhibition", row.get_text(" "), re.I)), "conferenceGame": False,
+            "exhibition": bool(EXHIBITION_RE.search(row.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": common.clean(opp.get_text(" ")),
             "opponentRank": int(rank_el.get_text().strip("# ").split("/")[0]) if rank_el and rank_el.get_text().strip("# ").split("/")[0].isdigit() else None,
             "location": common.clean(loc_name.get_text(" ")) if loc_name else None,
@@ -672,7 +693,7 @@ def _parse_wordpress_rows(soup: BeautifulSoup, base_url: str, season: int | None
         d = row.select_one(".schedule-item__date")
         games.append({
             "date": _date_from_text(d.get_text(" ") if d else "", season), "datetime": None,
-            "exhibition": bool(re.search(r"exhibition", row.get_text(" "), re.I)), "conferenceGame": False,
+            "exhibition": bool(EXHIBITION_RE.search(row.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
             "location": common.clean(loc.get_text(" ")) if loc else None,
             "result": result, "score": score, "links": _links(row, base_url),
@@ -709,7 +730,7 @@ def _parse_bordeaux(soup: BeautifulSoup, base_url: str, season: int | None) -> l
             links["results"] = urljoin(base_url, a["href"])
         games.append({
             "date": _date_from_text(date.get_text(" ") if date else "", season), "datetime": None,
-            "exhibition": bool(re.search(r"exhibition", block.get_text(" "), re.I)), "conferenceGame": False,
+            "exhibition": bool(EXHIBITION_RE.search(block.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
             "location": common.clean(place.get_text(" ")) if place else None,
             "result": result, "score": score, "links": links,
