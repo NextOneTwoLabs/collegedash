@@ -385,6 +385,23 @@ def _parse_block_layout(soup: BeautifulSoup, base_url: str, season: int | None) 
 
 
 def parse_schedule(html: str, base_url: str) -> dict:
+    """The two original branches run first and unchanged (gostanford.com's <time datetime> cards,
+    uclabruins.com's block layout). Only a page on which they find no game at all falls through to
+    the later WMT themes (issue #97): the 2025 redesign cards, the older WordPress themes and the
+    Bordeaux template."""
+    out = _parse_schedule_original(html, base_url)
+    if out["games"]:
+        return out
+    soup = BeautifulSoup(html, "html.parser")
+    season = out["season"] or _season_from_heading(soup)
+    for parse in (_parse_redesign_cards, _parse_wordpress_rows, _parse_bordeaux):
+        games = parse(soup, base_url, season)
+        if games:
+            return {"season": season, "games": games}
+    return out
+
+
+def _parse_schedule_original(html: str, base_url: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     games = []
     if not soup.select(".schedule-event-item") and soup.select(".schedule-item-block"):
@@ -428,6 +445,276 @@ def parse_schedule(html: str, base_url: str) -> dict:
         })
     games = [g for g in games if g["opponent"]]
     return {"season": _season_from_title(soup), "games": games}
+
+
+# ---------- later WMT schedule themes (issue #97) ----------
+# Measured on the 29 cached schedule pages that returned no games (all HTTP 200, rosters parsed
+# fine): 22 use redesign event cards, 4 redesign item blocks, 2 the older WordPress theme and 1 the
+# Bordeaux template. The redesign is one theme family, but each site ships its own BEM names
+# (schedule-default-event__name, schedule-event-item__opponent-name, schedule-event-teams__name,
+# schedule-default-team__opponent-name, schedule-item-team__heading, ...), so the card parser finds
+# fields by role -- the part of the class name after "__" -- rather than by one site's names.
+# fightingirish.com (Notre Dame) renders the schedule in the browser and ships only
+# skeleton placeholders; nothing here can parse it.
+
+MONTH_DAY_RE = re.compile(r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?,?\s+(\d{1,2})\b", re.I)
+# a whole word: "at" must not eat the start of "Atlantic 10 Championship"
+DIVIDER_RE = re.compile(r"^(vs\b\.?|at\b|@)\s*", re.I)
+RANK_PREFIX_RE = re.compile(r"^#\s*(\d{1,2})(?:/\d{1,2})?\s+")
+CARD_SELECTORS = (".schedule-event-item", ".schedule-event", ".schedule-event-block", ".schedule-item-block")
+OPPONENT_ROLES = ("opponent-name", "opponent-heading", "name", "heading", "title")
+
+
+def _season_from_heading(soup: BeautifulSoup) -> int | None:
+    """The season when the <title> states none: arkansasrazorbacks.com titles its page 'Schedule |
+    Arkansas Razorbacks' and states the year only in its <h1>, '2026-27 Soccer Schedule'."""
+    for h in soup.select("h1"):
+        m = TITLE_YEAR_RE.search(h.get_text(" "))
+        if m:
+            return int(m.group(0))
+    return None
+
+
+def _date_from_text(txt: str, season: int | None) -> str | None:
+    """'Thu, Aug 13' / 'Aug. 12' / 'Aug 16 (Sun)' -> ISO date in the page season. The year is the
+    season's, as in the Sidearm legacy branch: these pages state month and day only."""
+    m = MONTH_DAY_RE.search(txt or "")
+    if not m or not season:
+        return None
+    return f"{season}-{MONTHS_ABBR[m.group(1)[:3].lower()]:02d}-{int(m.group(2)):02d}"
+
+
+def _result_score(txt: str) -> tuple[str | None, str | None]:
+    """'W Win 2-0' / 'W, Win 2-1' / 'L, 4-1' -> ('W', '2-0'). The score is put in our-goals-first
+    order when the page lists the winner first (the Bordeaux template does), so a loss never reads
+    4-1."""
+    txt = common.clean(txt)
+    m = re.search(r"\b(W|L|T)\b", txt)
+    result = m.group(1) if m else None
+    m2 = re.search(r"(\d+)\s*-\s*(\d+)", txt)
+    if not m2:
+        return result, None
+    a, b = int(m2.group(1)), int(m2.group(2))
+    if (result == "W" and a < b) or (result == "L" and a > b):
+        a, b = b, a
+    return result, f"{a}-{b}"
+
+
+def _role(el) -> set[str]:
+    """Class roles of an element: 'schedule-default-event__opponent-name--school' -> {'opponent-name'}."""
+    out = set()
+    for c in el.get("class") or []:
+        if "__" in c:
+            out.add(c.split("__", 1)[1].split("--", 1)[0])
+    return out
+
+
+def _is_current_team(el) -> bool:
+    cls = " ".join(el.get("class") or [])
+    return "current" in cls or "hide-on-desktop" in cls
+
+
+def _inside_current_team(el, card) -> bool:
+    """True when `el` sits in our own team's block (lsusports.net ranks its own team there)."""
+    for anc in el.parents:
+        if anc is card:
+            return False
+        if "--current" in " ".join(anc.get("class") or []):
+            return True
+    return False
+
+
+def _venue_word(txt: str) -> str | None:
+    t = common.clean(txt).lower()
+    return {"home": "H", "away": "A", "neutral": "N"}.get(t)
+
+
+def _links(card, base_url: str) -> dict:
+    """Game links (recap, box score, watch, ...). Labels are the link text, as the other branches
+    store them. The venue link and the sport's own link are not game links."""
+    links = {}
+    for a in card.select("a[href]"):
+        cls = " ".join(a.get("class") or [])
+        if "link" not in cls or "location" in cls:
+            continue
+        label = common.clean(a.get_text(" ")).lower()
+        if label and label not in ("soccer", "women's soccer", "opens in a new window"):
+            links[label] = urljoin(base_url, a["href"])
+    return links
+
+
+def _parse_redesign_cards(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
+    # the card class the page uses is the first one whose cards carry a result or location; every
+    # card of that class is then read, including placeholders (a tournament with neither yet)
+    cards = []
+    for sel in CARD_SELECTORS:
+        found = soup.select(sel)
+        if any(c.select_one(".schedule-event-item-result, .schedule-event-grid-result, .schedule-event-location") for c in found):
+            cards = found
+            break
+    games = []
+    for card in cards:
+        if card.find_parent(class_=lambda c: c and any(s[1:] in c.split() for s in CARD_SELECTORS)):
+            continue  # a card nested inside another card is the same game
+        # opponent: the best-ranked role, skipping our own team's name
+        opp_el = None
+        for role in OPPONENT_ROLES:
+            cands = [e for e in card.find_all(True) if role in _role(e) and not _is_current_team(e)
+                     and "promo-title" not in " ".join(e.get("class") or [])
+                     and not e.find_parent(class_=re.compile(r"result|links|location"))
+                     and common.clean(e.get_text(" "))]
+            if role in ("name", "heading", "title"):
+                current = {common.clean(e.get_text(" ")) for e in card.select("[class*='current-name']")}
+                cands = [e for e in cands if common.clean(e.get_text(" ")) not in current]
+            if cands:
+                opp_el = cands[-1]
+                break
+        if opp_el is None:
+            continue
+        label = common.clean(opp_el.get_text(" "))
+        divider = None
+        m = DIVIDER_RE.match(label)
+        if m:
+            divider, label = m.group(1).lower(), label[m.end():]
+        rank = None
+        m = RANK_PREFIX_RE.match(label)
+        if m:
+            rank, label = int(m.group(1)), label[m.end():]
+        # walk the card in document order: a divider element, then a rank element before the opponent
+        seen_divider = divider is not None
+        for el in card.find_all(True):
+            if el is opp_el:
+                break
+            roles = _role(el)
+            txt = common.clean(el.get_text(" "))
+            if roles & {"divider", "opponent-vs"} or (el.name in ("span", "strong") and DIVIDER_RE.fullmatch(txt or "x")):
+                seen_divider = True
+                divider = divider or DIVIDER_RE.match(txt).group(1).lower() if DIVIDER_RE.match(txt) else divider
+            elif (seen_divider and rank is None and any("rank" in r for r in roles)
+                  and txt.strip("# ").split("/")[0].isdigit() and not _inside_current_team(el, card)):
+                rank = int(txt.strip("# ").split("/")[0])  # a rank after "vs."/"at" is the opponent's
+        if not label:
+            continue
+        # home/away: a venue word, then the card's own modifier, then the divider
+        home_away = None
+        for el in card.select("[class*='venue'], .schedule-event-date__venue-label"):
+            home_away = _venue_word(el.get_text(" "))
+            if home_away:
+                break
+        if home_away is None:
+            mods = " ".join(card.get("class") or [])
+            home_away = "H" if "--home" in mods else "A" if "--away" in mods else "N" if "--neutral" in mods else None
+        if home_away is None and divider:
+            home_away = "A" if divider in ("at", "@") else "H"
+        date_el = card.select_one("[class*='schedule-event-date'], [class*='schedule-item-date'], [class*='schedule-event-grid-date'], [class*='schedule-event-time']")
+        res_el = card.select_one(".schedule-event-item-result, .schedule-event-grid-result")
+        result, score = _result_score(res_el.get_text(" ")) if res_el else (None, None)
+        loc_el = card.select_one(".schedule-event-location")
+        games.append({
+            "date": _date_from_text(date_el.get_text(" ") if date_el else "", season), "datetime": None,
+            "exhibition": bool(re.search(r"exhibition", card.get_text(" "), re.I)),
+            "conferenceGame": bool(card.select_one("[class*='conference-image']")
+                                   or any(e.find("img") for e in card.select("[class*='conference']"))),
+            "homeAway": home_away, "opponent": label, "opponentRank": rank,
+            "location": common.clean(loc_el.get_text(" ")) if loc_el else None,
+            "result": result, "score": score, "links": _links(card, base_url),
+        })
+    return games
+
+
+def _parse_wordpress_rows(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
+    """The older WordPress WMT theme, in its two variants: gamecocksonline.com (.schedule-table_row
+    with .schedule-list__*) and ukathletics.com (.schedule-item with .schedule-item__*)."""
+    games = []
+    for row in soup.select(".schedule-table_row"):
+        opp = row.select_one(".schedule-list__opponent strong") or row.select_one(".schedule-list__opponent")
+        if not opp or not common.clean(opp.get_text(" ")):
+            continue
+        teams = row.select_one(".schedule-list__teams")
+        divider = next((common.clean(s.get_text()) for s in (teams.find_all("span", recursive=False) if teams else [])
+                        if DIVIDER_RE.fullmatch(common.clean(s.get_text()) or "x")), "")
+        rank_el = row.select_one(".ranking--opponent")
+        loc = row.select_one(".schedule-list__location")
+        loc_name = loc.select_one("strong") if loc else None
+        venue = next((_venue_word(s.get_text()) for s in (loc.select("span") if loc else []) if _venue_word(s.get_text())), None)
+        mods = row.get("class") or []
+        home_away = venue or ("H" if "home" in mods else "A" if "away" in mods else "N" if "neutral" in mods else None) \
+            or ("A" if divider.lower() in ("at", "@") else "H" if divider else None)
+        res = row.select_one(".schedule-list__result")
+        result, score = _result_score(res.get_text(" ")) if res else (None, None)
+        t = row.select_one("time")
+        games.append({
+            "date": _date_from_text(t.get_text(" ") if t else "", season), "datetime": None,
+            "exhibition": bool(re.search(r"exhibition", row.get_text(" "), re.I)), "conferenceGame": False,
+            "homeAway": home_away, "opponent": common.clean(opp.get_text(" ")),
+            "opponentRank": int(rank_el.get_text().strip("# ").split("/")[0]) if rank_el and rank_el.get_text().strip("# ").split("/")[0].isdigit() else None,
+            "location": common.clean(loc_name.get_text(" ")) if loc_name else None,
+            "result": result, "score": score, "links": _links(row, base_url),
+        })
+    for row in soup.select(".schedule-item"):
+        team = row.select_one(".schedule-item__team")
+        opp = team.select_one("h3") if team else None
+        if not opp or not common.clean(opp.get_text(" ")):
+            continue
+        label = common.clean(opp.get_text(" "))
+        rank = None
+        m = RANK_PREFIX_RE.match(label)
+        if m:
+            rank, label = int(m.group(1)), label[m.end():]
+        prefix = row.select_one(".prefix")
+        divider = common.clean(prefix.get_text()).lower() if prefix else ""
+        mods = row.get("class") or []
+        home_away = "H" if "home" in mods else "A" if "away" in mods else "N" if "neutral" in mods else \
+            ("A" if divider in ("at", "@") else "H" if divider else None)
+        loc = team.select_one("p")
+        res = row.select_one(".schedule-item__result")
+        result, score = _result_score(res.get_text(" ")) if res else (None, None)
+        d = row.select_one(".schedule-item__date")
+        games.append({
+            "date": _date_from_text(d.get_text(" ") if d else "", season), "datetime": None,
+            "exhibition": bool(re.search(r"exhibition", row.get_text(" "), re.I)), "conferenceGame": False,
+            "homeAway": home_away, "opponent": label, "opponentRank": rank,
+            "location": common.clean(loc.get_text(" ")) if loc else None,
+            "result": result, "score": score, "links": _links(row, base_url),
+        })
+    return games
+
+
+def _parse_bordeaux(soup: BeautifulSoup, base_url: str, season: int | None) -> list[dict]:
+    """arkansasrazorbacks.com's Bordeaux template: .time-container (type, date, place) next to
+    .opponent-container and .results-container inside one .content block per game."""
+    games = []
+    for oc in soup.select(".opponent-container"):
+        block = oc.find_parent(class_="content") or oc.parent
+        opp = oc.select_one(".opponent")
+        if not opp or not common.clean(opp.get_text(" ")):
+            continue
+        label = common.clean(opp.get_text(" "))
+        divider = None
+        m = DIVIDER_RE.match(label)
+        if m:
+            divider, label = m.group(1).lower(), label[m.end():]
+        rank = None
+        m = RANK_PREFIX_RE.match(label)
+        if m:
+            rank, label = int(m.group(1)), label[m.end():]
+        typ = block.select_one(".time-container .type")
+        home_away = (_venue_word(typ.get_text(" ")) if typ else None) or             ("A" if divider in ("at", "@") else "H" if divider else None)
+        date = block.select_one(".time-container .date .month") or block.select_one(".time-container .date")
+        place = block.select_one(".time-container .place")
+        res = block.select_one(".results-container .results")
+        result, score = _result_score(res.get_text(" ")) if res else (None, None)
+        links = {}
+        for a in block.select(".results-container a[href]"):
+            links["results"] = urljoin(base_url, a["href"])
+        games.append({
+            "date": _date_from_text(date.get_text(" ") if date else "", season), "datetime": None,
+            "exhibition": bool(re.search(r"exhibition", block.get_text(" "), re.I)), "conferenceGame": False,
+            "homeAway": home_away, "opponent": label, "opponentRank": rank,
+            "location": common.clean(place.get_text(" ")) if place else None,
+            "result": result, "score": score, "links": links,
+        })
+    return games
 
 
 DATE_RE = re.compile(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}")
