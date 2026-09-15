@@ -14,6 +14,7 @@ against Open-Meteo's hourly quota, so most bulk runs ended in HTTP 429.
 from __future__ import annotations
 
 import math
+import threading
 import urllib.parse
 
 from . import common
@@ -42,6 +43,7 @@ MAX_ROUNDS = 3        # candidate batches to try before giving up
 CANDIDATES_PER_ROUND = 3
 
 _stations: list[dict] | None = None
+_stations_lock = threading.Lock()  # refresh --workers N: parse the inventory once, not once per worker
 
 
 def _campus_latlon(program: dict) -> tuple[float, float]:
@@ -59,6 +61,11 @@ def _campus_latlon(program: dict) -> tuple[float, float]:
 def _load_stations(src: dict) -> list[dict]:
     """The NCEI station inventory (GHCND-stations fixed-width layout), U.S. airport and
     cooperative stations only. Cached in the HTTP cache for a year."""
+    with _stations_lock:
+        return _load_stations_locked(src)
+
+
+def _load_stations_locked(src: dict) -> list[dict]:
     global _stations
     if _stations is not None:
         return _stations

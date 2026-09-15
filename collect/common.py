@@ -20,11 +20,15 @@ import os
 import random
 import re
 import tempfile
+import threading
 import time
 import unicodedata
 from urllib import robotparser
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.connection import HTTPConnection, HTTPSConnection
+from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUBLIC_DIR = os.path.join(ROOT, "public")
@@ -82,6 +86,12 @@ DEFAULT_HEADERS = {
 
 # Politeness: minimum gap between live requests to the same host, plus jitter.
 MIN_GAP_SECONDS = float(os.environ.get("COLLEGEDASH_MIN_GAP", "1.2"))
+JITTER_SECONDS = 0.8
+# fetch() backs off before retrying: 429 = per-minute quotas (Open-Meteo, api.data.gov) need a real
+# pause, not a token one; other retryable statuses and network errors get a shorter one.
+BACKOFF_429_SECONDS = 25.0
+BACKOFF_5XX_SECONDS = 5.0
+BACKOFF_NETWORK_SECONDS = 2.0
 _last_request_at: dict[str, float] = {}
 
 
@@ -105,8 +115,37 @@ def today() -> str:
     return _dt.date.today().isoformat()
 
 
+_log_lock = threading.Lock()
+_log_context = threading.local()
+
+
+def set_log_context(label: str | None) -> None:
+    """Prefix this thread's log lines with `label` (a program slug under `refresh --workers N`, where
+    lines from different programs interleave). None clears it; the sequential path never sets it."""
+    _log_context.label = label
+
+
+def log_traceback() -> None:
+    """Print the current exception's traceback to stderr as one block, each line prefixed with this
+    thread's log label (the program slug under refresh --workers N), so it cannot interleave with
+    another worker's lines and says whose it is. Without a label it prints exactly what
+    traceback.print_exc() did."""
+    import sys
+    import traceback
+    label = getattr(_log_context, "label", None)
+    text = traceback.format_exc()
+    if label:
+        text = "".join(f"{label} | {line}\n" for line in text.rstrip("\n").split("\n"))
+    with _log_lock:
+        sys.stderr.write(text)
+        sys.stderr.flush()
+
+
 def log(msg: str) -> None:
-    print(f"[{_dt.datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
+    label = getattr(_log_context, "label", None)
+    line = f"[{_dt.datetime.now().strftime('%H:%M:%S')}] " + (f"{label} | " if label else "") + msg
+    with _log_lock:  # print() writes the text and the newline separately; threads must not split them
+        print(line, flush=True)
 
 
 # ---------- JSON files ----------
@@ -136,10 +175,39 @@ def write_json(path: str, obj, *, sort_keys: bool = False) -> str:
     return path
 
 
+_path_locks: dict[str, threading.Lock] = {}
+_path_locks_lock = threading.Lock()
+
+
 @contextlib.contextmanager
 def _locked(path: str, *, timeout: float = 15.0, stale_after: float = 60.0):
     """Cross-process lock around a read-modify-write of `path` (lock file = path + '.lock',
-    created with O_EXCL). A lock older than `stale_after` seconds is treated as abandoned."""
+    created with O_EXCL). A lock older than `stale_after` seconds is treated as abandoned.
+
+    Threads of one process (refresh --workers N) first take an in-process lock for the path, so only
+    one of them at a time contends for the lock file. Measured without it on Windows: a thread's
+    O_EXCL create racing another thread's delete of the lock file raises PermissionError (the file is
+    delete-pending), not FileExistsError, and the refresh crashed within two minutes. PermissionError
+    is also treated as "held" below, which covers the same race between two processes (serve +
+    refresh) that predates the workers.
+
+    The in-process lock has NO timeout, on purpose (PR #105 review). A queue of N workers on a large
+    file can wait longer than any fixed bound, and a timeout there turned successful collector runs
+    into recorded failures and crashed 32- and 64-worker runs. A thread only ever waits here for
+    another thread of this process that is making progress. `timeout` still bounds the wait for the
+    lock FILE, i.e. for another process, which is what it was written for."""
+    with _path_locks_lock:
+        plock = _path_locks.setdefault(os.path.abspath(path), threading.Lock())
+    plock.acquire()
+    try:
+        with _file_locked(path, timeout=timeout, stale_after=stale_after):
+            yield
+    finally:
+        plock.release()
+
+
+@contextlib.contextmanager
+def _file_locked(path: str, *, timeout: float, stale_after: float):
     lock = path + ".lock"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     deadline = time.monotonic() + timeout
@@ -148,7 +216,7 @@ def _locked(path: str, *, timeout: float = 15.0, stale_after: float = 60.0):
             fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
             os.close(fd)
             break
-        except FileExistsError:
+        except (FileExistsError, PermissionError):
             try:
                 if time.time() - os.path.getmtime(lock) > stale_after:
                     os.remove(lock)
@@ -187,23 +255,195 @@ def forget_cached(url: str, *, method: str = "GET", json_body=None) -> bool:
     body_str = json.dumps(json_body, sort_keys=True) if json_body is not None else None
     key = _cache_key(method, url, body_str)
     removed = False
-    for name in (key + ".body.gz", key + ".body", key + ".json"):
-        path = os.path.join(CACHE_DIR, name)
-        if os.path.exists(path):
-            os.remove(path)
-            removed = True
+    with _key_lock(key):  # never while another thread is reading or writing this entry
+        for name in (key + ".body.gz", key + ".body", key + ".json"):
+            path = os.path.join(CACHE_DIR, name)
+            if os.path.exists(path):
+                os.remove(path)
+                removed = True
     return removed
 
 
-def _polite_wait(url: str) -> None:
+# ---------- per-host politeness gate (issue #94) ----------
+# Every live request, and every redirect hop inside one, passes through the gate of the host it
+# actually contacts. The gate is a lock held for the whole request -- body included -- so two requests
+# to one host never overlap, plus the same gap the sequential collector always kept:
+# max(MIN_GAP_SECONDS, that host's Crawl-delay) + uniform(0, JITTER_SECONDS).
+#
+# The gap is measured from the moment the previous request finished SENDING, not from when it was
+# allowed to start (PR #105 review). Building, connecting and sending all need the GIL, so with other
+# threads parsing pages the time between "allowed to start" and "bytes on the wire" varies by hundreds
+# of milliseconds; measured from the earlier stamp, a host saw 13 of 99 intervals under 1.2 s, the
+# shortest 0.765 s. The later stamp is taken by the urllib3 connection itself right after the request
+# is written (_StampingHTTPConnection). The next request cannot start before that stamp + gap, so the
+# host cannot see two requests closer than the gap, network jitter aside. Where no stamp is taken (a
+# proxy, an error part-way) the moment the request finished is used instead, which is later still.
+# Measuring from the response END instead would put shared hosts at latency + gap (~1.9-2.0 s); the
+# send stamp costs next to nothing.
+#
+# A sequential run therefore behaves as before, only fractionally more spaced (a redirect hop now
+# waits its gap too), and `refresh --workers N` can run programs side by side without any host
+# receiving two requests at once or two requests closer than that gap.
+#
+# What this does NOT preserve: in a sequential walk a host every program uses (TopDrawerSoccer,
+# SoccerWire) was visited once per program, i.e. about every 16-19 s on a daily run, far slower than
+# the gap requires. With workers those hosts receive the same number of requests at the gap itself,
+# about one every 1.7 s. Raising a shared host's spacing is a policy choice with a direct cost in wall
+# time (issue #94 has the numbers); the gate is where it would be set.
+#
+# Backoffs after a 429/5xx or a network error are recorded on the gate of the host that answered (the
+# hop, not the URL the caller asked for), inside the gate, before it is released. Sequentially that
+# sleep paused the whole process and nobody touched the host meanwhile; with workers another thread is
+# usually already queued on the gate, and a hold recorded after release would race it. Because every
+# write to `not_before` happens under the gate lock, a thread waiting in the gate is never overtaken by
+# a hold recorded while it sleeps, so the wait needs no re-check.
+#
+# The gap is per process. Two refresh processes at once (not something the workflow does: its
+# concurrency group forbids it) would each keep their own gates, exactly as before this change.
+#
+# A robots.txt check (issue #101, deliberately not done here) would go in _PoliteAdapter.send, before
+# the gate: it sees the first request and every redirect hop, keyed by the host actually contacted.
+
+RETRY_STATUSES = (429, 500, 502, 503, 504)
+
+
+class _HostGate:
+    __slots__ = ("lock", "last", "not_before")
+
+    def __init__(self) -> None:
+        self.lock = threading.Lock()
+        self.last: float | None = None      # when the previous request finished sending
+        self.not_before = 0.0               # a backoff; written only while `lock` is held
+
+
+_gates: dict[str, _HostGate] = {}
+_gates_lock = threading.Lock()
+_sending = threading.local()   # the request this thread is sending: .gate, .sent_at
+_retry = threading.local()     # fetch()'s attempt number (1-based), so the gate can scale a backoff
+
+
+def _gate(host: str) -> _HostGate:
+    with _gates_lock:
+        g = _gates.get(host)
+        if g is None:
+            g = _gates[host] = _HostGate()
+        return g
+
+
+def _mark_sent() -> None:
+    """Called by the connection once a request has been written to the socket."""
+    if getattr(_sending, "gate", None) is not None:
+        _sending.sent_at = time.monotonic()
+
+
+@contextlib.contextmanager
+def _polite(url: str):
+    """Hold `url`'s host for one request: wait for its turn, then keep every other thread off the host
+    until the block exits. Yields the gate so the caller can record a backoff while still holding it."""
     host = _host(url)
-    last = _last_request_at.get(host)
-    if last is not None:
-        gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, 0.8)
-        elapsed = time.monotonic() - last
-        if elapsed < gap:
-            time.sleep(gap - elapsed)
-    _last_request_at[host] = time.monotonic()
+    g = _gate(host)
+    with g.lock:
+        wait_until = g.not_before
+        if g.last is not None:
+            gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, JITTER_SECONDS)
+            wait_until = max(wait_until, g.last + gap)
+        delay = wait_until - time.monotonic()
+        if delay > 0:
+            time.sleep(delay)
+        _sending.gate, _sending.sent_at = g, None
+        try:
+            yield g
+        finally:
+            sent = _sending.sent_at
+            _sending.gate = _sending.sent_at = None
+            g.last = _last_request_at[host] = sent if sent is not None else time.monotonic()
+
+
+def _hold(g: _HostGate, seconds: float) -> None:
+    """Keep every thread off gate `g`'s host for `seconds` from now. Call only inside _polite."""
+    g.not_before = max(g.not_before, time.monotonic() + seconds)
+
+
+def _backoff_seconds(status: int | None) -> float:
+    """The retry pause for a response status (None = a network error), scaled by fetch()'s attempt."""
+    attempt = getattr(_retry, "attempt", 1)
+    if status is None:
+        base = BACKOFF_NETWORK_SECONDS
+    elif status == 429:
+        base = BACKOFF_429_SECONDS
+    else:
+        base = BACKOFF_5XX_SECONDS
+    return base * attempt
+
+
+class _StampingHTTPConnection(HTTPConnection):
+    def request(self, *args, **kwargs):
+        try:
+            return super().request(*args, **kwargs)
+        finally:
+            _mark_sent()
+
+
+class _StampingHTTPSConnection(HTTPSConnection):
+    def request(self, *args, **kwargs):
+        try:
+            return super().request(*args, **kwargs)
+        finally:
+            _mark_sent()
+
+
+class _StampingHTTPPool(HTTPConnectionPool):
+    ConnectionCls = _StampingHTTPConnection
+
+
+class _StampingHTTPSPool(HTTPSConnectionPool):
+    ConnectionCls = _StampingHTTPSConnection
+
+
+class _PoliteAdapter(HTTPAdapter):
+    """requests transport that passes each request -- the first and every redirect hop, since
+    Session.resolve_redirects sends each hop through the adapter -- through its host's gate."""
+
+    def init_poolmanager(self, *args, **kwargs):
+        super().init_poolmanager(*args, **kwargs)
+        self.poolmanager.pool_classes_by_scheme = {"http": _StampingHTTPPool, "https": _StampingHTTPSPool}
+
+    def send(self, request, **kwargs):
+        with _polite(request.url) as g:
+            try:
+                resp = super().send(request, **kwargs)
+                if resp.status_code in RETRY_STATUSES:
+                    _hold(g, _backoff_seconds(resp.status_code))
+                if not kwargs.get("stream"):
+                    resp.content  # read the body while the host is still held; Session reads it later otherwise
+            except requests.RequestException:
+                _hold(g, _backoff_seconds(None))
+                raise
+            return resp
+
+
+def _session() -> requests.Session:
+    """A fresh Session per call, as requests.request() uses internally, with the polite transport."""
+    s = requests.Session()
+    adapter = _PoliteAdapter()
+    s.mount("http://", adapter)
+    s.mount("https://", adapter)
+    return s
+
+
+# One live fetch per cache key at a time: two workers that miss the same URL must not both request it
+# (more traffic than a sequential run, where the second would have hit the first one's cache), and a
+# reader must not see a body another thread is writing. Locks are created on demand and kept.
+_key_locks: dict[str, threading.Lock] = {}
+_key_locks_lock = threading.Lock()
+
+
+def _key_lock(key: str) -> threading.Lock:
+    with _key_locks_lock:
+        lk = _key_locks.get(key)
+        if lk is None:
+            lk = _key_locks[key] = threading.Lock()
+        return lk
 
 
 # ---------- robots.txt ----------
@@ -275,8 +515,8 @@ def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
         return rp
     url = f"{scheme}://{host}/robots.txt"
     try:
-        _polite_wait(url)
-        resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=20)
+        with _session() as s:
+            resp = s.get(url, headers=DEFAULT_HEADERS, timeout=20)
     except requests.RequestException as e:
         log(f"robots: {host} unreachable ({type(e).__name__}); treating as disallowed")
         rp.disallow_all = True
@@ -309,17 +549,20 @@ def robots_allowed(url: str) -> bool:
     'Disallow: /' is not honoured; agent matching is substring; and path wildcards are unsupported.
     See the notes above ROBOTS_AGENT for which of those fail open and which fail closed.
 
-    4xx = allowed; unreachable or 5xx = disallowed. Records the host's Crawl-delay for
-    _polite_wait."""
+    4xx = allowed; unreachable or 5xx = disallowed. Records the host's Crawl-delay for the host's
+    politeness gate (_polite)."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False
     scheme, host = m.group(1), m.group(2).lower()
     rp = _robots.get(host)
     if rp is None:
-        rp = _load_robots(host, scheme)
-        _robots[host] = rp
-        _apply_crawl_delay(host, rp)
+        with _key_lock("robots:" + host):  # once per host: a second worker waits for the first's answer
+            rp = _robots.get(host)
+            if rp is None:
+                rp = _load_robots(host, scheme)
+                _apply_crawl_delay(host, rp)  # before publishing rp: a worker that sees the parser also sees its delay
+                _robots[host] = rp
     return rp.can_fetch(ROBOTS_AGENT, url)
 
 
@@ -339,9 +582,20 @@ def fetch(
 
     Set max_age_hours=None to force a live request; 0 also forces live.
     Set the env var COLLEGEDASH_OFFLINE=1 to refuse live requests (cache only).
+
+    Thread-safe: the cache check, the live request and the cache write for one key run under that
+    key's lock, and the live request itself under its host's politeness gate.
     """
     body_str = json.dumps(json_body, sort_keys=True) if json_body is not None else None
     key = _cache_key(method, url, body_str)
+    with _key_lock(key):
+        return _fetch_locked(url, key, body_str, method=method, headers=headers, json_body=json_body,
+                             max_age_hours=max_age_hours, retries=retries, timeout=timeout,
+                             allow_status=allow_status)
+
+
+def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hours, retries, timeout,
+                  allow_status) -> tuple[bytes, dict]:
     os.makedirs(CACHE_DIR, exist_ok=True)
     body_path = os.path.join(CACHE_DIR, key + ".body")
     meta_path = os.path.join(CACHE_DIR, key + ".json")
@@ -375,26 +629,41 @@ def fetch(
 
     last_err: Exception | None = None
     for attempt in range(retries):
-        _polite_wait(url)
+        _retry.attempt = attempt + 1  # the gate scales the answering host's hold by it
         try:
-            resp = requests.request(method, url, headers=hdrs, data=body_str, timeout=timeout)
-        except requests.RequestException as e:  # network
+            with _session() as s:  # what requests.request() does, plus the per-host gate on every hop
+                resp = s.request(method, url, headers=hdrs, data=body_str, timeout=timeout)
+        except requests.RequestException as e:  # network; the host that failed is already held
             last_err = e
-            time.sleep(2 * (attempt + 1))
+            time.sleep(_backoff_seconds(None))  # and this thread pauses too, as it always did
             continue
+        finally:
+            _retry.attempt = 1
         if resp.status_code in allow_status:
             meta = {"url": url, "status": resp.status_code, "fetchedAt": now_iso(), "fromCache": False,
                     "contentType": resp.headers.get("Content-Type", ""), "finalUrl": resp.url}
-            with gzip.open(gz_path, "wb", compresslevel=6) as f:
-                f.write(resp.content)
+            # temp file + os.replace, like write_json: a reader never sees a half-written body
+            fd, tmp = tempfile.mkstemp(dir=CACHE_DIR, prefix=key + ".", suffix=".tmp")
+            try:
+                with os.fdopen(fd, "wb") as raw, gzip.GzipFile(filename="", mode="wb", compresslevel=6,
+                                                               fileobj=raw) as f:
+                    f.write(resp.content)
+                os.replace(tmp, gz_path)
+            except BaseException:
+                with contextlib.suppress(OSError):
+                    os.remove(tmp)
+                raise
             if os.path.exists(body_path):
                 os.remove(body_path)
             write_json(meta_path, meta)
             return resp.content, meta
-        if resp.status_code in (429, 500, 502, 503, 504):
+        if resp.status_code in RETRY_STATUSES:
             last_err = FetchError(f"HTTP {resp.status_code} for {url}")
-            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one
-            time.sleep((25 if resp.status_code == 429 else 5) * (attempt + 1))
+            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
+            # gate already holds the host that answered for this long; this thread pauses with it.
+            _retry.attempt = attempt + 1
+            time.sleep(_backoff_seconds(resp.status_code))
+            _retry.attempt = 1
             continue
         raise FetchError(f"HTTP {resp.status_code} for {url}")
     raise FetchError(f"giving up after {retries} attempts: {last_err}")  # last_err names the URL
@@ -486,12 +755,22 @@ def load_reviewed(slug: str) -> dict:
 # ---------- refresh state ----------
 
 def update_refresh_state(key: str, info: dict) -> None:
+    update_refresh_state_many({key: info})
+
+
+def update_refresh_state_many(entries: dict[str, dict]) -> None:
+    """Record several refresh-state entries in one locked read-modify-write. An entry that already
+    carries "at" keeps it (the time its collector finished); the others are stamped now. `refresh`
+    records each program's collectors with one call: the file is ~300 KB at 350 programs and ~800 KB
+    at 1,050, and rewriting it once per collector run is what made the lock contended (PR #105)."""
     with _locked(REFRESH_STATE_PATH):
         state = read_json(REFRESH_STATE_PATH, {}) or {}
-        entry = dict(info)
-        entry["at"] = now_iso()
-        state[key] = entry
-        state["updated"] = now_iso()
+        stamp = now_iso()
+        for key, info in entries.items():
+            entry = dict(info)
+            entry.setdefault("at", stamp)
+            state[key] = entry
+        state["updated"] = stamp
         write_json(REFRESH_STATE_PATH, state)
 
 
