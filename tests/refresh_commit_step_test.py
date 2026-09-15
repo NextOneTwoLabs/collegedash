@@ -32,6 +32,11 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   unhandled-conflict      main deletes a collected SOURCE file the run modified - a conflict the step
                           must not resolve. Nothing is published, and the collection is saved on a
                           refresh-sources/* branch with an ::error saying why.
+  pruned-by-run           the run's own registry change unpublishes a profile (the build prunes it) while
+                          main rewrites that profile (delete/modify, the reverse direction). The deletion
+                          stands and the run publishes.
+  mixed-conflict          main deletes a profile the run rewrote AND a source the run modified. One conflict is
+                          not the step's to settle, so none is: the collection is saved on a branch.
   push-always-rejected    origin rejects every push to main. After the retries the collection is saved on
                           a refresh-sources/* branch instead of being dropped.
   build-gate              (#82) build fails after the rebase: collection on a branch, data as main has it.
@@ -205,7 +210,7 @@ def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
     return files
 
 
-def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False):
+def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None):
     """Returns (exit code, output, origin path, main-before sha, upstream sha, run clone path)."""
     root = os.path.join(tmp, name)
     origin = os.path.join(root, "origin.git")
@@ -233,6 +238,15 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
         f.write('"ghost-v2-collected"\n')
     with open(os.path.join(work, "public", "data", "rpi", "current.json"), "w", newline="\n") as f:
         f.write('{"season": 2026}\n')
+    if run_registry is not None:  # the run's own registry change (a registry build or onboard during the run)
+        with open(os.path.join(work, "public", "data", "registry.json"), "w", newline="\n") as f:
+            f.write(json.dumps({"published": run_registry}) + "\n")
+        for slug in run_registry:  # a program the run onboarded has sources but no profile on main yet
+            d = os.path.join(work, "programs", slug, "sources")
+            os.makedirs(d, exist_ok=True)
+            if not os.path.exists(os.path.join(d, "athletics.json")):
+                with open(os.path.join(d, "athletics.json"), "w", newline="\n") as f:
+                    f.write(f'"{slug}-v2-collected"\n')
     r = subprocess.run([BASH, "-e", os.path.join(bin_dir, "python"), "collegedash.py", "build"], cwd=work, env=env, capture_output=True)
     assert r.returncode == 0, r.stderr
 
@@ -294,7 +308,10 @@ def test_deleted_upstream(tmp):
 
 def test_deleted_and_gated(tmp):
     print("deleted-and-gated: main deletes a profile, and validate fails on the rebuilt data")
-    code, out, origin, c1, _ = run_case(tmp, "deleted-and-gated", upstream=drop_ghost, run_markers=("VALIDATE_FAILS",))
+    # the run also onboards a new program, so the rebuild creates a profile main has no file for: the gate's restore
+    # has to remove it again, which is what `rm -rf public/data/programs` before the checkout is for
+    code, out, origin, c1, _ = run_case(tmp, "deleted-and-gated", upstream=drop_ghost, run_markers=("VALIDATE_FAILS",),
+                                        run_registry=["alpha", "beta", "newprog"])
     ok("the step fails", code != 0, out[-800:])
     ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
     bs = branches(origin)
@@ -303,6 +320,9 @@ def test_deleted_and_gated(tmp):
         files = tree_files(origin, bs[0])
         ok("the branch holds the collected source and RPI table", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n'
            and files.get("public/data/rpi/current.json") == b'{"season": 2026}\n')
+        ok("and the newly onboarded program's sources, with no profile for it (main has none)",
+           files.get("programs/newprog/sources/athletics.json") == b'"newprog-v2-collected"\n'
+           and "public/data/programs/newprog.json" not in files, sorted(k for k in files if "newprog" in k))
         ok("its public/data (except rpi and registry) is exactly main's, the deleted profile included",
            data_view(files) == data_view(tree_files(origin, c1)), sorted(set(data_view(files)) ^ set(data_view(tree_files(origin, c1)))))
         ok("the branch is one commit on top of main", git(origin, "rev-parse", f"{bs[0]}~1") == c1)
@@ -341,6 +361,36 @@ def test_unhandled_conflict(tmp):
            and files.get("programs/ghost/sources/athletics.json") == b'"ghost-v2-collected"\n'
            and files.get("public/data/rpi/current.json") == b'{"season": 2026}\n')
     ok("an ::error names the unresolved conflict", "::error" in out and "programs/ghost/sources/athletics.json" in out, out[-1200:])
+    ok("the runner is not left mid-rebase", not os.path.isdir(os.path.join(work, ".git", "rebase-merge")))
+
+
+def test_pruned_by_run(tmp):
+    print("pruned-by-run: the run prunes a profile that main rewrote")
+    def rewrite_ghost(files):
+        files["public/data/programs/ghost.json"] = b'{"slug": "ghost", "source": "ghost-v1", "builtAt": "upstream-rebuild"}\n'
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "pruned-by-run", upstream=rewrite_ghost, run_registry=["alpha", "beta"])
+    files = tree_files(origin, "refs/heads/main")
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("published on top of main", git(origin, "rev-parse", "refs/heads/main~1") == c1)
+    ok("the profile the run unpublished is gone, main's rewrite notwithstanding", "public/data/programs/ghost.json" not in files, sorted(files))
+    ok("with the run's registry and collection", files.get("public/data/registry.json") == b'{"published": ["alpha", "beta"]}\n'
+       and files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
+    ok("no sources branch", branches(origin) == [])
+
+
+def test_mixed_conflict(tmp):
+    print("mixed-conflict: main deletes a profile the run rewrote and a source the run modified")
+    def drop_both(files):
+        files = drop_ghost(files)
+        files.pop("programs/ghost/sources/athletics.json")
+        return files
+    code, out, origin, c1, work = run_case(tmp, "mixed-conflict", upstream=drop_both)
+    ok("the step fails", code != 0, out[-800:])
+    ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    bs = branches(origin)
+    ok("the collection is saved on one refresh-sources/* branch", len(bs) == 1 and bs[0].startswith("refs/heads/refresh-sources/"), bs)
+    ok("the ::error names the source conflict", "::error" in out and "programs/ghost/sources/athletics.json" in out)
     ok("the runner is not left mid-rebase", not os.path.isdir(os.path.join(work, ".git", "rebase-merge")))
 
 
@@ -399,7 +449,7 @@ def main(argv=None) -> int:
     print(f"step: {os.path.relpath(YML, ROOT) if YML.startswith(ROOT) else YML}; bash: {BASH}")
     tmp = tempfile.mkdtemp(prefix="refresh-step-")
     cases = [test_deleted_upstream, test_deleted_and_gated, test_unrelated_upstream, test_unhandled_conflict,
-             test_push_always_rejected, test_build_gate, test_fifth_output]
+             test_pruned_by_run, test_mixed_conflict, test_push_always_rejected, test_build_gate, test_fifth_output]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
