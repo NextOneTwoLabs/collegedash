@@ -431,8 +431,9 @@ def test_committed() -> None:
     ok("Saint Francis is held as D3, waiting for D3", sf in held and sf["division"] == "D3"
        and sf["hold"]["reason"] == "division-not-onboarded" and sf["ids"].get("ncaaOrgId") == 600, str(sf and sf.get("hold")))
     ok("Mississippi Valley State is held as in no list", mvsu in held and mvsu["hold"]["reason"] == "not-in-directory", str(mvsu and mvsu.get("hold")))
-    ok("West Florida is a D1 program with its orgId, not yet onboarded", uwf in programs and uwf["ids"].get("ncaaOrgId") == 11740
-       and uwf["division"] == "D1" and uwf["onboarded"] is False, str(uwf))
+    # onboarded is deliberately not asserted: `onboard west-florida` flips it, and that must not turn this red
+    ok("West Florida is a published D1 program with its orgId", uwf in programs and uwf["ids"].get("ncaaOrgId") == 11740
+       and uwf["division"] == "D1", str(uwf))
     # fails if a value supplied from memory enters the registry (the spike's gogusties.com)
     ok("no athletics URL came from memory", "gogusties" not in json.dumps(reg))
 
