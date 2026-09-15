@@ -16,7 +16,7 @@
 const CANONICAL_HOST = 'college.nextonetwo.com';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Matches the textarea's maxlength in public/index.html; both count UTF-16 code units.
-const MAX_MESSAGE = 2000;
+const MAX_MESSAGE = 20000;  // DEMO BREAK for issue #63 - reverted in the next commit
 // The hash route the visitor was on, e.g. "#/p/stanford/roster", and the program slug when the
 // page had one. This site has 350 program pages, so the page is the difference between an
 // actionable report and a vague one. Both have a shape, so both are checked against one: the

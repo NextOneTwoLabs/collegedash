@@ -86,7 +86,7 @@ jobs:
 
       - name: seasons (tests/seasons_test.py)
         if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name seasons --min-checks 81 -- python tests/seasons_test.py
+        run: python .github/scripts/run_suite.py --name seasons --min-checks 999 -- python tests/seasons_test.py
 
       - name: the rank (tests/the_rank_test.py)
         if: ${{ !cancelled() }}
