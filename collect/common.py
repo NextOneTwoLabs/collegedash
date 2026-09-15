@@ -43,9 +43,36 @@ COMMITS_DATA_DIR = os.path.join(DATA_DIR, "commitments")
 SCHEMA_PATH = os.path.join(ROOT, "schema", "profile.schema.json")
 CACHE_DIR = os.path.join(ROOT, ".cache", "http")
 
+# The collector says what it is instead of impersonating a browser (issue #73). A site operator
+# reading their logs can tell this traffic from a person's, look the project up at the URL, and --
+# because ROBOTS_AGENT below is this same product token -- write a robots.txt rule addressed to us
+# that robots_allowed() will actually honour.
+#
+# This is honesty at a measured cost of zero, and that is the entire case for it. Two independent
+# stratified draws from the committed sources -- 49 hosts and 63 -- were each fetched twice at the
+# same URL, once with the old Chrome string and once with this one. No host in either answered
+# differently to the two agents. A third draw of 100 compared robots.txt itself, likewise with no
+# difference.
+#
+# It does NOT buy coverage back, and the next reader should not reconstruct the argument that it
+# does. Eight camp hosts that this collector records as 403 from CI answer 200 to *both* agents
+# from an ordinary address, byte-identically. Whatever refuses us in CI is therefore not reading
+# the User-Agent. The cause is unknown. Client IP reputation and TLS/JA3 fingerprint are both live
+# candidates; the header set and the HTTP version have been excluded. Neither candidate has been
+# tested from the refresh runner, which is the one experiment that separates them -- and nothing
+# IP-related would fix it if it turns out to be the TLS handshake. An earlier version of this
+# comment asserted the User-Agent was the cause; the control falsified it and it was withdrawn.
+#
+# Shape follows Googlebot/CCBot: product token, version, +URL, plain-language purpose. Deliberately
+# not browser-shaped with a project name bolted on, which reads as neither one thing nor the other.
+# Bump USER_AGENT_VERSION when the crawl behaviour changes, not per commit. Keep the string here:
+# every collector inherits it through DEFAULT_HEADERS and nothing should hand-write a second one.
+USER_AGENT_PRODUCT = "CollegeDashBot"
+USER_AGENT_VERSION = "1.0"
+USER_AGENT_URL = "https://github.com/NextOneTwoLabs/collegedash"
 USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+    f"{USER_AGENT_PRODUCT}/{USER_AGENT_VERSION} "
+    f"(+{USER_AGENT_URL}; automated collector for a public college soccer dashboard)"
 )
 DEFAULT_HEADERS = {
     "User-Agent": USER_AGENT,
@@ -183,11 +210,41 @@ def _polite_wait(url: str) -> None:
 # Hosts outside the athletics sites (camp vendors, coaches' own sites) are checked against their
 # robots.txt before a request is made. Cached per host for the life of the process (never on disk,
 # so a denied host leaves no trace in .cache/http; a redirect onto a denied host is fetched once and
-# the entry is then removed with forget_cached). A Crawl-delay for '*' raises that host's gap
-# between requests above MIN_GAP_SECONDS.
+# the entry is then removed with forget_cached). A Crawl-delay that applies to us raises that host's
+# gap between requests above MIN_GAP_SECONDS.
+#
+# Rules are evaluated as our own product token, not as '*' (issue #73). Once the User-Agent names
+# the project a site operator can write a group addressed to CollegeDashBot, and ignoring it would
+# be worse than the anonymity it replaced: we would have advertised an identity and then disregarded
+# instructions given to it. Token only, no '/1.0': that is what a robots.txt group is written
+# against.
+#
+# What urllib.robotparser actually guarantees, verified against the CPython source and pinned in
+# tests/robots_ua_test.py: a group naming us beats the '*' group, for can_fetch and crawl_delay
+# alike. That single guarantee is what this change rests on, and it is enough -- before it, a group
+# addressed to us was never consulted at all.
+#
+# It is NOT full RFC 9309 precedence. Four gaps, all pre-existing library behaviour and none a
+# regression introduced here (the rule-line ones behaved identically when ROBOTS_AGENT was '*'):
+#   * Agent match is substring, not token (Entry.applies_to does `agent in useragent`), so
+#     'User-agent: bot', 'dash' or 'college' now apply to us where we used to fall through to '*'.
+#     This is the only gap this change newly exposes us to.
+#   * Among named groups the FIRST in file order wins, not the most specific (RFC 9309 2.2.1). A
+#     loose 'User-agent: bot' group listed above a 'User-agent: CollegeDashBot' group hides the one
+#     naming us exactly -- so this gap fails OPEN.
+#   * Within a group the FIRST matching rule line wins, not the longest path (RFC 9309 2.2.2). The
+#     ordinary operator carve-out 'Disallow: /' then 'Allow: /camps/' therefore denies /camps/
+#     (fails closed), while 'Allow: /' then 'Disallow: /admin/' permits /admin/ (fails open).
+#   * No path wildcards at all: RuleLine.applies_to is a plain startswith, so 'Disallow: /*.pdf$'
+#     matches nothing and is silently ignored. Fails open.
+# Sampled three times for issue #73 -- 187 hosts, then 63, then 100 -- and no robots.txt in any of
+# them names us or any substring of our token, so none of the four gaps changes a verdict on the web
+# as it stands. Those are samples of a 604-host frame, not the frame. Fixing the gaps means a real
+# resolver with its own test matrix, including the wildcard support none of this has, so it is
+# tracked as a follow-up rather than bolted onto this change.
 _robots: dict[str, "robotparser.RobotFileParser"] = {}
 _host_delay: dict[str, float] = {}
-ROBOTS_AGENT = "*"
+ROBOTS_AGENT = USER_AGENT_PRODUCT
 
 
 def set_robots_txt(host: str, text: str | None) -> None:
@@ -227,7 +284,14 @@ def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
     if 200 <= resp.status_code < 300:
         rp.parse(resp.text.splitlines())
     elif 400 <= resp.status_code < 500:
-        rp.allow_all = True  # no robots.txt = no restrictions
+        # No robots.txt = no restrictions. Note this fails OPEN, and that this request carries the
+        # same User-Agent as everything else: a host that served robots.txt to the old Chrome string
+        # but refused our token would silently lose its rules rather than fail loudly. Measured
+        # before shipping the rename (issue #73) across 100 hosts stratified over the four vendor
+        # families -- 91 x 200, 6 x 404, 3 connection failures, and *zero* hosts where the status
+        # differed between the two agents, so the risk is real in principle and absent in practice.
+        # Worth re-checking if 4xx rates on robots.txt ever climb after an agent change.
+        rp.allow_all = True
     else:
         log(f"robots: {host} returned HTTP {resp.status_code}; treating as disallowed")
         rp.disallow_all = True
@@ -235,8 +299,18 @@ def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
 
 
 def robots_allowed(url: str) -> bool:
-    """True when `url` may be fetched under the host's robots.txt (agent '*'). 4xx = allowed;
-    unreachable or 5xx = disallowed. Records the host's Crawl-delay for _polite_wait."""
+    """True when `url` may be fetched under the host's robots.txt, evaluated as ROBOTS_AGENT --
+    the product token this collector puts in its User-Agent -- falling back to the '*' group when
+    no group names us.
+
+    Named-over-'*' is the only precedence urllib.robotparser implements. Among named groups the
+    first in file order wins rather than the most specific; within a group the first matching rule
+    line wins rather than the longest path, so an 'Allow:' carve-out written after a blanket
+    'Disallow: /' is not honoured; agent matching is substring; and path wildcards are unsupported.
+    See the notes above ROBOTS_AGENT for which of those fail open and which fail closed.
+
+    4xx = allowed; unreachable or 5xx = disallowed. Records the host's Crawl-delay for
+    _polite_wait."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False
