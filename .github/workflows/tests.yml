@@ -8,9 +8,15 @@ name: Tests
 # scored 380 of 380 with three real addresses in front of it, and nothing would have caught it on
 # merge.
 #
-# Each suite is its own step, and each step runs even after an earlier one has failed
-# (`if: ${{ !cancelled() }}`), so one red suite never hides the state of the other five. The run's
-# Summary tab carries a table of all six with their check counts and times.
+# No step here names the test files it runs. The Python suites under tests/ and the Node suites are
+# each discovered by a glob, because a workflow that lists its suites is green the day someone adds
+# one it does not list - which is the failure #63 exists to end, and which happened to both halves
+# of this file before they were changed. What each discovery step guards instead is three
+# assertions computed from the tree at run time; the scripts in .github/scripts/ carry the detail.
+#
+# One red suite never hides the state of the others: the steps run after an earlier failure
+# (`if: ${{ !cancelled() }}`), and inside the discovery steps every suite runs and is judged
+# separately. The run's Summary tab carries a table of every suite with its check count and time.
 #
 # Every suite is offline: no network, no token, no HTTP cache, and the ones that build do so into a
 # temporary directory rather than touching public/data. Nothing here writes to the repository.
@@ -27,7 +33,12 @@ name: Tests
 # one that runs. When #81 makes "checked nothing" a non-zero outcome in the tools themselves, the
 # sweep can be added here with a --min-ok floor.
 #
-# The floors below are the other half of the same argument: see .github/scripts/run_suite.py.
+# Discovery is what keeps that exclusion honest rather than accidental: it is rooted at `tests/` and
+# cannot reach `tools/`, and run_python_suites.py asserts that of every path it matches instead of
+# leaving it to be read off the glob. So the two sweeps are absent by construction, and the one
+# tools/ command that does run is written out by hand, where a reader can see the choice.
+#
+# The floors here are the other half of the same argument: see .github/scripts/run_suite.py.
 
 on:
   pull_request:
@@ -80,28 +91,33 @@ jobs:
             echo "| --- | --- | ---: | ---: |"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # One step per suite. The --min-checks floor is the count the suite reported when the step was
-      # written; a suite that starts running fewer goes red here rather than green. Raising a floor
-      # after adding checks is optional; lowering one is a deliberate, reviewable edit.
-
-      - name: seasons (tests/seasons_test.py)
+      # Every Python suite, discovered rather than named. These used to be four steps, one per
+      # file - which meant a fifth suite would not have run and this workflow would have been green
+      # while skipping it. That was not hypothetical: PR #96 adds tests/sidearm_schedule_test.py,
+      # and against a workflow naming four files it would have merged, never run, and reported
+      # green. Naming the suites is the failure #63 exists to end, surviving inside the mechanism
+      # built to end it; the Node step below was changed for the same reason a few hours earlier.
+      #
+      # Per-suite reporting is kept, not traded away: every discovered suite gets its own banner in
+      # this step's log, its own error annotation naming it, and its own row in the Summary table,
+      # and a failing suite does not stop the ones after it. Actions cannot generate steps from a
+      # glob; the script's docstring records why a matrix job was rejected rather than used.
+      #
+      # --min-checks is an aggregate backstop against checks eroding inside an existing file, and
+      # is NOT what catches a missing suite. That is three assertions computed from the tree: the
+      # glob must match something, every suite-shaped file under tests/ must be matched by it, and
+      # every discovered suite must report checks of its own. None of the three needs editing when
+      # a suite is added, which is the point - and none assumes a number of suites, so this is
+      # correct whether #96 merges before or after it.
+      - name: python suites (every tests/*_test.py, discovered)
         if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name seasons --min-checks 81 -- python tests/seasons_test.py
+        run: python .github/scripts/run_python_suites.py --min-checks 396
 
-      - name: the rank (tests/the_rank_test.py)
-        if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name the-rank --min-checks 177 -- python tests/the_rank_test.py
-
-      - name: camps index (tests/camps_index_test.py)
-        if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name camps-index --min-checks 94 -- python tests/camps_index_test.py
-
-      - name: robots and User-Agent (tests/robots_ua_test.py)
-        if: ${{ !cancelled() }}
-        run: python .github/scripts/run_suite.py --name robots-ua --min-checks 44 -- python tests/robots_ua_test.py
-
-      # --fixtures only. The default sweep needs an HTTP cache this runner does not have; see the
-      # note at the top of this file and issue #81.
+      # Named, not discovered, and the one Python step that is meant to be. --fixtures is a mode
+      # rather than a file: the default sweep needs an HTTP cache this runner does not have and
+      # would exit 0 having checked nothing. Discovery above is rooted at tests/ and never reaches
+      # tools/, which is what keeps that sweep - and tools/roster_check.py - out of this job by
+      # construction rather than by omission. See the note at the top of this file and issue #81.
       - name: camps fixtures (tools/camps_check.py --fixtures)
         if: ${{ !cancelled() }}
         run: python .github/scripts/run_suite.py --name camps-fixtures --min-checks 390 -- python tools/camps_check.py --fixtures
