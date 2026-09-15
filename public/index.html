@@ -454,11 +454,12 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
    Reads the JSON that build.py writes under data/:
      data/programs/index.json   one summary entry per program (cards, table, search)
      data/programs/<slug>.json  full profile
+     data/camps/index.json      every upcoming camp across all programs (the #/camps view, loaded lazily)
      archive/refresh-state.json freshness
    Same design system as ecnl.nextonetwo.com (header, sidebar, at-a-glance panel).
    ===================================================================== */
 const S = {
-  index: null, profiles: {}, refresh: null, local: false,
+  index: null, profiles: {}, camps: null, refresh: null, local: false,
   favorites: new Set(), compare: [], q: '', qRaw: '',
   filters: { conf: [], region: [], sort: 'rpi', classYear: [], view: 'cards', moreStats: false }, // conf/region/classYear: [] = all
   sidebarTab: 'programs', residency: '',
@@ -619,6 +620,22 @@ async function loadProfile(slug) {
   if (!S.profiles[slug]) S.profiles[slug] = await getJSON(`data/programs/${slug}.json`);
   return S.profiles[slug];
 }
+/* The site-wide camps index, fetched on first entry to #/camps and never before: a visitor who
+   never opens that view pays nothing for it. Shape (build.py, issue #78):
+     { updated, window: { from, to }, counts: { total, id, youth, unknown }, camps: [ row ] }
+   A row carries camp fields plus the `slug` that joins it to the program index, and `campType`
+   ("id" | "youth" | "unknown"). The view reads campType and never re-derives it - all
+   classification lives in the build. `counts` is optional here on purpose: an index published
+   before #85's build lands carries neither counts nor campType, and the view has to degrade
+   honestly rather than throw. */
+async function loadCamps() {
+  if (!S.camps) {
+    const doc = await getJSON('data/camps/index.json');
+    S.camps = { updated: doc?.updated || null, window: doc?.window || null, counts: doc?.counts || null,
+                camps: Array.isArray(doc?.camps) ? doc.camps : [] };
+  }
+  return S.camps;
+}
 const observedIso = () => S.refresh?.updated || S.index?.updated;
 const observedText = () => observedIso() ? `Data checked ${fmtDate(observedIso())}` : '';
 function renderObserved() {
@@ -679,16 +696,22 @@ function renderSidebar() {
   if (tab === 'programs') {
     const confs = Object.entries(S.index.byConf).sort((a, b) => a[0].localeCompare(b[0]));
     const years = S.index.season?.gradYears || [];
+    /* The ID Camp View is filtered by region and conference only (issue #65). Sort is a program
+       attribute and does not survive one program contributing several camps; the recruiting-class
+       pills filter nothing anywhere today (#15), so leaving them here would be a second silent
+       no-op. Both are OMITTED, not disabled - f.sort and f.classYear are never written while this
+       view is open, so both come back intact with the Program View. */
+    const onCamps = currentView() === 'camps';
     body = `
       <div class="sidebar-section-title">Find a program</div>
       <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
       <div class="search-status" id="qStatus"></div>
       <div class="sidebar-section-title">Browse</div>
-      <div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`}
       <div class="browse-label">Region</div>
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
-      <div class="browse-label">Recruiting class</div>
-      <div class="pill-row" role="group" aria-label="Recruiting class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>
+      ${onCamps ? '' : `<div class="browse-label">Recruiting class</div>
+      <div class="pill-row" role="group" aria-label="Recruiting class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>`}
       <div class="browse-label">Conference</div>
       <div class="pill-row" role="group" aria-label="Conference"><button ${pillAttrs('conf', '', !f.conf.length)}>All</button>${confs.map(([c, n]) => `<button ${pillAttrs('conf', c, f.conf.includes(c))} title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`).join('')}</div>`;
   } else if (tab === 'shortlist') {
@@ -706,7 +729,7 @@ function renderSidebar() {
   }
   sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
     ${body}
-    <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span><span><kbd>c</kbd> cards / table</span></div>`;
+    <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${currentView() === 'camps' ? '' : '<span><kbd>c</kbd> cards / table</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
   sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
@@ -727,8 +750,18 @@ function renderSidebar() {
     updateSearchStatus();
   }
 }
-function rerenderForFilters() { if (currentView() === 'list' || currentView() === 'c') renderList(); }
+function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }
 function currentView() { return location.hash.replace(/^#\/?/, '').split('/')[0] || 'list'; }
+/* The sidebar's shape differs in exactly one way between views - #/camps drops the sort select and
+   the recruiting-class pills - so it is rebuilt on the transition into or out of that view and at no
+   other time. Rebuilding it on every route would take focus out of the search box mid-typing. */
+let sidebarIsCamps = currentView() === 'camps';
+function syncSidebarForView(view) {
+  const wantCamps = view === 'camps';
+  if (wantCamps === sidebarIsCamps) return;
+  sidebarIsCamps = wantCamps;
+  if (S.index) renderSidebar();
+}
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, select, textarea')) return;
   if (e.key === '/') { e.preventDefault(); S.sidebarTab = 'programs'; renderSidebar(); if (isPhone()) toggleSidebar(); $('#q')?.focus(); }
@@ -741,7 +774,9 @@ function setQuery(v) {
   S.qRaw = v; S.q = normText(v);
   const clr = $('#qClear'); if (clr) clr.hidden = !v;
   clearTimeout(qTimer);
-  qTimer = setTimeout(() => { updateSearchStatus(); if (currentView() === 'list' || currentView() === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
+  // Typing filters the view you are in - #/camps included, where it narrows camps to matching
+  // PROGRAMS, never camp names. From any other view a query still bounces to the programs list.
+  qTimer = setTimeout(() => { updateSearchStatus(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
 }
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
@@ -758,6 +793,7 @@ function route() {
   const app = $('#app');
   const go = p => p.catch(e => { app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e); });
   $('#main').scrollTop = 0;
+  syncSidebarForView(view);
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
   if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
     const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; saveState(); renderSidebar();
@@ -766,6 +802,9 @@ function route() {
   if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = ''; saveState(); location.replace('#/'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
+  // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
+  // camps once should not be dropped back into them on their next visit.
+  if (view === 'camps') return go(renderCamps());
   if (view === 'faq') return go(renderFaq());
   if (view === 'list') return go(renderList());
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
@@ -872,11 +911,23 @@ function wireCharts(root) {
 
 
 /* ---------- list view: cards or table ---------- */
+/* The one filter predicate, shared by the Program View and the ID Camp View (issue #65) so the two
+   cannot drift apart. `score` is the search-hit map filteredPrograms builds; pass null where there
+   is none and the search clause falls back to matchScore directly.
+   Extracted verbatim from filteredPrograms - same three clauses, same conjunction, same order.
+   Recruiting class and sort are deliberately absent: classYear filters nothing anywhere today
+   (#15), and sort is not a filter. */
+const matchesFilters = (p, score) => {
+  const f = S.filters;
+  return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q)))
+    && (!f.conf.length || f.conf.includes(p.conference))
+    && (!f.region.length || f.region.includes(p.region));
+};
 function filteredPrograms() {
   const idx = S.index, f = S.filters;
   const score = new Map();
   idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
-  let rows = idx.programs.filter(p => (!S.q || score.has(p.slug)) && (!f.conf.length || f.conf.includes(p.conference)) && (!f.region.length || f.region.includes(p.region)));
+  let rows = idx.programs.filter(p => matchesFilters(p, score));
   rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || sortCmp(f.sort)(a, b));
   return rows;
 }
@@ -908,7 +959,9 @@ async function renderList() {
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
   if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
   bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
-  const tabs = [['cards', 'Cards'], ['table', 'Table']].map(([k, l]) => `<button class="view-tab${f.view === k ? ' active' : ''}" role="tab" aria-selected="${f.view === k}" data-view="${k}">${l}</button>`).join('');
+  // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
+  // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
+  const tabs = listTabs(f.view);
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
@@ -974,6 +1027,144 @@ async function renderShortlist() {
   $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
     + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
   $('#app').querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
+}
+
+/* ---------- camps, shared ----------
+   One implementation of "how a camp reads", used by the program page's ID Camps tab (tabCamps) and
+   by the site-wide #/camps view. These were local to tabCamps until issue #65 gave them a second
+   caller; they were lifted unchanged so the two cannot drift. */
+// Camp pages are third-party content: only http(s) URLs become links, anything else is shown as text.
+const campHttpUrl = u => /^https?:\/\//i.test(u || '') ? u : null;
+const campLink = (u, text) => campHttpUrl(u) ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(text)}</a>` : `<span class="muted">${esc(text)}</span>`;
+const campWhen = it => it.precision === 'month' ? esc(it.dateText || it.startDate)
+  : it.endDate && it.endDate !== it.startDate ? `${fmtDate(it.startDate)} – ${fmtDate(it.endDate)}` : fmtDate(it.startDate);
+const campBadges = (it, old) => [
+  old ? '<span class="badge">past</span>' : '',
+  it.kind === 'news' ? '<span class="badge">from news release</span>' : it.kind === 'curated' ? '<span class="badge">curated</span>' : '',
+  it.confidence === 'heuristic' ? '<span class="badge" title="Read automatically from the page text; confirm with the source before relying on it">auto-detected</span>' : '',
+  it.yearInferred ? '<span class="badge" title="The source gave no year; it was inferred from the release date">year inferred</span>' : '',
+].filter(Boolean).join(' ');
+
+/* ---------- ID camp view (#/camps) ----------
+   Every upcoming women's soccer ID and prospect camp across all programs, in one date-ordered list.
+
+   Three rules this view is built around, all of them decisions recorded on issues #65 and #78:
+
+   1. It NEVER classifies. `campType` is produced in the build (collect/camps.py, build.py) and read
+      here verbatim. Nothing here looks at `kind`, `confidence` or `registerUrl` to decide what a
+      camp is - that separation is the whole point of the data layer.
+   2. It shows `campType === 'id'` only. Youth camps and rows the classifier could not place are
+      excluded: a real camp missing here is recoverable on the program page, a kids' camp appearing
+      here is the thing the owner ruled against.
+   3. It says how many rows it hid. A classifier nobody checks is how we would never learn it had
+      drifted, so the count is on the page even when it is zero.
+
+   Region and conference filter it, with the Program View's exact semantics (matchesFilters). Sort
+   and recruiting class do not apply and are hidden from the sidebar rather than left inert. Order
+   is by date, soonest first, fixed. Search keeps its program meaning. */
+const CAMP_CLASSES = ['id', 'youth', 'unknown'];
+// soonest first; ties broken by end date then name so the order is total and stable across rebuilds
+const campCmp = (a, b) => (a.startDate || '').localeCompare(b.startDate || '')
+  || (a.endDate || '').localeCompare(b.endDate || '') || (a.name || '').localeCompare(b.name || '');
+/* The published tally, site-wide. Prefers the index's own `counts` (build-side, verified by
+   check_camps_index) and falls back to counting the rows when the key is absent - an index built
+   before #85 carries neither `counts` nor `campType`. `unlabelled` is rows carrying no class at
+   all: normally zero, and loud rather than silent if a publish ever regresses. */
+function campTally(doc) {
+  const t = { total: doc.camps.length, id: 0, youth: 0, unknown: 0 };
+  const c = doc.counts;
+  if (c && typeof c === 'object' && CAMP_CLASSES.every(k => Number.isFinite(c[k]))) {
+    CAMP_CLASSES.forEach(k => { t[k] = c[k]; });
+    if (Number.isFinite(c.total)) t.total = c.total;
+  } else {
+    doc.camps.forEach(r => { if (CAMP_CLASSES.includes(r.campType)) t[r.campType]++; });
+  }
+  t.unlabelled = Math.max(0, t.total - t.id - t.youth - t.unknown);
+  return t;
+}
+// The list header strip. Cards and Table are f.view and switch in place; ID Camps is its own route.
+function listTabs(active) {
+  const btn = (k, l) => `<button class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}" data-view="${k}">${l}</button>`;
+  return btn('cards', 'Cards') + btn('table', 'Table')
+    + `<a href="#/camps" class="view-tab${active === 'camps' ? ' active' : ''}" role="tab" aria-selected="${active === 'camps'}">ID Camps</a>`;
+}
+function campRowHtml(c, p) {
+  const details = [c.location, c.ages, c.price].filter(Boolean).join(' · ');
+  const links = [c.registerUrl ? campLink(c.registerUrl, 'register') : '', c.sourceUrl ? campLink(c.sourceUrl, 'source') : ''].filter(Boolean).join(' · ');
+  return `<tr class="team-row" data-slug="${esc(c.slug)}">
+    <td>${campWhen(c)}</td>
+    <td><b>${esc(c.name)}</b> ${campBadges(c, false)}</td>
+    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(p.shortName || p.name)}</a><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span>${starBtn(c.slug)}</div></td>
+    <td class="small">${esc(details) || '<span class="muted">—</span>'}</td>
+    <td class="small">${links || '<span class="muted">—</span>'}</td></tr>`;
+}
+async function renderCamps() {
+  const idx = await loadIndex();
+  const doc = await loadCamps();
+  const f = S.filters;
+  // Join to the program index by slug, then apply the Program View's own filter predicate.
+  const byProgram = new Map(idx.programs.map(p => [p.slug, p]));
+  const shown = doc.camps.filter(c => c.campType === 'id');
+  const resolved = shown.filter(c => byProgram.has(c.slug));
+  const orphans = shown.length - resolved.length; // a published slug the program index does not carry
+  const rows = resolved.filter(c => matchesFilters(byProgram.get(c.slug), null)).sort(campCmp);
+  const tally = campTally(doc);
+  const nProg = new Set(rows.map(c => c.slug)).size;
+  const filtered = !!(f.conf.length || f.region.length || S.q);
+
+  const bits = [`NCAA Division I women's soccer`,
+    `${rows.length} upcoming ID camp${rows.length === 1 ? '' : 's'}${filtered ? ` of ${resolved.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`];
+  if (f.conf.length) bits.push(esc(f.conf.join(', ')));
+  if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
+  if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names`);
+  bits.push('soonest first');
+
+  // The hidden count, site-wide and not narrowed by the filters. A number that collapsed to "0 of 0"
+  // whenever a region was picked would hide exactly the classifier drift it exists to expose.
+  const hidden = Math.max(0, tally.total - tally.id);
+  const why = [`${tally.youth} youth or kids' camp${tally.youth === 1 ? '' : 's'}`,
+    `${tally.unknown} we could not classify`]
+    .concat(tally.unlabelled ? [`${tally.unlabelled} published without a classification`] : []).join(', ');
+  const foot = [
+    `Women's soccer ID and prospect camps only.`,
+    hidden ? `${hidden} of ${tally.total} upcoming camps are not shown here — ${why}.` : `All ${tally.total} upcoming camps we publish are shown here.`,
+    orphans ? `${orphans} row${orphans === 1 ? '' : 's'} could not be matched to a program.` : '',
+    `Every camp a school lists, youth camps included, is on that program's ID Camps tab. Programs whose camp page we could not read do not appear here.`,
+    doc.updated ? `Camp list checked ${fmtDate(doc.updated)}.` : '',
+  ].filter(Boolean).join(' ');
+
+  let body;
+  if (rows.length) {
+    body = `<div class="card"><div class="tscroll"><table>
+        <tr><th>When</th><th>Camp</th><th>Program</th><th>Details</th><th>Links</th></tr>
+        ${rows.map(c => campRowHtml(c, byProgram.get(c.slug))).join('')}</table></div>
+      <div class="table-footnote">${foot}</div></div>`;
+  } else if (filtered && resolved.length) {
+    // The common empty case, not an exceptional one: the list is small and regional coverage is thin.
+    body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
+      <p class="muted">Nothing is scheduled yet for ${esc([f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
+      ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
+      <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/">All programs</a></p>
+      <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
+  } else {
+    body = `<div class="card"><h3>No upcoming ID camps are published right now</h3>
+      <p class="muted">We publish a camp here once a school has posted a dated women's soccer ID or prospect camp. Camps are usually announced in the spring. A program's own <b>ID Camps</b> tab shows everything we found for it, including camps we could not date.</p>
+      <p><a class="btn primary" href="#/">All programs</a></p>
+      <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
+  }
+
+  $('#app').innerHTML = pageHeader({
+    crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Upcoming ID camps' }],
+    title: 'Upcoming ID camps', subtitle: bits.join(' · '), tabs: listTabs('camps'),
+  }) + `<div class="content-body">${body}</div>`;
+
+  const app = $('#app');
+  // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
+  const clr = $('#campsClear');
+  // Clears everything that narrowed the list, search included - otherwise "clear filters" leaves one on.
+  if (clr) clr.onclick = () => { f.conf = []; f.region = []; S.q = ''; S.qRaw = ''; saveState(); renderSidebar(); renderCamps(); };
 }
 
 /* ---------- profile ---------- */
@@ -1257,9 +1448,10 @@ async function tabCamps(p) {
   // 'month'), dateText, confidence ('heuristic' = read automatically from page text). upcoming/past is
   // decided here with today's local date: the site is static and rebuilt once a day.
   const c = p.camps;
-  // Camp pages are third-party content: only http(s) URLs become links, anything else is shown as text.
-  const httpUrl = u => /^https?:\/\//i.test(u || '') ? u : null;
-  const link = (u, text) => httpUrl(u) ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(text)}</a>` : `<span class="muted">${esc(text)}</span>`;
+  // campHttpUrl / campLink / campWhen / campBadges live at module scope (see "camps, shared") so this
+  // tab and the site-wide #/camps view render a camp the same way. They were local to this function
+  // until issue #65 gave them a second caller; the lift was a move, not a rewrite.
+  const httpUrl = campHttpUrl, link = campLink, when = campWhen, badges = campBadges;
   const skipped = (p._build.skipped || []).find(s => s.collector === 'camps');
   if (!c) return skipped
     ? `<div class="card empty">Camp information is not collected for this program: ${esc(skipped.reason.replace(/^camps: /, '').replace(/ \(registry [^)]*\)$/, ''))}. Check the ${extLink(p.links.athletics, 'athletics site')} directly.</div>`
@@ -1270,14 +1462,6 @@ async function tabCamps(p) {
   const isPast = it => it.precision === 'month' ? it.startDate < month : (it.endDate || it.startDate) < today;
   const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
   const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
-  const when = it => it.precision === 'month' ? esc(it.dateText || it.startDate)
-    : it.endDate && it.endDate !== it.startDate ? `${fmtDate(it.startDate)} – ${fmtDate(it.endDate)}` : fmtDate(it.startDate);
-  const badges = (it, old) => [
-    old ? '<span class="badge">past</span>' : '',
-    it.kind === 'news' ? '<span class="badge">from news release</span>' : it.kind === 'curated' ? '<span class="badge">curated</span>' : '',
-    it.confidence === 'heuristic' ? '<span class="badge" title="Read automatically from the page text; confirm with the source before relying on it">auto-detected</span>' : '',
-    it.yearInferred ? '<span class="badge" title="The source gave no year; it was inferred from the release date">year inferred</span>' : '',
-  ].filter(Boolean).join(' ');
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
     <td><b>${esc(it.name)}</b> ${badges(it, old)}${it.kind === 'news' && it.newsTitle && it.newsTitle !== it.name ? `<div class="small muted">${esc(it.newsTitle)}</div>` : ''}</td>
     <td class="small">${esc([it.location, it.ages, it.price].filter(Boolean).join(' · '))}</td>
