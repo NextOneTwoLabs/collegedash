@@ -1,7 +1,7 @@
 // Entry point for the deployed Worker. The site itself is the static files in public/ (see
-// [assets] in wrangler.toml). This script does three things and runs ahead of the static assets
-// only for "/" and "/api/*" (run_worker_first in wrangler.toml), so every other file is served as
-// a free static asset:
+// [assets] in wrangler.toml). This script does four things and runs ahead of the static assets
+// only for "/", "/api/*" and "/data/rpi/*" (run_worker_first in wrangler.toml), so every other
+// file is served as a free static asset:
 //
 //   1. Sends the workers.dev address to the canonical custom domain. Browsers carry the #fragment
 //      across a redirect, so deep links such as #/p/stanford/roster still land on the right page.
@@ -11,6 +11,9 @@
 //   3. Accepts footer feedback at POST /api/feedback and stores it in the FEEDBACK KV namespace,
 //      one key per submission. Stored: when it was sent, the message, the reply email if the
 //      visitor gave one, and which page they were on. No IP, no user agent.
+//   4. Answers 404 for /data/rpi and everything under it (issue #100). The RPI tables are committed
+//      and uploaded with the other assets, because the build and the collector read them from
+//      public/data/rpi, but the site does not serve them.
 //
 // Nothing here echoes a submission back to the client, and nothing renders one into the site.
 const CANONICAL_HOST = 'college.nextonetwo.com';
@@ -42,6 +45,12 @@ export default {
     }
     if (url.pathname === '/api/feedback') return feedback(request, env);
 
+    // The RPI tables stay in public/data/rpi (the build and the collector read them there) but are
+    // not served (issue #100). This answers only because wrangler.toml lists "/data/rpi/*" in
+    // run_worker_first; without that entry the file is served as a static asset and this line never
+    // runs. tests/rpi_not_served.test.mjs fails if either half is removed.
+    if (isRpiPath(url.pathname)) return new Response(null, { status: 404 });
+
     if (url.hostname.endsWith('.workers.dev')) {
       url.hostname = CANONICAL_HOST;
       return Response.redirect(url.toString(), 301);
@@ -49,6 +58,24 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+// True for /data/rpi and anything under it, compared the way the asset server resolves a path:
+// each segment percent-decoded, repeated slashes collapsed, and case ignored. The run_worker_first
+// pattern only sees the raw pathname, so /data/rp%69/current.json and //data/rpi/current.json do
+// not match it. The asset server decodes those, finds the file and answers 307 to the canonical
+// /data/rpi/... path, which does match. Deciding here on the decoded form as well means a request
+// that reaches the Worker by any route is refused, whatever it looked like. 404, not 403: a 403
+// would confirm that the file exists.
+function isRpiPath(pathname) {
+  const decoded = pathname.split('/').map((seg) => {
+    try {
+      return decodeURIComponent(seg);
+    } catch {
+      return seg;
+    }
+  }).join('/').replace(/\/+/g, '/').toLowerCase();
+  return decoded === '/data/rpi' || decoded.startsWith('/data/rpi/');
+}
 
 async function feedback(request, env) {
   if (request.method !== 'POST') {

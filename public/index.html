@@ -493,8 +493,9 @@ const rankStr = n => n == null ? '—' : '#' + n;
    "Fresno State" ahead of "Cal State Fullerton" and reads as unsorted (issue #60; the same mismatch
    had already been corrected once in the US-rank tiebreak, issue #57). It is one helper rather than a
    repeated expression so the rule cannot be applied to some orderings and not others a sixth time.
-   Not used by rpiOf or prepareSearch: those key into the NCAA's RPI table and the search index by the
-   same text, which is a lookup key and not a label, and conflating the two would hide a real bug. */
+   Not used by prepareSearch: that keys into the search index by the same text, which is a lookup key
+   and not a label, and conflating the two would hide a real bug. (rpiOf used to key into the NCAA's RPI
+   table the same way; since issue #100 it reads the program's own row and needs no name at all.) */
 const displayName = p => p.shortName || p.name || '';
 /* Alphabetical the way a reader reads it. `sensitivity: 'accent'` is case-insensitive and NOTHING
    else: accents still separate two names, punctuation is still significant, and no article or
@@ -635,10 +636,6 @@ async function loadIndex() {
   if (S.index) return S.index;
   S.index = await getJSON('data/programs/index.json');
   S.index.programs.forEach(prepareSearch);
-  try {
-    const rpi = await getJSON('data/rpi/current.json');
-    if (rpi?.season === RPI_SEASON && Array.isArray(rpi.teams)) S.rpiByName = new Map(rpi.teams.map(t => [t.school, t.rank]));
-  } catch { /* the weekly table is optional */ }
   /* Conference and division tallies, both derived from the rows that actually loaded and never from a
      list of divisions written down here. `divisions` is every distinct value of p.division, sorted, so
      it reads ['D1'] today and grows by itself the day D3 or D2 is published - which is what decides
@@ -691,9 +688,10 @@ function renderObserved() {
   document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
 }
 const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
-// RPI for the ranking season: the NCAA's published table (data/rpi/current.json, keyed by school name) first,
-// then whatever the program's own season rows carry
-const rpiOf = p => S.rpiByName?.get(p.shortName || p.name) ?? (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
+// RPI for the ranking season, from the program's own row in the published index: build.py joins the RPI
+// tables to each program by its curated ids and writes the result into lastSeason and rpiHistory. The page
+// no longer reads the tables themselves, and the site no longer serves them (issue #100).
+const rpiOf = p => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
 const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };
 /* ---------- academic rank (Times Higher Education) ----------
    THE ranks 171 US universities and prints a tied rank with a leading '=' (124 of the 171 are ties),

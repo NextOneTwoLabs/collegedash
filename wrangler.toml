@@ -3,9 +3,10 @@
 # The site is the static files in public/ - the same directory `python collegedash.py serve`
 # serves locally, so the deployed site is byte-identical to a local run (minus the feedback form,
 # which needs the Worker). worker.js redirects the workers.dev address to the canonical custom
-# domain and answers GET /api/status and POST /api/feedback. It runs ahead of the assets for "/"
-# and "/api/*" only, so every other file is served as a free static asset without invoking the
-# Worker.
+# domain, answers GET /api/status and POST /api/feedback, and refuses everything under /data/rpi
+# with a 404 (issue #100; serve.py still serves those files locally). It runs ahead of the assets
+# for "/", "/api/*" and "/data/rpi/*" only, so every other file is served as a free static asset
+# without invoking the Worker.
 #
 # Canonical address: https://college.nextonetwo.com  (custom domain, attached to this Worker in
 # the Cloudflare dashboard under Settings -> Domains & Routes).
@@ -17,7 +18,12 @@ compatibility_date = "2026-08-31"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = ["/", "/api/*"]
+# "/data/rpi/*" is here so worker.js can refuse it with a 404 (issue #100). The RPI tables stay in
+# public/data/rpi because the build and the collector read them there, so they are still uploaded
+# as assets. An asset is served *before* the Worker runs unless its path matches this list, so
+# deleting the entry exposes every file under /data/rpi again. tests/rpi_not_served.test.mjs
+# fails if it goes, and .github/workflows/rpi-not-served.yml checks the live site.
+run_worker_first = ["/", "/api/*", "/data/rpi/*"]
 
 # Visitor feedback is stored one key per submission in the KV namespace titled
 # COLLEGEDASH_FEEDBACK on the NextOneTwoLabs account. The title is prefixed because the bare
