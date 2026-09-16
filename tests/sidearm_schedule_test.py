@@ -422,7 +422,8 @@ def test_fixtures_carry_no_contact_details() -> None:
     # tests/sidearm_staff_test.py scans those too; a contact detail has to get past both.
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
     # 20 until issue #145 added roster-no-staff, roster-players-and-staff and the two coaches-* pages
-    ok("privacy: there are fixtures to check", len(names) == 24, str(names))
+    # 25 since issue #160 added schedule-safelinks (its only address is placeholder@example.invalid)
+    ok("privacy: there are fixtures to check", len(names) == 25, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
