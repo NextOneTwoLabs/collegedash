@@ -166,6 +166,13 @@ def parse_roster(html: str, base_url: str) -> dict:
             })
     if not players:
         _parse_redesign_layouts(soup, base_url, players, staff)
+    elif not staff:
+        # The players were in the older list/card markup, but a page can mix themes: wsucougars.com
+        # lists its players as li.roster-list-item and its staff as the redesign's
+        # li.staff-list-item, which only _parse_redesign_layouts reads, and that runs only when no
+        # player was found (issue #145). Read only when nothing else yielded staff, so a page that
+        # already has staff keeps exactly the rows, and the order, it had.
+        _parse_staff_list_items(soup, base_url, staff)
     if not players:
         _parse_legacy_layouts(soup, base_url, players, staff)
     if not players and soup.find("table"):  # plain-table themes (arkansasrazorbacks.com)
@@ -201,6 +208,21 @@ def _staff_from(item, name: str, title: str, link) -> dict:
         "isCoach": bool(re.search(r"coach|director of women", title, re.I)),
         "bioUrl": link, "social": _social(item),
     }
+
+
+def _parse_staff_list_items(soup: BeautifulSoup, base_url: str, staff: list) -> None:
+    """Staff from the redesign's li.staff-list-item rows (gopsusports.com, wsucougars.com)."""
+    for item in soup.select("li.staff-list-item"):
+        link = item.select_one("a.staff-list-item__title-link") or next(
+            (l for l in item.select("a[href*='/staff/']") if common.clean(l.get_text(" "))), None)
+        if not link:
+            continue
+        name = common.clean(link.get_text(" "))
+        title_el = item.select_one(".staff-list-item__position, [class*='staff-list-item__'][class*='position'], [class*='staff-list-item__'][class*='title']:not(a)")
+        f = _labelled_fields(item)
+        title = common.clean(title_el.get_text(" ")) if title_el and title_el is not link else f.get("title", f.get("position", ""))
+        if name:
+            staff.append(_staff_from(item, name, title, urljoin(base_url, link["href"])))
 
 
 def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, staff: list) -> None:
@@ -277,17 +299,7 @@ def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, s
             "club": f.get("club team", f.get("club", "")),
             "bioUrl": urljoin(base_url, link["href"]), "social": _social(item),
         })
-    for item in soup.select("li.staff-list-item"):
-        link = item.select_one("a.staff-list-item__title-link") or next(
-            (l for l in item.select("a[href*='/staff/']") if common.clean(l.get_text(" "))), None)
-        if not link:
-            continue
-        name = common.clean(link.get_text(" "))
-        title_el = item.select_one(".staff-list-item__position, [class*='staff-list-item__'][class*='position'], [class*='staff-list-item__'][class*='title']:not(a)")
-        f = _labelled_fields(item)
-        title = common.clean(title_el.get_text(" ")) if title_el and title_el is not link else f.get("title", f.get("position", ""))
-        if name:
-            staff.append(_staff_from(item, name, title, urljoin(base_url, link["href"])))
+    _parse_staff_list_items(soup, base_url, staff)
     if not players and soup.select("table .roster-table-cell"):
         from .sidearm import parse_roster_tables
         tp, ts = parse_roster_tables(soup, base_url)

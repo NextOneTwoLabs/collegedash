@@ -209,6 +209,11 @@ def urls(program: dict, registry: dict) -> dict:
         "scheduleSeason": lambda y: fmt("scheduleSeason", year=y),
         "news": fmt("news"),
         "rss": fmt("rss") if "rss" in t else None,
+        # Read only when the roster page lists no staff at all (issue #145; see
+        # athletics_site._coaches_page_staff). Not a registry template, so the registry is untouched;
+        # of the 11 Sidearm sites fetched for #145, 9 serve the sport's coaches here as a server-rendered
+        # table and 2 (ohio-university, st-thomas) as a page filled in by the browser, which yields none.
+        "coaches": f"{a['baseUrl']}{a['sportPath']}/coaches",
     }
 
 
