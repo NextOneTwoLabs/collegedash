@@ -341,6 +341,49 @@ def test_collector_stores_it() -> None:
         common.fetch_text, common.save_source, common.log = real
 
 
+def test_build_publishes_it() -> None:
+    """build_program_section: the bio year wins, a disagreement with Wikipedia is logged, and with no bio year
+    #169's Wikipedia rule applies unchanged."""
+    print("build.py: what coachSince publishes")
+    import build  # noqa: E402  (from CODE_ROOT, like the collector)
+
+    def section(bio, seasons_rows, infobox, head="Pat Lee"):
+        wiki = {"data": {"seasons": seasons_rows, "headCoach": infobox}}
+        ath = {"data": {"staff": [{"name": head, "title": "Head Coach", "isHeadCoach": True, "isCoach": True,
+                                   "bioUrl": "https://example.invalid/coaches/pat-lee/1", "social": {}}],
+                        **({"headCoachBio": bio} if bio is not None else {})}}
+        logs = []
+        real = common.log
+        common.log = logs.append
+        try:
+            since = build.build_program_section({"slug": "fixture", "division": "D1"}, wiki, ath)["headCoach"]["since"]
+        finally:
+            common.log = real
+        return since, logs
+
+    def rows(coach, first, last):
+        return [{"year": y, "label": str(y), "headCoach": coach} for y in range(first, last + 1)]
+
+    bio = {"name": "Pat Lee", "url": "https://example.invalid/coaches/pat-lee/1", "firstSeason": 2020, "conflict": False, "statements": []}
+    since, logs = section(bio, [], None)
+    ok("FIX a bio year is published when Wikipedia has nothing (no table, no infobox)", since == 2020, str(since))
+    since, logs = section(bio, rows("Pat Lee", 2020, 2025), "Pat Lee")
+    ok("FIX a bio year confirms a Wikipedia run the infobox cannot (no season count): 2020", since == 2020 and not logs, str((since, logs)))
+    since, logs = section({**bio, "firstSeason": 2007}, rows("Erica Dambach", 2016, 2023), "Erica Dambach (18th season)", head="Erica Dambach")
+    ok("CONTROL the bio page must be the head coach's own: another name's bio year is ignored",
+       since is None, str(since))
+    since, logs = section({**bio, "name": "Erica Dambach", "firstSeason": 2007}, rows("Erica Dambach", 2016, 2023),
+                          "Erica Dambach (18th season)", head="Erica Dambach")
+    ok("FIX bio and Wikipedia disagree (penn-state: bio 2007, table run from 2016): the bio year wins", since == 2007, str(since))
+    ok("FIX ... and the disagreement is written to the build log, with both years",
+       any("2007" in m and "2016" in m and "fixture" in m for m in logs), str(logs))
+    since, logs = section({**bio, "firstSeason": None, "conflict": True}, rows("Pat Lee", 2003, 2025), "Pat Lee (23rd season)")
+    ok("CONTROL a bio that contradicts itself gives no year, and #169's rule applies: 2003 (infobox 23rd season from 2025)",
+       since == 2003, str(since))
+    since, logs = section(None, rows("Pat Lee", 1995, 2025), "Pat Lee (29th season)")
+    ok("CONTROL no bio at all: #169's rule, which withdraws a run the infobox disagrees with (byu)", since is None, str(since))
+
+
 def test_no_contact_details() -> None:
     print("privacy: tests/fixtures/coach_bio/")
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
@@ -363,7 +406,8 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     if CODE_ROOT != ROOT:
         print(f"code under test imported from {CODE_ROOT}")
-    for case in (test_real_pages, test_phrasing_rules, test_previous_jobs, test_collector_stores_it, test_no_contact_details):
+    for case in (test_real_pages, test_phrasing_rules, test_previous_jobs, test_collector_stores_it, test_build_publishes_it,
+                 test_no_contact_details):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
