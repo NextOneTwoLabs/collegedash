@@ -122,6 +122,14 @@ tr:hover td { background: var(--row-hover); }
 .search-clear { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); border: none; background: none; color: var(--text-secondary); font-size: 16px; line-height: 1; padding: 4px 6px; border-radius: 999px; cursor: pointer; }
 .search-clear:hover { color: var(--text-primary); background: var(--bg-surface-alt); }
 .search-status { padding: 0 20px 6px; font-size: 12px; color: var(--text-secondary); min-height: 18px; }
+/* Ask (issue #165): rendered only when /api/status reports ask enabled, so none of this is used today. */
+.ask-slot { padding: 0 16px 8px; }
+.ask-row { display: block; width: 100%; text-align: left; padding: 7px 10px; font-size: 13px; font-weight: 600; font-family: var(--font); color: var(--accent-text); background: var(--accent-surface); border: 1px dashed var(--accent); border-radius: var(--radius-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ask-row:hover { border-style: solid; }
+.ask-row[disabled] { opacity: 0.7; cursor: progress; }
+.ask-note { font-size: 12px; color: var(--text-secondary); padding: 6px 2px 0; }
+.ask-banner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 14px; font-size: 13px; background: var(--accent-surface); border: 1px solid var(--accent); border-radius: var(--radius-sm); }
+.ask-banner .btn { padding: 3px 10px; font-size: 12px; }
 .browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
 .browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
 .browse-row .browse-label { padding: 0; min-width: 52px; }
@@ -488,6 +496,8 @@ const S = {
   filters: { conf: [], region: [], division: [], sort: 'name', classYear: [], view: 'cards', moreStats: false, cond: [] }, // conf/region/division/classYear: [] = all; cond: condition chips, [] = none (#166)
   sidebarTab: 'programs', residency: '',
   condForm: null, // the open "+ Add" condition form, {field, op, text, error}; never persisted
+  // Ask (#165). S.ask is set only by /api/status {ask: true}; while it is false no ask markup or behaviour exists.
+  ask: false, askPending: false, askMsg: '', askResult: null,
 };
 const RPI_SEASON = 2025;
 const NCAA_RPI_URL = 'https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi';
@@ -780,7 +790,11 @@ S.filters.cond = sanitizeConds(S.filters.cond);
 function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
 const pillAttrs = (attr, value, on) => `class="pill${on ? ' active' : ''}" data-${attr}="${esc(value)}" aria-pressed="${on}"`;
 S.residency = lsGet('cd.residency', '') || '';
-function saveState() { lsSet('cd.filters', S.filters); lsSet('cd.compare', S.compare); lsSet('cd.residency', S.residency); }
+function saveState() {
+  // An ask result describes the filters it applied; once anything changes them, the line would be false (#165).
+  if (S.askResult && askKey() !== S.askResult.key) S.askResult = null;
+  lsSet('cd.filters', S.filters); lsSet('cd.compare', S.compare); lsSet('cd.residency', S.residency);
+}
 
 /* theme: data-theme on <html>, same mechanism as the ECNL dashboard */
 function setThemeToggle(isDark) { const b = $('#themeToggle'); b.textContent = isDark ? '☀️' : '🌙'; b.title = isDark ? 'Switch to light mode' : 'Switch to dark mode'; b.setAttribute('aria-label', b.title); }
@@ -842,7 +856,7 @@ async function loadIndex() {
   const live = new Set(S.index.divisions);
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
   getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
-  getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
+  getJSON('api/status').then(r => { S.local = !!r.local; if (r.ask === true && !S.ask) askSwitchedOn(); }).catch(() => { });
   return S.index;
 }
 async function loadProfile(slug) {
@@ -1048,8 +1062,8 @@ function renderSidebar() {
       </form>` : ''}`;
     body = `
       <div class="sidebar-section-title">Find a program</div>
-      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
-      <div class="search-status" id="qStatus"></div>
+      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="${S.ask ? 'School, mascot, or a question…' : 'School or mascot…'}" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
+      <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
       <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`}
       ${divisionBlock}
@@ -1093,7 +1107,9 @@ function renderSidebar() {
   if (q) {
     q.addEventListener('input', e => setQuery(e.target.value));
     q.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${top.p.slug}`; } }
+      // Ask (#165), only when switched on: Shift+Enter always asks; Enter asks when no name matches.
+      if (e.key === 'Enter' && S.ask && S.qRaw.trim() && (e.shiftKey || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
+      else if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${top.p.slug}`; } }
       else if (e.key === 'Escape') { q.value = ''; setQuery(''); }
     });
     $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
@@ -1159,10 +1175,86 @@ function setQuery(v) {
 }
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
+  if (S.ask) renderAskSlot();
   if (!S.q) { el.textContent = ''; return; }
   const n = searchMatches().length;
+  if (S.ask) { el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first · Shift+Enter asks` : 'No name match · Enter asks'; return; }
   el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first` : 'No match - try the short name (UCLA, Ole Miss) or the mascot';
 }
+
+/* ---------- ask (issue #165, AI prototype 1) ----------
+   A question becomes the page's own filter state. The Worker's /api/ask returns only pills, condition chips
+   (stored units), a sort and a one-line reading, or {unsupported}; it is validated there against the same
+   vocabulary as this page, and again here on the way in (sanitizeConds, the pill lists). Nothing in this
+   block runs, and nothing renders, unless /api/status says {ask: true}. Asking is always a choice: typing
+   still only searches names. */
+function askSwitchedOn() {
+  S.ask = true;
+  if (!S.index || S.sidebarTab !== 'programs') return;
+  const typing = document.activeElement && document.activeElement.id === 'q';
+  renderSidebar();
+  if (typing) $('#q')?.focus();
+}
+const askKey = () => { const f = S.filters; return JSON.stringify([f.division, f.conf, f.region, f.classYear, f.cond, f.sort]); };
+function renderAskSlot() {
+  const slot = $('#askSlot'); if (!slot) return;
+  const text = S.qRaw.trim();
+  const row = text ? `<button type="button" class="ask-row" id="askRow"${S.askPending ? ' disabled' : ''}>${S.askPending ? 'Asking…' : `✦ Ask: “${esc(text)}”`}</button>` : '';
+  slot.innerHTML = row + (S.askMsg ? `<div class="ask-note" role="status">${esc(S.askMsg)}</div>` : '');
+  const b = $('#askRow'); if (b) b.onclick = () => askQuestion(S.qRaw);
+}
+async function askQuestion(text) {
+  const question = String(text || '').trim();
+  if (!S.ask || !question || S.askPending) return;
+  S.askPending = true; S.askMsg = ''; renderAskSlot();
+  let answer = null;
+  try {
+    const r = await fetch('api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question }) });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) S.askMsg = data.error || 'Ask is unavailable right now.';
+    else if (typeof data.unsupported === 'string') S.askMsg = `That needs the full Q&A: ${data.unsupported}`;
+    else answer = data;
+  } catch {
+    S.askMsg = 'Ask is unavailable right now.';
+  }
+  S.askPending = false;
+  if (answer) applyAsk(answer); else renderAskSlot();
+}
+// Apply an answer as ordinary filter state. Every list is re-checked against what this page offers, so a
+// value the page cannot show is dropped here even if the Worker let it through.
+function applyAsk(a) {
+  const f = S.filters, strs = x => Array.isArray(x) ? x.filter(s => typeof s === 'string') : [];
+  const prev = { filters: JSON.parse(JSON.stringify({ division: f.division, conf: f.conf, region: f.region, classYear: f.classYear, cond: f.cond, sort: f.sort })), qRaw: S.qRaw };
+  const years = (S.index.season?.gradYears || []).map(String);
+  f.division = strs(a.division).filter(d => (S.index.divisions || []).includes(d));
+  f.conf = strs(a.conf).filter(c => Object.prototype.hasOwnProperty.call(S.index.byConf, c));
+  f.region = strs(a.region).filter(r => REGIONS.includes(r));
+  f.classYear = strs(a.classYear).filter(y => years.includes(y));
+  f.cond = sanitizeConds(a.cond);
+  const sort = SORTS.find(s => s[0] === a.sort);
+  if (sort) f.sort = sort[0];
+  pruneConfToDivisions();
+  const parts = [...f.division.map(divisionName), ...f.conf, ...f.region.map(r => `${r} region`),
+    ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
+  S.qRaw = ''; S.q = ''; S.askMsg = '';
+  S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
+  saveState();
+  S.sidebarTab = 'programs'; renderSidebar();
+  const v = currentView();
+  if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/';
+}
+function undoAsk() {
+  const r = S.askResult; if (!r) return;
+  Object.assign(S.filters, JSON.parse(JSON.stringify(r.prev.filters)));
+  S.qRaw = r.prev.qRaw; S.q = normText(r.prev.qRaw);
+  S.askResult = null; saveState(); renderSidebar(); rerenderForFilters();
+}
+// The "From your question" line. '' when there is no ask result, which is always while ask is off.
+function askBanner() {
+  const r = S.askResult; if (!r) return '';
+  return `<div class="ask-banner" role="status"${r.reading ? ` title="${esc(r.reading)}"` : ''}><span>From your question: ${esc(r.parts.join(' · ') || 'no filters')}</span><button type="button" class="btn" id="askUndo">Undo</button></div>`;
+}
+function wireAskBanner() { const u = $('#askUndo'); if (u && S.askResult) u.onclick = undoAsk; }
 
 /* ---------- router ---------- */
 function route() {
@@ -1363,8 +1455,9 @@ async function renderList() {
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
   const app = $('#app');
+  wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   app.querySelectorAll('th[data-sort]').forEach(th => th.onclick = () => { f.sort = th.dataset.sort; saveState(); renderSidebar(); renderList(); });
@@ -1569,9 +1662,10 @@ async function renderCamps() {
   $('#app').innerHTML = pageHeader({
     crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Upcoming ID camps' }],
     title: 'Upcoming ID camps', subtitle: bits.join(' · '), tabs: listTabs('camps'),
-  }) + `<div class="content-body">${body}</div>`;
+  }) + `<div class="content-body">${askBanner()}${body}</div>`;
 
   const app = $('#app');
+  wireAskBanner();
   // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
   app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
