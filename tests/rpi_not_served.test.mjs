@@ -256,10 +256,18 @@ test('every program shows the RPI it showed when the page read the table, on the
     const tableRow = sandbox.tableHtml([p]);
     const cardFact = card.match(/RPI \d{4}<\/[^>]+>\s*<[^>]+>([^<]*)</);
     const rankCell = tableRow.match(/<span class="rank-num[^"]*">([^<]*)<\/span>/);
-    if (sandbox.rpiOf(p) !== before || sandbox.rpiCell(p) !== shown
-      || !cardFact || cardFact[1] !== shown || !rankCell || rankCell[1] !== String(before ?? '—')) {
-      wrong.push(`${p.slug}: was ${shown}, now rpiOf ${sandbox.rpiOf(p)}, card ${cardFact?.[1]}, table ${rankCell?.[1]}`);
+    // Since issue #115 a program with no RPI shows no RPI fact on its card, and a one-row table for it has
+    // no rank column at all - the em dash is only for a program that shares a table with a ranked one.
+    // West Florida, a 2026 D1 newcomer with no NCAA table row, is the first such program.
+    const cardOk = before == null ? cardFact === null : cardFact?.[1] === shown;
+    const tableOk = before == null ? rankCell === null : rankCell?.[1] === String(before);
+    if (sandbox.rpiOf(p) !== before || sandbox.rpiCell(p) !== shown || !cardOk || !tableOk) {
+      wrong.push(`${p.slug}: was ${shown}, now rpiOf ${sandbox.rpiOf(p)}, card ${cardFact?.[1] ?? '(no fact)'}, table ${rankCell?.[1] ?? '(no column)'}`);
     }
   }
   assert.deepEqual(wrong, [], `${wrong.length} of ${programs.length} programs changed`);
+  // the two branches above are both exercised by the shipped index, or one of them proves nothing
+  const ranked = programs.filter(p => sandbox.rpiOf(p) != null).length;
+  assert.ok(ranked > 0 && ranked < programs.length,
+    `every published program is on the same side of the RPI check (${ranked} of ${programs.length} ranked)`);
 });
