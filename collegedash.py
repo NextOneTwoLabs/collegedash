@@ -3,6 +3,11 @@
 CollegeDash command line.
 
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
+  python collegedash.py onboard <slug> <slug> ...       or --slugs-file f: batch form (issue #143) - every
+                    [--slugs-file f] [--workers 16]      collector for every program, THEN one build;
+                 [--collect-staged-divisions D2]         --workers side by side, same politeness as refresh;
+                                                          refuses a slug in a division the site does not
+                                                          publish yet, same as --all below
   python collegedash.py onboard --all [--conference C]   onboard the programs not yet onboarded, a batch at a
                               [--limit N] [--max-batch N] time; refuses a batch that spans a division the site
                          [--collect-staged-divisions D2] does not publish yet, or one over --max-batch
@@ -160,12 +165,47 @@ def _mark_onboarded(slug: str) -> dict:
     return common.update_registry(mutate)
 
 
+def explicit_slugs(args) -> list[str]:
+    """The slugs an onboard command names outside --all: the positional slug plus any more_slugs and
+    any --slugs-file, in the order given, duplicates dropped after the first. Empty for --all.
+
+    Two or more is the batch form (issue #143): collect every one, then build once, instead of once
+    per program. Exactly one - however it arrived, typed directly or the only line
+    of a file - is the single-program form that has always existed and is untouched by this: same
+    code path, same lack of a division guard, one build either way because there is only one program."""
+    if args.slug == "--all" or args.all:
+        return []
+    slugs = ([args.slug] if args.slug else []) + list(args.more_slugs)
+    if args.slugs_file:
+        with open(args.slugs_file, encoding="utf-8") as f:
+            slugs += [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+    seen: list[str] = []
+    for s in slugs:
+        if s not in seen:
+            seen.append(s)
+    return seen
+
+
 def cmd_onboard(args):
     reg = common.load_registry()
+    if (args.slug == "--all" or args.all) and (args.more_slugs or args.slugs_file):
+        # the batch syntax is new (issue #143), so refusing the combination changes no command that
+        # worked before; `onboard --all <one slug>` still ignores the slug, as it always has
+        common.log("!! onboard refuses: --all and an explicit slug list (more slugs, or --slugs-file) are two "
+                   "different batches. Name one of them. Nothing was collected.")
+        return 2
     if args.slug == "--all" or args.all:
         # checked before rpi.history/current, so a refused command makes no request at all
         refusal = batch_refusal(reg, conference=args.conference, limit=args.limit, max_batch=args.max_batch,
                                 allow_divisions=args.collect_staged_divisions.split(","))
+        if refusal:
+            for line in refusal:
+                common.log(line)
+            return 2
+    slugs = explicit_slugs(args)
+    if len(slugs) > 1:
+        # same shape as the --all guard above: checked, and refused, before any request is made
+        refusal = onboard_batch_refusal(reg, slugs, allow_divisions=args.collect_staged_divisions.split(","))
         if refusal:
             for line in refusal:
                 common.log(line)
@@ -178,10 +218,13 @@ def cmd_onboard(args):
         common.log(f"!! rpi current failed: {e}")
     if args.slug == "--all" or args.all:
         return onboard_all(reg, bios=not args.no_bios, limit=args.limit, conference=args.conference)
-    program = common.get_program(args.slug, reg)
+    if len(slugs) > 1:
+        return onboard_batch(reg, slugs, bios=not args.no_bios, workers=args.workers)
+    slug = slugs[0] if slugs else args.slug
+    program = common.get_program(slug, reg)
     if not program.get("onboarded"):
-        reg = _mark_onboarded(args.slug)
-        program = common.get_program(args.slug, reg)
+        reg = _mark_onboarded(slug)
+        program = common.get_program(slug, reg)
     results = [run_collector(c, program, reg, bios=not args.no_bios) for c in COLLECTORS]  # no short-circuit
     ok = all(results)
     import build
@@ -311,6 +354,85 @@ def onboard_all(reg, *, bios: bool, limit: int | None, conference: str | None = 
     common.log(f"onboard --all finished: {len(todo) - len(failures)} clean, {len(failures)} with issues")
     for slug, f in failures.items():
         common.log(f"   {slug}: {', '.join(f)}")
+    return 0 if not failures else 1
+
+
+def onboard_batch_refusal(reg, slugs: list[str], *, allow_divisions: "list[str] | tuple[str, ...]" = ()) -> list[str]:
+    """The lines to print instead of collecting an explicit list of slugs, or [] to go ahead.
+
+    Only one of batch_refusal()'s two rules applies to a named list: the division rule, not the
+    MAX_BATCH size cap. The cap exists to stop --all from silently sweeping a whole division in one
+    pass (issue #138); a list somebody typed out, or put one per line in a file, is already exactly
+    as big as they meant it to be - there is no "--all forgot to filter" failure mode here for a size
+    limit to catch. The division rule still matters just as much: naming a slug whose division
+    registry.onboardedDivisions does not list is the same mistake --all is guarded against, made
+    explicitly instead of by a filter that swept too wide (issue #143). --collect-staged-divisions is
+    the same override either way, because it is the same rule."""
+    unknown = [s for s in slugs if not any(p.get("slug") == s for p in reg.get("programs") or [])]
+    if unknown:
+        return [f"!! onboard refuses this batch: unknown slug(s) {', '.join(unknown)}. Nothing was collected."]
+    todo = [common.get_program(s, reg) for s in slugs]
+    published = reg.get("onboardedDivisions")
+    staged = sorted({(p.get("division") or "?") for p in todo} - set(published or [])) if published else []
+    allowed = {d.strip().upper() for d in allow_divisions if d.strip()}
+    unmet = [d for d in staged if d.upper() not in allowed]
+    unused = sorted(allowed - {d.upper() for d in staged})
+    reasons = []
+    if unmet:
+        reasons.append(f"it names program(s) in {', '.join(unmet)}, which the site does not publish yet "
+                       f"(registry onboardedDivisions is {published})")
+    if unused:
+        reasons.append(f"--collect-staged-divisions names {', '.join(unused)}, which this batch would not collect"
+                       + (f" (it is {', '.join(staged)} that is staged here)" if staged else " (nothing here is staged)"))
+    if not reasons:
+        return []
+    return [f"!! onboard refuses this batch of {len(slugs)} program(s): {'; and '.join(reasons)}.",
+            "   Nothing was collected. To override, on this one command: "
+            f"--collect-staged-divisions {','.join(staged)} names the staged division(s) you mean to collect."]
+
+
+def onboard_batch(reg, slugs: list[str], *, bios: bool, workers: int) -> int:
+    """Onboard an explicit list of programs (issue #143): every collector for every one of them,
+    then ONE build at the end - not one per program, which is what onboard <slug> run N times does.
+    Like onboard <slug>, it does not run validate; that stays a separate command. cmd_onboard has
+    already run onboard_batch_refusal() and returned 2 without a request when it refuses.
+
+    Programs are marked onboarded before collection, as onboard <slug> does for its one program.
+    The build reads the registry afresh, as refresh does, because the athletics collector writes the
+    detected platform into it during collection.
+
+    Concurrency is refresh's own collect_plan (issue #105), reused rather than reimplemented: the
+    same per-host gate in collect.common applies to its plan whichever caller built it, so one
+    program's collectors still run one after another in COLLECTORS order (camps mines the news
+    archive), while different programs proceed side by side - and two that happen to share a host
+    (SoccerWire, TopDrawerSoccer, Wikipedia) are still never sent two requests at once. Politeness is
+    therefore exactly refresh's: the same User-Agent, the same per-host delay and Crawl-delay, and at
+    most one worker per host, at any number of workers."""
+    common.log(f"onboard: {len(slugs)} program(s) to go: {', '.join(slugs)}")
+    clear_not_recorded()
+    programs = []
+    for slug in slugs:
+        program = common.get_program(slug, reg)
+        if not program.get("onboarded"):
+            reg = _mark_onboarded(slug)  # locked read-modify-write; see onboard_all
+            program = common.get_program(slug, reg)
+        programs.append(program)
+    plan = [(p, list(COLLECTORS)) for p in programs]
+    results = collect_plan(plan, reg, bios=bios, workers=workers)
+    failures: dict[str, list[str]] = {}
+    for r in results:
+        if r["outcome"] == "failed":
+            failures.setdefault(r["program"], []).append(r["collector"])
+    import build
+    build.build(common.load_registry())
+    common.update_refresh_state("onboardBatch", {"slugs": slugs, "failures": failures})
+    common.log(f"onboard finished: {len(slugs) - len(failures)} clean, {len(failures)} with issues")
+    for slug, cs in failures.items():
+        common.log(f"   {slug}: {', '.join(cs)}")
+    stale = not_recorded()
+    if stale:
+        common.log(f"!! refresh-state not recorded for {len(stale)} program(s): {', '.join(s for s, _, _ in stale)}. "
+                   f"Their sources are on disk; their stored collector status is stale.")
     return 0 if not failures else 1
 
 
@@ -531,15 +653,26 @@ def cmd_serve(args):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    p = sub.add_parser("onboard"); p.add_argument("slug", nargs="?", default=""); p.add_argument("--all", action="store_true"); p.add_argument("--limit", type=int); p.add_argument("--no-bios", action="store_true")
+    p = sub.add_parser("onboard"); p.add_argument("slug", nargs="?", default="")
+    p.add_argument("more_slugs", nargs="*", metavar="slug", default=[],
+                   help="more slugs, for the batch form (issue #143): collects every one, then builds and "
+                        "validates once at the end, instead of once per program")
+    p.add_argument("--slugs-file", metavar="PATH",
+                   help="a file of slugs, one per line (blank lines and #-comments ignored), combined with "
+                        "any named directly. Two or more slugs in total is the batch form above")
+    p.add_argument("--all", action="store_true"); p.add_argument("--limit", type=int); p.add_argument("--no-bios", action="store_true")
     p.add_argument("--conference", help="with --all: only programs in this conference (the batch shape the plan on #94 uses)")
     p.add_argument("--max-batch", type=int, default=MAX_BATCH,
                    help=f"with --all: programs this command will collect in one pass (default {MAX_BATCH}). "
                         "Raising it is a one-shot decision, made on the command that collects")
     p.add_argument("--collect-staged-divisions", default="", metavar="DIVISION[,DIVISION]",
-                   help="with --all: allow this batch to collect these staged divisions, which "
-                        "registry.onboardedDivisions does not list yet (e.g. D2). Naming a division the batch "
-                        "would not collect is a refusal, not a no-op")
+                   help="with --all or an explicit slug list: allow this batch to collect these staged "
+                        "divisions, which registry.onboardedDivisions does not list yet (e.g. D2). Naming a "
+                        "division the batch would not collect is a refusal, not a no-op")
+    p.add_argument("--workers", type=int, default=int(os.environ.get("COLLEGEDASH_WORKERS", "16")),
+                   help="with a batch of two or more explicit slugs: programs collected at once (default 16, "
+                        "env COLLEGEDASH_WORKERS; 1 = one at a time). Per-host politeness is refresh's own "
+                        "and does not change with this number (issue #143, #105)")
     p.set_defaults(fn=cmd_onboard)
     p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true")
     p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")
