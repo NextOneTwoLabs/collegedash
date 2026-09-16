@@ -271,6 +271,22 @@ def test_staged_division():
     ok("the refusal is the only thing printed about the batch", "refuses this batch" in r.out, r.out[:200])
 
 
+def recommended_command(lines: list[str]) -> dict:
+    """The `onboard --all` command a refusal recommends, parsed back into batch_refusal()'s keywords,
+    so the advice can be run rather than only read."""
+    import shlex
+    line = next((l for l in lines if "onboard --all --conference" in l), None)
+    if line is None:
+        return None
+    parts = shlex.split(line)
+    kw: dict = {"conference": parts[parts.index("--conference") + 1]}
+    if "--limit" in parts:
+        kw["limit"] = int(parts[parts.index("--limit") + 1])
+    if "--collect-staged-divisions" in parts:
+        kw["allow_staged"] = True
+    return kw
+
+
 def test_refusal_says_what_next():
     print("refusal-says-what-next: the refusal names the reason, the size, and the commands to run instead")
     reg = staged_d2()
@@ -282,8 +298,17 @@ def test_refusal_says_what_next():
        "261 programs" in text and "over the 25" in text, text.split("\n")[0])
     ok("it says nothing was collected", "Nothing was collected" in text)
     ok("it breaks the batch down by conference", "D2 Peach Belt: 245" in text and "D2 Gulf South: 16" in text, text)
-    ok("it names the conference batch to run instead", '--conference "Peach Belt"' in text, text)
+    ok("it names a conference batch to run instead", "--conference" in text, text)
     ok("it names the one-program batch too", "onboard <slug>" in text, text)
+    for label, args, r in [("the #137 sweep", {}, staged_d2()),
+                           ("a division of one huge conference", {}, registry([program(f"p{i}", "D2", "Peach Belt")
+                                                                               for i in range(245)])),
+                           ("30 unonboarded programs in a published division", {},
+                            registry([program(f"d1-{i}", "D1", "Big Ten") for i in range(30)]))]:
+        cmd = recommended_command(collegedash.batch_refusal(r, **args))
+        ok(f"the command it recommends for {label} is one the guard accepts",
+           cmd is not None and collegedash.batch_refusal(r, **cmd) == [],
+           (cmd, collegedash.batch_refusal(r, **cmd)[:1] if cmd else "no command was recommended"))
     ok("it names both overrides", "--max-batch" in text and "--collect-staged-divisions" in text, text)
     many = registry([program(f"p{i}", "D2", f"Conf {i % 12}") for i in range(120)])
     listed = [l for l in collegedash.batch_refusal(many) if l.startswith("     D2 Conf")]
@@ -422,7 +447,10 @@ def main(argv=None) -> int:
     for c in cases:
         if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
             continue
-        c()
+        try:
+            c()
+        except Exception as e:  # a case that raises is a failed case, not a lost run
+            ok(f"{c.__name__} ran to the end", False, f"{type(e).__name__}: {e}")
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
     if FAILS:
         print("FAILED: " + ", ".join(FAILS))

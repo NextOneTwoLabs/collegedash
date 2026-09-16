@@ -252,10 +252,19 @@ def batch_refusal(reg, *, conference: str | None = None, limit: int | None = Non
         lines.append("   This is already one conference and within the limit. Re-run the same command with "
                      "--collect-staged-divisions if you mean to collect a division that is only staged.")
     else:
+        # Name a batch this command would actually accept: the largest conference that fits under
+        # max_batch, or the largest one with a --limit when no conference fits on its own. Advice
+        # that would be refused a second time is worse than no advice.
+        within = [(c, n) for c, n in by_conf.most_common() if n <= max_batch]
+        (_, conf), n = within[0] if within else by_conf.most_common(1)[0]
+        suggestion = f"     python collegedash.py onboard --all --conference \"{conf}\""
+        if n > max_batch:
+            suggestion += f" --limit {max_batch}"
+        if staged:
+            suggestion += " --collect-staged-divisions"
         lines += [
             "   Collect a batch at a time instead, so each one can be audited before the next (issue #94):",
-            f"     python collegedash.py onboard --all --conference \"{by_conf.most_common(1)[0][0][1]}\""
-            + ("  --collect-staged-divisions" if staged else ""),
+            suggestion,
             "     python collegedash.py onboard <slug>            one program at a time, by slug",
         ]
         lines.append(f"   To override deliberately, on this one command: --max-batch N raises the {max_batch}-program "
