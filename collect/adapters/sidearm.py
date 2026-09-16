@@ -75,6 +75,88 @@ OPPONENT_MARKER_RE = re.compile(r"\s*[-\u2013]\s*(?:exhibitions?|exh(?:i|ib)?|ex
 LEGACY_NON_PLACE_RE = re.compile(r"^(exhibitions?|exh(?:i|ib)?\.?|exb\.?|scrimmages?|tv|radio|live stats|watch|listen|tickets)\b[:.]?$", re.I)
 GAME_LINK_LABELS = ("box score", "recap", "live stats", "history", "watch", "listen", "tickets")
 
+# ---------- rankings and seeds in front of the opponent's name (issue #129) ----------
+# Only '#21 Ohio State' was ever read, and that is the one spelling the corpus no longer contains.
+# Measured over every cached Sidearm page, re-parsed with the pre-change adapter: 550 decorated names
+# on 269 pages - 337 'No. N', 93 '(N)', 58 'RV', 23 '#a/b', 20 'Seed', 19 'No. N seed' - plus the
+# long tail this had to be written from rather than guessed at: '[8] Ohio State', '(RV) Iowa',
+# '[RV] Xavier', '#T18 Wake Forest', '#7/T9 UCLA', '#NR/RV/23 Brown', '(25/19) Texas Tech',
+# '(25/-) Colorado State', 'RV/No. 21 Kansas', 'RV-University of Wisconsin', '(5-Seed) #23/18 Baylor',
+# 'Seeded UCLA' and a bare '19 Xavier'.
+#
+# A poll marker and a tournament seed are different things and are stored separately: `opponentRank`
+# is the national ranking the site already renders as '#N', and `opponentSeed` is the bracket seed,
+# which nothing renders yet. 'RV' (receiving votes) and 'NR' (not ranked) are markers with no number:
+# they are removed from the name and leave both fields None.
+#
+# Two rules keep this from damaging names:
+#   * a prefix is only removed if something is left afterwards, so 'Seed ULM' and 'Seed Old Dominion'
+#     - where the label is all that precedes the name - keep their names;
+#   * a number alone, with no '#', 'No.' or bracket around it, is never read as a rank, so
+#     '2026 Summit League Soccer Championship' and '1st Round' are left alone.
+_POLL_TOKEN = r"(?:T\s*\d{1,2}|\d{1,2}|RV|NR|-)"
+# '#14/#16', '25/19', 'NR/RV/23', 'T3'; a group of poll positions separated by slashes
+_POLL_GROUP = rf"{_POLL_TOKEN}(?:\s*/\s*#?\s*{_POLL_TOKEN})*"
+RANK_PREFIXES = [
+    # (regex, kind) - kind 'rank' sets opponentRank, 'seed' sets opponentSeed, 'label' neither
+    (re.compile(rf"^\(\s*(\d{{1,2}})\s*-\s*seed\s*\)\s*", re.I), "seed"),          # (5-Seed)
+    (re.compile(rf"^[\[(]\s*#?\s*({_POLL_GROUP})\s*[\])]\s*", re.I), "bracket"),      # (6) [8] (RV) (25/19)
+    (re.compile(rf"^#\s*({_POLL_GROUP})\s+seed(?:ed|s)?\b\.?\s*", re.I), "seed"),     # #2 Seed, #5 Seeded
+    (re.compile(rf"^#\s*({_POLL_GROUP})\s*", re.I), "rank"),                            # #21 #14/#16 #T18 #RV/8/17
+    (re.compile(rf"^No\.?\s*({_POLL_GROUP})\s+seed(?:ed|s)?\b\.?\s*", re.I), "seed"),  # No. 1 Seed, No. 1 Seeded
+    (re.compile(rf"^No\.?\s*({_POLL_GROUP})\s*", re.I), "rank"),                        # No. 10, No. 6/7
+    (re.compile(r"^(RV|NR)\s*[-/]?\s*", re.I), "label"),                                # RV, NR, RV/No. 21, RV-Wisconsin
+    (re.compile(r"^seed(?:ed)?\b\.?\s*", re.I), "label"),                              # Seed, Seeded
+]
+# A bare leading number is deliberately NOT read as a rank. The corpus holds exactly one ('19
+# Xavier'), and a rule that caught it would also rewrite a row called '24 Hour Classic' or '3 Point
+# Challenge' into a ranked opponent. One missed rank is the cheaper mistake; the suite pins it.
+
+
+def _first_number(group: str) -> int | None:
+    """The first real position in a poll group: 'NR/RV/23' -> 23, 'T18' -> 18, 'RV/-' -> None."""
+    for tok in re.split(r"/", group or ""):
+        m = re.search(r"\d{1,2}", tok)
+        if m:
+            return int(m.group(0))
+    return None
+
+
+def rank_seed_and_name(raw: str) -> tuple[int | None, int | None, str]:
+    """(rank, seed, name) from an opponent label that may carry poll positions or a bracket seed.
+
+    The name is only stripped when something survives: `rank_seed_and_name('Seed ULM')` is
+    (None, None, 'ULM') but `rank_seed_and_name('Seed')` is (None, None, 'Seed').
+    """
+    name = common.clean(raw or "")
+    rank = seed = None
+    while name:
+        for rx, kind in RANK_PREFIXES:
+            m = rx.match(name)
+            if not m:
+                continue
+            rest = common.clean(name[m.end():])
+            if not rest:
+                return rank, seed, name  # the label is all there is: keep the name as it stands
+            group = m.group(1) if m.groups() else ""
+            value = _first_number(group)
+            if kind == "bracket":
+                # a single number in brackets is a tournament seed; anything with a slash or an
+                # RV/NR token is a poll line printed in brackets
+                if re.fullmatch(r"\s*\d{1,2}\s*", group or ""):
+                    seed = seed if seed is not None else value
+                else:
+                    rank = rank if rank is not None else value
+            elif kind == "seed":
+                seed = seed if seed is not None else value
+            elif kind in ("rank", "bare"):
+                rank = rank if rank is not None else value
+            name = rest
+            break
+        else:
+            break
+    return rank, seed, name
+
 
 def urls(program: dict, registry: dict) -> dict:
     t = registry["sources"]["athleticsPlatforms"]["sidearm"]
@@ -447,12 +529,9 @@ def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) ->
         toks = [common.clean(t) for t in info.get_text("\n").split("\n")] if info else []
         toks = [t for t in toks if t]
         opp_raw = toks[0] if toks else ""
-        rank = None
-        m = re.match(r"#\s*(\d+)\s+(.*)", opp_raw)
-        if m:
-            rank, opp_raw = int(m.group(1)), m.group(2)
+        rank, seed, opp_raw = rank_seed_and_name(opp_raw)
         exhibition = bool(EXHIBITION_RE.search(text))
-        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw))
+        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw)) or opp_raw
         loc_toks = [t for t in toks[1:] if not t.lower().startswith("tv:") and not t.lower().startswith("radio")]
         location = ", ".join(loc_toks[:2]) if loc_toks else None
         sc = c.select_one(".s-game-card__header__game-score-time")
@@ -478,7 +557,7 @@ def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) ->
             "exhibition": exhibition,
             "conferenceGame": bool(c.select_one(".s-game-card__header__conf-text, .s-game-card__header__conf-logo")),
             "homeAway": "A" if stamp_txt.startswith("at") else "H" if stamp_txt.startswith("vs") else None,
-            "opponent": opponent, "opponentRank": rank, "location": location,
+            "opponent": opponent, "opponentRank": rank, "opponentSeed": seed, "location": location,
             "result": result, "score": score, "links": links,
         })
     return games
@@ -593,11 +672,8 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
         classes = li.get("class") or []
         name_el = li.select_one(".sidearm-schedule-game-opponent-name")
         opp_raw = common.clean(name_el.get_text(" ")) if name_el else ""
-        rank = None
-        m = re.match(r"#\s*(\d+)\s+(.*)", opp_raw)
-        if m:
-            rank, opp_raw = int(m.group(1)), m.group(2)
-        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw))
+        rank, seed, opp_raw = rank_seed_and_name(opp_raw)
+        opponent = common.clean(OPPONENT_MARKER_RE.sub("", opp_raw)) or opp_raw
         if not opponent:
             continue
 
@@ -626,7 +702,7 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
             "exhibition": exhibition,
             "conferenceGame": conference,
             "homeAway": home_away,
-            "opponent": opponent, "opponentRank": rank,
+            "opponent": opponent, "opponentRank": rank, "opponentSeed": seed,
             "location": ", ".join(loc_toks[:2]) if loc_toks else None,
             "result": result, "score": score, "links": _game_links(li, base_url),
         })
