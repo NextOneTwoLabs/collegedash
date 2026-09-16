@@ -822,6 +822,19 @@ def test_committed() -> None:
     ok("and each of those is a conference page the builder fetches", set(rb.LABEL_TDS_CONFERENCE.values()) <= tds,
        str(sorted(set(rb.LABEL_TDS_CONFERENCE.values()) - tds)))
 
+    # fails if a staged entry is missing its orgId, state or a well-shaped slug, if a D2 conference
+    # was run through the D1 label table, if a staged slug or orgId collides with anything else in
+    # the registry, or if registry.stagedDivisions no longer stages what build.STAGED_DIVISION_COUNTS
+    # (issue #140) expects it to. That last one is the point: unlike the block above, which only
+    # has anything to say while "D2" in staged_divs, this runs every time and fails outright the
+    # moment stagedDivisions stops matching the anchor - it cannot pass by finding nothing staged.
+    import contextlib, io  # noqa: E402 - only here, matching _quiet() below
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        staged_registry_ok = build.check_staged_registry(reg)
+    ok("staged registry entries satisfy build.check_staged_registry (issue #140)", staged_registry_ok,
+       buf.getvalue().strip()[:2000])
+
 
 def _quiet(fn, *a):
     import contextlib, io
