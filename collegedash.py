@@ -23,6 +23,7 @@ import argparse
 import json
 import os
 import sys
+import threading
 import time
 import traceback
 
@@ -95,13 +96,36 @@ def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, d
 
 RECORD_ATTEMPTS = 3
 
+# Programs whose refresh-state entries could not be written: [(slug, number of entries, error)].
+# A failed write loses no collected data - the sources are on disk and the summary, exit code and
+# threshold all come from the outcomes held in memory - but it leaves that program's entries STALE,
+# which is worse than empty: build.py publishes them as the program's `_build.failed` / `_build.skipped`
+# and `refresh --failed` picks its work from them, so yesterday's verdict is republished as today's
+# and the program is not retried. So it is reported rather than only logged (issue #119): a warning
+# per program as it happens, and a count in the run summary and in lastRun. It is not made fatal:
+# the Reviewer's judgement on PR #105 was that this is stale diagnostic metadata, not lost data, and
+# failing the run would throw away a complete collection over a metadata write.
+_not_recorded: list[tuple[str, int, str]] = []
+_not_recorded_lock = threading.Lock()
+
+
+def not_recorded() -> list[tuple[str, int, str]]:
+    """The programs whose refresh-state entries could not be written, in the order they failed."""
+    with _not_recorded_lock:
+        return list(_not_recorded)
+
+
+def clear_not_recorded() -> None:
+    with _not_recorded_lock:
+        _not_recorded.clear()
+
 
 def record_outcomes(slug: str, entries: dict[str, dict]) -> bool:
     """Write refresh-state entries in one locked read-modify-write. Never raises for an Exception:
     the run's outcomes live in memory and drive the summary and exit code, so a refresh-state write
     that fails must not turn a success into a failure (it used to: the ok path's write raising was
     caught as the collector failing) or escape and cancel the programs still queued. Retried, then
-    logged. False when the entries could not be recorded."""
+    logged, annotated and counted (see _not_recorded). False when the entries could not be recorded."""
     for attempt in range(1, RECORD_ATTEMPTS + 1):
         try:
             common.update_refresh_state_many(entries)
@@ -109,6 +133,15 @@ def record_outcomes(slug: str, entries: dict[str, dict]) -> bool:
         except Exception as e:
             if attempt == RECORD_ATTEMPTS:
                 common.log(f"!! refresh-state not recorded for {slug} ({', '.join(entries)}): {e}")
+                with _not_recorded_lock:
+                    _not_recorded.append((slug, len(entries), str(e)[:200]))
+                if os.environ.get("GITHUB_ACTIONS"):
+                    common.annotate(f"::warning title=refresh: refresh-state not recorded for {slug}::"
+                                    f"{len(entries)} entries could not be written after {RECORD_ATTEMPTS} attempts "
+                                    f"({str(e)[:160]}). The collected sources are safe and this run's summary is "
+                                    f"correct, but {slug}'s stored per-collector status is now stale: the site will "
+                                    f"republish the previous run's verdict for it and `refresh --failed` will not "
+                                    f"retry it.")
                 return False
             time.sleep(0.2 * attempt)
     return False
@@ -199,6 +232,7 @@ def cmd_refresh(args):
         total = sum(len(cs) for _, cs in plan)
         print(f"-- {len(plan)} programs, {total} collector runs" + (", plus rpi current" if run_rpi else ""))
         return 0
+    clear_not_recorded()
     results = []
     if run_rpi:
         from collect import rpi
@@ -281,18 +315,29 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
     ok = total - len(failed) - skipped
     share = len(failed) / total if total else 0.0
     exceeded = share > threshold
+    stale = not_recorded()
     common.log(f"refresh summary: {total} runs, {ok} ok, {skipped} skipped, {len(failed)} failed "
                f"({share:.1%}, threshold {threshold:.0%}){' - THRESHOLD EXCEEDED' if exceeded else ''}")
     for r in failed:
         common.log(f"   {r['program']:24} {r['collector']:10} {r['error'][:120]}")
+    if stale:
+        common.log(f"!! refresh-state not recorded for {len(stale)} program(s), "
+                   f"{sum(n for _, n, _ in stale)} entries: {', '.join(s for s, _, _ in stale[:20])}"
+                   f"{' …' if len(stale) > 20 else ''}. Their stored status is stale; this run's summary is not.")
     common.update_refresh_state("lastRun", {
         "mode": mode, "total": total, "ok": ok, "skipped": skipped, "failed": len(failed),
         "failedShare": round(share, 4), "threshold": threshold, "exceeded": exceeded,
         "failures": [{k: r[k] for k in ("program", "collector", "error")} for r in failed[:100]],
+        "notRecorded": {"programs": len(stale), "entries": sum(n for _, n, _ in stale),
+                        "slugs": [s for s, _, _ in stale[:100]]},
     })
     if os.environ.get("GITHUB_ACTIONS"):
         for r in failed:
             print(f"::warning title=refresh: {r['collector']} failed for {r['program']}::{r['error'][:200]}")
+        if stale:
+            print(f"::warning title=refresh::refresh-state was not recorded for {len(stale)} program(s) "
+                  f"({sum(n for _, n, _ in stale)} entries). Their published collector status and "
+                  f"`refresh --failed` selection are stale until the next run records them.")
         if exceeded:
             print(f"::error title=refresh::{share:.1%} of collector runs failed (threshold {threshold:.0%}); the flow needs attention")
         summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -301,6 +346,10 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
                 f.write(f"## Refresh ({mode})\n\n{total} collector runs: **{ok} ok**, {skipped} skipped, "
                         f"**{len(failed)} failed** ({share:.1%}, threshold {threshold:.0%})"
                         f"{' - **threshold exceeded**' if exceeded else ''}\n\n")
+                if stale:
+                    f.write(f"**refresh-state not recorded for {len(stale)} program(s)** "
+                            f"({sum(n for _, n, _ in stale)} entries): {', '.join(s for s, _, _ in stale[:20])}. "
+                            f"Their stored per-collector status is stale.\n\n")
                 if failed:
                     f.write("| Program | Collector | Error |\n|---|---|---|\n")
                     for r in failed[:100]:
