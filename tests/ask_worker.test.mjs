@@ -5,11 +5,14 @@
 //
 // They drive the Worker's own fetch handler with a stub env. The global fetch is replaced in every test that
 // could reach the Anthropic API, and a test that is not meant to call it fails if it does. No key is used.
+// Since #179 a switched-on request also needs a valid Cloudflare Access token and a budget namespace; both are
+// stand-ins from tests/ask_access_helpers.mjs (a locally generated RSA key, an in-memory KV).
 //
 // What this proves:
 //   - /api/ask answers exactly like an unknown /api route (it falls through to the assets) unless BOTH
 //     ASK_ENABLED is "true" AND ANTHROPIC_API_KEY is set, and nothing calls the API while it is off;
-//   - /api/status is byte-identical {"local":false} while off, and adds ask:true only when on;
+//   - /api/status is byte-identical {"local":false} for everyone, on or off, token or not (ask availability is
+//     the owner-only GET /api/ask/status since #179; its tests are in tests/ask_access_budget.test.mjs);
 //   - wrangler.toml declares ASK_ENABLED "false" and no tracked file carries anything shaped like a key;
 //   - when on, the request sent upstream uses the pinned model, the hard output-token limit, a json_schema
 //     output format and the key only as a header, and the key never appears in any response;
@@ -32,6 +35,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
 const WORKER = process.env.ASK_WORKER || path.join(ROOT, 'worker.js');
 const worker = (await import(pathToFileURL(WORKER).href)).default;
+const { CERTS_URL, CERTS, accessVars, memoryKV, token } = await import(pathToFileURL(path.join(HERE, 'ask_access_helpers.mjs')).href);
+const OWNER = await token();
 const A = worker.ask;
 const KEY = 'sk-test-0000-not-a-real-key';
 const INDEX = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', 'data', 'programs', 'index.json'), 'utf8'));
@@ -48,17 +53,20 @@ function env(extra = {}) {
         return new Response('Not found', { status: 404, headers: { 'content-type': 'text/plain' } });
       },
     },
+    ASK_BUDGET: memoryKV(),
     ...extra,
   };
 }
 const request = (pathname, init = {}) => new Request(`https://college.nextonetwo.com${pathname}`, init);
-const post = (body) => request('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: typeof body === 'string' ? body : JSON.stringify(body) });
+const post = (body, jwt = OWNER) => request('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json', ...(jwt ? { 'cf-access-jwt-assertion': jwt } : {}) },
+  body: typeof body === 'string' ? body : JSON.stringify(body) });
 
 // Replace the global fetch for one call. `reply` builds the upstream Response; with none, any call fails the test.
 async function withUpstream(reply, fn) {
   const calls = [];
   const real = globalThis.fetch;
   globalThis.fetch = async (url, init) => {
+    if (String(url) === CERTS_URL) return Response.json(CERTS); // the Access team's public keys, not an upstream call
     calls.push({ url: String(url), init, body: init?.body ? JSON.parse(init.body) : null });
     if (!reply) throw new Error(`unexpected upstream call to ${url}`);
     return reply();
@@ -92,11 +100,16 @@ test('off by default: /api/ask is the same 404 as an unknown /api route, and not
   }
 });
 
-test('/api/status is byte-identical {"local":false} while off, and says ask:true only when on', async () => {
+test('/api/status is byte-identical {"local":false} off, on, and on with the owner\'s valid token (#179)', async () => {
   const off = await worker.fetch(request('/api/status'), env({ ASK_ENABLED: 'true' }));
   assert.equal(await off.text(), '{"local":false}');
-  const on = await worker.fetch(request('/api/status'), env({ ASK_ENABLED: 'true', ANTHROPIC_API_KEY: KEY }));
-  assert.equal(await on.text(), '{"local":false,"ask":true}');
+  const { result } = await withUpstream(null, async () => {
+    const on = await worker.fetch(request('/api/status'), env(accessVars({ ANTHROPIC_API_KEY: KEY })));
+    const owner = await worker.fetch(request('/api/status', { headers: { 'cf-access-jwt-assertion': OWNER } }), env(accessVars({ ANTHROPIC_API_KEY: KEY })));
+    return { on: await on.text(), owner: await owner.text() };
+  });
+  assert.equal(result.on, '{"local":false}');
+  assert.equal(result.owner, '{"local":false}', 'ask availability leaked onto the public status route');
 });
 
 test('wrangler.toml declares ASK_ENABLED "false", and no tracked file holds anything shaped like an Anthropic key', () => {
@@ -115,7 +128,7 @@ test('wrangler.toml declares ASK_ENABLED "false", and no tracked file holds anyt
 });
 
 test('when on: the upstream request uses the pinned model, a hard token limit, a json_schema format, and the key only as a header', async () => {
-  const e = env({ ASK_ENABLED: 'true', ANTHROPIC_API_KEY: KEY });
+  const e = env(accessVars({ ANTHROPIC_API_KEY: KEY }));
   const { result, calls } = await withUpstream(message({ ...blank, conf: ['ACC'] }), async () => {
     const res = await worker.fetch(post({ question: '  ACC   schools ' }), e);
     return { res, text: await res.text() };
@@ -141,9 +154,9 @@ test('when on: the upstream request uses the pinned model, a hard token limit, a
 });
 
 test('when on: method, empty and over-long questions are refused before any upstream call; upstream errors do not leak', async () => {
-  const on = { ASK_ENABLED: 'true', ANTHROPIC_API_KEY: KEY };
+  const on = accessVars({ ANTHROPIC_API_KEY: KEY });
   await withUpstream(null, async () => {
-    const get = await worker.fetch(request('/api/ask'), env(on));
+    const get = await worker.fetch(request('/api/ask', { headers: { 'cf-access-jwt-assertion': OWNER } }), env(on));
     assert.equal(get.status, 405);
     assert.equal(get.headers.get('allow'), 'POST');
     for (const body of [{}, { question: '   ' }, 'not json', { question: 42 }]) {
@@ -189,7 +202,7 @@ test('validation: every answer the page could not show becomes {unsupported}', a
 });
 
 test('through the route: an invalid field, unreadable JSON, a refusal and a truncated answer are all {unsupported}', async () => {
-  const on = { ASK_ENABLED: 'true', ANTHROPIC_API_KEY: KEY };
+  const on = accessVars({ ANTHROPIC_API_KEY: KEY });
   const cases = {
     'invalid field': message({ ...blank, cond: [{ field: 'coachSince', op: '<', value: 2010 }] }),
     'unreadable JSON': message('{"conf": ["ACC"'),
