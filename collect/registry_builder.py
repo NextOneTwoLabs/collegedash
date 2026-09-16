@@ -541,6 +541,8 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
             (held if was_held else programs).append(p)
             continue
         row = rows_by_org.get(org) if status in ("keyed", "agreed", "reviewed") else None
+        # read before the Directory's division overwrites p["division"] below
+        published_before = not was_held and bool(p.get("onboarded")) and p.get("division") in onboarded
         if row is not None:
             p.setdefault("ids", {})["ncaaOrgId"] = org
             state = _program_state(p, bulk_by_id)
@@ -565,11 +567,18 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
                 rep["returned"].append({"slug": slug, "division": row["division"]})
             programs.append(p)
             continue
-        if row is not None and row["division"] in staged and not p.get("onboarded"):
+        if row is not None and row["division"] in staged and not was_held and not published_before:
             # Staged: in the registry, never published, and its division is not onboarded yet. It
             # stays in `programs` as it is. heldPrograms is for a program the site HAS published and
             # no longer does -- holding one that was never published would say the site dropped it,
             # and would count it as a departure against the guard below.
+            #
+            # Staging is decided by the division, not by `onboarded` (issue #187). A collected staged
+            # entry (`onboarded: true`, its batch run through `onboard`) is exactly as staged as an
+            # uncollected one. Keying this on `not onboarded` held all 105 collected D2 entries on the
+            # next build, which only the departure guard stopped. What is still held is a program the
+            # site published before this build (onboarded, in an onboarded division) or one already
+            # held, such as saint-francis: for those, a staged division is a real departure.
             rep["staged"].append({"slug": slug, "division": row["division"], "orgId": org})
             programs.append(p)
             continue
@@ -634,9 +643,9 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
     rep["identity"] = {k: v for k, v in rep["identity"].items() if v}
     rep["slugs"] = {"published": sum(1 for p in programs if p.get("onboarded") and p.get("division") in onboarded),
                     "inPrograms": len(programs), "held": len(held),
-                    # every entry in programs that the site does not publish: staged divisions, plus a
-                    # program in an onboarded division that has not been through `onboard` yet
-                    "staged": sum(1 for p in programs if not p.get("onboarded") and p.get("division") in staged),
+                    # staged: every entry in programs whose division is staged, collected or not (#187);
+                    # notOnboarded: every entry not through `onboard` yet, staged or in an onboarded division
+                    "staged": sum(1 for p in programs if p.get("division") in staged),
                     "notOnboarded": sum(1 for p in programs if not p.get("onboarded"))}
     return rep
 
@@ -953,7 +962,7 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     report. `limit` caps how many new programs are built in one run (the rest are reported as notAdded).
 
     A staged division (registry.stagedDivisions) is built exactly like an onboarded one except that
-    nothing is published: every entry is onboarded: false, so no collector and no page follows from
+    nothing is published: every new entry is onboarded: false, so no collector and no page follows from
     this run."""
     if not registry.get("onboardedDivisions"):
         raise ValueError("registry.onboardedDivisions is missing; it names the divisions the site publishes")
