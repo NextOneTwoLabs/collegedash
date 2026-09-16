@@ -113,8 +113,10 @@ def test_unchanged_elsewhere() -> None:
     cl = {s["year"]: s for s in seasons("clemson")}
     ok("CONTROL clemson: records, conference records and finishes are read as before",
        (cl[2023]["record"], cl[2023]["confRecord"], cl[2023]["confFinish"]) == ("18-4-4", "7-2-1", "3rd"), str(cl[2023]))
-    ok("CONTROL clemson: the NCAA result is read exactly as before this change (its own column mapping is a separate fault)",
-       cl[2023]["ncaaResult"] == "NCAA College Cup" and cl[2021]["ncaaResult"] == "NCAA Hal Hershfelt/Maliah Morris", str((cl[2023]["ncaaResult"], cl[2021]["ncaaResult"])))
+    # 2021's NCAA result was pinned here to its old wrong value ('NCAA Hal Hershfelt/Maliah Morris') while #175 left
+    # that field alone; issue #176 fixed it, and tests/wikipedia_results_test.py checks it now.
+    ok("CONTROL clemson 2023: the NCAA result 'NCAA College Cup'",
+       cl[2023]["ncaaResult"] == "NCAA College Cup", str(cl[2023]["ncaaResult"]))
 
 
 def test_grid() -> None:
