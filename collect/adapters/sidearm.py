@@ -422,6 +422,53 @@ def _parse_person_cards(soup: BeautifulSoup, base_url: str, social_by_url: dict)
     return players
 
 
+def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
+    """Players from the legacy Sidearm list view, li.sidearm-roster-player (issue #156). Used only when
+    neither the tables nor the person cards gave a player. Some legacy pages (Mercyhurst, Hawaii-Hilo)
+    serve a grid table with no Name column and no player link beside this list, so the table cannot
+    say who a row is and the list is the only place the name is. Rows are never joined to the table:
+    every field here is read from the player's own list item.
+
+    Each item carries its details twice (a compact block and a wide one); the first of each is the
+    compact form the table shows ("Jr.", "GK"). A trailing parenthetical on the position is pronouns
+    ("GK (she/her/hers)") and is dropped from the label."""
+    players, seen = [], set()
+
+    def first(li, cls: str) -> str:
+        el = li.select_one(f".sidearm-roster-player-{cls}")
+        return common.clean(el.get_text(" ")) if el else ""
+
+    for li in soup.select("li.sidearm-roster-player"):
+        name_el = li.select_one(".sidearm-roster-player-name h3") or li.select_one(".sidearm-roster-player-name a")
+        name = common.clean(name_el.get_text(" ")) if name_el else ""
+        if not name:
+            continue
+        link = li.select_one(".sidearm-roster-player-name a[href]")
+        href = link["href"] if link else li.get("data-player-url")
+        bio_url = urljoin(base_url, href) if href else None
+        key = bio_url or name
+        if key in seen:
+            continue
+        seen.add(key)
+        forms = [re.sub(r"\s*\([^)]*\)\s*$", "", common.clean(x.get_text(" ")))
+                 for x in li.select(".sidearm-roster-player-position-long-short")]
+        pos = forms[-1] if forms else re.sub(r"\s*\([^)]*\)\s*$", "", first(li, "position"))
+        social = {}
+        for a in li.select(".sidearm-roster-player-social a[href]"):
+            if "instagram.com" in a["href"]:
+                social.setdefault("instagram", a["href"])
+            elif "twitter.com" in a["href"] or "x.com/" in a["href"]:
+                social.setdefault("x", a["href"])
+        record = _player_record(
+            number=first(li, "jersey-number"), name=name, pos_label=pos, height=first(li, "height"),
+            class_label=first(li, "academic-year"), hometown=first(li, "hometown"), high_school=first(li, "highschool"),
+            previous_school=first(li, "previous-school"), major=first(li, "major"), bio_url=bio_url, social=social)
+        if not record["pos"] and forms:  # "G" is not a label norm_pos knows; the long form beside it is
+            record["pos"] = common.norm_pos(forms[0])
+        players.append(record)
+    return players
+
+
 def looks_client_rendered(html: str) -> bool:
     """True when the roster page is a template filled in by the browser (legacy Sidearm Knockout /
     Vue sites, or the current theme's skeleton loader): the served HTML never contains players."""
@@ -449,6 +496,8 @@ def parse_roster(html: str, base_url: str) -> dict:
     players, staff = parse_roster_tables(soup, base_url, social_by_url)
     if not players:
         players = _parse_person_cards(soup, base_url, social_by_url)
+    if not players:
+        players = _parse_list_view(soup, base_url)
     seen, uniq = set(), []
     for s in staff:
         k = s["bioUrl"] or s["name"]
