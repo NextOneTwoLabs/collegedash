@@ -144,7 +144,12 @@ def test_scan() -> None:
         ok(f"the scan reads {m}", m in files)
     # one profile per published program plus index.json, counted from the registry (350 programs
     # before issue #100 held Saint Francis and Mississippi Valley State out of the published set)
-    published = [p["slug"] for p in json.loads(read("public/data/registry.json"))["programs"] if p.get("onboarded")]
+    # published = onboarded AND in an onboarded division. A staged division (issue #94) is collected
+    # but not published, so an onboarded D2 program has no profile file and never will until D2 is
+    # onboarded; testing `onboarded` alone turned this red on the first collected batch.
+    _reg = json.loads(read("public/data/registry.json"))
+    published = [p["slug"] for p in _reg["programs"]
+                 if p.get("onboarded") and p["division"] in _reg.get("onboardedDivisions", [p["division"]])]
     ok(f"the scan reads the published program profiles ({len(published)} and index.json)",
        bool(published) and all(f"public/data/programs/{s}.json" in files for s in published)
        and "public/data/programs/index.json" in files)
