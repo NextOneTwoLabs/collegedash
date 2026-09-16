@@ -16,7 +16,7 @@ from __future__ import annotations
 import datetime as dt
 import os
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 from collect import common
 from collect.camps import classify_camp
@@ -215,6 +215,117 @@ def check_no_stale_profiles(registry: dict) -> bool:
     for slug in stale:
         print(f"STALE {slug}: public/data/programs/{slug}.json is not a published program")
     return not stale
+
+
+# A staged division this repository currently expects, and the exact entry count it must have
+# (issue #140). Like REVIEWED_UNPUBLISHED above, this is a reviewed anchor, not "whatever
+# stagedDivisions says today": a real change - D2 finally onboarded and dropped from
+# stagedDivisions, or another division staged alongside it - is a one-line edit here, in its own
+# reviewed PR. Without an anchor, check_staged_registry() would only ever inspect whatever is
+# staged at the moment it runs, so the day stagedDivisions goes empty (a bad merge, a hand edit)
+# it would have nothing to look at and silently pass - the exact defect class issue #140 is about.
+STAGED_DIVISION_COUNTS = {"D2": 261}
+
+# A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
+# hyphen - the shape every slug in the registry already has (collect/registry_builder.py's
+# slug_ladder never produces anything else).
+STAGED_SLUG_SHAPE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+
+
+def check_staged_registry(registry: dict) -> bool:
+    """The structural invariants that guard a published program also guard a staged one, checked
+    here because nothing else does: a staged entry publishes no profile, so build's own schema
+    validation above never reaches it, and `collegedash.py validate` is the one command that runs
+    on every push (issue #140).
+
+    "Staged" is deliberately not "onboarded: false". A staged division's batch is collected
+    (`onboarded: true`, `onboardedAt` set, its sources kept fresh) long before the division itself
+    is onboarded - that is the whole point of the staged-division design (issue #94, option A) - so
+    a staged entry can carry `onboarded: true` and still be exactly as staged as one that does not.
+    What makes an entry staged is its division being in registry.stagedDivisions; the onboarded flag
+    is not part of that test here, on either side of it.
+
+    STAGED_DIVISION_COUNTS is checked first and unconditionally: a division named there that is not
+    currently in registry.stagedDivisions is a failure of this function, not something it quietly
+    has nothing to do because of. That is what keeps an empty (or emptied) staged set from passing.
+    """
+    from collect import registry_builder as rb  # local: only this check needs it
+
+    ok = True
+    try:
+        staged_divs = set(rb.staged_divisions(registry))
+    except ValueError as e:
+        print(f"STAGED: registry.stagedDivisions is invalid: {e}")
+        return False
+
+    for division in STAGED_DIVISION_COUNTS:
+        if division not in staged_divs:
+            print(f"STAGED {division}: expected in registry.stagedDivisions {sorted(staged_divs)} with "
+                  f"{STAGED_DIVISION_COUNTS[division]} entries, but it is not staged at all - if {division} "
+                  f"published, remove it from build.STAGED_DIVISION_COUNTS in the same PR")
+            ok = False
+    if not staged_divs:
+        # Nothing below has anything left to check once no division is staged; the anchor loop
+        # above is what stops that from reading as "nothing to check, so nothing failed".
+        return ok
+
+    programs = registry.get("programs") or []
+    held = registry.get("heldPrograms") or []
+    staged = [p for p in programs if p.get("division") in staged_divs]
+
+    for division, want in STAGED_DIVISION_COUNTS.items():
+        if division in staged_divs:
+            got = sum(1 for p in staged if p.get("division") == division)
+            if got != want:
+                print(f"STAGED {division}: expected {want} staged entries, found {got}")
+                ok = False
+
+    for p in staged:
+        slug = p.get("slug") or "<no slug>"
+        org = (p.get("ids") or {}).get("ncaaOrgId")
+        if not isinstance(org, int):
+            print(f"STAGED {slug}: ids.ncaaOrgId is {org!r}, not an int")
+            ok = False
+        state = (p.get("location") or {}).get("state")
+        if not state:
+            print(f"STAGED {slug}: location.state is {state!r}, not set")
+            ok = False
+        if not (isinstance(p.get("slug"), str) and STAGED_SLUG_SHAPE.match(p["slug"])):
+            print(f"STAGED {slug}: slug does not match lowercase-hyphenated shape {STAGED_SLUG_SHAPE.pattern}")
+            ok = False
+
+    # A D1 conference is stored as the label from CONFERENCE_LABELS.values() (e.g. "ACC", "DI
+    # Independent"); every other division keeps the Directory's own spelling (registry_builder's
+    # conference_label(), LABELLED_DIVISION == "D1"). A staged row carrying one of those labels was
+    # run through the D1 table by mistake - the concrete case being D2's own "Independent" (8
+    # programs, the Directory's literal spelling) getting relabelled into D1's "DI Independent".
+    d1_labels = set(rb.CONFERENCE_LABELS.values())
+    mislabelled = sorted(p["slug"] for p in staged if p.get("conference") in d1_labels)
+    if mislabelled:
+        print(f"STAGED: {len(mislabelled)} staged entries carry a Division I conference label instead of "
+              f"the Directory's own spelling: {', '.join(mislabelled[:5])}")
+        ok = False
+
+    # Duplicates are checked against the whole registry, not only within the staged set: a slug or
+    # orgId a staged entry shares with a published or held program is exactly as dangerous as one
+    # it shares with another staged entry.
+    everything = programs + held
+    slug_counts = Counter(p["slug"] for p in everything if p.get("slug"))
+    dup_slugs = sorted({p["slug"] for p in staged if slug_counts.get(p.get("slug"), 0) > 1})
+    if dup_slugs:
+        print(f"STAGED: {len(dup_slugs)} staged slugs are not unique across the registry: {', '.join(dup_slugs[:5])}")
+        ok = False
+    org_counts = Counter((p.get("ids") or {}).get("ncaaOrgId") for p in everything
+                         if isinstance((p.get("ids") or {}).get("ncaaOrgId"), int))
+    dup_orgs = sorted({p["slug"] for p in staged
+                       if isinstance((p.get("ids") or {}).get("ncaaOrgId"), int)
+                       and org_counts.get(p["ids"]["ncaaOrgId"], 0) > 1})
+    if dup_orgs:
+        print(f"STAGED: {len(dup_orgs)} staged entries carry an ncaaOrgId that is not unique across the "
+              f"registry: {', '.join(dup_orgs[:5])}")
+        ok = False
+
+    return ok
 
 
 # ---------- name matching ----------
@@ -1205,7 +1316,8 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     camps_ok = check_camps_index(registry)
     stale_ok = check_no_stale_profiles(registry)
     membership_ok = check_membership_anchor(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok
+    staged_ok = check_staged_registry(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok
 
 
 def check_camps_index(registry: dict) -> bool:

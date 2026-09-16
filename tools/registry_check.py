@@ -8,16 +8,32 @@ to a branch campus, or to an unrelated school whose name happens to contain the 
 
     python tools/registry_check.py                    # every onboarded program
     python tools/registry_check.py --slug lsu,penn-state
+    python tools/registry_check.py --staged            # every staged-division entry (issue #140)
     python tools/registry_check.py --json report.json --verbose
     python tools/registry_check.py --max-suspects 0   # exit 1 on any unaccepted suspect
 
 Classes: duplicate-unit-id | state-mismatch | city-mismatch | name-drift | no-registry-location |
-no-scorecard-source | unreadable-scorecard-source | ok
+no-scorecard-source | not-collected | unreadable-scorecard-source | ok
+
+not-collected is --staged only: a staged entry nobody has run the collectors on yet has no
+scorecard.json to compare against by design, not by defect, so (like no-registry-location) it is
+reported but never counts as a suspect. no-scorecard-source is the same absence on a program that
+IS onboarded (collected, or published) - there a missing source is exactly the kind of gap this
+tool exists to catch, and it is a suspect like any other.
 
 It compares the registry against the *collected source*, so a registry id edited by hand stays
 invisible here until the collector next runs and rewrites programs/<slug>/sources/scorecard.json.
 The exception is duplicate-unit-id, which reads the registry ids themselves and so catches a bad
-id immediately.
+id immediately - and it is computed over every program in the registry, onboarded or staged,
+never only the population a given run is reporting on: a Scorecard row a staged entry shares with
+a published one (or another staged one) is exactly as wrong as one two published entries share.
+
+--staged switches the population from "every onboarded program" to "every entry of a staged
+division" (registry.stagedDivisions), regardless of that entry's own `onboarded` flag - a staged
+batch is collected, and so onboarded, long before its division is (issue #94, option A), and this
+tool must audit it either way. --staged refuses to report success (exit 1) when the staged
+population is empty, rather than silently checking nothing and exiting 0: a check that can pass on
+an empty population is the defect issue #140 is about, and this tool does not get to be one.
 
 ACCEPTED can silence only city-mismatch and name-drift, and only while the row is still in the
 reviewed town. duplicate-unit-id, state-mismatch and a missing or unreadable source always raise.
@@ -41,6 +57,7 @@ sys.path.insert(0, ROOT)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 from collect import common  # noqa: E402
+from collect import registry_builder as rb  # noqa: E402
 from collect.registry_builder import tokens  # noqa: E402
 
 BULK_PATH = os.path.join(ROOT, "data", "scorecard-bulk.json")
@@ -183,7 +200,10 @@ def check(program: dict, dup_slugs: dict) -> dict:
         out["error"] = error
         out["classes"].append("unreadable-scorecard-source")
     elif not data:
-        out["classes"].append("no-scorecard-source")
+        # A staged entry nobody has collected yet has no source by design (issue #94, option A) --
+        # that is not a finding, it is the entry waiting its turn. Once it IS onboarded (collected),
+        # the same missing file is exactly as wrong as it would be for a published program.
+        out["classes"].append("no-scorecard-source" if program.get("onboarded") else "not-collected")
     elif not loc.get("city") or not loc.get("state"):
         out["classes"].append("no-registry-location")
     else:
@@ -210,7 +230,7 @@ def check(program: dict, dup_slugs: dict) -> dict:
                 continue
             accepted_for.append(c)
     out["suspectClasses"] = [
-        c for c in out["classes"] if c not in accepted_for and c != "no-registry-location"
+        c for c in out["classes"] if c not in accepted_for and c not in ("no-registry-location", "not-collected")
     ]
     if accepted_for:
         out["accepted"] = reason
@@ -223,6 +243,9 @@ def check(program: dict, dup_slugs: dict) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--slug", help="comma-separated slugs (default: every onboarded program)")
+    ap.add_argument("--staged", action="store_true",
+                    help="every entry of a staged division (registry.stagedDivisions), onboarded or not, "
+                         "instead of the onboarded population; exits 1 if that population is empty (issue #140)")
     ap.add_argument("--max-suspects", type=int, default=None,
                     help="exit 1 when more than this many unaccepted suspects remain")
     ap.add_argument("--json", help="write the per-program report here")
@@ -230,18 +253,37 @@ def main(argv=None) -> int:
                     help="print accepted variances, unchecked programs and idle ACCEPTED entries")
     args = ap.parse_args(argv)
 
+    if args.slug and args.staged:
+        print("--slug and --staged are mutually exclusive", file=sys.stderr)
+        return 1
+
     reg = common.load_registry()
     everyone = list(common.iter_programs(reg))
-    # Duplicates are always computed over the whole registry: --slug must not hide a collision
-    # with a program outside the selection.
+    # Duplicates are always computed over every program in the registry - onboarded, staged, or
+    # (via --slug) not currently selected - because a Scorecard row an unselected or staged program
+    # shares with the one being checked is exactly as wrong as one two checked programs share.
     by_unit = collections.defaultdict(list)
-    for p in everyone:
+    for p in reg.get("programs") or []:
         unit_id = (p.get("ids") or {}).get("scorecardUnitId")
         if unit_id:
             by_unit[unit_id].append(p["slug"])
     dup_slugs = {k: v for k, v in by_unit.items() if len(v) > 1}
 
-    if args.slug:
+    if args.staged:
+        try:
+            staged_divs = set(rb.staged_divisions(reg))
+        except ValueError as e:
+            print(f"registry.stagedDivisions is invalid: {e}", file=sys.stderr)
+            return 1
+        programs = [p for p in reg.get("programs") or [] if p.get("division") in staged_divs]
+        if not programs:
+            # Not a quiet exit 0: an empty staged population here means either nothing is staged
+            # (registry.stagedDivisions is empty) or the registry loaded short, and either way a
+            # green run here would be reporting success on a check that inspected nothing.
+            print(f"--staged: no staged entries found (registry.stagedDivisions = {sorted(staged_divs)}); "
+                  f"refusing to report success on an empty check", file=sys.stderr)
+            return 1
+    elif args.slug:
         programs, unknown = [], []
         for s in args.slug.split(","):
             s = s.strip()
@@ -296,6 +338,10 @@ def main(argv=None) -> int:
     unchecked = [r["slug"] for r in results if "no-registry-location" in r["classes"]]
     if unchecked:
         print(f"  no registry location, not checked: {', '.join(unchecked)}")
+    not_collected = [r["slug"] for r in results if "not-collected" in r["classes"]]
+    if not_collected:
+        print(f"  not collected yet, not checked: {len(not_collected)}"
+              + (f" ({', '.join(not_collected[:5])}, ...)" if args.verbose else ""))
     print(f"  unaccepted suspects: {len(suspects)}")
     unreadable = [r["slug"] for r in results if r.get("error")]
     if unreadable:
