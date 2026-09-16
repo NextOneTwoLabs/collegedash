@@ -138,6 +138,21 @@ tr:hover td { background: var(--row-hover); }
 .pill.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
 .pill .pill-sub { font-size: 10px; font-weight: 500; opacity: 0.65; margin-left: 5px; }
 .pill.active .pill-sub { opacity: 0.85; }
+/* Condition chips (issue #166): a pill that carries its own remove button, and the add form under the row. */
+.cond-chip { display: inline-flex; align-items: center; gap: 2px; padding: 2px 2px 2px 12px; cursor: default; background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); text-align: left; }
+.cond-chip:hover { color: var(--accent-text); }
+.cond-x { border: none; background: none; color: inherit; font-size: 12px; line-height: 1; padding: 5px 7px; border-radius: 999px; }
+.cond-x:hover { background: var(--accent-glow); color: var(--danger-text); }
+.cond-form { display: flex; flex-direction: column; gap: 8px; margin: 0 16px 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface-alt); }
+.cond-form label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+.cond-form .season-select, .cond-input { width: 100%; flex: none; }
+.cond-input { padding: 7px 10px; font-size: 16px; font-family: var(--font); color: var(--text-primary); background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; }
+.cond-input:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
+.cond-input[aria-invalid="true"] { border-color: var(--danger-text); }
+.cond-hint { font-size: 11px; color: var(--text-secondary); }
+.cond-error { font-size: 12px; color: var(--danger-text); }
+.cond-error:empty { display: none; }
+.cond-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .side-list { list-style: none; margin: 0; padding: 0 8px 8px; }
 .side-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; }
 .side-item:hover { background: var(--bg-surface-alt); }
@@ -470,8 +485,9 @@ const S = {
      nothing else, so an RPI default would drop every D3 and D2 program to the bottom of the first
      screen the moment they are published; Name is the one ordering that means the same thing in
      every division (owner's decision on #94). A visitor who already has a sort saved keeps it. */
-  filters: { conf: [], region: [], division: [], sort: 'name', classYear: [], view: 'cards', moreStats: false }, // conf/region/division/classYear: [] = all
+  filters: { conf: [], region: [], division: [], sort: 'name', classYear: [], view: 'cards', moreStats: false, cond: [] }, // conf/region/division/classYear: [] = all; cond: condition chips, [] = none (#166)
   sidebarTab: 'programs', residency: '',
+  condForm: null, // the open "+ Add" condition form, {field, op, text, error}; never persisted
 };
 const RPI_SEASON = 2025;
 const NCAA_RPI_URL = 'https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi';
@@ -583,6 +599,170 @@ function searchMatches(q = S.q, limit = Infinity) {
   return S.index.programs.map(p => ({ p, m: matchScore(p, q) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score).slice(0, limit);
 }
 
+/* ---------- condition chips: the field registry (issue #166) ----------
+   A condition is a rule on a number: { field, op, value }. S.filters.cond holds a list of them, saved in
+   cd.filters with the pills, and they are ANDed with each other, with the pills and with search. This
+   shape is deliberately plain data: it is what a later feature (#165) will produce, so everything a
+   condition may say is declared in COND_FIELDS below and nowhere else.
+
+     field  a `key` from COND_FIELDS
+     op     one of that field's `ops`: '<' '<=' '>' '>=' '='
+     value  a finite number in STORED units: the unit of the index.json value the accessor returns
+            (admission rate 0.30, not 30; tuition 40000, not "$40k"). Display units exist only in the
+            add form and on the chip, through COND_UNITS[unit].parse and .fmt.
+
+   Each field declares:
+     key, label (the add form), chip (the short name on a chip), missing (the phrase in "N hidden: no …"),
+     unit (a COND_UNITS key: parsing and formatting), ops (the comparisons it allows), get (the accessor
+     over an index.json row; null or any non-finite result means "no data"), and lowerIsBetter where a
+     smaller number is the better one (ranks). Those fields are worded in words, never bare symbols:
+     "RPI #50 or better", because "RPI ≤ 50" reads backwards to anyone who thinks of a rank as a score.
+
+   Missing data: owner's decision on #166, hide and count. A program with no value for a condition's
+   field does not match, and the views say how many were hidden for that reason, apart from the ones
+   that did not match (condStatus, condTally, condHiddenText). */
+const COND_OPS = ['<', '<=', '>', '>=', '='];
+const ORDER_OPS = ['<', '<=', '>', '>='];
+const COND_SYMBOL = { '<': '<', '<=': '≤', '>': '>', '>=': '≥', '=': '=' };
+// "30.00" -> "30": a display number with no trailing zeros, at most `dp` decimals
+const trimNum = (n, dp) => String(+Number(n).toFixed(dp));
+// a plain decimal typed by a person: "40,000" and " 12.5 " parse, "12abc", "", "1e3" and "Infinity" do not
+function parseDecimal(text) {
+  const t = String(text ?? '').trim().replace(/,/g, '');
+  if (!/^[-+]?(\d+(\.\d*)?|\.\d+)$/.test(t)) return null;
+  const n = Number(t);
+  return Number.isFinite(n) ? n : null;
+}
+const COND_UNITS = {
+  // stored 0-1, typed and shown as a percent: 30 or 30% -> 0.3
+  percent: { hint: 'Percent, e.g. 30 for 30%', fmt: v => `${trimNum(v * 100, 2)}%`,
+    parse: t => { const n = parseDecimal(String(t ?? '').trim().replace(/\s*%$/, '')); return n == null ? null : +(n / 100).toFixed(8); } },
+  // stored in dollars: 40000, $40,000, 40k and $40k all -> 40000
+  usd: { hint: 'Dollars a year, e.g. 40000 or $40k', fmt: v => v % 1000 === 0 && v !== 0 ? `$${fmtNum(v / 1000)}k` : fmtUsd(v),
+    parse: t => { let s = String(t ?? '').trim().replace(/^\$\s*/, ''); const k = /k$/i.test(s); if (k) s = s.slice(0, -1);
+      const n = parseDecimal(s); return n == null ? null : k ? n * 1000 : n; } },
+  rank: { hint: 'A rank, e.g. 50 (#1 is best)', fmt: v => `#${fmtNum(v)}`, parse: t => parseDecimal(String(t ?? '').trim().replace(/^#\s*/, '')) },
+  count: { hint: 'A number', fmt: v => fmtNum(v), parse: t => parseDecimal(t) },
+  score: { hint: 'A score, e.g. 1200', fmt: v => String(v), parse: t => parseDecimal(t) },
+  fahrenheit: { hint: 'Degrees Fahrenheit, e.g. 75', fmt: v => `${trimNum(v, 1)}°F`, parse: t => parseDecimal(String(t ?? '').trim().replace(/\s*°?\s*F$/i, '').replace(/\s*°$/, '')) },
+};
+/* A national-title or College Cup count comes from the NCAA Division I lists, which vouch for a zero only
+   for a Division I program - the same rule as has.titles (issue #115). For any other division a zero is
+   "not collected", and a condition must hide it rather than treat it as a known 0. */
+const d1Count = (p, v) => (p.division === 'D1' || v > 0) ? v : null;
+const COND_FIELDS = [
+  { key: 'admissionRate', label: 'Admission rate', chip: 'Admission', missing: 'no admission rate', unit: 'percent', ops: ORDER_OPS,
+    get: p => p.admissionRate },
+  /* The Tuition sort's own figure (tuitionOf, "Tuition (out-of-state)"): out-of-state, or in-state where
+     that is the only figure published. It is read THROUGH tuitionOf so the sort and the condition cannot
+     disagree; tuitionOf's missing-last sentinel is turned back into "no data". S.residency is not used:
+     today it only changes the Compare view and which figure a card dims, never a sort or a filter. */
+  { key: 'tuition', label: 'Tuition (out-of-state)', chip: 'Tuition', missing: 'no tuition', unit: 'usd', ops: ORDER_OPS,
+    get: p => { const t = tuitionOf(p); return t >= 1e12 ? null : t; } },
+  { key: 'undergradEnrollment', label: 'Undergrads', chip: 'Undergrads', missing: 'no undergraduate count', unit: 'count', ops: ORDER_OPS,
+    get: p => p.undergradEnrollment },
+  { key: 'academicRank', label: 'US rank (THE)', chip: 'US rank', missing: 'no academic rank', unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
+    get: p => p.academicRank },
+  { key: 'sat25', label: 'SAT, 25th percentile', chip: 'SAT 25th pct', missing: 'no SAT score', unit: 'score', ops: ORDER_OPS,
+    get: p => p.sat25 },
+  // The RPI the cards and table show (rpiOf: the ranking season only), not whatever lastSeason happens to hold.
+  { key: 'rpiRank', label: `RPI ${RPI_SEASON}`, chip: 'RPI', missing: `no ${RPI_SEASON} RPI`, unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
+    get: p => rpiOf(p) },
+  { key: 'nationalTitles', label: 'National titles', chip: 'Titles', missing: 'no national-title count', unit: 'count', ops: COND_OPS,
+    get: p => d1Count(p, p.nationalTitles) },
+  { key: 'collegeCups', label: 'College Cups', chip: 'College Cups', missing: 'no College Cup count', unit: 'count', ops: COND_OPS,
+    get: p => d1Count(p, p.collegeCups) },
+  { key: 'rosterSize', label: 'Roster size', chip: 'Roster', missing: 'no roster size', unit: 'count', ops: COND_OPS,
+    get: p => p.rosterSize },
+  { key: 'fallAvgHighF', label: 'Fall average high', chip: 'Fall high', missing: 'no climate data', unit: 'fahrenheit', ops: ORDER_OPS,
+    get: p => p.fallClimate?.avgHighF },
+];
+const COND_BY_KEY = new Map(COND_FIELDS.map(d => [d.key, d])); // a Map, so "constructor" or "__proto__" is never a field
+// A condition exactly as stored, or null. Used on every way in: a saved cd.filters, and the add form.
+function validCond(c) {
+  try {
+    if (!c || typeof c !== 'object' || Array.isArray(c)) return null;
+    const d = typeof c.field === 'string' ? COND_BY_KEY.get(c.field) : null;
+    if (!d || typeof c.op !== 'string' || !d.ops.includes(c.op)) return null;
+    if (typeof c.value !== 'number' || !Number.isFinite(c.value)) return null;
+    return { field: d.key, op: c.op, value: c.value };
+  } catch { return null; }
+}
+const sanitizeConds = v => Array.isArray(v) ? v.map(validCond).filter(Boolean) : [];
+const condValueOf = (d, p) => { const v = d.get(p); return typeof v === 'number' && Number.isFinite(v) ? v : null; };
+function condHolds(v, op, x) {
+  return op === '<' ? v < x : op === '<=' ? v <= x : op === '>' ? v > x : op === '>=' ? v >= x : op === '=' ? v === x : false;
+}
+/* 'pass', 'fail' or 'missing' for one program against a list of conditions. A program FAILS if any
+   condition it has data for is false - it cannot qualify whatever the missing values are. It is MISSING
+   if it fails none but lacks data for at least one: those are the programs hidden "because of missing
+   data", the ones a visitor must not read as not qualifying. */
+function condStatus(p, conds) {
+  let missing = false;
+  for (const c of conds) {
+    const d = COND_BY_KEY.get(c.field); if (!d) continue; // unreachable: every way in goes through validCond
+    const v = condValueOf(d, p);
+    if (v == null) { missing = true; continue; }
+    if (!condHolds(v, c.op, c.value)) return 'fail';
+  }
+  return missing ? 'missing' : 'pass';
+}
+const OP_WORDS = { '<': 'less than', '<=': 'at most', '>': 'more than', '>=': 'at least', '=': 'exactly' };
+const RANK_OP_WORDS = { '<': 'better than', '<=': 'at or better than', '>': 'worse than', '>=': 'at or worse than', '=': 'exactly' };
+const condOpLabel = (d, op) => `${COND_SYMBOL[op]} ${(d.lowerIsBetter ? RANK_OP_WORDS : OP_WORDS)[op]}`;
+function condText(c) {
+  const d = COND_BY_KEY.get(c.field); if (!d) return '';
+  const v = COND_UNITS[d.unit].fmt(c.value);
+  if (d.lowerIsBetter) return `${d.chip} ${{ '<': `better than ${v}`, '<=': `${v} or better`, '>': `worse than ${v}`, '>=': `${v} or worse`, '=': v }[c.op]}`;
+  return `${d.chip} ${COND_SYMBOL[c.op]} ${v}`;
+}
+// The add form's input, in display units, to a stored condition - or the message to show instead.
+function condFromInput(field, op, text) {
+  const d = COND_BY_KEY.get(field);
+  if (!d) return { error: 'Choose a field.' };
+  if (!d.ops.includes(op)) return { error: 'Choose a comparison.' };
+  const value = COND_UNITS[d.unit].parse(text);
+  if (value == null) return { error: `Enter a number. ${COND_UNITS[d.unit].hint}.` };
+  return { cond: validCond({ field: d.key, op, value }) };
+}
+function addCond(c) {
+  const ok = validCond(c); if (!ok) return false;
+  if (S.filters.cond.some(x => x.field === ok.field && x.op === ok.op && x.value === ok.value)) return false; // already there
+  S.filters.cond.push(ok); return true;
+}
+function removeCond(i) { if (i >= 0 && i < S.filters.cond.length) { S.filters.cond.splice(i, 1); return true; } return false; }
+/* How conditions split a set of items that have ALREADY passed search and the pills. `programOf` maps an
+   item to its program (the identity for the Program View, the camp's program for the ID Camp View), so
+   each view counts in its own unit. `byField` counts, per field, the MISSING items that lack it: an item
+   missing two fields is in both of those counts but only once in `missing`. */
+function condTally(items, conds, programOf = x => x) {
+  const t = { pass: 0, fail: 0, missing: 0, byField: {} };
+  for (const it of items) {
+    const p = programOf(it), s = condStatus(p, conds);
+    t[s]++;
+    if (s !== 'missing') continue;
+    new Set(conds.map(c => c.field)).forEach(k => { const d = COND_BY_KEY.get(k); if (d && condValueOf(d, p) == null) t.byField[k] = (t.byField[k] || 0) + 1; });
+  }
+  return t;
+}
+/* The hidden-for-missing-data phrase, identical in both views apart from its unit. Wording (issue #166):
+     nothing missing          ''  (the phrase is left out)
+     one field lacking        "187 hidden: no academic rank"
+     two or more fields       "190 hidden for missing data: 187 no academic rank, 12 no SAT score"
+                              + " (counted once when more than one is missing)" whenever those per-field
+                              numbers add up to more than the total, so the total never double-counts
+                              and a reader is told why the parts do not sum to it.
+   `unit` is '' in the Program View, whose count bit just before this already says "programs", and
+   'camp' in the ID Camp View, where the list is camps. */
+function condHiddenText(t, conds, unit = '') {
+  if (!t.missing) return '';
+  const keys = [...new Set(conds.map(c => c.field))].filter(k => t.byField[k]);
+  const n = unit ? `${t.missing} ${unit}${t.missing === 1 ? '' : 's'}` : String(t.missing);
+  if (keys.length === 1) return `${n} hidden: ${COND_BY_KEY.get(keys[0]).missing}`;
+  const sum = keys.reduce((a, k) => a + t.byField[k], 0);
+  return `${n} hidden for missing data: ${keys.map(k => `${t.byField[k]} ${COND_BY_KEY.get(k).missing}`).join(', ')}${sum > t.missing ? ' (counted once when more than one is missing)' : ''}`;
+}
+
 /* ---------- persistence (per-viewer conveniences only) ---------- */
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
@@ -593,6 +773,9 @@ Object.assign(S.filters, lsGet('cd.filters', {}) || {});
 // an older save with one value, a save written before the group existed at all (`undefined`, which is
 // what every cd.filters on a visitor's machine today carries for `division`), or a null.
 for (const k of ['conf', 'region', 'division', 'classYear']) { const v = S.filters[k]; S.filters[k] = Array.isArray(v) ? v.map(String) : v ? [String(v)] : []; } // older saves held one value
+// Conditions: anything a saved cd.filters holds that is not exactly a registered field, an op that field
+// allows and a finite number is dropped here, silently, and never thrown on (a save from before #166 has none).
+S.filters.cond = sanitizeConds(S.filters.cond);
 // multi-select pill groups: toggling a value removes it or adds it; "All" clears the group, so All and a value are never both active
 function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
 const pillAttrs = (attr, value, on) => `class="pill${on ? ' active' : ''}" data-${attr}="${esc(value)}" aria-pressed="${on}"`;
@@ -848,6 +1031,21 @@ function renderSidebar() {
        no-op. Both are OMITTED, not disabled - f.sort and f.classYear are never written while this
        view is open, so both come back intact with the Program View. */
     const onCamps = currentView() === 'camps';
+    /* Condition chips (#166). They filter both views, so unlike sort and class they stay in the camp view.
+       Each chip is text plus a real button to remove it; "+ Add" opens a form of labelled native controls
+       (field, comparison, value), so it is operable by keyboard with nothing custom: Tab moves, Enter in
+       the value submits, Escape cancels. */
+    const cf = S.condForm, cfd = cf ? (COND_BY_KEY.get(cf.field) || COND_FIELDS[0]) : null;
+    const condBlock = `<div class="browse-label" id="condLabel">Conditions</div>
+      <div class="pill-row" role="group" aria-labelledby="condLabel">${f.cond.map((c, i) => `<span class="pill cond-chip">${esc(condText(c))}<button type="button" class="cond-x" data-cond-rm="${i}" aria-label="Remove condition: ${esc(condText(c))}" title="Remove">✕</button></span>`).join('')}<button type="button" class="pill" id="condAdd" aria-expanded="${!!cf}" aria-controls="condForm">+ Add</button></div>
+      ${cf ? `<form class="cond-form" id="condForm" novalidate aria-label="Add a condition">
+        <label for="condField">Field<select class="season-select" id="condField">${COND_FIELDS.map(d => `<option value="${esc(d.key)}"${d.key === cfd.key ? ' selected' : ''}>${esc(d.label)}</option>`).join('')}</select></label>
+        <label for="condOp">Comparison<select class="season-select" id="condOp">${cfd.ops.map(op => `<option value="${esc(op)}"${op === cf.op ? ' selected' : ''}>${esc(condOpLabel(cfd, op))}</option>`).join('')}</select></label>
+        <label for="condValue">Value<input class="cond-input" id="condValue" type="text" inputmode="decimal" autocomplete="off" value="${esc(cf.text)}" aria-describedby="condHint condError"${cf.error ? ' aria-invalid="true"' : ''}></label>
+        <div class="cond-hint" id="condHint">${esc(COND_UNITS[cfd.unit].hint)}</div>
+        <div class="cond-error" id="condError" role="alert">${esc(cf.error || '')}</div>
+        <div class="cond-actions"><button type="submit" class="btn primary" id="condSubmit">Add condition</button><button type="button" class="btn" id="condCancel">Cancel</button></div>
+      </form>` : ''}`;
     body = `
       <div class="sidebar-section-title">Find a program</div>
       <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="School or mascot…" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
@@ -855,6 +1053,7 @@ function renderSidebar() {
       <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`}
       ${divisionBlock}
+      ${condBlock}
       <div class="browse-label">Region</div>
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
       ${onCamps ? '' : `<div class="browse-label">Recruiting class</div>
@@ -885,6 +1084,7 @@ function renderSidebar() {
   // selection to what is still on screen before the sidebar is rebuilt.
   sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  wireConditions(sb);
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
@@ -899,6 +1099,35 @@ function renderSidebar() {
     $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
     updateSearchStatus();
   }
+}
+/* The condition controls. Every handler ends the way a pill click does (save, rebuild the sidebar,
+   re-render the view in place) and then puts focus back somewhere sensible, because rebuilding the
+   sidebar would otherwise drop a keyboard user's focus on <body>. The drawer is left open while the form
+   is in use and closed when a chip is added or removed, as a pill click closes it. */
+function condFormOpen() { const d = COND_FIELDS[0]; S.condForm = { field: d.key, op: d.ops[0], text: '', error: '' }; renderSidebar(); $('#condField')?.focus(); }
+function condFormClose() { S.condForm = null; renderSidebar(); $('#condAdd')?.focus(); }
+function condFormSubmit() {
+  const st = S.condForm; if (!st) return false;
+  const input = $('#condValue'); if (input) st.text = input.value;
+  const r = condFromInput(st.field, st.op, st.text);
+  if (r.error) { st.error = r.error; renderSidebar(); $('#condValue')?.focus(); return false; }
+  addCond(r.cond); S.condForm = null; saveState(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer();
+  return true;
+}
+function condRemove(i) { if (!removeCond(i)) return; saveState(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer(); }
+function wireConditions(sb) {
+  sb.querySelectorAll('[data-cond-rm]').forEach(b => b.onclick = () => condRemove(Number(b.dataset.condRm)));
+  const add = $('#condAdd'); if (add) add.onclick = () => (S.condForm ? condFormClose() : condFormOpen());
+  const form = $('#condForm'); if (!form || !S.condForm) return;
+  const st = S.condForm;
+  form.onsubmit = e => { e.preventDefault(); condFormSubmit(); };
+  form.onkeydown = e => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); condFormClose(); } };
+  $('#condCancel').onclick = condFormClose;
+  // A new field may not allow the chosen comparison (ranks allow '=', rates do not); what was typed is kept.
+  $('#condField').onchange = e => { const d = COND_BY_KEY.get(e.target.value); if (!d) return; st.field = d.key; if (!d.ops.includes(st.op)) st.op = d.ops[0];
+    st.text = $('#condValue').value; st.error = ''; renderSidebar(); $('#condField')?.focus(); };
+  $('#condOp').onchange = e => { st.op = e.target.value; };
+  $('#condValue').oninput = e => { st.text = e.target.value; };
 }
 function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }
 function currentView() { return location.hash.replace(/^#\/?/, '').split('/')[0] || 'list'; }
@@ -1075,13 +1304,17 @@ function wireCharts(root) {
    Division (#94) is the fourth clause and lives HERE rather than in either view, so the Program View
    and the ID Camp View cannot disagree about it. It is vacuous while f.division is empty - which is
    every visitor today, because the pill row that writes it does not render against single-division
-   data - so with the D1-only index this predicate returns exactly what it returned before. */
-const matchesFilters = (p, score) => {
+   data - so with the D1-only index this predicate returns exactly what it returned before.
+   Condition chips (#166) are the fifth clause, here for the same reason. It is vacuous while the list is
+   empty. `conds` defaults to the chips in S.filters; the views pass [] to get the programs that pass
+   everything EXCEPT the chips, which is the set the hidden-for-missing-data count is taken over. */
+const matchesFilters = (p, score, conds = S.filters.cond) => {
   const f = S.filters;
   return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q)))
     && (!f.conf.length || f.conf.includes(p.conference))
     && (!f.region.length || f.region.includes(p.region))
-    && (!f.division.length || f.division.includes(p.division));
+    && (!f.division.length || f.division.includes(p.division))
+    && (!conds?.length || condStatus(p, conds) === 'pass');
 };
 function filteredPrograms() {
   const idx = S.index, f = S.filters;
@@ -1116,9 +1349,12 @@ async function renderList() {
   // The corpus is named from the divisions actually on screen: hardcoding "Division I" was true of a
   // single-division index and becomes a plain falsehood the moment a second division is published.
   const bits = [corpusLabel(), `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
+  // Conditions (#166): how many of the programs that passed search and the pills were hidden only for lack of data.
+  if (f.cond.length) { const hidden = condHiddenText(condTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (hidden) bits.push(esc(hidden)); }
   if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
+  if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
   bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
@@ -1284,12 +1520,15 @@ async function renderCamps() {
   const rows = resolved.filter(c => matchesFilters(byProgram.get(c.slug), null)).sort(campCmp);
   const tally = campTally(doc);
   const nProg = new Set(rows.map(c => c.slug)).size;
-  const filtered = !!(f.conf.length || f.region.length || f.division.length || S.q);
+  const filtered = !!(f.conf.length || f.region.length || f.division.length || S.q || f.cond.length);
 
   const bits = [corpusLabel(),
     `${rows.length} upcoming ID camp${rows.length === 1 ? '' : 's'}${filtered ? ` of ${resolved.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`];
+  // Conditions (#166), counted in camps: the camps whose program passed everything else but lacks the data.
+  if (f.cond.length) { const hidden = condHiddenText(condTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (hidden) bits.push(esc(hidden)); }
   if (f.conf.length) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
+  if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names`);
   bits.push('soonest first');
 
@@ -1316,7 +1555,7 @@ async function renderCamps() {
   } else if (filtered && resolved.length) {
     // The common empty case, not an exceptional one: the list is small and regional coverage is thin.
     body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
-      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
+      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', f.cond.map(condText).join(' and '), S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
       ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
       <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/">All programs</a></p>
       <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
@@ -1337,8 +1576,8 @@ async function renderCamps() {
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
   app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
   const clr = $('#campsClear');
-  // Clears everything that narrowed the list, search included - otherwise "clear filters" leaves one on.
-  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; S.q = ''; S.qRaw = ''; saveState(); renderSidebar(); renderCamps(); };
+  // Clears everything that narrowed the list, search and condition chips included - otherwise "clear filters" leaves one on.
+  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; f.cond = []; S.condForm = null; S.q = ''; S.qRaw = ''; saveState(); renderSidebar(); renderCamps(); };
 }
 
 /* ---------- profile ---------- */
