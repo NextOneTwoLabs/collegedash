@@ -665,7 +665,12 @@ def test_committed() -> None:
     import build  # noqa: E402 - only here, so the rest of this suite does not need build's imports
     published = build.published_programs(reg)
     staged_divs = rb.staged_divisions(reg)
-    staged = [p for p in programs if not p.get("onboarded") and p["division"] in staged_divs]
+    # A staged entry is one whose division is staged. It may have been through `onboard` -- a batch of
+    # them is collected before the division is published (issue #94, option A) -- and it is still not
+    # published, because published_programs() needs the division too. "Not onboarded" was the right
+    # test only while nothing had been collected.
+    staged = [p for p in programs if p["division"] in staged_divs]
+    collected = [p for p in staged if p.get("onboarded")]
     # fails if a published program sits in a division that is not onboarded
     ok("every published program is in an onboarded division", all(p["division"] in od for p in published),
        str([p["slug"] for p in published if p["division"] not in od][:5]))
@@ -676,8 +681,17 @@ def test_committed() -> None:
     # fails if staging leaks into the published set: this is the check that says the D2 work publishes nothing
     ok("no staged program is published", not (set(staged_divs) & {p["division"] for p in published}),
        str(sorted({p["division"] for p in published})))
-    ok("and no collector can see one: iter_programs yields only onboarded entries",
-       not ({p["slug"] for p in staged} & {p["slug"] for p in common.iter_programs(reg)}))
+    # iter_programs selects on `onboarded`, not on division, so a staged entry is invisible to the
+    # collectors until its batch is collected and visible afterwards -- which is how a collected D2
+    # program's sources stay fresh while it publishes nothing. fails if an uncollected entry is handed
+    # to a collector, or if a collected one is published.
+    seen = {p["slug"] for p in common.iter_programs(reg)}
+    ok("an uncollected staged entry is invisible to the collectors",
+       not ({p["slug"] for p in staged if not p.get("onboarded")} & seen),
+       str(sorted({p["slug"] for p in staged if not p.get("onboarded")} & seen)[:5]))
+    ok("a collected one is refreshed but still not published",
+       {p["slug"] for p in staged if p.get("onboarded")} <= seen
+       and not ({p["slug"] for p in staged} & {p["slug"] for p in published}))
     ok("every program in the registry carries its Directory orgId", all(isinstance(p["ids"].get("ncaaOrgId"), int) for p in programs),
        str([p["slug"] for p in programs if not isinstance(p["ids"].get("ncaaOrgId"), int)]))
     ok("every held program says why", all((p.get("hold") or {}).get("reason") in ("division-not-onboarded", "not-in-directory") for p in held))
@@ -713,9 +727,17 @@ def test_committed() -> None:
         # fails if the D2 list is short or long: the 2026-27 Directory list is 261 programs, and a
         # truncated fetch is the way that number quietly drops
         ok("all 261 D2 programs are in the registry", len(d2) == 261, str(len(d2)))
-        ok("and every one of them is staged, not published", all(p["onboarded"] is False for p in d2),
-           str([p["slug"] for p in d2 if p["onboarded"]][:5]))
-        ok("none has been through onboard", not any("onboardedAt" in p or "hold" in p for p in d2))
+        # fails if a D2 entry reaches the published set. This is the invariant, not "nothing is
+        # onboarded": a batch is collected (onboarded: true) before the division is published, so the
+        # flag moves per batch and the published set must not.
+        ok("and not one of them is published", not ({p["slug"] for p in d2} & {p["slug"] for p in published}),
+           str(sorted({p["slug"] for p in d2} & {p["slug"] for p in published})[:5]))
+        ok("none is held: a staged entry was never published, so there is nothing to hold",
+           not any("hold" in p for p in d2))
+        # a collected entry says when, and an uncollected one has no date to say
+        ok("onboardedAt is present exactly on the collected ones",
+           all(("onboardedAt" in p) == bool(p.get("onboarded")) for p in d2),
+           str([p["slug"] for p in d2 if ("onboardedAt" in p) != bool(p.get("onboarded"))][:5]))
         ok("each carries its Directory orgId and state", all(isinstance(p["ids"]["ncaaOrgId"], int) and p["location"]["state"] for p in d2))
         # fails if a D2 conference is run through the D1 label table: "Independent" is 8 D2 programs
         # and one D1 program, and they are not the same conference
@@ -730,8 +752,14 @@ def test_committed() -> None:
                                                              and p["ids"]["ncaaName"] is None and p["ids"]["rpiHistoryName"] is None
                                                              for p in d2),
            str([p["slug"] for p in d2 if p["colors"] or p["shortName"] or p["nickname"]][:5]))
-        ok("the platform is left for the probe to establish", {p["athletics"]["platform"] for p in d2} == {"auto"},
-           str(sorted({p["athletics"]["platform"] for p in d2})))
+        # fails if a platform is written for a program nothing has looked at: "auto" until the
+        # athletics collector detects one and writes it back on the program's own onboard run
+        ok("an uncollected entry's platform is still auto",
+           {p["athletics"]["platform"] for p in d2 if not p.get("onboarded")} <= {"auto"},
+           str(sorted({p["athletics"]["platform"] for p in d2 if not p.get("onboarded")})))
+        ok("and a collected one carries a platform an adapter detected",
+           {p["athletics"]["platform"] for p in d2 if p.get("onboarded")} <= {"sidearm", "wmt"},
+           str(sorted({p["athletics"]["platform"] for p in d2 if p.get("onboarded")})))
         # fails if an athletics URL is invented for the two rows the Directory leaves blank
         blank = sorted(p["slug"] for p in d2 if p["athletics"]["baseUrl"] is None)
         ok("the two rows with no Directory athletics URL have none", blank == ["middle-georgia-state", "texas-am-texarkana"], str(blank))
