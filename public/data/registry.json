@@ -1,6 +1,6 @@
 {
   "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>. Optional per-program athletics.campsUrl points the camps collector straight at the program's camp page (skips the nav search and any skipReason); athletics.campsNote is free text for humans. Membership comes from the NCAA Directory (collect/registry_builder.py): onboardedDivisions is the set of divisions the site publishes, and turning a division on is adding it there. A program whose Directory division is not onboarded, or that no Directory list carries, is moved whole to heldPrograms with a `hold` block; refresh, onboard and build read `programs` only, so it is neither collected nor published, and it returns unchanged with the same slug. stagedDivisions is the set of divisions whose programs are in `programs` with onboarded: false, built ahead of onboarding so the list, the slugs and the joins can be reviewed before any collector runs; nothing staged is published or collected, and onboarding a division moves it from stagedDivisions to onboardedDivisions.",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "onboardedDivisions": [
     "D1"
   ],
@@ -2942,8 +2942,9 @@
       ],
       "athletics": {
         "platform": "wmt",
-        "baseUrl": "https://thesundevils.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://sundevils.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 28, athleticWebUrl sundevils.com), which answered 200 at https://sundevils.com/ (\"Sun Devil Athletics | Arizona State University\"), checked 2026-09-16; the former thesundevils.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 104151,
@@ -6384,8 +6385,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://hbuhuskies.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://hcuhuskies.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 287, athleticWebUrl www.hcuhuskies.com), which answered 200 at https://hcuhuskies.com/splash.aspx?id=splash_35 (\"All-Sports Pass - Houston Christian University Athletics - Official Athletics Website\"), checked 2026-09-16; the former hbuhuskies.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 225399,
@@ -7145,8 +7147,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://texassports.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://texaslonghorns.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 703, athleticWebUrl www.TexasLonghorns.com), which answered 200 at https://texaslonghorns.com:443 (\"University of Texas Athletics - Official Athletics Website\"), checked 2026-09-16; the former texassports.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 228778,
@@ -8745,8 +8748,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://gonu.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://nuhuskies.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 500, athleticWebUrl www.nuhuskies.com), which answered 200 at https://nuhuskies.com/ (\"Northeastern University Athletics - Official Athletics Website\"), checked 2026-09-16; the former gonu.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 167358,
@@ -10870,8 +10874,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://gousieagles.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://usiscreamingeagles.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 661, athleticWebUrl www.usiscreamingeagles.com/), which answered 200 at https://usiscreamingeagles.com/ (\"University of Southern Indiana Athletics - Official Athletics Website\"), checked 2026-09-16; the former gousieagles.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 151306,
@@ -11550,8 +11555,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://icgaels.com",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://ionagaels.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 310, athleticWebUrl www.ionagaels.com), which answered 200 at https://ionagaels.com/ (\"Iona University Athletics - Official Athletics Website\"), checked 2026-09-16; the former icgaels.com redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 191931,
@@ -13395,8 +13401,9 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://athletics.tsu.edu",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://tsusports.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory (orgId 699, athleticWebUrl www.tsusports.com), which answered 200 at https://tsusports.com/ (\"Texas Southern University Athletics - Official Athletics Website\"), checked 2026-09-16; the former athletics.tsu.edu redirected to this domain (#150 sweep, #171)"
       },
       "ids": {
         "scorecardUnitId": 229063,
@@ -14549,7 +14556,7 @@
       },
       "ids": {
         "ncaaOrgId": 2683,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 197984,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -14562,11 +14569,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Belmont",
         "state": "NC",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 35.260651,
+        "lon": -81.041315,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #171) from College Scorecard row 197984 (\"Belmont Abbey College\", Belmont NC, www.belmontabbeycollege.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Registry build left them null because no Scorecard row shares the Directory's web domain (#137). Corroboration: the Directory's webSiteUrl www.bac.edu redirected to belmontabbeycollege.edu, the Scorecard row's own school_url, checked 2026-09-16; programs/belmont-abbey-college/sources/scorecard.json was already collected from this unit id"
       },
       "onboardedAt": "2026-09-16"
     },
@@ -16778,7 +16786,7 @@
       },
       "ids": {
         "ncaaOrgId": 30193,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 139630,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -16791,11 +16799,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Franklin Springs",
         "state": "GA",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 34.283641,
+        "lon": -83.14822,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #171) from College Scorecard row 139630 (\"Emmanuel University\", Franklin Springs GA, eu.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Registry build left them null because no Scorecard row shares the Directory's web domain (#137). Corroboration: the only Scorecard row named Emmanuel University in GA; the Directory name is Emmanuel University (Georgia) and the athletics site the Directory lists lands on goeulions.com titled Emmanuel University (Ga.); the Directory's webSiteUrl www.ec.edu failed its TLS handshake on 2026-09-16. The Scorecard API name search for \"Emmanuel University (Georgia)\" returns nothing because of the qualifier"
       },
       "onboardedAt": "2026-09-16"
     },
@@ -17726,7 +17735,7 @@
       },
       "ids": {
         "ncaaOrgId": 2697,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 141565,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -17739,11 +17748,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Hilo",
         "state": "HI",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 19.701189,
+        "lon": -155.080847,
+        "timezone": "Pacific/Honolulu",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #171) from College Scorecard row 141565 (\"University of Hawaii at Hilo\", Hilo HI, https://hilo.hawaii.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Registry build left them null because its website-domain join was ambiguous (#137). Corroboration: the registry build found four Scorecard rows on hawaii.edu and chose none (ambiguous: 141565 University of Hawaii at Hilo, 141574 Manoa, 141839 Maui College, 141981 West Oahu); 141565 is the only one whose name matches the Directory name exactly and whose city is Hilo; the Scorecard school_url hilo.hawaii.edu shares hawaii.edu with the Directory's webSiteUrl www.uhh.hawaii.edu (that host did not answer within 25 s on 2026-09-16); programs/hawaii-hilo/sources/scorecard.json was already collected from this unit id"
       },
       "onboardedAt": "2026-09-16"
     },
