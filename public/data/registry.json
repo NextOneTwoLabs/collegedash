@@ -14625,8 +14625,9 @@
       "colors": null,
       "athletics": {
         "platform": "auto",
-        "baseUrl": "https://www.bentley.edu",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://bentleyfalcons.com",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory athleticWebUrl is www.bentley.edu/athletics (orgId 56), which redirects to bentleyfalcons.com, \"Bentley University - Official Athletics Website\"; its women's soccer roster parses with the Sidearm adapter (\"2026 Women's Soccer Roster - Bentley University\", 30 players); checked 2026-09-16 (#94). The registry had kept only the Directory URL's host, the school's main site, dropping its /athletics path (#137)"
       },
       "ids": {
         "ncaaOrgId": 56,
@@ -14808,7 +14809,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.ubknights.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.ubknights.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 74,
@@ -15323,7 +15325,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://cneagles.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://cneagles.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1000,
@@ -15798,7 +15801,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.cokercobras.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.cokercobras.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1023,
@@ -16202,11 +16206,12 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://athletics.dyc.edu",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site fails TLS: TLS handshake failed (unrecognized name) for https://athletics.dyc.edu/ on one request, 2026-09-16 (robots.txt disallowed us in the #137 probe; TLS also failed in the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1059,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 190716,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -16219,11 +16224,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Buffalo",
         "state": "NY",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 42.902636,
+        "lon": -78.890868,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 190716 (\"D'Youville University\", Buffalo NY, https://www.dyu.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the only Scorecard row named D'Youville University in NY (Scorecard spells it with two spaces). The Directory's webSiteUrl www.dyc.edu is the former D'Youville College domain; the row's url is www.dyu.edu"
       }
     },
     {
@@ -16274,7 +16280,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.dbupatriots.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site fails TLS: certificate verification failed for https://www.dbupatriots.com/ on one request, 2026-09-16 (robots.txt disallowed us in the #137 probe; TLS also failed in the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1045,
@@ -16457,7 +16464,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.chargerathletics.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.chargerathletics.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 8956,
@@ -16497,7 +16505,7 @@
       },
       "ids": {
         "ncaaOrgId": 1057,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 177214,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -16510,11 +16518,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Springfield",
         "state": "MO",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 37.219681,
+        "lon": -93.286192,
+        "timezone": "America/Chicago",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 177214 (\"Drury University\", Springfield MO, www.drury.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: FLAGGED FOR REVIEW: Scorecard has two Drury University rows in Springfield MO, 177214 (the university, www.drury.edu) and 492801 (its College of Continuing Professional Studies, www.drury.edu/go/); the soccer program belongs to the university, so 177214. The build found the domain ambiguous (#137)"
       }
     },
     {
@@ -16714,7 +16723,7 @@
       },
       "ids": {
         "ncaaOrgId": 30244,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 133526,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -16727,11 +16736,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Jacksonville",
         "state": "FL",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 30.34479,
+        "lon": -81.684879,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 133526 (\"Edward Waters University\", Jacksonville FL, www.ew.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the only Scorecard row named Edward Waters University in FL. The Directory's webSiteUrl www.ewu.edu is Eastern Washington's domain (#137), which is why the build joined nothing; the Scorecard row's own url is www.ew.edu"
       }
     },
     {
@@ -16750,7 +16760,7 @@
       },
       "ids": {
         "ncaaOrgId": 9680,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 133553,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -16763,11 +16773,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Daytona Beach",
         "state": "FL",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 29.189903,
+        "lon": -81.048367,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 133553 (\"Embry-Riddle Aeronautical University-Daytona Beach\", Daytona Beach FL, daytonabeach.erau.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: FLAGGED FOR REVIEW: the Directory names Embry-Riddle Aeronautical University (Florida); Scorecard has two FL rows, 133553 Daytona Beach (the residential campus, daytonabeach.erau.edu) and 426314 Worldwide (the online campus), so 133553. The build found the domain ambiguous (#137)"
       }
     },
     {
@@ -16820,7 +16831,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.gowasps.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.gowasps.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 216,
@@ -17003,7 +17015,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.ferrisstatebulldogs.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.ferrisstatebulldogs.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 224,
@@ -17914,7 +17927,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://uindyathletics.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site fails TLS: certificate verification failed for https://uindyathletics.com/ on one request, 2026-09-16 (robots.txt disallowed us in the #137 probe; TLS also failed in the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 309,
@@ -18638,7 +18652,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.marshilllions.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.marshilllions.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1199,
@@ -18932,7 +18947,7 @@
       },
       "ids": {
         "ncaaOrgId": 30272,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 482158,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -18945,11 +18960,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Macon",
         "state": "GA",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 32.808092,
+        "lon": -83.732058,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 482158 (\"Middle Georgia State University\", Macon GA, https://www.mga.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the only Scorecard row named Middle Georgia State University in GA. The Directory gives no website"
       }
     },
     {
@@ -19112,7 +19128,7 @@
       },
       "ids": {
         "ncaaOrgId": 27854,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 174075,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -19125,11 +19141,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Crookston",
         "state": "MN",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 47.802536,
+        "lon": -96.606188,
+        "timezone": "America/Chicago",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 174075 (\"University of Minnesota-Crookston\", Crookston MN, https://crk.umn.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the Crookston campus row. The Directory name is \"University of Minnesota, Crookston\"; Scorecard lists five University of Minnesota campuses in MN, and this is the only one in Crookston. The Directory's webSiteUrl www.umcrookston.edu differs from the row's crk.umn.edu"
       }
     },
     {
@@ -20023,7 +20040,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://gonorthwood.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://gonorthwood.com/ on one request, 2026-09-16 (robots.txt disallowed us in the #137 probe and the host did not resolve in the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 510,
@@ -21003,8 +21021,9 @@
       "colors": null,
       "athletics": {
         "platform": "auto",
-        "baseUrl": "https://www.setonhill.edu",
-        "sportPath": "/sports/womens-soccer"
+        "baseUrl": "https://athletics.setonhill.edu",
+        "sportPath": "/sports/womens-soccer",
+        "note": "baseUrl from the NCAA Directory athleticWebUrl is www.setonhill.edu/athletics (orgId 30063), the school's Athletics Life page, which links athletics.setonhill.edu, as does the school's home page; its women's soccer roster parses with the Sidearm adapter (\"2026 Women's Soccer Roster - Seton Hill University Athletics\", 37 players); checked 2026-09-16 (#94). The registry had kept only the Directory URL's host, the school's main site, dropping its /athletics path (#137)"
       },
       "ids": {
         "ncaaOrgId": 30063,
@@ -21044,7 +21063,7 @@
       },
       "ids": {
         "ncaaOrgId": 636,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 199643,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -21057,11 +21076,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Raleigh",
         "state": "NC",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 35.771181,
+        "lon": -78.637693,
+        "timezone": "America/New_York",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 199643 (\"Shaw University\", Raleigh NC, www.shawu.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the only Scorecard row named Shaw University in NC. The Directory's webSiteUrl is www.shawuniversity.edu and the Scorecard row's url is www.shawu.edu, so the domain join failed; name, state and the athletics host shawbears.com agree"
       }
     },
     {
@@ -21948,7 +21968,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.stacathletics.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.stacathletics.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1348,
@@ -22056,7 +22077,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://tampaspartans.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://tampaspartans.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 689,
@@ -22096,7 +22118,7 @@
       },
       "ids": {
         "ncaaOrgId": 30285,
-        "scorecardUnitId": null,
+        "scorecardUnitId": 224545,
         "tdsClgId": null,
         "tdsSlug": null,
         "wikipedia": null,
@@ -22109,11 +22131,12 @@
         "instagram": null
       },
       "location": {
-        "city": null,
+        "city": "Texarkana",
         "state": "TX",
-        "lat": null,
-        "lon": null,
-        "timezone": null
+        "lat": 33.490482,
+        "lon": -94.103617,
+        "timezone": "America/Chicago",
+        "note": "ids.scorecardUnitId, city, lat and lon filled by hand (2026-09-16, #94) from College Scorecard row 224545 (\"Texas A&M University-Texarkana\", Texarkana TX, www.tamut.edu/) in data/scorecard-bulk.json (https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip); timezone from those coordinates (registry_builder.timezone_at). Why this row: the Texarkana campus row: exact name, state TX, city Texarkana, among six Texas A&M rows in TX. The Directory gives no website"
       }
     },
     {
@@ -22417,7 +22440,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.tusculumpioneers.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://www.tusculumpioneers.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 12830,
@@ -23403,7 +23427,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://athletics.wilmu.edu",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics site refuses CollegeDashBot: HTTP 403 for https://athletics.wilmu.edu/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94)"
       },
       "ids": {
         "ncaaOrgId": 1460,
