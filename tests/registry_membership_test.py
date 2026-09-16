@@ -783,9 +783,15 @@ def test_committed() -> None:
         ok("an uncollected entry's platform is still auto",
            {p["athletics"]["platform"] for p in d2 if not p.get("onboarded")} <= {"auto"},
            str(sorted({p["athletics"]["platform"] for p in d2 if not p.get("onboarded")})))
-        ok("and a collected one carries a platform an adapter detected",
-           {p["athletics"]["platform"] for p in d2 if p.get("onboarded")} <= {"sidearm", "wmt"},
-           str(sorted({p["athletics"]["platform"] for p in d2 if p.get("onboarded")})))
+        # fails if a collected entry claims a platform no adapter detected. The one exception is a host
+        # the registry records as refusing us (athletics.skipReason, #182): its athletics collector never
+        # contacts the site, so "auto" is the honest value - but only "auto", never an invented platform.
+        detected = {"sidearm", "wmt"}
+        wrong_platform = sorted(
+            (p["slug"], p["athletics"]["platform"]) for p in d2 if p.get("onboarded")
+            and p["athletics"]["platform"] not in (detected | {"auto"} if p["athletics"].get("skipReason") else detected))
+        ok("and a collected one carries a platform an adapter detected, or auto when its site is skipped",
+           not wrong_platform, str(wrong_platform[:5]))
         # fails if an athletics URL is invented for the two rows the Directory leaves blank
         blank = sorted(p["slug"] for p in d2 if p["athletics"]["baseUrl"] is None)
         ok("the two rows with no Directory athletics URL have none", blank == ["middle-georgia-state", "texas-am-texarkana"], str(blank))
