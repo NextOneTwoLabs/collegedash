@@ -507,6 +507,31 @@ def test_slugs() -> None:
     ok("a name that slugifies to nothing still gets a slug", rb.slug_ladder("!!!", "TX", 77) == ["program-77", "program-77-tx", "program-77-77"],
        str(rb.slug_ladder("!!!", "TX", 77)))
 
+    # issue #139: two D3 qualifiers are cities, not states. Each fails against the state-only rule.
+    jwu = rb.slug_ladder("Johnson & Wales University (Providence)", "RI", 22626)
+    ok("a city qualifier leads the ladder, ahead of the state",
+       jwu == ["johnson-wales-providence", "johnson-wales-university-providence", "johnson-wales-ri",
+               "johnson-wales-university-ri", "johnson-wales-22626"], str(jwu))
+    sju = rb.slug_ladder("St. Joseph's University NY (Brooklyn)", "NY", 30072)
+    ok("a name that already ends in its state takes the city, not the state twice",
+       sju[0] == "st-josephs-ny-brooklyn" and not any(s.endswith("-ny-ny") for s in sju), str(sju))
+    ok("a bare name ending in its state never gets the state appended again",
+       not any("-ny-ny" in s for s in rb.slug_ladder("Example University NY", "NY", 5)),
+       str(rb.slug_ladder("Example University NY", "NY", 5)))
+    ok("a state qualifier is still a state, as a name or as a code",
+       rb.slug_ladder("Anderson University (Indiana)", "IN", 939)[0] == "anderson-in"
+       and rb.slug_ladder("Anderson University (IN)", "IN", 939)[0] == "anderson-in",
+       str(rb.slug_ladder("Anderson University (IN)", "IN", 939)))
+    campuses = [drow(31, "D3", "Example University (Brooklyn)", "NY", "a.edu", "a.com", "C"),
+                drow(32, "D3", "Example University (Patchogue)", "NY", "b.edu", "b.com", "C")]
+    got = rb.assign_slugs(campuses, set())
+    # fails under the state-only rule: both campuses are NY, so both fell through to the orgId
+    ok("two campuses of one institution in one state are told apart by their city",
+       got == {31: "example-brooklyn", 32: "example-patchogue"}, str(got))
+    place = getattr(rb, "qualifier_place", None)
+    ok("qualifier_place: a city is a place, a state is not", place is not None and place("Brooklyn") == "brooklyn"
+       and place("South Carolina") == "" and place("SC") == "" and place(" ") == "")
+
     rows = [drow(1, "D2", "Trinity University", "CT", "a.edu", "a.com", "C"),
             drow(2, "D2", "Trinity University", "DC", "b.edu", "b.com", "C")]
     got = rb.assign_slugs(rows, set())
