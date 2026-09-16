@@ -400,8 +400,8 @@ def test_one_shot():
        "os.environ" not in guard and "getenv(" not in guard,
        [l for l in guard.splitlines() if "os.environ" in l or "getenv(" in l])
     reg = staged_d2()
-    env = {"COLLEGEDASH_COLLECT_STAGED_DIVISIONS": "1", "COLLEGEDASH_MAX_BATCH": "1000",
-           "COLLEGEDASH_ALLOW_STAGED": "1"}
+    env = {"COLLEGEDASH_COLLECT_STAGED_DIVISIONS": "D2", "COLLEGEDASH_MAX_BATCH": "1000",
+           "COLLEGEDASH_ALLOW_STAGED": "D2"}
     r = run_onboard(reg, ["--all"], env=env)
     ok("setting the obvious environment variables does not lift either rule",
        r.code == 2 and r.collectors == [], (r.code, len(r.collectors)))
