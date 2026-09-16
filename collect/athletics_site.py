@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from urllib.parse import urlparse
 
-from . import adapters, common
+from . import adapters, coach_bio, common
 
 NAME = "athletics"
 # Club names as they appear in bios: 1-4 capitalised words ending in a club-ish token.
@@ -139,6 +139,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
             except common.FetchError as e:
                 common.log(f"  bio failed for {p['name']}: {e}")
                 p["bio"], p["club"] = {}, ""
+    head_coach_bio = _head_coach_bio(staff, program) if bios else None
 
     history = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
@@ -172,6 +173,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         "rosterHistory": history,
         "schedule": {"season": sched["season"] or season, "games": sched["games"]},
         "scheduleHistory": sched_hist,
+        "headCoachBio": head_coach_bio,
     }
     extra = {"scheduleUrl": u["schedule"], "fromCache": meta.get("fromCache", False)}
     if staff_url:
@@ -181,6 +183,34 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     data = common.unwrap_links(data)
     common.save_source(slug, NAME, data, url=u["roster"], collector=NAME, extra=extra)
     return data
+
+
+def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
+    """The head coach's first season as their own bio page states it (issue #168): {name, url, firstSeason,
+    conflict, statements}, or None when there is no head coach with a bio link. One request per program,
+    cached a week like the player bios, through the same fetch path. A failed fetch stores the attempt
+    with no year, so the build falls back to Wikipedia rather than to nothing."""
+    head = next((s for s in staff if s.get("isHeadCoach") and s.get("bioUrl")), None)
+    if not head:
+        return None
+    try:
+        html, _ = common.fetch_text(head["bioUrl"], max_age_hours=24 * 7)
+    except common.FetchError as e:
+        common.log(f"  head coach bio failed for {head['name']}: {e}")
+        return {"name": head["name"], "url": head["bioUrl"], "firstSeason": None, "conflict": False, "statements": [],
+                "error": str(e)[:200]}
+    parsed = coach_bio.first_season(html, head["name"], school_names(program))
+    common.log(f"  head coach bio: {head['name']} first season {parsed['firstSeason']}"
+               + (" (the page contradicts itself)" if parsed["conflict"] else "")
+               + f" from {len(parsed['statements'])} statement(s)")
+    return {"name": head["name"], "url": head["bioUrl"], **parsed}
+
+
+def school_names(program: dict) -> list[str]:
+    """The names a bio sentence may call this school by: registry name, short name, nickname, and the
+    athletics site's host label (goduke, uclabruins)."""
+    host = re.sub(r"^https?://(?:www\.)?", "", (program.get("athletics") or {}).get("baseUrl") or "").split("/")[0]
+    return [n for n in (program.get("name"), program.get("shortName"), program.get("nickname"), host.split(".")[0]) if n]
 
 
 def _coaches_page_staff(ad, url: str, base: str, sport_path: str) -> list[dict]:
