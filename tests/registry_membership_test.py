@@ -17,11 +17,17 @@ Covers, in order:
   policy      reclassify -> held, return unchanged when the division is onboarded, not listed ->
               held only when reviewed, unresolved stays put, a new program only in an onboarded
               division, duplicate claims, the departure guard, hold evidence belongs to its program
+  staging     stagedDivisions: a division whose programs are in the registry and published by
+              nothing -- added as onboarded: false, left alone by the next build, never held and
+              never counted as a departure, while a program the site HAS published is still held
+  slugs       the collision ladder: "University" dropped and "College" kept, the fuller name, then
+              the state, then the orgId, applied to a whole batch so list order names nobody
   new entry   every field from a source or null: Wikipedia needs the state, TDS the conference,
               the timezone comes from the coordinates, a slug collision takes the state suffix
   committed   public/data/registry.json: every pre-#100 slug survives with the same ids, the three
               programs #100 names are where the policy puts them, held programs are invisible to
-              iter_programs, and the reviewed pins are the ids the registry carries
+              iter_programs, the reviewed pins are the ids the registry carries, and the 261 staged
+              D2 entries publish nothing and carry only what a source gave them
 """
 
 from __future__ import annotations
@@ -342,10 +348,190 @@ def test_policy() -> None:
         raises("an empty D1 list raises instead of holding every keyed program", RuntimeError, run, registry, empty)
         # fails if apply_membership edits entries in place before deciding to raise
         ok("and leaves the registry as it was", registry == before)
-        ok("a departure inside the limit is allowed", run(copy.deepcopy(registry), empty, max_departure_share=1.0)["slugs"] == {"published": 0, "held": 2})
+        ok("a departure inside the limit is allowed", run(copy.deepcopy(registry), empty, max_departure_share=1.0)["slugs"]
+           == {"published": 0, "inPrograms": 0, "held": 2, "staged": 0, "notOnboarded": 0})
         raises("onboardedDivisions missing raises", ValueError, run, {"programs": []}, directory)
         raises("an unknown division in onboardedDivisions raises", ValueError, run, {"onboardedDivisions": ["DII"], "programs": []}, directory)
         raises("one orgId in two lists raises", ValueError, run, registry, {**directory, "D3": directory["D3"] + [directory["D1"][0]]})
+
+
+# ---------- staged divisions ----------
+
+def staged_world():
+    """The world(), with D2 staged: Edward Waters is a D2 row nobody holds, and `ewu` is the D1
+    program whose Scorecard domain (ewu.edu) belongs to a different school in another state."""
+    registry, directory = world()
+    registry["programs"] = [p for p in registry["programs"] if p["slug"] in ("alpha", "ewu")]
+    registry["stagedDivisions"] = ["D2"]
+    return registry, directory
+
+
+def test_staging() -> None:
+    print("staging: a division in the registry, published by nothing")
+    raises("stagedDivisions with an unknown division raises", ValueError, rb.staged_divisions,
+           {"onboardedDivisions": ["D1"], "stagedDivisions": ["DII"]})
+    raises("a repeated division raises", ValueError, rb.staged_divisions,
+           {"onboardedDivisions": ["D1"], "stagedDivisions": ["D2", "D2"]})
+    raises("a string instead of a list raises", ValueError, rb.staged_divisions,
+           {"onboardedDivisions": ["D1"], "stagedDivisions": "D2"})
+    # fails if a division may be onboarded and staged at once, which would leave it unclear whether
+    # its programs are published
+    raises("a division in both lists raises", ValueError, rb.staged_divisions,
+           {"onboardedDivisions": ["D1", "D2"], "stagedDivisions": ["D2"]})
+    ok("no stagedDivisions key means nothing is staged", rb.staged_divisions({"onboardedDivisions": ["D1"]}) == [])
+
+    # fails if the D1 label table is applied to another division: "Independent" is a different
+    # conference in each, and 8 D2 programs would be labelled "DI Independent"
+    ok("a D1 conference is labelled from the table", rb.conference_label("Independent", "D1") == "DI Independent")
+    ok("a D2 conference keeps the Directory's own spelling", rb.conference_label("Independent", "D2") == "Independent")
+    ok("and so does a D2 name the table does not carry",
+       rb.conference_label("Northeast 10 Conference", "D2") == "Northeast 10 Conference")
+
+    # --- one Scorecard row, one program
+    solo = [sc(20, "Merged University", "Bloomsburg", "PA", "merged.edu")]
+    pair = [drow(3, "D2", "Campus One University", "PA", "merged.edu", "c.com", "C"),
+            drow(4, "D2", "Campus Two University", "PA", "merged.edu", "d.com", "C")]
+    contested = rb.contested_scorecard_ids(pair, solo)
+    # fails if a merged university's single Scorecard row may be attached to each of its campuses,
+    # giving one of them the other's city, coordinates and time zone
+    ok("one Scorecard row claimed by two Directory rows is contested",
+       list(contested) == [20] and len(contested[20]) == 2, str(contested))
+    ok("a row already used by a registry program is contested too",
+       list(rb.contested_scorecard_ids(pair[:1], solo, {"programs": [prog("other", 20, "https://o.com", "PA")]})) == [20])
+    ok("an uncontested row is not reported", rb.contested_scorecard_ids(pair[:1], solo) == {})
+    entry, ev = rb.new_program_entry(pair[0], bulk=solo, wiki=[], tds={}, taken=set(), contested=contested,
+                                     timezone_lookup=lambda lat, lon: "America/New_York")
+    ok("a contested row leaves the Scorecard fields null and says so",
+       entry["ids"]["scorecardUnitId"] is None and entry["location"]["city"] is None
+       and entry["location"]["timezone"] is None and ev["scorecard"].startswith("contested:20"), str(ev["scorecard"]))
+    entry, _ = rb.new_program_entry(pair[0], bulk=solo, wiki=[], tds={}, taken=set(), contested={},
+                                    timezone_lookup=lambda lat, lon: "America/New_York")
+    ok("control: uncontested, the same row is taken", entry["ids"]["scorecardUnitId"] == 20)
+
+    with with_pins():
+        registry, directory = staged_world()
+        entry = {"slug": "edward-waters", "onboarded": False, "division": "D2", "conference": "Independent",
+                 "ids": {"ncaaOrgId": 105}}
+        rep = run(registry, directory, new_entries={105: copy.deepcopy(entry), 108: {"slug": "epsilon", "ids": {"ncaaOrgId": 108}}})
+        added = {a["slug"]: a for a in rep["added"]}
+        # fails if staging a division does not add its rows, or adds them to heldPrograms instead
+        ok("a staged division's rows are added to programs", "edward-waters" in added
+           and any(p["slug"] == "edward-waters" for p in registry["programs"]), str(rep["added"]))
+        ok("and are not held", not any(p["slug"] == "edward-waters" for p in registry["heldPrograms"]))
+        # fails if a staged entry could be published: build.published_programs takes onboarded entries
+        # whose division is onboarded, so either flag alone keeps it off the site
+        new = next(p for p in registry["programs"] if p["slug"] == "edward-waters")
+        ok("a staged entry is onboarded: false and in a division that is not onboarded",
+           new["onboarded"] is False and new["division"] not in registry["onboardedDivisions"], str(new))
+        ok("the report counts published, staged and held separately",
+           rep["slugs"] == {"published": 2, "inPrograms": 4, "held": 0, "staged": 1, "notOnboarded": 2}, str(rep["slugs"]))
+
+        # --- a second build recognises it rather than moving it
+        again = copy.deepcopy(registry)
+        rep2 = run(again, directory, today="2027-01-01")
+        # fails if a staged entry is held as "division-not-onboarded" on the next build, which would
+        # both move 261 D2 entries into heldPrograms and count them against the departure guard
+        ok("a second build leaves the staged entry in programs",
+           any(p["slug"] == "edward-waters" for p in again["programs"]) and not again["heldPrograms"], str(again["heldPrograms"]))
+        ok("and reports it as staged", [s["slug"] for s in rep2["staged"]] == ["edward-waters"], str(rep2["staged"]))
+        ok("the staged count is every unpublished entry in a staged division", rep2["slugs"]["staged"] == 1, str(rep2["slugs"]))
+        # fails if a staged entry is rewritten on each build (a slug, a conference or an id churning
+        # under an entry nobody has reviewed yet)
+        ok("nothing about it changed", next(p for p in again["programs"] if p["slug"] == "edward-waters")
+           == next(p for p in registry["programs"] if p["slug"] == "edward-waters"),
+           str(next(p for p in again["programs"] if p["slug"] == "edward-waters")))
+
+    # --- staging never unpublishes, and never hides a departure
+    with with_pins():
+        registry, directory = staged_world()
+        # a program the site HAS published, whose division is now staged
+        registry["programs"].append(prog("edward-waters", 5, "https://ewutigers.com", "FL", division="D1", org=105))
+        rep = run(registry, directory, max_departure_share=1.0)
+        held = {p["slug"]: p for p in registry["heldPrograms"]}
+        # fails if staging a division quietly unpublishes a published program instead of holding it,
+        # which is what tells the operator (and the departure guard) that the site dropped a page
+        ok("a published program whose division is staged is held, not left in programs",
+           "edward-waters" in held and held["edward-waters"]["hold"]["reason"] == "division-not-onboarded",
+           str(rep["held"]))
+        ok("and counts as a departure", [h["slug"] for h in rep["held"]] == ["edward-waters"], str(rep["held"]))
+
+        # fails if a staged batch could be counted as departures and trip the guard, or if a real
+        # departure could hide behind one
+        registry, directory = staged_world()
+        big = {"D1": directory["D1"], "D2": [drow(200 + i, "D2", f"Staged {i} University", "FL", f"s{i}.edu", f"gos{i}.com", "Independent")
+                                             for i in range(40)], "D3": directory["D3"]}
+        entries = {200 + i: {"slug": f"staged-{i}", "onboarded": False, "division": "D2", "ids": {"ncaaOrgId": 200 + i}}
+                   for i in range(40)}
+        rep = run(registry, big, new_entries=entries, max_departure_share=0.05)
+        ok("40 staged additions to a 2-program registry do not trip the departure guard",
+           len(rep["added"]) == 40 and not rep["held"], str(len(rep["added"])))
+
+    # --- a staged entry marked onboarded is refused
+    with with_pins():
+        registry, directory = staged_world()
+        raises("a staged division's entry marked onboarded: true raises", ValueError, run, registry, directory,
+               new_entries={105: {"slug": "edward-waters", "onboarded": True, "division": "D2", "ids": {"ncaaOrgId": 105}}})
+
+
+# ---------- slugs ----------
+
+def test_slugs() -> None:
+    print("slugs: the collision rule, applied to a whole batch")
+    lad = rb.slug_ladder("Adams State University", "CO", 929)
+    # fails if "University" survives into the slug, or the ladder's order changes
+    ok("the short form drops University and leads the ladder", lad[0] == "adams-state", str(lad))
+    ok("the full name is the next rung", lad[1] == "adams-state-university", str(lad))
+    ok("then the state, then the full name with the state, then the orgId",
+       lad[2:] == ["adams-state-co", "adams-state-university-co", "adams-state-929"], str(lad))
+    # fails if "College" is dropped too: Georgia College would become "georgia", the University of
+    # Georgia's slug, and Boston College would become "boston"
+    ok("College is kept", rb.slug_ladder("Georgia College", "GA", 1)[0] == "georgia-college")
+    ok("so Georgia College does not collide with georgia", "georgia" not in rb.slug_ladder("Georgia College", "GA", 1))
+    # fails if a name the Directory itself qualifies is offered bare: Anderson (SC) is D2 and
+    # Anderson (IN) is D3, so whichever was built first would take `anderson` and fix the other's URL
+    ok("a name the Directory qualifies starts at the state",
+       rb.slug_ladder("Anderson University (South Carolina)", "SC", 2) == ["anderson-sc", "anderson-university-sc", "anderson-2"],
+       str(rb.slug_ladder("Anderson University (South Carolina)", "SC", 2)))
+    ok("and the bare name is not on its ladder", "anderson" not in rb.slug_ladder("Anderson University (South Carolina)", "SC", 2))
+    ok("which is the convention the registry already uses",
+       rb.slug_ladder("University of Miami (Florida)", "FL", 3)[0] == "miami-fl")
+    # fails if an apostrophe becomes a separator: the registry's own D1 slug is st-johns, not st-john-s
+    ok("an apostrophe closes up", rb.slug_ladder("Saint Martin's University", "WA", 4)[0] == "saint-martins")
+    ok("and a curly one does too", rb.slug_ladder("Saint Martin’s University", "WA", 4)[0] == "saint-martins")
+    ok("an ampersand joins rather than splits", rb.slug_ladder("Texas A&M International University", "TX", 3)[0] == "texas-am-international")
+    ok("a comma and a long dash are separators",
+       rb.slug_ladder("California State University, San Bernardino", "CA", 4)[0] == "california-state-san-bernardino")
+    ok("the ladder has no duplicate rung", rb.slug_ladder("Wheaton College", "MA", 9)[:2] == ["wheaton-college", "wheaton-college-ma"])
+    ok("a verified short name goes in front", rb.slug_ladder("University of West Florida", "FL", 11740, preferred="West Florida")[0]
+       == "west-florida")
+    ok("a name that slugifies to nothing still gets a slug", rb.slug_ladder("!!!", "TX", 77) == ["program-77", "program-77-tx", "program-77-77"],
+       str(rb.slug_ladder("!!!", "TX", 77)))
+
+    rows = [drow(1, "D2", "Trinity University", "CT", "a.edu", "a.com", "C"),
+            drow(2, "D2", "Trinity University", "DC", "b.edu", "b.com", "C")]
+    got = rb.assign_slugs(rows, set())
+    # fails if the row that happens to be processed first keeps the plain slug: both are Trinity, and
+    # neither may claim the name because of list order (the D3 name match that linked these two)
+    ok("two rows wanting one slug both move down the ladder", got == {1: "trinity-ct", 2: "trinity-dc"}, str(got))
+    ok("and the order they arrive in makes no difference", rb.assign_slugs(rows[::-1], set()) == got)
+    # fails if a new program may take a slug an existing program already has (a permanent URL moving)
+    ok("a slug the registry already holds sends the new row down the ladder",
+       rb.assign_slugs([rows[0]], {"trinity"}) == {1: "trinity-university"}, str(rb.assign_slugs([rows[0]], {"trinity"})))
+    ok("and the state is next when the fuller name is taken too",
+       rb.assign_slugs([rows[0]], {"trinity", "trinity-university"}) == {1: "trinity-ct"})
+    ok("the last rung carries the orgId and is always free",
+       rb.assign_slugs([rows[0]], {"trinity", "trinity-university", "trinity-ct", "trinity-university-ct"}) == {1: "trinity-1"})
+    # fails if the Directory's own qualifier stops reaching the slug when two such rows are built together
+    lincolns = [drow(5, "D2", "Lincoln University (Missouri)", "MO", "a.edu", "a.com", "C"),
+                drow(6, "D2", "Lincoln University (Pennsylvania)", "PA", "b.edu", "b.com", "C")]
+    ok("two qualified rows need no collision handling at all",
+       rb.assign_slugs(lincolns, set()) == {5: "lincoln-mo", 6: "lincoln-pa"}, str(rb.assign_slugs(lincolns, set())))
+    many = [drow(10 + i, "D2", "Same Name University", "TX", f"s{i}.edu", f"s{i}.com", "C") for i in range(3)]
+    got = rb.assign_slugs(many, set())
+    # fails if three rows with one name and one state do not each end up unique
+    ok("three rows with the same name and state all get distinct slugs", len(set(got.values())) == 3, str(got))
+    ok("and, being indistinguishable by name or state, all three fall back to the orgId",
+       sorted(got.values()) == ["same-name-10", "same-name-11", "same-name-12"], str(got))
 
 
 # ---------- new entries ----------
@@ -396,7 +582,9 @@ def test_new_entry() -> None:
                                      timezone_lookup=lambda lat, lon: None)
     # fails if a missing athletics URL is filled from anywhere but the Directory
     ok("no Directory athletics URL means baseUrl null", entry["athletics"]["baseUrl"] is None and "athletics.baseUrl" in ev["null"])
-    ok("with no Wikipedia row the slug comes from the official name", entry["slug"] == "epsilon-university", entry["slug"])
+    # fails if the slug is invented, or keeps a form-of-institution word no D1 slug carries: with no
+    # verified short name the official name's own short form is all there is (issue #94)
+    ok("with no Wikipedia row the slug is the official name's short form", entry["slug"] == "epsilon", entry["slug"])
     # fails if a new program can take a slug that is already published or held
     ok("a slug collision takes the state, then the orgId", rb.new_slug("Wheaton College", "MA", 9, {"wheaton-college"}) == "wheaton-college-ma"
        and rb.new_slug("Wheaton College", "MA", 9, {"wheaton-college", "wheaton-college-ma"}) == "wheaton-college-9")
@@ -472,10 +660,25 @@ def test_committed() -> None:
     ok("slugs are unique across published and held", len(slugs) == len(set(slugs)))
     orgs = [p["ids"].get("ncaaOrgId") for p in everything if p["ids"].get("ncaaOrgId") is not None]
     ok("orgIds are unique", len(orgs) == len(set(orgs)))
+    # `programs` holds the published entries and the staged ones (onboarded: false, division staged).
+    # Anything else in there is a program the site publishes from a division it does not publish.
+    import build  # noqa: E402 - only here, so the rest of this suite does not need build's imports
+    published = build.published_programs(reg)
+    staged_divs = rb.staged_divisions(reg)
+    staged = [p for p in programs if not p.get("onboarded") and p["division"] in staged_divs]
     # fails if a published program sits in a division that is not onboarded
-    ok("every published program is in an onboarded division", all(p["division"] in (reg.get("onboardedDivisions") or []) for p in programs),
-       str([p["slug"] for p in programs if p["division"] not in (reg.get("onboardedDivisions") or [])][:5]))
-    ok("every published program carries its Directory orgId", all(isinstance(p["ids"].get("ncaaOrgId"), int) for p in programs),
+    ok("every published program is in an onboarded division", all(p["division"] in od for p in published),
+       str([p["slug"] for p in published if p["division"] not in od][:5]))
+    # fails if an entry in `programs` is neither published nor staged -- the state that would put a
+    # page on the site for a division nobody onboarded, or leave an entry no policy explains
+    ok("every entry in programs is published or staged", len(published) + len(staged) == len(programs),
+       str([p["slug"] for p in programs if p not in published and p not in staged][:5]))
+    # fails if staging leaks into the published set: this is the check that says the D2 work publishes nothing
+    ok("no staged program is published", not (set(staged_divs) & {p["division"] for p in published}),
+       str(sorted({p["division"] for p in published})))
+    ok("and no collector can see one: iter_programs yields only onboarded entries",
+       not ({p["slug"] for p in staged} & {p["slug"] for p in common.iter_programs(reg)}))
+    ok("every program in the registry carries its Directory orgId", all(isinstance(p["ids"].get("ncaaOrgId"), int) for p in programs),
        str([p["slug"] for p in programs if not isinstance(p["ids"].get("ncaaOrgId"), int)]))
     ok("every held program says why", all((p.get("hold") or {}).get("reason") in ("division-not-onboarded", "not-in-directory") for p in held))
     ok("no published program carries a hold", not any("hold" in p for p in programs))
@@ -504,9 +707,63 @@ def test_committed() -> None:
     # fails if a value supplied from memory enters the registry (the spike's gogusties.com)
     ok("no athletics URL came from memory", "gogusties" not in json.dumps(reg))
 
+    # --- the staged Division II entries (issue #94)
+    if "D2" in staged_divs:
+        d2 = [p for p in programs if p["division"] == "D2"]
+        # fails if the D2 list is short or long: the 2026-27 Directory list is 261 programs, and a
+        # truncated fetch is the way that number quietly drops
+        ok("all 261 D2 programs are in the registry", len(d2) == 261, str(len(d2)))
+        ok("and every one of them is staged, not published", all(p["onboarded"] is False for p in d2),
+           str([p["slug"] for p in d2 if p["onboarded"]][:5]))
+        ok("none has been through onboard", not any("onboardedAt" in p or "hold" in p for p in d2))
+        ok("each carries its Directory orgId and state", all(isinstance(p["ids"]["ncaaOrgId"], int) and p["location"]["state"] for p in d2))
+        # fails if a D2 conference is run through the D1 label table: "Independent" is 8 D2 programs
+        # and one D1 program, and they are not the same conference
+        ok("D2 conferences are the Directory's own spelling, not D1 labels",
+           not ({p["conference"] for p in d2} & (set(rb.CONFERENCE_LABELS.values()) - {"Independent"})),
+           str(sorted({p["conference"] for p in d2} & set(rb.CONFERENCE_LABELS.values()))))
+        ok("the 8 D2 independents are 'Independent', not 'DI Independent'",
+           sum(1 for p in d2 if p["conference"] == "Independent") == 8 and not any(p["conference"] == "DI Independent" for p in d2))
+        # fails if a value no source gave is written for a new program (the spike's gogusties.com case)
+        ok("nothing a source did not give is filled in", all(p["colors"] is None and p["shortName"] is None and p["nickname"] is None
+                                                             and p["ids"]["wikipedia"] is None and p["ids"]["tdsClgId"] is None
+                                                             and p["ids"]["ncaaName"] is None and p["ids"]["rpiHistoryName"] is None
+                                                             for p in d2),
+           str([p["slug"] for p in d2 if p["colors"] or p["shortName"] or p["nickname"]][:5]))
+        ok("the platform is left for the probe to establish", {p["athletics"]["platform"] for p in d2} == {"auto"},
+           str(sorted({p["athletics"]["platform"] for p in d2})))
+        # fails if an athletics URL is invented for the two rows the Directory leaves blank
+        blank = sorted(p["slug"] for p in d2 if p["athletics"]["baseUrl"] is None)
+        ok("the two rows with no Directory athletics URL have none", blank == ["middle-georgia-state", "texas-am-texarkana"], str(blank))
+        # fails if one Scorecard row is attached to two programs: the Directory lists each campus of a
+        # merged university separately on the parent's domain, so Mansfield would take Bloomsburg's
+        # city and coordinates, and PennWest Clarion would take California's
+        units = [p["ids"]["scorecardUnitId"] for p in everything if p["ids"]["scorecardUnitId"] is not None]
+        ok("no Scorecard row is shared by two programs", len(units) == len(set(units)),
+           str([u for u in set(units) if units.count(u) > 1]))
+        contested = [p["slug"] for p in d2 if p["slug"] in ("bloomsburg-pennsylvania", "mansfield-pennsylvania",
+                                                            "pennsylvania-western-california", "pennsylvania-western-clarion")]
+        ok("the four merged-campus programs take no Scorecard row at all", len(contested) == 4
+           and all(by[s]["ids"]["scorecardUnitId"] is None and by[s]["location"]["city"] is None for s in contested),
+           str([(s, by[s]["ids"]["scorecardUnitId"], by[s]["location"]["city"]) for s in contested]))
+        # fails if a city, coordinate or time zone appears without the Scorecard row it comes from
+        ok("city, coordinates and time zone appear only with a Scorecard row",
+           all((p["ids"]["scorecardUnitId"] is None) == (p["location"]["city"] is None) ==
+               (p["location"]["lat"] is None) == (p["location"]["timezone"] is None) for p in d2),
+           str([p["slug"] for p in d2 if (p["ids"]["scorecardUnitId"] is None) != (p["location"]["city"] is None)][:5]))
+        joined = [p for p in d2 if p["ids"]["scorecardUnitId"] is not None]
+        ok("243 of the 261 join a Scorecard row by website domain", len(joined) == 243, str(len(joined)))
+        # fails if a slug the Directory qualifies loses its state, which is what keeps it stable when
+        # the other school of the same name arrives with D3
+        qualified = sorted(p["slug"] for p in d2 if "(" in p["name"])
+        ok("all 15 names the Directory qualifies carry the state", len(qualified) == 15
+           and all(s.endswith("-" + by[s]["location"]["state"].lower()) for s in qualified), str(qualified))
+        # fails if an apostrophe leaves a stray letter behind ("saint-martin-s")
+        ok("no slug ends in a stray -s from an apostrophe", not [s for s in qualified + [p["slug"] for p in d2] if s.endswith("-s")],
+           str([p["slug"] for p in d2 if p["slug"].endswith("-s")]))
+
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing
-    import build  # noqa: E402 - only here, so the rest of this suite does not need build's imports
     long_standing = {p["slug"] for p in pre}
     unpublished = long_standing - {p["slug"] for p in build.published_programs(reg)}
     ok("the long-standing D1 programs not published are exactly build.REVIEWED_UNPUBLISHED", unpublished == set(build.REVIEWED_UNPUBLISHED),
@@ -553,6 +810,8 @@ def main(argv=None) -> int:
     test_domains()
     test_identity()
     test_policy()
+    test_staging()
+    test_slugs()
     test_new_entry()
     test_timezones()
     test_committed()
