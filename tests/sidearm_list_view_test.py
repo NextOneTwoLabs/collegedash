@@ -20,6 +20,12 @@ which would put the wrong name on a player the moment the two views were ordered
 
 roster-list-view-no-name-column is trimmed from Mercyhurst's cached page: three players (list view
 and the matching grid rows) and the coaching staff table. Names and bio-URL slugs are placeholders.
+
+roster-list-view-table-reordered (issue #183) is trimmed from hawaii-hilo's cached page: four list-view
+players and the grid rows for the same four, with the grid rows deliberately put in a different order
+(no row at its player's list position). On every real page the two orders happened to agree, so a
+parser that paired list item i with table row i passed every other check here while being wrong by
+construction. On this fixture it gets every player's number and hometown wrong.
 """
 
 from __future__ import annotations
@@ -39,6 +45,7 @@ from collect.adapters import sidearm  # noqa: E402
 
 FIXTURES = os.path.join(ROOT, "tests", "fixtures", "sidearm")
 FIXTURE = "roster-list-view-no-name-column.html"
+REORDERED = "roster-list-view-table-reordered.html"
 BASE = "https://hurstathletics.com"
 FAILS: list[str] = []
 TOTAL = 0
@@ -122,6 +129,51 @@ def test_same_people_as_the_table() -> None:
        len(players) == len(rows) and all(agree), agree)
 
 
+# The four players of roster-list-view-table-reordered, in list-view order, each field as that player's own
+# list item states it. The grid table holds the same four in the order Charlie, Alpha, Delta, Bravo.
+REORDERED_PLAYERS = [
+    ("Alpha Player", "0", "Idaho Falls, Idaho", "Idaho Falls HS", "GK", "/sports/womens-soccer/roster/alpha-player/70001"),
+    ("Bravo Player", "1", "Pasadena, California", "Flintridge Sacred Heart Academy", "GK", "/sports/womens-soccer/roster/bravo-player/70002"),
+    ("Charlie Player", "2", "Lakewood, California", "Cerritos HS", "MID", "/sports/womens-soccer/roster/charlie-player/70003"),
+    ("Delta Player", "3", "Santa Monica, California", "Santa Monica HS", "DEF", "/sports/womens-soccer/roster/delta-player/70004"),
+]
+
+
+def test_table_order_differs_from_list_order() -> None:
+    print("order (#183): with the grid table in a different order, every field still comes from the player's own item")
+    base = "https://hiloathletics.com"
+    html = read(REORDERED)
+    soup = BeautifulSoup(html, "html.parser")
+    grid = next(t for t in soup.find_all("table") if "First" in t.find("tr").get_text(" "))
+    heads = [c.get_text(" ", strip=True) for c in grid.find("tr").find_all("th")]
+    col = {h: i for i, h in enumerate(heads)}
+    rows = [[c.get_text(" ", strip=True) for c in tr.find_all("td")] for tr in grid.select("tbody tr")]
+    list_numbers = [c.get_text(" ", strip=True) for c in soup.select(".sidearm-roster-player-jersey-number")]
+    table_numbers = [r[col["No."]] for r in rows]
+    # the property the fixture exists for: if this ever stops holding, the checks below prove nothing
+    ok("fixture: the table holds the same players as the list view", sorted(table_numbers) == sorted(list_numbers),
+       (table_numbers, list_numbers))
+    ok("fixture: no table row sits at its player's list position",
+       len(rows) == len(list_numbers) and all(t != l for t, l in zip(table_numbers, list_numbers)),
+       (table_numbers, list_numbers))
+    ok("fixture: the tables alone give no player, so the list view is what is read",
+       sidearm.parse_roster_tables(soup, base)[0] == [])
+
+    players = sidearm.parse_roster(html, base)["players"]
+    got = [(p["name"], p["number"], p["hometown"], p["highSchool"], p["posLabel"], p["bioUrl"]) for p in players]
+    want = [(n, num, home, hs, pos, base + url) for n, num, home, hs, pos, url in REORDERED_PLAYERS]
+    ok("four players, in list-view order", [g[0] for g in got] == [w[0] for w in want], [g[0] for g in got])
+    for g, w in zip(got, want):
+        ok(f"{w[0]}: number, hometown, high school, position and bio URL are all from {w[0]}'s own item",
+           g == w, f"got {g}")
+    # and the same people seen from the table, joined by name rather than by position
+    by_name = {f"{r[col['First']]} {r[col['Last']]}": r for r in rows}
+    agree = [p["name"] in by_name and (p["number"], p["hometown"])
+             == (by_name[p["name"]][col["No."]], by_name[p["name"]][col["Hometown"]]) for p in players]
+    ok("each player's number and hometown match that player's table row, found by name",
+       len(agree) == 4 and all(agree), agree)
+
+
 def test_fallback_only_when_nothing_else() -> None:
     print("precedence: the list view is read only when the tables and person cards give no player")
     named = read("roster-players-and-staff.html")
@@ -153,8 +205,8 @@ def test_list_view_edges() -> None:
 
 
 def test_fixture_carries_no_contact_details() -> None:
-    print("privacy: the new fixture has no email, phone, mailto: or tel:")
-    text = read(FIXTURE)
+    print("privacy: the list-view fixtures have no email, phone, mailto: or tel:")
+    text = read(FIXTURE) + "\n" + read(REORDERED)
     for label, rx in [("email", r"[\w.+-]+@[\w-]+\.[\w.]+"), ("mailto", r"mailto:"), ("tel", r"tel:"),
                       ("10-digit phone", r"\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]\d{4}\b"), ("7-digit phone", r"\b\d{3}[\s.-]\d{4}\b")]:
         found = re.findall(rx, text, re.I)
@@ -167,7 +219,8 @@ def main(argv=None) -> int:
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args(argv)
     VERBOSE = args.verbose
-    for case in (test_fixture_players, test_same_people_as_the_table, test_fallback_only_when_nothing_else,
+    for case in (test_fixture_players, test_same_people_as_the_table, test_table_order_differs_from_list_order,
+                 test_fallback_only_when_nothing_else,
                  test_list_view_edges, test_fixture_carries_no_contact_details):
         try:
             case()
