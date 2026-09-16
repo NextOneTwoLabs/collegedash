@@ -451,7 +451,9 @@ def test_deleted_registry_kept(tmp):
     def delete_file_only(files):
         files.pop("public/data/programs/ghost.json")
         return files
-    code, out, origin, c1, _ = run_case(tmp, "deleted-registry-kept", upstream=delete_file_only)
+    # the run also onboards newprog, whose profile is new to main as well: the warning must not name it
+    code, out, origin, c1, _ = run_case(tmp, "deleted-registry-kept", upstream=delete_file_only,
+                                        run_registry=["alpha", "beta", "ghost", "newprog"])
     files = tree_files(origin, "refs/heads/main")
     ok("the step succeeds", code == 0, out[-1200:])
     # the registry still publishes ghost, so the rebuild recreates it: that is the registry's call, not the step's
@@ -459,7 +461,11 @@ def test_deleted_registry_kept(tmp):
     # fails if the step claims it kept a deletion it did not keep (PR #124 review, item 1)
     ok("no annotation claims the deletion was kept", "keeping the deletion" not in out, out[-600:])
     ok("the notice says the rebuild decides", "the rebuild decides from the registry" in out, out[-900:])
-    ok("and a ::warning names the profile that came back", "::warning" in out and "put back public/data/programs/ghost.json" in out, out[-900:])
+    warn = next((l for l in out.splitlines() if "::warning" in l), "")
+    ok("and a ::warning names the profile that came back", "put back public/data/programs/ghost.json" in warn, out[-900:])
+    # fails if the warning lists everything new to main rather than what the resolution removed (R1)
+    ok("and names nothing else: a newly onboarded program was not deleted by main",
+       "newprog" not in warn and "public/data/programs/newprog.json" in tree_files(origin, "refs/heads/main"), warn)
 
 
 def test_deletion_direction(tmp):
@@ -496,7 +502,14 @@ def test_registry_both_sides(tmp):
         ok("which holds the run's collection", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
     # fails if the run's registry can silently overwrite main's (PR #124 review, item 2)
     ok("the ::error says both sides changed the registry", "::error" in out and "both changed public/data/registry.json" in out, out[-900:])
-    ok("and says the collection is rebased and gated, not raw", "rebased onto main, rebuilt" in out, out[-900:])
+    # fails if the guard's annotation tells the operator to push the branch as it stands, which would republish
+    # the very registry the guard refused (R2), or claims a rebuild that never ran on this path
+    ok("the ::error says main's change stands and the branch is pre-rebuild",
+       "MAIN'S MEMBERSHIP CHANGE STANDS" in out and "BEFORE the rebuild" in out, out[-1400:])
+    ok("and does not tell the operator to push it as it stands",
+       "everything except the push to main succeeded" not in out and "Do NOT rebase it onto main and push it as it stands" in out, out[-1400:])
+    ok("and says how to recover: take main's registry, rebuild, validate",
+       "public/data/registry.json" in out and "collegedash.py build" in out and "validate" in out, out[-1400:])
 
 
 def test_content_conflict(tmp):

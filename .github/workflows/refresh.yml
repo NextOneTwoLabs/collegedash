@@ -30,12 +30,13 @@ name: Refresh program data
 # to a per-run branch, where it can be inspected and reproduced, merged deliberately once the cause is
 # known, and - the point of keeping it off main - cannot poison the next day's rebuild. There are two
 # shapes, and the annotation on each says which it is, because they need different handling:
-#   refresh-sources/<run id>-<run attempt>-<push attempt>   a gate failed, or the rebuild put back a
-#     profile main deleted: the commit is rebased onto main and holds the collection with public/data
-#     exactly as main has it (issue 82).
-#   refresh-sources/<run id>-<run attempt>-unpublished      nothing could be published at all: a rebase
-#     conflict this step does not resolve, or three failed attempts (issue 117). The commit is the run
-#     as it stood; whether it was rebased and gated depends on which of the two it was, and the error says.
+#   refresh-sources/<run id>-<run attempt>-<push attempt>   build or validate failed on the rebuilt data
+#     (issue 82). The commit is rebased onto main and holds the collection, with public/data exactly as
+#     main has it.
+#   refresh-sources/<run id>-<run attempt>-unpublished      nothing could be published at all (issue 117):
+#     a rebase conflict this step does not resolve, the registry guard below refusing a publish that would
+#     revert a membership change merged into main, or three failed attempts. What that commit is - rebased
+#     or not, rebuilt or not, gated or not - differs per cause, and the error on each says which.
 # Nothing deletes those branches: they are one commit each and are meant to be deleted by hand once the
 # failure has been triaged.
 # Pushing to main triggers the Cloudflare deploy.
@@ -319,17 +320,26 @@ jobs:
           # Never drop a collection (issue 117). When the step cannot publish and has no gate path for the
           # reason, push the run's commit as it stands to a per-run branch and fail the run.
           #
-          # $2 says what that commit actually is, because the two callers leave HEAD in different states and
-          # an operator reading this at 03:00 acts on it: "unrebased" is the run as it stood, never rebased
-          # onto the current main and never gated; "rebased" is rebased, rebuilt and past both gates, and
-          # only the push to main failed. Telling someone to redo work that is already done is how a good
-          # annotation becomes a bad night, so the two say different things.
+          # $2 says what that commit actually is, because the callers leave HEAD in three different states and
+          # an operator reading this at 03:00 acts on it:
+          #   unrebased  the run as it stood, never rebased onto the current main and never gated.
+          #   rebased    rebased, rebuilt and past both gates; only the push to main failed.
+          #   guard      rebased, but stopped before the rebuild and the amend, because the registry it would
+          #              have built from was this run's and would have reverted main's membership change. Its
+          #              tree is therefore the raw rebase result: this run's registry.json, and without the
+          #              profiles the resolution removed. It must NOT be pushed to main as it stands - doing
+          #              that is exactly the publish the step refused - so its recovery text says to reconcile
+          #              the registry with main first, then rebuild and gate.
+          # Telling someone to redo work that is already done, or to redo work the step deliberately refused,
+          # is how a good annotation becomes a bad night; the three say different things.
           save_collection() {
             local pushed
             git rebase --abort 2>/dev/null || true
             branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-unpublished"
             base=$(git rev-parse --short HEAD~1 2>/dev/null || echo "an unknown commit")
-            if [ "$2" = "rebased" ]; then
+            if [ "$2" = "guard" ]; then
+              pushed="MAIN'S MEMBERSHIP CHANGE STANDS and the live site is unchanged; this run published nothing, on purpose. Its collection is safe on branch $branch, but that commit is NOT ready to push: it is the rebase result from BEFORE the rebuild, so its public/data/registry.json is this run's copy - the one that would have reverted main's change - and the files the rebase resolved are missing from public/data/programs. Do NOT rebase it onto main and push it as it stands; that is the publish this step just refused. To recover: git fetch origin $branch, check it out, take main's public/data/registry.json (git checkout origin/main -- public/data/registry.json) unless this run's registry change is the one you want, run python collegedash.py build and python collegedash.py validate, and push the result. Nothing needs collecting again. If in doubt, merge main's registry change first and re-dispatch this workflow with build_only=true."
+            elif [ "$2" = "rebased" ]; then
               pushed="Its collection is safe on branch $branch: the run's commit on $base, rebased onto main, rebuilt from the stored sources and past both build and validate - everything except the push to main succeeded. To publish it: git fetch origin $branch, check it out, rebase it onto main (there is no conflict to resolve unless main has moved again), and push. Nothing needs collecting again."
             else
               pushed="Its collection is safe on branch $branch: one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand, run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
@@ -379,7 +389,7 @@ jobs:
                 # Both sides changed the registry and the rebase had to resolve profiles: `-X theirs` kept the
                 # RUN's registry, so main's membership change may have just been reverted and the programs it
                 # removed republished. The data is gated, not guessed at: keep the collection and fail loudly.
-                save_collection "main and this run both changed public/data/registry.json, and the rebase resolved $(echo $resolved) with the run's copy of it, which can silently revert a membership change merged into main" "rebased"
+                save_collection "main and this run both changed public/data/registry.json, and the rebase resolved $(echo $resolved) with the run's copy of it, which can silently revert a membership change merged into main" "guard"
               else
                 git add -A
                 # Which of the removed files the rebuild put back, if any - staged, because a recreated file is
@@ -387,8 +397,15 @@ jobs:
                 # rebuild read still publishes those programs, and the guard above has already ruled out that
                 # registry being the run's copy over main's. It is here because "main deleted it and it is
                 # back" is exactly the thing an operator should not have to infer from a green run.
-                back=$(git diff --cached --name-only --diff-filter=A FETCH_HEAD -- public/data/programs | tr '\n' ' ')
-                if [ -n "$resolved" ] && [ -n "$back" ]; then
+                added=" $(git diff --cached --name-only --diff-filter=A FETCH_HEAD -- public/data/programs | tr '\n' ' ')"
+                back=
+                for f in $resolved; do
+                  # only a file this step removed can have "come back"; a profile for a program main onboarded
+                  # is also new to main and is not that (PR #124 second review, R1)
+                  case "$added" in *" $f "*) back="$back $f" ;; esac
+                done
+                back=${back# }
+                if [ -n "$back" ]; then
                   echo "::warning title=refresh::the rebuild put back $back, which main deleted: the registry it was built from still publishes those programs. If main meant to drop them, the registry change is missing."
                 fi
                 # --amend, not a second commit: one run stays one commit, and a retry re-amends the
