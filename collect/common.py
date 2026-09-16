@@ -141,6 +141,14 @@ def log_traceback() -> None:
         sys.stderr.flush()
 
 
+def annotate(line: str) -> None:
+    """Print a GitHub Actions workflow command (`::warning ...`) on its own line: no timestamp
+    prefix, which Actions would not parse, and under the log lock so a worker thread cannot split
+    it across another thread's output."""
+    with _log_lock:
+        print(line, flush=True)
+
+
 def log(msg: str) -> None:
     label = getattr(_log_context, "label", None)
     line = f"[{_dt.datetime.now().strftime('%H:%M:%S')}] " + (f"{label} | " if label else "") + msg

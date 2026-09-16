@@ -31,6 +31,11 @@ collegedash.collect_plan, from many threads:
                   no timeout, is taken before the lock file, and a PermissionError on the lock file
                   means "held"
   tracebacks      a worker's traceback lines carry the program slug
+  redirect 503    a backoff after a redirect holds the host that ANSWERED, not the one asked for
+  send stamp      the gap is measured from when the request was sent: with a deliberate pre-send
+                  delay inside the gate, the host still sees the full gap between arrivals
+  state write     a refresh-state write that fails every retry is annotated, counted in lastRun and
+                  reported in the summary, and still does not fail the run
 
 Controls: the gap, Crawl-delay, backoff and one-per-URL checkers are also run with the gate or key
 lock disabled, and the suite asserts they then REPORT violations. Every other check was shown to fail
@@ -788,6 +793,190 @@ def test_path_lock(tmp: str) -> None:
        f"{got}, {calls['n']} attempts")
 
 
+def test_redirect_backoff_holds_the_answering_host(tmp: str) -> None:
+    """A 429/5xx after a redirect holds the host that answered it (issue #119 B).
+
+    Nothing in the suite covered this: a mutation that held the originally requested host instead
+    passed every check. Here host A only redirects, host B answers 503, and other workers are
+    hammering B - so if the hold lands on A, B is hit during its own backoff.
+    """
+    print("a backoff after a redirect holds the host that answered")
+    landing = Stub("landing", routes={
+        "/boom": lambda path, n: ((503, {}, b"busy", 0.05) if n == 1 else (200, {}, b"fine", 0.05)),
+        "/ok/": lambda path, n: (200, {}, b"fine", 0.05),
+    })
+    redirector = Stub("redirector", routes={"/r": lambda path, n: (302, {"Location": landing.url("/boom")}, b"", 0.01)})
+    try:
+        with fresh_state(tmp):
+            done = threading.Event()
+
+            def first():
+                try:
+                    time.sleep(0.1)
+                    common.fetch(redirector.url("/r"), max_age_hours=None, retries=3)
+                finally:
+                    done.set()
+
+            def later(i):
+                j = 0
+                while not done.is_set():
+                    common.fetch(landing.url(f"/ok/{i}/{j}"), max_age_hours=None)
+                    j += 1
+
+            errors = run_threads([first] + [lambda i=i: later(i) for i in range(3)], workers=4)
+            rows = sorted(landing.log, key=lambda r: r[1])
+            ok("the redirected fetch recovered on its retry and the rest succeeded", not errors, "; ".join(errors[:3]))
+            ok("the 503 was answered by the host the redirect landed on",
+               any(r[0] == "/boom" and r[3] == 503 for r in rows) and len(rows) > 4, f"{len(rows)} requests")
+            ok("no request reached the ANSWERING host during its backoff", not backoff_breaches(rows),
+               "; ".join(backoff_breaches(rows)[:3]))
+            ok("and the redirector was not held instead (it was asked twice, a gap apart)",
+               len(redirector.log) == 2 and not violations(redirector, GAP), f"{len(redirector.log)} requests")
+    finally:
+        landing.close()
+        redirector.close()
+
+
+SEND_GAP = 1.5   # MIN_GAP_SECONDS for this case, chosen larger than PRE_SEND + LATENCY so that the
+PRE_SEND = 0.4   # three candidate stamps - gate entry, send, response end - give three different
+LATENCY = 0.6    # arrival spacings and the check can tell them apart
+
+
+def test_the_gap_starts_when_the_request_is_sent(tmp: str) -> None:
+    """The gate stamps the moment the request was SENT (issue #119 C).
+
+    Removing the stamp passed every check in the suite, and it would quietly lengthen every gap in
+    every run. This makes the three candidates measurable without CPU contention: a connection that
+    takes PRE_SEND to write the request, inside the gate, and a stub that takes LATENCY to answer.
+    With the gap at SEND_GAP, arrival-to-arrival at the host is
+
+        SEND_GAP                      = 1.5s   stamped on entry to the gate      (too soon)
+        PRE_SEND + SEND_GAP           = 1.9s   stamped when the request was sent (what the gate does)
+        PRE_SEND + LATENCY + SEND_GAP = 2.5s   stamped when the response was read (too late: this is
+                                               the fallback used when no stamp is taken at all)
+
+    so one two-sided check separates all three. JITTER is set to zero here for the same reason.
+    """
+    print("the gap is measured from when the request was sent")
+    stub = Stub("sent", routes={"/p/": lambda path, n: (200, {}, b"ok" * 200, LATENCY)})
+    real_conn, real_mark = common._StampingHTTPPool.ConnectionCls, common._mark_sent
+    marks = []
+
+    class SlowToSend(real_conn):
+        def request(self, *args, **kwargs):
+            time.sleep(PRE_SEND)  # building, connecting and writing, made deterministic
+            return super().request(*args, **kwargs)
+
+    try:
+        with fresh_state(tmp):
+            common.MIN_GAP_SECONDS, common.JITTER_SECONDS = SEND_GAP, 0.0
+            common._StampingHTTPPool.ConnectionCls = SlowToSend
+            common._mark_sent = lambda: (marks.append(time.monotonic()), real_mark())[1]
+            errors = run_threads([lambda i=i: common.fetch(stub.url(f"/p/{i}"), max_age_hours=None) for i in range(4)], workers=4)
+        ok("four slow-to-send fetches succeeded", not errors and len(stub.log) == 4, "; ".join(errors[:3]))
+        ok("the connection stamped the send of every request", len(marks) == 4, f"{len(marks)} stamps")
+        rows = sorted(stub.log, key=lambda r: r[1])
+        gaps = [round(b[1] - a[1], 3) for a, b in zip(rows, rows[1:])]
+        want = PRE_SEND + SEND_GAP
+        ok(f"arrivals are {want}s apart: the gap runs from the send, not from the gate ({SEND_GAP}s) "
+           f"and not from the response ({PRE_SEND + LATENCY + SEND_GAP}s)",
+           gaps and all(want - 0.15 <= g <= want + 0.25 for g in gaps), f"gaps {gaps}")
+        ok(f"no arrival is closer than MIN_GAP {SEND_GAP}s", not violations(stub, SEND_GAP), "; ".join(violations(stub, SEND_GAP)[:2]))
+    finally:
+        common._StampingHTTPPool.ConnectionCls = real_conn
+        common._mark_sent = real_mark
+        stub.close()
+
+
+def test_backoff_with_workers_already_on_the_host(tmp: str) -> None:
+    """Issue #119 D: the same backoff property as a black-box, under contention.
+
+    Four workers keep the host busy while two 503s land, so at every release there is a worker
+    queued on the gate. What makes this hold is that a hold is written by the thread inside the
+    gate, before it releases: a queued worker therefore reads it when it gets in, and no re-check
+    while it sleeps is needed.
+    """
+    print("a backoff with workers already queued on the host")
+    routes = {"/flaky": lambda path, n: ((503, {}, b"busy", 0.2) if n in (1, 2) else (200, {}, b"fine", 0.05)),
+              "/ok/": lambda path, n: (200, {}, b"fine", 0.05)}
+    flaky = Stub("queued", routes=routes)
+    try:
+        with fresh_state(tmp):
+            errors, rows = load_backoff(flaky)
+            ok("the flaky fetch recovered and the queue kept moving", not errors, "; ".join(errors[:3]))
+            ok("two 503s landed with other workers on the host",
+               sum(1 for r in rows if r[3] == 503) == 2 and len(rows) >= 8, f"{len(rows)} requests")
+            ok("no worker's request arrived inside either backoff", not backoff_breaches(rows),
+               "; ".join(backoff_breaches(rows)[:3]))
+    finally:
+        flaky.close()
+
+
+def test_failed_state_write_is_visible(tmp: str) -> None:
+    """A refresh-state write that fails every retry is annotated and counted (issue #119 A)."""
+    print("a refresh-state write that fails is visible")
+    import collegedash
+
+    real_many, real_one = common.update_refresh_state_many, common.update_refresh_state
+    real_attempts = collegedash.RECORD_ATTEMPTS
+    summary_path = os.path.join(tempfile.mkdtemp(dir=tmp), "summary.md")
+    last_run = {}
+    attempts = []
+    os.environ["GITHUB_ACTIONS"] = "true"
+    os.environ["GITHUB_STEP_SUMMARY"] = summary_path
+    try:
+        collegedash.RECORD_ATTEMPTS = 2
+        collegedash.clear_not_recorded()
+        common.update_refresh_state_many = lambda entries: attempts.append(entries) or (_ for _ in ()).throw(OSError("disk on fire"))
+        common.update_refresh_state = lambda key, info: last_run.setdefault(key, info)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            wrote = collegedash.record_outcomes("p001", {"p001.athletics": {"ok": True}, "p001.news": {"ok": False}})
+        printed = out.getvalue()
+        ok("record_outcomes reports the failure to its caller", wrote is False)
+        ok("it retried RECORD_ATTEMPTS times", len(attempts) == 2, f"{len(attempts)}")
+        ok("the program is remembered, with how many entries were lost",
+           collegedash.not_recorded()[:1] and collegedash.not_recorded()[0][:2] == ("p001", 2),
+           str(collegedash.not_recorded()))
+        ok("a ::warning names the program", "::warning title=refresh: refresh-state not recorded for p001::" in printed,
+           printed[:200])
+        ok("the warning says what is stale and what is not",
+           "stale" in printed and "sources are safe" in printed, printed[:200])
+        ok("the warning is on a line of its own, with no timestamp prefix",
+           any(line.startswith("::warning") for line in printed.splitlines()), printed[:200])
+
+        results = [{"program": "p001", "collector": "athletics", "outcome": "ok", "error": ""},
+                   {"program": "p002", "collector": "news", "outcome": "failed", "error": "boom"}]
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = collegedash.report_refresh(results, threshold=0.6, mode="daily")
+        printed = out.getvalue()
+        ok("the run still exits 0: stale metadata is not lost data", code == 0, str(code))
+        ok("lastRun carries the count", last_run.get("lastRun", {}).get("notRecorded")
+           == {"programs": 1, "entries": 2, "slugs": ["p001"]}, str(last_run.get("lastRun", {}).get("notRecorded")))
+        ok("the summary line says it", "refresh-state not recorded for 1 program(s), 2 entries" in printed, printed[:400])
+        ok("an aggregate ::warning is annotated", "::warning title=refresh::refresh-state was not recorded for 1 program(s)" in printed,
+           printed[:400])
+        with open(summary_path, encoding="utf-8") as f:
+            summary = f.read()
+        ok("and the step summary says it", "refresh-state not recorded for 1 program(s)" in summary, summary[:300])
+
+        collegedash.clear_not_recorded()
+        last_run.clear()
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            collegedash.report_refresh(results, threshold=0.6, mode="daily")
+        zero = last_run.get("lastRun", {}).get("notRecorded")
+        ok("with nothing lost, lastRun records zero and nothing is annotated",
+           zero == {"programs": 0, "entries": 0, "slugs": []} and "not recorded" not in out.getvalue(), str(zero))
+    finally:
+        common.update_refresh_state_many, common.update_refresh_state = real_many, real_one
+        collegedash.RECORD_ATTEMPTS = real_attempts
+        collegedash.clear_not_recorded()
+        os.environ.pop("GITHUB_ACTIONS", None)
+        os.environ.pop("GITHUB_STEP_SUMMARY", None)
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -797,7 +986,9 @@ def main() -> int:
     VERBOSE = args.verbose
     random.seed(94)
     cases = [test_sequential_unchanged, test_gap_overlap_redirect_crawl_delay, test_gap_under_cpu_load,
-             test_body_read_inside_gate, test_backoff, test_one_request_per_url, test_plan_and_state, test_path_lock]
+             test_the_gap_starts_when_the_request_is_sent, test_body_read_inside_gate, test_backoff,
+             test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
+             test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
