@@ -132,6 +132,39 @@ def _player_columns(rows, data_rows) -> set[int]:
     return {i for i, label in enumerate(_column_labels(rows, data_rows)) if PLAYER_COLUMN_RE.search(label)}
 
 
+NCAA_COLUMN_RE = re.compile(r"\bncaa\b", re.I)
+NCAA_STAT_RE = re.compile(r"w[–-]l|pct", re.I)  # south-carolina: 'NCAA W–L', 'NCAA win pct' are tallies, not results
+FINISH_COLUMN_RE = re.compile(r"\b(?:finish|standing|place|pos\.)", re.I)
+FINISH_NOT_RE = re.compile(r"tourn|natl|final rank|poll", re.I)  # wake-forest 'Conference tourn. pos.' is not the finish
+RESULT_RE = re.compile(r"round|final|champion|runner|sweet|elite|college cup|regional", re.I)
+OTHER_BODY_CELL_RE = re.compile(r"\b(?:AIAW|NAIA|NCCAA|NJCAA)\b")
+FINISH_CELL_RE = re.compile(r"\b(T-?\d+(?:st|nd|rd|th)|\d+(?:st|nd|rd|th))\b", re.I)  # siue 2019: 't1st'
+
+
+def _result_columns(rows, data_rows, grid) -> tuple[int | None, int | None]:
+    """The columns headed as the NCAA result and the conference finish (issue #176), in the laid-out grid.
+
+    Header rows are right-aligned to the season rows: on california and boston-college the 'Head coach' header
+    cell has no rowspan, so the lower header rows are one column short on the left. A header row that is one
+    cell across the whole table (a coaching-era divider such as "Kate O'Shaughnessy (1996–1997)", or lamar's
+    'NCAA year-by-year results' caption) names no column and is skipped."""
+    first = rows.index(data_rows[0]) if data_rows and data_rows[0] in rows else 0
+    if first == 0:
+        return None, None
+    season_rows = set(map(id, data_rows))
+    width = max((len(grid[i]) for i, r in enumerate(rows) if id(r) in season_rows), default=0)
+    labels = [""] * width
+    for tr, laid in zip(rows[:first], grid[:first]):
+        if len(tr.find_all(["th", "td"])) <= 1 or len(set(laid)) <= 1:
+            continue
+        laid = laid[-width:] if len(laid) > width else [""] * (width - len(laid)) + laid
+        for i, text in enumerate(laid):
+            labels[i] += " " + text
+    ncaa = next((i for i, l in enumerate(labels) if NCAA_COLUMN_RE.search(l) and not NCAA_STAT_RE.search(l)), None)
+    finish = next((i for i, l in enumerate(labels) if FINISH_COLUMN_RE.search(l) and not FINISH_NOT_RE.search(l)), None)
+    return ncaa, finish
+
+
 def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     """Year-by-year results. Wikipedia articles use several layouts:
       Stanford: Year | Head coach | Overall | Conference | Conference Standing | NCAA Tournament
@@ -171,7 +204,12 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     # coach to read at all; the fallback only looks outside columns that name players.
     coach_col = _coach_column(rows, data_rows)
     player_cols = _player_columns(rows, data_rows) if coach_col is None else set()
-    grid = dict(zip(map(id, rows), _grid(rows))) if (coach_col is not None or player_cols) else {}
+    laid_out_rows = _grid(rows)
+    grid = dict(zip(map(id, rows), laid_out_rows))
+    # Issue #176: the NCAA result and the conference finish come from the columns headed as such, when the table
+    # has them. Before, a table that splits wins, losses and ties took the NCAA result from the last text cell in
+    # the row: clemson's 'Top points' players (2004, 2021) or its conference finish (2009, 'NCAA 11th').
+    ncaa_col, finish_col = _result_columns(rows, data_rows, laid_out_rows)
     seasons, coach_last, legacy_last = [], None, None
     for tr in data_rows:
         cells = [common.clean(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
@@ -210,23 +248,38 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
             rec = _record(recs[0]) if recs else None
             crec = _record(recs[1]) if len(recs) > 1 else None
         ncaa = None
-        for c in rest:
-            m = NCAA_RE.search(c)
-            if m:
-                ncaa = common.clean(m.group(0))
-                break
-        if ncaa is None and split_wlt:
+        laid_out = grid.get(id(tr)) or []
+        if ncaa_col is not None:
+            cell = laid_out[ncaa_col] if ncaa_col < len(laid_out) else ""
+            m = NCAA_RE.search(cell)
+            # a dash, 'Ineligible due to Transition to Division I' (north-dakota-state 2004) or a blank is no result
+            # north-carolina 1980-81 'AIAW Semifinals'/'AIAW Champions' sit in its NCAA column but are not NCAA results
+            ncaa = common.clean(m.group(0)) if m else ("NCAA " + cell if RESULT_RE.search(cell) and not OTHER_BODY_CELL_RE.search(cell) else None)
+        else:
+            for c in rest:
+                m = NCAA_RE.search(c)
+                if m:
+                    ncaa = common.clean(m.group(0))
+                    break
+        if ncaa is None and split_wlt and ncaa_col is None:
             tail = [c for c in rest if not re.fullmatch(r"\d{1,2}", c) and c not in ("—", "–", "-") and c != legacy_coach]
             if tail:
                 ncaa = "NCAA " + tail[-1] if "ncaa" not in tail[-1].lower() else tail[-1]
         finish = None
-        for c in rest:
-            if c == legacy_coach or (ncaa and c == ncaa):
-                continue
-            m = FINISH_RE.search(c)
-            if m and not re.search(r"round|ncaa", c, re.I):
-                finish = m.group(1)
-                break
+        if finish_col is not None:
+            cell = laid_out[finish_col] if finish_col < len(laid_out) else ""
+            m = FINISH_CELL_RE.search(cell)
+            finish = m.group(1) if m and not re.search(r"round|ncaa", cell, re.I) else None
+            if finish and finish[0] == "t":  # a tie written in lower case, 't-2nd' (wake-forest) or 't1st' (siue)
+                finish = "T" + finish[1:]
+        else:
+            for c in rest:
+                if c == legacy_coach or (ncaa and c == ncaa):
+                    continue
+                m = FINISH_RE.search(c)
+                if m and not re.search(r"round|ncaa", c, re.I):
+                    finish = m.group(1)
+                    break
         seasons.append({
             "year": year, "label": year_txt, "headCoach": coach,
             "record": rec["text"] if rec else None,
