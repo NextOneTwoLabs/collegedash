@@ -12,6 +12,7 @@ career notes are available; pass bios=False to skip.
 from __future__ import annotations
 
 import re
+from urllib.parse import urlparse
 
 from . import adapters, common
 
@@ -123,6 +124,10 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         raise common.FetchError(f"athletics: roster parse found 0 players at {u['roster']}")
     season = roster["season"] or registry["season"]["current"]
     common.log(f"athletics[{platform}]: {season} roster {len(roster['players'])} players, {len(roster['staff'])} staff")
+    staff, staff_url = roster["staff"], None
+    if not staff and u.get("coaches"):
+        staff = _coaches_page_staff(ad, u["coaches"], base, program["athletics"]["sportPath"])
+        staff_url = u["coaches"] if staff else None
 
     if bios:
         for p in roster["players"]:
@@ -163,11 +168,41 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         "platform": platform,
         "season": season,
         "roster": {"season": season, "players": roster["players"]},
-        "staff": roster["staff"],
+        "staff": staff,
         "rosterHistory": history,
         "schedule": {"season": sched["season"] or season, "games": sched["games"]},
         "scheduleHistory": sched_hist,
     }
-    common.save_source(slug, NAME, data, url=u["roster"], collector=NAME,
-                       extra={"scheduleUrl": u["schedule"], "fromCache": meta.get("fromCache", False)})
+    extra = {"scheduleUrl": u["schedule"], "fromCache": meta.get("fromCache", False)}
+    if staff_url:
+        extra["staffUrl"] = staff_url  # the staff did not come from sourceUrl
+    common.save_source(slug, NAME, data, url=u["roster"], collector=NAME, extra=extra)
     return data
+
+
+def _coaches_page_staff(ad, url: str, base: str, sport_path: str) -> list[dict]:
+    """Staff from the sport's own coaches page, for a roster page that lists nobody (issue #145).
+
+    Called only when the roster page yielded zero staff rows, so it can never replace or merge into
+    staff the roster page did return, and a program whose roster page lists its staff costs no extra
+    request. Measured on the live sites: austin-peay, mississippi-state, louisiana-monroe, michigan,
+    texas and yale print no staff on the roster page at all, and each serves its coaches at
+    /sports/womens-soccer/coaches as a server-rendered table the roster table parser already reads -
+    the older theme's 'Staff Directory' table and the current theme's Name/Title table alike.
+
+    A page that has been redirected off the sport's coaches path (to an athletics-wide staff
+    directory, say, or a different site) is not used: every coach of every sport would otherwise be
+    published as this program's staff. A failed fetch leaves the program as it was, with no staff.
+    """
+    try:
+        html, meta = common.fetch_text(url, max_age_hours=24)
+    except common.FetchError as e:
+        common.log(f"  coaches page unavailable: {e}")
+        return []
+    final_path = urlparse(meta.get("finalUrl") or url).path.rstrip("/").lower()
+    if not final_path.endswith(f"{sport_path.rstrip('/')}/coaches".lower()):
+        common.log(f"  coaches page redirected to {meta.get('finalUrl')}; not used")
+        return []
+    staff = ad.parse_roster(html, base)["staff"]
+    common.log(f"  roster page lists no staff; {len(staff)} from {url}")
+    return staff
