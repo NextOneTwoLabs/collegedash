@@ -31,6 +31,13 @@ run_worker_first = ["/", "/api/*", "/data/rpi/*"]
 # title and the binding name are independent, and it is the binding name below that worker.js
 # reads as env.FEEDBACK. The id is an identifier, not a credential, so committing it is correct.
 
+# POST /api/ask (issue #165, AI prototype 1) is switched off. worker.js serves it only when this is the
+# string "true" AND the ANTHROPIC_API_KEY secret exists. The key is a secret, set with
+# `wrangler secret put ANTHROPIC_API_KEY`; it never goes in this file or anywhere in the repository.
+# Turning ask on waits for the owner's decisions on #165 (who may use it, and a monthly budget cap).
+[vars]
+ASK_ENABLED = "false"
+
 [[kv_namespaces]]
 binding = "FEEDBACK"
 id = "effbba53953e424aa9f528b2a6f00f4e"

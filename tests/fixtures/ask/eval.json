@@ -1,0 +1,1435 @@
+{
+  "_comment": "Eval set for /api/ask (issue #165). Each case: a question, the filter state it should produce (or {unsupported: true}), and `recorded`, the model output the offline harness replays. These recordings were WRITTEN BY HAND as the correct answer, because no live model call has been made: they test the Worker pipeline (request, parsing, validation) end to end, not the model. Replace them with real ones by running tests/ask_eval_live.mjs --record once the owner switches ask on.",
+  "recordedBy": "hand-written, 2026-09-16; no live model output yet",
+  "model": "claude-haiku-4-5-20251001",
+  "cases": [
+    {
+      "id": "conf-acc",
+      "tags": [
+        "conference"
+      ],
+      "question": "ACC schools",
+      "expected": {
+        "division": [],
+        "conf": [
+          "ACC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "ACC programs",
+        "division": [],
+        "conf": [
+          "ACC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-big-10",
+      "tags": [
+        "alias",
+        "conference"
+      ],
+      "question": "Big 10 programs",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Big Ten"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Big Ten programs",
+        "division": [],
+        "conf": [
+          "Big Ten"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-b1g-midwest",
+      "tags": [
+        "alias",
+        "conference",
+        "region"
+      ],
+      "question": "B1G teams in the Midwest",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Big Ten"
+        ],
+        "region": [
+          "Midwest"
+        ],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Big Ten programs in the Midwest",
+        "division": [],
+        "conf": [
+          "Big Ten"
+        ],
+        "region": [
+          "Midwest"
+        ],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-pac-12",
+      "tags": [
+        "alias",
+        "conference"
+      ],
+      "question": "Pac 12 soccer",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Pac-12"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Pac-12 programs",
+        "division": [],
+        "conf": [
+          "Pac-12"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-wcc",
+      "tags": [
+        "alias",
+        "conference"
+      ],
+      "question": "West Coast Conference programs",
+      "expected": {
+        "division": [],
+        "conf": [
+          "WCC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "WCC programs",
+        "division": [],
+        "conf": [
+          "WCC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-cusa",
+      "tags": [
+        "alias",
+        "conference"
+      ],
+      "question": "Conference USA schools",
+      "expected": {
+        "division": [],
+        "conf": [
+          "CUSA"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Conference USA programs",
+        "division": [],
+        "conf": [
+          "CUSA"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "alias-mvc",
+      "tags": [
+        "alias",
+        "conference"
+      ],
+      "question": "Missouri Valley schools",
+      "expected": {
+        "division": [],
+        "conf": [
+          "MVC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Missouri Valley Conference programs",
+        "division": [],
+        "conf": [
+          "MVC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "conf-two",
+      "tags": [
+        "conference"
+      ],
+      "question": "Big East or Atlantic 10 schools",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Big East",
+          "Atlantic 10"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Big East and Atlantic 10 programs",
+        "division": [],
+        "conf": [
+          "Big East",
+          "Atlantic 10"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "conf-america-east",
+      "tags": [
+        "conference"
+      ],
+      "question": "The America East",
+      "expected": {
+        "division": [],
+        "conf": [
+          "America East"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "America East programs",
+        "division": [],
+        "conf": [
+          "America East"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-admit-30",
+      "tags": [
+        "unit"
+      ],
+      "question": "admission rate under 30%",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.3
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "admission under 30%",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.3
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-ivy-admit-10",
+      "tags": [
+        "unit",
+        "conference"
+      ],
+      "question": "Ivy League schools with admission under 10%",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Ivy League"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.1
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Ivy League programs with admission under 10%",
+        "division": [],
+        "conf": [
+          "Ivy League"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.1
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-admit-half",
+      "tags": [
+        "unit"
+      ],
+      "question": "schools that admit at least half of applicants",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": ">=",
+            "value": 0.5
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "admission of 50% or more",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": ">=",
+            "value": 0.5
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-swac-admit-70",
+      "tags": [
+        "unit",
+        "conference",
+        "region"
+      ],
+      "question": "Southern schools in the SWAC with admission above 70%",
+      "expected": {
+        "division": [],
+        "conf": [
+          "SWAC"
+        ],
+        "region": [
+          "South"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": ">",
+            "value": 0.7
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "SWAC programs in the South with admission over 70%",
+        "division": [],
+        "conf": [
+          "SWAC"
+        ],
+        "region": [
+          "South"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": ">",
+            "value": 0.7
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-tuition-40k",
+      "tags": [
+        "unit"
+      ],
+      "question": "tuition under $40k",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "tuition",
+            "op": "<",
+            "value": 40000
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "tuition under $40,000",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "tuition",
+            "op": "<",
+            "value": 40000
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unit-tuition-25000-south",
+      "tags": [
+        "unit",
+        "region"
+      ],
+      "question": "tuition at most 25,000 dollars in the South",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [
+          "South"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "tuition",
+            "op": "<=",
+            "value": 25000
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "southern programs with tuition up to $25,000",
+        "division": [],
+        "conf": [],
+        "region": [
+          "South"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "tuition",
+            "op": "<=",
+            "value": 25000
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "rank-rpi-top-25",
+      "tags": [
+        "rank-direction"
+      ],
+      "question": "top 25 RPI teams",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rpiRank",
+            "op": "<=",
+            "value": 25
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "RPI top 25",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rpiRank",
+            "op": "<=",
+            "value": 25
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "rank-rpi-outside-100",
+      "tags": [
+        "rank-direction"
+      ],
+      "question": "teams ranked outside the top 100 in RPI",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rpiRank",
+            "op": ">",
+            "value": 100
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "RPI rank worse than 100",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rpiRank",
+            "op": ">",
+            "value": 100
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "rank-academic-top-50",
+      "tags": [
+        "rank-direction"
+      ],
+      "question": "top 50 universities academically",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<=",
+            "value": 50
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "US rank top 50",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<=",
+            "value": 50
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "rank-academic-better-20",
+      "tags": [
+        "rank-direction"
+      ],
+      "question": "academic rank better than 20",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<",
+            "value": 20
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "US rank better than 20",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<",
+            "value": 20
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "rank-academic-top-10-sorted",
+      "tags": [
+        "rank-direction",
+        "sort"
+      ],
+      "question": "top 10 in the US rankings, sorted by academic rank",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<=",
+            "value": 10
+          }
+        ],
+        "sort": "academicRank"
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "US rank top 10, best first",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "academicRank",
+            "op": "<=",
+            "value": 10
+          }
+        ],
+        "sort": "academicRank"
+      }
+    },
+    {
+      "id": "titles-any",
+      "tags": [
+        "count"
+      ],
+      "question": "programs that have won a national title",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "nationalTitles",
+            "op": ">=",
+            "value": 1
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "at least one national title",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "nationalTitles",
+            "op": ">=",
+            "value": 1
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "titles-acc-2",
+      "tags": [
+        "count",
+        "conference"
+      ],
+      "question": "ACC schools with at least 2 national titles",
+      "expected": {
+        "division": [],
+        "conf": [
+          "ACC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "nationalTitles",
+            "op": ">=",
+            "value": 2
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "ACC programs with two or more titles",
+        "division": [],
+        "conf": [
+          "ACC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "nationalTitles",
+            "op": ">=",
+            "value": 2
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "cups-none",
+      "tags": [
+        "count"
+      ],
+      "question": "schools with no College Cup appearances",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "collegeCups",
+            "op": "=",
+            "value": 0
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "no College Cup appearances",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "collegeCups",
+            "op": "=",
+            "value": 0
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "undergrads-big",
+      "tags": [
+        "count"
+      ],
+      "question": "big schools with over 30,000 undergrads",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": ">",
+            "value": 30000
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "more than 30,000 undergraduates",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": ">",
+            "value": 30000
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "undergrads-small",
+      "tags": [
+        "count"
+      ],
+      "question": "small colleges under 5000 students",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": "<",
+            "value": 5000
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "fewer than 5,000 undergraduates",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": "<",
+            "value": 5000
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "undergrads-between",
+      "tags": [
+        "count"
+      ],
+      "question": "undergrads between 10,000 and 20,000",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": ">=",
+            "value": 10000
+          },
+          {
+            "field": "undergradEnrollment",
+            "op": "<=",
+            "value": 20000
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "10,000 to 20,000 undergraduates",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "undergradEnrollment",
+            "op": ">=",
+            "value": 10000
+          },
+          {
+            "field": "undergradEnrollment",
+            "op": "<=",
+            "value": 20000
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "sat-1300",
+      "tags": [
+        "score"
+      ],
+      "question": "SAT 25th percentile above 1300",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "sat25",
+            "op": ">",
+            "value": 1300
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "SAT 25th percentile over 1300",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "sat25",
+            "op": ">",
+            "value": 1300
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "climate-warm",
+      "tags": [
+        "climate"
+      ],
+      "question": "warm places where fall highs are above 80 degrees",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "fallAvgHighF",
+            "op": ">",
+            "value": 80
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "fall highs over 80°F",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "fallAvgHighF",
+            "op": ">",
+            "value": 80
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "roster-35",
+      "tags": [
+        "count"
+      ],
+      "question": "rosters of 35 or more players",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rosterSize",
+            "op": ">=",
+            "value": 35
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "rosters of 35 or more",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rosterSize",
+            "op": ">=",
+            "value": 35
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "roster-horizon-28",
+      "tags": [
+        "count",
+        "conference"
+      ],
+      "question": "Horizon League schools with roster under 28",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Horizon"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rosterSize",
+            "op": "<",
+            "value": 28
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Horizon League programs with fewer than 28 players",
+        "division": [],
+        "conf": [
+          "Horizon"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "rosterSize",
+            "op": "<",
+            "value": 28
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "sort-sun-belt-tuition",
+      "tags": [
+        "sort",
+        "conference"
+      ],
+      "question": "Sun Belt schools sorted by tuition",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Sun Belt"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "tuition"
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Sun Belt programs, cheapest first",
+        "division": [],
+        "conf": [
+          "Sun Belt"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "tuition"
+      }
+    },
+    {
+      "id": "sort-cheapest-sec",
+      "tags": [
+        "sort",
+        "conference"
+      ],
+      "question": "cheapest SEC schools",
+      "expected": {
+        "division": [],
+        "conf": [
+          "SEC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "tuition"
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "SEC programs, cheapest first",
+        "division": [],
+        "conf": [
+          "SEC"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "tuition"
+      }
+    },
+    {
+      "id": "sort-big-12-rpi",
+      "tags": [
+        "sort",
+        "conference"
+      ],
+      "question": "best RPI in the Big 12",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Big 12"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "rpi"
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Big 12 programs by RPI",
+        "division": [],
+        "conf": [
+          "Big 12"
+        ],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": "rpi"
+      }
+    },
+    {
+      "id": "class-northeast-2027",
+      "tags": [
+        "class",
+        "region"
+      ],
+      "question": "Northeast programs recruiting the class of 2027",
+      "expected": {
+        "division": [],
+        "conf": [],
+        "region": [
+          "Northeast"
+        ],
+        "classYear": [
+          "2027"
+        ],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Northeast programs, class of 2027",
+        "division": [],
+        "conf": [],
+        "region": [
+          "Northeast"
+        ],
+        "classYear": [
+          "2027"
+        ],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "region-patriot-mid-atlantic",
+      "tags": [
+        "conference",
+        "region"
+      ],
+      "question": "Mid-Atlantic schools in the Patriot League",
+      "expected": {
+        "division": [],
+        "conf": [
+          "Patriot"
+        ],
+        "region": [
+          "Mid-Atlantic"
+        ],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "Patriot League programs in the Mid-Atlantic",
+        "division": [],
+        "conf": [
+          "Patriot"
+        ],
+        "region": [
+          "Mid-Atlantic"
+        ],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "combo-d1-west",
+      "tags": [
+        "division",
+        "region",
+        "unit",
+        "rank-direction"
+      ],
+      "question": "Division I programs in the West with admission under 20% and a top 50 RPI",
+      "expected": {
+        "division": [
+          "D1"
+        ],
+        "conf": [],
+        "region": [
+          "West"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.2
+          },
+          {
+            "field": "rpiRank",
+            "op": "<=",
+            "value": 50
+          }
+        ],
+        "sort": null
+      },
+      "recorded": {
+        "unsupported": null,
+        "reading": "D1 western programs, admission under 20%, RPI top 50",
+        "division": [
+          "D1"
+        ],
+        "conf": [],
+        "region": [
+          "West"
+        ],
+        "classYear": [],
+        "cond": [
+          {
+            "field": "admissionRate",
+            "op": "<",
+            "value": 0.2
+          },
+          {
+            "field": "rpiRank",
+            "op": "<=",
+            "value": 50
+          }
+        ],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-coach",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "who is the head coach at Stanford?",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: a coach is not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-prediction",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "which team will win the College Cup this year?",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: a prediction is not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-compare",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "compare UCLA and USC",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: a comparison is not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-players",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "players from Texas",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: players are not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-coach-since",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "coaches in charge since 2010",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: coach tenure is not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    },
+    {
+      "id": "unsupported-grad-rate",
+      "tags": [
+        "unsupported"
+      ],
+      "question": "graduation rate above 80%",
+      "expected": {
+        "unsupported": true
+      },
+      "recorded": {
+        "unsupported": "That needs more than filters: graduation rate is not a filter.",
+        "reading": "",
+        "division": [],
+        "conf": [],
+        "region": [],
+        "classYear": [],
+        "cond": [],
+        "sort": null
+      }
+    }
+  ]
+}
