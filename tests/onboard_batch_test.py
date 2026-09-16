@@ -19,7 +19,7 @@ Covers, in order:
                       list of slugs, with the same --collect-staged-divisions override; an unknown
                       slug is refused by name before anything else is checked
   guard-wiring        cmd_onboard checks the batch guard, in the same "before rpi, before any
-                      request" position as --all's, and only when two or more slugs were named
+                      request" position as --all's, for one slug as for many (owner, on #172)
   rebuild-once        onboard_batch collects every program through ONE collect_plan call and builds
                       ONCE at the end, against the same batch that onboard <slug> run once per
                       program (the pre-#143 shape) builds once per program for
@@ -285,10 +285,10 @@ def test_guard_wiring_and_rebuild_once() -> None:
     ok("CONTROL: three separate onboard <slug> calls build three times, once each",
        total_builds == 3, total_builds)
 
-    # a single explicit slug is not batch mode: no division guard, exactly as before #143
-    r = run_onboard(reg, ["d2-0"])
-    ok("one slug by itself is untouched by the new guard (same as before #143)",
-       r.code == 0 and r.plans == [] , (r.code, r.plans))
+    # a single explicit slug is not batch mode: it takes the single-program path, not collect_plan
+    r = run_onboard(reg, ["d2-0", "--collect-staged-divisions", "D2"])
+    ok("one slug takes the single-program path: no collect_plan, one build",
+       r.code == 0 and r.plans == [] and r.builds == 1, (r.code, r.plans, r.builds))
 
 
 @contextlib.contextmanager
@@ -347,6 +347,30 @@ def test_guard_batch_form() -> None:
         allowed("the same staged list with --collect-staged-divisions D2",
                 ["--slugs-file", listed, "--collect-staged-divisions", "D2"], ["d1-0", "d1-1", "d2-0"])
         allowed("a list of published D1 slugs, no flag", ["d1-0", "d1-1", "d1-2"], ["d1-0", "d1-1", "d1-2"])
+
+    # one staged slug is guarded exactly as a list is (owner's decision on #172). Before it, a single
+    # slug was never guarded: every check in this block fails against that code.
+    with tempfile.TemporaryDirectory() as tmp:
+        one = os.path.join(tmp, "one.txt")
+        with open(one, "w", encoding="utf-8") as f:
+            f.write("d2-1\n")
+        refused("one staged D2 slug with no flag", ["d2-0"],
+                needle="--collect-staged-divisions D2 names the staged division")
+        refused("one staged D2 slug as the only line of --slugs-file, no flag", ["--slugs-file", one],
+                needle="--collect-staged-divisions D2")
+        refused("one staged D2 slug with the flag naming the wrong division", ["d2-0", "--collect-staged-divisions", "D3"],
+                needle="D2, which the site does not publish yet")
+        refused("one published D1 slug with a flag it does not need", ["d1-0", "--collect-staged-divisions", "D2"],
+                needle="drop --collect-staged-divisions")
+        refused("one unknown slug", ["no-such-program"], needle="unknown slug(s) no-such-program")
+    r = run_onboard(mixed, ["d2-0", "--collect-staged-divisions", "D2"])
+    ok("one staged D2 slug WITH --collect-staged-divisions D2 runs: rpi, one build, marked onboarded",
+       r.code == 0 and r.rpi == ["history", "current"] and r.builds == 1 and r.plans == []
+       and [p["slug"] for p in r.reg["programs"] if p["onboarded"]] == ["d2-0"], (r.code, r.rpi, r.builds, r.out[-300:]))
+    r = run_onboard(mixed, ["d1-0"])
+    ok("one published D1 slug with no flag runs, as it always did",
+       r.code == 0 and r.builds == 1 and [p["slug"] for p in r.reg["programs"] if p["onboarded"]] == ["d1-0"],
+       (r.code, r.builds, r.out[-300:]))
 
     # --all refuses the same batches it did before: this registry's --all batch spans D2
     with no_sockets() as attempts:

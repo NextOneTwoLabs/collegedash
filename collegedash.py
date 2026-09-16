@@ -170,9 +170,10 @@ def explicit_slugs(args) -> list[str]:
     any --slugs-file, in the order given, duplicates dropped after the first. Empty for --all.
 
     Two or more is the batch form (issue #143): collect every one, then build once, instead of once
-    per program. Exactly one - however it arrived, typed directly or the only line
-    of a file - is the single-program form that has always existed and is untouched by this: same
-    code path, same lack of a division guard, one build either way because there is only one program."""
+    per program. Exactly one - however it arrived, typed directly or the only line of a file - takes
+    the single-program path. Either way the division guard applies (onboard_batch_refusal): the owner
+    decided on #172 that one staged-division slug needs --collect-staged-divisions exactly as a list
+    does. Before that, a single slug was never guarded, and #161 onboarded 56 D2 programs that way."""
     if args.slug == "--all" or args.all:
         return []
     slugs = ([args.slug] if args.slug else []) + list(args.more_slugs)
@@ -203,8 +204,9 @@ def cmd_onboard(args):
                 common.log(line)
             return 2
     slugs = explicit_slugs(args)
-    if len(slugs) > 1:
-        # same shape as the --all guard above: checked, and refused, before any request is made
+    if slugs:
+        # one slug or many (owner's decision on #172): same shape as the --all guard above, checked
+        # and refused before any request is made
         refusal = onboard_batch_refusal(reg, slugs, allow_divisions=args.collect_staged_divisions.split(","))
         if refusal:
             for line in refusal:
@@ -386,9 +388,14 @@ def onboard_batch_refusal(reg, slugs: list[str], *, allow_divisions: "list[str] 
                        + (f" (it is {', '.join(staged)} that is staged here)" if staged else " (nothing here is staged)"))
     if not reasons:
         return []
-    return [f"!! onboard refuses this batch of {len(slugs)} program(s): {'; and '.join(reasons)}.",
-            "   Nothing was collected. To override, on this one command: "
-            f"--collect-staged-divisions {','.join(staged)} names the staged division(s) you mean to collect."]
+    what = f"{slugs[0]}" if len(slugs) == 1 else f"this batch of {len(slugs)} programs"
+    lines = [f"!! onboard refuses {what}: {'; and '.join(reasons)}.", "   Nothing was collected."]
+    if staged:
+        lines.append("   To override, on this one command: "
+                     f"--collect-staged-divisions {','.join(staged)} names the staged division(s) you mean to collect.")
+    else:
+        lines.append("   Nothing here is staged, so drop --collect-staged-divisions.")
+    return lines
 
 
 def onboard_batch(reg, slugs: list[str], *, bios: bool, workers: int) -> int:
