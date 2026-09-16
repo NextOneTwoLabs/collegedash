@@ -392,21 +392,36 @@ def parse_schedule(html: str, base_url: str) -> dict:
     if not games:
         # the legacy branch can recover a season the <title> did not state, so it reports one back
         season, games = _parse_legacy_games(soup, base_url, season)
-    return {"season": season, "games": _spring_after_fall(games)}
+    return {"season": season, "games": _spring_games(games)}
 
 
-def _spring_after_fall(games: list[dict]) -> list[dict]:
-    """A January-July game listed after an August-December one is in the NEXT calendar year, and
-    both branches date a game by the page's season (the rows give month and day only). The
-    '2025-26' page ends with spring 2026 (issues #122, #97).
+def _spring_games(games: list[dict]) -> list[dict]:
+    """Fix the two things a spring block on a fall-season page gets wrong.
 
-    Measured over the cached pages: 173 games fall in January-July and 169 of them are listed after
-    the fall block. The current theme embeds every game in the page's Nuxt payload with a full ISO
-    datetime, and for all 74 current-theme games this moves, the payload holds the moved date and
-    never the stored one. Two legacy rows (portland 2025) say the same in their own aria-labels. The
-    four that come BEFORE the fall block (gonzaga 2024) are a spring block printed first and are
-    already right, which is why the rule is "after a fall game" and not "any spring date".
+    1. **The year.** Both branches date a row by the page's season, because the rows give month and
+       day only. A January-July game listed AFTER an August-December one is in the next calendar
+       year: the '2025-26' page ends with spring 2026 (issues #122, #97). A spring block printed
+       BEFORE the fall block (gonzaga 2024) is that season's own spring and keeps its year.
+       Measured over the cached pages: 173 games fall in January-July, 169 of them after the fall.
+       Every moved date agrees with the page's own second copy - the Nuxt payload's ISO datetimes
+       (74), an aria-label full date (2), a Feb 29 that does not exist in the season year (1) - and
+       the audit of PR #127 confirmed all 169 a third way, by the weekday each card prints.
+
+    2. **The record.** A spring game is a non-championship-segment contest and does not count in the
+       season record, and most sites say so in a section descriptor ('2025 Spring Exhibition
+       Season'). Some rows omit it: okstate.com's 2024 page carries that descriptor on six of the
+       seven spring cards and leaves it off the last one, 'vs Tulsa, W 3-2'. Read row by row that is
+       a win, and it published Oklahoma State's 2024 record as 15-5-3 where the school's own release
+       says 14-5-3. It is the only row of its kind in the corpus, and inheriting a descriptor down
+       the page would be the more dangerous rule - the exhibition block usually comes FIRST, so a
+       forward-inheriting descriptor would mark a whole fall season. So the rule is the plain one:
+       on a page that has a fall block at all, a January-July game is a spring game and is not
+       counted, whether or not its own row says so.
+
+    A page with no August-December game is not a fall-season page, so neither rule applies to it.
     """
+    if not any(g.get("date") and int(g["date"][5:7]) >= 8 for g in games):
+        return games
     seen_fall = False
     for g in games:
         d = g.get("date")
@@ -414,7 +429,9 @@ def _spring_after_fall(games: list[dict]) -> list[dict]:
             continue
         if int(d[5:7]) >= 8:
             seen_fall = True
-        elif seen_fall:
+            continue
+        g["exhibition"] = True
+        if seen_fall:
             g["date"] = f"{int(d[:4]) + 1}{d[4:]}"
     return games
 
