@@ -33,8 +33,48 @@ HEIGHT_RE = re.compile(r"(\d)\s*[-'′’]\s*(\d{1,2})")
 TITLE_YEAR_RE = re.compile(r"(?:19|20)\d\d")
 MONTHS = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
 DATE_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})$", re.I)
-HEAD_COACH_RE = re.compile(r"head coach", re.I)
-NOT_HEAD_RE = re.compile(r"assoc|assist|volunteer|director of (?:operations|ops)", re.I)
+# ---------- who the head coach is (issue #33) ----------
+# Measured over all 1,887 staff rows on the 313 cached Sidearm roster pages: 44 distinct titles
+# contain the word "head". `head coach` as a literal missed 41 pages whose coach is titled
+# "Head Women's Soccer Coach" (31), "Head Soccer Coach" (8) or "Head Women's Coach" (1) - one of
+# them (evansville) with a typographic apostrophe, the only non-ASCII character in any title here.
+#
+# The words allowed between "head" and "coach" are a closed list rather than `.*`, because
+# `head\b.*\bcoach` also matches six rows in the same corpus that belong to somebody else:
+# "Head Strength & Conditioning Coach" (4 spellings), "Head Olympic Strength and Conditioning
+# Coach" and "Head Sports Performance Coach (Women's Soccer, Softball, Men's Tennis, Golf)".
+# Publishing a strength coach as the head coach is worse than publishing nobody.
+#
+# APOS: ' and the typographic ’ one page uses; ‘ ´ ` and U+FFFD (what a mis-decoded page would
+# leave here, though none in the corpus does) cost nothing and save a re-run of this exercise.
+APOS = r"['‘’´`�]"
+HEAD_QUALIFIER = rf"(?:women{APOS}?s?|men{APOS}?s?|varsity|soccer|wsoc|w|and|&)"
+HEAD_COACH_RE = re.compile(rf"\bhead\s+(?:{HEAD_QUALIFIER}\s+){{0,5}}coach\b", re.I)
+# A word in front of "head" that makes the title somebody else's job: "Associate Head Coach",
+# "Assistant Head Coach", "Former Head Coach (1979-2024)", and the "Assosicate Head Coach" a real
+# page spells that way. Scoped to what stands before "head" so that a title which merely mentions
+# another role ("Head Coach / Associate Athletic Director") still reads as the head coach; over the
+# corpus that scoping changes no row, and every row it excludes is excluded for the reason given.
+# "Interim" and "Co-" are deliberately absent: an interim or co-head coach is the head coach.
+NOT_HEAD_RE = re.compile(rf"\b(?:asso[cs]\w*|assist\w*|asst\.?|deputy|volunteer|former)\s+"
+                         rf"(?:{HEAD_QUALIFIER}\s+)*head\b|\bemerit", re.I)
+# The roster page is one program's, but a combined staff directory can list the other program's
+# coach too, so a title that says men's and never says women's is not this program's head coach.
+# No cached page carries one today; D2 and D3 share staff pages far more often than D1.
+MENS_RE = re.compile(rf"\bmen{APOS}?s?\b", re.I)
+WOMENS_RE = re.compile(rf"\b(?:w|women{APOS}?s?|wsoc)\b", re.I)
+
+
+def is_head_coach(title: str) -> bool:
+    """Whether this staff title is the women's soccer head coach's.
+
+    build.py publishes the first staff row for which this is true, in page order. After this rule
+    exactly one cached page matches more than one row: Butler, which lists two "Co-Head Coach"
+    rows because it genuinely has two.
+    """
+    if not HEAD_COACH_RE.search(title) or NOT_HEAD_RE.search(title):
+        return False
+    return not (MENS_RE.search(title) and not WOMENS_RE.search(title))
 
 MONTH_NAMES = "January|February|March|April|May|June|July|August|September|October|November|December"
 LEGACY_SIDE_CLASSES = {"sidearm-schedule-home-game": "H", "sidearm-schedule-away-game": "A",
@@ -325,7 +365,7 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                     continue
                 staff.append({
                     "name": name, "title": title,
-                    "isHeadCoach": bool(HEAD_COACH_RE.search(title)) and not NOT_HEAD_RE.search(title),
+                    "isHeadCoach": is_head_coach(title),
                     "isCoach": is_coaching or bool(re.search(r"coach", title, re.I)),
                     "bioUrl": urljoin(base_url, link["href"]) if link else None, "social": {},
                 })

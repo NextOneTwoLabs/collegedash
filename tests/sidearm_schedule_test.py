@@ -417,8 +417,11 @@ def test_fixtures_carry_no_contact_details() -> None:
     print("fixture privacy")
     email = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
     phone = re.compile(r"(?<!\d)(?:\+?1[-. ]?)?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}(?!\d)")
+    # Every .html in the tree, not only this suite's: the nine roster-* fixtures issue #33 added
+    # are trimmed from staff directories, which is where a coach's address would come from.
+    # tests/sidearm_staff_test.py scans those too; a contact detail has to get past both.
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
-    ok("privacy: there are fixtures to check", len(names) == 11, str(names))
+    ok("privacy: there are fixtures to check", len(names) == 20, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
