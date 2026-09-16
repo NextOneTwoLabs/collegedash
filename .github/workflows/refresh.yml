@@ -27,10 +27,17 @@ name: Refresh program data
 # both gate that push: if the rebuild crashes or breaks an invariant, main is not touched at all -
 # not the rebuilt profiles, and not that run's freshly collected rpi tables or registry.json either -
 # so the live site keeps serving exactly what it served before. The run's whole collection is pushed
-# to a per-run branch, refresh-sources/<run id>-<run attempt>-<push attempt>, where it can be
-# inspected and reproduced, merged deliberately once the cause is known, and - the point of keeping
-# it off main - cannot poison the next day's rebuild. Nothing deletes those branches: they are one
-# commit each and are meant to be deleted by hand once the failure has been triaged.
+# to a per-run branch, where it can be inspected and reproduced, merged deliberately once the cause is
+# known, and - the point of keeping it off main - cannot poison the next day's rebuild. There are two
+# shapes, and the annotation on each says which it is, because they need different handling:
+#   refresh-sources/<run id>-<run attempt>-<push attempt>   a gate failed, or the rebuild put back a
+#     profile main deleted: the commit is rebased onto main and holds the collection with public/data
+#     exactly as main has it (issue 82).
+#   refresh-sources/<run id>-<run attempt>-unpublished      nothing could be published at all: a rebase
+#     conflict this step does not resolve, or three failed attempts (issue 117). The commit is the run
+#     as it stood; whether it was rebased and gated depends on which of the two it was, and the error says.
+# Nothing deletes those branches: they are one commit each and are meant to be deleted by hand once the
+# failure has been triaged.
 # Pushing to main triggers the Cloudflare deploy.
 
 on:
@@ -204,8 +211,9 @@ jobs:
           # is merged by a human who knows which of the two causes it was; the daily runs keep
           # publishing in the meantime. One branch per run attempt *and* per push attempt, because
           # GITHUB_RUN_ID is stable across a "Re-run all jobs" and a stale ref would then reject the
-          # push - losing the collection in the one place it must not be lost. All three components
-          # are digits, so the ref name is always valid and always unique.
+          # push - losing the collection in the one place it must not be lost. The first two components
+          # are digits and the third is a digit here or the literal "unpublished" in save_collection, so
+          # the ref name is always valid, and the two shapes can never collide with each other.
           #
           # public/data is still restored before the commit, so that what lands on the branch is a
           # clean "sources ahead of data" snapshot rather than a half-written build. Only what
@@ -272,12 +280,18 @@ jobs:
           # this, all three attempts then failed the same way and the run ended with its collection only
           # on the runner.
           #
-          # A conflict confined to profiles is resolved in favour of the deletion. That is safe because
-          # profiles are build() output and nothing more: the rebuild that follows every rebase writes a
-          # profile for every published program and prunes the rest (issue 110), so whatever this
-          # resolution leaves is overwritten by the output of main's own code and registry, and the gates
-          # below still decide whether it is published. Any other conflict - a collected source,
-          # registry.json, code - is not this step's to settle.
+          # A conflict confined to build() output under public/data/programs is resolved by removing the
+          # file. That is safe because those files are build() output and nothing more: the rebuild that
+          # follows every rebase writes a profile for every published program and prunes the rest (issue
+          # 110), and the gates below still decide whether any of it is published.
+          #
+          # What the rebuild does NOT settle is which registry it reads. `-X theirs` keeps the RUN's copy
+          # of any file both sides changed, registry.json included, so removing the file here is "let the
+          # rebuild decide", not "the deletion stands": a program main deleted comes back if the registry
+          # the rebuild reads still publishes it. Two things follow, both below: the annotations say that
+          # rather than claiming the deletion was kept, and the run fails closed when both sides edited
+          # registry.json, because there `-X theirs` would silently revert main's membership change.
+          # Any other conflict - a collected source, registry.json itself, code - is not this step's to settle.
           rebase_stopped() {
             [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]
           }
@@ -285,6 +299,7 @@ jobs:
           # there is no stopped rebase, when any conflict is outside public/data/programs/<slug>.json, or
           # when resolving fails. Called only as a condition, so errexit is off in here and each step is checked.
           resolve_profile_conflicts() {
+            local f
             rebase_stopped || return 1
             conflicted=$(git diff --name-only --diff-filter=U)
             [ -n "$conflicted" ] || return 1
@@ -294,25 +309,42 @@ jobs:
             for f in $conflicted; do
               git rm -q -- "$f" || return 1
             done
-            echo "::notice title=refresh::main changed or deleted program profiles this run had rewritten; keeping the deletion and rebuilding onto main: $(echo $conflicted)"
-            GIT_EDITOR=true git rebase --continue || return 1
+            resolved="$conflicted"
+            echo "::notice title=refresh::main changed or deleted $(printf '%s\n' "$conflicted" | wc -l) file(s) under public/data/programs that this run had rewritten. They are removed so the rebuild decides from the registry it reads whether each one comes back: $(echo $conflicted)"
+            if ! GIT_EDITOR=true git rebase --continue; then
+              continue_failed="$conflicted"
+              return 1
+            fi
           }
           # Never drop a collection (issue 117). When the step cannot publish and has no gate path for the
-          # reason, push the run's commit as it stands to a per-run branch and fail the run. Unlike
-          # publish_sources_only above, this commit was not rebased onto main and not rebuilt or gated, so
-          # the annotation says so: the branch is a place the collection is safe, not something to merge.
+          # reason, push the run's commit as it stands to a per-run branch and fail the run.
+          #
+          # $2 says what that commit actually is, because the two callers leave HEAD in different states and
+          # an operator reading this at 03:00 acts on it: "unrebased" is the run as it stood, never rebased
+          # onto the current main and never gated; "rebased" is rebased, rebuilt and past both gates, and
+          # only the push to main failed. Telling someone to redo work that is already done is how a good
+          # annotation becomes a bad night, so the two say different things.
           save_collection() {
+            local pushed
             git rebase --abort 2>/dev/null || true
             branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-unpublished"
             base=$(git rev-parse --short HEAD~1 2>/dev/null || echo "an unknown commit")
+            if [ "$2" = "rebased" ]; then
+              pushed="Its collection is safe on branch $branch: the run's commit on $base, rebased onto main, rebuilt from the stored sources and past both build and validate - everything except the push to main succeeded. To publish it: git fetch origin $branch, check it out, rebase it onto main (there is no conflict to resolve unless main has moved again), and push. Nothing needs collecting again."
+            else
+              pushed="Its collection is safe on branch $branch: one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand, run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
+            fi
             if git push origin "HEAD:refs/heads/$branch"; then
-              echo "::error title=refresh::$1. NOTHING WAS PUBLISHED: this run did not update main. Its collection is safe on branch $branch, as one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand, run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
+              echo "::error title=refresh::$1. NOTHING WAS PUBLISHED: this run did not update main. $pushed"
             else
               echo "::error title=refresh::$1, and pushing the collection to $branch was rejected too. NOTHING WAS PUBLISHED and this run's collection was NOT saved: it exists only on this runner. Re-dispatch this workflow to collect again."
             fi
             exit 1
           }
+          pre_rebase=$(git rev-parse HEAD)
           for attempt in 1 2 3; do
+            resolved=
+            continue_failed=
             if git pull --rebase -X theirs origin main || resolve_profile_conflicts; then
               # A rebase drops a commit that came out empty, leaving HEAD at upstream's tip - and the
               # amend below would then be amending someone else's commit. This is reachable, in two
@@ -342,8 +374,23 @@ jobs:
                 if publish_sources_only "build failed" "$attempt"; then exit 1; fi
               elif ! python collegedash.py validate; then
                 if publish_sources_only "validate failed" "$attempt"; then exit 1; fi
+              elif [ -n "$resolved" ] && ! git diff --quiet "$(git merge-base "$pre_rebase" FETCH_HEAD)" FETCH_HEAD -- public/data/registry.json \
+                   && ! git diff --quiet "$(git merge-base "$pre_rebase" FETCH_HEAD)" "$pre_rebase" -- public/data/registry.json; then
+                # Both sides changed the registry and the rebase had to resolve profiles: `-X theirs` kept the
+                # RUN's registry, so main's membership change may have just been reverted and the programs it
+                # removed republished. The data is gated, not guessed at: keep the collection and fail loudly.
+                save_collection "main and this run both changed public/data/registry.json, and the rebase resolved $(echo $resolved) with the run's copy of it, which can silently revert a membership change merged into main" "rebased"
               else
                 git add -A
+                # Which of the removed files the rebuild put back, if any - staged, because a recreated file is
+                # untracked until `git add` and `git diff` would not see it. Not a failure: the registry the
+                # rebuild read still publishes those programs, and the guard above has already ruled out that
+                # registry being the run's copy over main's. It is here because "main deleted it and it is
+                # back" is exactly the thing an operator should not have to infer from a green run.
+                back=$(git diff --cached --name-only --diff-filter=A FETCH_HEAD -- public/data/programs | tr '\n' ' ')
+                if [ -n "$resolved" ] && [ -n "$back" ]; then
+                  echo "::warning title=refresh::the rebuild put back $back, which main deleted: the registry it was built from still publishes those programs. If main meant to drop them, the registry change is missing."
+                fi
                 # --amend, not a second commit: one run stays one commit, and a retry re-amends the
                 # same commit instead of stacking one per attempt. The body records what it was built
                 # onto, which is the only thing a second commit would have made more visible. No "#"
@@ -359,13 +406,20 @@ jobs:
                 fi
               fi
             elif rebase_stopped; then
-              save_collection "The rebase onto main stopped on a conflict this step does not resolve: $(git diff --name-only --diff-filter=U | tr '\n' ' ')"
+              # After a successful resolve that could not be continued there are no unmerged paths left to
+              # list, so fall back to what was resolved, and never emit an empty list (issue 124 review).
+              unresolved=$(git diff --name-only --diff-filter=U | tr '\n' ' ')
+              if [ -n "$unresolved" ]; then
+                save_collection "The rebase onto main stopped on a conflict this step does not resolve: $unresolved" "unrebased"
+              else
+                save_collection "The rebase onto main could not continue after resolving ${continue_failed:-its conflicts} (git reported no unmerged path; see the log above for what it said)" "unrebased"
+              fi
             fi
             echo "attempt $attempt did not publish; retrying in 15s"
             git rebase --abort 2>/dev/null || true
             sleep 15
           done
-          save_collection "Could not publish after 3 attempts (see the attempts above for why)"
+          save_collection "Could not publish after 3 attempts (see the attempts above for why)" "rebased"
 
       - name: Fail if too many collectors failed
         if: steps.refresh.outputs.code != '' && steps.refresh.outputs.code != '0'
