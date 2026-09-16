@@ -1,6 +1,7 @@
 name: Tests
 
-# Every check suite in the repository, on every pull request and every push to main (issue #63).
+# Every check suite in the repository, on every pull request, every push to main, and every
+# completed run of "Refresh program data" (issue #63, issue #154).
 #
 # Before this existed, `.github/workflows/refresh.yml` was the only workflow and it never ran a
 # test file: 801 checks ran only when a person remembered to run them. The cost of that is not
@@ -20,6 +21,34 @@ name: Tests
 #
 # Every suite is offline: no network, no token, no HTTP cache, and the ones that build do so into a
 # temporary directory rather than touching public/data. Nothing here writes to the repository.
+#
+# Why this workflow also listens for workflow_run (issue #154)
+# ---------------------------------------------------------------
+# refresh.yml commits and pushes to main with the default GITHUB_TOKEN, and GitHub does not start
+# workflows - this one included - from a push made with GITHUB_TOKEN, to stop a workflow from
+# retriggering itself indefinitely. `push: branches: [main]` alone therefore never runs this
+# workflow against a refresh commit: it only fires for a push carrying a person's own token or
+# GitHub App credentials, such as the merge commit a pull request produces. That is not
+# hypothetical - the runs on main stopped dead at the last such merge, and the two refresh commits
+# that followed it (03c33317, 32afd35c) had no tests run at all, which is exactly how #153, a real
+# regression in the refreshed data, reached main showing green.
+#
+# `workflow_run` on "Refresh program data" `completed` is triggered by that workflow's completion
+# rather than by its commit's push event, so it is exempt from the GITHUB_TOKEN restriction above
+# and fires every time, success or failure - refresh.yml can still have published data even when
+# its own run is later marked failed, by the collector-failure-rate check that runs after the
+# commit step. The alternative the issue named, running the suites as a step inside refresh.yml
+# itself, was rejected: it would couple two workflows #63 deliberately kept separate (one runs
+# every check suite by discovery; the other collects and publishes data), and it would add this
+# job's time to every refresh run rather than running once, after the fact, against the commit
+# that matters.
+#
+# workflow_run's own head_sha is the commit refresh.yml STARTED from, before its own commit and
+# push, so checking that out would test main as it stood before the refresh - silently missing the
+# exact case this exists to catch. The checkout step below checks out the `main` branch by name
+# instead, for a workflow_run trigger: by the time GitHub delivers a workflow_run event, the
+# upstream run - its push included - has already finished, so `main` by name is the refreshed
+# commit.
 #
 # What is deliberately NOT run here, and why it is not an oversight
 # -----------------------------------------------------------------
@@ -45,11 +74,18 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Refresh program data"]
+    types: [completed]
+    branches: [main]
 
-# A pull request that gets a second push does not need the first run finished. Pushes to main are
-# never cancelled: the daily data refresh commits there, and its result is the one worth keeping.
+# A pull request that gets a second push does not need the first run finished. A push to main from
+# a person (a merge) is never cancelled, and neither is a workflow_run from refresh.yml: both are
+# the result the run exists to check, not intermediate work someone is still typing. The daily
+# refresh's OWN push never reaches this group via `push` at all - see the note near the top of this
+# file on why `workflow_run` exists to cover that case instead.
 concurrency:
-  group: tests-${{ github.ref }}
+  group: tests-${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
@@ -61,7 +97,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      # workflow_run's own head_sha predates the refresh commit (see the note at the top of this
+      # file); `main` by name is what actually carries it once the event is delivered. github.sha
+      # for every other event reproduces exactly what an unset `ref` would check out here - the
+      # ref/SHA that triggered the run - stated explicitly rather than left to checkout's default.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
 
       # 3.12 matches refresh.yml, so a suite cannot pass here and fail in the workflow that
       # publishes data.
