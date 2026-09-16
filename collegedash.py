@@ -3,6 +3,9 @@
 CollegeDash command line.
 
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
+  python collegedash.py onboard --all [--conference C]   onboard the programs not yet onboarded, a batch at a
+                              [--limit N] [--max-batch N] time; refuses a batch that spans a division the site
+                              [--collect-staged-divisions] does not publish yet, or one over --max-batch
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
                                 [--workers 16]          programs collected side by side; per-host politeness holds
@@ -20,6 +23,7 @@ Collectors: athletics, scorecard, climate, wikipedia, tds, soccerwire, news, cam
 from __future__ import annotations
 
 import argparse
+import collections
 import json
 import os
 import sys
@@ -158,6 +162,14 @@ def _mark_onboarded(slug: str) -> dict:
 
 def cmd_onboard(args):
     reg = common.load_registry()
+    if args.slug == "--all" or args.all:
+        # checked before rpi.history/current, so a refused command makes no request at all
+        refusal = batch_refusal(reg, conference=args.conference, limit=args.limit, max_batch=args.max_batch,
+                                allow_staged=args.collect_staged_divisions)
+        if refusal:
+            for line in refusal:
+                common.log(line)
+            return 2
     from collect import rpi
     rpi.history(reg)
     try:
@@ -165,7 +177,7 @@ def cmd_onboard(args):
     except Exception as e:
         common.log(f"!! rpi current failed: {e}")
     if args.slug == "--all" or args.all:
-        return onboard_all(reg, bios=not args.no_bios, limit=args.limit)
+        return onboard_all(reg, bios=not args.no_bios, limit=args.limit, conference=args.conference)
     program = common.get_program(args.slug, reg)
     if not program.get("onboarded"):
         reg = _mark_onboarded(args.slug)
@@ -177,13 +189,88 @@ def cmd_onboard(args):
     return 0 if ok else 1
 
 
-def onboard_all(reg, *, bios: bool, limit: int | None) -> int:
-    """Onboard every registry program not yet marked onboarded. Resumable: each program is marked
-    in the registry as soon as its collectors finish, and the site is rebuilt every 10 programs."""
-    import build
+# The largest conference in the registry is the Big Ten with 18 programs, and the batch plan on #94
+# collects one conference at a time so each batch can be audited before the next. 25 sits above any
+# single conference with room to spare and far below a division: PR #137 stages 261 D2 programs, and
+# `onboard --all` would have collected against all 261 live athletics sites in one pass (issue #138).
+# At ten or so requests per program and the per-host gap, 25 programs is about twenty minutes of
+# collection - a batch somebody can actually read through afterwards.
+MAX_BATCH = 25
+
+
+def batch_todo(reg, *, conference: str | None = None, limit: int | None = None) -> list[dict]:
+    """The programs `onboard --all` would collect, in order, after --conference and --limit."""
     todo = [p for p in reg["programs"] if not p.get("onboarded")]
+    if conference:
+        todo = [p for p in todo if (p.get("conference") or "").casefold() == conference.casefold()]
     if limit:
         todo = todo[:limit]
+    return todo
+
+
+def batch_refusal(reg, *, conference: str | None = None, limit: int | None = None,
+                  max_batch: int = MAX_BATCH, allow_staged: bool = False) -> list[str]:
+    """The lines to print instead of collecting, or [] when the batch may go ahead.
+
+    Two independent rules, because they protect different things:
+
+      * **a division the site does not publish yet.** `onboardedDivisions` is what build.py
+        publishes; a program staged in the registry for a division outside it is not meant to be
+        collected as part of a sweep, one conference at a time is the plan (#94), and the whole
+        division would be hundreds of sites at once.
+      * **a batch bigger than MAX_BATCH**, whatever the division. This one also catches a staged
+        division that somebody remembered to allow but not to size.
+
+    Both are lifted by arguments rather than an environment variable, deliberately: an argument is
+    one command, visible in the shell history that ran it, where an environment variable applies to
+    every command in a process and outlives the intent that set it (the shape #112 settled on).
+    """
+    todo = batch_todo(reg, conference=conference, limit=limit)
+    if not todo:
+        return []
+    published = reg.get("onboardedDivisions")
+    staged = sorted({(p.get("division") or "?") for p in todo} - set(published or [])) if published else []
+    by_conf = collections.Counter((p.get("division") or "?", p.get("conference") or "?") for p in todo)
+    reasons = []
+    if staged and not allow_staged:
+        reasons.append(f"it spans {', '.join(staged)}, which the site does not publish yet "
+                       f"(registry onboardedDivisions is {published})")
+    if len(todo) > max_batch:
+        reasons.append(f"it is {len(todo)} programs, over the {max_batch} this command will collect in one pass")
+    if not reasons:
+        return []
+    lines = [f"!! onboard --all refuses this batch: {'; and '.join(reasons)}.",
+             f"   Nothing was collected. The batch would have been {len(todo)} programs across "
+             f"{len({c for _, c in by_conf})} conference(s):"]
+    for (div, conf), n in by_conf.most_common(8):
+        lines.append(f"     {div} {conf}: {n}")
+    if len(by_conf) > 8:
+        lines.append(f"     ... and {len(by_conf) - 8} more conference(s)")
+    if staged and len(todo) <= max_batch and conference:
+        # already the shape the plan asks for: one conference, within the limit. The only thing
+        # missing is somebody saying they mean to collect a division the site does not publish.
+        lines.append("   This is already one conference and within the limit. Re-run the same command with "
+                     "--collect-staged-divisions if you mean to collect a division that is only staged.")
+    else:
+        lines += [
+            "   Collect a batch at a time instead, so each one can be audited before the next (issue #94):",
+            f"     python collegedash.py onboard --all --conference \"{by_conf.most_common(1)[0][0][1]}\""
+            + ("  --collect-staged-divisions" if staged else ""),
+            "     python collegedash.py onboard <slug>            one program at a time, by slug",
+        ]
+        lines.append(f"   To override deliberately, on this one command: --max-batch N raises the {max_batch}-program "
+                     f"limit" + (", and --collect-staged-divisions allows the staged division." if staged else "."))
+    return lines
+
+
+def onboard_all(reg, *, bios: bool, limit: int | None, conference: str | None = None) -> int:
+    """Onboard every registry program not yet marked onboarded. Resumable: each program is marked
+    in the registry as soon as its collectors finish, and the site is rebuilt every 10 programs.
+
+    The batch this will collect is whatever batch_refusal() has already allowed: cmd_onboard calls it
+    first and returns 2 without making a request when it refuses."""
+    import build
+    todo = batch_todo(reg, conference=conference, limit=limit)
     common.log(f"onboard --all: {len(todo)} programs to go ({len(reg['programs']) - len(todo)} done)")
     failures = {}
     for i, program in enumerate(todo, 1):
@@ -424,7 +511,14 @@ def cmd_serve(args):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    p = sub.add_parser("onboard"); p.add_argument("slug", nargs="?", default=""); p.add_argument("--all", action="store_true"); p.add_argument("--limit", type=int); p.add_argument("--no-bios", action="store_true"); p.set_defaults(fn=cmd_onboard)
+    p = sub.add_parser("onboard"); p.add_argument("slug", nargs="?", default=""); p.add_argument("--all", action="store_true"); p.add_argument("--limit", type=int); p.add_argument("--no-bios", action="store_true")
+    p.add_argument("--conference", help="with --all: only programs in this conference (the batch shape the plan on #94 uses)")
+    p.add_argument("--max-batch", type=int, default=MAX_BATCH,
+                   help=f"with --all: programs this command will collect in one pass (default {MAX_BATCH}). "
+                        "Raising it is a one-shot decision, made on the command that collects")
+    p.add_argument("--collect-staged-divisions", action="store_true",
+                   help="with --all: allow a batch that spans a division registry.onboardedDivisions does not list")
+    p.set_defaults(fn=cmd_onboard)
     p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true")
     p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")
     p.add_argument("--dry-run", action="store_true", help="print what would run, run nothing")
