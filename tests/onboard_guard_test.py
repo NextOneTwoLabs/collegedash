@@ -17,9 +17,12 @@ with `socket.socket.connect` replaced by one that fails the check it is called f
 was made" is therefore an assertion, not an assumption.
 
 Cases, and the mutation each is here to catch (tests/../scratch mutate138.py applies them):
-  unchanged-today        the registry as it is today: 349 D1 programs, all onboarded, nothing
-                         staged. The batch is empty and the command runs exactly as before.
-                         Fails when batch_todo() stops filtering on `onboarded`.
+  the-shipped-registry   `onboard --all` against public/data/registry.json as it currently is,
+                         with the expectation derived from that file rather than assumed: refused,
+                         naming the divisions it stages and the size of the batch, or collected in
+                         the pre-guard order when it stages nothing. Fails when batch_todo() stops
+                         filtering on `onboarded`, when a rule stops refusing, or when the refusal
+                         names the wrong division or count (issue #146).
   unchanged-d1-batch     a handful of unonboarded D1 programs: collected, in the same order and
                          with the same --limit behaviour as the code before the guard.
                          Fails when the guard refuses a batch it has no reason to refuse.
@@ -216,20 +219,60 @@ def todo_before_the_guard(reg: dict, limit: int | None = None) -> list[str]:
 
 # ---------- cases ----------
 
-def test_unchanged_today():
-    print("unchanged-today: the registry as it ships - D1 only, nothing unonboarded, nothing staged")
+def test_the_shipped_registry():
+    """`onboard --all` against public/data/registry.json, whatever that file currently holds.
+
+    This case used to assert the shape of the registry - D1 published, nothing unonboarded - and
+    then that the command collected nothing and exited 0. That was true when it was written and
+    false 20 seconds later: #137 staged 261 Division II programs and #142 merged just after it, so
+    the suite asserted a registry that no longer exists and `main` went red (issue #146).
+
+    So the expectation is derived from the file instead. It is derived *here*, with this case's own
+    arithmetic over `programs` and `onboardedDivisions`, and then checked against what the command
+    actually does and says - never by asking batch_refusal() what it thinks and agreeing. A rule
+    that stopped refusing, a selection that stopped filtering on `onboarded`, a refusal that named
+    the wrong division or the wrong count, or a check that moved after rpi is asked for the table,
+    all still fail here; a registry that stages or finishes a division does not.
+    """
     live = live_registry()
-    unonboarded = [p["slug"] for p in live["programs"] if not p.get("onboarded")]
-    ok("the live registry is the shape this case is about (D1 published, nothing unonboarded)",
-       live.get("onboardedDivisions") == ["D1"] and not unonboarded,
-       f"onboardedDivisions={live.get('onboardedDivisions')} unonboarded={len(unonboarded)}")
-    ok("nothing is refused", collegedash.batch_refusal(live) == [], collegedash.batch_refusal(live)[:2])
+    published = live.get("onboardedDivisions") or []
+    todo = [p for p in live["programs"] if not p.get("onboarded")]  # what onboard_all selected before the guard
+    staged = sorted({(p.get("division") or "?") for p in todo} - set(published))
+    too_many = len(todo) > collegedash.MAX_BATCH
+    print(f"the-shipped-registry: {len(live['programs'])} programs, {len(todo)} unonboarded, publishes "
+          f"{published}, staged {', '.join(staged) if staged else 'nothing'}")
+    ok("the registry says which divisions it publishes", bool(published), str(live.get("onboardedDivisions")))
+    refusal = collegedash.batch_refusal(live)
+    ok("refused exactly when this registry gives a reason to refuse",
+       bool(refusal) == (bool(staged) or too_many),
+       f"staged={staged} todo={len(todo)} max={collegedash.MAX_BATCH} refusal={refusal[:1]}")
     r = run_onboard(live, ["--all"])
-    ok("onboard --all still runs", r.code == 0, r.out[-400:])
-    ok("it still asks rpi for the table first", r.rpi == ["history", "current"], r.rpi)
-    ok("it collects nothing, because nothing is unonboarded", r.collectors == [], r.collectors[:3])
-    ok("it still records the run in refresh-state", r.state == ["onboardAll"], r.state)
     ok("no socket was opened", r.connects == 0)
+    if staged or too_many:
+        # the shape main has carried since #137: a division staged in the registry, or a batch
+        # past the limit, means the command refuses and collects nothing at all.
+        text = "\n".join(refusal)
+        ok("exit 2", r.code == 2, r.out[-400:])
+        ok("nothing was collected", r.collectors == [], r.collectors[:3])
+        ok("rpi was not asked either", r.rpi == [], r.rpi)
+        ok("nothing was recorded in refresh-state", r.state == [], r.state)
+        for division in staged or ["(none)"]:
+            ok(f"the refusal names {division}, which this registry stages",
+               division in refusal[0] if staged else True, refusal[:1])
+        ok(f"the refusal counts the batch this registry would have collected ({len(todo)})",
+           f"{len(todo)} programs" in text, text.splitlines()[:2])
+        if too_many:
+            ok(f"and says it is over the {collegedash.MAX_BATCH}-program limit, because it is",
+               f"over the {collegedash.MAX_BATCH}" in text, refusal[:1])
+        ok("and it says what to run instead",
+           "--conference" in text and "onboard <slug>" in text, text)
+    else:
+        # nothing staged and a batch within the limit: exactly the behaviour before the guard
+        ok("onboard --all still runs", r.code == 0, r.out[-400:])
+        ok("it still asks rpi for the table first", r.rpi == ["history", "current"], r.rpi)
+        ok("it collects the programs the code before the guard selected, in that order",
+           r.slugs == [p["slug"] for p in todo], r.slugs[:5])
+        ok("it still records the run in refresh-state", r.state == ["onboardAll"], r.state)
 
 
 def test_unchanged_d1_batch():
@@ -457,7 +500,7 @@ def main(argv=None) -> int:
     ap.add_argument("--case", action="append", help="run only these cases (by function suffix)")
     args = ap.parse_args(argv)
     VERBOSE = args.verbose
-    cases = [test_unchanged_today, test_unchanged_d1_batch, test_staged_division, test_refusal_says_what_next,
+    cases = [test_the_shipped_registry, test_unchanged_d1_batch, test_staged_division, test_refusal_says_what_next,
              test_conference_batch, test_overrides, test_one_shot, test_odd_registries]
     for c in cases:
         if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
