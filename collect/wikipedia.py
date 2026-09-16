@@ -64,9 +64,72 @@ def _infobox(soup: BeautifulSoup) -> dict:
 
 FINISH_RE = re.compile(r"\b(T-?\d+(?:st|nd|rd|th)|\d+(?:st|nd|rd|th))\b")
 NCAA_RE = re.compile(r"NCAA[^,;]*")
-COACH_RE = re.compile(r"^[A-Z][A-Za-z.'’\- ]{3,}$")
+# Quotes allow a nickname ('P. Matthew "Matt" Dillon', lamar). A result letter is a lone W, L or T, not the
+# initial in 'T. Logan Fleck' (south-florida), hence (?!\.) (issue #175).
+COACH_RE = re.compile(r"^[A-Z][A-Za-z.'’\- \"“”]{3,}$")
 BAD_COACH = re.compile(r"NCAA|Round|Final|Champion|Semifinal|Quarterfinal|Conference|Tournament|Runner|Winner|Sweet|Elite|"
-                       r"College Cup|Regional|Did not|—|–|^[WLT]\b", re.I)
+                       r"College Cup|Regional|Did not|—|–|^[WLT]\b(?!\.)", re.I)
+
+
+def _grid(rows) -> list[list[str]]:
+    """The table's cell texts laid out on a grid, one list per <tr>, with rowspans and colspans filled in,
+    so that column i of every row is the same column of the rendered table."""
+    grid: list[list[str]] = []
+    pending: dict[int, tuple[int, str]] = {}  # column -> (rows still covered, text)
+    for tr in rows:
+        out: list[str] = []
+        col = 0
+        cells = list(tr.find_all(["th", "td"]))
+
+        def fill_pending():
+            nonlocal col
+            while col in pending:
+                left, text = pending[col]
+                out.append(text)
+                if left <= 1:
+                    del pending[col]
+                else:
+                    pending[col] = (left - 1, text)
+                col += 1
+
+        for c in cells:
+            fill_pending()
+            text = common.clean(c.get_text(" "))
+            try:
+                rs, cs = int(c.get("rowspan") or 1), int(c.get("colspan") or 1)
+            except ValueError:
+                rs, cs = 1, 1
+            for _ in range(max(cs, 1)):
+                out.append(text)
+                if rs > 1:
+                    pending[col] = (rs - 1, text)
+                col += 1
+        fill_pending()
+        grid.append(out)
+    return grid
+
+
+PLAYER_COLUMN_RE = re.compile(r"\b(?:top\s+(?:points|scorer|scorers|goals|assists)|leading\s+scorer|captains?|players?|mvp)\b", re.I)
+
+
+def _column_labels(rows, data_rows) -> list[str]:
+    """Each column's header text (all header rows above the first season row, joined), lower case."""
+    first = rows.index(data_rows[0]) if data_rows and data_rows[0] in rows else 0
+    if first == 0:
+        return []
+    grid = _grid(rows[:first])
+    width = max((len(r) for r in grid), default=0)
+    return [" ".join(r[i] for r in grid if i < len(r)).lower() for i in range(width)]
+
+
+def _coach_column(rows, data_rows) -> int | None:
+    """The column whose header says coach, read from the header rows above the first season row."""
+    return next((i for i, label in enumerate(_column_labels(rows, data_rows)) if "coach" in label), None)
+
+
+def _player_columns(rows, data_rows) -> set[int]:
+    """Columns whose header names players ('Top points', 'Top scorer'): never a coach."""
+    return {i for i, label in enumerate(_column_labels(rows, data_rows)) if PLAYER_COLUMN_RE.search(label)}
 
 
 def _seasons_table(soup: BeautifulSoup) -> list[dict]:
@@ -100,17 +163,41 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     t, data_rows, rows = best
     header_txt = " ".join(common.clean(r.get_text(" ")).lower() for r in rows[:3])
     split_wlt = "wins" in header_txt and "losses" in header_txt
-    seasons, coach_last = [], None
+    # Issue #175: the coach is read from the column headed "coach" when the table has one. The first
+    # name-like cell is only the fallback for tables without such a header: clemson's coach cell spans
+    # 2011-2025 by rowspan, so those rows carry no coach cell of their own, and the first name-like cell
+    # left in them was the "Top points" player (Makenna Morris, Kendall Bodak, JuJu Harris).
+    # A table with no coach header but with player columns (wake-forest: 'Top points', 'Top scorer') has no
+    # coach to read at all; the fallback only looks outside columns that name players.
+    coach_col = _coach_column(rows, data_rows)
+    player_cols = _player_columns(rows, data_rows) if coach_col is None else set()
+    grid = dict(zip(map(id, rows), _grid(rows))) if (coach_col is not None or player_cols) else {}
+    seasons, coach_last, legacy_last = [], None, None
     for tr in data_rows:
         cells = [common.clean(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
         year_txt = cells[0]
         year = int(YEAR_RE.search(year_txt).group(0))
         rest = cells[1:]
-        coach = next((c for c in rest if COACH_RE.match(c) and not BAD_COACH.search(c) and not RECORD_RE.search(c)), None)
+        name_like = lambda c: bool(COACH_RE.match(c) and not BAD_COACH.search(c) and not RECORD_RE.search(c))
+        # What the first name-like cell was before #175. It no longer sets the coach where a header says which
+        # column is the coach's, but the NCAA and finish lookups below still skip it, exactly as before, so this
+        # change moves only the coach (their own column mapping is a separate fault, reported on the issue).
+        legacy = next((c for c in rest if name_like(c)), None)
+        legacy_last = legacy or legacy_last
+        if coach_col is not None:
+            laid_out = grid.get(id(tr)) or []
+            cell = laid_out[coach_col] if coach_col < len(laid_out) else ""
+            coach = cell if name_like(cell) else None
+        elif player_cols:
+            laid_out = grid.get(id(tr)) or []
+            coach = next((c for i, c in enumerate(laid_out[1:], start=1) if i not in player_cols and name_like(c)), None)
+        else:
+            coach = legacy
         if coach:
             coach_last = coach
         else:
             coach = coach_last
+        legacy_coach = legacy or legacy_last
         rec = crec = None
         if split_wlt:
             nums = [int(c) for c in rest if re.fullmatch(r"\d{1,2}", c)]
@@ -129,12 +216,12 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
                 ncaa = common.clean(m.group(0))
                 break
         if ncaa is None and split_wlt:
-            tail = [c for c in rest if not re.fullmatch(r"\d{1,2}", c) and c not in ("—", "–", "-") and c != coach]
+            tail = [c for c in rest if not re.fullmatch(r"\d{1,2}", c) and c not in ("—", "–", "-") and c != legacy_coach]
             if tail:
                 ncaa = "NCAA " + tail[-1] if "ncaa" not in tail[-1].lower() else tail[-1]
         finish = None
         for c in rest:
-            if c == coach or (ncaa and c == ncaa):
+            if c == legacy_coach or (ncaa and c == ncaa):
                 continue
             m = FINISH_RE.search(c)
             if m and not re.search(r"round|ncaa", c, re.I):
