@@ -665,6 +665,15 @@ def missing_org_rows(registry: dict, directory: dict[str, list[dict]], bulk: lis
 SLUG_DROP_WORDS = {"university", "universities", "the", "of", "at", "in"}
 
 
+def qualifier_place(qualifier: str) -> str:
+    """The slug of a Directory name qualifier that is a place other than a US state, or "" when it is a
+    state ("South Carolina", "SC") or empty. "Providence" -> providence; "Brooklyn" -> brooklyn."""
+    q = common.clean(qualifier or "")
+    if not q or common.state_code(q) in common.US_STATES:
+        return ""
+    return common.slugify(q)
+
+
 def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None = None) -> list[str]:
     """The slug candidates for a Directory row, best first. A slug is a permanent URL, so every rung
     is derived from the source row and nothing is invented (issue #94):
@@ -678,9 +687,16 @@ def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None
       4. the full name plus the state
       5. the short form plus the orgId -- always free, never expected
 
-    When the Directory qualifies the name itself -- "Anderson University (South Carolina)", and all 15
-    D2 and 5 D1 qualifiers are states -- the bare name is not offered at all and the ladder starts at
-    the state. The source is saying the name alone does not identify the school, and the registry
+    When the Directory qualifies the name itself -- "Anderson University (South Carolina)", as all 15
+    D2 and 5 D1 qualifiers and 41 of D3's 43 do -- the bare name is not offered at all and the ladder
+    starts at the state.
+
+    Two D3 qualifiers are cities, not states (issue #139): "Johnson & Wales University (Providence)"
+    and "St. Joseph's University NY (Brooklyn)". A city qualifier names a campus, and campuses of one
+    institution are usually in one state, so the state cannot be what separates them. For those the
+    ladder starts at the qualifier itself -- johnson-wales-providence, st-josephs-ny-brooklyn -- and the
+    state rungs follow. A state rung is never added to a form that already ends in that state, which
+    is what produced st-josephs-ny-ny. Neither change alters the ladder of any D1 or D2 row. The source is saying the name alone does not identify the school, and the registry
     already says so too: `miami-fl` and `miami-oh`. It also keeps the slug stable across divisions,
     which matters because a slug is a permanent URL: Anderson (SC) is D2 and Anderson (IN) is D3, and
     without this the one built first would take `anderson` and the other `anderson-university`.
@@ -692,7 +708,8 @@ def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None
     how every D1 entry built since #107 was named.
     """
     name = common.strip_accents(name or "").replace("'", "").replace("’", "")
-    qualified = bool(re.search(r"\([^)]*\)", name))
+    qualifier = re.search(r"\(([^)]*)\)", name)
+    qualified = bool(qualifier)
     plain = re.sub(r"\s*\([^)]*\)", " ", name).replace("&", "")
     full = common.slugify(plain)
     words = [w for w in re.split(r"[\s,–—-]+", plain) if w]
@@ -700,9 +717,18 @@ def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None
     short = short or full or f"program-{org_id}"
     full = full or short
     st = (state or "").strip().lower()
+    place = qualifier_place(qualifier.group(1)) if qualifier else ""
+    placed = [f"{short}-{place}", f"{full}-{place}"] if place else []
     unqualified = [] if (qualified and st) else [short, full]
-    ladder = [common.slugify(preferred) if preferred else None, *unqualified,
-              f"{short}-{st}" if st else None, f"{full}-{st}" if st else None, f"{short}-{org_id}"]
+
+    def with_state(base: str) -> str | None:
+        # "St. Joseph's University NY" already ends in its state; appending it again gave st-josephs-ny-ny (#139)
+        if not st or base == st or base.endswith(f"-{st}"):
+            return None
+        return f"{base}-{st}"
+
+    ladder = [common.slugify(preferred) if preferred else None, *placed, *unqualified,
+              with_state(short), with_state(full), f"{short}-{org_id}"]
     out: list[str] = []
     for c in ladder:  # in order, without duplicates: "Wheaton College" makes rungs 1 and 2 the same
         if c and c not in out:
