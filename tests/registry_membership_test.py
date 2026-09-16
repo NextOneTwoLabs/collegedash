@@ -39,7 +39,9 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+# Swap-back proof (issue #187): COLLEGEDASH_CODE_ROOT=<an export of origin/main> runs these checks against that code
+CODE_ROOT = os.environ.get("COLLEGEDASH_CODE_ROOT") or ROOT
+sys.path.insert(0, CODE_ROOT)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 from collect import common  # noqa: E402
@@ -440,6 +442,68 @@ def test_staging() -> None:
         ok("nothing about it changed", next(p for p in again["programs"] if p["slug"] == "edward-waters")
            == next(p for p in registry["programs"] if p["slug"] == "edward-waters"),
            str(next(p for p in again["programs"] if p["slug"] == "edward-waters")))
+
+    # --- a collected staged entry is still staged (issue #187)
+    # A staged division's batch is collected (`onboard` sets onboarded: true) long before the division is
+    # published. apply_membership keyed staging on `not onboarded`, so the next build held every collected
+    # entry as division-not-onboarded: 105 D2 programs on 2026-09-16, stopped only by the departure guard.
+    def build_or_refusal(registry, directory, **kw):
+        try:
+            return run(registry, directory, **kw), None
+        except RuntimeError as e:
+            return None, str(e)
+
+    with with_pins():
+        registry, directory = staged_world()
+        collected = prog("edward-waters", 5, "https://ewutigers.com", "FL", division="D2", conference="Independent", org=105)
+        registry["programs"].append(collected)
+        before = copy.deepcopy(collected)
+        rep, refusal = build_or_refusal(registry, directory)
+        # fails on the pre-#187 code: 1 of 3 entries "departing" is over the 5% guard, so the build refuses
+        ok("FIX a build with a collected staged entry is not refused by the departure guard", refusal is None, str(refusal))
+        # a refused build writes nothing (registry["programs"] keeps the entry), so each check below also
+        # requires that the build ran: on the pre-#187 code every one of them fails, none is skipped
+        built = rep is not None
+        after = next((p for p in registry["programs"] if p["slug"] == "edward-waters"), None)
+        # fails if the collected entry is moved to heldPrograms (the guard lifted, that is what the old code did)
+        ok("FIX a collected staged entry (onboarded: true) stays in programs",
+           built and after is not None and not registry["heldPrograms"], str(refusal or registry["heldPrograms"]))
+        ok("FIX ... is reported as staged, not as a departure",
+           built and [s["slug"] for s in rep["staged"]] == ["edward-waters"] and not rep["held"],
+           str(refusal or (rep["staged"], rep["held"])))
+        ok("FIX ... and is left exactly as it was: still onboarded, no hold block", built and after == before, str(refusal or after))
+        # fails if the report's staged count still means "not onboarded": a collected staged entry is staged
+        ok("FIX the report's staged count includes a collected staged entry",
+           built and rep["slugs"]["staged"] == 1 and rep["slugs"]["published"] == 2, str(refusal or rep["slugs"]))
+        # the same with the guard out of the way, so the placement is checked even where the old code refuses
+        registry, directory = staged_world()
+        registry["programs"].append(copy.deepcopy(before))
+        rep = run(registry, directory, max_departure_share=1.0)
+        ok("FIX with no guard in the way, the collected staged entry is still not held",
+           not registry["heldPrograms"] and not rep["held"], str(rep["held"]))
+
+        # an uncollected staged entry behaves exactly as before
+        registry, directory = staged_world()
+        uncollected = prog("edward-waters", 5, "https://ewutigers.com", "FL", division="D2", conference="Independent", org=105,
+                           onboarded=False)
+        uncollected.pop("onboardedAt")
+        registry["programs"].append(uncollected)
+        rep, refusal = build_or_refusal(registry, directory)
+        ok("CONTROL an uncollected staged entry (onboarded: false) stays in programs, reported as staged",
+           refusal is None and [s["slug"] for s in rep["staged"]] == ["edward-waters"] and not registry["heldPrograms"]
+           and rep["slugs"]["staged"] == 1, str(refusal or rep["staged"]))
+
+        # a held program whose division is staged stays held: saint-francis, published in D1, is held as D3,
+        # and staging D3 must not pull it back into programs (it was published, so it is a departure, not staging)
+        registry, directory = staged_world()
+        registry["stagedDivisions"] = ["D2", "D3"]
+        sf = prog("beta", 2, "https://gobeta.com", "PA", division="D3", org=102, conference="Presidents' Athletic Conference",
+                  hold={"reason": "division-not-onboarded", "division": "D3", "orgId": 102, "since": "2026-09-15"})
+        registry["heldPrograms"] = [copy.deepcopy(sf)]
+        rep, refusal = build_or_refusal(registry, directory, today="2027-01-01")
+        ok("CONTROL a held program (saint-francis) stays held when its division is staged, its hold unchanged",
+           refusal is None and registry["heldPrograms"] == [sf] and not any(p["slug"] == "beta" for p in registry["programs"])
+           and not rep["held"] and not rep["staged"] and not rep["returned"], str(refusal or registry["heldPrograms"]))
 
     # --- staging never unpublishes, and never hides a departure
     with with_pins():
