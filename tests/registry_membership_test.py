@@ -780,8 +780,23 @@ def test_committed() -> None:
            all((p["ids"]["scorecardUnitId"] is None) == (p["location"]["city"] is None) ==
                (p["location"]["lat"] is None) == (p["location"]["timezone"] is None) for p in d2),
            str([p["slug"] for p in d2 if (p["ids"]["scorecardUnitId"] is None) != (p["location"]["city"] is None)][:5]))
-        joined = [p for p in d2 if p["ids"]["scorecardUnitId"] is not None]
-        ok("243 of the 261 join a Scorecard row by website domain", len(joined) == 243, str(len(joined)))
+        # Which ids the BUILDER joined is read from its own committed report (scorecard: "exact", a website
+        # domain plus state match), not inferred from the registry, so a hand-filled id cannot pass as one.
+        # Issue #171: an id outside that set may exist only when it was filled by hand from a cited source,
+        # and then location.note must name the Scorecard row and the file it was read from.
+        report = common.read_json(os.path.join(common.DATA_DIR, "registry-build-report.json")) or {}
+        exact = {r["slug"] for r in report.get("newPrograms") or [] if r.get("scorecard") == "exact"}
+        joined = [p for p in d2 if p["slug"] in exact and p["ids"]["scorecardUnitId"] is not None]
+        # fails if the builder's join drifts: an exact join lost, or the report rewritten with a different count
+        ok("243 of the 261 join a Scorecard row by website domain", len(exact) == 243 and len(joined) == 243,
+           f"report exact {len(exact)}, with an id in the registry {len(joined)}")
+        # fails if an id beyond the builder's joins carries no note naming its source
+        hand = [p for p in d2 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in exact]
+        unsourced = [p["slug"] for p in hand
+                     if f"College Scorecard row {p['ids']['scorecardUnitId']}" not in ((p["location"].get("note") or ""))
+                     or "data/scorecard-bulk.json" not in (p["location"].get("note") or "")]
+        ok("every Scorecard id beyond the builder's joins names its source in location.note", not unsourced,
+           f"no sourced note: {unsourced}")
         # fails if a slug the Directory qualifies loses its state, which is what keeps it stable when
         # the other school of the same name arrives with D3
         qualified = sorted(p["slug"] for p in d2 if "(" in p["name"])
