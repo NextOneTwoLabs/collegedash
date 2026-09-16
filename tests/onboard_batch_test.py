@@ -1,5 +1,5 @@
 """The batch form of `onboard` (issue #143): an explicit slug list collects every program, then
-builds and validates ONCE, rather than once per program, and does its collecting through refresh's
+builds ONCE, rather than once per program, and does its collecting through refresh's
 own concurrent path (issue #105) rather than a second one.
 
     python tests/onboard_batch_test.py            # every case
@@ -23,13 +23,19 @@ Covers, in order:
   rebuild-once        onboard_batch collects every program through ONE collect_plan call and builds
                       ONCE at the end, against the same batch that onboard <slug> run once per
                       program (the pre-#143 shape) builds once per program for
+  guard-batch-form    the same guard end to end through cmd_onboard: a list typed out or in a
+                      --slugs-file that includes a staged slug is refused before any socket opens,
+                      the flag must name the division it allows, --all cannot be mixed with a list,
+                      and --all over the same registry is still refused by its own message
   all-unaffected      onboard --all's own guard and behaviour are untouched by any of this (the full
                       suite is tests/onboard_guard_test.py, which this does not duplicate)
-  per-host-politeness a real fetch, through collect.common.fetch and collegedash.collect_plan, from
-                      several programs at once: no two requests to a host they share overlap, and
-                      the gap between them holds - checked from the server's side, which cannot be
-                      fooled - and a control shows the same checker catching a deliberately disabled
-                      gate, so the check is one that can fail
+  per-host-politeness a real fetch, through collect.common.fetch and collegedash.onboard_batch, from
+                      six programs at once against stub hosts on 127.0.0.1: no two requests to one
+                      host overlap, the gap holds on every host, a host's robots.txt Crawl-delay
+                      holds, and every request carries the CollegeDashBot User-Agent - checked twice,
+                      by instrumenting the fetch layer (requests' HTTPAdapter.send, inside the gate)
+                      and from the servers' side. A control disables the gate and shows the same
+                      checkers failing, so they are checks that can fail
 """
 
 from __future__ import annotations
@@ -45,7 +51,6 @@ import tempfile
 import threading
 import time
 import types
-from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -286,6 +291,71 @@ def test_guard_wiring_and_rebuild_once() -> None:
        r.code == 0 and r.plans == [] , (r.code, r.plans))
 
 
+@contextlib.contextmanager
+def no_sockets():
+    """socket.socket.connect replaced by one that records the attempt and refuses it, so "no request
+    was made" is an assertion rather than an assumption (the same device as onboard_guard_test.py)."""
+    import socket
+    attempts: list = []
+    real = socket.socket.connect
+
+    def refuse(self, address):
+        attempts.append(address)
+        raise OSError(f"test: no connection may be opened ({address})")
+
+    socket.socket.connect = refuse
+    try:
+        yield attempts
+    finally:
+        socket.socket.connect = real
+
+
+def test_guard_batch_form() -> None:
+    print("guard-batch-form: the #142 division guard, applied to the batch form through cmd_onboard")
+    mixed = registry([program(f"d1-{i}") for i in range(3)] + [program(f"d2-{i}", "D2", "Peach Belt") for i in range(3)])
+
+    def refused(label: str, argv: list[str], *, needle: str) -> None:
+        with no_sockets() as attempts:
+            r = run_onboard(mixed, argv)
+        ok(f"{label}: exit 2", r.code == 2, (r.code, r.out[-300:]))
+        ok(f"{label}: says why ({needle!r})", needle in r.out, r.out[-300:])
+        ok(f"{label}: nothing asked, collected, built or marked, no socket opened",
+           r.rpi == [] and r.plans == [] and r.builds == 0 and not attempts
+           and not any(p["onboarded"] for p in r.reg["programs"]), (r.rpi, r.plans, r.builds, attempts))
+
+    def allowed(label: str, argv: list[str], expect: list[str]) -> None:
+        r = run_onboard(mixed, argv)
+        ok(f"{label}: runs, one collect_plan and one build over {expect}",
+           r.code == 0 and r.plans == [expect] and r.builds == 1, (r.code, r.plans, r.builds, r.out[-300:]))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        listed = os.path.join(tmp, "slugs.txt")
+        with open(listed, "w", encoding="utf-8") as f:
+            f.write("d1-0\nd1-1\nd2-0\n")
+        refused("a --slugs-file list with one staged D2 slug among published D1 ones",
+                ["--slugs-file", listed], needle="D2, which the site does not publish yet")
+        refused("the same list typed out", ["d1-0", "d1-1", "d2-0"], needle="D2, which the site does not publish yet")
+        refused("the staged slug last on the command line, after a file of D1 slugs",
+                ["d1-0", "d2-1", "--slugs-file", listed], needle="D2")
+        refused("the flag naming the wrong division (D3) for a D2 slug",
+                ["d1-0", "d2-0", "--collect-staged-divisions", "D3"], needle="D2, which the site does not publish yet")
+        refused("the flag naming D2 for a list with no staged slug in it",
+                ["d1-0", "d1-1", "--collect-staged-divisions", "D2"], needle="nothing here is staged")
+        refused("an unknown slug in the list", ["d1-0", "no-such-program"], needle="unknown slug(s) no-such-program")
+        refused("--all combined with an explicit list", ["--all", "d1-0", "d1-1"], needle="two different batches")
+        refused("--all combined with --slugs-file", ["--all", "--slugs-file", listed], needle="two different batches")
+        allowed("the same staged list with --collect-staged-divisions D2",
+                ["--slugs-file", listed, "--collect-staged-divisions", "D2"], ["d1-0", "d1-1", "d2-0"])
+        allowed("a list of published D1 slugs, no flag", ["d1-0", "d1-1", "d1-2"], ["d1-0", "d1-1", "d1-2"])
+
+    # --all refuses the same batches it did before: this registry's --all batch spans D2
+    with no_sockets() as attempts:
+        r = run_onboard(mixed, ["--all"])
+    ok("--all over the same registry is still refused for D2, by its own message, exit 2",
+       r.code == 2 and "onboard --all refuses this batch" in r.out and "D2" in r.out and not attempts,
+       r.out[-300:])
+
+
 def test_all_unaffected() -> None:
     print("all-unaffected: onboard --all's guard is not touched by any of this "
           "(full coverage: tests/onboard_guard_test.py)")
@@ -305,11 +375,13 @@ JITTER = 0.05
 
 
 class Stub:
-    """One host: a threaded HTTP server on its own port that records (path, arrived, sent)."""
+    """One host: a threaded HTTP server on its own port that records (path, arrived, sent), and the
+    User-Agent of every request it was sent."""
 
     def __init__(self, name: str):
         self.name = name
         self.log: list[tuple[str, float, float]] = []
+        self.agents: list[str] = []
         self.lock = threading.Lock()
         stub = self
 
@@ -328,6 +400,7 @@ class Stub:
                 sent = time.monotonic()
                 with stub.lock:
                     stub.log.append((self.path, arrived, sent))
+                    stub.agents.append(self.headers.get("User-Agent") or "")
 
         self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), H)
         self.server.daemon_threads = True
@@ -343,27 +416,68 @@ class Stub:
         self.server.server_close()
 
 
-def violations(stub: Stub, min_gap: float) -> list[str]:
-    rows = sorted(stub.log, key=lambda r: r[1])
+def violations(rows: "list[tuple[str, float, float]]", min_gap: float) -> list[str]:
+    """(label, start, end) per request to one host -> every overlap and every start-to-start gap
+    shorter than min_gap. Used for the server's view (arrived, answered) and the client's (the
+    transport's send began, the response was read)."""
+    rows = sorted(rows, key=lambda r: r[1])
     bad = []
     for (p1, a1, s1), (p2, a2, s2) in zip(rows, rows[1:]):
         if a2 < s1:
-            bad.append(f"overlap: {p2} arrived before {p1} was answered")
+            bad.append(f"overlap: {p2} started before {p1} finished")
         if a2 - a1 < min_gap - 0.03:
-            bad.append(f"gap: {p2} arrived {a2 - a1:.3f}s after {p1} (< {min_gap}s)")
+            bad.append(f"gap: {p2} started {a2 - a1:.3f}s after {p1} (< {min_gap}s)")
     return bad
 
 
 @contextlib.contextmanager
-def fresh_state(tmp: str):
-    """Politeness/gate state reset to the suite's short timings, and refresh-state writes (both the
-    per-program ones from record_outcomes and onboard_batch's own summary) redirected to a scratch
-    file rather than public/archive/refresh-state.json."""
-    saved = (common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.REFRESH_STATE_PATH)
+def fetch_layer_recorder():
+    """Instrument the fetch layer itself: every request collect.common's polite transport hands to
+    requests' HTTPAdapter.send - the first request and every redirect hop, inside the host gate -
+    is recorded as {host: [(path, started, finished)]} with the User-Agent it carried. This is the
+    client's own view, alongside the stub servers' view of the same requests."""
+    import requests.adapters
+    from urllib.parse import urlsplit
+    real_send = requests.adapters.HTTPAdapter.send
+    seen: dict[str, list[tuple[str, float, float]]] = {}
+    agents: dict[str, list[str]] = {}
+    lock = threading.Lock()
+
+    def send(self, request, **kw):
+        started = time.monotonic()
+        try:
+            resp = real_send(self, request, **kw)
+            if not kw.get("stream"):
+                resp.content
+            return resp
+        finally:
+            finished = time.monotonic()
+            parts = urlsplit(request.url)
+            with lock:
+                seen.setdefault(parts.netloc.lower(), []).append((parts.path, started, finished))
+                agents.setdefault(parts.netloc.lower(), []).append(request.headers.get("User-Agent") or "")
+
+    requests.adapters.HTTPAdapter.send = send
+    try:
+        yield seen, agents
+    finally:
+        requests.adapters.HTTPAdapter.send = real_send
+
+
+@contextlib.contextmanager
+def fresh_state(tmp: str, reg: dict):
+    """Politeness/gate state reset to the suite's short timings, and every file onboard_batch reads
+    or writes pointed at scratch: refresh-state (the per-program writes from record_outcomes and
+    onboard_batch's own summary) rather than public/archive/refresh-state.json, and a registry file
+    holding `reg` rather than public/data/registry.json, which onboard_batch re-reads for its build."""
+    saved = (common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.REFRESH_STATE_PATH,
+             common.REGISTRY_PATH)
     common.CACHE_DIR = tempfile.mkdtemp(dir=tmp)
     common.MIN_GAP_SECONDS, common.JITTER_SECONDS = GAP, JITTER
     common.REFRESH_STATE_PATH = os.path.join(tempfile.mkdtemp(dir=tmp), "refresh-state.json")
     common.write_json(common.REFRESH_STATE_PATH, {})
+    common.REGISTRY_PATH = os.path.join(tempfile.mkdtemp(dir=tmp), "registry.json")
+    common.write_json(common.REGISTRY_PATH, reg)
     common._gates.clear()
     common._last_request_at.clear()
     common._robots.clear()
@@ -372,7 +486,8 @@ def fresh_state(tmp: str):
     try:
         yield
     finally:
-        common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.REFRESH_STATE_PATH = saved
+        (common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.REFRESH_STATE_PATH,
+         common.REGISTRY_PATH) = saved
 
 
 @contextlib.contextmanager
@@ -397,10 +512,12 @@ MODULES = {"scorecard": "scorecard", "climate": "climate", "wikipedia": "wikiped
 
 
 @contextlib.contextmanager
-def fetching_collectors(shared: Stub, own_of: dict):
+def fetching_collectors(shared: Stub, own_of: dict, crawl: "Stub | None" = None):
     """Every collector for a program fetches the shared host once and its own host once - a program
     from a real onboard batch touches several hosts, some of them shared with every other program
-    (SoccerWire, TopDrawerSoccer, Wikipedia), which is exactly the case this proof is about."""
+    (SoccerWire, TopDrawerSoccer, Wikipedia), which is exactly the case this proof is about. With
+    `crawl`, the news collector also fetches that host once per program: a shared host whose
+    robots.txt asks for a Crawl-delay longer than the default gap."""
     import importlib
     mods = {name: importlib.import_module(f"collect.{m}") for name, m in MODULES.items()}
     real = {name: mod.collect for name, mod in mods.items()}
@@ -410,6 +527,8 @@ def fetching_collectors(shared: Stub, own_of: dict):
             common.fetch(shared.url(f"/{name}/{program['slug']}"), max_age_hours=None)
             own = own_of[program["slug"]]
             common.fetch(own.url(f"/{name}"), max_age_hours=None)
+            if crawl is not None and name == "news":
+                common.fetch(crawl.url(f"/news/{program['slug']}"), max_age_hours=None)
         return collect
 
     for name, mod in mods.items():
@@ -439,43 +558,92 @@ def build_stubbed():
             sys.modules["build"] = saved
 
 
+CRAWL_DELAY = 1  # robotparser only accepts whole seconds; must exceed GAP to take effect
+
+
 def test_per_host_politeness() -> None:
-    print("per-host-politeness: an onboard batch never sends a shared host two requests at once, "
-          "and the gap holds")
+    print("per-host-politeness: an onboard batch sends every host one request at a time, at the gap "
+          "and the Crawl-delay, with the CollegeDashBot User-Agent - seen by the fetch layer and by the hosts")
     n = 6
     shared = Stub("shared")
+    crawl = Stub("crawl-delay")
     own = {f"p{i}": Stub(f"own{i}") for i in range(n)}
     reg = registry([program(f"p{i}") for i in range(n)], onboarded_divisions=("D1",))
     for p in reg["programs"]:
         p["onboarded"] = True  # already onboarded: this proof is about the fetch layer, not the guard
+    slugs = [f"p{i}" for i in range(n)]
+
+    def clear_logs():
+        for s in [shared, crawl, *own.values()]:
+            s.log.clear()
+            s.agents.clear()
+
     try:
         with tempfile.TemporaryDirectory() as tmp:
-            with fresh_state(tmp), fetching_collectors(shared, own), build_stubbed():
-                code = collegedash.onboard_batch(copy.deepcopy(reg), [f"p{i}" for i in range(n)],
-                                                 bios=False, workers=6)
+            with fresh_state(tmp, reg), fetching_collectors(shared, own, crawl), build_stubbed(), \
+                    fetch_layer_recorder() as (seen, agents):
+                common.set_robots_txt(crawl.host, f"User-agent: *\nCrawl-delay: {CRAWL_DELAY}\n")
+                code = collegedash.onboard_batch(copy.deepcopy(reg), slugs, bios=False, workers=6)
             ok("the batch ran clean", code == 0, code)
+            # each program's own-host requests span a window; side by side, those windows overlap
+            windows = sorted((min(r[1] for r in seen[s.host]), max(r[2] for r in seen[s.host]))
+                             for s in own.values() if seen.get(s.host))
+            overlapping = sum(1 for (a1, e1), (a2, e2) in zip(windows, windows[1:]) if a2 < e1)
+            ok(f"the programs really were collected side by side (consecutive own-host windows overlapping: "
+               f"{overlapping} of {len(windows) - 1}), so no-overlap below is not true merely by being serial",
+               len(windows) == n and overlapping >= 1, windows)
             ok(f"the shared host saw one request per program per collector ({n} programs x "
                f"{len(collegedash.COLLECTORS)} collectors)",
                len(shared.log) == n * len(collegedash.COLLECTORS), len(shared.log))
-            bad = violations(shared, GAP)
-            ok(f"the shared host: no overlap, arrivals >= {GAP}s apart, under 6-way concurrency",
+            ok(f"the Crawl-delay host saw one request per program ({n})", len(crawl.log) == n, len(crawl.log))
+
+            # the hosts' view
+            bad = violations(shared.log, GAP)
+            ok(f"server side, shared host: no overlap, arrivals >= {GAP}s apart, under 6-way concurrency",
+               not bad, "; ".join(bad[:4]))
+            bad = violations(crawl.log, CRAWL_DELAY)
+            ok(f"server side, Crawl-delay host: no overlap, arrivals >= its Crawl-delay {CRAWL_DELAY}s apart",
                not bad, "; ".join(bad[:4]))
             for slug, s in own.items():
-                bad = violations(s, GAP)
-                ok(f"{slug}'s own host: no overlap either ({len(s.log)} requests)", not bad, "; ".join(bad[:2]))
+                bad = violations(s.log, GAP)
+                ok(f"server side, {slug}'s own host: no overlap, gap holds ({len(s.log)} requests)",
+                   not bad, "; ".join(bad[:2]))
+
+            # the fetch layer's view of the same requests
+            ok("fetch layer recorded every request the hosts received",
+               sum(len(v) for v in seen.values()) == sum(len(s.log) for s in [shared, crawl, *own.values()]),
+               {h: len(v) for h, v in seen.items()})
+            bad = violations(seen.get(shared.host, []), GAP)
+            ok(f"fetch layer, shared host: no two sends in flight at once, starts >= {GAP}s apart",
+               seen.get(shared.host) and not bad, "; ".join(bad[:4]))
+            bad = violations(seen.get(crawl.host, []), CRAWL_DELAY)
+            ok(f"fetch layer, Crawl-delay host: starts >= {CRAWL_DELAY}s apart",
+               seen.get(crawl.host) and not bad, "; ".join(bad[:4]))
+            bad = [f"{s.name}: {b}" for s in own.values() for b in violations(seen.get(s.host, []), GAP)]
+            ok("fetch layer, every program's own host: no overlap, gap holds", not bad, "; ".join(bad[:4]))
+
+            # the User-Agent, as sent and as received
+            sent_agents = {a for v in agents.values() for a in v}
+            got_agents = {a for s in [shared, crawl, *own.values()] for a in s.agents}
+            ok("every request carried collect.common's USER_AGENT, as sent and as received",
+               sent_agents == got_agents == {common.USER_AGENT}, (sent_agents, got_agents))
+            ok("... and that User-Agent is the CollegeDashBot one",
+               common.USER_AGENT.startswith("CollegeDashBot/"), common.USER_AGENT)
 
             # control: the exact same load, with the gate disabled - proof the checker above is one
             # that can fail, not a tautology that always passes
-            shared.log.clear()
-            for s in own.values():
-                s.log.clear()
-            with fresh_state(tmp), gate_disabled(), fetching_collectors(shared, own), build_stubbed():
-                collegedash.onboard_batch(copy.deepcopy(reg), [f"p{i}" for i in range(n)], bios=False, workers=6)
+            clear_logs()
+            with fresh_state(tmp, reg), gate_disabled(), fetching_collectors(shared, own, crawl), build_stubbed(), \
+                    fetch_layer_recorder() as (seen, agents):
+                common.set_robots_txt(crawl.host, f"User-agent: *\nCrawl-delay: {CRAWL_DELAY}\n")
+                collegedash.onboard_batch(copy.deepcopy(reg), slugs, bios=False, workers=6)
             ok("CONTROL: with the gate disabled, the same checker reports violations on the shared host",
-               len(violations(shared, GAP)) > 0, f"{len(violations(shared, GAP))} found")
+               len(violations(shared.log, GAP)) > 0 and len(violations(seen.get(shared.host, []), GAP)) > 0,
+               f"{len(violations(shared.log, GAP))} found")
+            ok("CONTROL: ... and on the Crawl-delay host",
+               len(violations(crawl.log, CRAWL_DELAY)) > 0, f"{len(violations(crawl.log, CRAWL_DELAY))} found")
     finally:
-        shared.close()
-        for s in own.values():
+        for s in [shared, crawl, *own.values()]:
             s.close()
 
 
@@ -486,7 +654,7 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     VERBOSE = args.verbose
     for case in (test_explicit_slugs, test_guard_reuse, test_guard_wiring_and_rebuild_once,
-                test_all_unaffected, test_per_host_politeness):
+                 test_guard_batch_form, test_all_unaffected, test_per_host_politeness):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
