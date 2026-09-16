@@ -5,8 +5,10 @@ name: Refresh program data
 #
 #   daily 11:00 UTC  -> commitments (TDS + SoccerWire), news, NCAA RPI
 #   Aug-Dec daily    -> also rosters/schedules (no bios), so results land the morning after a game
-#                       (about 2,800 extra requests and +60-90 min per run; the runner has no HTTP cache)
-#   Mondays          -> also rosters/schedules (no bios), Wikipedia and ID camps (camp pages are
+#                       (about 2,800 extra requests and +60-90 min per run; the runner has no HTTP cache).
+#                       The head coach's stored bio year is kept, not fetched (issue #168)
+#   Mondays          -> also rosters/schedules (no player bios, but each head coach's bio page: one request
+#                       per program, --coach-bios, issue #168), Wikipedia and ID camps (camp pages are
 #                       seasonal; one request per program plus one per camp site, honouring
 #                       robots.txt); school facts and climate only on a manual "full" run
 #                       (Scorecard falls back to DEMO_KEY, 30 requests/hour, until the
@@ -19,7 +21,7 @@ name: Refresh program data
 #                       plus rpi). Use it to republish one collector's data after a parser fix -
 #                       e.g. only=camps is 350 collector runs (one roster page plus the camp page
 #                       it finds) rather than the full run's ~1,400 runs and ~2,800 requests.
-#   full=true        -> every collector
+#   full=true        -> every collector, with head-coach bio pages but no player bio pages
 #   otherwise the schedule branches above.
 # Whatever the mode, the commit step rebuilds public/data from the stored sources after it rebases
 # onto the current main and before it pushes, so a run always publishes data built by the code it is
@@ -47,7 +49,7 @@ on:
   workflow_dispatch:
     inputs:
       full:
-        description: "Run every collector (rosters, schedules, bios, school facts, climate, Wikipedia)"
+        description: "Run every collector (rosters, schedules, head-coach bios, school facts, climate, Wikipedia); player bios are not fetched"
         type: boolean
         default: false
       only:
@@ -144,14 +146,15 @@ jobs:
           set +e
           if [ -n "$ONLY_INPUT" ]; then
             # a hand-picked collector list (validated above); --mode is only the label recorded
-            # with the run summary, so `only` + `full` means "this list, logged as a full run"
+            # with the run summary, so `only` + `full` means "this list, logged as a full run".
+            # No --coach-bios: an athletics re-run keeps each stored head-coach bio (issue #168)
             mode=manual
             if [ "$FULL_INPUT" = "true" ]; then mode=full; fi
             python collegedash.py refresh --only "$ONLY_INPUT" --no-bios --mode "$mode"
           elif [ "$FULL_INPUT" = "true" ]; then
-            python collegedash.py refresh --no-bios --mode full
+            python collegedash.py refresh --no-bios --coach-bios --mode full
           elif [ "$(date -u +%u)" = "1" ]; then
-            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --mode weekly
+            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --coach-bios --mode weekly
           elif [ "$(date -u +%m)" -ge 8 ]; then   # Aug-Dec, in season: schedules/results daily
             python collegedash.py refresh --only athletics,tds,soccerwire,news,rpi --no-bios --mode daily
           else

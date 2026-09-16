@@ -3,6 +3,7 @@
 CollegeDash command line.
 
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
+                                                        (--no-bios skips player bios; the head coach's bio is still fetched)
   python collegedash.py onboard <slug> <slug> ...       or --slugs-file f: batch form (issue #143) - every
                     [--slugs-file f] [--workers 16]      collector for every program, THEN one build;
                  [--collect-staged-divisions D2]         --workers side by side, same politeness as refresh;
@@ -13,6 +14,7 @@ CollegeDash command line.
                          [--collect-staged-divisions D2] does not publish yet, or one over --max-batch
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
+                           [--no-bios] [--coach-bios]    --coach-bios: head-coach bio pages even with --no-bios
                                 [--workers 16]          programs collected side by side; per-host politeness holds
                                 [--fail-threshold 0.05] exit 1 only when more than this share of runs fail; 2 = crash
   python collegedash.py registry build|tidy|fix-wiki|colors [--apply] [--slug a,b]
@@ -72,7 +74,7 @@ def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, d
             m.collect(program, registry)
         elif name == "athletics":
             from collect import athletics_site as m
-            m.collect(program, registry, bios=kw.get("bios", True))
+            m.collect(program, registry, bios=kw.get("bios", True), coach_bios=kw.get("coach_bios"))
         elif name == "tds":
             from collect import commitments_tds as m
             m.collect(program, registry)
@@ -227,7 +229,8 @@ def cmd_onboard(args):
     if not program.get("onboarded"):
         reg = _mark_onboarded(slug)
         program = common.get_program(slug, reg)
-    results = [run_collector(c, program, reg, bios=not args.no_bios) for c in COLLECTORS]  # no short-circuit
+    # the head coach's bio is fetched on onboard even with --no-bios (issue #168): one request, a host already visited
+    results = [run_collector(c, program, reg, bios=not args.no_bios, coach_bios=True) for c in COLLECTORS]  # no short-circuit
     ok = all(results)
     import build
     build.build(reg)
@@ -340,7 +343,7 @@ def onboard_all(reg, *, bios: bool, limit: int | None, conference: str | None = 
     failures = {}
     for i, program in enumerate(todo, 1):
         common.log(f"===== [{i}/{len(todo)}] {program['slug']} ({program['ids'].get('ncaaName')})")
-        results = {c: run_collector(c, program, reg, bios=bios) for c in COLLECTORS}
+        results = {c: run_collector(c, program, reg, bios=bios, coach_bios=True) for c in COLLECTORS}
         failed = [c for c, ok in results.items() if not ok]
         if failed:
             failures[program["slug"]] = failed
@@ -425,7 +428,7 @@ def onboard_batch(reg, slugs: list[str], *, bios: bool, workers: int) -> int:
             program = common.get_program(slug, reg)
         programs.append(program)
     plan = [(p, list(COLLECTORS)) for p in programs]
-    results = collect_plan(plan, reg, bios=bios, workers=workers)
+    results = collect_plan(plan, reg, bios=bios, coach_bios=True, workers=workers)
     failures: dict[str, list[str]] = {}
     for r in results:
         if r["outcome"] == "failed":
@@ -478,7 +481,10 @@ def cmd_refresh(args):
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
             results.append({"program": "-", "collector": "rpi", "outcome": "failed", "error": str(e)[:300]})
-    results += collect_plan(plan, reg, bios=not args.no_bios, workers=args.workers)
+    # --coach-bios fetches the head coach's bio with player bios off (the weekly and full runs, issue #168);
+    # without either, a run with player bios fetches it too, and a --no-bios run keeps the stored one
+    results += collect_plan(plan, reg, bios=not args.no_bios, coach_bios=args.coach_bios or not args.no_bios,
+                            workers=args.workers)
     if not plan and not run_rpi:
         common.log("nothing to refresh")
         return 0
@@ -487,7 +493,8 @@ def cmd_refresh(args):
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
 
 
-def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, workers: int) -> list[dict]:
+def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, workers: int,
+                 coach_bios: bool | None = None) -> list[dict]:
     """Run every (program, collectors) pair of the plan and return the outcomes in plan order.
 
     workers <= 1 walks the programs one at a time, as before. With more, up to `workers` programs are
@@ -509,7 +516,7 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
         results, entries = [], {}
         try:
             for c in collectors:
-                r, entry = collect_one(c, program, reg, bios=bios)
+                r, entry = collect_one(c, program, reg, bios=bios, coach_bios=coach_bios)
                 results.append(r)
                 if entry is not None:
                     entries[f"{program['slug']}.{c}"] = entry
@@ -682,6 +689,9 @@ def main(argv=None):
                         "and does not change with this number (issue #143, #105)")
     p.set_defaults(fn=cmd_onboard)
     p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true")
+    p.add_argument("--coach-bios", action="store_true",
+                   help="fetch each head coach's bio page (one request per program) even with --no-bios; without it a "
+                        "--no-bios run keeps the stored head-coach bio (issue #168)")
     p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")
     p.add_argument("--dry-run", action="store_true", help="print what would run, run nothing")
     p.add_argument("--fail-threshold", type=float, default=float(os.environ.get("COLLEGEDASH_FAIL_THRESHOLD", "0.05")),

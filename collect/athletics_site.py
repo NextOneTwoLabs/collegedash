@@ -80,7 +80,7 @@ def _persist_platform(program: dict, platform: str) -> None:
     common.log(f"athletics: detected platform '{platform}' for {slug}")
 
 
-def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool = True) -> dict:
+def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool = True, coach_bios: bool | None = None) -> dict:
     slug = program["slug"]
     base = program["athletics"].get("baseUrl")
     if not base:
@@ -139,7 +139,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
             except common.FetchError as e:
                 common.log(f"  bio failed for {p['name']}: {e}")
                 p["bio"], p["club"] = {}, ""
-    head_coach_bio = _head_coach_bio(staff, program) if bios else None
+    # The head coach's bio is its own switch (issue #168): `onboard` and the weekly/full refresh fetch it even with
+    # player bios off; coach_bios=None follows `bios`. A run that does not fetch it keeps the stored one.
+    head_coach_bio = _coach_bio_for_run(slug, staff, program, bios if coach_bios is None else coach_bios)
 
     history = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
@@ -183,6 +185,27 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     data = common.unwrap_links(data)
     common.save_source(slug, NAME, data, url=u["roster"], collector=NAME, extra=extra)
     return data
+
+
+def _coach_bio_for_run(slug: str, staff: list[dict], program: dict, fetch: bool) -> dict | None:
+    """headCoachBio for this run's athletics source (issue #168).
+
+    fetch=False (the daily refresh): the stored headCoachBio is carried forward unchanged. The daily run rewrites
+    athletics.json, and writing null here would erase every bio year until the next weekly run. A stored bio that
+    belongs to a coach who has since left is harmless: build.head_coach_first_season uses a bio only when its
+    name is the current head coach's (same_person), and otherwise falls back to the Wikipedia rule.
+
+    fetch=True: one request for the head coach's bio page. If that request fails and a bio is already stored, the
+    stored one is kept rather than replaced by an attempt with no year - a transient error on a Monday should not
+    take a published year down for a week. With nothing stored, the failed attempt is recorded as before."""
+    previous = ((common.load_source(slug, NAME) or {}).get("data") or {}).get("headCoachBio")
+    if not fetch:
+        return previous
+    fetched = _head_coach_bio(staff, program)
+    if fetched is not None and fetched.get("error") and previous and not previous.get("error"):
+        common.log(f"  head coach bio: fetch failed; keeping the stored bio for {previous.get('name')}")
+        return previous
+    return fetched
 
 
 def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
