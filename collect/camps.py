@@ -128,13 +128,17 @@ def _http_url(href: str | None, base_url: str | None = None) -> str | None:
     """`href` resolved against `base_url`, or None unless the result is an http(s) URL. Every URL the
     collector emits passes through here: camp pages are third-party content, so a `javascript:` or
     `data:` href (with or without leading whitespace or odd casing) must never reach an href in the
-    UI. Protocol-relative `//host/x` takes the page's scheme."""
+    UI. Protocol-relative `//host/x` takes the page's scheme. An Outlook Safe Links wrapper becomes
+    the URL it wraps, or None when it wraps nothing usable (issue #160: clemson's camp page carried
+    three, each with a staff mailbox in its `data` parameter)."""
     href = (href or "").strip()
     if not href or SKIP_HREF_RE.match(href):
         return None
     try:
-        url = urljoin(base_url, href) if base_url else href
+        url = common.unwrap_link(urljoin(base_url, href) if base_url else href)
     except ValueError:
+        return None
+    if url is None:
         return None
     return HTTP_URL_RE.sub(lambda m: m.group(0).lower(), url) if HTTP_URL_RE.match(url) else None
 
@@ -1410,6 +1414,7 @@ def collect(program: dict, registry: dict) -> dict:
     if data["newsCamps"]:
         common.log(f"camps: {len(data['newsCamps'])} camp entries from {data['newsScanned']} archived news items")
     _sanitize_urls(data)
+    data = common.unwrap_links(data)  # any wrapper outside the URL fields _sanitize_urls knows (#160)
     common.save_source(slug, NAME, data, url=_http_url(source_url) or roster_url, collector=NAME)
     return data
 

@@ -176,6 +176,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     extra = {"scheduleUrl": u["schedule"], "fromCache": meta.get("fromCache", False)}
     if staff_url:
         extra["staffUrl"] = staff_url  # the staff did not come from sourceUrl
+    # Outlook Safe Links wrappers become the links they wrap, wherever they sit: schedule links,
+    # bios, staff (issue #160). A wrapper that wraps nothing usable is dropped, never stored.
+    data = common.unwrap_links(data)
     common.save_source(slug, NAME, data, url=u["roster"], collector=NAME, extra=extra)
     return data
 

@@ -24,6 +24,7 @@ import threading
 import time
 import unicodedata
 from urllib import robotparser
+from urllib.parse import parse_qsl, urlsplit
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -784,6 +785,88 @@ def update_refresh_state_many(entries: dict[str, dict]) -> None:
 
 def load_refresh_state() -> dict:
     return read_json(REFRESH_STATE_PATH, {}) or {}
+
+
+# ---------- link-rewriting wrappers (issue #160) ----------
+# Some schools paste links into their CMS from Outlook, which has rewritten them into Microsoft
+# Defender "Safe Links": https://<region>.safelinks.protection.outlook.com/?url=<real URL>&data=...
+# The real URL is the percent-encoded `url` query parameter (Microsoft's documented format); `data`
+# carries the mailbox that received the message. Stored as-is, such a link sends visitors through
+# Microsoft's redirector and publishes a staff address. Measured over every stored source on main
+# (2,948 files): 17 wrapped URLs, all Safe Links (13 california-state-los-angeles schedule "watch"
+# links, 3 clemson camp registerUrls, 1 old-dominion "live stats" link), and no Proofpoint
+# urldefense or Check Point protect.checkpoint wrapper - so those are not unwrapped here.
+# office365.us is the same service for US government tenants.
+SAFELINKS_HOST_RE = re.compile(r"(?:^|\.)safelinks\.protection\.(?:outlook\.com|office365\.us)$", re.I)
+_SAFELINKS_IN_TEXT_RE = re.compile(r"https?://[A-Za-z0-9.-]*safelinks\.protection\.(?:outlook\.com|office365\.us)"
+                                   r"(?::\d+)?/[^\s\"'<>]*", re.I)
+_DROP = object()
+
+
+def is_wrapped_link(url) -> bool:
+    """True when `url` is a Safe Links wrapper (whatever it decodes to)."""
+    if not isinstance(url, str):
+        return False
+    try:
+        host = urlsplit(url.strip()).hostname or ""
+    except ValueError:
+        return False
+    return bool(SAFELINKS_HOST_RE.search(host))
+
+
+def unwrap_link(url: str | None) -> str | None:
+    """The real target of a Safe Links wrapper; any other value comes back unchanged.
+
+    A wrapper whose `url` parameter is missing, or does not decode to an absolute http(s) URL, gives
+    None: the caller stores no link rather than the wrapper. A wrapper around a wrapper is unwrapped
+    all the way down."""
+    for _ in range(5):
+        if not is_wrapped_link(url):
+            return url
+        try:
+            targets = [v for k, v in parse_qsl(urlsplit(url.strip()).query, keep_blank_values=True) if k.lower() == "url"]
+            target = targets[0].strip() if targets else ""
+            parts = urlsplit(target)
+        except ValueError:
+            return None
+        if parts.scheme.lower() not in ("http", "https") or not parts.hostname:
+            return None
+        url = target
+    return None  # still wrapped after five layers: not a link worth storing
+
+
+def unwrap_links(obj):
+    """A copy of `obj` (JSON-shaped) with every Safe Links wrapper replaced by its target.
+
+    A string that is a wrapper becomes its target; one that does not decode is removed from a
+    `links` mapping (label -> URL, where a null would render as an empty link) and from lists, and
+    becomes None anywhere else. A wrapper inside longer text (a bio paragraph) is replaced in place by
+    its target, or removed from the text. Everything else is returned as it was."""
+    out = _unwrap(obj, None)
+    return None if out is _DROP else out
+
+
+def _unwrap(v, key):
+    if isinstance(v, str):
+        if is_wrapped_link(v) and not any(c.isspace() for c in v.strip()):
+            target = unwrap_link(v)
+            return _DROP if target is None else target
+        if "safelinks" in v.lower():
+            return _SAFELINKS_IN_TEXT_RE.sub(lambda m: unwrap_link(m.group(0)) or "", v)
+        return v
+    if isinstance(v, dict):
+        out = {}
+        for k, x in v.items():
+            nx = _unwrap(x, k)
+            if nx is _DROP:
+                if key == "links":
+                    continue
+                nx = None
+            out[k] = nx
+        return out
+    if isinstance(v, list):
+        return [nx for nx in (_unwrap(x, key) for x in v) if nx is not _DROP]
+    return v
 
 
 # ---------- text helpers ----------
