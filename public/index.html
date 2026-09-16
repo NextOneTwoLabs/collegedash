@@ -856,7 +856,9 @@ async function loadIndex() {
   const live = new Set(S.index.divisions);
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
   getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
-  getJSON('api/status').then(r => { S.local = !!r.local; if (r.ask === true && !S.ask) askSwitchedOn(); }).catch(() => { });
+  getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
+  // Ask is owner-only (#179): only Cloudflare Access's /api/ask* app can say so. redirect:'manual' means a visitor's probe ends as an unfollowed redirect to the login page - never loaded, and read as off like any error.
+  getJSON('api/ask/status', { redirect: 'manual' }).then(r => { if (r.ask === true && !S.ask) askSwitchedOn(); }).catch(() => { });
   return S.index;
 }
 async function loadProfile(slug) {
