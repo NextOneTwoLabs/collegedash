@@ -660,8 +660,9 @@ def test_committed() -> None:
     ok("slugs are unique across published and held", len(slugs) == len(set(slugs)))
     orgs = [p["ids"].get("ncaaOrgId") for p in everything if p["ids"].get("ncaaOrgId") is not None]
     ok("orgIds are unique", len(orgs) == len(set(orgs)))
-    # `programs` holds the published entries and the staged ones (onboarded: false, division staged).
-    # Anything else in there is a program the site publishes from a division it does not publish.
+    # `programs` holds the published entries and the staged ones (division staged; onboarded may be
+    # true or false, see below). Anything else in there is a program the site publishes from a
+    # division it does not publish.
     import build  # noqa: E402 - only here, so the rest of this suite does not need build's imports
     published = build.published_programs(reg)
     staged_divs = rb.staged_divisions(reg)
@@ -842,6 +843,42 @@ def _quiet(fn, *a):
         return fn(*a)
 
 
+def test_staged_division_count_anchor() -> None:
+    print("staged anchor: build.STAGED_DIVISION_COUNTS must cover every division in stagedDivisions (issue #149)")
+    import build  # noqa: E402 - local, matching test_committed's own import of build
+    import contextlib, io
+
+    def run_check(reg):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            result = build.check_staged_registry(reg)
+        return result, buf.getvalue()
+
+    # D3 is staged, but build.STAGED_DIVISION_COUNTS names only D2 - the exact gap issue #149 is
+    # about: a division staged later and never added to the dict must fail loudly, not pass with
+    # no count anchor at all.
+    reg = {"onboardedDivisions": ["D1"], "stagedDivisions": ["D3"],
+           "programs": [prog("gamma-d3", 900, "https://gogamma.com", "OH", division="D3", conference="Old Conf", org=900)],
+           "heldPrograms": []}
+    result, out = run_check(reg)
+    # fails if a staged division with no entry in STAGED_DIVISION_COUNTS passes silently
+    ok("a staged division missing from STAGED_DIVISION_COUNTS fails the check", not result, out)
+    ok("names the division, what to do, and when to do it",
+       "STAGED D3" in out and "STAGED_DIVISION_COUNTS" in out and "same PR that stages it" in out, out)
+
+    # control: naming D3 with its real count removes the failure, so the case above is really
+    # testing the anchor and not some unrelated break in the fixture.
+    saved = dict(build.STAGED_DIVISION_COUNTS)
+    try:
+        build.STAGED_DIVISION_COUNTS.clear()
+        build.STAGED_DIVISION_COUNTS.update({"D3": 1})
+        result2, out2 = run_check(reg)
+        ok("control: naming D3 with its actual count passes", result2, out2)
+    finally:
+        build.STAGED_DIVISION_COUNTS.clear()
+        build.STAGED_DIVISION_COUNTS.update(saved)
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -856,6 +893,7 @@ def main(argv=None) -> int:
     test_new_entry()
     test_timezones()
     test_committed()
+    test_staged_division_count_anchor()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
     if FAILS:
         print("FAILED: " + ", ".join(FAILS))

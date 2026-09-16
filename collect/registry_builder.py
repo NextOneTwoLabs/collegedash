@@ -31,10 +31,14 @@ Membership policy (the owner's decisions on issue #94), applied on every build:
     matches exactly AND an independent signal (state for Wikipedia, conference for TDS) agrees.
     Anything a source does not establish is null and listed in the report.
   - `stagedDivisions` is the set of divisions whose programs are built into `programs` but published
-    by nothing: every entry is `onboarded: false`, so the site, the collectors and the build skip
-    them. It is how a division is prepared -- list, slugs and joins reviewed in a diff -- before it
-    is onboarded (issue #94, Division II). Onboarding then moves the division from one list to the
-    other. A staged entry is not held: heldPrograms is for programs the site has published.
+    by nothing. What makes an entry staged is its division being in stagedDivisions, not its
+    `onboarded` flag: a staged division's batch is collected (`onboarded: true`, sources kept fresh)
+    long before the division itself is onboarded -- that is the point of staging, so collection can
+    start early -- and build.published_programs() only publishes an entry that is both `onboarded`
+    and in a division listed in `onboardedDivisions`. A staged entry fails the second test whatever
+    the first says. It is how a division is prepared -- list, slugs and joins reviewed in a diff --
+    before it is onboarded (issue #94, Division II). Onboarding then moves the division from one
+    list to the other. A staged entry is not held: heldPrograms is for programs the site has published.
 
 Existing entries are preserved: a build writes only `division`, `conference` and `ids.ncaaOrgId`
 on a program that stays. data/registry-build-report.json records every decision.
@@ -452,14 +456,18 @@ def resolve_identity(program: dict, rows_by_org: dict[int, dict], bulk_by_id: di
 
 def staged_divisions(registry: dict) -> list[str]:
     """registry.stagedDivisions: divisions whose programs are IN the registry but are not published --
-    entries built ahead of onboarding so the list, the slugs and the joins can be reviewed before any
-    collector runs (issue #94, Division II).
+    entries built ahead of onboarding so the list, the slugs and the joins can be reviewed, and so
+    collection can start, before the division itself is onboarded (issue #94, Division II).
 
     Explicit policy data, like onboardedDivisions, and for the same reason: onboarding a division is
-    then a one-line move from one list to the other, reviewed in a diff. A staged entry is
-    `onboarded: false`, so build.published_programs() never publishes it and iter_programs() never
-    hands it to a collector. A division cannot be in both lists: that would leave it unclear whether
-    its programs are published, and membership policy is exactly what must not be ambiguous (#100)."""
+    then a one-line move from one list to the other, reviewed in a diff. A staged entry is one whose
+    division is in stagedDivisions; the `onboarded` flag is not part of that test, on either side of
+    it. build.published_programs() publishes an entry only when it is `onboarded` AND its division is
+    in onboardedDivisions, so a staged entry stays unpublished whatever its `onboarded` flag says --
+    collection (`onboarded: true`, sources kept fresh) can run well ahead of onboarding, which is the
+    whole point of staging a division. A division cannot be in both lists: that would leave it unclear
+    whether its programs are published, and membership policy is exactly what must not be ambiguous
+    (#100)."""
     staged = registry.get("stagedDivisions") or []
     if not isinstance(staged, list) or any(d not in DIVISION_ROMAN for d in staged) or len(staged) != len(set(staged)):
         raise ValueError(f"registry.stagedDivisions must be a list of distinct divisions drawn from "
