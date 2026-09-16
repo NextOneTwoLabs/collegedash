@@ -423,7 +423,8 @@ def test_fixtures_carry_no_contact_details() -> None:
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
     # 20 until issue #145 added roster-no-staff, roster-players-and-staff and the two coaches-* pages
     # 25 since issue #160 added schedule-safelinks (its only address is placeholder@example.invalid)
-    ok("privacy: there are fixtures to check", len(names) == 25, str(names))
+    # 26 since issue #156 added roster-list-view-no-name-column (Mercyhurst, names are placeholders)
+    ok("privacy: there are fixtures to check", len(names) == 26, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
