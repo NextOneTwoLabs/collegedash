@@ -224,6 +224,12 @@ def check_no_stale_profiles(registry: dict) -> bool:
 # reviewed PR. Without an anchor, check_staged_registry() would only ever inspect whatever is
 # staged at the moment it runs, so the day stagedDivisions goes empty (a bad merge, a hand edit)
 # it would have nothing to look at and silently pass - the exact defect class issue #140 is about.
+#
+# The anchor has to run both ways (issue #149): a division named here that is not staged is a
+# failure (below), and so is a division in stagedDivisions with no entry here. Without the second
+# direction, a division staged later and never added to this dict would get the structural checks
+# below and no count anchor, silently - staging D3 without writing its count down here would pass
+# every check that exists. check_staged_registry() fails that case too, on purpose.
 STAGED_DIVISION_COUNTS = {"D2": 261}
 
 # A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
@@ -245,9 +251,12 @@ def check_staged_registry(registry: dict) -> bool:
     What makes an entry staged is its division being in registry.stagedDivisions; the onboarded flag
     is not part of that test here, on either side of it.
 
-    STAGED_DIVISION_COUNTS is checked first and unconditionally: a division named there that is not
-    currently in registry.stagedDivisions is a failure of this function, not something it quietly
-    has nothing to do because of. That is what keeps an empty (or emptied) staged set from passing.
+    STAGED_DIVISION_COUNTS is checked first and unconditionally, both ways: a division named there
+    that is not currently in registry.stagedDivisions is a failure of this function, not something
+    it quietly has nothing to do because of - that is what keeps an empty (or emptied) staged set
+    from passing. So is a division in registry.stagedDivisions with no entry in
+    STAGED_DIVISION_COUNTS (issue #149): staging a division is not allowed to ship without a
+    reviewed count anchor for it, because an anchor nobody wrote is a check nobody runs.
     """
     from collect import registry_builder as rb  # local: only this check needs it
 
@@ -264,6 +273,10 @@ def check_staged_registry(registry: dict) -> bool:
                   f"{STAGED_DIVISION_COUNTS[division]} entries, but it is not staged at all - if {division} "
                   f"published, remove it from build.STAGED_DIVISION_COUNTS in the same PR")
             ok = False
+    for division in sorted(staged_divs - set(STAGED_DIVISION_COUNTS)):
+        print(f"STAGED {division}: in registry.stagedDivisions but has no entry in build.STAGED_DIVISION_COUNTS "
+              f"- add {division} with its Directory count to STAGED_DIVISION_COUNTS, in the same PR that stages it")
+        ok = False
     if not staged_divs:
         # Nothing below has anything left to check once no division is staged; the anchor loop
         # above is what stops that from reading as "nothing to check, so nothing failed".
