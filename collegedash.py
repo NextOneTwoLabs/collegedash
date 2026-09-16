@@ -5,7 +5,7 @@ CollegeDash command line.
   python collegedash.py onboard <slug> [--no-bios]      run every collector for one program, then build
   python collegedash.py onboard --all [--conference C]   onboard the programs not yet onboarded, a batch at a
                               [--limit N] [--max-batch N] time; refuses a batch that spans a division the site
-                              [--collect-staged-divisions] does not publish yet, or one over --max-batch
+                         [--collect-staged-divisions D2] does not publish yet, or one over --max-batch
   python collegedash.py refresh [--only a,b] [--slug s]  refresh collectors for onboarded programs (scheduled job)
                                 [--failed] [--dry-run]   --failed: only collectors whose last run failed
                                 [--workers 16]          programs collected side by side; per-host politeness holds
@@ -165,7 +165,7 @@ def cmd_onboard(args):
     if args.slug == "--all" or args.all:
         # checked before rpi.history/current, so a refused command makes no request at all
         refusal = batch_refusal(reg, conference=args.conference, limit=args.limit, max_batch=args.max_batch,
-                                allow_staged=args.collect_staged_divisions)
+                                allow_divisions=args.collect_staged_divisions.split(","))
         if refusal:
             for line in refusal:
                 common.log(line)
@@ -209,7 +209,7 @@ def batch_todo(reg, *, conference: str | None = None, limit: int | None = None) 
 
 
 def batch_refusal(reg, *, conference: str | None = None, limit: int | None = None,
-                  max_batch: int = MAX_BATCH, allow_staged: bool = False) -> list[str]:
+                  max_batch: int = MAX_BATCH, allow_divisions: "list[str] | tuple[str, ...]" = ()) -> list[str]:
     """The lines to print instead of collecting, or [] when the batch may go ahead.
 
     Two independent rules, because they protect different things:
@@ -223,18 +223,27 @@ def batch_refusal(reg, *, conference: str | None = None, limit: int | None = Non
 
     Both are lifted by arguments rather than an environment variable, deliberately: an argument is
     one command, visible in the shell history that ran it, where an environment variable applies to
-    every command in a process and outlives the intent that set it (the shape #112 settled on).
+    every command in a process and outlives the intent that set it. `--collect-staged-divisions`
+    takes the divisions it allows rather than being a bare switch, and naming a division this batch
+    would not collect is itself a refusal - the shape #112 settled on for `--allow-unexplained-prune`,
+    where the override has to say what it is allowing and is checked against what is actually there.
     """
     todo = batch_todo(reg, conference=conference, limit=limit)
     if not todo:
         return []
     published = reg.get("onboardedDivisions")
     staged = sorted({(p.get("division") or "?") for p in todo} - set(published or [])) if published else []
+    allowed = {d.strip().upper() for d in allow_divisions if d.strip()}
+    unmet = [d for d in staged if d.upper() not in allowed]
+    unused = sorted(allowed - {d.upper() for d in staged})
     by_conf = collections.Counter((p.get("division") or "?", p.get("conference") or "?") for p in todo)
     reasons = []
-    if staged and not allow_staged:
-        reasons.append(f"it spans {', '.join(staged)}, which the site does not publish yet "
+    if unmet:
+        reasons.append(f"it spans {', '.join(unmet)}, which the site does not publish yet "
                        f"(registry onboardedDivisions is {published})")
+    if unused:
+        reasons.append(f"--collect-staged-divisions names {', '.join(unused)}, which this batch would not collect"
+                       + (f" (it is {', '.join(staged)} that is staged here)" if staged else " (nothing here is staged)"))
     if len(todo) > max_batch:
         reasons.append(f"it is {len(todo)} programs, over the {max_batch} this command will collect in one pass")
     if not reasons:
@@ -246,11 +255,12 @@ def batch_refusal(reg, *, conference: str | None = None, limit: int | None = Non
         lines.append(f"     {div} {conf}: {n}")
     if len(by_conf) > 8:
         lines.append(f"     ... and {len(by_conf) - 8} more conference(s)")
-    if staged and len(todo) <= max_batch and conference:
+    if unmet and not unused and len(todo) <= max_batch and conference:
         # already the shape the plan asks for: one conference, within the limit. The only thing
         # missing is somebody saying they mean to collect a division the site does not publish.
-        lines.append("   This is already one conference and within the limit. Re-run the same command with "
-                     "--collect-staged-divisions if you mean to collect a division that is only staged.")
+        lines.append(f"   This is already one conference and within the limit. Re-run the same command with "
+                     f"--collect-staged-divisions {','.join(unmet)} if you mean to collect a division that is "
+                     f"only staged.")
     else:
         # Name a batch this command would actually accept: the largest conference that fits under
         # max_batch, or the largest one with a --limit when no conference fits on its own. Advice
@@ -261,14 +271,15 @@ def batch_refusal(reg, *, conference: str | None = None, limit: int | None = Non
         if n > max_batch:
             suggestion += f" --limit {max_batch}"
         if staged:
-            suggestion += " --collect-staged-divisions"
+            suggestion += f" --collect-staged-divisions {','.join(staged)}"
         lines += [
             "   Collect a batch at a time instead, so each one can be audited before the next (issue #94):",
             suggestion,
             "     python collegedash.py onboard <slug>            one program at a time, by slug",
         ]
         lines.append(f"   To override deliberately, on this one command: --max-batch N raises the {max_batch}-program "
-                     f"limit" + (", and --collect-staged-divisions allows the staged division." if staged else "."))
+                     f"limit" + (f", and --collect-staged-divisions {','.join(staged)} allows the staged division."
+                                 if staged else "."))
     return lines
 
 
@@ -525,8 +536,10 @@ def main(argv=None):
     p.add_argument("--max-batch", type=int, default=MAX_BATCH,
                    help=f"with --all: programs this command will collect in one pass (default {MAX_BATCH}). "
                         "Raising it is a one-shot decision, made on the command that collects")
-    p.add_argument("--collect-staged-divisions", action="store_true",
-                   help="with --all: allow a batch that spans a division registry.onboardedDivisions does not list")
+    p.add_argument("--collect-staged-divisions", default="", metavar="DIVISION[,DIVISION]",
+                   help="with --all: allow this batch to collect these staged divisions, which "
+                        "registry.onboardedDivisions does not list yet (e.g. D2). Naming a division the batch "
+                        "would not collect is a refusal, not a no-op")
     p.set_defaults(fn=cmd_onboard)
     p = sub.add_parser("refresh"); p.add_argument("--only"); p.add_argument("--slug"); p.add_argument("--no-bios", action="store_true")
     p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")

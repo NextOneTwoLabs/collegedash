@@ -31,7 +31,9 @@ Cases, and the mutation each is here to catch (tests/../scratch mutate138.py app
   conference-batch       --conference is the batch shape the refusal recommends: it narrows the
                          batch, matches a conference exactly, and is still refused while the
                          division is staged. Fails when the conference filter over-matches.
-  overrides              the two overrides are independent, and each lifts only its own rule.
+  overrides              the two overrides are independent, and each lifts only its own rule;
+                         --collect-staged-divisions has to name the division it is allowing, and
+                         naming one this batch would not collect is a refusal of its own.
                          Fails when either is ignored, or when one lifts both.
   one-shot               the overrides are arguments, they default off, they are not read from the
                          environment, and nothing about them survives the command.
@@ -283,7 +285,9 @@ def recommended_command(lines: list[str]) -> dict:
     if "--limit" in parts:
         kw["limit"] = int(parts[parts.index("--limit") + 1])
     if "--collect-staged-divisions" in parts:
-        kw["allow_staged"] = True
+        after = parts[parts.index("--collect-staged-divisions") + 1:]
+        # a flag with nothing after it names no division, which is what the guard will see too
+        kw["allow_divisions"] = after[0].split(",") if after and not after[0].startswith("--") else []
     return kw
 
 
@@ -330,10 +334,10 @@ def test_conference_batch():
     ok("16 programs is within the limit, so only the staged division is left as a reason",
        len(lines) > 1 and "over the" not in lines[0] and "does not publish yet" in lines[0], lines[:1])
     ok("and the advice is to confirm this batch, not to reshape it",
-       "Re-run the same command with --collect-staged-divisions" in "\n".join(lines), "\n".join(lines))
+       "Re-run the same command with --collect-staged-divisions D2" in "\n".join(lines), "\n".join(lines))
     r = run_onboard(reg, ["--all", "--conference", "Gulf South"])
     ok("it is still refused while the division is staged", r.code == 2 and r.collectors == [], r.code)
-    r = run_onboard(reg, ["--all", "--conference", "Gulf South", "--collect-staged-divisions"])
+    r = run_onboard(reg, ["--all", "--conference", "Gulf South", "--collect-staged-divisions", "D2"])
     ok("with the override it runs", r.code == 0, r.out[-400:])
     ok("and collects that conference and nothing else", r.slugs == [f"gs-{i}" for i in range(16)], r.slugs)
     r = run_onboard(reg, ["--all", "--conference", "Nowhere Conference"])
@@ -347,20 +351,30 @@ def test_conference_batch():
 def test_overrides():
     print("overrides: two rules, two switches, each lifting only its own")
     reg = staged_d2()
-    only_count = collegedash.batch_refusal(reg, allow_staged=True)
-    ok("--collect-staged-divisions alone leaves the count rule standing",
+    only_count = collegedash.batch_refusal(reg, allow_divisions=["D2"])
+    ok("--collect-staged-divisions D2 alone leaves the count rule standing",
        len(only_count) > 1 and "over the 25" in only_count[0] and "does not publish yet" not in only_count[0],
        only_count[:1])
     only_division = collegedash.batch_refusal(reg, max_batch=500)
     ok("--max-batch alone leaves the division rule standing",
        len(only_division) > 1 and "does not publish yet" in only_division[0] and "over the" not in only_division[0],
        only_division[:1])
-    ok("both together allow the batch", collegedash.batch_refusal(reg, max_batch=500, allow_staged=True) == [])
-    r = run_onboard(reg, ["--all", "--max-batch", "500", "--collect-staged-divisions"])
+    both = collegedash.batch_refusal(reg, max_batch=500, allow_divisions=["D2"])
+    ok("both together allow the batch", both == [], both[:1])
+    ok("the override has to name the division that is actually staged: D3 is a refusal, not a no-op",
+       "--collect-staged-divisions names D3" in "\n".join(
+           collegedash.batch_refusal(reg, max_batch=500, allow_divisions=["D3"])),
+       collegedash.batch_refusal(reg, max_batch=500, allow_divisions=["D3"])[:1])
+    ok("naming it in either case works",
+       collegedash.batch_refusal(reg, max_batch=500, allow_divisions=["d2"]) == [])
+    r = run_onboard(reg, ["--all", "--max-batch", "500", "--collect-staged-divisions", "D2"])
     ok("and the command then collects all 261", r.code == 0 and len(r.slugs) == 261, (r.code, len(r.slugs)))
     r = run_onboard(reg, ["--all", "--max-batch", "500"])
     ok("--max-batch on its own does not smuggle the division through", r.code == 2 and r.collectors == [], r.code)
-    r = run_onboard(reg, ["--all", "--collect-staged-divisions"])
+    r = run_onboard(reg, ["--all", "--max-batch", "500", "--collect-staged-divisions", "D3"])
+    ok("naming the wrong division does not smuggle it through either",
+       r.code == 2 and r.collectors == [], r.code)
+    r = run_onboard(reg, ["--all", "--collect-staged-divisions", "D2"])
     ok("--collect-staged-divisions on its own does not smuggle 261 programs through",
        r.code == 2 and r.collectors == [], r.code)
     d1 = registry([program(f"d1-{i}", "D1", "ACC") for i in range(40)])
@@ -372,12 +386,13 @@ def test_one_shot():
     print("one-shot: the overrides are arguments on one command, not settings")
     parsed = _parse(["onboard", "--all"])  # the parser is built inside main(); parse through it
     ok("--max-batch defaults to MAX_BATCH", parsed.max_batch == collegedash.MAX_BATCH, parsed.max_batch)
-    ok("--collect-staged-divisions defaults to off", parsed.collect_staged_divisions is False)
+    ok("--collect-staged-divisions defaults to naming nothing", parsed.collect_staged_divisions == "",
+       parsed.collect_staged_divisions)
     ok("--conference defaults to nothing", parsed.conference is None)
     parsed = _parse(["onboard", "--all", "--conference", "Gulf South", "--max-batch", "40",
-                     "--collect-staged-divisions"])
+                     "--collect-staged-divisions", "D2,D3"])
     ok("all three arrive from the command line",
-       (parsed.conference, parsed.max_batch, parsed.collect_staged_divisions) == ("Gulf South", 40, True),
+       (parsed.conference, parsed.max_batch, parsed.collect_staged_divisions) == ("Gulf South", 40, "D2,D3"),
        (parsed.conference, parsed.max_batch, parsed.collect_staged_divisions))
     src = open(os.path.join(ROOT, "collegedash.py"), encoding="utf-8").read()
     guard = src[src.index("def cmd_onboard"):src.index("def cmd_refresh")]
@@ -393,7 +408,7 @@ def test_one_shot():
     r = run_onboard(reg, ["--all", "--conference", "Gulf South"], env=env)
     ok("nor the division rule on a batch the count rule would have let through",
        r.code == 2 and r.collectors == [], (r.code, len(r.collectors)))
-    run_onboard(reg, ["--all", "--max-batch", "500", "--collect-staged-divisions"])
+    run_onboard(reg, ["--all", "--max-batch", "500", "--collect-staged-divisions", "D2"])
     ok("and an override does not survive the command it was given on",
        collegedash.batch_refusal(staged_d2()) != [] and collegedash.MAX_BATCH == 25, collegedash.MAX_BATCH)
     ok("no state file is written by a refused command", run_onboard(reg, ["--all"]).state == [])
