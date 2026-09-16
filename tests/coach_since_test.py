@@ -122,6 +122,29 @@ def test_unbroken_run() -> None:
     ok("CONTROL a season listed twice with the same coach (nebraska) does not break the run", got == LAST - 32, str(got))
 
 
+def test_tolerance_is_one_season() -> None:
+    """The owner's confirmation rule: the run and the infobox agree within ONE season, and no more.
+
+    Both cases are the stored tables as they are (Reviewer 2 on #169: widening the tolerance changed no check).
+    The Wikipedia tables end in 2025 and never move, so these hold whatever the current season is: the table's
+    own last season is always one of the two years the count is measured from."""
+    print("the tolerance is exactly one season")
+    # michigan-state: Tom Saxton to 2020, Jeff Hosler 2021-2025; infobox "Jeff Hosler [ 2 ] (4th season)".
+    # From the table's last season (2025) the 4th season began 2022: one season from the run's 2021.
+    rows = seasons(("Tom Saxton", 2009, 2020), ("Jeff Hosler", 2021, 2025))
+    got = since("Jeff Hosler", rows, "Jeff Hosler [ 2 ] (4th season)")
+    ok("CONTROL michigan-state: run 2021, infobox implies 2022 (1 season apart) -> published 2021", got == 2021, str(got))
+    # byu: Jennifer Rockwood 1995-2025; infobox "Jennifer Rockwood (29th season)". From 2025 the 29th season began
+    # 1997, two seasons after the run's 1995 (and further still from any later current season).
+    rows = seasons(("Jennifer Rockwood", 1995, 2025))
+    got = since("Jennifer Rockwood", rows, "Jennifer Rockwood (29th season)")
+    ok("FIX byu: run 1995, infobox implies 1997 at the nearest (2 seasons apart) -> withdrawn", got is None, str(got))
+    ok("FIX byu: ... and withdrawn at 3 seasons apart too (a 30th-season count, 1996, would still be one away; 28th, 1998, is three)",
+       since("Jennifer Rockwood", rows, "Jennifer Rockwood (28th season)") is None
+       and since("Jennifer Rockwood", rows, "Jennifer Rockwood (30th season)") == 1995,
+       str((since("Jennifer Rockwood", rows, "Jennifer Rockwood (28th season)"), since("Jennifer Rockwood", rows, "Jennifer Rockwood (30th season)"))))
+
+
 def test_infobox_agreement() -> None:
     print("agreement with the infobox's (Nth season)")
     start = LAST - 22
@@ -161,7 +184,7 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     if CODE_ROOT != ROOT:
         print(f"code under test imported from {CODE_ROOT}")
-    for case in (test_the_four_wrong_years, test_unbroken_run, test_infobox_agreement):
+    for case in (test_the_four_wrong_years, test_unbroken_run, test_tolerance_is_one_season, test_infobox_agreement):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
