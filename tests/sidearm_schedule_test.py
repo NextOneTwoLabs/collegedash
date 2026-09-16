@@ -28,6 +28,28 @@ chosen so each check has an input that makes it fail:
                     pin down which branch wins
   duplicate-links   one real current-theme card carrying two anchors labelled 'Box Score'
 
+Issues #122 and #25 added four more, and a second reason to have them: exhibitions marked
+'(EXH)', '(Exh.)', '(Exhib.)', '(EX)', '(EXB)', 'Exhibitions', '- EXH' or 'Scrimmage' were counted
+in season records, and spring games listed after the fall block were dated a year early.
+
+  exhibition-markers          CONSTRUCTED: seven real cards carrying seven spellings, plus three
+                              REAL matches that look like markers - a game at Alumni Soccer
+                              Stadium, an 'Alumni Day' promotion and a game in BOILING SPRINGS, NC
+  legacy-exhibition-markers   CONSTRUCTED: the same question in the legacy theme
+  spring-after-fall           one real page (xavier 2025): the last fall game and the spring games
+                              printed after it, which belong to 2026
+  legacy-spring-after-fall    one real page (navy 2023), including a Feb 29 row - a date that does
+                              not exist in the season year, so the year must be the next one
+  spring-descriptor-gap       one real page (oklahoma-state 2024): six of its seven spring cards
+                              carry a '2025 Spring Exhibition Season' descriptor and the last one
+                              does not. Read row by row it is a win, and it published the 2024
+                              record as 15-5-3 where the school's release says 14-5-3 (PR #127 audit)
+
+Every date these fixtures produce is also checked against the weekday the card prints. A weekday
+cannot be ambiguous between two years one apart, so it is a self-contained oracle for the date
+rules: the audit of PR #127 used it to confirm all 169 moved dates, including the 92 that no other
+copy on the page could settle.
+
 `test_matches_origin_behaviour` is the swap-back proof in miniature. `_parse_game_cards` is the
 pre-change parser's body, unmodified; running it directly on the legacy fixtures and requiring
 zero games is the same evidence as checking the fixture out against the old file, and it keeps
@@ -384,7 +406,7 @@ def test_fixtures_carry_no_contact_details() -> None:
     email = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
     phone = re.compile(r"(?<!\d)(?:\+?1[-. ]?)?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}(?!\d)")
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
-    ok("privacy: there are fixtures to check", len(names) == 4, str(names))
+    ok("privacy: there are fixtures to check", len(names) == 9, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
@@ -394,6 +416,191 @@ def test_fixtures_carry_no_contact_details() -> None:
            str(phone.findall(text)[:3]))
         ok(f"privacy: {name} has no mailto: or tel: link",
            not re.search(r"(mailto|tel):(?!removed@example\.invalid|0000000000)", text, re.I))
+
+
+# (date, homeAway, opponent, exhibition, result, score), in page order
+MARKER_GAMES = [
+    ("2026-08-05", "H", "Wofford", True, "T", "1-1"),                 # (EXH)
+    ("2026-08-28", "A", "Shelbourne FC", True, "W", "3-0"),           # (Exh.)
+    ("2026-08-05", "A", "Missouri State", True, "W", "4-0"),          # (exhib.)
+    ("2026-08-07", "H", "Kennesaw State", True, "W", "3-0"),          # (Exb.)
+    ("2026-08-03", "H", "South Florida", True, "W", "2-1"),           # 'South Florida - EXH'
+    ("2026-08-05", "A", "Campbell", True, None, None),                # 'Exhibitions' beside the venue
+    ("2026-08-04", None, "Oregon State", True, "W", "2-1"),           # (EX)
+    ("2026-09-18", "A", "Notre Dame", False, "L", "2-3"),             # at Alumni Soccer Stadium
+    ("2026-10-05", "H", "No. 21 Ohio State", False, "T", "1-1"),      # 'Alumni Day' promotion
+    ("2026-10-01", "H", "Winthrop", False, "T", "0-0"),               # BOILING SPRINGS, NC
+    ("2026-08-07", "H", "Furman", True, "T", "1-1"),                  # note really does say SCRIMMAGE
+]
+LEGACY_MARKER_GAMES = [
+    ("2026-08-05", "A", "Georgia Southern University", True, "T", "1-1"),   # (EX)
+    ("2026-08-06", "H", "LSU-Eunice", True, "W", "7-0"),                    # (Exhib.)
+    ("2026-08-07", "H", "Snow College", True, "W", "5-1"),                  # (Scrimmage)
+    ("2026-09-06", "H", "Presbyterian College", False, None, None),         # a real game
+]
+SPRING_GAMES = [("2025-09-20", "DePaul"), ("2026-02-20", "Ohio State"), ("2026-03-26", "Northern Kentucky")]
+DESCRIPTOR_GAP_GAMES = [("2024-11-15", "Arkansas", False), ("2025-04-12", "Arkansas", True), ("2025-04-18", "Tulsa", True)]
+WEEKDAYS = {"sun": 6, "mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5}
+LEGACY_SPRING_GAMES = [("2023-10-20", "Holy Cross"), ("2024-02-29", "Towson"), ("2024-04-12", "George Mason")]
+
+# The pre-change rules, copied from origin/main: the current-theme branch searched the card for
+# 'exhibition' with no word boundary, the legacy branch for 'exhibition' or 'exh.', and neither
+# moved a spring date. They are here so the swap-back proof lives in the suite (as
+# test_matches_origin_behaviour does for #35) rather than in a reviewer's terminal history.
+ORIGIN_CARD_RE = re.compile(r"exhibition", re.I)
+ORIGIN_LEGACY_RE = re.compile(r"\bexhibition\b|\bexh\.", re.I)
+
+
+def row(g: dict) -> tuple:
+    return (g["date"], g["homeAway"], g["opponent"], g["exhibition"], g["result"], g["score"])
+
+
+def test_exhibition_markers() -> None:
+    """Every marker spelling found on the cached pages, and the look-alikes that must not match."""
+    print("exhibition markers (issues #122, #25)")
+    for name, want in (("schedule-exhibition-markers", MARKER_GAMES),
+                       ("schedule-legacy-exhibition-markers", LEGACY_MARKER_GAMES)):
+        got = [row(g) for g in parse(name)["games"]]
+        ok(f"{name}: every row, with its exhibition flag, result and score", got == want, f"got {got}")
+    for label, want in (("(EXH)", True), ("(Exh.)", True), ("(exhib.)", True), ("(Exhib)", True),
+                        ("(Exhi.)", True), ("(EXB)", True), ("(Exb.)", True), ("(EX)", True), ("(Ex.)", True),
+                        ("Exhibitions", True), ("South Florida - EXH", True), ("Scrimmage", True),
+                        ("Blue vs. Yellow Scrimmage", True), ("exhibition", True),
+                        ("Alumni Soccer Stadium", False), ("Alumni Day", False), ("Alumni Game / Senior Day", False),
+                        ("BOILING SPRINGS, NC", False), ("Spring Schedule", False), ("Exeter", False),
+                        ("Essex", False), ("Excel Center", False), ("Texas Tech", False)):
+        ok(f"marker {label!r} -> exhibition {want}", bool(sidearm.EXHIBITION_RE.search(label)) is want)
+    for label, want in (("Wofford (EXH)", "Wofford"), ("South Florida - EXH", "South Florida"),
+                        ("Kennesaw State (Exb.)", "Kennesaw State"), ("Snow College (Scrimmage)", "Snow College"),
+                        ("Blue vs. Yellow Scrimmage", "Blue vs. Yellow Scrimmage"),
+                        ("Alumni FC", "Alumni FC"), ("Exeter City", "Exeter City")):
+        got = sidearm.OPPONENT_MARKER_RE.sub("", label).strip()
+        ok(f"opponent {label!r} -> {want!r}", got == want, f"got {got!r}")
+    for token, want in (("Exhibitions", True), ("Exhib.", True), ("EXB", True), ("Scrimmage", True),
+                        ("Huntsville, AL", False), ("Alumni Soccer Stadium", False)):
+        ok(f"location token {token!r} dropped: {want}", bool(sidearm.LEGACY_NON_PLACE_RE.match(token)) is want)
+
+
+def test_markers_were_missed_before() -> None:
+    """The swap-back proof: origin/main's rules find nothing in the rows this pins."""
+    print("origin/main missed these markers")
+    # radford's card says 'Exhibitions', which origin/main's boundary-free 'exhibition' does catch;
+    # every other marker spelling in these fixtures it misses.
+    for name, rule, want_missed in (("schedule-exhibition-markers", ORIGIN_CARD_RE, 7),
+                                    ("schedule-legacy-exhibition-markers", ORIGIN_LEGACY_RE, 3)):
+        soup = BeautifulSoup(fixture(name), "html.parser")
+        rows = sidearm._top_level_cards(soup) or soup.select("li.sidearm-schedule-game")
+        missed = [r for r in rows if sidearm.EXHIBITION_RE.search(r.get_text(" ")) and not rule.search(r.get_text(" "))]
+        ok(f"{name}: origin/main's rule misses {want_missed} of the exhibitions this fixture carries",
+           len(missed) == want_missed, f"missed {len(missed)}")
+        ok(f"{name}: and it flags no row this change would not flag",
+           not [r for r in rows if rule.search(r.get_text(" ")) and not sidearm.EXHIBITION_RE.search(r.get_text(" "))])
+    for name, games in (("schedule-spring-after-fall", SPRING_GAMES), ("schedule-legacy-spring-after-fall", LEGACY_SPRING_GAMES)):
+        season = parse(name)["season"]
+        moved = [d for d, _ in games if int(d[:4]) != season]
+        ok(f"{name}: origin/main dated every row in the season year, so {len(moved)} were wrong",
+           len(moved) == 2 and all(int(d[:4]) == season + 1 for d in moved), f"{moved} vs season {season}")
+
+
+def test_spring_descriptor_gap() -> None:
+    """A spring card whose own row omits the section descriptor is still a spring game.
+
+    okstate.com's 2024 page is the only row of its kind in the corpus. Inheriting the descriptor
+    down the page would be the more dangerous rule - an exhibition block usually comes first, so a
+    forward-inheriting descriptor would mark a whole fall season - so a January-July date on a page
+    with a fall block is simply not counted.
+    """
+    print("a spring card with no descriptor of its own")
+    cards = sidearm._top_level_cards(BeautifulSoup(fixture("schedule-spring-descriptor-gap"), "html.parser"))
+    descriptors = [len(c.select(".s-descriptor__text")) for c in cards]
+    ok("descriptor-gap: the middle spring card carries the descriptor and the Tulsa card carries none",
+       len(cards) == 3 and descriptors[1] > 0 and descriptors[2] == 0
+       and "Tulsa" in cards[2].get_text(" "), f"descriptors per card: {descriptors}")
+    games = parse("schedule-spring-descriptor-gap")["games"]
+    got = [(g["date"], g["opponent"], g["exhibition"]) for g in games]
+    ok("descriptor-gap: the fall game counts; both spring games do not, and both move a year",
+       got == DESCRIPTOR_GAP_GAMES, f"got {got}")
+    counted = [g for g in games if not g["exhibition"]]
+    ok("descriptor-gap: only the fall game reaches the record (0-1-0, not 2-1-0)",
+       [g["result"] for g in counted] == ["L"], str([g["result"] for g in counted]))
+    ok("descriptor-gap: reading the marker row by row - what origin/main does - would count the Tulsa win",
+       not sidearm.EXHIBITION_RE.search("vs Tulsa Neal Patterson Stadium Stillwater, OK W, 3-2 Apr 18 (Fri) 6:00 PM"))
+
+
+def test_dates_match_the_weekday_on_the_card() -> None:
+    """The date rules' own oracle: a weekday cannot be ambiguous between years one apart.
+
+    Every Sidearm row prints the weekday beside the date ('Apr 18 (Fri)', 'Feb 29 (Thu)'). If the
+    year is wrong the weekday will not match, which is what makes this a check and not a restatement
+    of the parser. The last block shows it can fail: the pre-change date for every moved game lands
+    on a different weekday.
+    """
+    print("dates agree with the weekday printed on the card")
+    import datetime as dt
+    checked = 0
+    # only the fixtures trimmed from ONE page: the two CONSTRUCTED marker fixtures gather cards from
+    # several seasons under one title year, so their dates are deliberately not their pages' dates
+    for name in ("schedule-spring-after-fall", "schedule-legacy-spring-after-fall",
+                 "schedule-spring-descriptor-gap", "schedule-legacy", "schedule-legacy-no-title-year"):
+        soup = BeautifulSoup(fixture(name), "html.parser")
+        rows = sidearm._top_level_cards(soup) or soup.select("li.sidearm-schedule-game")
+        games = parse(name)["games"]
+        if len(rows) != len(games):
+            continue  # a fixture whose rows and games do not line up 1:1 is covered elsewhere
+        for g, r in zip(games, rows):
+            m = re.search(r"\((Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?\)", r.get_text(" "))
+            if not (m and g["date"]):
+                continue
+            checked += 1
+            y, mo, d = (int(x) for x in g["date"].split("-"))
+            ok(f"{name}: {g['opponent']} on {g['date']} is a {m.group(1)}",
+               dt.date(y, mo, d).weekday() == WEEKDAYS[m.group(1).lower()[:3]],
+               f"{g['date']} is a {dt.date(y, mo, d).strftime('%a')}")
+    ok("weekday oracle: it actually looked at some dates", checked >= 10, str(checked))
+    wrong = 0
+    for name, games in (("schedule-spring-after-fall", SPRING_GAMES), ("schedule-legacy-spring-after-fall", LEGACY_SPRING_GAMES)):
+        season = parse(name)["season"]
+        soup = BeautifulSoup(fixture(name), "html.parser")
+        rows = sidearm._top_level_cards(soup) or soup.select("li.sidearm-schedule-game")
+        for (date, _opp), r in zip(games, rows):
+            if int(date[:4]) == season:
+                continue
+            m = re.search(r"\((Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?\)", r.get_text(" "))
+            if not m:
+                continue
+            old = f"{season}-{date[5:]}"
+            try:
+                bad = dt.date(*(int(x) for x in old.split("-"))).weekday() != WEEKDAYS[m.group(1).lower()[:3]]
+            except ValueError:
+                bad = True  # Feb 29 in a non-leap year: not a date at all
+            wrong += bool(bad)
+    ok("weekday oracle can fail: every pre-change date lands on the wrong weekday (or does not exist)",
+       wrong == 4, str(wrong))
+
+
+def test_spring_after_fall() -> None:
+    """A January-July game listed after an August-December one belongs to the next year."""
+    print("spring games listed after the fall block")
+    for name, want in (("schedule-spring-after-fall", SPRING_GAMES),
+                       ("schedule-legacy-spring-after-fall", LEGACY_SPRING_GAMES)):
+        got = [(g["date"], g["opponent"]) for g in parse(name)["games"]]
+        ok(f"{name}: the fall game keeps the season year and the spring games move on a year",
+           got == want, f"got {got}")
+    leap = [g for g in parse("schedule-legacy-spring-after-fall")["games"] if (g["date"] or "").endswith("-02-29")]
+    ok("legacy-spring-after-fall: the Feb 29 row proves it - 2023 has no Feb 29, 2024 does",
+       len(leap) == 1 and leap[0]["date"] == "2024-02-29", str([g["date"] for g in leap]))
+    before_fall = [{"date": "2024-04-13"}, {"date": "2024-04-20"}, {"date": "2024-08-15"}]
+    ok("a spring block printed BEFORE the fall block keeps its year (gonzaga 2024)",
+       [g["date"] for g in sidearm._spring_games(before_fall)] == ["2024-04-13", "2024-04-20", "2024-08-15"])
+    ok("...and is still a spring game, so it does not count",
+       [g.get("exhibition") for g in before_fall] == [True, True, None])
+    dateless = [{"date": None}, {"date": "2025-08-10"}, {"date": None}, {"date": "2025-03-01"}]
+    ok("a row with no date is passed over, and the ones around it still work",
+       [g["date"] for g in sidearm._spring_games(dateless)] == [None, "2025-08-10", None, "2026-03-01"])
+    spring_only = [{"date": "2026-03-01"}, {"date": "2026-04-02"}]
+    ok("a page with no fall block at all is not a fall-season page: nothing is moved or flagged",
+       [(g["date"], g.get("exhibition")) for g in sidearm._spring_games(spring_only)]
+       == [("2026-03-01", None), ("2026-04-02", None)])
 
 
 def main() -> int:
@@ -413,6 +620,11 @@ def main() -> int:
     test_current_theme_wins()
     test_duplicate_link_labels_keep_the_last()
     test_both_branches_agree_on_the_contract()
+    test_exhibition_markers()
+    test_markers_were_missed_before()
+    test_spring_after_fall()
+    test_spring_descriptor_gap()
+    test_dates_match_the_weekday_on_the_card()
     test_fixtures_carry_no_contact_details()
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
