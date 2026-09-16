@@ -182,6 +182,73 @@ test('access: switched off, /api/ask/status is the same 404 as any unknown /api 
   }
 });
 
+// ---------- access: the three bypasses Reviewer 2 found no test for on #191 ----------
+
+test('access: a key cached for one team is never used to verify a token for another team', async () => {
+  // Team A's certs fill the isolate's cache. Team B is configured next, and a token claims team B while being
+  // signed with team A's key under the same kid. Only team B's own certs may decide it, and they do not carry
+  // that key, so it must be refused - and team B's certs must actually be fetched.
+  const TEAM_B = 'https://another-team.cloudflareaccess.com';
+  const certsB = { keys: [{ ...(await crypto.subtle.exportKey('jwk', H.attackerKeys.publicKey)), kid: 'team-b-key', alg: 'RS256', use: 'sig' }] };
+  const fetched = [];
+  const real = globalThis.fetch;
+  globalThis.fetch = async (u) => {
+    fetched.push(String(u));
+    if (String(u) === H.CERTS_URL) return Response.json(H.CERTS);
+    if (String(u) === `${TEAM_B}/cdn-cgi/access/certs`) return Response.json(certsB);
+    throw new Error(`unexpected fetch ${u}`);
+  };
+  A.resetCache();
+  try {
+    const legit = await worker.fetch(statusReq(bearer(await H.token())), env());
+    assert.equal(legit.status, 200, 'the legitimate team A call did not fill the cache');
+    const crossTeam = await H.token({ claims: { iss: TEAM_B } }); // team A's key, team A's kid, team B's issuer
+    const res = await worker.fetch(statusReq(bearer(crossTeam)), env({ ACCESS_TEAM_DOMAIN: TEAM_B }));
+    assert.equal(res.status, 403, 'a team A key from the cache verified a token for team B');
+    assert.deepEqual(fetched, [H.CERTS_URL, `${TEAM_B}/cdn-cgi/access/certs`], 'team B\'s certs were not fetched');
+  } finally {
+    globalThis.fetch = real;
+    A.resetCache();
+  }
+});
+
+test('access: an empty ACCESS_AUD is refused even for a token whose aud is empty too, touching neither certs nor the model', async () => {
+  for (const [name, aud] of [['aud: [""]', ['']], ['aud: ""', '']]) {
+    A.resetCache();
+    const jwt = await H.token({ claims: { aud } });
+    const e = env({ ACCESS_AUD: '' });
+    const { result, calls } = await H.withFetch(answer({ input_tokens: 1, output_tokens: 1 }), async () => {
+      const s = await worker.fetch(statusReq(bearer(jwt)), e);
+      const a = await worker.fetch(askReq(bearer(jwt)), e);
+      return { s: s.status, a: a.status };
+    });
+    assert.equal(result.s, 403, `${name}: /api/ask/status answered ${result.s}`);
+    assert.equal(result.a, 403, `${name}: /api/ask answered ${result.a}`);
+    assert.equal(calls.certs, 0, `${name}: fetched the certs`);
+    assert.equal(calls.upstream.length, 0, `${name}: called the model`);
+    assert.deepEqual(e.ASK_BUDGET.puts, [], `${name}: wrote the budget`);
+  }
+});
+
+test('access is checked before the method: an unauthenticated GET /api/ask is 403 with no allow header, not 405', async () => {
+  for (const [name, headers] of [['no token', {}], ['a forged token', bearer(await H.token({ privateKey: H.attackerKeys.privateKey }))]]) {
+    A.resetCache();
+    const { result, calls } = await H.withFetch(null, async () => {
+      const res = await worker.fetch(new Request(url('/api/ask'), { headers }), env());
+      return { status: res.status, allow: res.headers.get('allow'), body: await res.text() };
+    });
+    assert.equal(result.status, 403, `${name}: answered ${result.status}, which tells a stranger the route exists and what it accepts`);
+    assert.equal(result.allow, null, `${name}: sent an allow header`);
+    assert.equal(calls.upstream.length, 0);
+  }
+  // and the owner's own GET is the 405
+  const { result } = await H.withFetch(null, async () => {
+    const res = await worker.fetch(new Request(url('/api/ask'), { headers: bearer(await H.token()) }), env());
+    return { status: res.status, allow: res.headers.get('allow') };
+  });
+  assert.deepEqual(result, { status: 405, allow: 'POST' });
+});
+
 // ---------- budget ----------
 
 async function askAt(e, { jwt, upstream = answer({ input_tokens: 1000, output_tokens: 100 }) } = {}) {
