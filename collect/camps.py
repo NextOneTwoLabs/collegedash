@@ -174,6 +174,104 @@ def _pick(cands: list[dict]) -> dict | None:
     return max(cands, key=lambda c: (c["score"], -c["order"]))
 
 
+# ---------- is an off-site camps page this program's? (issue #162) ----------
+# Missouri Western's roster page carries, in its site navigation, 'KANSAS CITY CHIEFS TRAINING CAMP'
+# -> chiefs.com/trainingcamp/: the NFL team trains on that campus. It was the page's only camp link,
+# so it won, and the Chiefs' four training-camp dates were stored as the program's camps. Nothing
+# asked whether a page off the athletics site belonged to the program at all.
+#
+# An off-site camps page is used only when it shows it belongs to a camp vendor or to the school.
+# From the link itself: a known vendor's host, a .edu host, soccer or women/girls named in the link,
+# an 'ID' camp or clinic (a college recruiting camp), a school's own hosted store or ticketing system
+# (SCHOOL_STORE_HOSTS), or the school named in the link's URL or text.
+# Otherwise from the page once fetched: detect_vendor recognises a vendor by its markup (a Ryzer site
+# on a coach's own domain), or the page title names the school. A page that shows neither is not
+# used, and one that could not be read (robots, fetch error) cannot show it.
+#
+# "Names the school" reads the roster page's own <title> ('2026 Soccer Roster - Missouri Western State
+# University Athletics') and the athletics host: the school's distinctive words (missouri, western),
+# their initials (mwsu), and the host label with and without its go-/-athletics/-sports affixes
+# (gogriffons, griffons). stanfordathleticscamps.com names stanford, csusbathleticscamps.com csusb,
+# wmuevents.com wmu, utmcamps.com utm.
+_TITLE_NOISE = {
+    "athletics", "athletic", "official", "website", "site", "roster", "soccer", "women", "womens", "mens",
+    "university", "college", "state", "the", "of", "and", "at", "in", "for", "sports", "team", "home",
+    "north", "south", "east", "west", "northern", "southern", "eastern", "western", "central", "saint",
+}
+_INITIALS_SKIP = {"the", "of", "and", "at", "athletics", "official", "website", "site"}
+# Hosted stores and ticketing systems a university runs its own camp registration on. Not camp
+# vendors, so detect_vendor still records them as 'external'; but a camps link there is the school's.
+# Both are on cached roster pages: marshall (secure.touchnet.net uStores) and binghamton
+# (prod1.agileticketing.net), each linked as the athletics site's 'Camps and Clinics'.
+SCHOOL_STORE_HOSTS = ("touchnet.net", "touchnet.com", "agileticketing.net")
+_HOST_AFFIX_RE = re.compile(r"^(?:go|the)|(?:athletics?|sports|online)$")
+
+
+def _title_of(html: str | None) -> str:
+    """A page's <title> text, parsed rather than pattern-matched, so a comment that mentions <title>
+    cannot stand in for it."""
+    soup = BeautifulSoup((html or "")[:200000], "html.parser")
+    return common.clean(soup.title.get_text(" ")) if soup.title else ""
+
+
+def _school_tokens(html: str, page_url: str) -> set[str]:
+    """Lower-case strings that identify the school, from the roster page's <title> and host."""
+    tokens: set[str] = set()
+    title = _title_of(html)
+    parts = re.split(r"\s+[-|–]\s+", title)
+    school = [part for part in parts[1:] if re.search(r"[A-Za-z]", part)] or parts[:1]
+    for part in school:
+        words = re.findall(r"[A-Za-z][A-Za-z&'’]*", part)
+        caps = [w for w in words if w[0].isupper() and w.lower() not in _INITIALS_SKIP]
+        if len(caps) >= 2:
+            tokens.add("".join(w[0] for w in caps).lower())
+        for w in words:
+            w = re.sub(r"[^a-z]", "", w.lower())
+            if len(w) >= 3 and w not in _TITLE_NOISE:
+                tokens.add(w)
+    labels = _host(page_url).split(".")
+    label = labels[-2] if len(labels) >= 2 else ""
+    for cand in (label, _HOST_AFFIX_RE.sub("", label)):
+        if len(cand) >= 3:
+            tokens.add(cand)
+    return tokens
+
+
+def _names_school(text: str, tokens: set[str]) -> bool:
+    """Whether `text` (a URL, a link label, a page title) names the school. A token of five letters or
+    more may sit anywhere in the text (stanfordathleticscamps); a shorter one (wmu, utm, csusb is five)
+    must be a whole word or start a host label or path segment (wmuevents.com, utmcamps.com)."""
+    low = (text or "").lower()
+    flat = re.sub(r"[^a-z0-9]", "", low)
+    words = set(re.findall(r"[a-z0-9]+", low))
+    return any(t in words or (len(t) >= 5 and t in flat) or re.search(rf"(?:^|[/.]){re.escape(t)}", low)
+               for t in tokens)
+
+
+def _vouched(url: str, text: str, sc: dict, page_url: str, tokens: set[str]) -> bool:
+    """Whether the link itself shows it is this program's camps page (see the note above)."""
+    host, page_host = _host(url), _host(page_url)
+    if not host or host.split(".")[-2:] == page_host.split(".")[-2:]:
+        return True
+    if any(host == s or host.endswith("." + s) for s in [v for v, _ in VENDOR_HOSTS] + list(SCHOOL_STORE_HOSTS)) \
+            or host.endswith(".edu"):
+        return True
+    return bool(sc["soccer"] or sc["female"] or ID_RE.search(text or "") or _names_school(f"{url} {text}", tokens))
+
+
+def _page_vouches(final_url: str | None, html: str | None, base_host: str, tokens: set[str]) -> bool:
+    """Whether a fetched off-site camps page shows it is a camp vendor's or the school's."""
+    if not html:
+        return False
+    vendor = detect_vendor(final_url, html, base_host)
+    if vendor and vendor != "external":
+        return True
+    if final_url and _host(final_url).endswith(".edu"):
+        return True
+    title = _title_of(html)
+    return bool(title and _names_school(title, tokens))
+
+
 def _anchor_candidates(soup, base_url: str, exclude: set[str]) -> list[dict]:
     out, seen = [], set()
     for i, a in enumerate(soup.find_all("a", href=True)):
@@ -228,8 +326,10 @@ def _json_candidates(html: str, base_url: str, exclude: set[str]) -> list[dict]:
 
 
 def find_camps_link(html: str, page_url: str) -> dict | None:
-    """The camps link on a roster page: {url, text, via: anchor|json, female, soccer} or None.
-    Anchors (text, title, aria-label, href) first; JSON nav objects only when no anchor matches."""
+    """The camps link on a roster page: {url, text, via: anchor|json, female, soccer, vouched,
+    schoolTokens} or None. Anchors (text, title, aria-label, href) first; JSON nav objects only when no
+    anchor matches. `vouched` is False for an off-site link that does not itself show it belongs to a
+    camp vendor or the school; collect() then uses it only if the fetched page shows that (#162)."""
     exclude = {page_url.split("#")[0]}
     soup = BeautifulSoup(html, "html.parser")
     best = _pick(_anchor_candidates(soup, page_url, exclude))
@@ -239,7 +339,9 @@ def find_camps_link(html: str, page_url: str) -> dict | None:
         via = "json"
     if not best:
         return None
-    return {"url": best["url"], "text": best["text"], "via": via, "female": best["female"], "soccer": best["soccer"]}
+    tokens = _school_tokens(html, page_url)
+    return {"url": best["url"], "text": best["text"], "via": via, "female": best["female"], "soccer": best["soccer"],
+            "vouched": _vouched(best["url"], best["text"], best, page_url, tokens), "schoolTokens": sorted(tokens)}
 
 
 def _strippable(el) -> bool:
@@ -1379,10 +1481,16 @@ def collect(program: dict, registry: dict) -> dict:
         html, _ = common.fetch_text(roster_url, max_age_hours=24)
         link = find_camps_link(html, roster_url)
     source_url = roster_url
+    r = fetch_checked(link["url"], base_host) if link else None
+    if link and not link.get("vouched", True) and not _page_vouches(
+            r["finalUrl"] or link["url"], r["html"], base_host, set(link.get("schoolTokens") or ())):
+        why = "the page" if r["html"] else "robots.txt" if r["robotsBlocked"] else (r["error"] or "the unreadable page")
+        common.log(f"camps: {link['url']} ({link['text'][:60]!r}) is off the athletics site, and neither the link "
+                   f"nor {why} shows it is a camp vendor's or the school's; not used (#162)")
+        link = None
     if link:
         data["campsUrl"], data["discoveredVia"] = link["url"], link["via"]
         source_url = link["url"]
-        r = fetch_checked(link["url"], base_host)
         if r["html"] and _same_site(r["finalUrl"] or link["url"], base_host) and not (link["female"] or link["soccer"]):
             hop = find_hub_hop(r["html"], r["finalUrl"] or link["url"], {roster_url, link["url"]})
             if hop:
