@@ -30,6 +30,11 @@ Membership policy (the owner's decisions on issue #94), applied on every build:
     domain in the same state); Wikipedia and TopDrawerSoccer fill a field only when the name
     matches exactly AND an independent signal (state for Wikipedia, conference for TDS) agrees.
     Anything a source does not establish is null and listed in the report.
+  - `stagedDivisions` is the set of divisions whose programs are built into `programs` but published
+    by nothing: every entry is `onboarded: false`, so the site, the collectors and the build skip
+    them. It is how a division is prepared -- list, slugs and joins reviewed in a diff -- before it
+    is onboarded (issue #94, Division II). Onboarding then moves the division from one list to the
+    other. A staged entry is not held: heldPrograms is for programs the site has published.
 
 Existing entries are preserved: a build writes only `division`, `conference` and `ids.ncaaOrgId`
 on a program that stays. data/registry-build-report.json records every decision.
@@ -74,6 +79,13 @@ MAX_DEPARTURE_SHARE = 0.05
 # Every D1 label that existed before #100 is kept for the conference it named. Three are new with
 # the 2026-27 lists: Pac-12, UAC and Metro (the Directory's name for the 13 former MAAC members).
 # A name missing here is published as the Directory spells it and listed in the report.
+#
+# The table is Division I only, and conference_label() applies it to a D1 row only. Conference names
+# repeat across divisions with different meanings: "Independent" is 1 D1 program and 8 D2 programs,
+# and labelling those eight "DI Independent" would be wrong. Division II keeps the Directory's own
+# spelling until its own label table is reviewed (issue #94; the pills want short names before a D2
+# program is published).
+LABELLED_DIVISION = "D1"
 CONFERENCE_LABELS = {
     "America East Conference": "America East", "American Conference": "American", "Atlantic 10 Conference": "Atlantic 10",
     "Atlantic Coast Conference": "ACC", "Atlantic Sun Conference": "ASUN", "BIG EAST Conference": "Big East",
@@ -254,9 +266,13 @@ def fetch_directory(registry: dict | None = None) -> dict[str, list[dict]]:
     return out
 
 
-def conference_label(directory_name: str | None) -> str | None:
+def conference_label(directory_name: str | None, division: str | None = LABELLED_DIVISION) -> str | None:
+    """The label for a Directory conference name. Only a Division I row is looked up in
+    CONFERENCE_LABELS; every other division keeps the Directory's own spelling (see the table)."""
     if not directory_name:
         return None
+    if division != LABELLED_DIVISION:
+        return directory_name
     return CONFERENCE_LABELS.get(directory_name, directory_name)
 
 
@@ -365,6 +381,28 @@ def scorecard_by_domain(website: str | None, state: str | None, bulk: list[dict]
     return None, "none"
 
 
+def contested_scorecard_ids(rows: list[dict], bulk: list[dict], registry: dict | None = None) -> dict[int, list[str]]:
+    """Scorecard rows that more than one program would claim: unitId -> the names claiming it.
+
+    scorecard_by_domain() refuses to pick between two Scorecard rows for one program. This is the
+    other direction, and the Directory produces it: a merged university keeps one Scorecard row while
+    the Directory still lists each campus, all on the parent's domain. Bloomsburg and Mansfield both
+    resolve to Commonwealth University of Pennsylvania (Bloomsburg PA), and PennWest California and
+    PennWest Clarion both to Pennsylvania Western University (California PA) -- so one campus of each
+    pair would take the other's city, coordinates and time zone. A contested row is used by nobody:
+    the fields stay null and the report names it for review (issue #94)."""
+    claims: dict[int, list[str]] = collections.defaultdict(list)
+    for row in rows:
+        sc, _ = scorecard_by_domain(row["website"], row["state"], bulk)
+        if sc and sc.get("id") is not None:
+            claims[sc["id"]].append(row["name"])
+    for p in list((registry or {}).get("programs") or []) + list((registry or {}).get("heldPrograms") or []):
+        unit = (p.get("ids") or {}).get("scorecardUnitId")
+        if unit in claims:
+            claims[unit].append(f"{p['slug']} (already in the registry)")
+    return {unit: names for unit, names in claims.items() if len(names) > 1}
+
+
 # ---------- identity ----------
 
 def _program_state(program: dict, bulk_by_id: dict) -> str | None:
@@ -412,17 +450,39 @@ def resolve_identity(program: dict, rows_by_org: dict[int, dict], bulk_by_id: di
 
 # ---------- membership ----------
 
+def staged_divisions(registry: dict) -> list[str]:
+    """registry.stagedDivisions: divisions whose programs are IN the registry but are not published --
+    entries built ahead of onboarding so the list, the slugs and the joins can be reviewed before any
+    collector runs (issue #94, Division II).
+
+    Explicit policy data, like onboardedDivisions, and for the same reason: onboarding a division is
+    then a one-line move from one list to the other, reviewed in a diff. A staged entry is
+    `onboarded: false`, so build.published_programs() never publishes it and iter_programs() never
+    hands it to a collector. A division cannot be in both lists: that would leave it unclear whether
+    its programs are published, and membership policy is exactly what must not be ambiguous (#100)."""
+    staged = registry.get("stagedDivisions") or []
+    if not isinstance(staged, list) or any(d not in DIVISION_ROMAN for d in staged) or len(staged) != len(set(staged)):
+        raise ValueError(f"registry.stagedDivisions must be a list of distinct divisions drawn from "
+                         f"{sorted(DIVISION_ROMAN)}, got {staged!r}")
+    both = sorted(set(staged) & set(registry.get("onboardedDivisions") or []))
+    if both:
+        raise ValueError(f"division(s) {both} are in both onboardedDivisions and stagedDivisions; a division is "
+                         f"either published or staged, not both. Onboarding removes it from stagedDivisions.")
+    return list(staged)
+
+
 def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: list[dict], *, today: str,
                      new_entries: dict[int, dict] | None = None, max_departure_share: float = MAX_DEPARTURE_SHARE,
                      timezone_lookup=None) -> dict:
     """Apply the Directory lists and the membership policy to `registry` in place. Pure: no network,
     no file access. Returns the membership part of the build report.
 
-    `new_entries`: orgId -> a fully built registry entry, for Directory rows in an onboarded division
-    that no registry entry holds (see new_program_entry). A row with none is reported, not added."""
+    `new_entries`: orgId -> a fully built registry entry, for Directory rows in an onboarded or staged
+    division that no registry entry holds (see new_program_entry). A row with none is reported, not added."""
     onboarded = registry.get("onboardedDivisions")
     if not isinstance(onboarded, list) or not onboarded or any(d not in DIVISION_ROMAN for d in onboarded):
         raise ValueError(f"registry.onboardedDivisions must be a non-empty list drawn from {sorted(DIVISION_ROMAN)}, got {onboarded!r}")
+    staged = staged_divisions(registry)
     rows_by_org: dict[int, dict] = {}
     for division, rows in directory.items():
         for r in rows:
@@ -431,8 +491,9 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
             rows_by_org[r["orgId"]] = r
     bulk_by_id = {r.get("id"): r for r in bulk}
     new_entries = new_entries or {}
-    rep = {"onboardedDivisions": list(onboarded), "directoryCounts": {d: len(rows) for d, rows in directory.items()},
-           "identity": collections.Counter(), "unresolved": [], "reviewed": [], "duplicateOrgId": [],
+    rep = {"onboardedDivisions": list(onboarded), "stagedDivisions": list(staged),
+           "directoryCounts": {d: len(rows) for d, rows in directory.items()},
+           "identity": collections.Counter(), "unresolved": [], "reviewed": [], "duplicateOrgId": [], "staged": [],
            "reclassified": [], "held": [], "returned": [], "added": [], "notAdded": [], "conferenceChanged": [],
            "conferenceUnlabelled": [], "stateDisagreement": [], "scorecardDomainDisagreement": [],
            "timezoneFilled": [], "timezoneDisagreement": [], "slugs": {}}
@@ -484,8 +545,8 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
             if p.get("division") != row["division"]:
                 rep["reclassified"].append({"slug": slug, "from": p.get("division"), "to": row["division"], "orgId": org})
                 p["division"] = row["division"]
-            label = conference_label(row["conference"])
-            if row["conference"] and row["conference"] not in CONFERENCE_LABELS:
+            label = conference_label(row["conference"], row["division"])
+            if row["conference"] and row["division"] == LABELLED_DIVISION and row["conference"] not in CONFERENCE_LABELS:
                 rep["conferenceUnlabelled"].append({"slug": slug, "directory": row["conference"]})
             if label and p.get("conference") != label:
                 rep["conferenceChanged"].append({"slug": slug, "from": p.get("conference"), "to": label, "directory": row["conference"]})
@@ -494,6 +555,14 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
             if was_held:
                 p.pop("hold", None)
                 rep["returned"].append({"slug": slug, "division": row["division"]})
+            programs.append(p)
+            continue
+        if row is not None and row["division"] in staged and not p.get("onboarded"):
+            # Staged: in the registry, never published, and its division is not onboarded yet. It
+            # stays in `programs` as it is. heldPrograms is for a program the site HAS published and
+            # no longer does -- holding one that was never published would say the site dropped it,
+            # and would count it as a departure against the guard below.
+            rep["staged"].append({"slug": slug, "division": row["division"], "orgId": org})
             programs.append(p)
             continue
         hold = ({"reason": "division-not-onboarded", "division": row["division"], "orgId": org} if row is not None
@@ -508,17 +577,20 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
 
     published_before = len(current)
     if published_before and departures > max_departure_share * published_before:
-        raise RuntimeError(f"registry build would take {departures} of {published_before} programs out of the published set "
+        raise RuntimeError(f"registry build would move {departures} of {published_before} entries out of registry.programs "
                            f"(limit {max_departure_share:.0%}); refusing to write. A failed or truncated Directory response "
                            f"looks exactly like this. Report so far: held {[h['slug'] for h in rep['held']]}")
 
     taken = {p["slug"] for p in programs} | {p["slug"] for p in held}
     held_orgs = {(p.get("ids") or {}).get("ncaaOrgId") for p in programs + held}
-    for division in onboarded:
+    for division in list(onboarded) + staged:
         for row in directory.get(division, []):
             if row["orgId"] in held_orgs:
                 continue
             entry = new_entries.get(row["orgId"])
+            if entry is not None and division in staged and entry.get("onboarded"):
+                raise ValueError(f"new program {row['name']} (orgId {row['orgId']}) is in staged division {division} "
+                                 f"and must be onboarded: false; a staged division publishes nothing")
             if rep["unresolved"]:
                 # an unresolved entry may be this very row under an identity nobody has confirmed;
                 # adding it would publish the school twice
@@ -552,13 +624,19 @@ def apply_membership(registry: dict, directory: dict[str, list[dict]], bulk: lis
     registry["programs"] = programs
     registry["heldPrograms"] = held
     rep["identity"] = {k: v for k, v in rep["identity"].items() if v}
-    rep["slugs"] = {"published": len(programs), "held": len(held)}
+    rep["slugs"] = {"published": sum(1 for p in programs if p.get("onboarded") and p.get("division") in onboarded),
+                    "inPrograms": len(programs), "held": len(held),
+                    # every entry in programs that the site does not publish: staged divisions, plus a
+                    # program in an onboarded division that has not been through `onboard` yet
+                    "staged": sum(1 for p in programs if not p.get("onboarded") and p.get("division") in staged),
+                    "notOnboarded": sum(1 for p in programs if not p.get("onboarded"))}
     return rep
 
 
-def missing_org_rows(registry: dict, directory: dict[str, list[dict]], bulk: list[dict]) -> list[dict]:
-    """Directory rows in an onboarded division that no registry entry will hold after this build --
-    the programs new_program_entry must build. Uses the same identity rules as apply_membership."""
+def missing_org_rows(registry: dict, directory: dict[str, list[dict]], bulk: list[dict],
+                     divisions: list[str] | None = None) -> list[dict]:
+    """Directory rows in an onboarded or staged division that no registry entry will hold after this
+    build -- the programs new_program_entry must build. Same identity rules as apply_membership."""
     rows_by_org = {r["orgId"]: r for rows in directory.values() for r in rows}
     bulk_by_id = {r.get("id"): r for r in bulk}
     held = set()
@@ -566,17 +644,101 @@ def missing_org_rows(registry: dict, directory: dict[str, list[dict]], bulk: lis
         org, status, _ = resolve_identity(p, rows_by_org, bulk_by_id)
         if org is not None:
             held.add(org)
-    return [r for d in registry.get("onboardedDivisions") or [] for r in directory.get(d, []) if r["orgId"] not in held]
+    if divisions is None:
+        divisions = list(registry.get("onboardedDivisions") or []) + staged_divisions(registry)
+    return [r for d in divisions for r in directory.get(d, []) if r["orgId"] not in held]
 
 
-def new_slug(name: str, state: str | None, org_id: int, taken: set[str]) -> str:
-    """slugify(name); on a collision '<slug>-<state>'; then '<slug>-<orgId>'. Every candidate comes
-    from the source row, and a slug already in the registry (published or held) is never reused."""
-    base = common.slugify(name) or f"program-{org_id}"
-    for cand in (base, f"{base}-{state.lower()}" if state else None, f"{base}-{org_id}"):
-        if cand and cand not in taken:
+# Words dropped from an official name to get the short form a slug reads best as. "University" is a
+# form-of-institution word that common usage drops ("Adams State University" is Adams State), and so
+# are the connectors. "College" is NOT dropped: it is part of the name in common usage, and dropping
+# it turns Boston College into "boston" and Georgia College into "georgia", which is both misleading
+# and a collision with two different D1 schools. norm_school() keeps "college" for the same reason.
+SLUG_DROP_WORDS = {"university", "universities", "the", "of", "at", "in"}
+
+
+def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None = None) -> list[str]:
+    """The slug candidates for a Directory row, best first. A slug is a permanent URL, so every rung
+    is derived from the source row and nothing is invented (issue #94):
+
+      1. the short form: the official name without a parenthetical qualifier, "University" and the
+         connectors  -- "Adams State University" -> adams-state
+      2. the full official name, minus the qualifier                  -- "Georgia College" -> georgia-college
+         (this rung is what separates Georgia College from the University of Georgia, and Queens
+         College from Queens University of Charlotte, without reaching for a state)
+      3. the short form plus the state                                -- "Lincoln University" -> lincoln-mo
+      4. the full name plus the state
+      5. the short form plus the orgId -- always free, never expected
+
+    When the Directory qualifies the name itself -- "Anderson University (South Carolina)", and all 15
+    D2 and 5 D1 qualifiers are states -- the bare name is not offered at all and the ladder starts at
+    the state. The source is saying the name alone does not identify the school, and the registry
+    already says so too: `miami-fl` and `miami-oh`. It also keeps the slug stable across divisions,
+    which matters because a slug is a permanent URL: Anderson (SC) is D2 and Anderson (IN) is D3, and
+    without this the one built first would take `anderson` and the other `anderson-university`.
+
+    Apostrophes close up rather than splitting, as the registry's own `st-johns` does, so
+    "Saint Martin's University" is saint-martins and not saint-martin-s.
+
+    `preferred` (the verified Wikipedia short name, when a list gives one) goes in front, which is
+    how every D1 entry built since #107 was named.
+    """
+    name = common.strip_accents(name or "").replace("'", "").replace("’", "")
+    qualified = bool(re.search(r"\([^)]*\)", name))
+    plain = re.sub(r"\s*\([^)]*\)", " ", name).replace("&", "")
+    full = common.slugify(plain)
+    words = [w for w in re.split(r"[\s,–—-]+", plain) if w]
+    short = common.slugify(" ".join(w for w in words if re.sub(r"[^a-z]", "", w.lower()) not in SLUG_DROP_WORDS))
+    short = short or full or f"program-{org_id}"
+    full = full or short
+    st = (state or "").strip().lower()
+    unqualified = [] if (qualified and st) else [short, full]
+    ladder = [common.slugify(preferred) if preferred else None, *unqualified,
+              f"{short}-{st}" if st else None, f"{full}-{st}" if st else None, f"{short}-{org_id}"]
+    out: list[str] = []
+    for c in ladder:  # in order, without duplicates: "Wheaton College" makes rungs 1 and 2 the same
+        if c and c not in out:
+            out.append(c)
+    return out
+
+
+def new_slug(name: str, state: str | None, org_id: int, taken: set[str], preferred: str | None = None) -> str:
+    """The first slug_ladder() rung that no registry entry (published or held) already uses."""
+    for cand in slug_ladder(name, state, org_id, preferred):
+        if cand not in taken:
             return cand
     raise ValueError(f"no free slug for {name} (orgId {org_id})")
+
+
+def assign_slugs(rows: list[dict], taken: set[str], preferred: dict[int, str] | None = None) -> dict[int, str]:
+    """orgId -> slug for a batch of Directory rows, none of them colliding with each other or with
+    `taken`. Order-independent, unlike calling new_slug() row by row: when two new rows want the same
+    rung, BOTH move down the ladder, so neither gets to be the plain name because it was processed
+    first. A rung an existing entry holds also moves the new row, because a published slug is a URL
+    that must not change (issue #100)."""
+    preferred = preferred or {}
+    ladders = {r["orgId"]: slug_ladder(r["name"], r["state"], r["orgId"], preferred.get(r["orgId"])) for r in rows}
+    rung = {org: 0 for org in ladders}
+
+    def pick(org):
+        return ladders[org][min(rung[org], len(ladders[org]) - 1)]
+
+    for _ in range(max((len(l) for l in ladders.values()), default=0) + 1):
+        wanted = collections.Counter(pick(org) for org in ladders)
+        moved = False
+        for org in ladders:
+            if rung[org] >= len(ladders[org]) - 1:
+                continue  # the last rung carries the orgId and is free by construction
+            if pick(org) in taken or wanted[pick(org)] > 1:
+                rung[org] += 1
+                moved = True
+        if not moved:
+            break
+    out = {org: pick(org) for org in ladders}
+    clash = [s for s, n in collections.Counter(out.values()).items() if n > 1] + sorted(set(out.values()) & taken)
+    if clash:
+        raise ValueError(f"slug assignment did not converge; still colliding: {sorted(set(clash))[:8]}")
+    return out
 
 
 # ---------- enrichment of a new program ----------
@@ -699,11 +861,18 @@ def tds_team_for(row: dict, label: str | None, wiki_row: dict | None, tds: dict[
 
 
 def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dict[str, dict], taken: set[str],
-                      article_lookup=soccer_article_for, timezone_lookup=timezone_at) -> tuple[dict, dict]:
+                      article_lookup=soccer_article_for, timezone_lookup=timezone_at,
+                      slug: str | None = None, contested: dict[int, list[str]] | None = None) -> tuple[dict, dict]:
     """(registry entry, what each source established) for a Directory row the registry does not hold.
-    Every field is from a source or null; nothing is supplied from memory."""
-    label = conference_label(row["conference"])
+    Every field is from a source or null; nothing is supplied from memory.
+
+    `slug`: the slug assign_slugs() gave this row when a whole batch is being named at once. Without
+    one the row is named on its own, against `taken`."""
+    label = conference_label(row["conference"], row["division"])
     sc, sc_how = scorecard_by_domain(row["website"], row["state"], bulk)
+    if sc and (contested or {}).get(sc.get("id")):
+        # another program's domain resolves to this same Scorecard row; see contested_scorecard_ids
+        sc, sc_how = None, f"contested:{sc['id']} claimed by {len(contested[sc['id']])} programs"
     w, w_how = wiki_row_for(row, wiki)
     t, t_how = tds_team_for(row, label, w, tds)
     article = article_lookup(w.get("athleticsArticle")) if w else None
@@ -714,7 +883,10 @@ def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dic
         host = re.split(r"[/?#]", re.sub(r"^[a-z][a-z0-9+.-]*://", "", raw_ath.lower()), maxsplit=1)[0].rstrip(".")
         base_url = "https://" + host
     short = w["institution"] if w else None
-    slug = new_slug(short or row["name"], row["state"], row["orgId"], taken)
+    if slug is None:
+        slug = new_slug(row["name"], row["state"], row["orgId"], taken, preferred=short)
+    elif slug in taken:
+        raise ValueError(f"slug {slug!r} for {row['name']} (orgId {row['orgId']}) is already taken")
     city = sc.get("school.city") if sc else None
     entry = {
         "slug": slug, "onboarded": False, "name": row["name"], "shortName": short, "nickname": w["nickname"] if w else None,
@@ -742,29 +914,44 @@ def new_program_entry(row: dict, *, bulk: list[dict], wiki: list[dict], tds: dic
 # ---------- build ----------
 
 def build(registry: dict, *, limit: int | None = None) -> dict:
-    """Fetch the Directory (3 requests), build entries for new programs in onboarded divisions, then
-    apply the membership policy to a freshly locked registry and write it with the report.
-    `limit` caps how many new programs are built in one run (the rest are reported as notAdded)."""
+    """Fetch the Directory (3 requests), build entries for new programs in onboarded and staged
+    divisions, then apply the membership policy to a freshly locked registry and write it with the
+    report. `limit` caps how many new programs are built in one run (the rest are reported as notAdded).
+
+    A staged division (registry.stagedDivisions) is built exactly like an onboarded one except that
+    nothing is published: every entry is onboarded: false, so no collector and no page follows from
+    this run."""
     if not registry.get("onboardedDivisions"):
         raise ValueError("registry.onboardedDivisions is missing; it names the divisions the site publishes")
+    staged = staged_divisions(registry)
     directory = fetch_directory(registry)
     years = sorted({r["academicYear"] for rows in directory.values() for r in rows})
     bulk = fetch_scorecard_bulk(registry)
     missing = missing_org_rows(registry, directory, bulk)
     if limit is not None:
         missing = missing[:limit]
-    new_entries, evidence = {}, []
+    new_entries, evidence, contested = {}, [], {}
     if missing:
         wiki = {d: fetch_wiki_list(d) for d in sorted({r["division"] for r in missing})}
         tds = fetch_tds_teams() if any(r["division"] == "D1" for r in missing) else {}
         taken = {p["slug"] for p in list(registry.get("programs") or []) + list(registry.get("heldPrograms") or [])}
+        # name the whole batch at once, so two new programs wanting one slug both move down the ladder
+        preferred = {r["orgId"]: w["institution"] for r in missing
+                     for w, _ in [wiki_row_for(r, wiki.get(r["division"], []))] if w}
+        slugs = assign_slugs(missing, taken, preferred)
+        contested = contested_scorecard_ids(missing, bulk, registry)
+        for unit, names in sorted(contested.items()):
+            common.log(f"registry: Scorecard row {unit} is claimed by {len(names)} programs ({', '.join(names)}); "
+                       f"none of them takes it")
         for row in missing:
-            entry, ev = new_program_entry(row, bulk=bulk, wiki=wiki.get(row["division"], []), tds=tds, taken=taken)
+            entry, ev = new_program_entry(row, bulk=bulk, wiki=wiki.get(row["division"], []), tds=tds, taken=taken,
+                                          slug=slugs[row["orgId"]], contested=contested)
             taken.add(entry["slug"])
             new_entries[row["orgId"]] = entry
             evidence.append(ev)
             common.log(f"registry: new {row['division']} program {row['name']} -> {entry['slug']} "
-                       f"(scorecard {ev['scorecard']}, wikipedia {ev['wikipediaList']}, tds {ev['tds']})")
+                       f"(scorecard {ev['scorecard']}, wikipedia {ev['wikipediaList']}, tds {ev['tds']})"
+                       + (" [staged, not published]" if row["division"] in staged else ""))
     holder = {}
 
     def mutate(reg):
@@ -778,11 +965,13 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
         for field in ev["null"]:
             unmatched[field].append(ev["slug"])
     report = {"builtAt": common.now_iso(), "source": DIRECTORY_URL, "academicYears": years, **m,
+              "contestedScorecardRows": {str(u): names for u, names in sorted(contested.items())},
               "newPrograms": evidence, "unmatched": dict(unmatched),
               "lowConfidence": [{"slug": u["slug"], "evidence": u["evidence"]} for u in m["unresolved"]]}
     report["counts"] = {k: len(v) for k, v in report["unmatched"].items()}
     common.write_json(REPORT_PATH, report)
-    common.log(f"registry: {m['slugs']['published']} published, {m['slugs']['held']} held; identity {m['identity']}; "
+    common.log(f"registry: {m['slugs']['published']} published, {m['slugs']['staged']} staged ({', '.join(staged) or '-'}), "
+               f"{m['slugs']['held']} held; identity {m['identity']}; "
                f"added {len(m['added'])}, held now {len(m['held'])}, returned {len(m['returned'])}, reclassified "
                f"{len(m['reclassified'])}, conference changes {len(m['conferenceChanged'])}, unresolved {len(m['unresolved'])}")
     return report
