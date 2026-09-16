@@ -34,7 +34,7 @@ TITLE_YEAR_RE = re.compile(r"(?:19|20)\d\d")
 MONTHS = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
 DATE_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})$", re.I)
 # ---------- who the head coach is (issue #33) ----------
-# Measured over all 1,887 staff rows on the 313 cached Sidearm roster pages: 40 distinct titles
+# Measured over all 1,887 staff rows on the 313 cached Sidearm roster pages: 44 distinct titles
 # contain the word "head". `head coach` as a literal missed 41 pages whose coach is titled
 # "Head Women's Soccer Coach" (31), "Head Soccer Coach" (8) or "Head Women's Coach" (1) - one of
 # them (evansville) with a typographic apostrophe, the only non-ASCII character in any title here.
