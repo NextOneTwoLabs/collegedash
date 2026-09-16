@@ -177,6 +177,15 @@ def season_of(rows: list[dict], year: int) -> dict:
     return next((s for s in rows if s["year"] == year), {})
 
 
+def early_rpi_claims(seasons: list[dict], before_year: int) -> list[int]:
+    """Years before `before_year` that still carry an RPI claim - an `rpiRank` or an `rpi` block -
+    which is what "no earlier claim" (issue #153) actually means. Not the same question as how many
+    seasons are in the list: the list may carry real pre-D1 history once schedule collection runs,
+    and that history is correct data, not a leak. Only a rank or an rpi block for a year the program
+    was not D1 would be the leak."""
+    return sorted(s["year"] for s in seasons if s["year"] < before_year and (s.get("rpiRank") is not None or "rpi" in s))
+
+
 # ---------- what each program's data entitles it to ----------
 
 def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
@@ -459,9 +468,16 @@ def test_build(registry: dict, built: str, log: str) -> None:
     for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
         got = [s["year"] for s in profile(built, slug)["seasons"] if s.get("rpiRank")]
         ok(f"{slug} publishes {ranked} ranked seasons", len(got) == ranked, str(sorted(got)))
-    ok("new-haven, a 2025 D1 newcomer, has that one season and no earlier claim",
-       [s["year"] for s in profile(built, "new-haven")["seasons"]] == [FINISHED],
-       str([s["year"] for s in profile(built, "new-haven")["seasons"]]))
+    # fails if new-haven's D1 rank leaks onto a season it played before joining D1 (issue #153).
+    # Not "the season list is exactly [2025]": once schedule collection runs, the list correctly
+    # carries New Haven's real D2-era results too (2023, 2024) - that is data, not a defect. The
+    # only thing that must stay true is that no year before 2025 carries an RPI claim.
+    nh_seasons = profile(built, "new-haven")["seasons"]
+    ok("new-haven, a 2025 D1 newcomer, has exactly one ranked season and it is 2025",
+       [s["year"] for s in nh_seasons if s.get("rpiRank")] == [FINISHED],
+       str([s["year"] for s in nh_seasons if s.get("rpiRank")]))
+    ok("and no season before 2025 carries an rpiRank or an rpi block",
+       not early_rpi_claims(nh_seasons, FINISHED), str(early_rpi_claims(nh_seasons, FINISHED)))
     ok("alcorn-state's ranks come from the AlcornState archive key the registry now names",
        (registry and program(registry, "alcorn-state")["ids"]["rpiHistoryName"] == "AlcornState"),
        str(program(registry, "alcorn-state")["ids"]["rpiHistoryName"]))
