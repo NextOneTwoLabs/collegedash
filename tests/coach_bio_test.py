@@ -383,6 +383,21 @@ def test_build_publishes_it() -> None:
     since, logs = section(None, rows("Pat Lee", 1995, 2025), "Pat Lee (29th season)")
     ok("CONTROL no bio at all: #169's rule, which withdraws a run the infobox disagrees with (byu)", since is None, str(since))
 
+    # lsu-shaped: Wikipedia's own rule succeeds on its own (an unbroken 2021-2025 run, and the infobox's 5th season
+    # confirms 2021), while the bio says she enters her seventh season in 2026 (2020). The owner's decision is that
+    # the bio wins. Every case above where the two disagree is one where #169's rule already gives nothing, so
+    # without this one a build that let Wikipedia win would pass (Reviewer 2 on #181).
+    lsu_rows, lsu_box = rows("Sian Hudson", 2021, 2025), "Sian Hudson (5th season)"
+    since, logs = section(None, lsu_rows, lsu_box, head="Sian Hudson")
+    ok("CONTROL lsu-shaped, no bio: #169's rule on its own confirms 2021", since == 2021, str(since))
+    lsu_bio = {**bio, "name": "Sian Hudson", "firstSeason": 2020,
+               "url": "https://lsusports.net/sports/sc/roster/season/2026/staff/sian-hudson"}
+    since, logs = section(lsu_bio, lsu_rows, lsu_box, head="Sian Hudson")
+    ok("FIX lsu-shaped: the bio year (2020) is published over a Wikipedia year its own rule confirms (2021)",
+       since == 2020, str(since))
+    ok("FIX ... and the disagreement is logged with both years and the bio page",
+       any("2020" in m and "2021" in m and "sian-hudson" in m for m in logs), str(logs))
+
 
 def test_no_contact_details() -> None:
     print("privacy: tests/fixtures/coach_bio/")
