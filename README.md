@@ -16,6 +16,9 @@ pip install -r requirements.txt
 python collegedash.py serve            # http://127.0.0.1:8000/
 ```
 
+`python collegedash.py registry build` and the test suites also need the registry extra, which looks up time zones
+offline and is kept out of the data refresh: `pip install -r requirements-registry.txt`.
+
 Any static server over `public/` also works (`cd public && python -m http.server`), read-only.
 
 The FAQ page (`#/faq`) explains the sources, that nothing is verified by hand, and how to send feedback;

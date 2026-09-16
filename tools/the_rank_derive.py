@@ -363,7 +363,6 @@ def main(argv=None) -> int:
         "asset": os.path.relpath(args.asset, ROOT).replace(os.sep, "/"),
         "rankLabel": asset.get("rankLabel"),
         "rankYear": asset.get("rankYear"),
-        "programs": len(programs),
         "ranked": len(aliases),
         "evidenceCounts": dict(sorted(collections.Counter(
             a["evidence"] for a in aliases.values()).items())),

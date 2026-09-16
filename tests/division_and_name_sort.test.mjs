@@ -9,9 +9,16 @@
 // published index, and again against a synthetic three-division one - because the whole point of the
 // change is that the UI is derived from whatever data loaded.
 //
+// Single-division data (issue #110): the single-division tests used to read the shipped index and assert
+// it held exactly one division, so onboarding D2 would have turned them red without anything being wrong.
+// They now run against REAL, the shipped rows of the division that holds the most programs - which IS the
+// shipped index while the site publishes one division - and a separate test checks the shipped index
+// itself against what it actually contains.
+//
 // What this proves:
-//   - the shipped index carries `division` on every row and holds exactly one division today;
-//   - THE HEADLINE PROPERTY: with the shipped single-division data, row selection AND ordering are
+//   - the shipped index carries `division` on every row, and the page's division list is exactly the
+//     distinct divisions in it;
+//   - THE HEADLINE PROPERTY: with single-division data, row selection AND ordering are
 //     byte-for-byte what they were before the division clause existed, over 720 filter states, and the
 //     rendered conference pill row is character-identical to the markup this page shipped before;
 //   - the Division pill row does not exist with one division and does exist, with counts, with three;
@@ -113,7 +120,8 @@ function loadPage(overrides, seed) {
     + ' renderCamps, renderList, renderSidebar, loadIndex, loadCamps, route,'
     + ' shownDivisions, conferenceGroups, pruneConfToDivisions, corpusLabel, divisionName });\n';
   const fetchLog = [];
-  const sandbox = makeEnv(fetchLog, overrides, seed);
+  // every page gets the single-division index unless a test serves its own (see REAL below)
+  const sandbox = makeEnv(fetchLog, { [INDEX_URL]: REAL, ...(overrides || {}) }, seed);
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return { sandbox, fetchLog, source };
@@ -163,7 +171,11 @@ async function ready(sb) {
 }
 
 /* ---------- the real published index, and a synthetic three-division one built from it ---------- */
-const REAL = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+const SHIPPED = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+const DIV_COUNTS = SHIPPED.programs.reduce((m, p) => (m[p.division] = (m[p.division] || 0) + 1, m), {});
+const BIGGEST = Object.keys(DIV_COUNTS).sort((a, b) => DIV_COUNTS[b] - DIV_COUNTS[a] || a.localeCompare(b))[0];
+// The shipped rows of one division: the whole shipped index while the site publishes one division.
+const REAL = { ...SHIPPED, programs: SHIPPED.programs.filter(p => p.division === BIGGEST) };
 const D3_CONFS = ['NESCAC', 'Centennial', 'UAA', 'DIII Independent'];
 const D2_CONFS = ['Peach Belt', 'GLIAC'];
 // Real rows with division and conference reassigned, so every other field stays real and the views
@@ -185,12 +197,23 @@ const S = real.sandbox.S;
 const sidebar = () => real.sandbox.document.querySelector('#sidebar').innerHTML;
 const app = () => real.sandbox.document.querySelector('#app').innerHTML;
 
-test('the shipped index carries a division on every row, and holds exactly one', async () => {
-  await ready(real.sandbox);
-  const missing = REAL.programs.filter(p => !p.division);
+test('the shipped index carries a division on every row, and the page lists exactly the divisions in it', async () => {
+  const missing = SHIPPED.programs.filter(p => !p.division);
   assert.deepEqual(missing.map(p => p.slug), [], 'a published program row has no division');
-  assert.deepEqual(plain(S.index.divisions), ['D1'], 'the shipped index no longer holds exactly one division');
-  assert.equal(S.index.byDiv.D1, REAL.programs.length);
+  const shipped = loadPage({ [INDEX_URL]: SHIPPED });
+  await ready(shipped.sandbox);
+  assert.deepEqual(plain(shipped.sandbox.S.index.divisions), Object.keys(DIV_COUNTS).sort(),
+    'the page does not list exactly the divisions the shipped index holds');
+  assert.deepEqual(plain(shipped.sandbox.S.index.byDiv), DIV_COUNTS, 'the per-division counts disagree with the shipped rows');
+  assert.equal(shipped.sandbox.S.index.programs.length, SHIPPED.programs.length);
+});
+
+test('the single-division data the next tests use holds exactly one division, and all its rows', async () => {
+  await ready(real.sandbox);
+  assert.ok(REAL.programs.length > 300, `only ${REAL.programs.length} rows in ${BIGGEST}, too few for the synthetic index below`);
+  assert.deepEqual(plain(S.index.divisions), [BIGGEST], 'the single-division page holds more than one division');
+  assert.equal(S.index.byDiv[BIGGEST], REAL.programs.length);
+  assert.equal(REAL.programs.length, DIV_COUNTS[BIGGEST]);
   // the per-division split of the conference tally must reconstruct the site-wide tally exactly
   const rebuilt = {};
   for (const d of S.index.divisions) for (const [c, n] of Object.entries(S.index.byDivConf[d])) rebuilt[c] = (rebuilt[c] || 0) + n;
@@ -242,6 +265,7 @@ test('with one division there is no Division pill row and no conference grouping
 });
 
 test('with one division the list still calls itself NCAA Division I women\'s soccer', async () => {
+  assert.equal(BIGGEST, 'D1', 'the largest published division is no longer D1; this label test names Division I');
   real.sandbox.location.hash = '#/';
   await real.sandbox.renderList();
   assert.ok(app().includes("NCAA Division I women's soccer"),
@@ -477,7 +501,9 @@ test('the Name sort orders by the name the page renders, not the stored one', ()
   // the check has to be able to fail: the old comparator really does leave visible inversions
   const wasWrong = adjacentInversions(before);
   assert.ok(wasWrong > 0, 'the pre-#60 comparator produced no inversions - this check cannot fail and proves nothing');
-  assert.equal(wasWrong, 50, 'the number of visible inversions in the OLD order changed; re-measure before trusting the new one');
+  // No fixed count (PR #112 review): the old comparator's inversion count moves with every membership change to
+  // the largest division - it was 50, and one legitimate reclassification changed it. What must hold is that the
+  // old order is visibly wrong on today's data (above) and the new order is not (below).
   assert.equal(adjacentInversions(after), 0, 'the Name sort still leaves rows out of alphabetical order');
 
   // the specific programs issue #60 measured on the live site

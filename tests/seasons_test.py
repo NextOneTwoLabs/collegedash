@@ -24,8 +24,13 @@ Covers, in order:
   join        build_seasons: rows are created and not merely decorated, the match is exact on the
               curated ids with no shortName fallback, Wikipedia and the schedule keep ownership of
               `record` except where the key is present but null, and inProgress defers to a schedule
-  build       what build.py publishes: 350 with seasons / any rank / lastSeason / rpiHistory, every
-              lastSeason 2025 and carrying a record, and the per-program coverage of #3's examples
+  build       what build.py publishes, measured against what each program's own data entitles it to
+              (issue #110): a lastSeason with a record for every program with a record for 2025,
+              an RPI rank exactly where the program has a row under its own ids, and both absent -
+              correctly, and checked as such - for a program with none (a new D1 program, any D2 or D3
+              one). Plus the per-program coverage of #3's examples, and an anchor that does not come
+              from the ids or the loaders at all: every long-standing D1 program keeps its RPI ids, every RPI
+              season it published before #110, and its 2025 lastSeason (PR #112 review, M1)
   flip        the time bomb: relabelling current.json as the next season must not erase the last
               one, because the finished season comes from its immutable weekly snapshot
   archive+    the maintenance landmine: extending the archive over a season a snapshot covers takes
@@ -61,6 +66,10 @@ from collect import common  # noqa: E402
 # season that only exists because of this change.
 FINISHED = 2025
 SNAPSHOT = os.path.join(common.RPI_OUT_DIR, "weekly", str(FINISHED), f"{FINISHED}-12-08.json")
+
+# Long-standing D1 programs and the RPI seasons each published before issue #110 (PR #112 review, M1).
+PRE_100 = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-100-programs.json")
+RPI_ANCHOR = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-110-rpi-seasons.json")
 
 FAILS: list[str] = []
 TOTAL = 0
@@ -153,11 +162,11 @@ def rebuild(tmp: str, rpi_dir: str | None = None) -> tuple[str, str]:
 def complaints(log: str) -> str:
     """The lines build's own validate pass prints when an invariant fails."""
     return "\n".join(l for l in log.splitlines()
-                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING")))
+                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING", "STALE ", "MEMBERSHIP")))
 
 
 def program(registry: dict, slug: str) -> dict:
-    return next(p for p in common.iter_programs(registry) if p["slug"] == slug)
+    return next(p for p in build.published_programs(registry) if p["slug"] == slug)
 
 
 def profile(built: str, slug: str) -> dict:
@@ -166,6 +175,125 @@ def profile(built: str, slug: str) -> dict:
 
 def season_of(rows: list[dict], year: int) -> dict:
     return next((s for s in rows if s["year"] == year), {})
+
+
+# ---------- what each program's data entitles it to ----------
+
+def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
+    """slug -> what the sources and RPI tables say this program should publish, computed from the data
+    and never from the build's output. Issue #110: the checks below used to assume every program was a
+    long-standing D1 program with a row in every table; a new D1 program has none, nor will any D2 or D3
+    program. The expectation is derived per program instead, so a program with no RPI row is asserted
+    to publish no rank - absent, and correctly so - rather than skipped.
+
+      rpiYears        seasons with a row under the program's own ids: an archive sheet keyed by
+                      ids.rpiHistoryName, or an NCAA table keyed by ids.ncaaName (exact, as the build joins)
+      finishedRecord  some source carries a record for FINISHED: its NCAA table row, a FINISHED schedule
+                      history, the live schedule if it is FINISHED's, or a Wikipedia FINISHED record
+      anySeason       any source that creates a season row at all
+    """
+    ctx = swapped(RPI_OUT_DIR=rpi_dir) if rpi_dir else contextlib.nullcontext()
+    with ctx:
+        hist = build.load_rpi_history()
+        finals = build.load_rpi_finals(registry["season"]["current"])
+    out = {}
+    for p in build.published_programs(registry):
+        ids = p.get("ids") or {}
+        hname, nname = ids.get("rpiHistoryName"), ids.get("ncaaName")
+        years = {y for y, table in hist.items() if hname and table.get(hname)}
+        finals_rows = ({y: next((t for t in doc.get("teams") or [] if t.get("school") == nname), None)
+                        for y, doc in finals.items()} if nname else {})
+        years |= {y for y, row in finals_rows.items() if row}
+        wiki = (common.load_source(p["slug"], "wikipedia") or {}).get("data") or {}
+        ath = (common.load_source(p["slug"], "athletics") or {}).get("data") or {}
+        wseasons = wiki.get("seasons") or []
+        sched = ath.get("schedule") or {}
+        history = ath.get("scheduleHistory") or {}
+        record = (bool((finals_rows.get(FINISHED) or {}).get("record"))
+                  or bool(history.get(str(FINISHED)))
+                  or bool(sched.get("games") and (sched.get("season") or registry["season"]["current"]) == FINISHED)
+                  or any(w.get("year") == FINISHED and w.get("record") for w in wseasons))
+        out[p["slug"]] = {"rpiYears": years, "finishedRecord": record,
+                          "anySeason": bool(years or wseasons or sched.get("games") or history)}
+    return out
+
+
+def _last(rows: dict, slug: str) -> dict:
+    return (rows.get(slug) or {}).get("lastSeason") or {}
+
+
+def check_anchor(registry: dict, rows: dict[str, dict], label: str) -> None:
+    """What the entitlements cannot see (PR #112 review, M1). They are computed from the registry ids and the
+    RPI loaders, the same inputs the build reads, so a fault in either moves the expectation with the output:
+    nulling rpiHistoryName and ncaaName on 40 programs passed every entitlement check while 40 profiles lost
+    their RPI history. These checks do not use either input. The anchor is a fixed list, independent of the
+    data under test: the long-standing D1 programs (tests/fixtures/registry/pre-100-programs.json) and the RPI
+    seasons each of them published before this change. Past seasons do not disappear, so a program still
+    published in D1 must keep its ids, keep at least those seasons, and keep a 2025 lastSeason with a record.
+    A new program (West Florida) or a non-D1 one is not in the anchor and is not affected."""
+    pre = {p["slug"] for p in json.load(open(PRE_100, encoding="utf-8"))["programs"]}
+    anchor_doc = json.load(open(RPI_ANCHOR, encoding="utf-8"))
+    anchor = anchor_doc["programs"]
+    # the fixture's lastSeason flags were measured for one season; a rollover must re-measure it, not reinterpret it
+    ok(f"{label}: the RPI seasons fixture was measured for the finished season {FINISHED}", anchor_doc.get("finished") == FINISHED,
+       f"fixture finished {anchor_doc.get('finished')}, FINISHED {FINISHED}")
+    progs = [p for p in build.published_programs(registry) if p["slug"] in pre and p.get("division") == "D1"]
+    ok(f"{label}: the anchor covers the long-standing D1 programs still published", bool(progs)
+       and all(p["slug"] in anchor for p in progs), str([p["slug"] for p in progs if p["slug"] not in anchor][:5]))
+    # ncaaName for every one; rpiHistoryName for those with archive seasons (new-haven joined D1 in 2025 and has none)
+    lost_ids = [p["slug"] for p in progs
+                if not (p.get("ids") or {}).get("ncaaName")
+                or (any(y < FINISHED for y in anchor.get(p["slug"], {}).get("rpiYears", [])) and not (p.get("ids") or {}).get("rpiHistoryName"))]
+    ok(f"{label}: every long-standing D1 program keeps its RPI ids", not lost_ids, f"{len(lost_ids)}: {lost_ids[:6]}")
+    lost_years = {p["slug"]: sorted(set(anchor[p["slug"]]["rpiYears"]) - {h["year"] for h in (rows.get(p["slug"]) or {}).get("rpiHistory") or []})
+                  for p in progs if p["slug"] in anchor}
+    lost_years = {k: v for k, v in lost_years.items() if v}
+    ok(f"{label}: every long-standing D1 program still publishes every RPI season it published before", not lost_years,
+       f"{len(lost_years)}: {dict(list(lost_years.items())[:4])}")
+    lost_last = [p["slug"] for p in progs if anchor.get(p["slug"], {}).get("lastSeasonRecord")
+                 and not (((rows.get(p["slug"]) or {}).get("lastSeason") or {}).get("year") == FINISHED
+                          and rows[p["slug"]]["lastSeason"].get("record"))]
+    ok(f"{label}: every long-standing D1 program still publishes a {FINISHED} lastSeason with a record", not lost_last,
+       f"{len(lost_last)}: {lost_last[:6]}")
+
+
+def check_published_against(ent: dict[str, dict], rows: dict[str, dict], built: str | None, label: str) -> None:
+    """The published index (and profiles, when `built` is given) against the entitlements, both ways."""
+    ok(f"{label}: some program is entitled to an RPI rank, so the rank checks below test something",
+       any(e["rpiYears"] for e in ent.values()), "no program has a row in any table")
+    ok(f"{label}: some program is entitled to a {FINISHED} record", any(e["finishedRecord"] for e in ent.values()))
+    ok(f"{label}: the index holds exactly the programs the entitlements were computed for",
+       sorted(rows) == sorted(ent), f"{len(rows)} rows, {len(ent)} programs")
+    lacking = [s for s, e in ent.items() if e["finishedRecord"] and _last(rows, s).get("year") != FINISHED]
+    ok(f"{label}: every program with a {FINISHED} record has lastSeason {FINISHED}", not lacking,
+       f"{len(lacking)}: {lacking[:5]}")
+    dashes = [s for s, e in ent.items() if e["finishedRecord"] and not _last(rows, s).get("record")]
+    ok(f"{label}: and every one carries a record, so the Record column has no dashes", not dashes,
+       f"{len(dashes)}: {dashes[:5]}")
+    unearned = [s for s, e in ent.items() if not e["finishedRecord"] and _last(rows, s).get("year") == FINISHED]
+    ok(f"{label}: no program without a {FINISHED} record publishes one", not unearned, str(unearned[:5]))
+    wrong_rank = [s for s, e in ent.items() if _last(rows, s).get("year") == FINISHED
+                  and bool(_last(rows, s).get("rpiRank")) != (FINISHED in e["rpiYears"])]
+    ok(f"{label}: lastSeason carries a rank exactly when the program has a {FINISHED} row, and none otherwise",
+       not wrong_rank, str([(s, _last(rows, s).get("rpiRank"), FINISHED in ent[s]["rpiYears"]) for s in wrong_rank[:5]]))
+    hist_wrong = [s for s, e in ent.items()
+                  if {h["year"] for h in (rows.get(s) or {}).get("rpiHistory") or []} != e["rpiYears"]]
+    ok(f"{label}: rpiHistory lists exactly the seasons with a row, and is empty for a program with none",
+       not hist_wrong, str([(s, sorted(h["year"] for h in rows[s].get("rpiHistory") or []), sorted(ent[s]["rpiYears"]))
+                            for s in hist_wrong[:3]]))
+    if built is None:
+        return
+    season_wrong, rank_wrong = [], []
+    for slug, e in ent.items():
+        ss = profile(built, slug)["seasons"]
+        if bool(ss) != e["anySeason"]:
+            season_wrong.append(slug)
+        if {x["year"] for x in ss if x.get("rpiRank")} != e["rpiYears"]:
+            rank_wrong.append(slug)
+    ok(f"{label}: a profile has season history exactly when a source creates a season", not season_wrong,
+       str(season_wrong[:5]))
+    ok(f"{label}: a profile's ranked seasons are exactly its rows, and none for a program with no row",
+       not rank_wrong, str(rank_wrong[:5]))
 
 
 # ---------- the loader ----------
@@ -322,32 +450,10 @@ def test_build(registry: dict, built: str, log: str) -> None:
     ok("the build's own validate pass reports nothing", not complaints(log), complaints(log)[:400])
     index = json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))
     rows = {r["slug"]: r for r in index["programs"]}
-    # Every published program, counted from the registry the build read (350 before issue #100 moved
-    # Saint Francis and Mississippi Valley State out of the published set), not a number to maintain.
-    n = sum(1 for _ in common.iter_programs(registry))
-    ok(f"index.json carries a row for each of the registry's {n} published programs",
-       n > 0 and sorted(rows) == sorted(p["slug"] for p in common.iter_programs(registry)), f"{len(rows)} rows, {n} programs")
-    ok(f"all {n} rows have a lastSeason", sum(1 for r in rows.values() if r.get("lastSeason")) == n,
-       str(sum(1 for r in rows.values() if r.get("lastSeason"))))
-    ok(f"all {n} rows have an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
-       str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
-    ok(f"every lastSeason is {FINISHED}",
-       all(r["lastSeason"]["year"] == FINISHED for r in rows.values()),
-       str(sorted({r["lastSeason"]["year"] for r in rows.values()})))
-    ok("and every one carries a record, so the list's Record column has no dashes",
-       all(r["lastSeason"].get("record") for r in rows.values()),
-       str([s for s, r in rows.items() if not r["lastSeason"].get("record")][:5]))
-    ok("and a rank, so the list's # column has none either",
-       all(r["lastSeason"].get("rpiRank") for r in rows.values()),
-       str([s for s, r in rows.items() if not r["lastSeason"].get("rpiRank")][:5]))
-
-    n_seasons = n_rank = 0
-    for slug in rows:
-        ss = profile(built, slug)["seasons"]
-        n_seasons += bool(ss)
-        n_rank += any(s.get("rpiRank") for s in ss)
-    ok(f"all {n} profiles have season history", n_seasons == n, str(n_seasons))
-    ok(f"all {n} profiles have at least one RPI rank", n_rank == n, str(n_rank))
+    ok("index.json carries a row for each published program", bool(rows) and
+       sorted(rows) == sorted(p["slug"] for p in build.published_programs(registry)), f"{len(rows)} rows")
+    check_published_against(entitlements(registry), rows, built, "build")
+    check_anchor(registry, rows, "build")
 
     # Issue #3's own examples, and the coverage each one is expected to have.
     for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
@@ -388,17 +494,11 @@ def test_flip(registry: dict) -> None:
         rows = {r["slug"]: r for r in json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))["programs"]}
         vandy = profile(built, "vanderbilt")
         ok("the rebuild still validates", not complaints(log), complaints(log)[:400])
-        n = sum(1 for _ in common.iter_programs(registry))
-        ok(f"still all {n} rows with a lastSeason",
-           n > 0 and sum(1 for r in rows.values() if r.get("lastSeason")) == n,
-           str(sum(1 for r in rows.values() if r.get("lastSeason"))))
-        ok(f"still all {n} with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
-           str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
-        ok(f"lastSeason is still {FINISHED} everywhere, not the newly labelled season",
-           {r["lastSeason"]["year"] for r in rows.values()} == {FINISHED},
-           str(sorted({r["lastSeason"]["year"] for r in rows.values()})))
-        ok("and still carries a record everywhere",
-           all(r["lastSeason"].get("record") for r in rows.values()))
+        # entitlements are read from the relabelled tables, the same ones the rebuild read
+        check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "flip")
+        check_anchor(registry, rows, "flip")
+        ok(f"no lastSeason is the newly labelled {cur_season}",
+           not [r for r in rows.values() if (r.get("lastSeason") or {}).get("year") == cur_season])
         s = season_of(vandy["seasons"], FINISHED)
         ok(f"vanderbilt {FINISHED} survives as #8, 18-4-2, not in progress",
            (s.get("rpiRank"), s.get("record"), s.get("inProgress")) == (8, "18-4-2", None), str(s))
@@ -429,19 +529,11 @@ def test_archive_extended(registry: dict) -> None:
         built, log = rebuild(tmp, scratch_rpi(tmp, cur_season=cur_season, archive_year=FINISHED))
         rows = {r["slug"]: r for r in json.load(open(os.path.join(built, "index.json"), encoding="utf-8"))["programs"]}
         ok("the rebuild still validates", not complaints(log), complaints(log)[:400])
-        n = sum(1 for _ in common.iter_programs(registry))
-        ok(f"still all {n} rows with a lastSeason, not 173",
-           n > 0 and sum(1 for r in rows.values() if r.get("lastSeason")) == n,
-           str(sum(1 for r in rows.values() if r.get("lastSeason"))))
-        ok(f"every lastSeason is still {FINISHED}",
-           {r["lastSeason"]["year"] for r in rows.values()} == {FINISHED},
-           str(sorted({r["lastSeason"]["year"] for r in rows.values()})))
-        dashes = [s for s, r in rows.items() if not r["lastSeason"].get("record")]
-        ok("and the Record column stays full: 0 dashes, not 177", not dashes, f"{len(dashes)}: {dashes[:5]}")
-        ok("every row still has a rank too", all(r["lastSeason"].get("rpiRank") for r in rows.values()),
-           str([s for s, r in rows.items() if not r["lastSeason"].get("rpiRank")][:5]))
-        ok(f"still all {n} with an rpiHistory", sum(1 for r in rows.values() if r.get("rpiHistory")) == n,
-           str(sum(1 for r in rows.values() if r.get("rpiHistory"))))
+        # The Record column must not lose a single entitled program to the new sheet: publishing 173
+        # lastSeasons instead of 350 was the bug. Entitlements read the same extended tables.
+        check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "archive+snapshot")
+        # the synthesised sheet re-ranks 2025 but must not cost any program a season, an id or its lastSeason
+        check_anchor(registry, rows, "archive+snapshot")
 
         # The synthesised sheet's ranks are deliberately wrong, so a published rank names its source.
         v = season_of(profile(built, "vanderbilt")["seasons"], FINISHED)
