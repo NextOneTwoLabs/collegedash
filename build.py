@@ -603,6 +603,21 @@ def coach_since(head_name: str | None, seasons: list[dict], infobox: str | None,
          run must agree with one of them. Beyond one season from both, the table and the infobox
          disagree about this coach and neither is taken. No "(Nth season)" for the head coach, no year.
     """
+    run = wikipedia_run(head_name, seasons)
+    if run is None:
+        return None
+    start, last = run
+    n = infobox_season_number(infobox, head_name)
+    if n is None:
+        return None
+    current = current_season if current_season is not None else CURRENT_SEASON_FALLBACK
+    anchors = {last, max(current, last)}
+    return start if any(abs((anchor - n + 1) - start) <= 1 for anchor in anchors) else None
+
+
+def wikipedia_run(head_name: str | None, seasons: list[dict]) -> tuple[int, int] | None:
+    """(first, last) season of the head coach's unbroken run ending at the table's latest season, before
+    any infobox check (rules 1 and 2 of coach_since); None when the table's latest season is not theirs."""
     if not head_name or not seasons:
         return None
     by_year: dict[int, list[dict]] = {}
@@ -621,12 +636,25 @@ def coach_since(head_name: str | None, seasons: list[dict], infobox: str | None,
         if y != start - 1 or not coached(y):
             break
         start = y
-    n = infobox_season_number(infobox, head_name)
-    if n is None:
-        return None
-    current = current_season if current_season is not None else CURRENT_SEASON_FALLBACK
-    anchors = {years[-1], max(current, years[-1])}
-    return start if any(abs((anchor - n + 1) - start) <= 1 for anchor in anchors) else None
+    return start, years[-1]
+
+
+def head_coach_first_season(program: dict, head_name: str | None, seasons: list[dict], infobox: str | None,
+                            bio: dict | None) -> int | None:
+    """The published first season (issue #168, part 2). The head coach's own bio page on the athletics site
+    wins when it gives a year for this coach: it is the school's source, collected into athletics.json as
+    headCoachBio by collect/coach_bio.py. A Wikipedia run that starts in a different year is logged, not used.
+    With no bio year, the Wikipedia run confirmed by the infobox (coach_since) is the year, as before."""
+    bio_year = None
+    if bio and head_name and bio.get("firstSeason") and same_person(bio.get("name") or "", head_name):
+        bio_year = bio["firstSeason"]
+    if bio_year:
+        run = wikipedia_run(head_name, seasons)
+        if run and run[0] != bio_year:
+            common.log(f"build: {program.get('slug')}: coachSince {bio_year} from {head_name}'s bio page "
+                       f"({bio.get('url')}); the Wikipedia seasons table starts the run in {run[0]}, not used (#168)")
+        return bio_year
+    return coach_since(head_name, seasons, infobox)
 
 
 def build_program_section(program, wiki, ath) -> dict:
@@ -636,7 +664,7 @@ def build_program_section(program, wiki, ath) -> dict:
     head = next((s for s in staff if s.get("isHeadCoach")), None)
     seasons = w.get("seasons", [])
     head_name = head["name"] if head else (re.sub(r"\(.*?\)", "", w.get("headCoach") or "").strip() or None)
-    since = coach_since(head_name, seasons, w.get("headCoach"))
+    since = head_coach_first_season(program, head_name, seasons, w.get("headCoach"), a.get("headCoachBio"))
     wins = sum(s.get("wins") or 0 for s in seasons)
     losses = sum(s.get("losses") or 0 for s in seasons)
     ties = sum(s.get("ties") or 0 for s in seasons)
