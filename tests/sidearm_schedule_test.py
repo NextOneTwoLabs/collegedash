@@ -45,6 +45,17 @@ in season records, and spring games listed after the fall block were dated a yea
                               does not. Read row by row it is a win, and it published the 2024
                               record as 15-5-3 where the school's release says 14-5-3 (PR #127 audit)
 
+Issue #129 added two more, for the rankings and seeds that were left inside opponent names. Only
+'#21 Ohio State' was ever read, and that is the one spelling the corpus no longer contains: 613
+names on 294 cached pages carry one of the other forms.
+
+  ranked-opponents            CONSTRUCTED: a real card for every spelling - No. N, RV, (RV), [N],
+                              (N) with a rank behind it, No. N seed, #N Seed, #N Seeded, #a/Tb,
+                              (N-Seed) with a poll pair behind it, #RV/N - and three rows that must
+                              NOT be touched, including a row that begins with a year
+  legacy-ranked-opponents     the same question in the legacy theme, where the decoration sits in
+                              .sidearm-schedule-game-opponent-name
+
 Every date these fixtures produce is also checked against the weekday the card prints. A weekday
 cannot be ambiguous between two years one apart, so it is a self-contained oracle for the date
 rules: the audit of PR #127 used it to confirm all 169 moved dates, including the 92 that no other
@@ -69,6 +80,7 @@ os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 from bs4 import BeautifulSoup  # noqa: E402
 
+from collect import common  # noqa: E402
 from collect.adapters import sidearm  # noqa: E402
 
 FIXTURES = os.path.join(ROOT, "tests", "fixtures", "sidearm")
@@ -374,7 +386,7 @@ def test_both_branches_agree_on_the_contract() -> None:
     current = parse("schedule-dual-template")["games"]
     ok("contract: both fixtures produced games", bool(legacy) and bool(current))
     expected = {"date", "datetime", "exhibition", "conferenceGame", "homeAway",
-                "opponent", "opponentRank", "location", "result", "score", "links"}
+                "opponent", "opponentRank", "opponentSeed", "location", "result", "score", "links"}
     ok("contract: current-theme keys are the documented set",
        set(current[0]) == expected, str(sorted(set(current[0]) ^ expected)))
     for game in legacy:
@@ -406,7 +418,7 @@ def test_fixtures_carry_no_contact_details() -> None:
     email = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
     phone = re.compile(r"(?<!\d)(?:\+?1[-. ]?)?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}(?!\d)")
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
-    ok("privacy: there are fixtures to check", len(names) == 9, str(names))
+    ok("privacy: there are fixtures to check", len(names) == 11, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
@@ -428,7 +440,7 @@ MARKER_GAMES = [
     ("2026-08-05", "A", "Campbell", True, None, None),                # 'Exhibitions' beside the venue
     ("2026-08-04", None, "Oregon State", True, "W", "2-1"),           # (EX)
     ("2026-09-18", "A", "Notre Dame", False, "L", "2-3"),             # at Alumni Soccer Stadium
-    ("2026-10-05", "H", "No. 21 Ohio State", False, "T", "1-1"),      # 'Alumni Day' promotion
+    ("2026-10-05", "H", "Ohio State", False, "T", "1-1"),             # 'Alumni Day' promotion; 'No. 21' is now a rank (#129)
     ("2026-10-01", "H", "Winthrop", False, "T", "0-0"),               # BOILING SPRINGS, NC
     ("2026-08-07", "H", "Furman", True, "T", "1-1"),                  # note really does say SCRIMMAGE
 ]
@@ -603,6 +615,123 @@ def test_spring_after_fall() -> None:
        == [("2026-03-01", None), ("2026-04-02", None)])
 
 
+# (opponent, rank, seed), in page order
+RANKED_GAMES = [
+    ("Notre Dame", 5, None),                        # No. 5 Notre Dame
+    ("Pepperdine", None, None),                     # RV Pepperdine - receiving votes, no number
+    ("Illinois", None, None),                       # (RV) Illinois
+    ("Ohio State", None, 8),                        # [8] Ohio State - a bracket seed
+    ("Texas", 21, 4),                               # (4) #21 Texas - seed and rank in one label
+    ("Louisiana Tech", None, 7),                    # No. 7 seed Louisiana Tech
+    ("ULM", None, 3),                               # #3 Seed ULM - the label is all that precedes it
+    ("Tarleton State University", None, 5),         # #5 Seeded Tarleton State University
+    ("UCLA", 7, None),                              # #7/T9 UCLA - first poll wins, T means tied
+    ("Baylor", 23, 5),                              # (5-Seed) #23/18 Baylor
+    ("Saint Louis", 21, None),                      # #RV/21 Saint Louis
+    ("2026 Summit League Soccer Championship", None, None),   # a year, not a rank
+    ("Michigan", None, None),
+    ("Baylor", None, None),
+]
+LEGACY_RANKED_GAMES = [
+    ("West Virginia", 20, None),                    # No. 20 West Virginia
+    ("Kansas", 21, None),                           # RV/No. 21 Kansas
+    ("Brown", 23, None),                            # #NR/RV/23 Brown
+    ("UC Irvine", None, 4),                         # [4] UC Irvine
+    ("Lamar", None, 1),                             # No. 1 Seed Lamar
+    ("FAU", None, 7),                               # #7 SEED FAU
+    ("University of Wisconsin", None, None),        # RV-University of Wisconsin
+    ("2026 Metro Championship", None, None),
+    ("Duquesne", None, None),
+]
+# What the pre-change parser did: it read a rank only from '#21 Ohio State' and left everything else
+# in the name. Kept here so the swap-back proof lives in the suite.
+ORIGIN_RANK_RE = re.compile(r"#\s*(\d+)\s+(.*)")
+
+
+def test_ranks_and_seeds_leave_the_name(name: str = "schedule-ranked-opponents") -> None:
+    print("rankings and seeds in front of the opponent (issue #129)")
+    for fixture_name, want in (("schedule-ranked-opponents", RANKED_GAMES),
+                               ("schedule-legacy-ranked-opponents", LEGACY_RANKED_GAMES)):
+        games = parse(fixture_name)["games"]
+        got = [(g["opponent"], g["opponentRank"], g["opponentSeed"]) for g in games]
+        ok(f"{fixture_name}: every opponent, rank and seed", got == want, f"got {got}")
+        ok(f"{fixture_name}: no name is left empty", all((g["opponent"] or "").strip() for g in games),
+           str([g["opponent"] for g in games]))
+        ok(f"{fixture_name}: no name still carries a decoration",
+           not [g for g in games if re.match(r"^(?:#|No\.?\s*\d|RV\b|NR\b|seed(?:ed)?\b|[\[(]\s*(?:\d{1,2}|RV|NR))", g["opponent"], re.I)],
+           str([g["opponent"] for g in games]))
+
+
+def test_every_spelling_and_the_ones_to_leave_alone() -> None:
+    """The unit table: every form measured in the corpus, and the strings that must survive intact."""
+    print("every ranking spelling, and the names that must survive")
+    for label, want in [
+        ("#21 Ohio State", (21, None, "Ohio State")),
+        ("No. 10 Arkansas", (10, None, "Arkansas")),
+        ("No. 3 Utah State University", (3, None, "Utah State University")),
+        ("No. 6/7 North Carolina", (6, None, "North Carolina")),
+        ("#14/#16 Michigan State", (14, None, "Michigan State")),
+        ("#T18 Wake Forest", (18, None, "Wake Forest")),
+        ("#7/T9 UCLA", (7, None, "UCLA")),
+        ("#NR/RV/23 Brown", (23, None, "Brown")),
+        ("#RV/RV/NR Indiana", (None, None, "Indiana")),
+        ("(25/19) Texas Tech", (25, None, "Texas Tech")),
+        ("(25/-) Colorado State", (25, None, "Colorado State")),
+        ("RV Utah State", (None, None, "Utah State")),
+        ("(RV) Iowa", (None, None, "Iowa")),
+        ("[RV] Xavier", (None, None, "Xavier")),
+        ("(rv) Texas Tech", (None, None, "Texas Tech")),
+        ("RV-University of Wisconsin", (None, None, "University of Wisconsin")),
+        ("RV/No. 21 Kansas", (21, None, "Kansas")),
+        ("(6) New Mexico vs. (3) Utah State (First Round)", (None, 6, "New Mexico vs. (3) Utah State (First Round)")),
+        ("[8] Ohio State", (None, 8, "Ohio State")),
+        ("No. 1 Seed Western Michigan", (None, 1, "Western Michigan")),
+        ("#2 Seed Arkansas", (None, 2, "Arkansas")),
+        ("#5 Seeded Tarleton State University", (None, 5, "Tarleton State University")),
+        ("(5-Seed) #23/18 Baylor", (23, 5, "Baylor")),
+        ("Seed ULM", (None, None, "ULM")),
+        ("Seed Old Dominion", (None, None, "Old Dominion")),
+        ("Seeded UCLA", (None, None, "UCLA")),
+        # names and labels that must come through untouched
+        ("Texas Tech", (None, None, "Texas Tech")),
+        ("Norfolk State", (None, None, "Norfolk State")),
+        ("Nova Southeastern", (None, None, "Nova Southeastern")),
+        ("Seedorf FC", (None, None, "Seedorf FC")),
+        ("Seed", (None, None, "Seed")),
+        ("RV", (None, None, "RV")),
+        ("No. 5", (None, None, "No. 5")),
+        ("2026 Summit League Soccer Championship", (None, None, "2026 Summit League Soccer Championship")),
+        ("2026 Metro Championship", (None, None, "2026 Metro Championship")),
+        ("19 Xavier", (None, None, "19 Xavier")),
+        ("24 Hour Classic", (None, None, "24 Hour Classic")),
+        ("1st Round", (None, None, "1st Round")),
+    ]:
+        got = sidearm.rank_seed_and_name(label)
+        ok(f"{label!r} -> {want}", got == want, f"got {got}")
+
+
+def test_origin_left_these_in_the_name() -> None:
+    """The swap-back proof: origin/main read a rank only from '#N ' and left the rest in the name."""
+    print("origin/main left these decorations in the name")
+    left = [(g["opponent"], g["opponentRank"], g["opponentSeed"]) for name in
+            ("schedule-ranked-opponents", "schedule-legacy-ranked-opponents") for g in parse(name)["games"]]
+    decorated = 0
+    for fixture_name in ("schedule-ranked-opponents", "schedule-legacy-ranked-opponents"):
+        soup = BeautifulSoup(fixture(fixture_name), "html.parser")
+        rows = sidearm._top_level_cards(soup) or soup.select("li.sidearm-schedule-game")
+        for r in rows:
+            el = r.select_one(".s-game-card__header__team-event-info") or r.select_one(".sidearm-schedule-game-opponent-name")
+            raw = [t for t in (common.clean(x) for x in el.get_text("\n").split("\n")) if t][0] if el else ""
+            m = ORIGIN_RANK_RE.match(raw)
+            origin_name = common.clean(m.group(2)) if m else raw
+            ours = sidearm.rank_seed_and_name(raw)[2]
+            if origin_name != ours:
+                decorated += 1
+    ok("origin/main leaves a decoration in 15 of the 23 names these fixtures carry", decorated == 15, str(decorated))
+    ok("and none of ours is empty or still decorated", all(n and not re.match(r"^(#|No\.\s*\d|RV\b|seed\b|\[|\()", n, re.I) or n.startswith("2026") for n, _, _ in left),
+       str([n for n, _, _ in left]))
+
+
 def main() -> int:
     global VERBOSE
     parser = argparse.ArgumentParser()
@@ -625,6 +754,9 @@ def main() -> int:
     test_spring_after_fall()
     test_spring_descriptor_gap()
     test_dates_match_the_weekday_on_the_card()
+    test_ranks_and_seeds_leave_the_name()
+    test_every_spelling_and_the_ones_to_leave_alone()
+    test_origin_left_these_in_the_name()
     test_fixtures_carry_no_contact_details()
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
