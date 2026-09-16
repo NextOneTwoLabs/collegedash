@@ -368,14 +368,78 @@ NCAA_D1_WOMENS_CHAMPIONS = {
 }
 
 
-def national_titles(slug: str, wiki_years: list[int]) -> list[int]:
-    """Authoritative title years for a program: the champions table, plus nothing else. Wikipedia
-    years that the table does not attribute to this program are logged and dropped."""
-    official = sorted(y for y, s in NCAA_D1_WOMENS_CHAMPIONS.items() if s == slug)
-    bogus = sorted(set(wiki_years or []) - set(official))
-    if bogus:
-        common.log(f"build: wikipedia claims NCAA titles for {slug} in {bogus} - not in the NCAA champions list, ignored")
-    return official
+# NCAA Division II women's soccer champions by season, named as NCAA.com's own championship history
+# writes them (https://www.ncaa.com/history/soccer-women/d2, read 2026-09-16). Every played year was
+# cross-checked against Wikipedia's "NCAA Division II women's soccer tournament" results table on the
+# same day and the two agree on all 37; where NCAA.com spells a school out and Wikipedia abbreviates
+# it ("Cal State East Bay" / "Cal State (H)", "Metro State" / "MSU") the spelled-out name is used.
+# 1988 is the first tournament and 2020 was cancelled for COVID, so both are absent on purpose. No year
+# is entered here that neither source shows; an unsourced year is reported by check_titles, never guessed.
+#
+# Keyed by champion NAME, not by slug as the D1 table is, because no Division II program is in the
+# registry yet: their slugs do not exist to be written down. title_matches() joins a name to a program
+# by exact normalised comparison with its registry name or short name, and D2_TITLE_SLUGS pins the ones
+# that comparison cannot reach. That table is empty today and gains an entry per D2 champion as D2
+# programs are onboarded - "Metro State" against "Metropolitan State University of Denver", say.
+NCAA_D2_WOMENS_CHAMPIONS = {
+    1988: "Cal State East Bay", 1989: "Barry", 1990: "Sonoma State", 1991: "Cal State Dominguez Hills",
+    1992: "Barry", 1993: "Barry", 1994: "Franklin Pierce", 1995: "Franklin Pierce",
+    1996: "Franklin Pierce", 1997: "Franklin Pierce", 1998: "Lynn", 1999: "Franklin Pierce",
+    2000: "UC San Diego", 2001: "UC San Diego", 2002: "Christian Brothers", 2003: "Kennesaw State",
+    2004: "Metro State", 2005: "Nebraska-Omaha", 2006: "Metro State", 2007: "Tampa",
+    2008: "Seattle Pacific", 2009: "Grand Valley State", 2010: "Grand Valley State", 2011: "Saint Rose",
+    2012: "West Florida", 2013: "Grand Valley State", 2014: "Grand Valley State",
+    2015: "Grand Valley State", 2016: "Western Washington", 2017: "Central Missouri",
+    2018: "Bridgeport", 2019: "Grand Valley State", 2021: "Grand Valley State",
+    2022: "Western Washington", 2023: "Point Loma", 2024: "Cal Poly Pomona", 2025: "Florida Tech",
+}
+# Reviewed joins from a D2 champion name to a registry slug, for the ones normalisation cannot reach.
+# Empty while no D2 program is published; each entry is a reviewed line in the PR that adds it.
+D2_TITLE_SLUGS: dict[str, str] = {}
+CHAMPION_TABLES = {"D1": NCAA_D1_WOMENS_CHAMPIONS, "D2": NCAA_D2_WOMENS_CHAMPIONS}
+
+_TITLE_NAME_DROP = re.compile(r"\b(the|university|universities|college|of|at)\b")
+
+
+def _title_name(s: str) -> str:
+    """'The College of Saint Rose' -> 'saint rose'; 'University of Nebraska at Omaha' -> 'nebraska omaha'."""
+    s = common.strip_accents(s or "").lower().replace("&", " and ")
+    s = re.sub(r"[^a-z0-9]+", " ", s)
+    s = _TITLE_NAME_DROP.sub(" ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def title_matches(program: dict, champion: str | None, division: str | None) -> bool:
+    """Is this program the champion the table names? D1 names a slug, so the comparison is exact. D2
+    names a school, so it is an exact match on the normalised registry name or short name, or a pinned
+    entry in D2_TITLE_SLUGS. Nothing fuzzy: a near-match here publishes another school's title. A
+    division with no champions table of its own matches nothing - it does not borrow another's."""
+    if not champion or division not in CHAMPION_TABLES:
+        return False
+    if division == "D1":
+        return champion == program.get("slug")
+    if D2_TITLE_SLUGS.get(champion):
+        return D2_TITLE_SLUGS[champion] == program.get("slug")
+    want = _title_name(champion)
+    return bool(want) and want in {_title_name(program.get("name") or ""), _title_name(program.get("shortName") or "")}
+
+
+def national_titles(program: dict, wiki_years: list[int]) -> tuple[list[int], list[int]]:
+    """(the years this program won its own division's championship, the years something claimed for it
+    that no champions table supports).
+
+    Issue #113: the second half used to be logged and thrown away, and the first half was always read
+    from the Division I table, so a Division II program's real titles were dropped in silence. Both
+    halves are now per division and both are published: the unsourced years go into the profile as
+    program.unsourcedTitleClaims and check_titles reports them."""
+    division = program.get("division")
+    table = CHAMPION_TABLES.get(division) or {}
+    official = sorted(y for y, champ in table.items() if title_matches(program, champ, division))
+    unsourced = sorted(set(wiki_years or []) - set(official))
+    if unsourced:
+        common.log(f"build: {program.get('slug')}: title years {unsourced} are not in the {division or 'unknown-division'} "
+                   f"champions table and are not published; check_titles reports them")
+    return official, unsourced
 
 
 def build_program_section(program, wiki, ath) -> dict:
@@ -395,6 +459,7 @@ def build_program_section(program, wiki, ath) -> dict:
     ties = sum(s.get("ties") or 0 for s in seasons)
     coaches = [s for s in staff if s.get("isCoach")]
     support = [s for s in staff if not s.get("isCoach")]
+    titles, unsourced_titles = national_titles(program, w.get("nationalTitles", []))
     return {
         "headCoach": {"name": head_name, "title": head["title"] if head else None,
                       "since": since, "seasons": (CURRENT_SEASON_FALLBACK - since + 1) if since else None,
@@ -403,7 +468,10 @@ def build_program_section(program, wiki, ath) -> dict:
         "supportStaff": support,
         "stadium": w.get("stadium"),
         "founded": w.get("founded"),
-        "nationalTitles": national_titles(program["slug"], w.get("nationalTitles", [])),
+        "nationalTitles": titles,
+        # only when there is something to report, so a program with nothing unsourced publishes exactly
+        # the profile it published before this key existed (issue #113)
+        **({"unsourcedTitleClaims": unsourced_titles} if unsourced_titles else {}),
         "nationalRunnerUp": w.get("nationalRunnerUp", []),
         "collegeCups": w.get("collegeCups", []),
         "ncaaAppearances": w.get("ncaaAppearances", []),
@@ -1427,22 +1495,52 @@ def check_academic_ranks(registry: dict) -> bool:
 
 
 def check_titles(registry: dict) -> bool:
-    """Every NCAA title year must be claimed by exactly the champion in NCAA_D1_WOMENS_CHAMPIONS."""
-    claimed: dict[int, list[str]] = {}
-    for program in published_programs(registry):
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"))
-        for y in ((p or {}).get("program") or {}).get("nationalTitles") or []:
-            claimed.setdefault(y, []).append(program["slug"])
+    """Every published national-title year is one its own division's champions table gives that program,
+    and every year those tables give a published program is published by it.
+
+    Per division since issue #113: a Division II program's titles are checked against the Division II
+    table, and a year in neither table is reported rather than disappearing. Those reports print as
+    "note: titles ..." and do not fail validate - a year a source claims and no championship record
+    supports is a data question, not a broken build, and it arrives from a refresh nobody is watching.
+    A published year that no table supports, or a table year a published champion did not publish, does
+    fail. Every line that fails starts "TITLES ", which is the prefix tests/seasons_test.py reads as an
+    invariant failure, so the notes deliberately do not use it."""
+    programs = published_programs(registry)
+    published, notes = set(), []
     ok = True
-    for y, slugs in sorted(claimed.items()):
-        expected = NCAA_D1_WOMENS_CHAMPIONS.get(y)
-        if slugs != [expected]:
-            print(f"TITLES {y}: claimed by {slugs}, NCAA champion is {expected}")
-            ok = False
-    total = sum(len(s) for s in claimed.values())
-    if total != len(NCAA_D1_WOMENS_CHAMPIONS):
-        print(f"TITLES: {total} title years published across programs, NCAA record has {len(NCAA_D1_WOMENS_CHAMPIONS)}")
+    for program in programs:
+        slug, division = program["slug"], program.get("division")
+        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        pr = p.get("program") or {}
+        for y in pr.get("nationalTitles") or []:
+            published.add((division, y, slug))
+        unsourced = pr.get("unsourcedTitleClaims") or []
+        if unsourced:
+            notes.append(f"note: titles {slug}: title years {sorted(unsourced)} are claimed for it by a source but are not "
+                         f"in the {division} champions table, so they are not published")
+    expected, unclaimed = set(), []
+    for division, table in CHAMPION_TABLES.items():
+        for year, champion in table.items():
+            winners = [q["slug"] for q in programs if q.get("division") == division and title_matches(q, champion, division)]
+            if len(winners) == 1:
+                expected.add((division, year, winners[0]))
+            elif len(winners) > 1:
+                print(f"TITLES {division} {year}: champion {champion!r} matches more than one published program: {sorted(winners)}")
+                ok = False
+            else:
+                unclaimed.append((division, year, champion))
+    for division, year, slug in sorted(published - expected):
+        champion = (CHAMPION_TABLES.get(division) or {}).get(year)
+        print(f"TITLES {division} {year}: published by {slug}, champion is {champion!r}")
         ok = False
+    for division, year, slug in sorted(expected - published):
+        print(f"TITLES {division} {year}: {slug} is the champion but publishes no title for that year")
+        ok = False
+    for line in notes:
+        print(line)
+    if unclaimed:
+        print(f"note: titles: {len(unclaimed)} champion years belong to programs this site does not publish "
+              f"(e.g. {', '.join(f'{d} {y} {c}' for d, y, c in unclaimed[:3])})")
     return ok
 
 
