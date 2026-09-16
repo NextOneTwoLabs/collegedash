@@ -566,6 +566,69 @@ def national_titles(program: dict, wiki_years: list[int]) -> tuple[list[int], li
     return official, unsourced
 
 
+# "(23rd season)" after a name in the Wikipedia infobox's head-coach field; a footnote marker such as
+# "Jeff Hosler [ 2 ] (4th season)" may sit between the two, and a co-coached program lists two
+# ("Tari St. John (18th season) Rob Alman (12th season)").
+_INFOBOX_SEASON_RE = re.compile(r"([^()\[\]]+?)\s*(?:\[\s*\w+\s*\]\s*)*\((\d{1,2})(?:st|nd|rd|th)\s+season\)", re.I)
+
+
+def infobox_season_number(infobox: str | None, head_name: str | None) -> int | None:
+    """N from the infobox's "<name> (Nth season)", only when that name is the head coach's."""
+    if not infobox or not head_name:
+        return None
+    for m in _INFOBOX_SEASON_RE.finditer(infobox):
+        if same_person(m.group(1).strip(), head_name):
+            return int(m.group(2))
+    return None
+
+
+def coach_since(head_name: str | None, seasons: list[dict], infobox: str | None,
+                current_season: int | None = None) -> int | None:
+    """The head coach's first season, or None when the stored Wikipedia source cannot show it (issue #168).
+
+    It used to be the earliest season whose coach shared the head coach's LAST name, which published
+    four wrong years: pittsburgh's Ben Waldrum "since 2018" (Randy Waldrum's first season),
+    south-florida's Chris Brown "since 2007" (Denise Schilte-Brown's), and penn-state and west-virginia
+    from seasons tables that name the same coach under an earlier surname. The year is now:
+
+      1. the same person, by same_person (nickname-aware; a hyphenated surname contains the earlier one,
+         so "Nikki Izzo" and "Nikki Izzo-Brown" are one coach, but Ben and Randy Waldrum are not);
+      2. one unbroken run of seasons ending at the table's latest season - a coach who is not in the
+         table's last season, or a gap in the run, gives no year rather than a year from before the gap.
+         A season the table lists twice (nebraska 2024) is one season, when every row of it names
+         this coach;
+      3. published only when it agrees, within one season, with the infobox's "(Nth season)" for that
+         coach. The count was written at some point between the table's latest season and today, and
+         the source does not say when, so it is counted back from each of those two seasons and the
+         run must agree with one of them. Beyond one season from both, the table and the infobox
+         disagree about this coach and neither is taken. No "(Nth season)" for the head coach, no year.
+    """
+    if not head_name or not seasons:
+        return None
+    by_year: dict[int, list[dict]] = {}
+    for s in seasons:
+        if isinstance(s.get("year"), int):
+            by_year.setdefault(s["year"], []).append(s)
+    years = sorted(by_year)
+
+    def coached(year: int) -> bool:
+        return all(r.get("headCoach") and same_person(r["headCoach"], head_name) for r in by_year[year])
+
+    if not years or not coached(years[-1]):
+        return None
+    start = years[-1]
+    for y in reversed(years[:-1]):
+        if y != start - 1 or not coached(y):
+            break
+        start = y
+    n = infobox_season_number(infobox, head_name)
+    if n is None:
+        return None
+    current = current_season if current_season is not None else CURRENT_SEASON_FALLBACK
+    anchors = {years[-1], max(current, years[-1])}
+    return start if any(abs((anchor - n + 1) - start) <= 1 for anchor in anchors) else None
+
+
 def build_program_section(program, wiki, ath) -> dict:
     w = wiki["data"] if wiki else {}
     a = ath["data"] if ath else {}
@@ -573,11 +636,7 @@ def build_program_section(program, wiki, ath) -> dict:
     head = next((s for s in staff if s.get("isHeadCoach")), None)
     seasons = w.get("seasons", [])
     head_name = head["name"] if head else (re.sub(r"\(.*?\)", "", w.get("headCoach") or "").strip() or None)
-    since = None
-    if head_name and seasons:
-        last = _name_parts(head_name)[1]
-        yrs = [s["year"] for s in seasons if s.get("headCoach") and _name_parts(s["headCoach"])[1] == last]
-        since = min(yrs) if yrs else None
+    since = coach_since(head_name, seasons, w.get("headCoach"))
     wins = sum(s.get("wins") or 0 for s in seasons)
     losses = sum(s.get("losses") or 0 for s in seasons)
     ties = sum(s.get("ties") or 0 for s in seasons)
