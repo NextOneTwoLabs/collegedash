@@ -150,8 +150,8 @@ def test_what_a_link_vouches_for() -> None:
     for label, href, text, want in (
             ("same site", "https://gostanford.com/camps", "Camps", True),
             ("another host on the athletics site's own domain", "https://camps.gostanford.com/", "Camps", True),
-            ("a camp vendor's host", "https://stanfordwsoc.totalcamps.com/About%20Us", "Camps", True),
-            ("a .edu host", "https://summer.stanford.edu/camps", "Camps", True),
+            ("a camp vendor's host", "https://cardinalwsoc.totalcamps.com/About%20Us", "Camps", True),
+            ("a .edu host (not otherwise naming the school)", "https://precollege.example.edu/camps", "Camps", True),
             ("a school's hosted store", "https://secure.touchnet.net/C20127_ustores/web/index.jsp", "Camps and Clinics", True),
             ("soccer named in the host", "https://www.cardinalsoccercamps.com/", "Camps", True),
             ("girls named in the text", "https://www.example-camps.com/", "Girls Camps", True),
