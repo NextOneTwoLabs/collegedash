@@ -20,6 +20,7 @@ import urllib.parse
 from collections import Counter, defaultdict
 
 import clubs
+import schools
 from collect import common
 from collect.camps import classify_camp
 from collect.commitments_tds import record_key
@@ -879,6 +880,23 @@ def observe_clubs(recorder, ath, tds, sw, *, slug: str, division: str) -> None:
         recorder.observe(r.get("club"), source="SoccerWire", division=division, slug=slug)
 
 
+def annotate_roster_schools(roster: dict | None, *, division: str, table=None, recorder=None) -> None:
+    """Give every current-roster player a `schoolInfo`: the raw high-school string, its cleaned key,
+    the NCES school id when exactly one school in the hometown's state carries that name, and the
+    status (matched / unmatched / ambiguous / outside-us), per issue #229. Never without the state.
+
+    D1 only for now (the owner's decision 7 on #225: D1 first, then D2 on the same model). A D2
+    roster is left as it is - no `schoolInfo` - rather than annotated and not counted."""
+    if not roster or division != "D1":
+        return
+    table = table or schools.load_table()
+    for q in roster["players"]:
+        m = table.match(q.get("highSchool"), q.get("hometown"))
+        q["schoolInfo"] = None if m.status == "none" else m.as_dict()
+        if recorder is not None:
+            recorder.observe(q, m, slug=roster.get("_slug"))
+
+
 def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dict]:
     a = (ath or {}).get("data") or {}
     roster = a.get("roster")
@@ -1335,11 +1353,13 @@ def load_academic_ranks(registry: dict) -> dict[str, dict]:
 # ---------- profile ----------
 
 def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: dict | None = None,
-                  ranks: dict[str, dict] | None = None, club_table=None, club_recorder=None) -> dict:
+                  ranks: dict[str, dict] | None = None, club_table=None, club_recorder=None,
+                  school_table=None, school_recorder=None) -> dict:
     slug = program["slug"]
     if ranks is None:
         ranks = load_academic_ranks(registry)
     club_table = club_table or clubs.load_table()
+    school_table = school_table or schools.load_table()
     S = lambda n: common.load_source(slug, n)
     scorecard, climate, wiki, ath = S("scorecard"), S("climate"), S("wikipedia"), S("athletics")
     tds, sw, news, camps = S("commitments.tds"), S("commitments.soccerwire"), S("news"), S("camps")
@@ -1349,6 +1369,12 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
     roster, roster_hist = build_roster(ath, build_club_lookup(tds, sw))
     annotate_roster_clubs(roster, ath, tds, sw, club_table)
     observe_clubs(club_recorder, ath, tds, sw, slug=slug, division=program.get("division", "D1"))
+    if roster:
+        roster["_slug"] = slug  # for the review report's per-program count; dropped below
+    annotate_roster_schools(roster, division=program.get("division", "D1"), table=school_table,
+                            recorder=school_recorder)
+    if roster:
+        roster.pop("_slug", None)
     a = program["athletics"]
     profile = {
         "slug": slug, "name": program["name"], "shortName": program.get("shortName"), "nickname": program.get("nickname"),
@@ -1538,10 +1564,13 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     club_table = clubs.load_table(reload=True)  # reviewed data; a contradictory edit raises here
     club_recorder = clubs.Recorder(club_table)
+    school_table = schools.load_table(reload=True)  # derived from NCES by tools/schools_nces.py; a bad file raises here
+    school_recorder = schools.Recorder(school_table)
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
-        profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder)
+        profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder,
+                                school_table, school_recorder)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
@@ -1578,6 +1607,15 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                f"{cs['clubStringsUnmatched']} unmatched in {cs['distinctUnmatchedKeys']} names "
                f"({club_report['newSinceLastBuild']['count']} new)"
                + (" -> data/clubs-review.json" if publishing else " (scratch build: review report not written)"))
+    school_report = (school_recorder.write() if publishing
+                     else school_recorder.report(common.read_json(schools.REVIEW_PATH)))
+    ss = school_report["summary"]
+    common.log(f"build: high schools (D1) {ss['matched']} of {ss['playersWithAHighSchool']} players matched "
+               f"({ss['matchedShareOfPlayersWithAHighSchool']}%) to {ss['distinctSchoolsMatched']} NCES schools; "
+               f"{ss['unmatched']} unmatched ({ss['unmatchedWithoutAState']} with no state), "
+               f"{ss['ambiguous']} ambiguous, {ss['outsideUS']} outside the US "
+               f"({school_report['newSinceLastBuild']['count']} names new)"
+               + (" -> data/schools-review.json" if publishing else " (scratch build: review report not written)"))
     if not validate(registry):
         common.log("!! build: schema validation reported errors (see SCHEMA lines above; `python collegedash.py validate`)")
     return rows
