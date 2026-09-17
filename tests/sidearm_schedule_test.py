@@ -425,11 +425,14 @@ def test_fixtures_carry_no_contact_details() -> None:
     # 25 since issue #160 added schedule-safelinks (its only address is placeholder@example.invalid)
     # 26 since issue #156 added roster-list-view-no-name-column (Mercyhurst, names are placeholders)
     # 27 since issue #183 added roster-list-view-table-reordered (hawaii-hilo, names are placeholders)
-    # 31 since issue #227 added roster-hometown-highschool-previous-school (Oakland),
+    # 33 since issue #227 added roster-hometown-highschool-previous-school (Oakland),
     #    roster-previous-team-is-a-club (Ohio),
-    #    roster-previous-team-ambiguous-high-school-or-college (California Baptist) and
-    #    roster-hometown-no-slash-real-previous-school (Hampton)
-    ok("privacy: there are fixtures to check", len(names) == 31, str(names))
+    #    roster-previous-team-ambiguous-high-school-or-college (California Baptist),
+    #    roster-hometown-no-slash-real-previous-school (Hampton),
+    #    roster-high-school-previous-schools-combined-column (Sam Houston) and
+    #    roster-two-hometown-prefixed-columns (Prairie View A&M) - the last two from Huatuo's
+    #    review of the first version of this fix (PR #231)
+    ok("privacy: there are fixtures to check", len(names) == 33, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()

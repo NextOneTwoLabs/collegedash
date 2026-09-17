@@ -283,9 +283,10 @@ def test_fixtures_carry_no_contact_details() -> None:
     # nine from issue #33, plus roster-no-staff and roster-players-and-staff from #145 (staff_fallback_test.py),
     # plus roster-list-view-no-name-column from #156 and roster-list-view-table-reordered from #183
     # (sidearm_list_view_test.py), plus roster-hometown-highschool-previous-school,
-    # roster-previous-team-is-a-club, roster-previous-team-ambiguous-high-school-or-college and
-    # roster-hometown-no-slash-real-previous-school from #227 (sidearm_roster_highschool_test.py)
-    ok("privacy: there are roster fixtures to check", len(names) == 17, str(names))
+    # roster-previous-team-is-a-club, roster-previous-team-ambiguous-high-school-or-college,
+    # roster-hometown-no-slash-real-previous-school, roster-high-school-previous-schools-combined-column
+    # and roster-two-hometown-prefixed-columns from #227 (sidearm_roster_highschool_test.py)
+    ok("privacy: there are roster fixtures to check", len(names) == 19, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()

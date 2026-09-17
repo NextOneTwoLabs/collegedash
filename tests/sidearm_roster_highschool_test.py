@@ -51,6 +51,23 @@ combined column is hometown-only (nothing after the slash) on a page that also h
 separate Previous School column. It pins the guard that stops the last-resort fallback above from
 reading that real Previous School column into highSchool for this row - the one case tiers 1 and 2
 don't reach on an otherwise-#227-shaped page.
+
+The next two fixtures were added after Huatuo's review of the first version of this fix (PR
+#231) found two regressions the fix's own before/after audit had missed - neither is a new bug
+class, both are the tier-1 `ci["hs"]` lookup and the plain `_col(idx, "hometown")` lookup not
+handling a column shape the corpus also contains:
+
+roster-high-school-previous-schools-combined-column is trimmed from Sam Houston's cached page: a
+single "High School / Previous Schools" column (tier 1, not the "Hometown / High School" combo
+tier 2 handles) that the first version of the fix took verbatim, appending a spurious "/ <College>"
+onto an otherwise-clean high school. Fixed by splitting a tier-1 hit exactly as the pre-fix code
+always did to whatever `ci["hs"]` pointed to.
+
+roster-two-hometown-prefixed-columns is trimmed from Prairie View A&M's cached page: two
+"hometown"-prefixed columns ("Hometown/Previous School", a club, and the real "Hometown / High
+School"), where `_col`'s plain first-match prefix search picked whichever came first in table
+order - the club one - so the real column was never read at all. Fixed by `_home_col`, which
+prefers whichever "hometown"-prefixed header also names "high school".
 """
 
 from __future__ import annotations
@@ -71,6 +88,8 @@ HS_PREV = "roster-hometown-highschool-previous-school.html"
 PREV_TEAM = "roster-previous-team-is-a-club.html"
 PREV_TEAM_AMBIGUOUS = "roster-previous-team-ambiguous-high-school-or-college.html"
 NO_SLASH_REAL_PREV = "roster-hometown-no-slash-real-previous-school.html"
+HS_COMBINED_COL = "roster-high-school-previous-schools-combined-column.html"
+TWO_HOMETOWN_COLS = "roster-two-hometown-prefixed-columns.html"
 FAILS: list[str] = []
 TOTAL = 0
 VERBOSE = False
@@ -206,6 +225,40 @@ def test_no_slash_row_never_falls_through_to_the_real_previous_school_column() -
        (sutton.get("hometown"), sutton.get("highSchool")))
 
 
+def test_high_school_combined_column_is_split_not_appended() -> None:
+    print("regression (Huatuo's review of PR #231): a tier-1 'High School / X' column must still split")
+    players = players_by_name(read(HS_COMBINED_COL), "https://gobearkats.com")
+    ok("row parsed", len(players) == 1, sorted(players))
+    stipp = players.get("Hannah Stipp", {})
+    ok("high school is clean, not polluted with an appended '/ <College>'",
+       stipp.get("highSchool") == "Circle HS", stipp.get("highSchool"))
+    ok("the split-off remainder still lands in previousSchool - it isn't just dropped",
+       stipp.get("previousSchool") == "North Dakota State", stipp.get("previousSchool"))
+    ok("hometown is unaffected (it's this page's own separate, plain column)",
+       stipp.get("hometown") == "Wichita, Kan.", stipp.get("hometown"))
+
+
+def test_home_col_prefers_the_hometown_prefixed_header_that_names_high_school() -> None:
+    print("regression (Huatuo's review of PR #231): two 'hometown'-prefixed columns, wrong one picked")
+    players = players_by_name(read(TWO_HOMETOWN_COLS), "https://pvpanthers.com")
+    ok("both rows parsed", len(players) == 2, sorted(players))
+
+    hutchinson = players.get("Kaarie Hutchinson", {})
+    ok("the real, present 'Hometown / High School' column is read, not the 'Hometown/Previous "
+       "School' club column that happens to come first in table order",
+       hutchinson.get("highSchool") == "Mansfield High School", hutchinson.get("highSchool"))
+    ok("hometown comes from the same, correct column", hutchinson.get("hometown") == "Mansfield, Texas", hutchinson.get("hometown"))
+    ok("the club still reaches previousSchool, from its own dedicated 'Previous School' column - "
+       "not invented, and not what made highSchool wrong",
+       hutchinson.get("previousSchool") == "Sting Royal", hutchinson.get("previousSchool"))
+    ok("the club name is nowhere in highSchool", "Sting" not in hutchinson.get("highSchool", ""), hutchinson.get("highSchool"))
+
+    jackson = players.get("Nenah Jackson", {})
+    ok("a non-transfer on the same page: real high school, no previous school",
+       (jackson.get("highSchool"), jackson.get("previousSchool")) == ("Mansfield High School", ""),
+       (jackson.get("highSchool"), jackson.get("previousSchool")))
+
+
 def test_prev_col_excludes_club_and_team_columns() -> None:
     print("_prev_col: unit checks for the header shapes measured in the cached corpus (issue #227)")
     cases = [
@@ -228,7 +281,8 @@ def test_prev_col_excludes_club_and_team_columns() -> None:
 
 def test_fixture_carries_no_contact_details() -> None:
     print("privacy: the fixtures have no email, phone, mailto: or tel:")
-    text = read(HS_PREV) + "\n" + read(PREV_TEAM) + "\n" + read(PREV_TEAM_AMBIGUOUS) + "\n" + read(NO_SLASH_REAL_PREV)
+    text = (read(HS_PREV) + "\n" + read(PREV_TEAM) + "\n" + read(PREV_TEAM_AMBIGUOUS) + "\n" + read(NO_SLASH_REAL_PREV)
+            + "\n" + read(HS_COMBINED_COL) + "\n" + read(TWO_HOMETOWN_COLS))
     for label, rx in [("email", r"[\w.+-]+@[\w-]+\.[\w.]+"), ("mailto", r"mailto:"), ("tel", r"tel:"),
                       ("10-digit phone", r"\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]\d{4}\b"), ("7-digit phone", r"\b\d{3}[\s.-]\d{4}\b")]:
         found = re.findall(rx, text, re.I)
@@ -247,6 +301,8 @@ def main(argv=None) -> int:
                  test_previous_team_column_is_never_read_as_previous_school,
                  test_ambiguous_previous_team_column_keeps_todays_value_when_nothing_better_exists,
                  test_no_slash_row_never_falls_through_to_the_real_previous_school_column,
+                 test_high_school_combined_column_is_split_not_appended,
+                 test_home_col_prefers_the_hometown_prefixed_header_that_names_high_school,
                  test_prev_col_excludes_club_and_team_columns,
                  test_fixture_carries_no_contact_details):
         try:

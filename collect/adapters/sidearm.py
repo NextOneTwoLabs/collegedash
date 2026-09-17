@@ -357,6 +357,31 @@ def _prev_col(idx: dict) -> int | None:
     return None
 
 
+def _home_col(idx: dict) -> int | None:
+    """Column index for hometown - `_col(idx, "hometown")`'s plain first-match prefix search,
+    except that a "hometown"-prefixed header which also names "high school" wins over one that
+    doesn't, when a page has more than one.
+
+    Found on prairie-view-am (issue #227, Huatuo's review of the first version of this fix):
+    the page has both "Hometown/Previous School" (holds a club, e.g. 'Mansfield, Texas / Sting
+    Royal') and, separately, the real "Hometown / High School" ('Mansfield, Texas / Mansfield
+    High School'). `_col`'s prefix search returns whichever of the two comes first in the table's
+    own column order - on this page, the club one - so the real combined column was never read at
+    all: the club name reached both `highSchool` (via the tier-2 split of the wrong column) and
+    `previousSchool` (from its own dedicated column), and the correct, present, correctly-labelled
+    high school was silently dropped. Preferring the header that actually says "high school" is
+    order-independent and matches every other multi-hometown-column page in the corpus
+    (wmubroncos.com, nevadawolfpack.com, usfdons.com), where the "high school" one already carries
+    the real data and the other is either a real transfer college or junk."""
+    candidates = [h for h in idx if h.startswith("hometown")]
+    if not candidates:
+        return None
+    for h in candidates:
+        if "high school" in h:
+            return idx[h]
+    return idx[candidates[0]]
+
+
 def _player_record(*, number, name, pos_label, height, class_label, hometown, high_school,
                    previous_school="", club="", major="", bio_url=None, social=None) -> dict:
     ht = height or ""
@@ -397,7 +422,7 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
         if "name" in idx and "pos" in idx and not is_staff:
             real_prev = _prev_col(idx)
             ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
-                  "yr": _col(idx, "year"), "home": _col(idx, "hometown"),
+                  "yr": _col(idx, "year"), "home": _home_col(idx),
                   "hs": _col(idx, "high school"), "prev": real_prev, "club": _col(idx, "club"),
                   "major": _col(idx, "major", "academic major"),
                   # Last resort only (see the loop below): the pre-fix broad match, for a page with
@@ -421,7 +446,20 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                 hometown = cell("home")
                 prev = cell("prev")
                 if ci["hs"] is not None:
-                    hs = cell("hs")
+                    # A tier-1 column can itself be a single combined one - 'High School /
+                    # Previous Schools', 'High School / Last School' (distinct from the
+                    # 'Hometown / High School' combo tier 2 handles) - so it needs the same split
+                    # the pre-fix code always applied to whatever `ci["hs"]` pointed to. Left
+                    # unsplit (Huatuo's review of the first version of this fix), a page whose only
+                    # school column is shaped that way got a previously-clean high school polluted
+                    # with an appended " / <College>" - e.g. sam-houston-state's Hannah Stipp,
+                    # 'Circle HS' -> 'Circle HS / North Dakota State'. Splitting is a no-op for a
+                    # plain 'High School' column, which never contains a slash. The remainder is
+                    # only used as `previousSchool` when no real, distinct Previous School column
+                    # already supplied one - `real_prev` from a separate column always wins.
+                    hs, hs_prev = _split_slash(cell("hs"))
+                    if not prev and hs_prev:
+                        prev = hs_prev
                 elif " / " in hometown:  # single 'Hometown / High School' column
                     hometown, hs = _split_slash(hometown)
                 elif ci["hs_fallback"] is not None and ci["hs_fallback"] != real_prev:
