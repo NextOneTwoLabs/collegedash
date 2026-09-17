@@ -16,6 +16,7 @@ from __future__ import annotations
 import datetime as dt
 import os
 import re
+import urllib.parse
 from collections import Counter, defaultdict
 
 from collect import common
@@ -850,11 +851,41 @@ def build_schedule(ath) -> dict | None:
 
 # ---------- camps ----------
 
+_TRACKING_PARAM = re.compile(r"^(utm_|fbclid$|gclid$|mc_cid$|mc_eid$)", re.I)
+
+
+def registration_key(url) -> str | None:
+    """A registration link reduced to what identifies the registration (issue #74): scheme, a leading "www."
+    and letter case in the host, a trailing slash, the fragment, query-parameter order and tracking parameters
+    do not make two links different; the path and every other parameter (Ryzer's `id`, `sport`) do.
+    None for anything that is not an http(s) URL."""
+    if not isinstance(url, str) or not url.strip():
+        return None
+    parts = urllib.parse.urlsplit(url.strip())
+    if parts.scheme.lower() not in ("http", "https") or not parts.netloc:
+        return None
+    host = parts.netloc.lower()
+    host = host[4:] if host.startswith("www.") else host
+    query = sorted((k, v) for k, v in urllib.parse.parse_qsl(parts.query, keep_blank_values=True) if not _TRACKING_PARAM.match(k))
+    return f"{host}{parts.path.rstrip('/')}?{urllib.parse.urlencode(query)}"
+
+
+def camp_source(item: dict) -> dict:
+    """Where one camp entry came from, kept on the merged entry so a camp found in two places keeps both."""
+    src = {"kind": item.get("kind"), "name": item.get("name"), "sourceUrl": item.get("sourceUrl")}
+    for k in ("newsTitle", "newsUrl", "newsDate"):
+        if item.get(k):
+            src[k] = item[k]
+    return src
+
+
 def build_camps(camps, news, curated) -> dict | None:
     """ID camps section: the camp page (link, host, vendor, robots state) plus one merged list of
     entries with `kind`: "camp" (extracted from the camp page), "news" (announced in a news
     release), "curated" (hand-written curated.camps[]). Dated entries first by start date, undated
-    last; a news entry that repeats a camp-page entry (same start date, same name) is dropped.
+    last; a news entry that repeats a camp-page entry (same start date, same name) is dropped, and entries
+    from different sources with the same start date and the same registration link are merged into one
+    that lists every source in `sources` (issue #74).
     `upcoming` is not computed here: the site is static, so the UI splits on today's date.
 
     Every entry also carries `campType`: "id", "youth" or "unknown" (issue #78). It is a LABEL, not
@@ -869,8 +900,8 @@ def build_camps(camps, news, curated) -> dict | None:
     items = []
     for e in c.get("camps") or []:
         items.append({**e, "kind": "camp"})
-    for e in c.get("newsCamps") or []:
-        items.append({**e, "kind": "news"})
+    # Source order is precedence (issue #74): camp page, then curated (hand-entered), then news. Whichever of two
+    # duplicates comes first here is the entry kept, so a curated entry wins over a news release about it.
     for e in curated.get("camps") or []:
         if isinstance(e, dict) and e.get("name"):
             sd = e.get("startDate")
@@ -878,13 +909,31 @@ def build_camps(camps, news, curated) -> dict | None:
                           "precision": ("month" if len(sd) == 7 else "day") if isinstance(sd, str) and sd else None,
                           "yearInferred": False, "location": None, "ages": None, "price": None, "registerUrl": None,
                           "sourceUrl": None, "confidence": "curated", **e, "kind": "curated"})
+    for e in c.get("newsCamps") or []:
+        items.append({**e, "kind": "news"})
     seen, merged = set(), []
+    by_registration: dict[tuple[str, str], dict] = {}
     for it in items:
         key = (it.get("startDate"), re.sub(r"\W+", "", (it.get("name") or "").lower())[:40])
         if it.get("startDate") and key in seen:
             continue
+        # Issue #74: the same camp announced on the camp page AND in a news release arrives twice, under two
+        # names ("Soccer ID Clinic | October 3rd" / "WOMEN'S SOCCER TO HOLD ID CLINIC", le-moyne). Two entries
+        # from different sources with the same start date and the same registration link are one camp: the
+        # first (camp page, then curated, then news - the order `items` is built in) is kept, and the other's
+        # source is recorded on it. A name alone never merges, and neither does a date alone: two camps on one
+        # day with different registration links stay two camps.
+        reg = registration_key(it.get("registerUrl"))
+        rkey = (it.get("startDate"), reg) if it.get("startDate") and reg else None
+        kept = by_registration.get(rkey) if rkey else None
+        if kept is not None and kept["kind"] != it["kind"]:
+            kept["sources"].append(camp_source(it))
+            continue
         seen.add(key)
-        merged.append({**it, "campType": classify_camp(it.get("name"))})
+        entry = {**it, "campType": classify_camp(it.get("name")), "sources": [camp_source(it)]}
+        merged.append(entry)
+        if rkey and rkey not in by_registration:  # the FIRST entry with this date and link is the one a later source merges into
+            by_registration[rkey] = entry
     merged.sort(key=lambda it: (it.get("startDate") is None, it.get("startDate") or "", it.get("name") or ""))
     metas = [_meta(camps)] if camps else []
     if news and any(it["kind"] == "news" for it in merged):
@@ -918,7 +967,8 @@ CAMP_INDEX_FIELDS = ("name", "startDate", "endDate", "dateText", "precision", "y
 # provenance belongs on the profile, where the release can be linked in context; the camp view joins
 # by slug and links `sourceUrl`. Listed rather than ignored so the guard below can tell "withheld on
 # purpose" from "forgotten", which is the whole point of #69.
-CAMP_ITEM_UNPUBLISHED = ("newsTitle", "newsUrl", "newsDate")
+# `sources` (issue #74): every place a merged camp was found; the row's own sourceUrl and kind are the kept entry's.
+CAMP_ITEM_UNPUBLISHED = ("newsTitle", "newsUrl", "newsDate", "sources")
 
 
 def camps_window(today: dt.date | None = None) -> dict:
