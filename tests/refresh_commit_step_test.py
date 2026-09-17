@@ -19,8 +19,10 @@ Each case:
 
 The stand-in `python` is a shell script on PATH: `build` writes one profile per slug listed in
 public/data/registry.json, removes any other profile, and writes the three indexes; it fails when the
-tree holds BUILD_FAILS, and writes a fifth output when it holds FIFTH_OUTPUT. `validate` fails when the
-tree holds VALIDATE_FAILS. `sleep` is a no-op so the retry loop runs in milliseconds.
+tree holds BUILD_FAILS, and writes a fifth output when it holds FIFTH_OUTPUT. It also writes the two review
+reports that live outside public/data (data/clubs-review.json, data/schools-review.json: issues #228, #229),
+as the real build does. `validate` fails when the tree holds VALIDATE_FAILS. `sleep` is a no-op so the retry
+loop runs in milliseconds.
 
 Cases (issue #117 first, then the #82 gate behaviour that must not change):
   deleted-upstream        main deletes a profile the run rewrote (modify/delete). The deletion stands, the
@@ -201,6 +203,10 @@ case "$cmd" in
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/commitments/index.json
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/camps/index.json
     if [ -f FIFTH_OUTPUT ]; then mkdir -p public/data/extra; printf '{"x": 1}\n' > public/data/extra/x.json; fi
+    # the two review reports build() writes outside public/data (issues #228, #229), on every build
+    mkdir -p data
+    printf '{"builtAt": "%s"}\n' "$stamp" > data/clubs-review.json
+    printf '{"builtAt": "%s"}\n' "$stamp" > data/schools-review.json
     ;;
   validate)
     if [ -f VALIDATE_FAILS ]; then echo "harness: validate failed" >&2; exit 1; fi
@@ -559,6 +565,54 @@ def test_build_gate(tmp):
     ok("an ::error says build failed", "::error" in out and "build failed" in out)
 
 
+def test_review_reports(tmp):
+    print("review-reports (#228, #229): build writes data/*-review.json outside public/data, and validate fails")
+    # Upstream has never built a review report. The gate's restore must not fail on the missing paths (a
+    # `git checkout` naming a path the commit lacks fails outright), and this run's copies must not reach
+    # the sources-only branch: the branch holds "everything build() writes exactly as main has it".
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "review-reports-absent", upstream=readme, run_markers=("VALIDATE_FAILS",))
+    ok("absent upstream: the step fails", code != 0)
+    ok("absent upstream: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    bs = branches(origin)
+    ok("absent upstream: the collection is on one sources branch", len(bs) == 1, bs)
+    if len(bs) == 1:
+        files = tree_files(origin, bs[0])
+        ok("absent upstream: neither review report is on the branch",
+           not any(k.startswith("data/") and k.endswith("-review.json") for k in files), sorted(files))
+        ok("absent upstream: public/data is exactly main's", data_view(files) == data_view(tree_files(origin, c1)))
+    ok("absent upstream: the restore itself did not fail the step", "could not then be restored" not in out, out[-1500:])
+
+    # Upstream carries both reports (a previous build published them): the branch must hold upstream's
+    # copies, not this run's.
+    def with_reports(files):
+        files["README.md"] = b"moved\n"
+        files["data/clubs-review.json"] = b'{"builtAt": "upstream"}\n'
+        files["data/schools-review.json"] = b'{"builtAt": "upstream"}\n'
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "review-reports-present", upstream=with_reports, run_markers=("VALIDATE_FAILS",))
+    ok("present upstream: the step fails", code != 0)
+    ok("present upstream: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    bs = branches(origin)
+    ok("present upstream: the collection is on one sources branch", len(bs) == 1, bs)
+    if len(bs) == 1:
+        files = tree_files(origin, bs[0])
+        ok("present upstream: both review reports are upstream's copies",
+           files.get("data/clubs-review.json") == b'{"builtAt": "upstream"}\n'
+           and files.get("data/schools-review.json") == b'{"builtAt": "upstream"}\n',
+           {k: v for k, v in files.items() if k.startswith("data/")})
+
+    # And on the success path the run's own reports are published with the rest of the build.
+    code, out, origin, c1, _ = run_case(tmp, "review-reports-published", upstream=readme)
+    files = tree_files(origin, "refs/heads/main")
+    ok("success: the step succeeds", code == 0, out[-1500:])
+    ok("success: the run's review reports are published on main",
+       b'"builtAt": "built-' in files.get("data/clubs-review.json", b"")
+       and b'"builtAt": "built-' in files.get("data/schools-review.json", b""), sorted(files))
+
+
 def test_fifth_output(tmp):
     print("fifth-output (#82): build writes an output the gate does not restore, and validate fails")
     def readme(files):
@@ -583,7 +637,7 @@ def main(argv=None) -> int:
     cases = [test_deleted_upstream, test_deleted_and_gated, test_deleted_registry_kept, test_deletion_direction,
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
-             test_build_gate, test_fifth_output]
+             test_build_gate, test_fifth_output, test_review_reports]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
