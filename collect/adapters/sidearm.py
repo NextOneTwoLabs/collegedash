@@ -288,6 +288,75 @@ def _col(idx: dict, *names):
     return None
 
 
+# ---------- high school vs. previous school (issue #227) ----------
+# `_col(idx, "high school", "previous", "last school")` was the pre-fix `ci["hs"]` lookup. Its
+# exact-match pass tries "high school" first, so any page with a real "High School" column (a
+# plain one, or a combined "High School / Last School" / "High School (Previous College)" header
+# reached through the prefix pass) was never affected. The break was in `_col`'s PREFIX pass:
+# checked one candidate at a time across every header, so once "high school" found nothing it
+# went on to try "previous" and "last school" as prefixes - and a genuine "Previous School" or
+# "Last School" column (holding a transfer's prior COLLEGE, not a high school) starts with
+# exactly that. That column won `ci["hs"]`, which did two things: published the transfer's
+# college as their high school, and set `ci["hs"] is not None`, which skipped the one rule able to
+# split a combined "Hometown / High School" column - so a current player on the same page got no
+# high school at all. Measured over the cached pages (#225's discovery report): 104 Sidearm
+# programs, 2,023 current rows with an empty high school and 6,307 more across past rosters.
+#
+# The fix is three lookups, tried in order in the row loop below, instead of one shared one:
+#   1. `_col(idx, "high school")` - a real High School column, exact or prefixed (so the combined
+#      headers above, and 'high school/previous school' etc., are unaffected) - always wins.
+#   2. failing that, the existing "Hometown / High School" split (guarded by `" / " in hometown`,
+#      per row) - exactly as it was.
+#   3. failing THAT too (no explicit column, and this row's hometown isn't a combined one to
+#      split), `hs_fallback` - the old, broad `_col(idx, "high school", "previous", "last
+#      school")` match, but refused whenever it lands on the same column `_prev_col` already
+#      claims as the real Previous School. That guard is what stops the fix from reintroducing
+#      its own bug: a page shaped exactly like the 104 above differs from this tier only by
+#      whether a row's hometown cell happens to contain a "/" (tier 2 fires first when it does),
+#      so without the guard, a current player with a blank combined cell would fall through to
+#      tier 3 and read the very "Previous School" column tier 1/2 exist to keep out of `hs`.
+#      Tier 3 exists for the residual pages with no explicit High School column, no combined one,
+#      and no real Previous School column either - the site's only school-ish column already
+#      couldn't be trusted before this fix, and won't be trusted more precisely by it, so the
+#      instruction is the conservative one: keep publishing what was already there rather than
+#      invent an empty field. Measured examples: cbulancers.com's only such column is titled
+#      "Previous Team" and holds a real high school for 25 of its 28 rows ('ThunderRidge HS') and
+#      a real transfer college for the rest ('Northern Illinois University') - genuinely
+#      unsplittable without a marker this page doesn't have. goblackbears.com's same-shaped column
+#      holds mostly club names ('FC Köln') and a couple of colleges tagged "(NCAA)" - never
+#      demonstrably a high school - and tier 3 preserves that as-is too, rather than risk the
+#      opposite mistake of discarding a page where it might occasionally be right.
+#
+# `_prev_col`, below, is a real previous-school column only, never a header that also promises
+# "hometown" (that is a combined column for `_split_slash`, not a plain previous-school field) and
+# never one that also says "club" or "team" (see `_prev_col`'s own docstring) - so `previousSchool`
+# is never populated from a column tier 3 might also be reading from for `highSchool`.
+PREV_SCHOOL_NAMES = ("previous school", "previous college", "last school", "last college")
+
+
+def _prev_col(idx: dict) -> int | None:
+    """Column index for a genuine previous-school (transfer college) field, or None.
+
+    Deliberately narrower than `_col`: a header that also says "club" or "team" - 'Club Team /
+    Previous School', 'Previous School/Club Team', 'Previous Team' - holds a club name on the
+    cached pages that have one ('Kings Hammer ECNL', 'PDA', 'FC Stars of Massachusetts'), not a
+    school, so treating it as `previousSchool` would invent a college that was never there. A bare
+    'Previous' (jmusports.com: 'Northwestern State') is accepted as an exact match only - not as a
+    prefix, which is what let 'Previous Team' slip through the pre-fix lookup (`_col`'s prefix pass
+    tried "previous" before "last school", and 'previous team'.startswith('previous') is True).
+    """
+    if "previous" in idx:
+        return idx["previous"]
+    for n in PREV_SCHOOL_NAMES:
+        if n in idx:
+            return idx[n]
+    for n in PREV_SCHOOL_NAMES:
+        for h, i in idx.items():
+            if h.startswith(n) and "club" not in h and "team" not in h:
+                return i
+    return None
+
+
 def _player_record(*, number, name, pos_label, height, class_label, hometown, high_school,
                    previous_school="", club="", major="", bio_url=None, social=None) -> dict:
     ht = height or ""
@@ -326,10 +395,15 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
         is_staff = ("title" in idx or "alma mater" in idx
                     or ("pos" in idx and not any(k in idx for k in ("#", "ht", "year", "hometown"))))
         if "name" in idx and "pos" in idx and not is_staff:
+            real_prev = _prev_col(idx)
             ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
                   "yr": _col(idx, "year"), "home": _col(idx, "hometown"),
-                  "hs": _col(idx, "high school", "previous", "last school"), "club": _col(idx, "club"),
-                  "major": _col(idx, "major", "academic major")}
+                  "hs": _col(idx, "high school"), "prev": real_prev, "club": _col(idx, "club"),
+                  "major": _col(idx, "major", "academic major"),
+                  # Last resort only (see the loop below): the pre-fix broad match, for a page with
+                  # no explicit High School column, no splittable combined one on this row, and no
+                  # real Previous School column either - so there is nothing better on offer.
+                  "hs_fallback": _col(idx, "high school", "previous", "last school")}
             for tr in rows:
                 cells = tr.find_all(["td", "th"])
                 if len(cells) < 4:
@@ -345,9 +419,24 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                 if not name or name.lower() in ("name", "full name"):
                     continue
                 hometown = cell("home")
-                hs, prev = _split_slash(cell("hs"))
-                if ci["hs"] is None and " / " in hometown:  # single 'Hometown / High School' column
+                prev = cell("prev")
+                if ci["hs"] is not None:
+                    hs = cell("hs")
+                elif " / " in hometown:  # single 'Hometown / High School' column
                     hometown, hs = _split_slash(hometown)
+                elif ci["hs_fallback"] is not None and ci["hs_fallback"] != real_prev:
+                    # No explicit High School column, this row's hometown isn't a combined one to
+                    # split, and there is no real Previous School column to protect - `hs_fallback`
+                    # can only be the real `real_prev` column when one exists (never a club/team
+                    # column, which `_prev_col` refuses), so this never resurrects issue #227's
+                    # core bug. It exists for pages like cbulancers.com, whose only school-ish
+                    # column is literally titled "Previous Team" but holds real high schools
+                    # ('ThunderRidge HS'...) for most rows and real transfer colleges for the rest
+                    # (issue #227: ambiguous and unsplittable - keep today's value rather than
+                    # invent an empty one).
+                    hs = cell("hs_fallback")
+                else:
+                    hs = ""
                 bio_url = urljoin(base_url, link["href"]) if link else None
                 players.append(_player_record(
                     number=cell("num"), name=name, pos_label=cell("pos"), height=cell("ht"), class_label=cell("yr"),

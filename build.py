@@ -807,14 +807,17 @@ def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dic
         q = dict(p)
         secs = (q.get("bio") or {}).get("sections") or {}
         q["bio"] = {k: (v[:1500] + "…" if len(v) > 1500 else v) for k, v in secs.items()}
-        # Club: recruiting databases are far more reliable than bio-text regex.
+        # Club: recruiting databases are far more reliable than the roster page's own Club column.
         known = club_lookup.get(common.norm_name(q["name"])) if club_lookup else None
         if not known and club_lookup:
             known = next((v for n, v in club_lookup.items() if same_person(n, q["name"])), None)
         if known:
             q["club"], q["clubSource"] = known["club"], known["source"]
         elif q.get("club"):
-            q["clubSource"] = "bio text (unverified)"
+            # This value always came from the roster table's own Club column, never from a bio
+            # page: the refresh runs --no-bios and no stored roster row carries a `bio` key with a
+            # club field. Mislabelling it "bio text (unverified)" is issue #227's bug 2.
+            q["clubSource"] = "roster page"
         else:
             q["clubSource"] = None
         players.append(q)
