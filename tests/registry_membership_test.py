@@ -20,7 +20,11 @@ Covers, in order:
   staging     stagedDivisions: a division whose programs are in the registry and published by
               nothing -- added as onboarded: false, left alone by the next build, never held and
               never counted as a departure, while a program the site HAS published is still held
-  slugs       the collision ladder: "University" dropped and "College" kept, the fuller name, then
+  holds       collectionHold (#199): an uncollected entry of an onboarded division is explained only
+              by a well-formed hold, and a build keeps the hold
+  independent the D1 and D2 independents share one label (#199): the mislabel guard and the
+              TopDrawerSoccer match tell them apart by division
+  slugs      the collision ladder: "University" dropped and "College" kept, the fuller name, then
               the state, then the orgId, applied to a whole batch so list order names nobody
   new entry   every field from a source or null: Wikipedia needs the state, TDS the conference,
               the timezone comes from the coordinates, a slug collision takes the state suffix
@@ -382,10 +386,18 @@ def test_staging() -> None:
            {"onboardedDivisions": ["D1", "D2"], "stagedDivisions": ["D2"]})
     ok("no stagedDivisions key means nothing is staged", rb.staged_divisions({"onboardedDivisions": ["D1"]}) == [])
 
-    # fails if the D1 label table is applied to another division: "Independent" is a different
-    # conference in each, and 8 D2 programs would be labelled "DI Independent"
-    ok("a D1 conference is labelled from the table", rb.conference_label("Independent", "D1") == "DI Independent")
-    ok("a D2 conference keeps the Directory's own spelling", rb.conference_label("Independent", "D2") == "Independent")
+    # fails if the D1 label table is applied to another division. Since #199 "Independent" maps to itself,
+    # so it can no longer show that; "Conference USA" still can (D1 "CUSA", D2 would keep the Directory's name)
+    ok("a D1 conference is labelled from the table", rb.conference_label("Conference USA", "D1") == "CUSA")
+    ok("a D2 conference keeps the Directory's own spelling", rb.conference_label("Conference USA", "D2") == "Conference USA")
+    # fails if the rename is undone in the table, or the D2 spelling changes with it (owner decision 5 on #197)
+    ok("#199: the D1 independent is labelled 'Independent', the same string as D2's",
+       rb.conference_label("Independent", "D1") == "Independent" == rb.conference_label("Independent", "D2"))
+    ok("#199: no label reads 'DI Independent' any more", "DI Independent" not in set(rb.CONFERENCE_LABELS.values())
+       | set(rb.LABEL_TDS_CONFERENCE), str(sorted(set(rb.CONFERENCE_LABELS.values()))))
+    # fails if a shared string is counted as D1-only: every D2 independent would then read as mislabelled
+    ok("#199: d1_only_labels holds the renamed labels and not 'Independent'",
+       "CUSA" in rb.d1_only_labels() and "Independent" not in rb.d1_only_labels(), str(sorted(rb.d1_only_labels())))
     ok("and so does a D2 name the table does not carry",
        rb.conference_label("Northeast 10 Conference", "D2") == "Northeast 10 Conference")
 
@@ -730,6 +742,197 @@ def test_timezones() -> None:
         ok("without a lookup nothing is filled", registry["programs"][0]["location"]["timezone"] is None)
 
 
+# ---------- collection holds (#199) ----------
+
+# The D2 entries deliberately never collected, and why: the owner's decision on #94 (the 6 merged PSAC
+# campuses share a College Scorecard row) and the TPM's ruling recorded there (no usable athletics source).
+D2_COLLECTION_HOLDS = {
+    "bloomsburg-pennsylvania": "merged-scorecard-row", "lock-haven-pennsylvania": "merged-scorecard-row",
+    "mansfield-pennsylvania": "merged-scorecard-row", "pennsylvania-western-california": "merged-scorecard-row",
+    "pennsylvania-western-clarion": "merged-scorecard-row", "pennsylvania-western-edinboro": "merged-scorecard-row",
+    "middle-georgia-state": "no-athletics-source", "texas-am-texarkana": "no-athletics-source",
+    "st-cloud-state": "no-athletics-source", "puerto-rico-bayamon": "no-athletics-source",
+}
+
+
+def unexplained_entries(reg: dict) -> list[str]:
+    """Slugs in reg.programs no membership state explains: not published, not staged (division in
+    stagedDivisions), and not an uncollected entry of an onboarded division with a well-formed
+    collectionHold. The committed-registry check and its mutations below share this one definition."""
+    import build  # noqa: E402 - local, as in test_committed
+    published = {p["slug"] for p in build.published_programs(reg)}
+    staged_divs = set(rb.staged_divisions(reg))
+    onboarded = set(reg.get("onboardedDivisions") or [])
+    return [p["slug"] for p in reg["programs"]
+            if p["slug"] not in published and p["division"] not in staged_divs
+            and not (p["division"] in onboarded and not p.get("onboarded") and rb.collection_hold_problem(p) is None)]
+
+
+def test_collection_holds() -> None:
+    print("collection holds (#199): an uncollected entry in an onboarded division needs a reason")
+    good = {"reason": "no-athletics-source", "evidence": "the Directory gives no athletics URL", "since": "2026-09-16"}
+
+    def reg_with(entry, onboarded=("D1", "D2"), staged=()):
+        return {"onboardedDivisions": list(onboarded), "stagedDivisions": list(staged), "heldPrograms": [],
+                "programs": [prog("alpha", 1, "https://goalpha.com", "TX", org=101),
+                             prog("gamma", 3, "https://gogamma.com", "OH", division="D2", conference="G Conf", org=103),
+                             entry]}
+
+    uncollected = prog("delta", 6, None, "NJ", division="D2", conference="G Conf", org=106, onboarded=False)
+    uncollected.pop("onboardedAt")
+    held_entry = dict(copy.deepcopy(uncollected), collectionHold=dict(good))
+
+    # CONTROL: D2 staged, an uncollected entry is explained by staging alone, hold or not
+    ok("CONTROL staged: an uncollected D2 entry with no hold is explained by staging",
+       unexplained_entries(reg_with(copy.deepcopy(uncollected), onboarded=("D1",), staged=("D2",))) == [])
+    # the check the brief asks for: fails if D2 publishes with an uncollected entry that says nothing
+    ok("FIX onboarded: an uncollected D2 entry with no collectionHold is unexplained",
+       unexplained_entries(reg_with(copy.deepcopy(uncollected))) == ["delta"],
+       str(unexplained_entries(reg_with(copy.deepcopy(uncollected)))))
+    ok("FIX onboarded: the same entry with a collectionHold is explained",
+       unexplained_entries(reg_with(copy.deepcopy(held_entry))) == [], str(unexplained_entries(reg_with(copy.deepcopy(held_entry)))))
+    # fails if any collectionHold-shaped thing will do: each malformed variant must leave the entry unexplained
+    variants = {
+        "an unknown reason": dict(good, reason="too-hard"),
+        "empty evidence": dict(good, evidence="  "),
+        "a date that is not ISO": dict(good, since="16/09/2026"),
+        "a missing key": {"reason": "no-athletics-source", "evidence": "x"},
+        "an extra key": dict(good, note="x"),
+        "a string instead of a block": "no-athletics-source",
+        "the membership `hold` key instead": None,
+    }
+    for label, block in variants.items():
+        e = copy.deepcopy(uncollected)
+        if block is None:
+            e["hold"] = dict(good)
+        else:
+            e["collectionHold"] = block
+        ok(f"FIX a collectionHold with {label} does not explain the entry", unexplained_entries(reg_with(e)) == ["delta"],
+           str(rb.collection_hold_problem(e)))
+    # fails if a collected entry may carry a hold: it would say "not collected" about a program that is
+    collected = dict(prog("delta", 6, "https://godelta.com", "NJ", division="D2", conference="G Conf", org=106), collectionHold=dict(good))
+    ok("FIX a collectionHold on a collected entry is a problem", rb.collection_hold_problem(collected) is not None,
+       str(rb.collection_hold_problem(collected)))
+    # a hold does not publish anything or move anything out of an uncollected entry's reach
+    import build  # noqa: E402
+    ok("a held entry is not published", "delta" not in {p["slug"] for p in build.published_programs(reg_with(copy.deepcopy(held_entry)))})
+    ok("and pruning explains it as not onboarded",
+       build.prune_explanations(reg_with(copy.deepcopy(held_entry))).get("delta") == "in the registry but not onboarded")
+
+    # --- apply_membership keeps it: D2 staged, and D2 onboarded
+    for label, onboarded, staged in (("staged", ["D1"], ["D2"]), ("onboarded", ["D1", "D2"], [])):
+        with with_pins():
+            registry, directory = world()
+            directory["D2"] = [drow(106, "D2", "Delta University", "NJ", "delta-u.edu", "godelta.com", "G Conf")]
+            entry = copy.deepcopy(held_entry)
+            registry["programs"] = [prog("alpha", 1, "https://goalpha.com", "TX", org=101), entry]
+            registry["onboardedDivisions"], registry["stagedDivisions"] = onboarded, staged
+            before = copy.deepcopy(entry)
+            try:
+                rep = run(registry, directory)
+                err = None
+            except Exception as e:  # noqa: BLE001
+                rep, err = None, e
+            after = next((p for p in registry["programs"] if p["slug"] == "delta"), None)
+            # fails if a build drops, rewrites or holds the entry, or strips its collectionHold
+            ok(f"apply_membership with D2 {label}: the held entry stays in programs, unchanged, hold included",
+               err is None and after == before and not registry["heldPrograms"], str(err or after))
+            ok(f"apply_membership with D2 {label}: it is neither a departure nor a return",
+               err is None and not rep["held"] and not rep["returned"], str(err or (rep["held"], rep["returned"])))
+
+    # --- through build(): the written registry keeps it
+    with with_pins():
+        registry, directory = world()
+        directory["D2"] = [drow(106, "D2", "Delta University", "NJ", "delta-u.edu", "godelta.com", "G Conf")]
+        registry["programs"] = [prog("alpha", 1, "https://goalpha.com", "TX", org=101), copy.deepcopy(held_entry)]
+        registry["onboardedDivisions"], registry["stagedDivisions"] = ["D1"], ["D2"]
+        saved = (rb.fetch_directory, rb.fetch_scorecard_bulk, rb.fetch_wiki_list, rb.fetch_tds_teams, rb.timezone_at,
+                 common.update_registry, common.write_json)
+
+        def fake_update(mutate):
+            mutate(registry)
+            return registry
+
+        try:
+            rb.fetch_directory = lambda reg=None: directory
+            rb.fetch_scorecard_bulk = lambda reg=None: BULK
+            rb.fetch_wiki_list = lambda division="D1": []
+            rb.fetch_tds_teams = lambda: {}
+            rb.timezone_at = lambda lat, lon: None
+            common.update_registry = fake_update
+            common.write_json = lambda path, obj, **kw: None
+            try:
+                rb.build(copy.deepcopy(registry))
+                err = None
+            except Exception as e:  # noqa: BLE001
+                err = e
+        finally:
+            (rb.fetch_directory, rb.fetch_scorecard_bulk, rb.fetch_wiki_list, rb.fetch_tds_teams, rb.timezone_at,
+             common.update_registry, common.write_json) = saved
+        after = next((p for p in registry["programs"] if p["slug"] == "delta"), None)
+        ok("build() writes the registry with the collectionHold kept", err is None and bool(after)
+           and after.get("collectionHold") == good, str(err or after))
+
+
+def test_independent_label_guard() -> None:
+    print("Independent (#199): one string in two divisions, told apart by division")
+    import build  # noqa: E402
+    import contextlib, io
+
+    def staged_reg(*d2):
+        return {"onboardedDivisions": ["D1"], "stagedDivisions": ["D2"], "heldPrograms": [],
+                "programs": [prog("sc-state", 1, "https://scsu.com", "SC", conference="Independent", org=101)] + list(d2)}
+
+    def check(reg):
+        saved = dict(build.STAGED_DIVISION_COUNTS)
+        buf = io.StringIO()
+        try:
+            build.STAGED_DIVISION_COUNTS.clear()
+            build.STAGED_DIVISION_COUNTS.update({d: sum(1 for p in reg["programs"] if p["division"] == d)
+                                                 for d in reg["stagedDivisions"]})
+            with contextlib.redirect_stdout(buf):
+                result = build.check_staged_registry(reg)
+        finally:
+            build.STAGED_DIVISION_COUNTS.clear()
+            build.STAGED_DIVISION_COUNTS.update(saved)
+        return result, buf.getvalue()
+
+    def d2_entry(slug, org, directory_conf, table_division):
+        # a D2 Directory row labelled as the builder would label it for `table_division`
+        return prog(slug, org, f"https://go{slug}.com", "FL", division="D2", org=org,
+                    conference=rb.conference_label(directory_conf, table_division))
+
+    independent = d2_entry("edward-waters", 105, "Independent", "D2")
+    ok_result, out = check(staged_reg(independent))
+    # fails if the guard reads the shared string as D1's: every D2 independent would fail validate
+    ok("CONTROL a D2 independent beside the D1 'Independent' passes the mislabel guard", ok_result, out)
+    ok("CONTROL ... and so does the same row run through the D1 table, because the label is the same string",
+       check(staged_reg(d2_entry("edward-waters", 105, "Independent", "D1")))[0])
+    # the mutation the guard exists for: a D2 row whose Directory name the D1 table renames
+    mislabelled = d2_entry("cusa-two", 106, "Conference USA", "D1")
+    bad_result, bad_out = check(staged_reg(independent, mislabelled))
+    ok("FIX a D2 row run through the D1 table ('Conference USA' stored as 'CUSA') fails the guard, naming it",
+       mislabelled["conference"] == "CUSA" and not bad_result and "Division I conference label" in bad_out
+       and "cusa-two" in bad_out and "edward-waters" not in bad_out, bad_out)
+    ok("CONTROL the same row labelled for D2 passes", check(staged_reg(independent, d2_entry("cusa-two", 106, "Conference USA", "D2")))[0])
+    # fails if the guard reads the label alone: a staged D1 entry is labelled from the table by design
+    # (a synthetic registry staging D1, which the real one never does)
+    d1_staged = {"onboardedDivisions": ["D2"], "stagedDivisions": ["D1"], "heldPrograms": [],
+                 "programs": [prog("cusa-one", 107, "https://gocusa.com", "TX", conference="CUSA", org=107)]}
+    ok("FIX the guard goes by division: a staged D1 entry labelled 'CUSA' is not mislabelled", check(d1_staged)[0],
+       check(d1_staged)[1])
+
+    # --- TopDrawerSoccer: a D2 independent must not take a D1 independent's TDS team by name
+    tds = {"delta": {"tdsName": "Delta University", "tdsSlug": "delta", "tdsConf": "independent", "tdsClgId": 9}}
+    d1_row = drow(201, "D1", "Delta University", "SC", "delta.edu", "godelta.com", "Independent")
+    d2_row = drow(202, "D2", "Delta University", "FL", "delta.edu", "godelta.com", "Independent")
+    got, how = rb.tds_team_for(d1_row, rb.conference_label("Independent", "D1"), None, tds)
+    ok("CONTROL a D1 independent matches TDS's independent team by name and conference", bool(got) and how == "name+conference", how)
+    got, how = rb.tds_team_for(d2_row, rb.conference_label("Independent", "D2"), None, tds)
+    # fails if LABEL_TDS_CONFERENCE is read for a non-D1 row: since #199 D2's label is a key of that map
+    ok("FIX a D2 independent with the same name does not take it", got is None, how)
+
+
 # ---------- the committed registry ----------
 
 def test_committed() -> None:
@@ -765,9 +968,19 @@ def test_committed() -> None:
     ok("every published program is in an onboarded division", all(p["division"] in od for p in published),
        str([p["slug"] for p in published if p["division"] not in od][:5]))
     # fails if an entry in `programs` is neither published nor staged -- the state that would put a
-    # page on the site for a division nobody onboarded, or leave an entry no policy explains
-    ok("every entry in programs is published or staged", len(published) + len(staged) == len(programs),
-       str([p["slug"] for p in programs if p not in published and p not in staged][:5]))
+    # page on the site for a division nobody onboarded, or leave an entry no policy explains. The one
+    # other state allowed (#199) is an uncollected entry in an onboarded division that carries a
+    # well-formed collectionHold: a person decided it is not collected, and the registry says why.
+    unexplained = unexplained_entries(reg)
+    ok("every entry in programs is published, staged, or held from collection with a reason", not unexplained,
+       str(unexplained[:5]))
+    # fails if a collectionHold is malformed, carries an unknown reason, or sits on a collected entry --
+    # wherever it is, staged division included, so a bad one cannot wait for the day D2 is published
+    bad_holds = [(p["slug"], rb.collection_hold_problem(p)) for p in programs
+                 if "collectionHold" in p and rb.collection_hold_problem(p)]
+    ok("every collectionHold is well formed and on an uncollected entry", not bad_holds, str(bad_holds[:5]))
+    ok("no heldPrograms entry carries a collectionHold (a hold already says why it is not published)",
+       not any("collectionHold" in p for p in held), str([p["slug"] for p in held if "collectionHold" in p]))
     # fails if staging leaks into the published set: this is the check that says the D2 work publishes nothing
     ok("no staged program is published", not (set(staged_divs) & {p["division"] for p in published}),
        str(sorted({p["division"] for p in published})))
@@ -841,13 +1054,25 @@ def test_committed() -> None:
            all(("onboardedAt" in p) == bool(p.get("onboarded")) for p in d2),
            str([p["slug"] for p in d2 if ("onboardedAt" in p) != bool(p.get("onboarded"))][:5]))
         ok("each carries its Directory orgId and state", all(isinstance(p["ids"]["ncaaOrgId"], int) and p["location"]["state"] for p in d2))
-        # fails if a D2 conference is run through the D1 label table: "Independent" is 8 D2 programs
-        # and one D1 program, and they are not the same conference
+        # fails if a D2 conference is run through the D1 label table. "Independent" is 8 D2 programs and
+        # one D1 program under the same string since #199, so only the labels the D1 table renames can
+        # show the mistake; the division is what separates the two independents
         ok("D2 conferences are the Directory's own spelling, not D1 labels",
-           not ({p["conference"] for p in d2} & (set(rb.CONFERENCE_LABELS.values()) - {"Independent"})),
-           str(sorted({p["conference"] for p in d2} & set(rb.CONFERENCE_LABELS.values()))))
-        ok("the 8 D2 independents are 'Independent', not 'DI Independent'",
-           sum(1 for p in d2 if p["conference"] == "Independent") == 8 and not any(p["conference"] == "DI Independent" for p in d2))
+           not ({p["conference"] for p in d2} & rb.d1_only_labels()),
+           str(sorted({p["conference"] for p in d2} & rb.d1_only_labels())))
+        # fails if the D1 rename reaches D2 (or is not made), or the D2 count moves
+        independents = sorted((p["division"], p["slug"]) for p in everything if p["conference"] == "Independent")
+        ok("#199: 'Independent' is the 8 D2 independents and the 1 D1 independent, south-carolina-state",
+           sum(1 for d, _ in independents if d == "D2") == 8 and [s for d, s in independents if d == "D1"] == ["south-carolina-state"],
+           str(independents))
+        ok("#199: nothing in the registry is labelled 'DI Independent'",
+           not any(p["conference"] == "DI Independent" for p in everything))
+        # fails if an uncollected D2 entry has no collectionHold, or one is added to an entry nobody decided
+        # on. The list is the owner's decision (6 merged PSAC campuses) and the TPM's ruling (4 with no
+        # usable athletics source), both recorded on #94; changing it is a reviewed edit here.
+        holds = {p["slug"]: (p.get("collectionHold") or {}).get("reason") for p in d2 if not p.get("onboarded")}
+        ok("#199: the uncollected D2 entries are exactly the 10 held from collection, each with its reason",
+           holds == D2_COLLECTION_HOLDS, str(sorted(set(holds.items()) ^ set(D2_COLLECTION_HOLDS.items()), key=str)))
         # fails if a value no source gave is written for a new program (the spike's gogusties.com case)
         ok("nothing a source did not give is filled in", all(p["colors"] is None and p["shortName"] is None and p["nickname"] is None
                                                              and p["ids"]["wikipedia"] is None and p["ids"]["tdsClgId"] is None
@@ -1123,6 +1348,8 @@ def main(argv=None) -> int:
     test_identity()
     test_policy()
     test_staging()
+    test_collection_holds()
+    test_independent_label_guard()
     test_slugs()
     test_reviewed_slugs()
     test_new_entry()
