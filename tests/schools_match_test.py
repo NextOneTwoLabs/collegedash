@@ -130,6 +130,14 @@ def test_rules_on_a_synthetic_table() -> None:
     m = t.match("Mountain View HS", "Mountain View")
     check("synthetic: no state -> unmatched, never the California school",
           m.status == "unmatched" and m.schoolId is None and m.state is None, m.as_dict())
+    # The rule is "never without a state", not "never when the name is in several states": a name
+    # that is unique across the whole table must not match either. Los Altos is the only one here.
+    check("synthetic guard: exactly one Los Altos in the whole table",
+          sum(1 for (st, k) in t.by_key if k == "los altos") == 1)
+    for hometown in ("", None, "Los Altos"):
+        m = t.match("Los Altos High School", hometown)
+        check(f"synthetic: a table-wide unique name with hometown {hometown!r} is still unmatched",
+              m.status == "unmatched" and m.schoolId is None and m.state is None, m.as_dict())
     m = t.match("St. Francis", "Mountain View, Calif.")
     check("synthetic: St. Francis in California is ambiguous across two survey years",
           m.status == "ambiguous" and m.candidates == 2, m.as_dict())
@@ -206,6 +214,18 @@ def test_committed_list(t: schools.Table) -> None:
           m_ca.status == "ambiguous" and m_ca.schoolId is None and m_ca.candidates == len(calif), m_ca.as_dict())
     m_no = t.match("Mountain View HS", "")
     check("same name, no hometown: unmatched, not the Idaho school", m_no.status == "unmatched" and m_no.schoolId is None)
+    # A name unique across the entire list is the common case (most cleaned keys are in one state
+    # only), and it must not match without a state either. Guarded: the list really has exactly
+    # one school whose name cleans to "punahou", so a "unique name" fallback would have matched it.
+    punahou = [(st, k) for (st, k) in t.by_key if k == "punahou"]
+    check("guard: the list has exactly one Punahou, in Hawaii, and one school under that key",
+          punahou == [("HI", "punahou")] and len(t.by_key[("HI", "punahou")]) == 1, str(punahou))
+    m_hi = t.match("Punahou School", "Honolulu, Hawaii")
+    check("Punahou with its state: matched", m_hi.status == "matched" and m_hi.state == "HI", m_hi.as_dict())
+    for hometown in ("", None, "Honolulu"):
+        m = t.match("Punahou School", hometown)
+        check(f"a list-wide unique name with hometown {hometown!r}: unmatched, no id",
+              m.status == "unmatched" and m.schoolId is None and m.state is None, m.as_dict())
 
     m_sf = t.match("St. Francis", "Mountain View, Calif.")
     check("St. Francis, California: ambiguous with 2 candidates", m_sf.status == "ambiguous" and m_sf.candidates == 2, m_sf.as_dict())

@@ -171,11 +171,14 @@ def main() -> int:
             stats[f"pss {SOURCES[key]['year']} {what}"] = 0
     rows = ccd_rows(download("ccd"), stats, SOURCES["ccd"]["year"])
     rows += pss_rows(download("pss"), stats, SOURCES["pss"]["year"])
-    # A school is carried over from the previous survey only when the newer one has neither its id
-    # nor a school of the same cleaned name in the same city and state: survey ids are not always
-    # stable between rounds, and a carried-over duplicate would make its own name ambiguous.
+    # A school is carried over from the previous survey only when the newer survey has neither its
+    # id nor a private school of the same cleaned name in the same city and state: survey ids are
+    # not always stable between rounds, and a carried-over duplicate would make its own name
+    # ambiguous. Only the newer PSS rows count here, not the CCD: a private school can share a
+    # cleaned name and city with a public one (ASHEVILLE SCHOOL beside Asheville High) and be a
+    # different school; kept, the two make the name ambiguous, which is safe.
     seen_ids = {r[0] for r in rows}
-    seen_places = {(r[3], schools.school_key(r[1]), r[2].casefold()) for r in rows}
+    seen_places = {(r[3], schools.school_key(r[1]), r[2].casefold()) for r in rows if r[4] == "private"}
     previous = pss_rows(download("pss-previous"), stats, SOURCES["pss-previous"]["year"])
     prev_year, cur_year = SOURCES["pss-previous"]["year"], SOURCES["pss"]["year"]
     stats[f"pss {prev_year} already in {cur_year} by id"] = sum(r[0] in seen_ids for r in previous)
