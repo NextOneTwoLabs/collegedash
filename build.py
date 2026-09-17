@@ -900,8 +900,8 @@ def build_camps(camps, news, curated) -> dict | None:
     items = []
     for e in c.get("camps") or []:
         items.append({**e, "kind": "camp"})
-    for e in c.get("newsCamps") or []:
-        items.append({**e, "kind": "news"})
+    # Source order is precedence (issue #74): camp page, then curated (hand-entered), then news. Whichever of two
+    # duplicates comes first here is the entry kept, so a curated entry wins over a news release about it.
     for e in curated.get("camps") or []:
         if isinstance(e, dict) and e.get("name"):
             sd = e.get("startDate")
@@ -909,6 +909,8 @@ def build_camps(camps, news, curated) -> dict | None:
                           "precision": ("month" if len(sd) == 7 else "day") if isinstance(sd, str) and sd else None,
                           "yearInferred": False, "location": None, "ages": None, "price": None, "registerUrl": None,
                           "sourceUrl": None, "confidence": "curated", **e, "kind": "curated"})
+    for e in c.get("newsCamps") or []:
+        items.append({**e, "kind": "news"})
     seen, merged = set(), []
     by_registration: dict[tuple[str, str], dict] = {}
     for it in items:
@@ -930,7 +932,7 @@ def build_camps(camps, news, curated) -> dict | None:
         seen.add(key)
         entry = {**it, "campType": classify_camp(it.get("name")), "sources": [camp_source(it)]}
         merged.append(entry)
-        if rkey and rkey not in by_registration:
+        if rkey and rkey not in by_registration:  # the FIRST entry with this date and link is the one a later source merges into
             by_registration[rkey] = entry
     merged.sort(key=lambda it: (it.get("startDate") is None, it.get("startDate") or "", it.get("name") or ""))
     metas = [_meta(camps)] if camps else []

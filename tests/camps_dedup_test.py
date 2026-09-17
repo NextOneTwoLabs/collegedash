@@ -11,7 +11,8 @@ news entry only when its name matched a camp-page entry's exactly.
 
 The rule now, at build time: two entries from DIFFERENT sources (camp page, curated, news) with the same start
 date and the same registration link - compared after build.registration_key normalises it - are one camp. The
-camp-page entry is kept, and every source it was found in is listed in its `sources` (withheld from the
+first in source order is kept (camp page, then curated, then news; among entries of one source that share a date
+and link, the first of them), and every source it was found in is listed in its `sources` (withheld from the
 published camps index, like newsTitle). A name alone never merges, and neither does a date alone.
 
 Offline, no files written: build_camps runs on in-memory sources shaped like the stored ones (the le-moyne
@@ -110,6 +111,31 @@ def test_normalised_links() -> None:
        getattr(build, "registration_key", lambda u: u)("https://x.example/camps/") == getattr(build, "registration_key", lambda u: None)("https://x.example/camps"))
 
 
+def test_precedence() -> None:
+    print("which entry is kept: the first in source order (camp page, curated, news)")
+    curated = {**NEWS, "name": "Hand-entered ID clinic", "sourceUrl": None, "newsTitle": None, "newsUrl": None, "newsDate": None,
+               "price": "$150 (per the coach)"}
+    got = items([], [NEWS], [curated])
+    # fails if news entries are listed before curated ones (the order build_camps first shipped with): the release is kept
+    ok("FIX a curated entry and a news release about the same camp (no camp-page entry): the curated one is kept",
+       len(got) == 1 and (got[0].get("kind"), got[0].get("name"), got[0].get("price")) == ("curated", "Hand-entered ID clinic", "$150 (per the coach)"),
+       str(summary(got)))
+    ok("FIX ... and the release is listed as its second source", len(got) == 1 and [s.get("kind") for s in got[0].get("sources") or []] == ["curated", "news"],
+       str(got[0].get("sources") if got else None))
+
+    # two camp-page entries share a date and link (they stay two), then a release about that camp arrives: it is recorded
+    # on the FIRST of them, and the second keeps only itself
+    first = {**CAMP, "name": "Soccer ID Clinic | October 3rd (morning)"}
+    second = {**CAMP, "name": "Soccer ID Clinic | October 3rd (afternoon)"}
+    got = items([first, second], [NEWS])
+    by_name = {it.get("name"): it for it in got}
+    # fails if a later entry with the same date and link replaces the first as the one later sources merge into
+    ok("FIX with two same-date, same-link camp-page entries, a news release merges into the first, not the last",
+       len(got) == 2 and [s.get("kind") for s in (by_name.get(first["name"]) or {}).get("sources") or []] == ["camp", "news"]
+       and [s.get("kind") for s in (by_name.get(second["name"]) or {}).get("sources") or []] == ["camp"],
+       str([(it.get("name"), [s.get("kind") for s in it.get("sources") or []]) for it in got]))
+
+
 def test_not_merged() -> None:
     print("what is not the same camp")
     got = items([CAMP], [{**NEWS, "registerUrl": "https://register.ryzer.com/camp.cfm?sport=7&id=339091"}])
@@ -139,7 +165,7 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     if CODE_ROOT != ROOT:
         print(f"code under test imported from {CODE_ROOT}")
-    for case in (test_merge, test_normalised_links, test_not_merged):
+    for case in (test_merge, test_normalised_links, test_precedence, test_not_merged):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
