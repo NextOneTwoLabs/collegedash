@@ -1337,7 +1337,9 @@ def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], []
 def search_names(p: dict) -> list[str]:
     """Names people might type for this school, for the dashboard search: short name, full name,
     NCAA and RPI-archive names ('ULM', 'CalStateFullerton' -> 'Cal State Fullerton'), initials of a
-    3+ word short name ('UC Santa Barbara' -> 'UCSB'), and St./Saint swaps. De-duplicated, in order."""
+    3+ word short name ('UC Santa Barbara' -> 'UCSB'), initials of the full name when it is just the
+    short name plus a dropped 'University'/'College' ('Grand Valley State University' -> 'GVSU', even
+    though shortName's own initials are 'GVS'), and St./Saint swaps. De-duplicated, in order."""
     ids = p.get("ids") or {}
     raw = [p.get("shortName"), p.get("name"), ids.get("ncaaName"), ids.get("rpiHistoryName")]
     out: list[str] = []
@@ -1358,6 +1360,19 @@ def search_names(p: dict) -> list[str]:
     words = short.split()
     if len(words) >= 3:  # 'UC Santa Barbara' -> 'UCSB' (an all-caps word keeps all its letters)
         add("".join((w if w.isupper() and len(w) <= 4 else w[0]) for w in words if w[0].isalpha()))
+    # A shortName built by dropping a trailing generic word ('Grand Valley State' from 'Grand Valley
+    # State University') loses that word's letter from the initials above ('GVS', not 'GVSU'). When the
+    # full name is exactly the shortName plus one or two purely generic trailing words, restore it -
+    # gated tightly (the extra words must be nothing but 'University'/'College') so an unrelated long
+    # name never contributes noise (issue #200: filling shortName must not cost an initials match that
+    # worked off the long name before).
+    name = p.get("name") or ""
+    if short and name.lower().startswith(short.lower() + " "):
+        extra = name[len(short):].split()
+        if extra and len(extra) <= 2 and all(w.strip(",") in ("University", "College") for w in extra):
+            full_words = words + extra
+            if len(full_words) >= 3:
+                add("".join((w if w.isupper() and len(w) <= 4 else w[0]) for w in full_words if w[0].isalpha()))
     for s in list(out):
         if re.search(r"\bSt\.?\s", s):
             add(re.sub(r"\bSt\.?\s", "Saint ", s))

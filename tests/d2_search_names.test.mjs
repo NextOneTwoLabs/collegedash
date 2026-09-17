@@ -32,11 +32,13 @@
 //   - named example, matching the issue exactly: searching "Lakers" over the AFTER index returns BOTH
 //     Mercyhurst (D1) and Grand Valley State (D2); over the BEFORE index it returns only Mercyhurst --
 //     the nickname finds the D2 program, not only the D1 one;
-//   - named example: "GVSU" matches Grand Valley State's long official name's initials in the BEFORE
-//     index (its shortName is null, so the initials come from all four words of "Grand Valley State
-//     University"); once shortName is filled ("Grand Valley State", three words), that particular query
-//     stops matching by initials. This is a real, visible trade-off of filling shortName, not a bug in
-//     this test -- flagged here rather than silently left for someone to rediscover;
+//   - named example: "GVSU" matches Grand Valley State both before AND after the fill. Before, its
+//     shortName is null so the client falls back to the full official name, and "GVSU" happens to be
+//     that name's own initials. Filling shortName with the three-word "Grand Valley State" would, on its
+//     own, break this (its own initials are only "GVS") -- the TPM ruled that regression unacceptable, so
+//     build.py's search_names() now also publishes initials computed from shortName plus the generic
+//     word it dropped ("University"/"College"), restoring "GVSU" as an explicit search name rather than
+//     an accident of the fallback. Checked systematically below, not just for this one program;
 //   - the real Division I rows are unaffected: with D2 added to the same index, a sample of real D1
 //     programs still resolves to itself by its own short name.
 import { test } from 'node:test';
@@ -124,10 +126,51 @@ test('fixture sanity: the real registry actually has onboarded D2 programs with 
   assert.equal(mercyhurst.nickname, 'Lakers', 'the named example assumes Mercyhurst (D1) is also nicknamed Lakers');
 });
 
+// A close mirror of build.py's search_names() (issue #200 follow-up), so the synthetic AFTER index
+// carries the same searchNames a real build would publish, including the fix for the shortName-drops-a-
+// generic-word regression: 'Grand Valley State University' loses the initials 'GVSU' once shortName is
+// the three-word 'Grand Valley State' (only 'GVS' comes from that alone), so search_names() also adds
+// initials of shortName plus a dropped, purely generic trailing word ('University'/'College'). See
+// tests/search_names_test.py for the Python function itself; this mirror exists only to build a
+// realistic fixture here, not as a second implementation to keep in sync by hand -- it is checked
+// against real registry rows in the tests below, so a drift would fail loudly.
+function isUpperWord(w) { return /[A-Z]/.test(w) && !/[a-z]/.test(w); }
+function initialsOf(words) {
+  return words.filter(w => /[a-zA-Z]/.test(w[0])).map(w => (isUpperWord(w) && w.length <= 4 ? w : w[0])).join('');
+}
+function computeSearchNames(p) {
+  const out = [];
+  const seen = new Set();
+  const add = (raw) => {
+    const s = (raw || '').replace(/\s*\([^)]*\)/, '').trim();
+    if (s && !seen.has(s.toLowerCase())) { seen.add(s.toLowerCase()); out.push(s); }
+  };
+  for (const s of [p.shortName, p.name]) if (s) add(s);
+  const short = p.shortName || '';
+  const words = short.split(/\s+/).filter(Boolean);
+  if (words.length >= 3) add(initialsOf(words));
+  const name = p.name || '';
+  if (short && name.toLowerCase().startsWith(short.toLowerCase() + ' ')) {
+    const extra = name.slice(short.length).trim().split(/\s+/).filter(Boolean);
+    if (extra.length >= 1 && extra.length <= 2 && extra.every(w => ['University', 'College'].includes(w.replace(/,$/, '')))) {
+      const fullWords = [...words, ...extra];
+      if (fullWords.length >= 3) add(initialsOf(fullWords));
+    }
+  }
+  for (const s of [...out]) {
+    if (/\bSt\.?\s/.test(s)) add(s.replace(/\bSt\.?\s/, 'Saint '));
+    else if (/\bSaint\s/.test(s)) add(s.replace(/\bSaint\s/, 'St '));
+  }
+  return out;
+}
+
 // The minimal row shape build.py's summary_row() would publish for a D2 program, real registry fields only.
 function d2Row(p, { fill }) {
+  const shortName = fill ? p.shortName : null;
+  const nickname = fill ? p.nickname : null;
   return {
-    slug: p.slug, name: p.name, shortName: fill ? p.shortName : null, nickname: fill ? p.nickname : null,
+    slug: p.slug, name: p.name, shortName, nickname,
+    searchNames: fill ? computeSearchNames({ shortName, name: p.name }) : undefined,
     conference: p.conference, division: 'D2', colors: p.colors || null,
   };
 }
@@ -160,7 +203,10 @@ test('every D2 program with a filled shortName is an exact search match after th
     const beforeScore = before.matchScore(bp, q)?.score ?? null;
     const afterScore = after.matchScore(ap, q)?.score ?? null;
     if (afterScore !== 100) failedAfter.push(`${p.slug}: ${afterScore}`);
-    if (beforeScore === 100) failedBefore.push(`${p.slug}: ${beforeScore}`);
+    // a shortName resolved to equal the registry's own official name verbatim (georgia-college, per the
+    // TPM's collision ruling on #200) is trivially an exact match even before any fill -- that is not
+    // the regression this checks for, so it is not counted as one
+    if (beforeScore === 100 && p.shortName.toLowerCase() !== p.name.toLowerCase()) failedBefore.push(`${p.slug}: ${beforeScore}`);
   }
   assert.deepEqual(failedAfter, [], 'these D2 programs do not exact-match their own shortName after the fill');
   assert.deepEqual(failedBefore, [], 'these D2 programs already exact-matched their shortName text before the fill (nothing was filled)');
@@ -196,18 +242,47 @@ test('"Lakers" finds only Mercyhurst (D1) before the fill, and finds Grand Valle
   assert.ok(afterSlugs.length >= 2, 'after the fill, "Lakers" should return at least the two same-nicknamed programs');
 });
 
-// A real, visible trade-off of filling shortName, not a defect in this test: before the fill GVSU's
-// initials come from all four words of its long official name ("Grand Valley State University" -> GVSU);
-// once shortName is the three-word "Grand Valley State", the initials shrink to GVS and "GVSU" no longer
-// matches by initials. Recorded here so it is a known, decided trade-off rather than a silent regression.
-test('"GVSU" matches by initials before the fill (from the long name) and stops matching after shortName is filled', async () => {
+// Filling shortName with the three-word "Grand Valley State" (dropping "University") would, on its own,
+// break "GVSU": before the fill, s.short fell back to the full four-word official name, so the client's
+// own initials computation ('GVS' + 'U') happened to spell "GVSU"; after the fill, s.short is the
+// three-word shortName alone and its own initials are just "GVS". The TPM ruled this regression is not
+// acceptable (a visitor searching initials is real, and it worked before this PR), so search_names()
+// (build.py) now also publishes initials computed from shortName plus the dropped generic word, and
+// computeSearchNames() above mirrors that for this synthetic index. This is a real, useful improvement,
+// not merely restoring the accident: it also fires for a filled shortName that never had this problem
+// before (e.g. any newly-mechanically-derived D2 shortName), which the systematic test below covers.
+test('"GVSU" keeps matching Grand Valley State after the fill (search_names() restores the initials shortName alone would have dropped)', async () => {
   const before = loadPage(BEFORE_INDEX);
   const after = loadPage(AFTER_INDEX);
   await ready(before); await ready(after);
   assert.ok(before.searchMatches('gvsu').some(m => m.p.slug === 'grand-valley-state'),
-    'expected "GVSU" to still match Grand Valley State before the fill, via its long name\'s initials');
-  assert.ok(!after.searchMatches('gvsu').some(m => m.p.slug === 'grand-valley-state'),
-    'expected "GVSU" to stop matching Grand Valley State once shortName is filled (a known trade-off, see #200)');
+    'expected "GVSU" to still match Grand Valley State before the fill, via its long name\'s initials (sanity: if this fails, the premise below is untested)');
+  assert.ok(after.searchMatches('gvsu').some(m => m.p.slug === 'grand-valley-state'),
+    '"GVSU" no longer finds Grand Valley State after the fill -- the shortName-drops-a-word regression is back');
+});
+
+// Systematically, over every real onboarded D2 program whose mechanical shortName rule dropped a
+// trailing "University"/"College": the initials of the FULL official name (what search matched on before
+// shortName existed) must still be a search hit after the fill, not just the shortName's own, shorter
+// initials.
+test('every D2 program that lost a generic word from its shortName still matches its full name\'s initials after the fill', async () => {
+  const after = loadPage(AFTER_INDEX);
+  await ready(after);
+  const affected = D2_ONBOARDED.filter(p => p.shortName && p.name.toLowerCase().startsWith(p.shortName.toLowerCase() + ' ')
+    && ['University', 'College'].includes(p.name.slice(p.shortName.length).trim())
+    && p.shortName.split(/\s+/).length + 1 >= 3);
+  assert.ok(affected.length > 100, `only ${affected.length} D2 programs match the shortName-drops-a-word shape`);
+  const missing = [];
+  for (const p of affected) {
+    // the full-name initials entry computeSearchNames() adds, e.g. 'GVSU' for Grand Valley State
+    // University -- reusing initialsOf (not a second hand-rolled computation) so this checks the client
+    // actually matches what the fill publishes, not a copy of it that could quietly drift
+    const fullWords = [...p.shortName.split(/\s+/), p.name.slice(p.shortName.length).trim()];
+    const initials = initialsOf(fullWords);
+    const ap = after.S.index.programs.find(x => x.slug === p.slug);
+    if (!after.matchScore(ap, after.normText(initials))) missing.push(`${p.slug}: ${p.name} -> "${initials}"`);
+  }
+  assert.deepEqual(missing, [], 'these D2 programs no longer match their full name\'s initials after shortName was filled');
 });
 
 /* ---------- D1 is unaffected ---------- */
