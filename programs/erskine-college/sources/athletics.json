@@ -1,9 +1,10 @@
 {
   "collector": "athletics",
   "sourceUrl": "https://www.erskinesports.com/sports/womens-soccer/roster",
-  "fetchedAt": "2026-09-16T15:40:08Z",
+  "fetchedAt": "2026-09-17T15:37:22Z",
   "scheduleUrl": "https://www.erskinesports.com/sports/womens-soccer/schedule",
-  "fromCache": true,
+  "fromCache": false,
+  "staffUrl": "https://www.erskinesports.com/sports/womens-soccer/coaches",
   "data": {
     "platform": "sidearm",
     "season": 2026,
@@ -590,7 +591,24 @@
         }
       ]
     },
-    "staff": [],
+    "staff": [
+      {
+        "name": "Lucy Hutto",
+        "title": "Head Women's Soccer Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": "https://www.erskinesports.com/sports/womens-soccer/roster/coaches/lucy-hutto/1017",
+        "social": {}
+      },
+      {
+        "name": "Cheyenne Fuller",
+        "title": "Assistant Women's Soccer Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": "https://www.erskinesports.com/sports/womens-soccer/roster/coaches/cheyenne-fuller/1018",
+        "social": {}
+      }
+    ],
     "rosterHistory": {
       "2025": [
         {
@@ -1982,11 +2000,11 @@
           "opponentRank": null,
           "opponentSeed": null,
           "location": "Due West, SC, Lundy Field",
-          "result": null,
-          "score": null,
+          "result": "W",
+          "score": "1-0",
           "links": {
-            "watch": "https://www.conferencecarolinasdn.com/erskine/",
-            "live stats": "https://erskinesports.com/sidearmstats/wsoc/summary",
+            "box score": "https://www.erskinesports.com/sports/womens-soccer/stats/2026/southern-wesleyan-universitys-c-/boxscore/9193",
+            "recap": "https://www.erskinesports.com/news/2026/9/16/erskine-womens-soccer-st-hill-santana-help-fleet-down-southern-wesleyan-for-first-win-of-season.aspx",
             "history": "https://www.erskinesports.com/sports/womens-soccer/opponent-history/southern-wesleyan-universitys-c-/67"
           }
         },
@@ -3054,6 +3072,7 @@
           }
         }
       ]
-    }
+    },
+    "headCoachBio": null
   }
 }

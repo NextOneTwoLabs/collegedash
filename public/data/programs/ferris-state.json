@@ -269,7 +269,7 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-17T06:54:21Z",
+    "builtAt": "2026-09-17T15:43:05Z",
     "completeness": 0.22,
     "sections": {
       "school": true,
@@ -282,21 +282,13 @@
       "commitments": false,
       "news": false
     },
-    "stale": [
-      "soccerwire: never collected"
-    ],
-    "failed": [
-      {
-        "collector": "soccerwire",
-        "error": "giving up after 3 attempts: HTTP 502 for https://www.soccerwire.com/wp-json/v1/elastic-proxy/soccerwirecom-post-1/_search",
-        "at": "2026-09-16T21:41:01Z"
-      }
-    ],
+    "stale": [],
+    "failed": [],
     "skipped": [
       {
         "collector": "athletics",
         "reason": "athletics: athletics site refuses CollegeDashBot: HTTP 403 for https://www.ferrisstatebulldogs.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94) (registry athletics.skipReason)",
-        "at": "2026-09-16T21:40:29Z"
+        "at": "2026-09-17T15:37:02Z"
       },
       {
         "collector": "camps",
@@ -306,12 +298,12 @@
       {
         "collector": "news",
         "reason": "news: athletics site refuses CollegeDashBot: HTTP 403 for https://www.ferrisstatebulldogs.com/ on one request, 2026-09-16 (also refused in the #137 probe and the #150 sweep; not worked around, #94) (registry athletics.skipReason)",
-        "at": "2026-09-16T21:41:01Z"
+        "at": "2026-09-17T15:37:11Z"
       },
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-16T21:40:29Z"
+        "at": "2026-09-17T15:37:02Z"
       },
       {
         "collector": "wikipedia",
