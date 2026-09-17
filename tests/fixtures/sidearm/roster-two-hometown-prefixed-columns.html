@@ -1,0 +1,59 @@
+<!--
+Trimmed from https://pvpanthers.com/sports/womens-soccer/roster (Prairie View A&M), cached
+2026-09-08, for issue #227 (Huatuo's review of the first version of this fix, PR #231). The page
+has THREE school-ish columns: "Hometown/Previous School" (a club, e.g. "Sting Royal"), a separate
+real "Previous School" (the same club again here, but a real transfer college on other rows), and
+"Hometown / High School" (the real one, e.g. "Mansfield High School"). `_col(idx, "hometown")`'s
+plain first-match prefix search returned whichever "hometown"-prefixed header came first in the
+table's own column order - here, the club one - so the real "Hometown / High School" column was
+never read at all: the club name reached both highSchool (via a tier-2 split of the wrong column)
+and previousSchool (from its own dedicated column), and Kaarie Hutchinson's actual, present,
+correctly-labelled "Mansfield High School" was silently dropped. `_home_col` fixes this by
+preferring whichever "hometown"-prefixed header also names "high school", regardless of column
+order. Nenah Jackson is a non-transfer for contrast (no club or previous college anywhere).
+-->
+<html><head><title>2026 Women's Soccer Roster - Prairie View A&amp;M</title></head><body>
+<table>
+<thead>
+<tr>
+<th class="text-left text-uppercase" scope="col">Image</th>
+<th class="text-left text-uppercase" scope="col">#</th>
+<th class="text-left text-uppercase" scope="col">Name</th>
+<th class="text-left text-uppercase" scope="col">Pos.</th>
+<th class="text-left text-uppercase" scope="col">Ht.</th>
+<th class="text-left text-uppercase" scope="col">Class</th>
+<th class="text-left text-uppercase" scope="col">Major</th>
+<th class="text-left text-uppercase" scope="col">Hometown/Previous School</th>
+<th class="text-left text-uppercase" scope="col">Previous School</th>
+<th class="text-left text-uppercase" scope="col">Hometown / High School</th>
+</tr>
+</thead><tbody>
+<tr>
+<td class="image_combined_path"><img alt="2026 SOCCER HEADSHOTS" class="lazyload" data-src="/images/2026/8/5/Nenah_Jackson.jpg?width=50"/></td>
+<td class="roster_jerseynum">1</td>
+<td class="sidearm-table-player-name" data-sort="Jackson, Nenah">
+<a aria-label="Nenah Jackson - View Full Bio" href="/sports/womens-soccer/roster/nenah-jackson/8855">Nenah Jackson</a>
+</td>
+<td class="rp_position_long">Goalkeeper</td>
+<td class="height" data-sort="68">5-8</td>
+<td class="roster_class" data-sort="2">So.</td>
+<td class="player_major">Sting Black ECRL , DKSC | Mechanical Engineering</td>
+<td class="hometownprevious">Mansfield, Texas / </td>
+<td class="player_previous_school"></td>
+<td class="hometownhighschool">Mansfield, Texas / Mansfield High School</td>
+</tr>
+<tr>
+<td class="image_combined_path"><img alt="2026 SOCCER HEADSHOTS" class="lazyload" data-src="/images/2026/8/5/Kaarie_Hutchinson.jpg?width=50"/></td>
+<td class="roster_jerseynum">3</td>
+<td class="sidearm-table-player-name" data-sort="Hutchinson, Kaarie">
+<a aria-label="Kaarie Hutchinson - View Full Bio" href="/sports/womens-soccer/roster/kaarie-hutchinson/8854">Kaarie Hutchinson</a>
+</td>
+<td class="rp_position_long">Defender</td>
+<td class="height" data-sort="66">5-6</td>
+<td class="roster_class" data-sort="2">So.</td>
+<td class="player_major">Marketing</td>
+<td class="hometownprevious">Mansfield, Texas / Sting Royal</td>
+<td class="player_previous_school">Sting Royal</td>
+<td class="hometownhighschool">Mansfield, Texas / Mansfield High School</td>
+</tr>
+</tbody></table></body></html>
