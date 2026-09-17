@@ -9,6 +9,10 @@ page that reads them, so it hosts for free and works offline.
 Later phases add a student profile with personalised recommendations, a social-media scout for
 commitment announcements, and application tracking (see `PLAN.md`).
 
+For read-only research in Codex using the existing local JSON checkout, see the
+[CollegeDash Research plugin](plugins/collegedash-research/README.md). This optional local plugin
+adds no API or hosting dependency and does not bundle the dataset.
+
 ## Run it
 
 ```bash
