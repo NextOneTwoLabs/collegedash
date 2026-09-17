@@ -192,7 +192,7 @@ def run_onboard(reg: dict, argv: list[str]) -> Run:
     r = Run()
     r.reg = copy.deepcopy(reg)
 
-    def fake_collect_plan(plan, registry_, *, bios, workers):
+    def fake_collect_plan(plan, registry_, *, bios, workers, **kw):  # **kw: coach_bios (issue #168)
         r.plans.append([p["slug"] for p, _ in plan])
         return [{"program": p["slug"], "collector": c, "outcome": "ok", "error": ""}
                for p, cs in plan for c in cs]
