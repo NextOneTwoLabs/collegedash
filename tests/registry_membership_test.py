@@ -1073,12 +1073,36 @@ def test_committed() -> None:
         holds = {p["slug"]: (p.get("collectionHold") or {}).get("reason") for p in d2 if not p.get("onboarded")}
         ok("#199: the uncollected D2 entries are exactly the 10 held from collection, each with its reason",
            holds == D2_COLLECTION_HOLDS, str(sorted(set(holds.items()) ^ set(D2_COLLECTION_HOLDS.items()), key=str)))
-        # fails if a value no source gave is written for a new program (the spike's gogusties.com case)
-        ok("nothing a source did not give is filled in", all(p["colors"] is None and p["shortName"] is None and p["nickname"] is None
+        # fails if a value no source gave is written for a new program (the spike's gogusties.com case).
+        # shortName and nickname are handled separately below (issue #200: a D2 program may carry them
+        # from a cited source); everything else here still comes from nothing on D2.
+        ok("nothing a source did not give is filled in", all(p["colors"] is None
                                                              and p["ids"]["wikipedia"] is None and p["ids"]["tdsClgId"] is None
                                                              and p["ids"]["ncaaName"] is None and p["ids"]["rpiHistoryName"] is None
                                                              for p in d2),
-           str([p["slug"] for p in d2 if p["colors"] or p["shortName"] or p["nickname"]][:5]))
+           str([p["slug"] for p in d2 if p["colors"] or p["ids"]["wikipedia"] or p["ids"]["tdsClgId"]
+                or p["ids"]["ncaaName"] or p["ids"]["rpiHistoryName"]][:5]))
+        # issue #200: a filled shortName or nickname must cite its source in namesNote, following #173's
+        # location.note pattern ("every Scorecard id beyond the builder's joins names its source"). Fails
+        # if either field is set with no note, or with a note that names no source, or if a note exists
+        # with neither field set (a citation for nothing).
+        named = [p for p in d2 if p.get("shortName") or p.get("nickname")]
+        ok("a filled shortName or nickname cites its source in namesNote",
+           all(isinstance(p.get("namesNote"), str) and "wikipedia.org" in p["namesNote"].lower() for p in named),
+           str([p["slug"] for p in named if not (isinstance(p.get("namesNote"), str)
+                                                  and "wikipedia.org" in p["namesNote"].lower())][:5]))
+        ok("a namesNote appears only alongside a shortName or a nickname",
+           all(bool(p.get("namesNote")) == bool(p.get("shortName") or p.get("nickname")) for p in d2),
+           str([p["slug"] for p in d2 if bool(p.get("namesNote")) != bool(p.get("shortName") or p.get("nickname"))][:5]))
+        # fails if a D2 shortName collides with another program's, published or held, in either division
+        # -- D1 currently allows no shortName to repeat, so neither may D2's
+        short_counts: dict[str, list[str]] = {}
+        for q in everything:
+            sn = q.get("shortName")
+            if sn:
+                short_counts.setdefault(sn.strip().lower(), []).append(q["slug"])
+        dupes = {k: v for k, v in short_counts.items() if len(v) > 1}
+        ok("no shortName is shared by two programs", not dupes, str(dupes))
         # fails if a platform is written for a program nothing has looked at: "auto" until the
         # athletics collector detects one and writes it back on the program's own onboard run
         ok("an uncollected entry's platform is still auto",
