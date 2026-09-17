@@ -39,6 +39,13 @@ Membership policy (the owner's decisions on issue #94), applied on every build:
     the first says. It is how a division is prepared -- list, slugs and joins reviewed in a diff --
     before it is onboarded (issue #94, Division II). Onboarding then moves the division from one
     list to the other. A staged entry is not held: heldPrograms is for programs the site has published.
+  - A `collectionHold` block ({reason, evidence, since}; reason from COLLECTION_HOLD_REASONS) marks
+    an entry that stays in `programs` with `onboarded: false` on purpose: a person decided it is not
+    to be collected (issue #199: the six merged PSAC campuses, and four D2 programs with no usable
+    athletics source). It is how an uncollected entry may sit in an onboarded division. It is not a
+    `hold`: a `hold` moves a program the site published out of `programs`, while a collection hold
+    is on a program the site never published and stays where it is. The builder never writes,
+    changes or removes one; a build keeps it with the rest of the entry.
 
 Existing entries are preserved: a build writes only `division`, `conference` and `ids.ncaaOrgId`
 on a program that stays. data/registry-build-report.json records every decision.
@@ -86,16 +93,17 @@ MAX_DEPARTURE_SHARE = 0.05
 #
 # The table is Division I only, and conference_label() applies it to a D1 row only. Conference names
 # repeat across divisions with different meanings: "Independent" is 1 D1 program and 8 D2 programs,
-# and labelling those eight "DI Independent" would be wrong. Division II keeps the Directory's own
-# spelling until its own label table is reviewed (issue #94; the pills want short names before a D2
-# program is published).
+# and they are not the same conference. Division II keeps the Directory's own spelling until its own
+# label table is reviewed (issue #94). Since #199 the D1 independent is labelled plain "Independent"
+# (owner decision 5 on #197): the division, not the string, tells the two apart, so anything that
+# reads a label as D1's must check the division as well (d1_only_labels, and tds_team_for below).
 LABELLED_DIVISION = "D1"
 CONFERENCE_LABELS = {
     "America East Conference": "America East", "American Conference": "American", "Atlantic 10 Conference": "Atlantic 10",
     "Atlantic Coast Conference": "ACC", "Atlantic Sun Conference": "ASUN", "BIG EAST Conference": "Big East",
     "Big 12 Conference": "Big 12", "Big Sky Conference": "Big Sky", "Big South Conference": "Big South",
     "Big Ten Conference": "Big Ten", "Big West Conference": "Big West", "Coastal Athletic Association": "CAA",
-    "Conference USA": "CUSA", "Horizon League": "Horizon", "Independent": "DI Independent", "The Ivy League": "Ivy League",
+    "Conference USA": "CUSA", "Horizon League": "Horizon", "Independent": "Independent", "The Ivy League": "Ivy League",
     "Metro Conference": "Metro", "Mid-American Conference": "MAC", "Missouri Valley Conference": "MVC",
     "Mountain West Conference": "Mountain West", "Northeast Conference": "NEC", "Ohio Valley Conference": "OVC",
     "Pac-12 Conference": "Pac-12", "Patriot League": "Patriot", "Southeastern Conference": "SEC",
@@ -108,13 +116,50 @@ LABEL_TDS_CONFERENCE = {
     "America East": "america-east", "American": "american-athletic", "Atlantic 10": "atlantic-10", "ACC": "atlantic-coast",
     "ASUN": "asun", "Big East": "big-east", "Big 12": "big-12", "Big Sky": "big-sky", "Big South": "big-south",
     "Big Ten": "big-ten", "Big West": "big-west", "CAA": "coastal-athletic-association", "CUSA": "conference-usa",
-    "Horizon": "horizon-league", "DI Independent": "independent", "Ivy League": "ivy-league",
+    "Horizon": "horizon-league", "Independent": "independent", "Ivy League": "ivy-league",
     "Metro": "metro-atlantic-athletic-conference", "MAC": "mid-american", "MVC": "missouri-valley",
     "Mountain West": "mountain-west", "NEC": "northeast", "OVC": "ohio-valley", "Pac-12": "pacific-12",
     "Patriot": "patriot-league", "SEC": "sec", "SoCon": "southern", "Southland": "southland",
     "SWAC": "southwestern-athletic", "Summit League": "summit-league", "Sun Belt": "sun-belt", "UAC": "united-athletic-conference",
     "WCC": "west-coast",
 }
+
+
+def d1_only_labels() -> set[str]:
+    """The D1 labels no Directory name is spelled as: the strings only the D1 table can produce, so
+    an entry of another division carrying one was run through that table by mistake. "Independent"
+    is not one of them since #199 -- the table maps it to itself, so a D2 independent reads the same
+    whichever table it went through, and only its division says which conference it is."""
+    return {label for name, label in CONFERENCE_LABELS.items() if label != name}
+
+
+# Why an entry in `programs` is deliberately not collected (see the module docstring). A new reason is
+# a reviewed decision, added here in the PR that first uses it.
+COLLECTION_HOLD_REASONS = {
+    "merged-scorecard-row": "the campus shares one College Scorecard row with other campuses of a merged university",
+    "no-athletics-source": "no citable source gives a usable athletics site",
+}
+_ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def collection_hold_problem(p: dict) -> str | None:
+    """None when `p` carries a well-formed collection hold, else what is wrong with it (including
+    that it has none). Well formed: exactly {reason, evidence, since}, a known reason, non-empty
+    evidence, an ISO date, on an entry that is not collected."""
+    hold = p.get("collectionHold")
+    if hold is None:
+        return "no collectionHold"
+    if not isinstance(hold, dict) or set(hold) != {"reason", "evidence", "since"}:
+        return f"collectionHold must be exactly {{reason, evidence, since}}, got {hold!r}"
+    if hold["reason"] not in COLLECTION_HOLD_REASONS:
+        return f"collectionHold.reason {hold['reason']!r} is not one of {sorted(COLLECTION_HOLD_REASONS)}"
+    if not (isinstance(hold["evidence"], str) and hold["evidence"].strip()):
+        return "collectionHold.evidence is empty"
+    if not (isinstance(hold["since"], str) and _ISO_DATE.match(hold["since"])):
+        return f"collectionHold.since {hold['since']!r} is not a YYYY-MM-DD date"
+    if p.get("onboarded"):
+        return "collectionHold is on a collected entry (onboarded: true)"
+    return None
 
 # Reviewed by hand on issue #100 (2026-09-15, Directory lists for 2026-27): the registry programs
 # whose three identity signals did not all agree. State and one domain agree in every case, and the
@@ -943,7 +988,8 @@ def tds_team_for(row: dict, label: str | None, wiki_row: dict | None, tds: dict[
     """The TopDrawerSoccer team for a Directory row: exact normalised name (official name, or the
     verified Wikipedia short name) AND TDS files the team under the same conference; unique."""
     forms = _name_forms(row["name"]) | ({norm_school(wiki_row["institution"])} if wiki_row else set())
-    want_conf = LABEL_TDS_CONFERENCE.get(label or "")
+    # D1 labels only (#199): D2's "Independent" is the same string as D1's and is not TDS's D1 independents
+    want_conf = LABEL_TDS_CONFERENCE.get(label or "") if row.get("division") == LABELLED_DIVISION else None
     hits = [t for t in tds.values() if norm_school(t["tdsName"]) in forms]
     agree = [t for t in hits if want_conf and t["tdsConf"] == want_conf]
     if len(agree) == 1:

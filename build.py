@@ -308,13 +308,16 @@ def check_staged_registry(registry: dict) -> bool:
             print(f"STAGED {slug}: slug does not match lowercase-hyphenated shape {STAGED_SLUG_SHAPE.pattern}")
             ok = False
 
-    # A D1 conference is stored as the label from CONFERENCE_LABELS.values() (e.g. "ACC", "DI
-    # Independent"); every other division keeps the Directory's own spelling (registry_builder's
-    # conference_label(), LABELLED_DIVISION == "D1"). A staged row carrying one of those labels was
-    # run through the D1 table by mistake - the concrete case being D2's own "Independent" (8
-    # programs, the Directory's literal spelling) getting relabelled into D1's "DI Independent".
-    d1_labels = set(rb.CONFERENCE_LABELS.values())
-    mislabelled = sorted(p["slug"] for p in staged if p.get("conference") in d1_labels)
+    # A D1 conference is stored as the label from CONFERENCE_LABELS.values() (e.g. "ACC", "CUSA");
+    # every other division keeps the Directory's own spelling (registry_builder's conference_label(),
+    # LABELLED_DIVISION == "D1"). A staged row of another division carrying a label only that table
+    # produces was run through it by mistake ("Conference USA" stored as "CUSA"). Since #199 D1's
+    # independent is plain "Independent", the same string as D2's 8 independents, so the set is
+    # rb.d1_only_labels(): labels that differ from the Directory name they come from. A shared string
+    # such as "Independent" is told apart by the entry's division, never flagged by its value.
+    d1_only = rb.d1_only_labels()
+    mislabelled = sorted(p["slug"] for p in staged
+                         if p.get("division") != rb.LABELLED_DIVISION and p.get("conference") in d1_only)
     if mislabelled:
         print(f"STAGED: {len(mislabelled)} staged entries carry a Division I conference label instead of "
               f"the Directory's own spelling: {', '.join(mislabelled[:5])}")
