@@ -153,6 +153,18 @@ REVIEWED_NOT_LISTED = {
                        "Mississippi Valley State under any name",
 }
 
+# Reviewed by the owner (issue #190): the slug a NEW program takes when the ladder's own choice is not the one
+# to publish -- a generic word ("eastern"), a name read straight off a long official title, or a campus that
+# should follow its siblings' pattern. orgId -> (slug, reason). Empty until the owner decides.
+#
+# Only a Directory row the registry does not hold yet is named from here. A slug is a permanent URL and the
+# builder never renames an entry it already holds, so an override for an orgId already in the registry does
+# nothing -- which is also why the table has to land before the division it names is staged. A reviewed slug
+# is taken exactly or the build refuses: one that is not a valid slug, that two overrides share, or that an
+# entry already holds is an error, never quietly moved down the ladder to something nobody reviewed.
+REVIEWED_SLUGS: dict[int, tuple[str, str]] = {}
+SLUG_SHAPE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")  # the shape build.STAGED_SLUG_SHAPE checks on every staged entry
+
 # Time zones come from the coordinates, never from the state (issue #110). The state table this
 # replaces put Knoxville, Chattanooga and Johnson City on Central time, Murray, Bowling Green,
 # Evansville and Valparaiso on Eastern, El Paso on Central and Moscow (Idaho) on Mountain, and it had
@@ -745,6 +757,46 @@ def slug_ladder(name: str, state: str | None, org_id: int, preferred: str | None
     return out
 
 
+def reviewed_slug_pins(rows: list[dict], taken: set[str], table: dict[int, tuple[str, str]] | None = None) -> dict[int, str]:
+    """orgId -> reviewed slug, for the rows in `rows` (Directory rows about to be added) that REVIEWED_SLUGS names.
+
+    Raises ValueError, naming the override, when the table is unusable: a slug that is not lowercase words joined
+    by single hyphens, one slug given to two orgIds, or -- for a row being added -- a slug an entry in `taken`
+    already holds. An override for an orgId that is not among `rows` (the registry already holds it) is not
+    applied and not checked against `taken`: its own entry holds that slug from the build that added it."""
+    table = REVIEWED_SLUGS if table is None else table
+    errors = []
+    for org, value in sorted(table.items()):
+        slug = value[0] if isinstance(value, (tuple, list)) and value else None
+        if not isinstance(org, int) or not isinstance(slug, str) or not SLUG_SHAPE.match(slug):
+            errors.append(f"orgId {org!r} -> {slug!r} is not a valid slug (lowercase words joined by single hyphens)")
+    by_slug = collections.defaultdict(list)
+    for org, value in table.items():
+        if isinstance(value, (tuple, list)) and value:
+            by_slug[value[0]].append(org)
+    for slug, orgs in sorted(by_slug.items()):
+        if len(orgs) > 1:
+            errors.append(f"{slug!r} is given to more than one orgId: {sorted(orgs)}")
+    adding = {r["orgId"]: r for r in rows}
+    pins = {org: table[org][0] for org in sorted(table) if org in adding}
+    for org, slug in pins.items():
+        if slug in taken:
+            errors.append(f"{slug!r} for {adding[org]['name']} (orgId {org}) is already held by a registry entry")
+    if errors:
+        raise ValueError("REVIEWED_SLUGS is not usable: " + "; ".join(errors))
+    return pins
+
+
+def name_new_programs(rows: list[dict], taken: set[str], preferred: dict[int, str] | None = None,
+                      table: dict[int, tuple[str, str]] | None = None) -> dict[int, str]:
+    """orgId -> slug for a batch of new Directory rows: a reviewed slug (REVIEWED_SLUGS) exactly as given, and the
+    rest by assign_slugs() with those reviewed slugs counted as taken, so no ladder can reach one."""
+    pins = reviewed_slug_pins(rows, taken, table)
+    out = assign_slugs([r for r in rows if r["orgId"] not in pins], set(taken) | set(pins.values()), preferred)
+    out.update(pins)
+    return out
+
+
 def new_slug(name: str, state: str | None, org_id: int, taken: set[str], preferred: str | None = None) -> str:
     """The first slug_ladder() rung that no registry entry (published or held) already uses."""
     for cand in slug_ladder(name, state, org_id, preferred):
@@ -981,7 +1033,8 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
         # name the whole batch at once, so two new programs wanting one slug both move down the ladder
         preferred = {r["orgId"]: w["institution"] for r in missing
                      for w, _ in [wiki_row_for(r, wiki.get(r["division"], []))] if w}
-        slugs = assign_slugs(missing, taken, preferred)
+        # a reviewed slug (REVIEWED_SLUGS, issue #190) is taken as given; everything else takes its ladder
+        slugs = name_new_programs(missing, taken, preferred)
         contested = contested_scorecard_ids(missing, bulk, registry)
         for unit, names in sorted(contested.items()):
             common.log(f"registry: Scorecard row {unit} is claimed by {len(names)} programs ({', '.join(names)}); "

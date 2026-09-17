@@ -989,6 +989,118 @@ def test_staged_division_count_anchor() -> None:
         build.STAGED_DIVISION_COUNTS.update(saved)
 
 
+def test_reviewed_slugs() -> None:
+    print("reviewed slugs: REVIEWED_SLUGS names a new program, never renames one, and refuses an unusable override (#190)")
+    missing_fn = lambda *a, **kw: (_ for _ in ()).throw(AttributeError("no name_new_programs on this code"))  # noqa: E731
+    name_new = getattr(rb, "name_new_programs", None) or missing_fn
+    eastern = drow(301, "D3", "Eastern University", "PA", "eastern.edu", "goeasterneagles.com", "MAC Freedom")
+    south = drow(302, "D3", "University of the South", "TN", "sewanee.edu", "sewaneetigers.com", "Southern Athletic Association")
+    # a row whose own first rung is the slug reviewed for Eastern: the reviewed slug must win, and this one move down
+    rival = drow(303, "D3", "Eastern PA University", "NJ", "epa.edu", "goepa.com", "NJAC")
+    taken = {"eastern-illinois", "south-carolina", "alpha"}
+
+    def call(rows, table):
+        try:
+            return name_new(rows, set(taken), {}, table), None
+        except Exception as e:  # noqa: BLE001
+            return None, e
+
+    ok("CONTROL with no override the ladder names them: eastern, south",
+       rb.assign_slugs([eastern, south], set(taken)) == {301: "eastern", 302: "south"}, str(rb.assign_slugs([eastern, south], set(taken))))
+    got, err = call([eastern, south], {})
+    ok("FIX an empty table names them exactly as the ladder does", err is None and got == {301: "eastern", 302: "south"}, str(err or got))
+
+    # --- applied to a new program
+    got, err = call([eastern, south, rival], {301: ("eastern-pa", "a direction, not a name")})
+    # fails if the table is ignored, or the reviewed slug is moved down the ladder instead of taken as given
+    ok("FIX a reviewed slug names the new program exactly: 301 -> eastern-pa", err is None and got[301] == "eastern-pa",
+       str(err or got))
+    ok("FIX ... and a program without an override keeps its ladder: 302 -> south", err is None and got[302] == "south", str(err or got))
+    # fails if the reviewed slug is not counted as taken for the rest of the batch: 303's first rung is eastern-pa
+    ok("FIX ... and another new row whose ladder reaches the same slug moves down, not the reviewed one",
+       err is None and got[303] == "eastern-pa-university" and len(set(got.values())) == 3, str(err or got))
+
+    # --- through build(): the table reaches the entries a build adds, and never an entry already held
+    with with_pins():
+        registry, directory = staged_world()
+        registry["stagedDivisions"] = ["D2", "D3"]
+        registry["programs"].append(prog("edward-waters", 5, "https://ewutigers.com", "FL", division="D2", conference="Independent",
+                                         org=105, onboarded=False))
+        directory["D3"] = [eastern]
+        saved = (rb.fetch_directory, rb.fetch_scorecard_bulk, rb.fetch_wiki_list, rb.fetch_tds_teams, rb.timezone_at,
+                 common.update_registry, common.write_json, getattr(rb, "REVIEWED_SLUGS", None))
+        written = {}
+
+        def fake_update(mutate):
+            mutate(registry)
+            return registry
+
+        try:
+            rb.fetch_directory = lambda reg=None: directory
+            rb.fetch_scorecard_bulk = lambda reg=None: BULK
+            rb.fetch_wiki_list = lambda division="D1": []
+            rb.fetch_tds_teams = lambda: {}
+            rb.timezone_at = lambda lat, lon: None
+            common.update_registry = fake_update
+            common.write_json = lambda path, obj, **kw: written.__setitem__(path, obj)
+            # 105 is already in the registry as edward-waters; 301 is new
+            rb.REVIEWED_SLUGS = {301: ("eastern-pa", "a direction, not a name"), 105: ("ewu-tigers", "would rename an entry")}
+            try:
+                build_rep = rb.build(copy.deepcopy(registry))
+                build_err = None
+            except Exception as e:  # noqa: BLE001
+                build_rep, build_err = None, e
+            slugs = {p["ids"].get("ncaaOrgId"): p["slug"] for p in registry["programs"]}
+            # fails if build() names new programs without the table
+            ok("FIX build() names the new D3 program from REVIEWED_SLUGS: eastern-pa",
+               build_err is None and slugs.get(301) == "eastern-pa", str(build_err or slugs))
+            # fails if an override is applied to (or checked against) an entry the registry already holds. The two GUARD
+            # checks pass on code without the table too (nothing there renames anything); the mutation that applies
+            # the table to every orgId, not only to rows being added, is what they catch
+            ok("GUARD an override for an orgId already in the registry renames nothing: 105 stays edward-waters, and the build runs",
+               build_err is None and slugs.get(105) == "edward-waters" and not any(s == "ewu-tigers" for s in slugs.values()),
+               str(build_err or slugs))
+            # its own slug in the table (the state every reviewed entry is in on the builds after the one that added it)
+            # a later build that still has a new row to add, so the table is read: 301 is taken out again
+            registry["programs"] = [p for p in registry["programs"] if p["ids"].get("ncaaOrgId") != 301]
+            rb.REVIEWED_SLUGS = {105: ("edward-waters", "already added under this slug"), 301: ("eastern-pa", "x")}
+            try:
+                rb.build(copy.deepcopy(registry))
+                again_err = None
+            except Exception as e:  # noqa: BLE001
+                again_err = e
+            slugs = {p["ids"].get("ncaaOrgId"): p["slug"] for p in registry["programs"]}
+            ok("GUARD an override naming the slug its own entry already holds is not a collision on later builds",
+               again_err is None and slugs.get(301) == "eastern-pa" and slugs.get(105) == "edward-waters", str(again_err or slugs))
+        finally:
+            (rb.fetch_directory, rb.fetch_scorecard_bulk, rb.fetch_wiki_list, rb.fetch_tds_teams, rb.timezone_at,
+             common.update_registry, common.write_json) = saved[:7]
+            if saved[7] is None:
+                rb.__dict__.pop("REVIEWED_SLUGS", None)
+            else:
+                rb.REVIEWED_SLUGS = saved[7]
+
+    # --- refused, with the override named
+    def refused(label, table, *needles):
+        got, err = call([eastern, south], table)
+        ok(label, isinstance(err, ValueError) and all(n in str(err) for n in needles), str(err or got))
+
+    # fails if a reviewed slug an entry already holds is quietly moved down the ladder (or published twice)
+    refused("FIX an override that collides with an existing slug is refused, naming it",
+            {301: ("eastern-illinois", "x")}, "eastern-illinois", "already held")
+    # fails if two orgIds may be given one slug
+    refused("FIX two overrides with one slug are refused, naming both orgIds",
+            {301: ("sewanee", "x"), 302: ("sewanee", "y")}, "sewanee", "301", "302")
+    ok("FIX ... the same two with distinct slugs are applied",
+       call([eastern, south], {301: ("eastern-pa", "x"), 302: ("sewanee", "y")})[0] == {301: "eastern-pa", 302: "sewanee"})
+    # fails if a slug that breaks the shape build.check_staged_registry enforces could be written
+    refused("FIX an override with capitals or a doubled hyphen is refused", {301: ("Eastern--PA", "x")}, "Eastern--PA", "not a valid slug")
+    refused("FIX an override with an underscore is refused", {301: ("eastern_pa", "x")}, "eastern_pa", "not a valid slug")
+    refused("FIX an override with a trailing hyphen is refused", {301: ("eastern-", "x")}, "eastern-", "not a valid slug")
+    ok("CONTROL the shipped table is empty until the owner decides (#190)", getattr(rb, "REVIEWED_SLUGS", {}) == {},
+       str(getattr(rb, "REVIEWED_SLUGS", None)))
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1000,6 +1112,7 @@ def main(argv=None) -> int:
     test_policy()
     test_staging()
     test_slugs()
+    test_reviewed_slugs()
     test_new_entry()
     test_timezones()
     test_committed()
