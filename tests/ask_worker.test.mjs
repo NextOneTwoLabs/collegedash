@@ -13,7 +13,8 @@
 //     ASK_ENABLED is "true" AND ANTHROPIC_API_KEY is set, and nothing calls the API while it is off;
 //   - /api/status is byte-identical {"local":false} for everyone, on or off, token or not (ask availability is
 //     the owner-only GET /api/ask/status since #179; its tests are in tests/ask_access_budget.test.mjs);
-//   - wrangler.toml declares ASK_ENABLED "false" and no tracked file carries anything shaped like a key;
+//   - no tracked file carries anything shaped like a key (the switched-on wrangler.toml values are checked in
+//     tests/ask_enabled_config.test.mjs);
 //   - when on, the request sent upstream uses the pinned model, the hard output-token limit, a json_schema
 //     output format and the key only as a header, and the key never appears in any response;
 //   - validation turns every answer the page could not show into {unsupported}: an unknown field, a
@@ -84,7 +85,7 @@ const blank = { unsupported: null, reading: 'a reading', division: [], conf: [],
 test('off by default: /api/ask is the same 404 as an unknown /api route, and nothing calls the API', async () => {
   const offs = { 'no variables': {}, 'enabled but no key': { ASK_ENABLED: 'true' }, 'key but not enabled': { ANTHROPIC_API_KEY: KEY },
     'enabled "1", not "true"': { ASK_ENABLED: '1', ANTHROPIC_API_KEY: KEY }, 'enabled with an empty key': { ASK_ENABLED: 'true', ANTHROPIC_API_KEY: '' },
-    'the committed wrangler.toml value': { ASK_ENABLED: 'false', ANTHROPIC_API_KEY: KEY } };
+    'enabled "false" with a key': { ASK_ENABLED: 'false', ANTHROPIC_API_KEY: KEY } };
   for (const [name, vars] of Object.entries(offs)) {
     const { result, calls } = await withUpstream(null, async () => {
       const e1 = env(vars), e2 = env(vars);
@@ -112,9 +113,8 @@ test('/api/status is byte-identical {"local":false} off, on, and on with the own
   assert.equal(result.owner, '{"local":false}', 'ask availability leaked onto the public status route');
 });
 
-test('wrangler.toml declares ASK_ENABLED "false", and no tracked file holds anything shaped like an Anthropic key', () => {
+test('wrangler.toml holds no ANTHROPIC_API_KEY var, and no tracked file holds anything shaped like an Anthropic key', () => {
   const toml = fs.readFileSync(process.env.ASK_WRANGLER || path.join(ROOT, 'wrangler.toml'), 'utf8');
-  assert.match(toml, /^\[vars\]\s*\nASK_ENABLED = "false"\s*$/m);
   assert.doesNotMatch(toml, /ANTHROPIC_API_KEY\s*=/, 'the key must be a secret, not a var');
   const files = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 28 }).split('\0').filter(Boolean)
     .filter((f) => /\.(js|mjs|cjs|html|toml|json|md|py|ya?ml|txt|env)$/i.test(f) || !path.extname(f));
