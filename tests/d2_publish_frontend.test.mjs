@@ -44,7 +44,12 @@ const readJson = (rel) => JSON.parse(fs.readFileSync(path.join(PUBLIC, rel), 'ut
 const clone = (v) => JSON.parse(JSON.stringify(v));
 
 // ---------- data ----------
-const REAL_INDEX = readJson('data/programs/index.json');
+// The D1 ONLY dataset is the committed index's Division I rows. Before #197 that was the whole index; since
+// D2 is published the committed index also holds the real Division II rows, which would otherwise be mixed
+// into every "D1 only" view and into MIXED beside the generated programs below.
+const COMMITTED_INDEX = readJson('data/programs/index.json');
+const REAL_INDEX = { ...COMMITTED_INDEX, programs: COMMITTED_INDEX.programs.filter((p) => p.division === 'D1') };
+const D1_FILES = { 'data/programs/index.json': REAL_INDEX };
 const row = (slug) => { const r = REAL_INDEX.programs.find((p) => p.slug === slug); assert.ok(r, `no ${slug} in the index`); return r; };
 const RPI_SEASON = 2025;
 const rpiOfRow = (p) => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find((r) => r.year === RPI_SEASON)?.rank ?? null;
@@ -125,7 +130,7 @@ function loadPage(html = PAGE, files = {}) {
 }
 const settle = async () => { for (let i = 0; i < 30; i++) await new Promise((r) => setTimeout(r, 0)); };
 const FILTERS = { conf: [], region: [], division: [], classYear: [], sort: 'name', view: 'cards', cond: [], moreStats: false };
-async function ready(files) { const pg = loadPage(PAGE, files); await pg.sb.loadIndex(); await settle(); return pg; }
+async function ready(files) { const pg = loadPage(PAGE, { ...D1_FILES, ...(files || {}) }); await pg.sb.loadIndex(); await settle(); return pg; }
 async function list(pg, filters = {}) {
   Object.assign(pg.sb.S.filters, clone(FILTERS), clone(filters));
   pg.sb.S.q = ''; pg.sb.S.qRaw = ''; pg.sb.location.hash = '';
@@ -184,7 +189,7 @@ test('D1 profiles render byte for byte the same whether or not Division II is lo
 const BASELINE = process.env.D2PUB_BASELINE_HTML;
 test('D1 only: every view is byte-identical to the page before #198, apart from the division-neutral copy', { skip: BASELINE ? false : 'set D2PUB_BASELINE_HTML to the pre-change public/index.html to run this comparison' }, async () => {
   const views = async (html) => {
-    const pg = loadPage(html); await pg.sb.loadIndex(); await settle();
+    const pg = loadPage(html, D1_FILES); await pg.sb.loadIndex(); await settle();
     const out = {};
     const cases = { default: {}, rpi: { sort: 'rpi' }, titles: { sort: 'titles' }, table: { view: 'table', sort: 'rpi', moreStats: true },
       condRpi: { cond: [{ field: 'rpiRank', op: '<=', value: 50 }] }, condCups: { view: 'table', cond: [{ field: 'collegeCups', op: '>=', value: 1 }, { field: 'sat25', op: '>', value: 1000 }] },

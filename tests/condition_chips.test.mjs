@@ -422,7 +422,12 @@ test('the ID Camp View honours chips and counts the camps hidden for missing dat
   reset(S);
 });
 
+// The pre-#166 code knew one division: its titles and RPI sorts interleave divisions, which #207 changed on
+// purpose (#197 decisions 2 and 3). Since #197 publishes D2 the equivalence is checked over the shipped index's
+// Division I rows, the data that code was written for; D2 ordering is covered by d2_publish_frontend.test.mjs.
+const d1Only = await ready(loadPage({ index: { ...SHIPPED, programs: SHIPPED.programs.filter(p => p.division === 'D1') } }));
 test('no chips: Program View rows are in byte-identical order to the code that shipped before, and the subtitle is unchanged', async () => {
+  const real = d1Only;
   const { S, filteredPrograms, matchScore, normText, renderList } = real.sb;
   const sortCmp = sortCmpBefore(S); // the ordering as it shipped, not the page's
   // every key sortCmp handles: the sidebar's sorts and the table-header-only ones

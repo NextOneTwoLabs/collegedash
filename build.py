@@ -231,7 +231,9 @@ def check_no_stale_profiles(registry: dict) -> bool:
 # direction, a division staged later and never added to this dict would get the structural checks
 # below and no count anchor, silently - staging D3 without writing its count down here would pass
 # every check that exists. check_staged_registry() fails that case too, on purpose.
-STAGED_DIVISION_COUNTS = {"D2": 261}
+#
+# Empty since #197: D2 was published (moved to onboardedDivisions), and nothing else is staged.
+STAGED_DIVISION_COUNTS: dict[str, int] = {}
 
 # A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
 # hyphen - the shape every slug in the registry already has (collect/registry_builder.py's

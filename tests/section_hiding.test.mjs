@@ -157,7 +157,8 @@ const tile = (html, re) => [...html.matchAll(/<div class="tile"><div class="labe
 const glance = html => (html.match(/<aside class="glance-panel"[^>]*>([\s\S]*)<\/aside>/) || [])[1] || '';
 const see = {
   overview: (tab, app) => ({
-    'season tile': tile(tab, /season$/), 'National titles tile': tile(tab, /^National titles$/), 'College Cups tile': tile(tab, /^College Cups$/),
+    // D1 reads "National titles"; another division names itself, "NCAA D2 titles" (#197 decision 2, #207)
+    'season tile': tile(tab, /season$/), 'National titles tile': tile(tab, /^(National titles|NCAA D\d titles)$/), 'College Cups tile': tile(tab, /^College Cups$/),
     'Admission rate tile': tile(tab, /^Admission rate$/), 'Undergraduates tile': tile(tab, /^Undergraduates$/), 'Tuition tile': tile(tab, /^Tuition \/ yr$/),
     'Commitments tile': tile(tab, /^Commitments$/), 'RPI chart': tab.includes('<h3>RPI, recent seasons</h3>'), 'Roster snapshot': tab.includes('<h3>Roster snapshot'),
   }),
