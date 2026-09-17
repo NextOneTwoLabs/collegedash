@@ -110,7 +110,10 @@ async function ready(sb) {
 }
 
 /* ---------- the real D1 index, and a synthetic D2 index built from the real registry rows ---------- */
-const REAL_D1 = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+// The committed index's Division I rows. Since #197 publishes D2, that index also holds the real D2 rows,
+// which the BEFORE/AFTER indexes below replace with their own; keeping them would list each D2 slug twice.
+const COMMITTED_INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+const REAL_D1 = { ...COMMITTED_INDEX, programs: COMMITTED_INDEX.programs.filter(p => p.division === 'D1') };
 const REGISTRY = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'registry.json'), 'utf8'));
 const D2_ONBOARDED = REGISTRY.programs.filter(p => p.division === 'D2' && p.onboarded);
 
