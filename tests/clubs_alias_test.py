@@ -284,9 +284,17 @@ def test_owner_decisions_233(table: clubs.Table) -> None:
     for raw, name in confirmed.items():
         m = table.match(raw)
         check(f"#233 confirmed: {raw!r} -> {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
-    check("#233: 'Select Soccer Club' no longer means Select SC",
-          table.match("Select Soccer Club").clubId != table.match("Select SC").clubId)
-    check("#233: Select SC keeps its own name, so the row stays", table.match("Select SC").status == "matched")
+    # the owner's addition: the players written exactly "Select SC" are Eclipse Select too, so
+    # the Select SC row is folded in and its name becomes a reviewed alias
+    for raw in ("Select SC", "Select Soccer Club"):
+        m = table.match(raw)
+        check(f"#233 folded: {raw!r} -> 'Eclipse Select (IL)'", m.status == "matched" and m.clubId == "eclipse-select-il",
+              f"{m.status} {m.clubId}")
+    check("#233 folded: the Select SC row is gone", "select-sc" not in table.clubs)
+    with open(clubs.TABLE_PATH, encoding="utf-8") as f:
+        entry = (json.load(f).get("aliases") or {}).get("select sc") or {}
+    check("#233 folded: the owner is recorded on the 'select sc' alias",
+          entry.get("club") == "eclipse-select-il" and str(entry.get("reviewedBy", "")).startswith("owner"), str(entry))
     # the near-miss guard: merging must not have emptied the pairs the vacuity check relies on
     both = [(a, b) for a, b in NEAR_MISSES if table.match(a).status == "matched" and table.match(b).status == "matched"]
     check("#233: the near-miss vacuity guard still has 5+ pairs after the merges", len(both) >= 5, str(len(both)))
