@@ -811,18 +811,30 @@ def test_committed() -> None:
     # fails if a value supplied from memory enters the registry (the spike's gogusties.com)
     ok("no athletics URL came from memory", "gogusties" not in json.dumps(reg))
 
-    # --- the staged Division II entries (issue #94)
-    if "D2" in staged_divs:
+    # --- the Division II entries (issue #94): staged, and after publishing (#197) still checked
+    # Every check below is about the entries themselves, so it applies whether D2 is staged or onboarded; only
+    # what "published" means for them depends on which. Keyed on staged alone, the block stopped running the
+    # day D2 was published, and every check in it went quiet with nothing failing.
+    d2_onboarded = "D2" in (reg.get("onboardedDivisions") or [])
+    ok("D2 is either staged or onboarded, so the D2 checks below run", "D2" in staged_divs or d2_onboarded,
+       f"stagedDivisions {staged_divs}, onboardedDivisions {reg.get('onboardedDivisions')}")
+    if "D2" in staged_divs or d2_onboarded:
         d2 = [p for p in programs if p["division"] == "D2"]
         # fails if the D2 list is short or long: the 2026-27 Directory list is 261 programs, and a
         # truncated fetch is the way that number quietly drops
         ok("all 261 D2 programs are in the registry", len(d2) == 261, str(len(d2)))
-        # fails if a D2 entry reaches the published set. This is the invariant, not "nothing is
-        # onboarded": a batch is collected (onboarded: true) before the division is published, so the
-        # flag moves per batch and the published set must not.
-        ok("and not one of them is published", not ({p["slug"] for p in d2} & {p["slug"] for p in published}),
-           str(sorted({p["slug"] for p in d2} & {p["slug"] for p in published})[:5]))
-        ok("none is held: a staged entry was never published, so there is nothing to hold",
+        published_d2 = {p["slug"] for p in d2} & {p["slug"] for p in published}
+        if d2_onboarded:
+            # fails if publishing D2 leaves a collected entry off the site, or puts an uncollected one on it
+            ok("with D2 onboarded, exactly the collected D2 entries are published",
+               published_d2 == {p["slug"] for p in d2 if p.get("onboarded")},
+               str(sorted(published_d2 ^ {p["slug"] for p in d2 if p.get("onboarded")})[:5]))
+        else:
+            # fails if a D2 entry reaches the published set. This is the invariant, not "nothing is
+            # onboarded": a batch is collected (onboarded: true) before the division is published, so the
+            # flag moves per batch and the published set must not.
+            ok("and not one of them is published", not published_d2, str(sorted(published_d2)[:5]))
+        ok("none is held: a D2 entry was never published before, so there is nothing to hold",
            not any("hold" in p for p in d2))
         # a collected entry says when, and an uncollected one has no date to say
         ok("onboardedAt is present exactly on the collected ones",

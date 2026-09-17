@@ -276,14 +276,34 @@ def test_committed() -> None:
     out = buf.getvalue()
     ok("check_titles passes on the committed profiles", passed, out[:400])
     ok("no published profile carries an unsourced title claim", "note: titles " not in out, out[:400])
-    published = {}
+    # Keyed by (division, year), not by year alone (#197): 1989 is North Carolina's D1 title and Barry's D2 title,
+    # and a year-keyed map made one of them overwrite the other the moment D2 is published.
+    published, doubled = {}, []
     for p in programs:
         prof = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{p['slug']}.json")) or {}
         for y in ((prof.get("program") or {}).get("nationalTitles") or []):
-            published[y] = p["slug"]
-    # fails if a D1 champion's title stops being published, or a D2 year starts being published by a D1 program
-    ok("every D1 champion year is published by its champion", published == {y: s for y, s in build.NCAA_D1_WOMENS_CHAMPIONS.items()},
-       str(sorted(set(published.items()) ^ set(build.NCAA_D1_WOMENS_CHAMPIONS.items()))[:4]))
+            key = (p.get("division"), y)
+            if key in published:
+                doubled.append((key, published[key], p["slug"]))
+            published[key] = p["slug"]
+    ok("no division's title year is published by two programs", not doubled, str(doubled[:4]))
+    d1 = {y: s for (d, y), s in published.items() if d == "D1"}
+    # fails if a D1 champion's title stops being published, or a year starts being published by a D1 program that did not win it
+    ok("every D1 champion year is published by its champion", d1 == build.NCAA_D1_WOMENS_CHAMPIONS,
+       str(sorted(set(d1.items()) ^ set(build.NCAA_D1_WOMENS_CHAMPIONS.items()))[:4]))
+    # Every other division's published years are years its own table has, published by the program that table's
+    # champion joins to. Today no D2 program is published and this holds vacuously; with D2 published it is checked.
+    by_slug = {p["slug"]: p for p in programs}
+    wrong = sorted((d, y, s, (build.CHAMPION_TABLES.get(d) or {}).get(y)) for (d, y), s in published.items()
+                   if d != "D1" and not (y in (build.CHAMPION_TABLES.get(d) or {})
+                                         and build.title_matches(by_slug[s], build.CHAMPION_TABLES[d][y], d)))
+    # fails if a D2 program publishes a year its table does not give it (or a D1 year leaks into D2)
+    ok("every non-D1 title year is its own division's champion year, published by that champion", not wrong, str(wrong[:4]))
+    missing = sorted((d, y, champion, [q["slug"] for q in programs if q.get("division") == d and build.title_matches(q, champion, d)])
+                     for d, table in build.CHAMPION_TABLES.items() if d != "D1" for y, champion in table.items()
+                     if (d, y) not in published and any(q.get("division") == d and build.title_matches(q, champion, d) for q in programs))
+    # fails if a published D2 champion stops publishing one of its title years
+    ok("every non-D1 champion year whose champion is published is published", not missing, str(missing[:4]))
     ok("no published program is in a division with no champions table",
        all(p.get("division") in build.CHAMPION_TABLES for p in programs),
        sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES)))
