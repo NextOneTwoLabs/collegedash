@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-17",
-  "note": "Reviewed club table for issue #228 (phase 2a of #225). Matching is exact against `aliases` after the conservative cleanup in clubs.clean_key: no fuzzy merging. Seeded under the owner's option A: club names seen 5 or more times in the D1 corpus (current rosters, past rosters and commitment records). Everything else stays unmatched and is listed in data/clubs-review.json.",
+  "note": "Reviewed club table for issue #228 (phase 2a of #225). Matching is exact against `aliases` after the conservative cleanup in clubs.clean_key: no fuzzy merging. Seeded under the owner's option A: club names seen 5 or more times in the D1 corpus (current rosters, past rosters and commitment records). Everything else stays unmatched and is listed in data/clubs-review.json. Rows and aliases carrying `reviewed`/`reviewedBy` were confirmed by the owner on issue #233.",
   "clubs": [
     {
       "id": "ac-florida",
@@ -107,9 +107,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 14,
+      "seenAs": 21,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "arlington-sa",
@@ -193,26 +195,17 @@
       "state": null,
       "country": null,
       "formerNames": [],
-      "leagues": [],
-      "seenAs": 28,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "az-arsenal",
-      "name": "AZ Arsenal",
-      "state": null,
-      "country": null,
-      "formerNames": [],
       "leagues": [
         {
           "league": "ECNL",
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 7,
+      "seenAs": 34,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "baltimore-armour",
@@ -341,8 +334,8 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
-      "id": "boise-thorns",
-      "name": "Boise Thorns",
+      "id": "boise-timbers-thorns-sc",
+      "name": "Boise Timbers Thorns SC",
       "state": null,
       "country": null,
       "formerNames": [],
@@ -352,20 +345,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 11,
+      "seenAs": 23,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "boise-timbers-thorns-sc",
-      "name": "Boise Timbers Thorns SC",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 12,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "carolina-elite-soccer-academy",
@@ -597,21 +581,12 @@
           "basis": "girlsacademyleague.com/members/, read 2026-09-17"
         }
       ],
-      "seenAs": 47,
+      "seenAs": 63,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
-      "city": "Cincinnati"
-    },
-    {
-      "id": "cincinnati-united-soccer-club",
-      "name": "Cincinnati United Soccer Club",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 16,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "city": "Cincinnati",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "city-sc",
@@ -811,25 +786,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 44,
+      "seenAs": 52,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "crossfire-united",
-      "name": "Crossfire United",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 8,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "dallas-sting",
@@ -961,22 +922,6 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
-      "id": "eclipse",
-      "name": "Eclipse",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 12,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
       "id": "eclipse-select-il",
       "name": "Eclipse Select (IL)",
       "state": "IL",
@@ -988,9 +933,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 87,
+      "seenAs": 99,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "fairfax-virginia-union",
@@ -1877,17 +1824,6 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
-      "id": "lou-fusz",
-      "name": "Lou Fusz",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 13,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
       "id": "lou-fusz-athletic",
       "name": "Lou Fusz Athletic",
       "state": "MO",
@@ -1899,10 +1835,12 @@
           "basis": "girlsacademyleague.com/members/, read 2026-09-17"
         }
       ],
-      "seenAs": 42,
+      "seenAs": 55,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
-      "city": "St. Louis"
+      "city": "St. Louis",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "louisiana-tdp-elite",
@@ -2185,17 +2123,6 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
-      "id": "nc-fusion",
-      "name": "NC Fusion",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 10,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
       "id": "nc-fusion-ecnl",
       "name": "NC Fusion ECNL",
       "state": null,
@@ -2323,9 +2250,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 16,
+      "seenAs": 26,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "north-florida-soccer-academy",
@@ -2412,8 +2341,8 @@
       "city": "Glastonbury"
     },
     {
-      "id": "ohio-elite",
-      "name": "Ohio Elite",
+      "id": "ohio-elite-soccer-academy",
+      "name": "Ohio Elite Soccer Academy",
       "state": null,
       "country": null,
       "formerNames": [],
@@ -2423,20 +2352,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 27,
+      "seenAs": 61,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "ohio-elite-soccer-academy",
-      "name": "Ohio Elite Soccer Academy",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 34,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "ohio-premier",
@@ -2619,25 +2539,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 76,
+      "seenAs": 96,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "penn-fusion-sa",
-      "name": "Penn Fusion SA",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 20,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "penn-fusion-soccer-academy",
@@ -3144,21 +3050,12 @@
           "basis": "girlsacademyleague.com/members/, read 2026-09-17"
         }
       ],
-      "seenAs": 20,
+      "seenAs": 26,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
-      "city": "Pitman"
-    },
-    {
-      "id": "sjeb-rush",
-      "name": "SJEB Rush",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 6,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "city": "Pitman",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "slammers-fc",
@@ -3172,9 +3069,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 59,
+      "seenAs": 140,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "slammers-fc-fb-koge",
@@ -3184,38 +3083,6 @@
       "formerNames": [],
       "leagues": [],
       "seenAs": 6,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "slammers-fc-hb-koge",
-      "name": "Slammers FC HB Koge",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 56,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "slammers-hb-koge",
-      "name": "Slammers HB Køge",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 25,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
@@ -3231,20 +3098,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 42,
+      "seenAs": 51,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "socal-blues",
-      "name": "SoCal Blues",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 9,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "sockers-fc",
@@ -3569,22 +3427,6 @@
       "city": "Morris Plains"
     },
     {
-      "id": "sting-austin",
-      "name": "Sting Austin",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 6,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
       "id": "sting-royal",
       "name": "Sting Royal",
       "state": null,
@@ -3775,10 +3617,10 @@
       "city": "Tulsa"
     },
     {
-      "id": "ufa",
-      "name": "UFA",
-      "state": null,
-      "country": null,
+      "id": "united-futbol-academy",
+      "name": "United Futbol Academy",
+      "state": "GA",
+      "country": "US",
       "formerNames": [],
       "leagues": [
         {
@@ -3786,20 +3628,11 @@
           "basis": "tagged in the source strings"
         }
       ],
-      "seenAs": 14,
+      "seenAs": 45,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "united-futbol-academy",
-      "name": "United Futbol Academy",
-      "state": "GA",
-      "country": "US",
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 31,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
       "id": "united-soccer-alliance",
@@ -4144,7 +3977,9 @@
     "albion mls next": {
       "club": "albion-sc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "arizona arsenal ecnl": {
       "club": "arizona-arsenal",
@@ -4154,27 +3989,42 @@
     "arlington ecnl": {
       "club": "arlington-soccer",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "arlington sc": {
       "club": "arlington-soccer",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "arlington soccer ecnl": {
       "club": "arlington-soccer",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "atlanta fire united ecnl": {
       "club": "atlanta-fire-united",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "az arsenal ecnl": {
-      "club": "az-arsenal",
+    "az arsenal": {
+      "club": "arizona-arsenal",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "az arsenal ecnl": {
+      "club": "arizona-arsenal",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "baltimore armour girls academy": {
       "club": "baltimore-armour",
@@ -4216,10 +4066,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "boise thorns ecnl": {
-      "club": "boise-thorns",
+    "boise thorns": {
+      "club": "boise-timbers-thorns-sc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "boise thorns ecnl": {
+      "club": "boise-timbers-thorns-sc",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "boise timbers thorns": {
       "club": "boise-timbers-thorns-sc",
@@ -4302,9 +4161,11 @@
       "basis": "same club, spelling or team-label variant"
     },
     "cincinnati united": {
-      "club": "cincinnati-united-soccer-club",
+      "club": "cincinnati-united-premier",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "cincinnati united premier ga": {
       "club": "cincinnati-united-premier",
@@ -4315,6 +4176,13 @@
       "club": "cincinnati-united-premier",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "cincinnati united soccer club": {
+      "club": "cincinnati-united-premier",
+      "prepared": "2026-09-17",
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "classics elite 02 ecnl": {
       "club": "classics-elite",
@@ -4411,10 +4279,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "crossfire united ecnl": {
-      "club": "crossfire-united",
+    "crossfire united": {
+      "club": "crossfire-premier-sc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "crossfire united ecnl": {
+      "club": "crossfire-premier-sc",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "dallas texans ecnl 05": {
       "club": "dallas-texans",
@@ -4459,7 +4336,9 @@
     "eagles sc": {
       "club": "eagles-sc-ca",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "eagles sc ecnl": {
       "club": "eagles-sc-ca",
@@ -4469,7 +4348,9 @@
     "eagles soccer club": {
       "club": "eagles-sc-ca",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "east meadow ecnl": {
       "club": "east-meadow-sc",
@@ -4496,20 +4377,33 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "eclipse ecnl": {
-      "club": "eclipse",
+    "eclipse": {
+      "club": "eclipse-select-il",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "eclipse ecnl": {
+      "club": "eclipse-select-il",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "eclipse fc": {
-      "club": "eclipse",
+      "club": "eclipse-select-il",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "eclipse sc": {
-      "club": "eclipse",
+      "club": "eclipse-select-il",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "eclipse select": {
       "club": "eclipse-select-il",
@@ -4629,7 +4523,9 @@
     "galaxy": {
       "club": "galaxy-sc-il",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "galaxy sc": {
       "club": "galaxy-sc-il",
@@ -4784,7 +4680,9 @@
     "legends": {
       "club": "legends-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "legends fc ecnl": {
       "club": "legends-fc",
@@ -4794,7 +4692,9 @@
     "legends sc": {
       "club": "legends-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "lonestar": {
       "club": "lonestar-sc",
@@ -4821,20 +4721,31 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "lou fusz": {
+      "club": "lou-fusz-athletic",
+      "prepared": "2026-09-17",
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
     "lou fusz athletic club": {
       "club": "lou-fusz-athletic",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
     "lou fusz ga": {
-      "club": "lou-fusz",
+      "club": "lou-fusz-athletic",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "lou fusz sc": {
-      "club": "lou-fusz",
+      "club": "lou-fusz-athletic",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "marin fc ecnl": {
       "club": "marin-fc",
@@ -4869,7 +4780,9 @@
     "mclean ecnl": {
       "club": "mclean-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "michigan hawks ecnl": {
       "club": "michigan-hawks",
@@ -4961,6 +4874,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "nc fusion": {
+      "club": "north-carolina-fusion",
+      "prepared": "2026-09-17",
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
     "ncfc ecnl": {
       "club": "ncfc",
       "prepared": "2026-09-17",
@@ -4991,20 +4911,33 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "ohio elite ecnl": {
-      "club": "ohio-elite",
+    "ohio elite": {
+      "club": "ohio-elite-soccer-academy",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "ohio elite ecnl": {
+      "club": "ohio-elite-soccer-academy",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "ohio elite ecnl soccer": {
-      "club": "ohio-elite",
+      "club": "ohio-elite-soccer-academy",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "ohio elite sc": {
-      "club": "ohio-elite",
+      "club": "ohio-elite-soccer-academy",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "ohio premier ecnl": {
       "club": "ohio-premier",
@@ -5076,10 +5009,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "penn fusion sa ecnl": {
-      "club": "penn-fusion-sa",
+    "penn fusion sa": {
+      "club": "penn-fusion",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "penn fusion sa ecnl": {
+      "club": "penn-fusion",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "phoenix rising": {
       "club": "phoenix-rising-fc",
@@ -5169,7 +5111,9 @@
     "rise 05 ga": {
       "club": "rise-sc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "rockford raptors fc": {
       "club": "rockford-raptors",
@@ -5237,9 +5181,11 @@
       "basis": "same club, spelling or team-label variant"
     },
     "select soccer club": {
-      "club": "select-sc",
+      "club": "eclipse-select-il",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "re-pointed by the owner from select-sc (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "sjeb": {
       "club": "sjeb-fc",
@@ -5251,10 +5197,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "sjeb rush ga": {
-      "club": "sjeb-rush",
+    "sjeb rush": {
+      "club": "sjeb-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "sjeb rush ga": {
+      "club": "sjeb-fc",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "slammers ecnl": {
       "club": "slammers-fc",
@@ -5266,15 +5221,33 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "slammers fc hb koge ecnl": {
-      "club": "slammers-fc-hb-koge",
+    "slammers fc hb koge": {
+      "club": "slammers-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "slammers fc hb koge ecnl": {
+      "club": "slammers-fc",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "slammers hb koge": {
+      "club": "slammers-fc",
+      "prepared": "2026-09-17",
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "slammers hb koge ecnl": {
-      "club": "slammers-hb-koge",
+      "club": "slammers-fc",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "slsg": {
       "club": "st-louis-scott-gallagher",
@@ -5291,10 +5264,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "socal blues sc": {
-      "club": "socal-blues",
+    "socal blues": {
+      "club": "so-cal-blues",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "socal blues sc": {
+      "club": "so-cal-blues",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "sockers ecnl": {
       "club": "sockers-fc",
@@ -5436,10 +5418,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "sting austin ecnl": {
-      "club": "sting-austin",
+    "sting austin": {
+      "club": "austin-sting",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "sting austin ecnl": {
+      "club": "austin-sting",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "sting black": {
       "club": "sting-soccer",
@@ -5516,10 +5507,19 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
-    "ufa ecnl": {
-      "club": "ufa",
+    "ufa": {
+      "club": "united-futbol-academy",
       "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "basis": "one club held as two rows; merged by the owner (issue #233)",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "ufa ecnl": {
+      "club": "united-futbol-academy",
+      "prepared": "2026-09-17",
+      "basis": "same club, spelling or team-label variant",
+      "reviewed": "2026-09-17",
+      "reviewedBy": "owner (zhenyisx), issue #233"
     },
     "united futbol academy ga": {
       "club": "united-futbol-academy",

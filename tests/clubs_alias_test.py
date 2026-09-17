@@ -255,6 +255,43 @@ def test_committed_table(table: clubs.Table) -> None:
           table.match("Beach FC (CA)").clubId != table.match("Beach FC").clubId)
 
 
+def test_owner_decisions_233(table: clubs.Table) -> None:
+    """Issue #233: the owner confirmed 8 alias links and merged 14 split groups. Each is checked
+    by name, so a later edit that quietly splits or re-points one of them fails here."""
+    merged = [("Arizona Arsenal", "AZ Arsenal"), ("Boise Timbers Thorns SC", "Boise Thorns"),
+              ("Lou Fusz Athletic", "Lou Fusz"), ("North Carolina Fusion", "NC Fusion"),
+              ("Ohio Elite Soccer Academy", "Ohio Elite"), ("Penn Fusion", "Penn Fusion SA"),
+              ("Slammers FC", "Slammers FC HB Koge"), ("Slammers FC", "Slammers HB Køge"),
+              ("So Cal Blues", "SoCal Blues"), ("SJEB FC", "SJEB Rush"), ("Austin Sting", "Sting Austin"),
+              ("United Futbol Academy", "UFA"), ("Crossfire Premier SC", "Crossfire United"),
+              ("Cincinnati United Premier", "Cincinnati United Soccer Club"), ("Eclipse Select (IL)", "Eclipse")]
+    for canon, other in merged:
+        a, b = table.match(canon), table.match(other)
+        check(f"#233 merged: {other!r} -> {canon!r}", a.status == b.status == "matched" and a.clubId == b.clubId,
+              f"{a.clubId} vs {b.clubId}")
+        check(f"#233 merged: {canon!r} is the canonical name", a.name == canon, str(a.name))
+        check(f"#233 merged: the owner is recorded on {canon!r}",
+              table.clubs[a.clubId].get("reviewedBy", "").startswith("owner"), str(table.clubs[a.clubId].get("reviewedBy")))
+    gone = ["az-arsenal", "boise-thorns", "lou-fusz", "nc-fusion", "ohio-elite", "penn-fusion-sa", "slammers-fc-hb-koge",
+            "slammers-hb-koge", "socal-blues", "sjeb-rush", "sting-austin", "ufa", "crossfire-united",
+            "cincinnati-united-soccer-club", "eclipse"]
+    check("#233 merged: the absorbed rows are gone", not any(g in table.clubs for g in gone),
+          str([g for g in gone if g in table.clubs]))
+    confirmed = {"Albion MLS Next": "Albion SC", "Arlington SC": "Arlington Soccer", "Arlington ECNL": "Arlington Soccer",
+                 "Galaxy": "Galaxy SC (IL)", "Legends": "Legends FC", "Legends SC": "Legends FC",
+                 "Eagles Soccer Club": "Eagles SC (CA)", "McLean ECNL": "McLean FC", "RISE 05 GA": "Rise SC",
+                 "Select Soccer Club": "Eclipse Select (IL)"}
+    for raw, name in confirmed.items():
+        m = table.match(raw)
+        check(f"#233 confirmed: {raw!r} -> {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
+    check("#233: 'Select Soccer Club' no longer means Select SC",
+          table.match("Select Soccer Club").clubId != table.match("Select SC").clubId)
+    check("#233: Select SC keeps its own name, so the row stays", table.match("Select SC").status == "matched")
+    # the near-miss guard: merging must not have emptied the pairs the vacuity check relies on
+    both = [(a, b) for a, b in NEAR_MISSES if table.match(a).status == "matched" and table.match(b).status == "matched"]
+    check("#233: the near-miss vacuity guard still has 5+ pairs after the merges", len(both) >= 5, str(len(both)))
+
+
 def test_scratch_build_leaves_the_report_alone() -> None:
     """A test that builds into a temp directory must not rewrite data/clubs-review.json.
 
@@ -290,6 +327,7 @@ def main() -> int:
     test_precedence(table)
     test_suggestions_are_only_suggestions(table)
     test_committed_table(table)
+    test_owner_decisions_233(table)
     test_scratch_build_leaves_the_report_alone()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
     return 1 if FAILS else 0
