@@ -1739,6 +1739,13 @@ function prov(meta, extra) {
   return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · checked ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
 }
 const LINK_LABELS = { athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', camps: 'Camps', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' };
+/* A header link that is the source of a profile section follows that section's tab (issue #206, #115's
+   per-program hide-empty rule): when the tab is not offered because the program has no data for it, its
+   link is not offered either, so the header never points at something the page just said is empty.
+   TopDrawerSoccer is the Commitments tab's link (TPM ruling on #206). The athletics home page, Wikipedia
+   and social links are not a section's link and always show. */
+const LINK_TAB = { roster: 'roster', schedule: 'schedule', news: 'news', camps: 'camps', tds: 'commitments' };
+const linkHasSection = (k, p) => !LINK_TAB[k] || TAB_HAS[LINK_TAB[k]](p);
 function glanceHtml(p, row) {
   const seasons = p.seasons || [];
   const s25 = seasons.find(s => s.year === RPI_SEASON);
@@ -1811,7 +1818,7 @@ async function renderProfile(slug, tab) {
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
   const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank && appliesTo('rpi', p) ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
-  const right = Object.entries(p.links).filter(([, v]) => v).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
+  const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
