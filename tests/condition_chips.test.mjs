@@ -48,6 +48,13 @@ const HTML = process.env.COND_TEST_HTML || path.join(PUBLIC, 'index.html');
 const INDEX_URL = 'data/programs/index.json';
 const RPI_SEASON = 2025;
 const SHIPPED = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+/* The divisions build.py reads national titles from a champions table for (CHAMPION_TABLES), read from build.py
+   itself: in those a zero title count is a real zero (issue #206); in any other it is "not collected". */
+const TITLE_TABLE_DIVISIONS = (() => {
+  const m = fs.readFileSync(path.join(HERE, '..', 'build.py'), 'utf8').match(/^CHAMPION_TABLES = \{([^}]*)\}/m);
+  assert.ok(m, 'build.py no longer defines CHAMPION_TABLES on one line');
+  return [...m[1].matchAll(/"([^"]+)"\s*:/g)].map(x => x[1]);
+})();
 const CAMPS = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data/camps/index.json'), 'utf8'));
 
 /* ---------- stub DOM ---------- */
@@ -60,7 +67,7 @@ function makeElement(name) {
     matches: () => false, focus() { }, contains: () => false,
   };
 }
-const HANDLES = ['S', 'COND_FIELDS', 'COND_UNITS', 'condFromInput', 'condText', 'condStatus', 'condTally', 'condHiddenText',
+const HANDLES = ['S', 'TITLE_TABLE_DIVISIONS', 'COND_FIELDS', 'COND_UNITS', 'condFromInput', 'condText', 'condStatus', 'condTally', 'condHiddenText',
   'addCond', 'removeCond', 'condRemove', 'condFormOpen', 'condFormClose', 'condFormSubmit', 'filteredPrograms', 'matchesFilters',
   'matchScore', 'sortCmp', 'normText', 'tuitionOf', 'renderList', 'renderCamps', 'renderSidebar', 'loadIndex', 'corpusLabel', 'SORTS'];
 // `seed` maps a localStorage key to the RAW string stored, which is how a hand-edited or corrupt save is reproduced.
@@ -117,7 +124,7 @@ const EXPECT_GET = {
   academicRank: p => p.academicRank,
   sat25: p => p.sat25,
   rpiRank: p => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank,
-  nationalTitles: p => (p.division === 'D1' || p.nationalTitles > 0) ? p.nationalTitles : null,
+  nationalTitles: p => (TITLE_TABLE_DIVISIONS.includes(p.division) || p.nationalTitles > 0) ? p.nationalTitles : null,
   collegeCups: p => (p.division === 'D1' || p.collegeCups > 0) ? p.collegeCups : null,
   rosterSize: p => p.rosterSize,
   fallAvgHighF: p => p.fallClimate?.avgHighF,
@@ -202,10 +209,19 @@ test('registry: exactly the ten fields shipped, each complete, and each accessor
   }
   assert.deepEqual(plain(COND_FIELDS.filter(d => d.lowerIsBetter).map(d => d.key)), ['academicRank', 'rpiRank'], 'the lower-is-better fields');
   assert.ok(!COND_FIELDS.find(d => d.key === 'admissionRate').ops.includes('='), 'equality on a rate is not offered');
-  // Every shipped row is D1 today, so a non-D1 row is added: its zero title and College Cup counts are not
-  // vouched for by the D1 champions lists and must read as "no data", while a real title still counts.
+  // Every shipped row is D1 today, so non-D1 rows are added. D3 has no champions table: its zero title and
+  // College Cup counts must read as "no data", while a real title still counts. D2 has one (#206): its zero
+  // title count is a real 0, and its zero College Cup count is still "no data".
   const rows = [...SHIPPED.programs, { slug: 'synthetic-d3', division: 'D3', nationalTitles: 0, collegeCups: 0 },
-    { slug: 'synthetic-d3-champion', division: 'D3', nationalTitles: 2, collegeCups: 3 }];
+    { slug: 'synthetic-d3-champion', division: 'D3', nationalTitles: 2, collegeCups: 3 },
+    { slug: 'synthetic-d2', division: 'D2', nationalTitles: 0, collegeCups: 0 },
+    { slug: 'synthetic-d2-champion', division: 'D2', nationalTitles: 7, collegeCups: 0 }];
+  assert.deepEqual(plain(real.sb.TITLE_TABLE_DIVISIONS), TITLE_TABLE_DIVISIONS, 'the page and build.py disagree on which divisions have a champions table');
+  const titles = COND_FIELDS.find(d => d.key === 'nationalTitles');
+  assert.equal(titles.get(rows.find(p => p.slug === 'synthetic-d2')), 0, 'a D2 program with no titles reads as no data, not 0');
+  assert.equal(titles.get(rows.find(p => p.slug === 'synthetic-d3')), null, 'a D3 zero (no champions table) reads as a known 0');
+  assert.equal(real.sb.condStatus(rows.find(p => p.slug === 'synthetic-d2'), [{ field: 'nationalTitles', op: '>=', value: 1 }]), 'fail',
+    'Titles >= 1 on a D2 program with no titles: hidden for missing data instead of simply not matching');
   for (const d of COND_FIELDS) {
     const wrong = rows.filter(p => nz(d.get(p)) !== nz(EXPECT_GET[d.key](p)));
     assert.equal(wrong.length, 0, `${d.key}: accessor disagrees with the data on ${wrong.slice(0, 3).map(p => p.slug)}`);

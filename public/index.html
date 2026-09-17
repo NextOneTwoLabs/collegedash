@@ -670,10 +670,17 @@ const appliesTo = (measure, p) => !(NOT_APPLICABLE[measure] || []).includes(p?.d
    division names itself, e.g. "7 NCAA D2 titles". */
 const titlesPhrase = (n, division) => division === 'D1' || !division ? `${n} national title${n === 1 ? '' : 's'}` : `${n} NCAA ${division} title${n === 1 ? '' : 's'}`;
 const titlesLabel = division => division === 'D1' || !division ? 'National titles' : `NCAA ${division} titles`;
-/* A national-title or College Cup count comes from the NCAA Division I lists, which vouch for a zero only
-   for a Division I program - the same rule as has.titles (issue #115). For any other division a zero is
-   "not collected", and a condition must hide it rather than treat it as a known 0. */
+/* A College Cup count comes from the NCAA Division I lists, which vouch for a zero only for a Division I
+   program - the same rule as has.titles (issue #115). For any other division a zero is "not collected", and a
+   condition must hide it rather than treat it as a known 0. (A division in NOT_APPLICABLE.collegeCups, D2, is
+   excluded as not applicable before this is read.) */
 const d1Count = (p, v) => (p.division === 'D1' || v > 0) ? v : null;
+/* A national-title count is read from the program's OWN division's NCAA champions table (build.py
+   CHAMPION_TABLES, issue #113), so a zero is a real zero in every division that has one: Division I and
+   Division II (issue #206). A division without a table keeps d1Count's rule: its zero is "not collected".
+   This list must name exactly the divisions CHAMPION_TABLES does. */
+const TITLE_TABLE_DIVISIONS = ['D1', 'D2'];
+const titleCount = (p, v) => (TITLE_TABLE_DIVISIONS.includes(p.division) || v > 0) ? v : null;
 const COND_FIELDS = [
   { key: 'admissionRate', label: 'Admission rate', chip: 'Admission', missing: 'no admission rate', unit: 'percent', ops: ORDER_OPS,
     get: p => p.admissionRate },
@@ -693,7 +700,7 @@ const COND_FIELDS = [
   { key: 'rpiRank', label: `RPI ${RPI_SEASON}`, chip: 'RPI', missing: `no ${RPI_SEASON} RPI`, unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
     get: p => rpiOf(p), applies: p => appliesTo('rpi', p) },
   { key: 'nationalTitles', label: 'National titles', chip: 'Titles', missing: 'no national-title count', unit: 'count', ops: COND_OPS,
-    get: p => d1Count(p, p.nationalTitles) },
+    get: p => titleCount(p, p.nationalTitles) },
   { key: 'collegeCups', label: 'College Cups', chip: 'College Cups', missing: 'no College Cup count', unit: 'count', ops: COND_OPS,
     get: p => d1Count(p, p.collegeCups), applies: p => appliesTo('collegeCups', p) },
   { key: 'rosterSize', label: 'Roster size', chip: 'Roster', missing: 'no roster size', unit: 'count', ops: COND_OPS,
