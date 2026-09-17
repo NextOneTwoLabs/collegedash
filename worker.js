@@ -346,8 +346,46 @@ function validateAsk(out, v) {
   return { division, conf, region, classYear, cond, sort, reading };
 }
 
+/* ---------- Diagnostic logging for /api/ask failures (issue #165) ----------
+   Every log line is built from fixed labels only. The upstream error body's `message` can name the account, so
+   it is never logged: only the HTTP status, the error `type` if it is one of Anthropic's documented types, and,
+   for invalid_request_error, a label from a fixed list chosen by matching the message. The key, the question and
+   the request body are never logged. Anything unexpected is logged as "other" or "unknown". */
+const UPSTREAM_ERROR_TYPES = ['invalid_request_error', 'authentication_error', 'billing_error', 'permission_error',
+  'not_found_error', 'request_too_large', 'rate_limit_error', 'timeout_error', 'api_error', 'overloaded_error'];
+// First match wins; checked in this order because a max_tokens message can also name the model.
+const INVALID_REQUEST_REASONS = [
+  ['credit_balance', /credit balance/i],
+  ['max_tokens', /max_tokens/i],
+  ['output_config', /output_config|output_format|json_schema|schema|format/i],
+  ['model', /model/i],
+];
+
+async function upstreamErrorLog(upstream) {
+  let type = 'unknown';
+  let reason = null;
+  try {
+    const body = JSON.parse(await upstream.text());
+    const t = body?.error?.type;
+    if (typeof t === 'string') type = UPSTREAM_ERROR_TYPES.includes(t) ? t : 'other';
+    if (type === 'invalid_request_error') {
+      const m = typeof body.error.message === 'string' ? body.error.message : '';
+      reason = (INVALID_REQUEST_REASONS.find(([, re]) => re.test(m)) || ['other'])[0];
+    }
+  } catch {
+    // unreadable body: type stays "unknown"
+  }
+  const status = Number.isInteger(upstream.status) ? upstream.status : 0;
+  return `ask: upstream_error status=${status} type=${type}${reason ? ` reason=${reason}` : ''}`;
+}
+
+function fetchErrorName(err) {
+  const name = err && typeof err.name === 'string' ? err.name : '';
+  return /^[A-Za-z]{1,40}$/.test(name) ? name : 'unknown';
+}
+
 async function ask(request, env) {
-  const json = (body, status = 200) => Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
+  const json =(body, status = 200) => Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
   // First, before the method, the body or any upstream work: only a verified Access token gets further.
   if (!(await verifyAccess(request, env))) return json({ error: 'Ask is only available to the site owner.' }, 403);
   if (request.method !== 'POST') {
@@ -367,6 +405,7 @@ async function ask(request, env) {
   try {
     vocab = await loadVocab(request, env);
   } catch {
+    console.error('ask: unavailable reason=vocab');
     return json({ error: 'Ask is unavailable right now.' }, 503);
   }
 
@@ -378,7 +417,10 @@ async function ask(request, env) {
   if (reservation.refused === 'cap') {
     return json({ error: `Ask has reached its $${BUDGET_CAP_USD} budget for ${reservation.month} (UTC). It resets on the 1st.` }, 429);
   }
-  if (reservation.refused) return json({ error: 'Ask is unavailable right now.' }, 503);
+  if (reservation.refused) {
+    console.error('ask: unavailable reason=budget_kv');
+    return json({ error: 'Ask is unavailable right now.' }, 503);
+  }
 
   let upstream;
   try {
@@ -388,13 +430,15 @@ async function ask(request, env) {
       body: upstreamBody,
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
-  } catch {
+  } catch (err) {
     // The request may have reached the API before the connection failed, so the reservation stays counted.
+    console.error(`ask: upstream_fetch_failed name=${fetchErrorName(err)}`);
     return json({ error: 'Ask is unavailable right now.' }, 502);
   }
   // The upstream body is never passed through: an error from the API can name the account or the key.
   // An error response is not billed, so its reservation is released.
   if (!upstream.ok) {
+    console.error(await upstreamErrorLog(upstream));
     await settleBudget(env, reservation, 0);
     return json({ error: 'Ask is unavailable right now.' }, 502);
   }
