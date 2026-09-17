@@ -236,11 +236,15 @@ def test_the_shipped_registry():
     """
     live = live_registry()
     published = live.get("onboardedDivisions") or []
-    todo = [p for p in live["programs"] if not p.get("onboarded")]  # what onboard_all selected before the guard
+    # what onboard_all selected before the guard, less entries under a collectionHold, which onboard
+    # never collects (issue #216; tests/onboard_holds_test.py)
+    todo = [p for p in live["programs"] if not p.get("onboarded") and not p.get("collectionHold")]
+    held = [p for p in live["programs"] if not p.get("onboarded") and p.get("collectionHold")]
     staged = sorted({(p.get("division") or "?") for p in todo} - set(published))
     too_many = len(todo) > collegedash.MAX_BATCH
-    print(f"the-shipped-registry: {len(live['programs'])} programs, {len(todo)} unonboarded, publishes "
-          f"{published}, staged {', '.join(staged) if staged else 'nothing'}")
+    print(f"the-shipped-registry: {len(live['programs'])} programs, {len(todo)} unonboarded and collectable "
+          f"({len(held)} more under a collectionHold), publishes {published}, "
+          f"staged {', '.join(staged) if staged else 'nothing'}")
     ok("the registry says which divisions it publishes", bool(published), str(live.get("onboardedDivisions")))
     refusal = collegedash.batch_refusal(live)
     ok("refused exactly when this registry gives a reason to refuse",
@@ -266,6 +270,15 @@ def test_the_shipped_registry():
                f"over the {collegedash.MAX_BATCH}" in text, refusal[:1])
         ok("and it says what to run instead",
            "--conference" in text and "onboard <slug>" in text, text)
+    elif held and not todo:
+        # every uncollected entry is under a collectionHold (issue #216): nothing to collect, so no
+        # request at all - not even rpi's - and each held entry is named
+        ok("onboard --all exits 0", r.code == 0, r.out[-400:])
+        ok("nothing was collected", r.collectors == [], r.collectors[:3])
+        ok("rpi was not asked, since there is nothing to collect", r.rpi == [], r.rpi)
+        ok("nothing was recorded in refresh-state", r.state == [], r.state)
+        ok("every held entry is named as skipped",
+           all(f"onboard skips {p['slug']}" in r.out for p in held), r.out[:600])
     else:
         # nothing staged and a batch within the limit: exactly the behaviour before the guard
         ok("onboard --all still runs", r.code == 0, r.out[-400:])

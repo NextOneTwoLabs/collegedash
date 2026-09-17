@@ -189,6 +189,21 @@ def explicit_slugs(args) -> list[str]:
     return seen
 
 
+def collection_hold(p: dict) -> dict | None:
+    """The entry's `collectionHold` block (issue #199), or None. A person decided the entry is not to be
+    collected (collect/registry_builder.py documents the block), so onboard never collects it (issue #216)."""
+    hold = p.get("collectionHold")
+    return hold if hold else None
+
+
+def hold_phrase(p: dict) -> str:
+    hold = collection_hold(p)
+    if not isinstance(hold, dict):
+        return "collectionHold (no reason given)"
+    since = f", since {hold['since']}" if hold.get("since") else ""
+    return f"collectionHold {hold.get('reason') or '(no reason given)'}{since}"
+
+
 def cmd_onboard(args):
     reg = common.load_registry()
     if (args.slug == "--all" or args.all) and (args.more_slugs or args.slugs_file):
@@ -198,6 +213,11 @@ def cmd_onboard(args):
                    "different batches. Name one of them. Nothing was collected.")
         return 2
     if args.slug == "--all" or args.all:
+        # entries under a collectionHold are never part of the batch (issue #216); each is named, before
+        # the guard, so a refused command still says which programs it left out and why
+        held = batch_held(reg, conference=args.conference)
+        for p in held:
+            common.log(f"onboard skips {p['slug']}: {hold_phrase(p)}")
         # checked before rpi.history/current, so a refused command makes no request at all
         refusal = batch_refusal(reg, conference=args.conference, limit=args.limit, max_batch=args.max_batch,
                                 allow_divisions=args.collect_staged_divisions.split(","))
@@ -205,8 +225,34 @@ def cmd_onboard(args):
             for line in refusal:
                 common.log(line)
             return 2
+        if held and not batch_todo(reg, conference=args.conference, limit=args.limit):
+            common.log(f"onboard --all: nothing to collect - every program it would have taken is under a "
+                       f"collectionHold ({len(held)} skipped). Nothing was collected.")
+            return 0
     slugs = explicit_slugs(args)
     if slugs:
+        known = {p.get("slug"): p for p in reg.get("programs") or []}
+        held_slugs = [s for s in slugs if s in known and collection_hold(known[s])]
+        if held_slugs and len(slugs) == 1:
+            # one program, named explicitly: refused, never silently skipped (issue #216). Overriding a
+            # hold is a decision of its own and would need its own flag; there is none.
+            p = known[slugs[0]]
+            hold = collection_hold(p)
+            evidence = hold.get("evidence") if isinstance(hold, dict) else None
+            common.log(f"!! onboard refuses {p['slug']}: it is under a {hold_phrase(p)}. Nothing was collected.")
+            if evidence:
+                common.log(f"   {evidence}")
+            common.log("   A collection hold is a decision that this program is not to be collected; lift it in the "
+                       "registry first if that decision has changed.")
+            return 2
+        for s in held_slugs:
+            common.log(f"onboard skips {s}: {hold_phrase(known[s])}")
+        if held_slugs and len(held_slugs) == len(slugs):
+            common.log(f"!! onboard refuses this batch of {len(slugs)} programs: every one is under a collectionHold. "
+                       f"Nothing was collected.")
+            return 2
+        batch_form = len(slugs) > 1
+        slugs = [s for s in slugs if s not in held_slugs]
         # one slug or many (owner's decision on #172): same shape as the --all guard above, checked
         # and refused before any request is made
         refusal = onboard_batch_refusal(reg, slugs, allow_divisions=args.collect_staged_divisions.split(","))
@@ -222,7 +268,8 @@ def cmd_onboard(args):
         common.log(f"!! rpi current failed: {e}")
     if args.slug == "--all" or args.all:
         return onboard_all(reg, bios=not args.no_bios, limit=args.limit, conference=args.conference)
-    if len(slugs) > 1:
+    if slugs and batch_form:
+        # a list stays the batch form even when skipping held entries leaves one program
         return onboard_batch(reg, slugs, bios=not args.no_bios, workers=args.workers)
     slug = slugs[0] if slugs else args.slug
     program = common.get_program(slug, reg)
@@ -247,13 +294,22 @@ MAX_BATCH = 25
 
 
 def batch_todo(reg, *, conference: str | None = None, limit: int | None = None) -> list[dict]:
-    """The programs `onboard --all` would collect, in order, after --conference and --limit."""
-    todo = [p for p in reg["programs"] if not p.get("onboarded")]
+    """The programs `onboard --all` would collect, in order, after --conference and --limit. An entry under
+    a collectionHold is never one of them (issue #216), and --limit counts only the programs it can take."""
+    todo = [p for p in reg["programs"] if not p.get("onboarded") and not collection_hold(p)]
     if conference:
         todo = [p for p in todo if (p.get("conference") or "").casefold() == conference.casefold()]
     if limit:
         todo = todo[:limit]
     return todo
+
+
+def batch_held(reg, *, conference: str | None = None) -> list[dict]:
+    """The uncollected programs `onboard --all` (after --conference) leaves out because of a collectionHold."""
+    held = [p for p in reg["programs"] if not p.get("onboarded") and collection_hold(p)]
+    if conference:
+        held = [p for p in held if (p.get("conference") or "").casefold() == conference.casefold()]
+    return held
 
 
 def batch_refusal(reg, *, conference: str | None = None, limit: int | None = None,
