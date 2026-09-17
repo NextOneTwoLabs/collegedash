@@ -21,6 +21,7 @@ from collections import Counter, defaultdict
 
 import clubs
 import schools
+import trends
 from collect import common
 from collect.camps import classify_camp
 from collect.commitments_tds import record_key
@@ -1566,12 +1567,14 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     club_recorder = clubs.Recorder(club_table)
     school_table = schools.load_table(reload=True)  # derived from NCES by tools/schools_nces.py; a bad file raises here
     school_recorder = schools.Recorder(school_table)
+    trends_recorder = trends.Recorder(club_table, candidates=club_candidates, same_person=same_person)  # issue #230
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder,
                                 school_table, school_recorder)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
+        trends_recorder.observe(profile, program)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
             # clubInfo is per-profile detail; the cross-program index carries only the canonical id,
@@ -1598,6 +1601,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                f"window from {window['from']}; "
                f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
                f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view)")
+    common.log("build: " + trends.summary_line(trends_recorder.write()) + f" -> {trends.out_path()}")
     publishing = publishing_run()
     club_report = (club_recorder.write() if publishing
                    else club_recorder.report(common.read_json(clubs.REVIEW_PATH)))

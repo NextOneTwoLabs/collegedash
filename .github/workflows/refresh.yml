@@ -262,13 +262,16 @@ jobs:
             for report in data/clubs-review.json data/schools-review.json; do
               git checkout FETCH_HEAD -- "$report" 2>/dev/null || rm -f "$report"
             done
+            # The clubs & schools index (issue #230) is restored the same tolerant way, for the same
+            # reason: upstream has none until the first refresh after that build lands.
+            git checkout FETCH_HEAD -- public/data/trends/index.json 2>/dev/null || rm -f public/data/trends/index.json
             if ! git checkout FETCH_HEAD -- public/data/programs public/data/commitments/index.json public/data/camps/index.json; then
               echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data could not then be restored to what $onto holds. Nothing was pushed anywhere: main is still $onto and the live site is unchanged - but this run's collection was NOT saved either, it exists only on this runner. Re-dispatch this workflow to collect again."
               exit 1
             fi
             git add -A
             if ! git diff --quiet FETCH_HEAD -- public/data data/clubs-review.json data/schools-review.json ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
-              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json, data/clubs-review.json and data/schools-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json, trends/index.json, data/clubs-review.json and data/schools-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
               exit 1
             fi
             if git diff --quiet FETCH_HEAD --; then
