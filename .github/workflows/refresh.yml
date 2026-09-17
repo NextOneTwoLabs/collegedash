@@ -253,13 +253,19 @@ jobs:
           publish_sources_only() {
             branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-$2"
             rm -rf public/data/programs
+            # data/clubs-review.json is restored separately and tolerantly: it is the one build()
+            # output outside public/data (issue #228), and a `git checkout` naming a path the
+            # upstream commit does not carry fails outright, taking the whole restore with it.
+            # Upstream may legitimately not have it - before the first build that writes one - and
+            # then the right restore is to delete the copy this run produced.
+            git checkout FETCH_HEAD -- data/clubs-review.json 2>/dev/null || rm -f data/clubs-review.json
             if ! git checkout FETCH_HEAD -- public/data/programs public/data/commitments/index.json public/data/camps/index.json; then
               echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data could not then be restored to what $onto holds. Nothing was pushed anywhere: main is still $onto and the live site is unchanged - but this run's collection was NOT saved either, it exists only on this runner. Re-dispatch this workflow to collect again."
               exit 1
             fi
             git add -A
-            if ! git diff --quiet FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
-              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json and camps/index.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+            if ! git diff --quiet FETCH_HEAD -- public/data data/clubs-review.json ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json and data/clubs-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
               exit 1
             fi
             if git diff --quiet FETCH_HEAD --; then
