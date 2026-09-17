@@ -145,8 +145,21 @@ def profile_delta_empty():
             "rosterHistory": {}, "commitments": []}
 
 
+class NoSchools:
+    """A school table that matches nothing. Passed whenever a case does not inject its own, so the
+    recorder never falls back to the real `schools` module (present since #236) and the fixture's
+    expectations do not depend on data/schools.json."""
+    class _M:
+        status = "none"
+        def as_dict(self):
+            return None
+    def match(self, hs, hometown):
+        return self._M()
+
+
 def record(with_schools=False, school_table=None) -> trends.Recorder:
-    rec = trends.Recorder(TABLE, candidates=lambda tds, sw: CANDIDATES, same_person=lambda a, b: False, school_table=school_table)
+    rec = trends.Recorder(TABLE, candidates=lambda tds, sw: CANDIDATES, same_person=lambda a, b: False,
+                          school_table=school_table or NoSchools())
     rec.observe(profile_alpha(with_schools), {"slug": "alpha", "division": "D1"}, ath=ATH_ALPHA, tds={}, sw={})
     rec.observe(profile_beta(), {"slug": "beta", "division": "D1"}, ath={}, tds={}, sw={})
     rec.observe(profile_gamma_d2(), {"slug": "gamma", "division": "D2"}, ath={}, tds={}, sw={})
