@@ -361,22 +361,51 @@ const INVALID_REQUEST_REASONS = [
   ['model', /model/i],
 ];
 
+// Shape labels, all fixed: which content-type family, whether the body parsed as JSON, which top-level keys it
+// had (only the documented ones by name, anything else as "x"), and whether a request-id header was present.
+// No header value and no body text is ever logged.
+const ERROR_BODY_KEYS = ['type', 'error', 'request_id'];
+
+function contentTypeFamily(headers) {
+  const raw = headers?.get?.('content-type');
+  if (!raw) return 'none';
+  const mime = raw.split(';')[0].trim().toLowerCase();
+  if (mime === 'application/json' || mime.endsWith('+json')) return 'json';
+  if (mime === 'text/html') return 'html';
+  if (mime.startsWith('text/')) return 'text';
+  return 'other';
+}
+
 async function upstreamErrorLog(upstream) {
   let type = 'unknown';
   let reason = null;
+  let parse = 'fail';
+  let keys = '-';
+  let body;
   try {
-    const body = JSON.parse(await upstream.text());
+    body = JSON.parse(await upstream.text());
+    parse = 'ok';
+  } catch {
+    // unreadable or non-JSON body: type stays "unknown"
+  }
+  if (parse === 'ok') {
+    if (body && typeof body === 'object' && !Array.isArray(body)) {
+      const names = Object.keys(body);
+      const known = ERROR_BODY_KEYS.filter((k) => names.includes(k));
+      keys = [...known, ...(names.some((k) => !ERROR_BODY_KEYS.includes(k)) ? ['x'] : [])].join(',') || '-';
+    }
     const t = body?.error?.type;
     if (typeof t === 'string') type = UPSTREAM_ERROR_TYPES.includes(t) ? t : 'other';
     if (type === 'invalid_request_error') {
       const m = typeof body.error.message === 'string' ? body.error.message : '';
       reason = (INVALID_REQUEST_REASONS.find(([, re]) => re.test(m)) || ['other'])[0];
     }
-  } catch {
-    // unreadable body: type stays "unknown"
   }
   const status = Number.isInteger(upstream.status) ? upstream.status : 0;
-  return `ask: upstream_error status=${status} type=${type}${reason ? ` reason=${reason}` : ''}`;
+  const ct = contentTypeFamily(upstream.headers);
+  const rid = upstream.headers?.has?.('request-id') ? 'yes' : 'no';
+  return `ask: upstream_error status=${status} type=${type}${reason ? ` reason=${reason}` : ''}`
+    + ` ct=${ct} parse=${parse} keys=${keys} rid=${rid}`;
 }
 
 function fetchErrorName(err) {
