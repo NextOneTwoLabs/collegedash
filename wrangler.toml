@@ -31,17 +31,18 @@ run_worker_first = ["/", "/api/*", "/data/rpi/*"]
 # title and the binding name are independent, and it is the binding name below that worker.js
 # reads as env.FEEDBACK. The id is an identifier, not a credential, so committing it is correct.
 
-# POST /api/ask (issue #165, AI prototype 1) is switched off. worker.js serves it only when this is the
-# string "true" AND the ANTHROPIC_API_KEY secret exists. The key is a secret, set with
-# `wrangler secret put ANTHROPIC_API_KEY`; it never goes in this file or anywhere in the repository.
-# Even when on, it answers only a request carrying a valid Cloudflare Access token for the Access application
-# that protects /api/ask* (issue #179): ACCESS_TEAM_DOMAIN is the Zero Trust team domain
-# ("https://<team>.cloudflareaccess.com") and ACCESS_AUD is that application's Audience (AUD) tag. Both are
-# identifiers, not credentials, so they belong here; while either is empty every ask request is refused (403).
+# POST /api/ask (issue #165, AI prototype 1) is switched on, for the site owner only. worker.js serves it only while
+# this is the string "true" AND the ANTHROPIC_API_KEY secret exists; setting it back to "false" switches ask off.
+# The key is a secret, set with `wrangler secret put ANTHROPIC_API_KEY`; it never goes in this file or anywhere in
+# the repository. It answers only a request carrying a valid Cloudflare Access token for the Access application
+# "college" that protects college.nextonetwo.com/api/ask* (issue #179): ACCESS_TEAM_DOMAIN is the Zero Trust team
+# domain ("https://<team>.cloudflareaccess.com", the token's iss) and ACCESS_AUD is that application's Audience
+# (AUD) tag. Both are identifiers, not credentials, so they belong here; if either is emptied every ask request is
+# refused (403). tests/ask_enabled_config.test.mjs checks these values against the Worker's own config checks.
 [vars]
-ASK_ENABLED = "false"
-ACCESS_TEAM_DOMAIN = ""
-ACCESS_AUD = ""
+ASK_ENABLED = "true"
+ACCESS_TEAM_DOMAIN = "https://broad-snowflake-934e.cloudflareaccess.com"
+ACCESS_AUD = "b9c9162446e83350b83b6e6cc4ee0b4d386a1cf55e3fabb6b52f4822a1e5080b"
 
 [[kv_namespaces]]
 binding = "FEEDBACK"
@@ -49,9 +50,8 @@ id = "effbba53953e424aa9f528b2a6f00f4e"
 
 # The ask route's $10 monthly budget counter (issue #179): one key per UTC month, "ask-spend:YYYY-MM", holding
 # integer micro-dollars. worker.js reads it as env.ASK_BUDGET and refuses every ask request while the binding
-# is missing. The namespace does not exist yet: creating it is an owner action
-# (`wrangler kv namespace create COLLEGEDASH_ASK_BUDGET`), after which this block is uncommented with its id.
-# It is left commented because a binding without a real id would fail the deploy.
-# [[kv_namespaces]]
-# binding = "ASK_BUDGET"
-# id = "<the id wrangler prints>"
+# is missing. The namespace is titled COLLEGEDASH_ASK_BUDGET on the NextOneTwoLabs account, created by the owner
+# on 2026-09-16. As with FEEDBACK, the id is an identifier, not a credential.
+[[kv_namespaces]]
+binding = "ASK_BUDGET"
+id = "dfdeb314f1b848a287e6f99b453a5d22"
