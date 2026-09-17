@@ -17,7 +17,9 @@
 //   5. POST /api/ask (issue #165, AI prototype 1), SWITCHED OFF. It exists only when BOTH the
 //      ASK_ENABLED variable is "true" AND an ANTHROPIC_API_KEY secret is set; otherwise the request
 //      falls through to the static assets exactly like any unknown /api path (404), and /api/status
-//      stays {"local":false}. See the block above ask() for what it does and what still waits for the owner.
+//      stays {"local":false}. When on, it answers only the owner - a Cloudflare Access token verified
+//      here, never the header's presence - and only within a $10 monthly budget kept in KV (issue #179).
+//      See the blocks above ask(), verifyAccess() and reserveBudget().
 //
 // Nothing here echoes a submission back to the client, and nothing renders one into the site.
 const CANONICAL_HOST = 'college.nextonetwo.com';
@@ -45,12 +47,14 @@ export default {
       if (request.method !== 'GET' && request.method !== 'HEAD') {
         return new Response('Method not allowed', { status: 405, headers: { allow: 'GET, HEAD' } });
       }
-      // "ask" is added only when the route is on, so today's response is byte-identical: {"local":false}.
-      return Response.json(askEnabled(env) ? { local: false, ask: true } : { local: false });
+      // The same for every visitor, whether or not ask is on: whether ask is available is an owner-only
+      // question, answered by GET /api/ask/status behind Cloudflare Access (issue #179), never here.
+      return Response.json({ local: false });
     }
     if (url.pathname === '/api/feedback') return feedback(request, env);
     // Off: fall through to the assets below, the same path - and so the same 404 - as any unknown /api route.
     if (url.pathname === '/api/ask' && askEnabled(env)) return ask(request, env);
+    if (url.pathname === '/api/ask/status' && askEnabled(env)) return askStatus(request, env);
 
     // The RPI tables stay in public/data/rpi (the build and the collector read them there) but are
     // not served (issue #100). This answers only because wrangler.toml lists "/data/rpi/*" in
@@ -175,11 +179,10 @@ async function feedback(request, env) {
    admission rate 0.30, not 30. The schema says so and the unit ranges below enforce it, so a model that
    answers 30 gets "unsupported" instead of a list silently filtered to nothing.
 
-   TODO(owner, #165 decision 1 - access): who may call this. Today anyone who can reach the Worker could,
-     once it is switched on. Put it behind Cloudflare Access, or add per-IP rate limiting, before enabling.
-   TODO(owner, #165 decision 2 - budget): a monthly spend cap. Nothing here counts spend yet; the only
-     limits are per request (MAX_QUESTION characters in, MAX_OUTPUT_TOKENS out). A KV counter checked before
-     the upstream call is the obvious place, once the cap is decided. */
+   The owner's decisions on #165, built in #179:
+     - access: the owner only. Cloudflare Access protects /api/ask*, and this Worker verifies the Access token
+       itself (verifyAccess) before doing anything else; a request without a valid token gets 403.
+     - budget: $10 a month, enforced here before every upstream call (reserveBudget / settleBudget). */
 const ASK_MODEL = 'claude-haiku-4-5-20251001';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const MAX_QUESTION = 300;
@@ -302,6 +305,11 @@ function buildAskRequest(question, v) {
 }
 
 // Model output -> the response body. Anything that is not exactly a filter the page can show is `unsupported`.
+// Unknown TOP-LEVEL keys in `out` are ignored, not rejected (noted in #178's review, accepted on #179): the
+// response is rebuilt below from the known keys only, so an extra key can never reach the page, and the
+// json_schema format (additionalProperties: false) already keeps the model from sending one. Rejecting
+// would only turn a harmless extra into an "unsupported" for the owner. Unknown keys INSIDE a condition are
+// dropped the same way (only field, op and value are copied).
 function validateAsk(out, v) {
   const no = (why) => ({ unsupported: why });
   if (!out || typeof out !== 'object' || Array.isArray(out)) return no('The answer was not a filter setting.');
@@ -339,10 +347,12 @@ function validateAsk(out, v) {
 }
 
 async function ask(request, env) {
+  const json = (body, status = 200) => Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
+  // First, before the method, the body or any upstream work: only a verified Access token gets further.
+  if (!(await verifyAccess(request, env))) return json({ error: 'Ask is only available to the site owner.' }, 403);
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405, headers: { allow: 'POST' } });
   }
-  const json = (body, status = 200) => Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
   let body = {};
   try {
     body = await request.json();
@@ -360,21 +370,251 @@ async function ask(request, env) {
     return json({ error: 'Ask is unavailable right now.' }, 503);
   }
 
+  const upstreamBody = JSON.stringify(buildAskRequest(question, vocab));
+  // The budget is reserved BEFORE the call, at the worst case this request could cost. Any KV problem, or a
+  // month that cannot absorb the worst case, means no call at all.
+  const worst = worstCaseMicroUsd(upstreamBody);
+  const reservation = await reserveBudget(env, worst, new Date());
+  if (reservation.refused === 'cap') {
+    return json({ error: `Ask has reached its $${BUDGET_CAP_USD} budget for ${reservation.month} (UTC). It resets on the 1st.` }, 429);
+  }
+  if (reservation.refused) return json({ error: 'Ask is unavailable right now.' }, 503);
+
   let upstream;
   try {
     upstream = await fetch(ANTHROPIC_URL, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify(buildAskRequest(question, vocab)),
+      body: upstreamBody,
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
   } catch {
+    // The request may have reached the API before the connection failed, so the reservation stays counted.
     return json({ error: 'Ask is unavailable right now.' }, 502);
   }
   // The upstream body is never passed through: an error from the API can name the account or the key.
-  if (!upstream.ok) return json({ error: 'Ask is unavailable right now.' }, 502);
+  // An error response is not billed, so its reservation is released.
+  if (!upstream.ok) {
+    await settleBudget(env, reservation, 0);
+    return json({ error: 'Ask is unavailable right now.' }, 502);
+  }
   const message = await upstream.json().catch(() => null);
+  // Unreadable usage keeps the worst case counted: over-counting is the safe direction.
+  const actual = costMicroUsd(message?.usage);
+  await settleBudget(env, reservation, actual === null ? worst : actual);
   return json(answerFromMessage(message, vocab));
+}
+
+/* ---------- Owner-only access: the Cloudflare Access token, verified here (issue #179) ----------
+   Cloudflare Access sits in front of /api/ask* (POST /api/ask and GET /api/ask/status) and lets only the owner's
+   identity through, adding a signed JWT to each request it forwards as the Cf-Access-Jwt-Assertion header.
+   Only the header is read. Cloudflare's docs recommend it over the CF_Authorization cookie, "since the cookie is
+   not guaranteed to be passed", and a path outside the Access application gets no header - which is why the
+   page asks /api/ask/status, not /api/status. The header is not trusted because it is PRESENT: a request that
+   reaches the Worker without passing through Access (a workers.dev address, a route change, a forged header)
+   could carry anything. The token is verified here, and anything short of all of this is refused:
+     - three base64url parts; header alg RS256 with a kid (no "none", no HMAC with the public key as secret);
+     - an RSA signature by a key from the team's own certs endpoint, https://<team>.cloudflareaccess.com/cdn-cgi/access/certs;
+     - aud contains ACCESS_AUD (the Access application's audience tag), so a token for another Access app fails;
+     - iss is the team domain; exp is in the future; nbf, when present, is not;
+   ACCESS_TEAM_DOMAIN and ACCESS_AUD are identifiers, not credentials (wrangler.toml). Either missing = refuse. */
+const ACCESS_HEADER = 'cf-access-jwt-assertion';
+const ACCESS_CERTS_TTL_MS = 10 * 60 * 1000;
+const ACCESS_CERTS_RETRY_MS = 30 * 1000; // an unknown kid refetches the certs at most this often (key rotation)
+const ACCESS_CLOCK_SKEW_S = 30;
+let accessCerts = null; // { team, at, keys: Map(kid -> CryptoKey) }
+
+function accessTeam(env) {
+  const raw = typeof env?.ACCESS_TEAM_DOMAIN === 'string' ? env.ACCESS_TEAM_DOMAIN.trim() : '';
+  if (!raw) return null;
+  const withScheme = /^https:\/\//i.test(raw) ? raw : `https://${raw}`;
+  let url;
+  try {
+    url = new URL(withScheme);
+  } catch {
+    return null;
+  }
+  // Certs are fetched only from a Cloudflare Access team domain, whatever the variable says.
+  if (url.protocol !== 'https:' || !/^[a-z0-9-]+\.cloudflareaccess\.com$/i.test(url.hostname) || (url.pathname !== '/' && url.pathname !== '')) return null;
+  return `https://${url.hostname.toLowerCase()}`;
+}
+
+function accessToken(request) {
+  return (request.headers.get(ACCESS_HEADER) || '').trim();
+}
+
+// GET /api/ask/status: the owner's view of ask - on, and this month's spend. Behind the same Access application
+// as /api/ask, so a visitor's request never reaches here; one that does without a valid token gets 403.
+async function askStatus(request, env) {
+  const headers = { 'cache-control': 'no-store' };
+  if (!(await verifyAccess(request, env))) {
+    return Response.json({ error: 'Ask is only available to the site owner.' }, { status: 403, headers });
+  }
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new Response('Method not allowed', { status: 405, headers: { allow: 'GET, HEAD' } });
+  }
+  return Response.json({ ask: true, spend: await spendReport(env) }, { headers });
+}
+
+function b64urlBytes(s) {
+  if (typeof s !== 'string' || !/^[A-Za-z0-9_-]*$/.test(s)) throw new Error('not base64url');
+  const b64 = s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (s.length % 4)) % 4);
+  const bin = atob(b64);
+  return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+}
+const b64urlJson = (s) => JSON.parse(new TextDecoder().decode(b64urlBytes(s)));
+
+async function accessKey(team, kid, now) {
+  const fresh = accessCerts && accessCerts.team === team && now - accessCerts.at < ACCESS_CERTS_TTL_MS;
+  if (fresh && accessCerts.keys.has(kid)) return accessCerts.keys.get(kid);
+  if (fresh && now - accessCerts.at < ACCESS_CERTS_RETRY_MS) return null;
+  const res = await fetch(`${team}/cdn-cgi/access/certs`, { headers: { accept: 'application/json' } });
+  if (!res.ok) throw new Error(`certs ${res.status}`);
+  const body = await res.json();
+  const keys = new Map();
+  for (const jwk of Array.isArray(body?.keys) ? body.keys : []) {
+    if (jwk?.kty !== 'RSA' || typeof jwk.kid !== 'string') continue;
+    try {
+      const key = await crypto.subtle.importKey('jwk', { kty: 'RSA', n: jwk.n, e: jwk.e, alg: 'RS256', ext: true },
+        { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+      keys.set(jwk.kid, key);
+    } catch {
+      // a malformed key is skipped; a token signed by it then fails as an unknown kid
+    }
+  }
+  accessCerts = { team, at: now, keys };
+  return keys.get(kid) || null;
+}
+
+// True only for a request carrying a valid Access token for this application. Never throws.
+async function verifyAccess(request, env, now = Date.now()) {
+  try {
+    const team = accessTeam(env);
+    const aud = typeof env?.ACCESS_AUD === 'string' ? env.ACCESS_AUD.trim() : '';
+    if (!team || !aud) return false;
+    const token = accessToken(request);
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    const header = b64urlJson(parts[0]);
+    const claims = b64urlJson(parts[1]);
+    if (!header || header.alg !== 'RS256' || typeof header.kid !== 'string' || !claims || typeof claims !== 'object') return false;
+    const key = await accessKey(team, header.kid, now);
+    if (!key) return false;
+    const signed = new TextEncoder().encode(`${parts[0]}.${parts[1]}`);
+    if (!(await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, b64urlBytes(parts[2]), signed))) return false;
+    const auds = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+    if (!auds.includes(aud)) return false;
+    if (claims.iss !== team) return false;
+    const nowS = Math.floor(now / 1000);
+    if (typeof claims.exp !== 'number' || claims.exp <= nowS) return false;
+    if (claims.nbf !== undefined && (typeof claims.nbf !== 'number' || claims.nbf > nowS + ACCESS_CLOCK_SKEW_S)) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/* ---------- The $10 monthly budget, enforced here (issue #179) ----------
+   Money is counted in integer micro-dollars (1 µ$ = $0.000001), so the counter never drifts, and $/MTok equals
+   µ$/token. One KV key per UTC month, "ask-spend:YYYY-MM", in the ASK_BUDGET namespace; a new month starts from
+   a missing key, i.e. zero.
+
+   Before each call: read the month's spend; refuse (429) if spend + this request's WORST case would exceed the
+   cap; otherwise write spend + worst case back (a reservation). After the call: re-read and replace the worst
+   case with the actual cost from the response's usage. Every KV failure before the call - binding missing,
+   read or write throwing, a value that is not a whole number - refuses (503) and makes no call. A KV failure
+   after the call leaves the reservation in place, which over-counts: the only direction a failure may err.
+
+   Limits, stated rather than hidden: KV is eventually consistent (a read can lag a write by up to ~60 s at
+   another location) and has no transaction, so two calls at the same moment from different locations could
+   both pass the check. With one user this is a few cents at most; the Anthropic Console spend limit on the
+   key's workspace is the hard backstop (an owner action on #179). */
+// Claude Haiku 4.5 (ASK_MODEL), Anthropic first-party API prices in US dollars per million tokens.
+// Source: https://platform.claude.com/docs/en/pricing - Haiku 4.5 is $1 input and $5 output per MTok; prompt-cache
+// reads are ~0.1x input and 5-minute cache writes ~1.25x. Taken on 2026-09-16 from the Claude API reference's
+// model table (cached 2026-06-24), not from a fresh fetch of that page: re-check it when prices change. This route
+// sends no cache_control, so cache usage should always be zero; it is priced anyway, cache writes at 2x input as
+// a deliberate over-estimate above the 1.25x rate.
+const HAIKU_45_INPUT_USD_PER_MTOK = 1;
+const HAIKU_45_OUTPUT_USD_PER_MTOK = 5;
+const HAIKU_45_CACHE_WRITE_USD_PER_MTOK = 2;
+const HAIKU_45_CACHE_READ_USD_PER_MTOK = 0.1;
+const BUDGET_CAP_USD = 10;
+const BUDGET_CAP_MICRO_USD = BUDGET_CAP_USD * 1_000_000;
+const BUDGET_KEY_PREFIX = 'ask-spend:';
+// Worst-case input tokens: every token is at least one UTF-8 byte, so the request body's byte length bounds the
+// prompt; structured outputs add a system prompt of their own, which this margin covers.
+const WORST_CASE_EXTRA_INPUT_TOKENS = 4000;
+
+function budgetMonth(date) {
+  return date.toISOString().slice(0, 7); // UTC "YYYY-MM"
+}
+
+function worstCaseMicroUsd(upstreamBody) {
+  const inputTokens = new TextEncoder().encode(upstreamBody).length + WORST_CASE_EXTRA_INPUT_TOKENS;
+  return Math.ceil(inputTokens * HAIKU_45_INPUT_USD_PER_MTOK + MAX_OUTPUT_TOKENS * HAIKU_45_OUTPUT_USD_PER_MTOK);
+}
+
+// The cost of one response from its usage, or null when usage cannot be read.
+function costMicroUsd(usage) {
+  if (!usage || typeof usage !== 'object') return null;
+  const n = (k) => (usage[k] === undefined || usage[k] === null ? 0 : usage[k]);
+  const counts = [n('input_tokens'), n('output_tokens'), n('cache_creation_input_tokens'), n('cache_read_input_tokens')];
+  if (counts.some((c) => typeof c !== 'number' || !Number.isFinite(c) || c < 0)) return null;
+  if (usage.input_tokens === undefined || usage.output_tokens === undefined) return null;
+  const [input, output, cacheWrite, cacheRead] = counts;
+  return Math.ceil(input * HAIKU_45_INPUT_USD_PER_MTOK + output * HAIKU_45_OUTPUT_USD_PER_MTOK
+    + cacheWrite * HAIKU_45_CACHE_WRITE_USD_PER_MTOK + cacheRead * HAIKU_45_CACHE_READ_USD_PER_MTOK);
+}
+
+// A stored counter -> µ$. A missing key is zero; anything that is not a non-negative whole number throws.
+function parseSpend(raw) {
+  if (raw === null || raw === undefined) return 0;
+  if (typeof raw !== 'string' || !/^\d{1,15}$/.test(raw)) throw new Error('corrupt spend counter');
+  return Number(raw);
+}
+
+async function reserveBudget(env, worst, now) {
+  const month = budgetMonth(now);
+  const key = BUDGET_KEY_PREFIX + month;
+  const kv = env?.ASK_BUDGET;
+  if (!kv || typeof kv.get !== 'function' || typeof kv.put !== 'function') return { refused: 'unavailable', month };
+  let spent;
+  try {
+    spent = parseSpend(await kv.get(key));
+  } catch {
+    return { refused: 'unavailable', month };
+  }
+  if (spent + worst > BUDGET_CAP_MICRO_USD) return { refused: 'cap', month };
+  try {
+    await kv.put(key, String(spent + worst));
+  } catch {
+    return { refused: 'unavailable', month };
+  }
+  return { refused: null, month, key, worst };
+}
+
+async function settleBudget(env, reservation, actual) {
+  if (actual === reservation.worst) return;
+  try {
+    const kv = env.ASK_BUDGET;
+    const spent = parseSpend(await kv.get(reservation.key));
+    await kv.put(reservation.key, String(Math.max(0, spent - reservation.worst + actual)));
+  } catch {
+    // the reservation stays counted: over, never under
+  }
+}
+
+// The owner's status line: this month's spend, or null when it cannot be read.
+async function spendReport(env, now = new Date()) {
+  const month = budgetMonth(now);
+  try {
+    if (!env?.ASK_BUDGET) return null;
+    const spent = parseSpend(await env.ASK_BUDGET.get(BUDGET_KEY_PREFIX + month));
+    return { month, usd: Math.round(spent / 100) / 10000, capUsd: BUDGET_CAP_USD };
+  } catch {
+    return null;
+  }
 }
 
 // A Messages API response -> the response body. Refusals and truncation are answers, not errors.
@@ -395,5 +635,10 @@ function answerFromMessage(message, vocab) {
 const ASK = {
   MODEL: ASK_MODEL, MAX_QUESTION, MAX_OUTPUT_TOKENS, FIELDS: ASK_FIELDS, SORTS: ASK_SORTS, REGIONS: ASK_REGIONS,
   UNIT_RANGE, askEnabled, vocabFromIndex, askSchema, askSystemPrompt, buildAskRequest, validateAsk, answerFromMessage,
-  resetCache: () => { vocabCache = null; },
+  // issue #179
+  BUDGET_CAP_USD, BUDGET_CAP_MICRO_USD, BUDGET_KEY_PREFIX, WORST_CASE_EXTRA_INPUT_TOKENS,
+  PRICES_USD_PER_MTOK: { input: HAIKU_45_INPUT_USD_PER_MTOK, output: HAIKU_45_OUTPUT_USD_PER_MTOK,
+    cacheWrite: HAIKU_45_CACHE_WRITE_USD_PER_MTOK, cacheRead: HAIKU_45_CACHE_READ_USD_PER_MTOK },
+  verifyAccess, accessTeam, budgetMonth, worstCaseMicroUsd, costMicroUsd, reserveBudget, settleBudget, spendReport,
+  resetCache: () => { vocabCache = null; accessCerts = null; },
 };

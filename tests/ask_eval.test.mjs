@@ -26,12 +26,15 @@ const ROOT = path.join(HERE, '..');
 const FIXTURE = process.env.ASK_EVAL_FIXTURE || path.join(HERE, 'fixtures', 'ask', 'eval.json');
 const WORKER = process.env.ASK_WORKER || path.join(ROOT, 'worker.js');
 const worker = (await import(pathToFileURL(WORKER).href)).default;
+// Since #179 a switched-on request needs a valid Cloudflare Access token and a budget namespace: local stand-ins.
+const { CERTS_URL, CERTS, accessVars, memoryKV, token } = await import(pathToFileURL(path.join(HERE, 'ask_access_helpers.mjs')).href);
+const OWNER = await token();
 const EVAL = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
 const FAKE_KEY = 'test-key-not-a-secret';
 
 function assetsEnv() {
   return {
-    ASK_ENABLED: 'true', ANTHROPIC_API_KEY: FAKE_KEY,
+    ...accessVars({ ANTHROPIC_API_KEY: FAKE_KEY }), ASK_BUDGET: memoryKV(),
     ASSETS: {
       fetch: async (req) => {
         const p = path.join(ROOT, 'public', decodeURIComponent(new URL(req.url).pathname));
@@ -46,13 +49,14 @@ async function askWith(question, recorded, { stopReason = 'end_turn' } = {}) {
   const sent = [];
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url, init) => {
+    if (String(url) === CERTS_URL) return Response.json(CERTS); // the Access team's public keys
     sent.push({ url: String(url), init, body: JSON.parse(init.body) });
     return Response.json({ id: 'msg_recorded', type: 'message', role: 'assistant', model: worker.ask.MODEL, stop_reason: stopReason,
       content: [{ type: 'text', text: JSON.stringify(recorded) }], usage: { input_tokens: 0, output_tokens: 0 } });
   };
   try {
     const res = await worker.fetch(new Request('https://college.nextonetwo.com/api/ask', {
-      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question }) }), assetsEnv());
+      method: 'POST', headers: { 'content-type': 'application/json', 'cf-access-jwt-assertion': OWNER }, body: JSON.stringify({ question }) }), assetsEnv());
     return { res, body: await res.json(), sent };
   } finally {
     globalThis.fetch = realFetch;
