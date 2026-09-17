@@ -15,6 +15,12 @@ scout/cache/
 # Local secrets (College Scorecard API key etc.)
 .env
 
+# Agents' and reviewers' scratch notes (issue #195). Scratch belongs in the session scratchpad outside the
+# repository; a scratchpad/ folder inside a worktree is ignored so notes are never swept into a commit or
+# into the working-tree scans some tests run (tests/rpi_attribution_test.py). tests/scratchpad_ignored_test.py
+# fails if anything under scratchpad/ is tracked anyway (git add -f).
+scratchpad/
+
 # Cloudflare wrangler scratch and any npx download
 .wrangler/
 node_modules/
