@@ -299,10 +299,16 @@ test('hide and count, one chip on the real index: programs with no academic rank
   await renderList();
   const westMissing = P.filter(p => p.region === 'West' && p.academicRank == null).length;
   assert.ok(subtitle(real.app()).includes(` · ${westMissing} hidden: no academic rank`), subtitle(real.app()));
-  // a chip every program has data for adds no hidden phrase at all
+  /* A second chip, with its expectation read off the shipped index rather than assumed (#197): on the D1-only index
+     every program has an undergraduate count, so the chip adds no hidden phrase at all; with D2 published two
+     programs lack one, and the phrase must count exactly those. */
   reset(S); S.filters.cond = [{ field: 'undergradEnrollment', op: '>', value: 0 }];
   await renderList();
-  assert.ok(!/hidden/.test(subtitle(real.app())), subtitle(real.app()));
+  const noUndergrads = P.filter(p => nz(p.undergradEnrollment) == null).length;
+  const withUndergrads = P.filter(p => nz(p.undergradEnrollment) != null && p.undergradEnrollment > 0).length;
+  const sub2 = subtitle(real.app());
+  if (noUndergrads === 0) assert.ok(!/hidden/.test(sub2), `every program has an undergraduate count, so nothing is hidden: ${sub2}`);
+  else assert.ok(sub2.includes(`${withUndergrads} of ${P.length} programs · ${noUndergrads} hidden: no undergraduate count`), `subtitle: ${sub2}`);
   reset(S);
 });
 
