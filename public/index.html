@@ -988,6 +988,12 @@ const has = {
   titles: p => (p.program?.nationalTitles || []).length > 0 || p.division === 'D1',
   cups: p => appliesTo('collegeCups', p) && ((p.program?.collegeCups || []).length > 0 || !!p.program?._meta?.wikipedia),
   honors: p => !!p.program?._meta?.wikipedia || HONOR_LISTS.some(k => (p.program?.[k] || []).length > 0),
+  /* The all-time record is build.py's sum over the Wikipedia seasons table (issue #221). A program with no such
+     table (every Division II program, and Division I pages without one) sums to 0-0-0 over 0 seasons, and a
+     table whose rows carry no parsed results sums to 0-0-0 over N: neither is a record. The line shows only
+     when games were actually counted. It is not recomputed from p.seasons, which covers a few recent years,
+     not all time. */
+  allTimeRecord: p => { const r = p.program?.allTimeRecord; return !!r && ((r.wins || 0) + (r.losses || 0) + (r.ties || 0)) > 0; },
   history: p => has.rpiHistory(p) || has.seasons(p) || has.honors(p),
   schedule: p => !!p.schedule && ((p.schedule.games || []).length > 0 || Object.keys(p.schedule.history || {}).length > 0),
   roster: p => !!p.roster && (p.roster.players || []).length > 0,
@@ -1937,7 +1943,7 @@ async function tabHistory(p) {
       ${has.honors(p) ? `<div class="card"><h3>Honors</h3><table>
         ${yearsList(p.division === 'D1' || !p.division ? 'NCAA championships' : `NCAA ${esc(p.division)} championships`, pr.nationalTitles)}${yearsList('NCAA runner-up', pr.nationalRunnerUp)}${cups ? yearsList('College Cup (final four)', pr.collegeCups) : ''}
         ${yearsList('NCAA tournament appearances', pr.ncaaAppearances)}${yearsList('Conference regular-season titles', pr.confRegularSeasonTitles)}${yearsList('Conference tournament titles', pr.confTournamentTitles)}
-        <tr><th>All-time record</th><td>${pr.allTimeRecord.wins}-${pr.allTimeRecord.losses}-${pr.allTimeRecord.ties} (${pr.allTimeRecord.winPct ?? '—'}) over ${pr.allTimeRecord.seasons} seasons</td></tr>
+        ${has.allTimeRecord(p) ? `<tr><th>All-time record</th><td>${pr.allTimeRecord.wins}-${pr.allTimeRecord.losses}-${pr.allTimeRecord.ties} (${pr.allTimeRecord.winPct ?? '—'}) over ${pr.allTimeRecord.seasons} seasons</td></tr>` : ''}
         <tr><th>Founded</th><td>${dash(pr.founded)}</td></tr><tr><th>Stadium</th><td>${esc(pr.stadium?.name || '—')}${pr.stadium?.capacity ? ` (capacity ${fmtNum(pr.stadium.capacity)})` : ''}</td></tr></table>
         ${prov(pr._meta?.wikipedia)}</div>` : ''}
       ${has.seasons(p) ? `<div class="card"><h3>Season by season</h3><div class="tscroll" style="max-height:520px;overflow-y:auto"><table>
