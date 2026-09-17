@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>College Soccer · nextonetwo</title>
-<meta name="description" content="A research dashboard for NCAA Division I women's soccer: 350 program profiles built from public sources — school, roster, schedule, RPI and commitments.">
+<meta name="description" content="A research dashboard for NCAA women's soccer: program profiles built from public sources — school, roster, schedule, RPI and commitments.">
 <link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://college.nextonetwo.com/">
 <meta property="og:title" content="College Soccer · nextonetwo">
-<meta property="og:description" content="A research dashboard for NCAA Division I women's soccer: 350 program profiles built from public sources — school, roster, schedule, RPI and commitments.">
+<meta property="og:description" content="A research dashboard for NCAA women's soccer: program profiles built from public sources — school, roster, schedule, RPI and commitments.">
 <meta property="og:image" content="https://college.nextonetwo.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -656,6 +656,20 @@ const COND_UNITS = {
   score: { hint: 'A score, e.g. 1200', fmt: v => String(v), parse: t => parseDecimal(t) },
   fahrenheit: { hint: 'Degrees Fahrenheit, e.g. 75', fmt: v => `${trimNum(v, 1)}°F`, parse: t => parseDecimal(String(t ?? '').trim().replace(/\s*°?\s*F$/i, '').replace(/\s*°$/, '')) },
 };
+/* What does not apply to a division (owner's decision 3 on #197, issue #198). RPI and College Cups are
+   Division I measures on this site: no Division II RPI is collected, and the College Cup is Division I's
+   final four. For a program in a division listed here the measure is NOT APPLICABLE - not missing: its RPI
+   and College Cup parts are left out of cards, the table, the profile and Compare; a condition on it
+   excludes the program and says so by division rather than counting it as hidden for missing data; and the
+   RPI sort puts it after every Division I program. A division not listed keeps today's rule (missing when
+   empty), so with the Division I-only index none of this changes a byte. */
+const NOT_APPLICABLE = { rpi: ['D2'], collegeCups: ['D2'] };
+const appliesTo = (measure, p) => !(NOT_APPLICABLE[measure] || []).includes(p?.division);
+/* National titles are counted per division, from that division's own NCAA champions table (build.py), so
+   they are labelled by division (owner's decision 2 on #197): Division I keeps its wording, any other
+   division names itself, e.g. "7 NCAA D2 titles". */
+const titlesPhrase = (n, division) => division === 'D1' || !division ? `${n} national title${n === 1 ? '' : 's'}` : `${n} NCAA ${division} title${n === 1 ? '' : 's'}`;
+const titlesLabel = division => division === 'D1' || !division ? 'National titles' : `NCAA ${division} titles`;
 /* A national-title or College Cup count comes from the NCAA Division I lists, which vouch for a zero only
    for a Division I program - the same rule as has.titles (issue #115). For any other division a zero is
    "not collected", and a condition must hide it rather than treat it as a known 0. */
@@ -677,11 +691,11 @@ const COND_FIELDS = [
     get: p => p.sat25 },
   // The RPI the cards and table show (rpiOf: the ranking season only), not whatever lastSeason happens to hold.
   { key: 'rpiRank', label: `RPI ${RPI_SEASON}`, chip: 'RPI', missing: `no ${RPI_SEASON} RPI`, unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
-    get: p => rpiOf(p) },
+    get: p => rpiOf(p), applies: p => appliesTo('rpi', p) },
   { key: 'nationalTitles', label: 'National titles', chip: 'Titles', missing: 'no national-title count', unit: 'count', ops: COND_OPS,
     get: p => d1Count(p, p.nationalTitles) },
   { key: 'collegeCups', label: 'College Cups', chip: 'College Cups', missing: 'no College Cup count', unit: 'count', ops: COND_OPS,
-    get: p => d1Count(p, p.collegeCups) },
+    get: p => d1Count(p, p.collegeCups), applies: p => appliesTo('collegeCups', p) },
   { key: 'rosterSize', label: 'Roster size', chip: 'Roster', missing: 'no roster size', unit: 'count', ops: COND_OPS,
     get: p => p.rosterSize },
   { key: 'fallAvgHighF', label: 'Fall average high', chip: 'Fall high', missing: 'no climate data', unit: 'fahrenheit', ops: ORDER_OPS,
@@ -703,11 +717,14 @@ const condValueOf = (d, p) => { const v = d.get(p); return typeof v === 'number'
 function condHolds(v, op, x) {
   return op === '<' ? v < x : op === '<=' ? v <= x : op === '>' ? v > x : op === '>=' ? v >= x : op === '=' ? v === x : false;
 }
-/* 'pass', 'fail' or 'missing' for one program against a list of conditions. A program FAILS if any
-   condition it has data for is false - it cannot qualify whatever the missing values are. It is MISSING
-   if it fails none but lacks data for at least one: those are the programs hidden "because of missing
-   data", the ones a visitor must not read as not qualifying. */
+/* 'pass', 'fail', 'missing' or 'na' for one program against a list of conditions. A program is NA if any
+   condition is on a measure that does not apply to its division (NOT_APPLICABLE, #198): it is excluded, and
+   counted apart from both of the others, because it neither fails the condition nor lacks data for it.
+   Otherwise it FAILS if any condition it has data for is false - it cannot qualify whatever the missing
+   values are. It is MISSING if it fails none but lacks data for at least one: those are the programs hidden
+   "because of missing data", the ones a visitor must not read as not qualifying. */
 function condStatus(p, conds) {
+  for (const c of conds) { const d = COND_BY_KEY.get(c.field); if (d?.applies && !d.applies(p)) return 'na'; }
   let missing = false;
   for (const c of conds) {
     const d = COND_BY_KEY.get(c.field); if (!d) continue; // unreachable: every way in goes through validCond
@@ -749,6 +766,7 @@ function condTally(items, conds, programOf = x => x) {
   const t = { pass: 0, fail: 0, missing: 0, byField: {} };
   for (const it of items) {
     const p = programOf(it), s = condStatus(p, conds);
+    if (s === 'na') continue; // counted by condNaTally, never as pass, fail or missing
     t[s]++;
     if (s !== 'missing') continue;
     new Set(conds.map(c => c.field)).forEach(k => { const d = COND_BY_KEY.get(k); if (d && condValueOf(d, p) == null) t.byField[k] = (t.byField[k] || 0) + 1; });
@@ -771,6 +789,27 @@ function condHiddenText(t, conds, unit = '') {
   if (keys.length === 1) return `${n} hidden: ${COND_BY_KEY.get(keys[0]).missing}`;
   const sum = keys.reduce((a, k) => a + t.byField[k], 0);
   return `${n} hidden for missing data: ${keys.map(k => `${t.byField[k]} ${COND_BY_KEY.get(k).missing}`).join(', ')}${sum > t.missing ? ' (counted once when more than one is missing)' : ''}`;
+}
+/* The not-applicable phrase (#198), beside the hidden-for-missing-data one and never folded into it:
+     "205 excluded: RPI not applicable to Division II"
+     "43 camps excluded: RPI and College Cups not applicable to Division II"
+   '' when no condition excluded anything, which is always the case with a Division I-only index. */
+function condNaTally(items, conds, programOf = x => x) {
+  const t = { na: 0, divisions: new Set(), fields: new Set() };
+  for (const it of items) {
+    const p = programOf(it);
+    if (condStatus(p, conds) !== 'na') continue;
+    t.na++; t.divisions.add(p.division);
+    conds.forEach(c => { const d = COND_BY_KEY.get(c.field); if (d?.applies && !d.applies(p)) t.fields.add(d.key); });
+  }
+  return t;
+}
+function condNaText(t, conds, unit = '') {
+  if (!t.na) return '';
+  const chips = [...new Set(conds.map(c => c.field))].filter(k => t.fields.has(k)).map(k => COND_BY_KEY.get(k).chip);
+  const divs = (S.index?.divisions || []).filter(d => t.divisions.has(d));
+  const n = unit ? `${t.na} ${unit}${t.na === 1 ? '' : 's'}` : String(t.na);
+  return `${n} excluded: ${chips.join(' and ')} not applicable to ${divs.map(divisionName).join(' or ')}`;
 }
 
 /* ---------- persistence (per-viewer conveniences only) ---------- */
@@ -893,6 +932,11 @@ const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
 // tables to each program by its curated ids and writes the result into lastSeason and rpiHistory. The page
 // no longer reads the tables themselves, and the site no longer serves them (issue #100).
 const rpiOf = p => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
+// The RPI sort's key: ranked programs by rank, then unranked Division I programs (999, as before), then programs
+// whose division RPI does not apply to (#198) - after them, and never shown as missing.
+const rpiSortKey = p => appliesTo('rpi', p) ? (rpiOf(p) ?? 999) : 1999;
+// Titles sort within division (#198): one division's counts are never interleaved with another's.
+const divisionOrder = p => { const i = (S.index?.divisions || []).indexOf(p.division); return i < 0 ? 1e6 : i; };
 const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };
 /* ---------- academic rank (Times Higher Education) ----------
    THE ranks 171 US universities and prints a tied rank with a leading '=' (124 of the 171 are ties),
@@ -914,27 +958,28 @@ const rankTitle = p => p.academicRank == null ? `${THE_RANK_SOURCE} — this uni
    Owner decision on #94: a section appears only when THAT program has data for it, decided per program and
    never per division. "Has data" is defined by what the section renders: a heading over an empty table, a
    dash, or a "not collected" line is empty. Where a section has data it renders exactly as it did before;
-   every change here is a section being left out. The one division-shaped rule is national titles: the
+   every change here is a section being left out. Measures that do not apply to a division (NOT_APPLICABLE,
+   #198) are left out for every program in it. The one other division-shaped rule is national titles: the
    count comes from the NCAA Division I champions list, which vouches for a zero only for a D1 program.
    `r` is an index row (cards, table), `p` a full profile. */
 const HONOR_LISTS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaAppearances', 'confRegularSeasonTitles', 'confTournamentTitles'];
 const has = {
   // index rows: cards and table
-  rowRpi: r => rpiOf(r) != null,
+  rowRpi: r => appliesTo('rpi', r) && rpiOf(r) != null,
   rowRecord: r => r.lastSeason?.year === RPI_SEASON && !!r.lastSeason.record,
   rowAcademicRank: r => r.academicRank != null,
   rowCommits: r => Object.keys(r.commitmentsByYear || {}).length > 0,
   rowRoster: r => r.rosterSize != null,
   rowTitles: r => r.nationalTitles > 0,
-  rowCups: r => r.collegeCups > 0,
+  rowCups: r => appliesTo('collegeCups', r) && r.collegeCups > 0,
   // profiles
-  rpiHistory: p => (p.seasons || []).some(s => s.rpiRank),
+  rpiHistory: p => appliesTo('rpi', p) && (p.seasons || []).some(s => s.rpiRank),
   seasons: p => (p.seasons || []).length > 0,
   lastSeason: p => (p.seasons || []).some(s => !s.inProgress && s.record),
   commitments: p => (p.commitments || []).length > 0,
   commitsByYear: p => Object.keys(p.commitmentsByYear || {}).length > 0,
   titles: p => (p.program?.nationalTitles || []).length > 0 || p.division === 'D1',
-  cups: p => (p.program?.collegeCups || []).length > 0 || !!p.program?._meta?.wikipedia,
+  cups: p => appliesTo('collegeCups', p) && ((p.program?.collegeCups || []).length > 0 || !!p.program?._meta?.wikipedia),
   honors: p => !!p.program?._meta?.wikipedia || HONOR_LISTS.some(k => (p.program?.[k] || []).length > 0),
   history: p => has.rpiHistory(p) || has.seasons(p) || has.honors(p),
   schedule: p => !!p.schedule && ((p.schedule.games || []).length > 0 || Object.keys(p.schedule.history || {}).length > 0),
@@ -1077,9 +1122,9 @@ function renderSidebar() {
       <div class="browse-label">Conference</div>
       ${confBlock}`;
   } else if (tab === 'shortlist') {
-    const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999));
+    const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => rpiSortKey(a) - rpiSortKey(b));
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
-      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${rpiCell(p)}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${appliesTo('rpi', p) ? rpiCell(p) : ''}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
       : `<div class="side-empty">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
   } else {
@@ -1426,14 +1471,14 @@ function sortCmp(key) {
   const cy = S.filters.classYear;
   return (a, b) => key === 'name' ? byDisplayName(a, b)
     : key === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
-    : key === 'titles' ? b.nationalTitles - a.nationalTitles
+    : key === 'titles' ? (divisionOrder(a) - divisionOrder(b)) || (b.nationalTitles - a.nationalTitles)
     : key === 'tuition' ? tuitionOf(a) - tuitionOf(b)
     : key === 'undergrads' ? (b.undergradEnrollment ?? -1) - (a.undergradEnrollment ?? -1)
     : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
     : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
     : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
     : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || byDisplayName(a, b)
-    : (rpiOf(a) ?? 999) - (rpiOf(b) ?? 999);
+    : rpiSortKey(a) - rpiSortKey(b);
 }
 async function renderList() {
   const idx = await loadIndex();
@@ -1445,6 +1490,8 @@ async function renderList() {
   const bits = [corpusLabel(), `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
   // Conditions (#166): how many of the programs that passed search and the pills were hidden only for lack of data.
   if (f.cond.length) { const hidden = condHiddenText(condTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (hidden) bits.push(esc(hidden)); }
+  // And, apart from those, how many a chip excluded because its measure does not apply to their division (#198).
+  if (f.cond.length) { const na = condNaText(condNaTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (na) bits.push(esc(na)); }
   if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
@@ -1484,7 +1531,7 @@ function cardHtml(p) {
   const meta = [p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc).join(' · ');
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
     <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
-      ${p.nationalTitles > 0 ? `<span class="titles">${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}</span>` : ''}</div>
+      ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
     ${stripeHtml(tc)}
     <div class="body"><div class="meta">${meta}</div>
       ${facts.some(Boolean) ? `<div class="facts">
@@ -1500,7 +1547,7 @@ function cardHtml(p) {
 function tableHtml(rows) {
   const f = S.filters, cy = f.classYear;
   const cols = [
-    ['rank', '#', 'num', p => { const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
+    ['rank', '#', 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
     ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
     ['record', `Record ${RPI_SEASON}`, 'num', p => p.lastSeason?.year === RPI_SEASON ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
@@ -1508,8 +1555,8 @@ function tableHtml(rows) {
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
     ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
     ['commits', classLabel(cy), 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
-    ['titles', 'Titles', 'num col-extra', p => p.nationalTitles || '—', 'titles'],
-    ['cups', 'College Cups', 'num col-extra', p => p.collegeCups || '—'],
+    ['titles', 'Titles', 'num col-extra', p => p.division === 'D1' || !p.division ? p.nationalTitles || '—' : p.nationalTitles ? `<span title="${esc(titlesPhrase(p.nationalTitles, p.division))}">${p.nationalTitles} ${esc(p.division)}</span>` : '—', 'titles'],
+    ['cups', 'College Cups', 'num col-extra', p => appliesTo('collegeCups', p) ? p.collegeCups || '—' : ''],
     ['region', 'Region', 'col-extra', p => esc(p.region || '—')],
     ['type', 'Type', 'col-extra', p => esc((p.ownership || '—').replace(/ (nonprofit|for-profit)$/, ''))],
     ['cmp', '', '', p => cmpBtn(p.slug)],
@@ -1520,7 +1567,7 @@ function tableHtml(rows) {
     <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
-    <div class="table-footnote">RPI and record are the ${RPI_SEASON} season as published by the NCAA · Admission rate and size are for the whole university · Select a program for details</div>
+    <div class="table-footnote">RPI and record are the ${RPI_SEASON} season as published by the NCAA${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
   </div>`;
 }
 
@@ -1621,6 +1668,7 @@ async function renderCamps() {
     `${rows.length} upcoming ID camp${rows.length === 1 ? '' : 's'}${filtered ? ` of ${resolved.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`];
   // Conditions (#166), counted in camps: the camps whose program passed everything else but lacks the data.
   if (f.cond.length) { const hidden = condHiddenText(condTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (hidden) bits.push(esc(hidden)); }
+  if (f.cond.length) { const na = condNaText(condNaTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (na) bits.push(esc(na)); }
   if (f.conf.length) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
@@ -1682,6 +1730,9 @@ const TAB_HAS = { school: has.school, climate: has.climate, history: has.history
   commitments: has.commitments, schedule: has.schedule, news: has.news, camps: has.camps };
 const TAB_NOUN = { school: 'school', climate: 'climate', history: 'history or RPI', staff: 'staff', roster: 'roster', commitments: 'commitment', schedule: 'schedule', news: 'news', camps: 'ID camp' };
 const profileTabs = p => TABS.filter(([k]) => !TAB_HAS[k] || TAB_HAS[k](p)); // Overview has no rule: it is always there
+// Where RPI does not apply to a program's division (#198) its history tab is plain "History".
+const tabLabel = (k, label, p) => k === 'history' && !appliesTo('rpi', p) ? 'History' : label;
+const tabNoun = (k, p) => k === 'history' && !appliesTo('rpi', p) ? 'history' : TAB_NOUN[k];
 function prov(meta, extra) {
   if (!meta) return '';
   const items = Array.isArray(meta) ? meta : [meta];
@@ -1716,8 +1767,8 @@ function glanceHtml(p, row) {
       <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
     </div>
     <div class="glance-stats">
-      ${s25?.rpiRank ? `<div><div class="stat-label">RPI ${RPI_SEASON}</div><div class="stat-value">${s25?.rpiRank ? `#${s25.rpiRank}` : '—'}</div>${s25?.record ? `<div class="stat-sub">${esc(s25.record)}${s25.ncaaResult ? ` · ${esc(s25.ncaaResult)}` : ''}</div>` : ''}</div>` : ''}
-      ${cur || has.titles(p) ? `<div><div class="stat-label">${cur ? `${cur.year} so far` : 'National titles'}</div><div class="stat-value">${cur ? esc(cur.record || '—') : (pr.nationalTitles || []).length}</div>${cur && has.titles(p) ? `<div class="stat-sub">${(pr.nationalTitles || []).length} national title${(pr.nationalTitles || []).length === 1 ? '' : 's'}</div>` : ''}</div>` : ''}
+      ${s25?.rpiRank && appliesTo('rpi', p) ? `<div><div class="stat-label">RPI ${RPI_SEASON}</div><div class="stat-value">${s25?.rpiRank ? `#${s25.rpiRank}` : '—'}</div>${s25?.record ? `<div class="stat-sub">${esc(s25.record)}${s25.ncaaResult ? ` · ${esc(s25.ncaaResult)}` : ''}</div>` : ''}</div>` : ''}
+      ${cur || has.titles(p) ? `<div><div class="stat-label">${cur ? `${cur.year} so far` : titlesLabel(p.division)}</div><div class="stat-value">${cur ? esc(cur.record || '—') : (pr.nationalTitles || []).length}</div>${cur && has.titles(p) ? `<div class="stat-sub">${titlesPhrase((pr.nationalTitles || []).length, p.division)}</div>` : ''}</div>` : ''}
       ${sch.admissionRate != null ? `<div><div class="stat-label">Admit rate</div><div class="stat-value">${fmtPct(sch.admissionRate)}</div><div class="stat-sub">whole university</div></div>` : ''}
       ${sch.undergradEnrollment != null ? `<div><div class="stat-label">Undergrads</div><div class="stat-value">${fmtNum(sch.undergradEnrollment)}</div><div class="stat-sub">${esc((sch.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))}</div></div>` : ''}
     </div>
@@ -1755,13 +1806,13 @@ async function renderProfile(slug, tab) {
   const failed = p._build.failed || [];
   const notices = [];
   if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
-  if (hiddenAsked) notices.push(`There is no ${TAB_NOUN[hiddenAsked[0]]} information for ${esc(displayName(p))}, so the ${esc(hiddenAsked[1])} tab is not shown.`);
+  if (hiddenAsked) notices.push(`There is no ${tabNoun(hiddenAsked[0], p)} information for ${esc(displayName(p))}, so the ${esc(tabLabel(hiddenAsked[0], hiddenAsked[1], p))} tab is not shown.`);
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
-  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? `${titles} national title${titles === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ');
+  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank && appliesTo('rpi', p) ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([, v]) => v).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
-  const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${l}</a>`).join('');
+  const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
@@ -1776,11 +1827,11 @@ async function tabOverview(p) {
   const ls = p.seasons.find(s => !s.inProgress && s.record);
   const sch = p.school || {}, pr = p.program;
   const commits = Object.entries(p.commitmentsByYear || {});
-  const rpiPts = p.seasons.filter(s => s.rpiRank).slice(0, 6).reverse();
+  const rpiPts = appliesTo('rpi', p) ? p.seasons.filter(s => s.rpiRank).slice(0, 6).reverse() : [];
   return `
     <div class="tiles section">
-      ${ls ? tile(`${ls?.year ?? 'Last'} season`, esc(ls?.record || '—'), ls ? `${esc(ls.ncaaResult || 'NCAA result not recorded')}${ls.rpiRank != null ? ` · RPI ${rankStr(ls.rpiRank)}` : ''}` : '') : ''}
-      ${has.titles(p) ? tile('National titles', pr.nationalTitles.length, pr.nationalTitles.join(', ') || 'none') : ''}
+      ${ls ? tile(`${ls?.year ?? 'Last'} season`, esc(ls?.record || '—'), ls ? `${esc(ls.ncaaResult || 'NCAA result not recorded')}${ls.rpiRank != null && appliesTo('rpi', p) ? ` · RPI ${rankStr(ls.rpiRank)}` : ''}` : '') : ''}
+      ${has.titles(p) ? tile(titlesLabel(p.division), pr.nationalTitles.length, pr.nationalTitles.join(', ') || 'none') : ''}
       ${has.cups(p) ? tile('College Cups', pr.collegeCups.length, pr.collegeCups.length ? `last ${pr.collegeCups[pr.collegeCups.length - 1]}` : '') : ''}
       ${sch.admissionRate != null ? tile('Admission rate', fmtPct(sch.admissionRate), sch.sat25 ? `SAT ${sch.sat25}–${sch.sat75}` : '') : ''}
       ${sch.undergradEnrollment != null ? tile('Undergraduates', fmtNum(sch.undergradEnrollment), esc(sch.ownership || '')) : ''}
@@ -1814,7 +1865,7 @@ async function tabSchool(p) {
     <div class="card"><h3>Cost</h3><table>
       ${kv('Type', esc(dash(s.ownership)))}${kv('Tuition (in-state)', fmtUsd(s.tuitionInState))}${kv('Tuition (out-of-state)', fmtUsd(s.tuitionOutOfState))}
       ${kv('Cost of attendance', fmtUsd(s.costOfAttendance))}${kv('Average net price (after aid)', fmtUsd(s.netPriceAverage))}</table>
-      <p class="small muted" style="margin-top:8px">Net price is the average paid by aid recipients; athletic scholarships are separate (D1 women's soccer allows up to 14 equivalencies, program-dependent).</p></div>
+      <p class="small muted" style="margin-top:8px">Net price is the average paid by aid recipients; athletic scholarships are separate${p.division === 'D1' ? " (D1 women's soccer allows up to 14 equivalencies, program-dependent)" : ''}.</p></div>
     <div class="card"><h3>Location</h3><table>
       ${kv('Campus', `${esc(s.city)}, ${esc(s.state)} ${esc(s.zip || '')}`)}${kv('Setting', esc(dash(s.locale)))}${kv('Region', esc(dash(s.region)))}
       ${kv('Website', s.website ? `<a href="https://${esc(s.website.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${esc(s.website)}</a>` : '—')}
@@ -1857,7 +1908,8 @@ async function tabClimate(p) {
 
 async function tabHistory(p) {
   const pr = p.program;
-  const withRpi = p.seasons.filter(s => s.rpiRank).sort((a, b) => a.year - b.year);
+  const rpi = appliesTo('rpi', p), cups = appliesTo('collegeCups', p);
+  const withRpi = rpi ? p.seasons.filter(s => s.rpiRank).sort((a, b) => a.year - b.year) : [];
   const chart = svgLine({
     width: 1160, height: 300, yInverted: true, yMin: 1, yMax: Math.max(30, ...withRpi.map(s => s.rpiRank)),
     series: [{ name: 'RPI rank', color: 'var(--s1)', points: withRpi.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank} (${s.record || ''})` })) }],
@@ -1869,14 +1921,14 @@ async function tabHistory(p) {
       <p class="small muted">Lower is better. 2007–2024 are end-of-season ranks from <a href="${RPI_ARCHIVE_URL}" target="_blank" rel="noopener">Chris Thomas’s RPI archive</a>: from 2010 he restates them as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so they are not the ranks that stood at the time (2007–2009 use the overtime rules and formula of those years); 2025 onward are the NCAA's own published ranks. No 2020 (COVID season).</p></div>` : ''}
     <div class="grid g2">
       ${has.honors(p) ? `<div class="card"><h3>Honors</h3><table>
-        ${yearsList('NCAA championships', pr.nationalTitles)}${yearsList('NCAA runner-up', pr.nationalRunnerUp)}${yearsList('College Cup (final four)', pr.collegeCups)}
+        ${yearsList(p.division === 'D1' || !p.division ? 'NCAA championships' : `NCAA ${esc(p.division)} championships`, pr.nationalTitles)}${yearsList('NCAA runner-up', pr.nationalRunnerUp)}${cups ? yearsList('College Cup (final four)', pr.collegeCups) : ''}
         ${yearsList('NCAA tournament appearances', pr.ncaaAppearances)}${yearsList('Conference regular-season titles', pr.confRegularSeasonTitles)}${yearsList('Conference tournament titles', pr.confTournamentTitles)}
         <tr><th>All-time record</th><td>${pr.allTimeRecord.wins}-${pr.allTimeRecord.losses}-${pr.allTimeRecord.ties} (${pr.allTimeRecord.winPct ?? '—'}) over ${pr.allTimeRecord.seasons} seasons</td></tr>
         <tr><th>Founded</th><td>${dash(pr.founded)}</td></tr><tr><th>Stadium</th><td>${esc(pr.stadium?.name || '—')}${pr.stadium?.capacity ? ` (capacity ${fmtNum(pr.stadium.capacity)})` : ''}</td></tr></table>
         ${prov(pr._meta?.wikipedia)}</div>` : ''}
       ${has.seasons(p) ? `<div class="card"><h3>Season by season</h3><div class="tscroll" style="max-height:520px;overflow-y:auto"><table>
-        <tr><th>Year</th><th>Coach</th><th>Record</th><th>Conf</th><th>Finish</th><th>NCAA</th><th class="num">RPI</th><th class="num">Seed</th><th class="num">KPI</th><th class="num">Massey</th></tr>
-        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ' <span class="badge">live</span>' : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td><td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td></tr>`).join('')}</table></div></div>` : ''}
+        <tr><th>Year</th><th>Coach</th><th>Record</th><th>Conf</th><th>Finish</th><th>NCAA</th>${rpi ? '<th class="num">RPI</th><th class="num">Seed</th><th class="num">KPI</th><th class="num">Massey</th>' : ''}</tr>
+        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ' <span class="badge">live</span>' : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td>${rpi ? `<td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td>` : ''}</tr>`).join('')}</table></div></div>` : ''}
     </div>`;
 }
 
@@ -2016,6 +2068,8 @@ async function tabCamps(p) {
 
 /* ---------- compare ---------- */
 const US_STATES = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
+// A Compare cell for a measure that does not apply to the program's division (#198): said, not dashed.
+const notApplicableCell = p => `<span class="muted small">not applicable to ${esc(divisionName(p.division))}</span>`;
 async function renderCompare() {
   const idx = await loadIndex();
   const picked = S.compare.filter(s => idx.programs.some(p => p.slug === s)).slice(0, 4);
@@ -2033,12 +2087,13 @@ async function renderCompare() {
       ['6-yr graduation rate', p => fmtPct(p.school?.gradRate6yr)], ['Setting', p => esc(p.school?.locale || '—')],
     ]],
     ['Soccer', [
-      [`RPI ${RPI_SEASON}`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
-      [`RPI ${RPI_SEASON - 1}`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
-      ['Avg RPI, last 5 seasons', p => { const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
+      [`RPI ${RPI_SEASON}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      [`RPI ${RPI_SEASON - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === RPI_SEASON - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      ['Avg RPI, last 5 seasons', p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
       [`${RPI_SEASON} record`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.record ? `${esc(s.record)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
       ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
-      ['National titles', p => p.program.nationalTitles.length], ['College Cups', p => p.program.collegeCups.length],
+      ['National titles', p => p.division === 'D1' || !p.division ? p.program.nationalTitles.length : `${p.program.nationalTitles.length} <span class="muted small">NCAA ${esc(p.division)}</span>`],
+      ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],
       ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],
       ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
       ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
@@ -2085,14 +2140,14 @@ async function renderFaq() {
     [ext('https://collegescorecard.ed.gov/', 'College Scorecard'), 'Admission rate, SAT range, enrollment, tuition, net price, graduation rate', 'U.S. Department of Education'],
     [ext(THE_RANK_URL, 'Times Higher Education'), 'The “US rank (THE)” on each program card, from their Best universities in the United States 2026 table; “N/A” means the university is not one of the 171 they rank', 'Times Higher Education; the ranking is theirs and all rights are reserved'],
     [ext('https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA NCEI Climate Normals'), 'Monthly temperature and rainfall averages for 1991–2020 at the weather station nearest campus', 'U.S. National Oceanic and Atmospheric Administration'],
-    [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, conference and NCAA honours, stadium (national titles are checked against the NCAA champions list)', 'Team articles, where one exists'],
-    [ext('https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi', 'NCAA.com RPI') + ' and ' + ext(RPI_ARCHIVE_URL, 'Chris Thomas’s RPI archive'), 'Weekly RPI during the season; end-of-season RPI since 2007 (the archive’s ranks from 2010 are restated as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so they are not the ranks that stood at the time)', 'NCAA; an independent, widely cited archive'],
-    [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
+    [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, conference and NCAA honours, stadium (national titles are checked against each division’s NCAA champions list)', 'Team articles, where one exists'],
+    [ext('https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi', 'NCAA.com RPI') + ' and ' + ext(RPI_ARCHIVE_URL, 'Chris Thomas’s RPI archive'), 'Division I only. Weekly RPI during the season; end-of-season RPI since 2007 (the archive’s ranks from 2010 are restated as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so they are not the ranks that stood at the time)', 'NCAA; an independent, widely cited archive'],
+    [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class (listed mostly for Division I programs)', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
   ];
   const app = $('#app');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h2>About the data</h2>
-      <p class="lead">nextonetwo College Soccer gathers public information about NCAA Division I women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
+      <p class="lead">nextonetwo College Soccer gathers public information about NCAA women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
 
     <div class="card"><h3>Where does the data come from?</h3>
       <p>Every figure comes from a public source that coaches, journalists and families already rely on. Nothing is estimated or made up.</p>

@@ -323,7 +323,12 @@ test('table columns: a data column is left out only when no row on screen has da
   assert.deepEqual(d2, ['', 'Program', 'Undergrads', 'Tuition / yr', 'Commits', 'Region', 'Type', ''], 'the synthetic D2 table columns');
   const mixed = heads(page.sandbox.tableHtml([rowOf('stanford'), rowOf(bare.slug)]));
   assert.ok(mixed.includes('#') && mixed.includes('Titles'), 'one ranked program on screen must keep the RPI and Titles columns');
-  assert.ok(page.sandbox.tableHtml([rowOf('stanford'), rowOf(bare.slug)]).includes('<span class="rank-num">—</span>'), 'a row without data in a kept column shows a dash');
+  // A Division I row without data in a kept column shows a dash. A Division II row shows nothing there at all:
+  // RPI does not apply to Division II (#198), which is not the same as missing.
+  const unrankedD1 = REAL_INDEX.programs.find(r => r.division === 'D1' && !(r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank) && !(r.rpiHistory || []).some(h => h.year === RPI_SEASON));
+  assert.ok(unrankedD1, 'no unranked Division I program in the index to check the dash with');
+  assert.ok(page.sandbox.tableHtml([rowOf('stanford'), rowOf(unrankedD1.slug)]).includes('<span class="rank-num">—</span>'), 'a row without data in a kept column shows a dash');
+  assert.ok(!page.sandbox.tableHtml([rowOf('stanford'), rowOf(bare.slug)]).includes('<span class="rank-num">—</span>'), 'a Division II row shows the missing-data dash for an RPI that does not apply to it');
   assert.ok(page.sandbox.tableHtml([]).includes('No programs match.'), 'an empty table lost its message');
   S.filters.moreStats = false;
 });
