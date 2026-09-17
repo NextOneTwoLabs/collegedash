@@ -19,11 +19,17 @@ import re
 import urllib.parse
 from collections import Counter, defaultdict
 
+import clubs
 from collect import common
 from collect.camps import classify_camp
 from collect.commitments_tds import record_key
 
 CURRENT_SEASON_FALLBACK = dt.date.today().year
+# Where a real build publishes. Captured at import, before any test swaps common's output dirs, so
+# that a build into a scratch directory can be told from the one that publishes: the club review
+# report lives in data/, which is outside the swap, and a test run must not rewrite it
+# (tests/seasons_test.py and tests/profile_pruning_test.py both run build() into a temp dir).
+_PUBLISHED_PROGRAMS_DIR = os.path.abspath(common.PROGRAMS_OUT_DIR)
 # Sources whose absence is not staleness: a program never collected for camps (new program, collector
 # not yet run) shows "not collected yet" in the UI instead of a stale banner. They are also not in
 # the completeness checks.
@@ -798,6 +804,81 @@ def build_club_lookup(tds, sw) -> dict[str, dict]:
     return out
 
 
+def publishing_run() -> bool:
+    """True when this build writes to public/data, false when a test redirected it elsewhere.
+
+    Only a publishing run may rewrite data/clubs-review.json: that file lives outside the output
+    directories a scratch build swaps, so without this a test run would overwrite the repository's
+    copy on its way past."""
+    return os.path.abspath(common.PROGRAMS_OUT_DIR) == _PUBLISHED_PROGRAMS_DIR
+
+
+def club_candidates(tds, sw) -> dict[str, list[dict]]:
+    """norm name -> every club string we hold for that person, with the date its source speaks for.
+
+    Unlike `build_club_lookup`, which keeps one winner per person, this keeps them all, because
+    `clubs.resolve` has to see a disagreement to settle it by date (issue #228). Dates:
+
+      * SoccerWire publishes a profile-modified date; failing that the profile's created date, and
+        failing both the day we last saw the record;
+      * TopDrawerSoccer publishes no date of its own, so the day we last saw the record is used.
+    """
+    out: dict[str, list[dict]] = defaultdict(list)
+    for r in ((sw or {}).get("data", {}).get("allRecords") or []):
+        if r.get("club"):
+            out[common.norm_name(r["name"])].append(
+                {"raw": r["club"], "source": "SoccerWire",
+                 "updated": r.get("profileModified") or r.get("profileCreated") or r.get("lastSeen")})
+    for r in ((tds or {}).get("data", {}).get("records") or {}).values():
+        if r.get("club"):
+            out[common.norm_name(r["name"])].append(
+                {"raw": r["club"], "source": "TopDrawerSoccer", "updated": r.get("lastSeen") or r.get("firstSeen")})
+    return out
+
+
+def annotate_roster_clubs(roster: dict | None, ath, tds, sw, table=None) -> None:
+    """Give every current-roster player a `clubInfo` (raw string, cleaned key, canonical id when the
+    reviewed table knows it, status) and let the most recent source win, per issue #228.
+
+    The roster page's own Club column is dated with the start of its season, not with the day we
+    fetched it: see `clubs.season_date`."""
+    if not roster:
+        return
+    table = table or clubs.load_table()
+    cands = club_candidates(tds, sw)
+    stored = ((ath or {}).get("data", {}).get("roster") or {}).get("players") or []
+    column = {common.norm_name(p["name"]): (p.get("club") or "").strip() for p in stored}
+    season_date = clubs.season_date(roster.get("season"))
+    for q in roster["players"]:
+        key = common.norm_name(q["name"])
+        found = cands.get(key)
+        if not found:
+            found = next((v for n, v in cands.items() if same_person(n, q["name"])), [])
+        rows = list(found)
+        if column.get(key):
+            rows.append({"raw": column[key], "source": "roster page", "updated": season_date})
+        clubs.annotate(q, rows, table)
+
+
+def observe_clubs(recorder, ath, tds, sw, *, slug: str, division: str) -> None:
+    """Count every club string this program holds into the review report, matched or not.
+
+    SoccerWire's `allRecords` is what the roster join reads, and it contains its `records`, so only
+    `allRecords` is counted here - counting both would double every current recruit."""
+    if recorder is None:
+        return
+    data = (ath or {}).get("data") or {}
+    seasons = [("roster page", ((data.get("roster") or {}).get("players")) or [])]
+    seasons += [("roster page (past season)", pl or []) for pl in (data.get("rosterHistory") or {}).values()]
+    for source, players in seasons:
+        for p in players:
+            recorder.observe(p.get("club"), source=source, division=division, slug=slug)
+    for r in ((tds or {}).get("data", {}).get("records") or {}).values():
+        recorder.observe(r.get("club"), source="TopDrawerSoccer", division=division, slug=slug)
+    for r in ((sw or {}).get("data", {}).get("allRecords") or []):
+        recorder.observe(r.get("club"), source="SoccerWire", division=division, slug=slug)
+
+
 def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dict]:
     a = (ath or {}).get("data") or {}
     roster = a.get("roster")
@@ -1058,8 +1139,21 @@ def camp_counts(rows: list) -> dict:
 
 # ---------- commitments ----------
 
-def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> list[dict]:
+def commitment_club_date(rec: dict, kind: str) -> str | None:
+    """The date a commitment record's club string speaks for; see `club_candidates`."""
+    if kind == "soccerwire":
+        return rec.get("profileModified") or rec.get("profileCreated") or rec.get("lastSeen")
+    if kind == "tds":
+        return rec.get("lastSeen") or rec.get("firstSeen")
+    return rec.get("approvedAt") or rec.get("postedAt")
+
+
+CLUB_SOURCE_NAMES = {"tds": "TopDrawerSoccer", "soccerwire": "SoccerWire"}
+
+
+def resolve_commitments(program, tds, sw, reviewed, news, roster, registry, table=None) -> list[dict]:
     slug = program["slug"]
+    table = table or clubs.load_table()
     tracked = set(registry["season"]["gradYears"])
     merged: list[dict] = []
 
@@ -1095,6 +1189,11 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> l
             if v and (prefer or not c[k]):
                 c[k] = v
         c["sources"].append(source)
+        if rec.get("club"):
+            # kept per source, not collapsed: clubs.resolve settles a disagreement by date (#228)
+            c.setdefault("_clubCandidates", []).append(
+                {"raw": rec["club"], "source": CLUB_SOURCE_NAMES.get(source["kind"], source["kind"]),
+                 "updated": commitment_club_date(rec, source["kind"])})
         fs = source.get("firstSeen")
         if fs and (c["firstSeen"] is None or fs < c["firstSeen"]):
             c["firstSeen"] = fs
@@ -1125,7 +1224,14 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry) -> l
             b["sources"].extend(a["sources"])
             for k in ("pos", "club", "state", "city", "highSchool"):
                 b[k] = b[k] or a[k]
+            b.setdefault("_clubCandidates", []).extend(a.get("_clubCandidates") or [])
             merged.remove(a)
+
+    # One club per recruit, from every source that named one: they agree, or the most recently
+    # updated source wins (issue #228). `clubInfo` carries the raw string and, where the reviewed
+    # table knows it, the canonical club.
+    for c in merged:
+        clubs.annotate(c, c.pop("_clubCandidates", []), table)
 
     roster_names = [p["name"] for p in (roster or {}).get("players", [])]
     recruiting_news = ((news or {}).get("data", {}).get("recruitingItems") or [])
@@ -1226,10 +1332,11 @@ def load_academic_ranks(registry: dict) -> dict[str, dict]:
 # ---------- profile ----------
 
 def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: dict | None = None,
-                  ranks: dict[str, dict] | None = None) -> dict:
+                  ranks: dict[str, dict] | None = None, club_table=None, club_recorder=None) -> dict:
     slug = program["slug"]
     if ranks is None:
         ranks = load_academic_ranks(registry)
+    club_table = club_table or clubs.load_table()
     S = lambda n: common.load_source(slug, n)
     scorecard, climate, wiki, ath = S("scorecard"), S("climate"), S("wikipedia"), S("athletics")
     tds, sw, news, camps = S("commitments.tds"), S("commitments.soccerwire"), S("news"), S("camps")
@@ -1237,6 +1344,8 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
     reviewed = common.load_reviewed(slug)
 
     roster, roster_hist = build_roster(ath, build_club_lookup(tds, sw))
+    annotate_roster_clubs(roster, ath, tds, sw, club_table)
+    observe_clubs(club_recorder, ath, tds, sw, slug=slug, division=program.get("division", "D1"))
     a = program["athletics"]
     profile = {
         "slug": slug, "name": program["name"], "shortName": program.get("shortName"), "nickname": program.get("nickname"),
@@ -1260,7 +1369,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
         "roster": roster,
         "rosterHistory": roster_hist,
         "schedule": build_schedule(ath),
-        "commitments": resolve_commitments(program, tds, sw, reviewed, news, roster, registry),
+        "commitments": resolve_commitments(program, tds, sw, reviewed, news, roster, registry, club_table),
         "news": ({"recruiting": (news["data"].get("recruitingItems") or [])[:25], "latest": (news["data"].get("items") or [])[:12],
                   "_meta": _meta(news)} if news else None),
         "camps": build_camps(camps, news, curated),
@@ -1424,14 +1533,20 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     rpi_finals = load_rpi_finals(registry["season"]["current"])
     state = common.load_refresh_state()
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
+    club_table = clubs.load_table(reload=True)  # reviewed data; a contradictory edit raises here
+    club_recorder = clubs.Recorder(club_table)
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
-        profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks)
+        profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         rows.append(summary_row(profile))
         for c in profile["commitments"]:
-            all_commits.append({**{k: v for k, v in c.items() if k != "sources"}, "sourceCount": len(c["sources"]),
+            # clubInfo is per-profile detail; the cross-program index carries only the canonical id,
+            # so it stays small enough to serve to every visitor.
+            all_commits.append({**{k: v for k, v in c.items() if k not in ("sources", "clubInfo")},
+                                "clubId": (c.get("clubInfo") or {}).get("clubId"),
+                                "sourceCount": len(c["sources"]),
                                 "collegeName": program.get("shortName") or program["name"]})
         for it in ((profile.get("camps") or {}).get("items") or []):
             if camp_in_window(it, window):
@@ -1451,6 +1566,15 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                f"window from {window['from']}; "
                f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
                f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view)")
+    publishing = publishing_run()
+    club_report = (club_recorder.write() if publishing
+                   else club_recorder.report(common.read_json(clubs.REVIEW_PATH)))
+    cs = club_report["summary"]
+    common.log(f"build: clubs {cs['clubStringsMatched']} of {cs['recordsWithAClubString']} club strings matched "
+               f"({cs['matchedShareOfStrings']}%) against {cs['clubsInTable']} reviewed clubs; "
+               f"{cs['clubStringsUnmatched']} unmatched in {cs['distinctUnmatchedKeys']} names "
+               f"({club_report['newSinceLastBuild']['count']} new)"
+               + (" -> data/clubs-review.json" if publishing else " (scratch build: review report not written)"))
     if not validate(registry):
         common.log("!! build: schema validation reported errors (see SCHEMA lines above; `python collegedash.py validate`)")
     return rows
