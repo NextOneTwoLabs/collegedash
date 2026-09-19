@@ -82,7 +82,7 @@ function loadPage({ html = HTML, status = { local: false }, probe = 'redirect', 
         else if (sub === 'camps') u = 'data/camps/index.json';
         else if (sub === 'trends') u = 'data/trends/index.json';
         else if (sub === 'commitments') u = 'data/commitments/index.json';
-        else if (sub === 'status') u = 'status.json';
+        else if (sub === 'status') u = 'archive/refresh-state.json';
       }
       const p = path.join(PUBLIC, u);
       return fs.existsSync(p) ? ok(JSON.parse(fs.readFileSync(p, 'utf8'))) : ok({}, 404);

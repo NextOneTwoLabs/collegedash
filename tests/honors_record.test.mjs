@@ -71,10 +71,10 @@ function loadPage(html = PAGE, publicDir = PUBLIC, files = {}) {
         else if (sub === 'camps') u = 'data/camps/index.json';
         else if (sub === 'trends') u = 'data/trends/index.json';
         else if (sub === 'commitments') u = 'data/commitments/index.json';
-        else if (sub === 'status') u = 'status.json';
+        else if (sub === 'status') u = 'archive/refresh-state.json';
       }
       if (files[u]) return ok(files[u]);
-      if (!u.startsWith('data/')) return ok({}, 404);
+      if (!u.startsWith('data/') && !u.startsWith('archive/')) return ok({}, 404);
       const p = path.join(publicDir, u);
       return fs.existsSync(p) ? ok(JSON.parse(fs.readFileSync(p, 'utf8'))) : ok({}, 404);
     },

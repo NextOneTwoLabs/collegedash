@@ -56,7 +56,7 @@ function makeEnv(fetchLog) {
       else if (sub === 'camps') rel = 'data/camps/index.json';
       else if (sub === 'trends') rel = 'data/trends/index.json';
       else if (sub === 'commitments') rel = 'data/commitments/index.json';
-      else if (sub === 'status') rel = 'status.json';
+      else if (sub === 'status') rel = 'archive/refresh-state.json';
     }
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;

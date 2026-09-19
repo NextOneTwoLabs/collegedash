@@ -43,9 +43,9 @@ function failure(request, status) {
 }
 
 export async function dataApi(request, env) {
+  if (!['GET', 'HEAD'].includes(request.method)) return failure(request, 405);
   const resource = resolveResource(new URL(request.url).pathname);
   if (resource.status) return failure(request, resource.status);
-  if (!['GET', 'HEAD'].includes(request.method)) return failure(request, 405);
   try {
     const stored = await readAsset(request, env, resource);
     if (stored.status === 404) return failure(request, 404);

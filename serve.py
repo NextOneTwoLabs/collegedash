@@ -17,6 +17,8 @@ Usage: python collegedash.py serve [--port 8000]
 
 from __future__ import annotations
 
+import datetime
+import email.utils
 import hashlib
 import http.server
 import json
@@ -115,21 +117,40 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return True
 
         etag = f'"{hashlib.sha256(content).hexdigest()[:16]}"'
+        mtime = os.path.getmtime(full_path)
+        last_modified = email.utils.formatdate(mtime, usegmt=True)
+
         inm = self.headers.get("If-None-Match")
         if inm:
             inm_tags = [t.strip() for t in inm.split(",")]
             if "*" in inm_tags or etag in inm_tags or f"W/{etag}" in inm_tags:
                 self.send_response(304)
                 self.send_header("ETag", etag)
+                self.send_header("Last-Modified", last_modified)
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 return True
+        elif self.headers.get("If-Modified-Since"):
+            ims = self.headers.get("If-Modified-Since")
+            try:
+                ims_dt = email.utils.parsedate_to_datetime(ims)
+                mtime_dt = datetime.datetime.fromtimestamp(int(mtime), tz=datetime.timezone.utc)
+                if mtime_dt <= ims_dt:
+                    self.send_response(304)
+                    self.send_header("ETag", etag)
+                    self.send_header("Last-Modified", last_modified)
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    return True
+            except Exception:
+                pass
 
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(content)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("ETag", etag)
+        self.send_header("Last-Modified", last_modified)
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(content)

@@ -55,7 +55,7 @@ function loadPage(overrides = {}) {
       else if (sub === 'camps') rel = 'data/camps/index.json';
       else if (sub === 'trends') rel = 'data/trends/index.json';
       else if (sub === 'commitments') rel = 'data/commitments/index.json';
-      else if (sub === 'status') rel = 'status.json';
+      else if (sub === 'status') rel = 'archive/refresh-state.json';
     }
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
@@ -83,7 +83,7 @@ function loadPage(overrides = {}) {
         else if (sub === 'camps') u = 'data/camps/index.json';
         else if (sub === 'trends') u = 'data/trends/index.json';
         else if (sub === 'commitments') u = 'data/commitments/index.json';
-        else if (sub === 'status') u = 'status.json';
+        else if (sub === 'status') u = 'archive/refresh-state.json';
       }
       if (Object.prototype.hasOwnProperty.call(overrides, u)) {
         const doc = overrides[u];

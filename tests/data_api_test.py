@@ -63,7 +63,7 @@ def main() -> int:
             ("/api/v1/camps", "data/camps/index.json"),
             ("/api/v1/trends", "data/trends/index.json"),
             ("/api/v1/commitments", "data/commitments/index.json"),
-            ("/api/v1/status", "status.json"),
+            ("/api/v1/status", "archive/refresh-state.json"),
         ]
 
         for route, disk_rel in routes:
@@ -90,15 +90,23 @@ def main() -> int:
                 resp_data = json.loads(body.decode("utf-8"))
                 ok(f"GET {route} payload parity with {disk_rel}", resp_data == disk_data)
 
-        # 2. Test conditional GET (If-None-Match -> 304)
+        # 2. Test conditional GET (If-None-Match -> 304 and If-Modified-Since -> 304)
         status, hdrs, _ = request_raw("127.0.0.1", port, "GET", "/api/v1/programs")
         etag = hdrs.get("ETag")
+        last_modified = hdrs.get("Last-Modified")
         status_cond, hdrs_cond, body_cond = request_raw(
             "127.0.0.1", port, "GET", "/api/v1/programs", headers={"If-None-Match": etag}
         )
-        ok("conditional GET yields 304", status_cond == 304, f"got {status_cond}")
+        ok("conditional GET with INM yields 304", status_cond == 304, f"got {status_cond}")
         ok("304 response has empty body", len(body_cond) == 0, f"body length {len(body_cond)}")
         ok("304 preserves etag", hdrs_cond.get("ETag") == etag)
+
+        if last_modified:
+            status_ims, hdrs_ims, body_ims = request_raw(
+                "127.0.0.1", port, "GET", "/api/v1/programs", headers={"If-Modified-Since": last_modified}
+            )
+            ok("conditional GET with IMS yields 304", status_ims == 304, f"got {status_ims}")
+            ok("IMS 304 response has empty body", len(body_ims) == 0)
 
         # 3. Test HEAD request on v1 route
         status_head, hdrs_head, body_head = request_raw("127.0.0.1", port, "HEAD", "/api/v1/programs")

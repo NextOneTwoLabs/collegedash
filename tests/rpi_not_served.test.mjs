@@ -226,7 +226,7 @@ function loadPage() {
         else if (sub === 'camps') rel = 'data/camps/index.json';
         else if (sub === 'trends') rel = 'data/trends/index.json';
         else if (sub === 'commitments') rel = 'data/commitments/index.json';
-        else if (sub === 'status') rel = 'status.json';
+        else if (sub === 'status') rel = 'archive/refresh-state.json';
       }
       const file = path.join(PUBLIC, rel);
       if (!file.startsWith(PUBLIC) || !fs.existsSync(file)) return { ok: false, status: 404, async json() { throw new Error('404'); } };

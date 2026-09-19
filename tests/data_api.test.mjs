@@ -63,7 +63,7 @@ test('all 6 v1 routes return 200, valid JSON, and edge cache headers', async () 
     { path: '/api/v1/camps', file: 'data/camps/index.json' },
     { path: '/api/v1/trends', file: 'data/trends/index.json' },
     { path: '/api/v1/commitments', file: 'data/commitments/index.json' },
-    { path: '/api/v1/status', file: 'status.json' },
+    { path: '/api/v1/status', file: 'archive/refresh-state.json' },
   ];
 
   for (const r of routes) {
@@ -146,6 +146,11 @@ test('non-GET/HEAD methods on v1 return 405 Method Not Allowed with Allow header
     assert.equal(res.headers.get('allow'), 'GET, HEAD');
     assert.deepEqual(await res.json(), { ok: false, error: 'Method not allowed' });
   }
+
+  // Method check takes precedence over slug syntax check (returns 405, not 400)
+  const badSlugPost = await worker.fetch(new Request(HOST + '/api/v1/programs/bad..slug', { method: 'POST' }), env);
+  assert.equal(badSlugPost.status, 405, 'POST on bad slug should return 405');
+  assert.equal(badSlugPost.headers.get('allow'), 'GET, HEAD');
 });
 
 test('direct access to /data/* and /archive/* is refused with 404 JSON on GET and empty on HEAD', async () => {
