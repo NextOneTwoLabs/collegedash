@@ -67,14 +67,24 @@ function loadPage({ html = HTML, status = { local: false }, probe = 'redirect', 
     fetch: async (url, init) => {
       requests.push({ url: String(url), init });
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return JSON.parse(JSON.stringify(body)); } });
-      if (url === 'api/status') return status ? ok(status) : ok({}, 404);
-      if (url === 'api/ask/status') {
+      if (url === 'api/status' || url === '/api/status') return status ? ok(status) : ok({}, 404);
+      if (url === 'api/ask/status' || url === '/api/ask/status') {
         if (probe === 'network') throw new TypeError('Failed to fetch');
         if (probe === 'redirect') return { ok: false, status: 0, type: 'opaqueredirect', async json() { throw new SyntaxError('opaque'); } };
         return typeof probe === 'number' ? ok({ error: 'no' }, probe) : ok(probe);
       }
-      if (url === 'api/ask') return answer ? ok(answer.body, answer.status || 200) : ok({ error: 'no' }, 404);
-      const p = path.join(PUBLIC, String(url));
+      if (url === 'api/ask' || url === '/api/ask') return answer ? ok(answer.body, answer.status || 200) : ok({ error: 'no' }, 404);
+      let u = String(url).replace(/^\//, '');
+      if (u.startsWith('api/v1/')) {
+        const sub = u.slice('api/v1/'.length);
+        if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub.startsWith('programs/')) u = `data/programs/${sub.slice('programs/'.length)}.json`;
+        else if (sub === 'camps') u = 'data/camps/index.json';
+        else if (sub === 'trends') u = 'data/trends/index.json';
+        else if (sub === 'commitments') u = 'data/commitments/index.json';
+        else if (sub === 'status') u = 'status.json';
+      }
+      const p = path.join(PUBLIC, u);
       return fs.existsSync(p) ? ok(JSON.parse(fs.readFileSync(p, 'utf8'))) : ok({}, 404);
     },
   };

@@ -904,7 +904,7 @@ async function getJSON(url, opts) {
 }
 async function loadIndex() {
   if (S.index) return S.index;
-  S.index = await getJSON('data/programs/index.json');
+  S.index = await getJSON('/api/v1/programs');
   S.index.programs.forEach(prepareSearch);
   /* Conference and division tallies, both derived from the rows that actually loaded and never from a
      list of divisions written down here. `divisions` is every distinct value of p.division, sorted, so
@@ -926,14 +926,14 @@ async function loadIndex() {
      that is how it already behaves and changing it is not this change's business. */
   const live = new Set(S.index.divisions);
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
-  getJSON('archive/refresh-state.json').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
+  getJSON('/api/v1/status').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
   getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
   // Ask is owner-only (#179): only Cloudflare Access's /api/ask* app can say so. redirect:'manual' means a visitor's probe ends as an unfollowed redirect to the login page - never loaded, and read as off like any error.
   getJSON('api/ask/status', { redirect: 'manual' }).then(r => { if (r.ask === true && !S.ask) askSwitchedOn(); }).catch(() => { });
   return S.index;
 }
 async function loadProfile(slug) {
-  if (!S.profiles[slug]) S.profiles[slug] = await getJSON(`data/programs/${slug}.json`);
+  if (!S.profiles[slug]) S.profiles[slug] = await getJSON(`/api/v1/programs/${slug}`);
   return S.profiles[slug];
 }
 /* The site-wide camps index, fetched on first entry to #/camps and never before: a visitor who
@@ -946,7 +946,7 @@ async function loadProfile(slug) {
    honestly rather than throw. */
 async function loadCamps() {
   if (!S.camps) {
-    const doc = await getJSON('data/camps/index.json');
+    const doc = await getJSON('/api/v1/camps');
     S.camps = { updated: doc?.updated || null, window: doc?.window || null, counts: doc?.counts || null,
                 camps: Array.isArray(doc?.camps) ? doc.camps : [] };
   }
@@ -957,7 +957,7 @@ async function loadCamps() {
    index is built by the daily refresh, so a page deployed before the next refresh has none) is left to
    the caller, which says so rather than showing an empty table. */
 async function loadTrends() {
-  if (!S.trends) S.trends = await getJSON('data/trends/index.json');
+  if (!S.trends) S.trends = await getJSON('/api/v1/trends');
   return S.trends;
 }
 const observedIso = () => S.refresh?.updated || S.index?.updated;

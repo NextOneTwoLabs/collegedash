@@ -18,12 +18,10 @@ compatibility_date = "2026-08-31"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-# "/data/rpi/*" is here so worker.js can refuse it with a 404 (issue #100). The RPI tables stay in
-# public/data/rpi because the build and the collector read them there, so they are still uploaded
-# as assets. An asset is served *before* the Worker runs unless its path matches this list, so
-# deleting the entry exposes every file under /data/rpi again. tests/rpi_not_served.test.mjs
-# fails if it goes, and .github/workflows/rpi-not-served.yml checks the live site.
-run_worker_first = ["/", "/api/*", "/data/rpi/*"]
+# "/archive*" and "/data*" are here so worker.js can refuse them with a 404, blocking direct visitor
+# access to raw archive and data JSON files while /api/v1/* serves public data. The files stay in public/
+# because the build and the collector write them there, so they are still uploaded as assets.
+run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 
 # Visitor feedback is stored one key per submission in the KV namespace titled
 # COLLEGEDASH_FEEDBACK on the NextOneTwoLabs account. The title is prefixed because the bare

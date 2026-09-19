@@ -47,7 +47,17 @@ function loadPage(overrides = {}) {
   const store = new Map();
   const replaced = [];
   const readPublic = url => {
-    const p = path.join(PUBLIC, url);
+    let rel = url.replace(/^\//, '');
+    if (rel.startsWith('api/v1/')) {
+      const sub = rel.slice('api/v1/'.length);
+      if (sub === 'programs') rel = 'data/programs/index.json';
+      else if (sub.startsWith('programs/')) rel = `data/programs/${sub.slice('programs/'.length)}.json`;
+      else if (sub === 'camps') rel = 'data/camps/index.json';
+      else if (sub === 'trends') rel = 'data/trends/index.json';
+      else if (sub === 'commitments') rel = 'data/commitments/index.json';
+      else if (sub === 'status') rel = 'status.json';
+    }
+    const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
   };
   const sandbox = {
@@ -61,11 +71,25 @@ function loadPage(overrides = {}) {
     localStorage: { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) },
     innerWidth: 1400, addEventListener() { },
     fetch: async url => {
-      if (Object.prototype.hasOwnProperty.call(overrides, url)) {
-        const doc = overrides[url];
+      let u = String(url);
+      if (Object.prototype.hasOwnProperty.call(overrides, u)) {
+        const doc = overrides[u];
         return { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(doc)); } };
       }
-      const body = readPublic(url);
+      if (u.startsWith('/api/v1/')) {
+        const sub = u.slice('/api/v1/'.length);
+        if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub.startsWith('programs/')) u = `data/programs/${sub.slice('programs/'.length)}.json`;
+        else if (sub === 'camps') u = 'data/camps/index.json';
+        else if (sub === 'trends') u = 'data/trends/index.json';
+        else if (sub === 'commitments') u = 'data/commitments/index.json';
+        else if (sub === 'status') u = 'status.json';
+      }
+      if (Object.prototype.hasOwnProperty.call(overrides, u)) {
+        const doc = overrides[u];
+        return { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(doc)); } };
+      }
+      const body = readPublic(u);
       if (body == null) return { ok: false, status: 404, async json() { throw new Error('404'); } };
       return { ok: true, status: 200, async json() { return JSON.parse(body); } };
     },

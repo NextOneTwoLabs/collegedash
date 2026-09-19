@@ -48,7 +48,17 @@ function makeEnv(fetchLog) {
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map();
   const readPublic = url => {
-    const p = path.join(PUBLIC, url);
+    let rel = url.replace(/^\//, '');
+    if (rel.startsWith('api/v1/')) {
+      const sub = rel.slice('api/v1/'.length);
+      if (sub === 'programs') rel = 'data/programs/index.json';
+      else if (sub.startsWith('programs/')) rel = `data/programs/${sub.slice('programs/'.length)}.json`;
+      else if (sub === 'camps') rel = 'data/camps/index.json';
+      else if (sub === 'trends') rel = 'data/trends/index.json';
+      else if (sub === 'commitments') rel = 'data/commitments/index.json';
+      else if (sub === 'status') rel = 'status.json';
+    }
+    const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
   };
   const sandbox = {
@@ -157,7 +167,7 @@ test('the published camps index renders as it actually is today', async () => {
   // must equal the id rows that join to a program.
   sandbox.location.hash = '#/camps';
   await sandbox.renderCamps();
-  assert.ok(fetchLog.includes('data/camps/index.json'), 'opening the camp view did not fetch the index');
+  assert.ok(fetchLog.includes('/api/v1/camps') || fetchLog.includes('data/camps/index.json'), 'opening the camp view did not fetch the index');
 
   const bySlug = new Map(S.index.programs.map(p => [p.slug, p]));
   const idRows = (published.camps || []).filter(c => c.campType === 'id');

@@ -1,6 +1,8 @@
+import { dataApi } from './api/data-api.mjs';
+
 // Entry point for the deployed Worker. The site itself is the static files in public/ (see
-// [assets] in wrangler.toml). This script does four things and runs ahead of the static assets
-// only for "/", "/api/*" and "/data/rpi/*" (run_worker_first in wrangler.toml), so every other
+// [assets] in wrangler.toml). This script does five things and runs ahead of the static assets
+// only for "/", "/api/*", "/archive*" and "/data*" (run_worker_first in wrangler.toml), so every other
 // file is served as a free static asset:
 //
 //   1. Sends the workers.dev address to the canonical custom domain. Browsers carry the #fragment
@@ -8,13 +10,13 @@
 //   2. Answers GET /api/status with {"local":false}. The local dev server (serve.py) answers true;
 //      the front end uses it to decide whether write actions are available. Before this existed
 //      the request 404'd and logged a console error on every page load (issue #11).
-//   3. Accepts footer feedback at POST /api/feedback and stores it in the FEEDBACK KV namespace,
+//   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240).
+//   4. Accepts footer feedback at POST /api/feedback and stores it in the FEEDBACK KV namespace,
 //      one key per submission. Stored: when it was sent, the message, the reply email if the
 //      visitor gave one, and which page they were on. No IP, no user agent.
-//   4. Answers 404 for /data/rpi and everything under it (issue #100). The RPI tables are committed
-//      and uploaded with the other assets, because the build and the collector read them from
-//      public/data/rpi, but the site does not serve them.
-//   5. POST /api/ask (issue #165, AI prototype 1), SWITCHED OFF. It exists only when BOTH the
+//   5. Answers 404 for /data/* and /archive/* (issues #100, #240). The raw tables stay in public/
+//      because the build and the collector read them there, but the site does not serve them directly.
+//   6. POST /api/ask (issue #165, AI prototype 1), SWITCHED OFF. It exists only when BOTH the
 //      ASK_ENABLED variable is "true" AND an ANTHROPIC_API_KEY secret is set; otherwise the request
 //      falls through to the static assets exactly like any unknown /api path (404), and /api/status
 //      stays {"local":false}. When on, it answers only the owner - a Cloudflare Access token verified
@@ -55,12 +57,10 @@ export default {
     // Off: fall through to the assets below, the same path - and so the same 404 - as any unknown /api route.
     if (url.pathname === '/api/ask' && askEnabled(env)) return ask(request, env);
     if (url.pathname === '/api/ask/status' && askEnabled(env)) return askStatus(request, env);
+    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await dataApi(request, env);
 
-    // The RPI tables stay in public/data/rpi (the build and the collector read them there) but are
-    // not served (issue #100). This answers only because wrangler.toml lists "/data/rpi/*" in
-    // run_worker_first; without that entry the file is served as a static asset and this line never
-    // runs. tests/rpi_not_served.test.mjs fails if either half is removed.
-    if (isRpiPath(url.pathname)) return new Response(null, { status: 404 });
+    // Block direct access to raw data and archive files (issues #100, #240).
+    if (isBlockedRawPath(url.pathname)) return notFound(request);
 
     if (url.hostname.endsWith('.workers.dev')) {
       url.hostname = CANONICAL_HOST;
@@ -73,14 +73,19 @@ export default {
   get ask() { return ASK; },
 };
 
-// True for /data/rpi and anything under it, compared the way the asset server resolves a path:
-// each segment percent-decoded, repeated slashes collapsed, and case ignored. The run_worker_first
-// pattern only sees the raw pathname, so /data/rp%69/current.json and //data/rpi/current.json do
-// not match it. The asset server decodes those, finds the file and answers 307 to the canonical
-// /data/rpi/... path, which does match. Deciding here on the decoded form as well means a request
-// that reaches the Worker by any route is refused, whatever it looked like. 404, not 403: a 403
-// would confirm that the file exists.
-function isRpiPath(pathname) {
+const notFound = request =>
+  new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Not found' }), {
+    status: 404,
+    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+  });
+
+// True for /data and /archive and anything under them (issues #100, #240), compared the way
+// the asset server resolves a path: each segment percent-decoded, repeated slashes collapsed, and
+// case ignored. The run_worker_first pattern only sees the raw pathname, so /data/rp%69/current.json
+// and //data/programs/index.json do not match it. The asset server decodes those, finds the file and
+// answers 307 to the canonical path, which does match. Deciding here on the decoded form as well means
+// a request that reaches the Worker by any route is refused with a JSON 404.
+function isBlockedRawPath(pathname) {
   const decoded = pathname.split('/').map((seg) => {
     try {
       return decodeURIComponent(seg);
@@ -88,7 +93,7 @@ function isRpiPath(pathname) {
       return seg;
     }
   }).join('/').replace(/\/+/g, '/').toLowerCase();
-  return decoded === '/data/rpi' || decoded.startsWith('/data/rpi/');
+  return /^\/(archive|data)($|\/)/.test(decoded);
 }
 
 async function feedback(request, env) {

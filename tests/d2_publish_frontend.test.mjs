@@ -112,9 +112,20 @@ function loadPage(html = PAGE, files = {}) {
     innerWidth: 1400, addEventListener() { }, alert() { },
     fetch: async (url) => {
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return clone(body); } });
-      const u = String(url);
+      let u = String(url);
       if (files[u]) return ok(files[u]);
-      if (!u.startsWith('data/')) return ok({}, 404);
+      if (u === '/api/v1/programs' && files['data/programs/index.json']) return ok(files['data/programs/index.json']);
+      if (u.startsWith('/api/v1/programs/')) {
+        const slug = u.slice('/api/v1/programs/'.length);
+        if (files[`data/programs/${slug}.json`]) return ok(files[`data/programs/${slug}.json`]);
+      }
+      if (u === '/api/v1/programs') u = 'data/programs/index.json';
+      else if (u === '/api/v1/status') u = 'archive/refresh-state.json';
+      else if (u.startsWith('/api/v1/programs/')) u = `data/programs/${u.slice('/api/v1/programs/'.length)}.json`;
+      else if (u === '/api/v1/camps') u = 'data/camps/index.json';
+      else if (u === '/api/v1/trends') u = 'data/trends/index.json';
+      else if (u === '/api/v1/commitments') u = 'data/commitments/index.json';
+      if (!u.startsWith('data/') && !u.startsWith('archive/')) return ok({}, 404);
       const p = path.join(PUBLIC, u);
       return fs.existsSync(p) ? ok(JSON.parse(fs.readFileSync(p, 'utf8'))) : ok({}, 404);
     },
