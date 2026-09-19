@@ -95,13 +95,14 @@ test('every file under public/data/rpi is routed to the Worker first', () => {
     'wrangler.toml [assets] run_worker_first needs "/data/rpi/*"');
 });
 
-test('the matcher is not vacuous: the rest of the site is still served straight from assets', () => {
-  // If this ever fails because run_worker_first became `true`, every request runs the Worker. That is
-  // still safe for /data/rpi, but it bills a Worker invocation for every file; decide on purpose.
-  for (const p of ['/data/programs/index.json', '/data/registry.json', '/index.html', '/data/rpi.json', '/data/rpix/x.json']) {
-    assert.equal(workerRunsFirst(CONFIG.runWorkerFirst, p), false, `${p} now runs the Worker first`);
+test('the matcher is not vacuous: static assets outside data/archive bypass the worker', () => {
+  // Static assets outside data/archive are served straight from assets
+  for (const p of ['/index.html', '/robots.txt', '/favicon.ico']) {
+    assert.equal(workerRunsFirst(CONFIG.runWorkerFirst, p), false, `${p} runs the Worker first`);
   }
-  assert.equal(workerRunsFirst(CONFIG.runWorkerFirst, '/api/feedback'), true, '/api/* no longer reaches the Worker');
+  for (const p of ['/data/programs/index.json', '/data/registry.json', '/archive/2024.json', '/api/feedback']) {
+    assert.equal(workerRunsFirst(CONFIG.runWorkerFirst, p), true, `${p} should run Worker first`);
+  }
 });
 
 /* ---------- 2. the Worker refuses every one of them ---------- */
@@ -118,7 +119,7 @@ function assetsEnv() {
         calls.push(p);
         const file = path.join(PUBLIC, decodeURIComponent(p));
         return file.startsWith(PUBLIC) && fs.existsSync(file) && fs.statSync(file).isFile()
-          ? new Response(fs.readFileSync(file), { status: 200 })
+          ? new Response(fs.readFileSync(file), { status: 200, headers: { 'content-type': 'application/json' } })
           : new Response(null, { status: 404 });
       },
     },
@@ -129,7 +130,12 @@ async function expectRefused(url, init) {
   const env = assetsEnv();
   const res = await worker.fetch(new Request(url, init), env);
   assert.equal(res.status, 404, `${init?.method || 'GET'} ${url} answered ${res.status}`);
-  assert.equal(await res.text(), '', `${url}: the 404 has a body`);
+  // In issue #240, blocked raw data endpoints return JSON 404 on GET and empty body on HEAD
+  if ((init?.method || 'GET').toUpperCase() === 'HEAD') {
+    assert.equal(await res.text(), '', `${url}: HEAD 404 has a non-empty body`);
+  } else {
+    assert.equal(await res.text(), '{"ok":false,"error":"Not found"}', `${url}: GET 404 does not match JSON body`);
+  }
   assert.deepEqual(env.calls, [], `${url}: the Worker handed the request to the asset server`);
 }
 
@@ -155,10 +161,11 @@ test('the Worker refuses encoded, doubled-slash, differently-cased and workers.d
 
 test('everything else the Worker handles is unaffected', async () => {
   const env = assetsEnv();
-  const index = await worker.fetch(new Request(`${HOST}/data/programs/index.json`), env);
-  assert.equal(index.status, 200);
-  assert.deepEqual(env.calls, ['/data/programs/index.json']);
-  for (const p of ['/', '/data/rpi.json', '/data/rpix/current.json']) {
+  const apiRes = await worker.fetch(new Request(`${HOST}/api/v1/programs`), env);
+  assert.equal(apiRes.status, 200);
+  assert.ok(apiRes.headers.get('content-type')?.startsWith('application/json'));
+
+  for (const p of ['/']) {
     const e = assetsEnv();
     await worker.fetch(new Request(HOST + p), e);
     assert.deepEqual(e.calls, [p], `${p} did not reach the asset server`);
@@ -211,7 +218,17 @@ function loadPage() {
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
     fetch: async url => {
       fetchLog.push(url);
-      const file = path.join(PUBLIC, url);
+      let rel = url.replace(/^\//, '');
+      if (rel.startsWith('api/v1/')) {
+        const sub = rel.slice('api/v1/'.length);
+        if (sub === 'programs') rel = 'data/programs/index.json';
+        else if (sub.startsWith('programs/')) rel = `data/programs/${sub.slice('programs/'.length)}.json`;
+        else if (sub === 'camps') rel = 'data/camps/index.json';
+        else if (sub === 'trends') rel = 'data/trends/index.json';
+        else if (sub === 'commitments') rel = 'data/commitments/index.json';
+        else if (sub === 'status') rel = 'archive/refresh-state.json';
+      }
+      const file = path.join(PUBLIC, rel);
       if (!file.startsWith(PUBLIC) || !fs.existsSync(file)) return { ok: false, status: 404, async json() { throw new Error('404'); } };
       const body = fs.readFileSync(file, 'utf8');
       return { ok: true, status: 200, async json() { return JSON.parse(body); } };
@@ -227,7 +244,7 @@ test('loading the page requests no RPI table', async () => {
   const { sandbox, fetchLog } = loadPage();
   await sandbox.loadIndex();
   for (let i = 0; i < 10; i++) await new Promise(r => setTimeout(r, 0));
-  assert.ok(fetchLog.includes('data/programs/index.json'), 'the page did not load its index, so the log proves nothing');
+  assert.ok(fetchLog.includes('/api/v1/programs') || fetchLog.includes('data/programs/index.json'), 'the page did not load its index, so the log proves nothing');
   assert.deepEqual(fetchLog.filter(u => u.includes('rpi')), []);
 });
 

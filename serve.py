@@ -17,16 +17,21 @@ Usage: python collegedash.py serve [--port 8000]
 
 from __future__ import annotations
 
+import datetime
+import email.utils
+import hashlib
 import http.server
 import json
 import os
+import posixpath
 import re
 import traceback
+import urllib.parse
 from functools import partial
 
 from collect import common
 
-SLUG_RE = re.compile(r"^[a-z0-9-]+$")
+SLUG_RE = re.compile(r"^[a-z0-9-]{1,64}$")
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -34,14 +39,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if "/api/" in (args[0] if args else ""):
             super().log_message(fmt, *args)
 
-    def _json(self, code: int, obj) -> None:
+    def _json(self, code: int, obj, extra_headers: dict | None = None) -> None:
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        if extra_headers:
+            for k, v in extra_headers.items():
+                self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(body)
+        if self.command != "HEAD":
+            self.wfile.write(body)
 
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
@@ -53,7 +62,112 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         name = {"curated": "curated.json", "review": "commitments.reviewed.json"}.get(kind)
         return os.path.join(common.program_dir(slug), name) if name else None
 
+    def _handle_blocked(self) -> bool:
+        raw_path = urllib.parse.urlparse(self.path).path
+        norm_path = posixpath.normpath(urllib.parse.unquote(raw_path))
+        if re.match(r"^/(archive|data)($|/)", norm_path, re.IGNORECASE):
+            self._json(404, {"ok": False, "error": "Not found"})
+            return True
+        return False
+
+    def _handle_v1(self) -> bool:
+        path = urllib.parse.urlparse(self.path).path
+        if path == "/api/v1" or path == "/api/v1/":
+            self._json(404, {"ok": False, "error": "Not found"})
+            return True
+        if not path.startswith("/api/v1/"):
+            return False
+
+        if self.command not in ("GET", "HEAD"):
+            self._json(405, {"ok": False, "error": "Method not allowed"}, {"Allow": "GET, HEAD"})
+            return True
+
+        sub = path[len("/api/v1/"):]
+        rel_file = None
+        if sub == "status":
+            rel_file = os.path.join("archive", "refresh-state.json")
+        elif sub == "programs":
+            rel_file = os.path.join("data", "programs", "index.json")
+        elif sub.startswith("programs/"):
+            slug = sub[len("programs/"):]
+            if not SLUG_RE.match(slug):
+                self._json(400, {"ok": False, "error": "Invalid identifier"})
+                return True
+            rel_file = os.path.join("data", "programs", f"{slug}.json")
+        elif sub == "camps":
+            rel_file = os.path.join("data", "camps", "index.json")
+        elif sub == "trends":
+            rel_file = os.path.join("data", "trends", "index.json")
+        elif sub == "commitments":
+            rel_file = os.path.join("data", "commitments", "index.json")
+        else:
+            self._json(404, {"ok": False, "error": "Not found"})
+            return True
+
+        full_path = os.path.join(common.PUBLIC_DIR, rel_file)
+        if not os.path.isfile(full_path):
+            self._json(404, {"ok": False, "error": "Not found"})
+            return True
+
+        try:
+            with open(full_path, "rb") as f:
+                content = f.read()
+        except OSError:
+            self._json(503, {"ok": False, "error": "Data is temporarily unavailable"})
+            return True
+
+        etag = f'"{hashlib.sha256(content).hexdigest()[:16]}"'
+        mtime = os.path.getmtime(full_path)
+        last_modified = email.utils.formatdate(mtime, usegmt=True)
+
+        inm = self.headers.get("If-None-Match")
+        if inm:
+            inm_tags = [t.strip() for t in inm.split(",")]
+            if "*" in inm_tags or etag in inm_tags or f"W/{etag}" in inm_tags:
+                self.send_response(304)
+                self.send_header("ETag", etag)
+                self.send_header("Last-Modified", last_modified)
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                return True
+        elif self.headers.get("If-Modified-Since"):
+            ims = self.headers.get("If-Modified-Since")
+            try:
+                ims_dt = email.utils.parsedate_to_datetime(ims)
+                mtime_dt = datetime.datetime.fromtimestamp(int(mtime), tz=datetime.timezone.utc)
+                if mtime_dt <= ims_dt:
+                    self.send_response(304)
+                    self.send_header("ETag", etag)
+                    self.send_header("Last-Modified", last_modified)
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    return True
+            except Exception:
+                pass
+
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(content)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("ETag", etag)
+        self.send_header("Last-Modified", last_modified)
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(content)
+        return True
+
+    def do_HEAD(self):
+        if self._handle_v1():
+            return
+        if self._handle_blocked():
+            return
+        super().do_HEAD()
+
     def do_GET(self):
+        if self._handle_v1():
+            return
+        if self._handle_blocked():
+            return
         if self.path == "/api/status":
             return self._json(200, {"local": True, "root": common.ROOT})
         m = re.match(r"^/api/(curated|review)/([^/?]+)$", self.path)
@@ -81,6 +195,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_PUT(self):
+        if self._handle_v1():
+            return
+        if self._handle_blocked():
+            return
         m = re.match(r"^/api/(curated|review)/([^/?]+)$", self.path)
         if not m:
             return self._json(404, {"error": "unknown endpoint"})
@@ -100,6 +218,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self._json(500, {"error": str(e)})
 
     def do_POST(self):
+        if self._handle_v1():
+            return
+        if self._handle_blocked():
+            return
         m = re.match(r"^/api/queue/([^/?]+)$", self.path)
         if not m:
             return self._json(404, {"error": "unknown endpoint"})

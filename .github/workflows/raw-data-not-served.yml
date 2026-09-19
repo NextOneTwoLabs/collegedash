@@ -1,0 +1,76 @@
+name: Raw data not served
+
+# Asks the live site whether it blocks raw data paths under /data/* and /archive/* (issue #100, #240).
+#
+# Raw JSON files stay committed in public/data and public/archive, because the build and offline tools
+# read them there, so every deploy still uploads them as static assets. What keeps them off the site is
+# two lines of config: "/data*" and "/archive*" in wrangler.toml's run_worker_first, and the
+# isBlockedRawPath 404 branch in worker.js.
+#
+# tests/rpi_not_served.test.mjs and tests/data_api.test.mjs guard both offline, but only against the rules
+# as this repository models them. This is the check that Cloudflare, on the day, agrees: a platform default
+# that changes, a dashboard setting nobody committed, or a deploy that did not pick up wrangler.toml would
+# all pass the offline test and show up here.
+#
+# It never runs on a pull request, because a PR is not what is deployed. It runs:
+#   - after every push to main, since each push redeploys. It waits first, so that it probes the new
+#     deploy and not the one before it. A push that removed the block would otherwise be checked
+#     against the old deploy, pass, and go unnoticed until the next scheduled run.
+#   - daily, so a change made outside the repository is found within a day.
+#   - on demand.
+#
+# It passes only on a 404 for every raw path and a 200 for controls (/index.html and /api/v1/programs).
+# The controls are what stop a site that answers 404 to everything (a broken deploy) from reading as "blocked".
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "37 15 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: raw-data-not-served
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Wait for the push to deploy
+        if: github.event_name == 'push'
+        run: sleep 300
+
+      - name: Probe the live site
+        env:
+          SITE: https://college.nextonetwo.com
+        run: |
+          # -L follows the asset server's 307 for an encoded path to the canonical one, so the code
+          # checked is the one a browser would end on.
+          code() { curl -sS -L -o /dev/null -w '%{http_code}' --max-time 30 "$SITE$1" || echo "000"; }
+          blocked="/data/rpi/current.json /data/rpi/2007.json /data/rpi/weekly/2025/2025-12-08.json /data/rp%69/current.json /data/programs/index.json /data/registry.json /archive/2024.json"
+          # A deploy can still be propagating. Retry a failing probe for up to ten minutes, and fail
+          # only if it never settles.
+          for attempt in $(seq 1 21); do
+            bad=""
+            control1=$(code /index.html)
+            [ "$control1" = "200" ] || bad="$bad /index.html=$control1(want 200)"
+            control2=$(code /api/v1/programs)
+            [ "$control2" = "200" ] || bad="$bad /api/v1/programs=$control2(want 200)"
+            for p in $blocked; do
+              c=$(code "$p")
+              [ "$c" = "404" ] || bad="$bad $p=$c(want 404)"
+            done
+            if [ -z "$bad" ]; then
+              echo "OK: every raw data path answers 404 and the controls answer 200"
+              exit 0
+            fi
+            echo "attempt $attempt:$bad"
+            sleep 30
+          done
+          echo "::error title=raw-data-not-served::The live site is not blocking raw data paths as it should:$bad. Check wrangler.toml run_worker_first and isBlockedRawPath in worker.js (issue #240)."
+          exit 1

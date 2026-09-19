@@ -97,7 +97,7 @@ function loadPage(indexDoc) {
   const src = SOURCE_LINES.slice(a + 1, b).join('\n')
     + '\n;Object.assign(globalThis, { S, matchScore, searchMatches, normText, prepareSearch, loadIndex });\n';
   const fetchLog = [];
-  const sandbox = makeEnv(fetchLog, { [INDEX_URL]: indexDoc });
+  const sandbox = makeEnv(fetchLog, { [INDEX_URL]: indexDoc, '/api/v1/programs': indexDoc });
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return sandbox;

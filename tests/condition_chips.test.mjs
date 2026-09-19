@@ -75,7 +75,7 @@ function loadPage({ index, seed = {} } = {}) {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map(Object.entries(seed));
-  const serve = { [INDEX_URL]: index || SHIPPED, 'data/camps/index.json': CAMPS };
+  const serve = { [INDEX_URL]: index || SHIPPED, '/api/v1/programs': index || SHIPPED, '/api/v1/camps': CAMPS, 'data/camps/index.json': CAMPS };
   const sandbox = {
     console, setTimeout, clearTimeout, Promise, Map, Set, Date, JSON, Math, Number, String, Array,
     Object, RegExp, Intl, isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
