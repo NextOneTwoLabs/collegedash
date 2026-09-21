@@ -25,7 +25,7 @@
     "roster": "https://www.uuathletics.com/sports/womens-soccer/roster",
     "schedule": "https://www.uuathletics.com/sports/womens-soccer/schedule",
     "news": "https://www.uuathletics.com/sports/womens-soccer/news",
-    "camps": "https://www.alfordsoccercamp.com/index.cfm",
+    "camps": "http://www.alfordsoccercamp.com//index.cfm",
     "tds": null,
     "wikipedia": null,
     "x": null,
@@ -232,8 +232,8 @@
     "headCoach": {
       "name": "Josh Alford",
       "title": "Head Coach",
-      "since": null,
-      "seasons": null,
+      "since": 2022,
+      "seasons": 5,
       "bioUrl": "https://www.uuathletics.com/sports/womens-soccer/roster/coaches/josh-alford/791",
       "social": {}
     },
@@ -293,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.uuathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-20T14:41:55Z"
+        "asOf": "2026-09-21T17:05:29Z"
       }
     }
   },
@@ -945,7 +945,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uuathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-20T14:41:55Z"
+      "asOf": "2026-09-21T17:05:29Z"
     }
   },
   "rosterHistory": {
@@ -1818,6 +1818,7 @@
         "score": null,
         "links": {
           "watch": "https://flosports.link/4bVp3z0",
+          "live stats": "https://uahchargers.com/sidearmstats/wsoc/summary",
           "history": "https://www.uuathletics.com/sports/womens-soccer/opponent-history/uah/15"
         }
       },
@@ -1889,6 +1890,7 @@
         "score": null,
         "links": {
           "watch": "https://flosports.link/4h5EqIE",
+          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666801",
           "history": "https://www.uuathletics.com/sports/womens-soccer/opponent-history/university-of-west-alabama/7"
         }
       },
@@ -1924,6 +1926,7 @@
         "score": null,
         "links": {
           "watch": "https://flosports.link/4xeLabS",
+          "live stats": "https://montevallofalcons.com/sidearmstats/wsoc/summary",
           "history": "https://www.uuathletics.com/sports/womens-soccer/opponent-history/university-of-montevallo/127"
         }
       },
@@ -2979,7 +2982,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uuathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-20T14:41:55Z"
+      "asOf": "2026-09-21T17:05:29Z"
     }
   },
   "commitments": [],
@@ -3062,58 +3065,34 @@
     "_meta": {
       "source": "news",
       "url": "https://www.uuathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-20T14:41:59Z"
+      "asOf": "2026-09-21T17:05:33Z"
     }
   },
   "camps": {
     "url": "http://www.alfordsoccercamp.com//index.cfm",
     "hubUrl": null,
-    "finalUrl": "https://www.alfordsoccercamp.com/index.cfm",
+    "finalUrl": "http://www.alfordsoccercamp.com//index.cfm",
     "host": "www.alfordsoccercamp.com",
     "vendor": "external",
-    "pageTitle": "Alford Soccer Camp (Union Women's Soccer) - powered by Oasys Sports",
+    "pageTitle": null,
     "discoveredVia": "anchor",
     "robotsBlocked": false,
-    "fetchError": null,
-    "parsed": true,
-    "newsScanned": 10,
-    "items": [
-      {
-        "name": "ID Camp",
-        "startDate": "2026-12-12",
-        "endDate": "2026-12-12",
-        "dateText": "December 12th, 2026",
-        "precision": "day",
-        "yearInferred": false,
-        "location": null,
-        "ages": null,
-        "price": null,
-        "registerUrl": null,
-        "sourceUrl": "https://www.alfordsoccercamp.com/index.cfm",
-        "confidence": "heuristic",
-        "kind": "camp",
-        "campType": "id",
-        "sources": [
-          {
-            "kind": "camp",
-            "name": "ID Camp",
-            "sourceUrl": "https://www.alfordsoccercamp.com/index.cfm"
-          }
-        ]
-      }
-    ],
+    "fetchError": "HTTP 403 for http://www.alfordsoccercamp.com//index.cfm",
+    "parsed": false,
+    "newsScanned": 12,
+    "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.alfordsoccercamp.com//index.cfm",
-        "asOf": "2026-09-16T05:13:13Z"
+        "asOf": "2026-09-21T17:05:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-20T14:43:19Z",
+    "builtAt": "2026-09-21T17:07:17Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3132,12 +3111,12 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-20T14:41:55Z"
+        "at": "2026-09-21T17:05:29Z"
       },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
-        "at": "2026-09-16T05:13:09Z"
+        "at": "2026-09-21T17:05:29Z"
       }
     ]
   }

@@ -25,7 +25,7 @@
     "roster": "https://www.drurypanthers.com/sports/womens-soccer/roster",
     "schedule": "https://www.drurypanthers.com/sports/womens-soccer/schedule",
     "news": "https://www.drurypanthers.com/sports/womens-soccer/news",
-    "camps": "https://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
+    "camps": "http://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
     "tds": null,
     "wikipedia": null,
     "x": null,
@@ -325,7 +325,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.drurypanthers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-20T14:37:27Z"
+        "asOf": "2026-09-21T16:59:28Z"
       }
     }
   },
@@ -1176,7 +1176,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drurypanthers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-20T14:37:27Z"
+      "asOf": "2026-09-21T16:59:28Z"
     }
   },
   "rosterHistory": {
@@ -3524,7 +3524,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drurypanthers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-20T14:37:27Z"
+      "asOf": "2026-09-21T16:59:28Z"
     }
   },
   "commitments": [],
@@ -3607,58 +3607,34 @@
     "_meta": {
       "source": "news",
       "url": "https://www.drurypanthers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-20T14:37:36Z"
+      "asOf": "2026-09-21T16:59:31Z"
     }
   },
   "camps": {
     "url": "http://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
     "hubUrl": null,
-    "finalUrl": "https://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
+    "finalUrl": "http://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
     "host": "www.drurywomenssocceracademy.com",
     "vendor": "external",
-    "pageTitle": "Drury Women's Soccer Academy - powered by Oasys Sports",
+    "pageTitle": null,
     "discoveredVia": "anchor",
     "robotsBlocked": false,
-    "fetchError": null,
-    "parsed": true,
-    "newsScanned": 10,
-    "items": [
-      {
-        "name": "August ID Camp",
-        "startDate": "2026-08-08",
-        "endDate": "2026-08-08",
-        "dateText": "August 8th, 2026",
-        "precision": "day",
-        "yearInferred": false,
-        "location": null,
-        "ages": null,
-        "price": null,
-        "registerUrl": null,
-        "sourceUrl": "https://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
-        "confidence": "heuristic",
-        "kind": "camp",
-        "campType": "id",
-        "sources": [
-          {
-            "kind": "camp",
-            "name": "August ID Camp",
-            "sourceUrl": "https://www.drurywomenssocceracademy.com/index.cfm?path=wsoc"
-          }
-        ]
-      }
-    ],
+    "fetchError": "HTTP 403 for http://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
+    "parsed": false,
+    "newsScanned": 13,
+    "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.drurywomenssocceracademy.com/index.cfm?path=wsoc",
-        "asOf": "2026-09-16T23:47:38Z"
+        "asOf": "2026-09-21T16:59:37Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-20T14:43:18Z",
+    "builtAt": "2026-09-21T17:07:16Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3677,12 +3653,12 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-20T14:37:27Z"
+        "at": "2026-09-21T16:59:28Z"
       },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
-        "at": "2026-09-16T23:42:35Z"
+        "at": "2026-09-21T16:59:28Z"
       }
     ]
   }

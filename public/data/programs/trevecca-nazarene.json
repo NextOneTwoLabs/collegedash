@@ -293,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.tnutrojans.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-20T14:41:42Z"
+        "asOf": "2026-09-21T17:05:10Z"
       }
     }
   },
@@ -1044,7 +1044,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.tnutrojans.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-20T14:41:42Z"
+      "asOf": "2026-09-21T17:05:10Z"
     }
   },
   "rosterHistory": {
@@ -3174,7 +3174,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.tnutrojans.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-20T14:41:42Z"
+      "asOf": "2026-09-21T17:05:10Z"
     }
   },
   "commitments": [],
@@ -3264,7 +3264,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.tnutrojans.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-20T14:41:48Z"
+      "asOf": "2026-09-21T17:05:16Z"
     }
   },
   "camps": {
@@ -3278,20 +3278,44 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
-    "items": [],
+    "newsScanned": 12,
+    "items": [
+      {
+        "name": "Women's ID Camp",
+        "startDate": "2026-11-23",
+        "endDate": "2026-11-23",
+        "dateText": "11/23/2026",
+        "precision": "day",
+        "yearInferred": false,
+        "location": null,
+        "ages": "9th - 12th Grade as of Fall 2026",
+        "price": null,
+        "registerUrl": "https://register.ryzer.com/camp.cfm?sport=7&id=342949",
+        "sourceUrl": "https://www.treveccawsoccercamps.com/index.cfm",
+        "confidence": "heuristic",
+        "kind": "camp",
+        "campType": "id",
+        "sources": [
+          {
+            "kind": "camp",
+            "name": "Women's ID Camp",
+            "sourceUrl": "https://www.treveccawsoccercamps.com/index.cfm"
+          }
+        ]
+      }
+    ],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.treveccawsoccercamps.com/index.cfm",
-        "asOf": "2026-09-16T05:12:56Z"
+        "asOf": "2026-09-21T17:05:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-20T14:43:19Z",
+    "builtAt": "2026-09-21T17:07:17Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3310,12 +3334,12 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-20T14:41:42Z"
+        "at": "2026-09-21T17:05:10Z"
       },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
-        "at": "2026-09-16T05:12:55Z"
+        "at": "2026-09-21T17:05:10Z"
       }
     ]
   }
