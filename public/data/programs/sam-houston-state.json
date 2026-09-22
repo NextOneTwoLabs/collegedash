@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gobearkats.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-21T16:50:11Z"
+        "asOf": "2026-09-22T15:23:54Z"
       }
     }
   },
@@ -312,13 +312,28 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-3",
-      "wins": 3,
+      "record": "4-2-3",
+      "wins": 4,
       "losses": 2,
       "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 8,
-      "headCoach": "Kendall Ayers"
+      "gamesPlayed": 9,
+      "headCoach": "Kendall Ayers",
+      "rpiRank": 181,
+      "rpi": {
+        "rank": 181,
+        "record": "3-2-3",
+        "through": "2026-09-20",
+        "prevRank": null,
+        "source": "NCAA.com weekly RPI",
+        "weekly": [
+          {
+            "through": "2026-09-20",
+            "rank": 181,
+            "record": "3-2-3"
+          }
+        ]
+      }
     },
     {
       "year": 2025,
@@ -1511,7 +1526,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobearkats.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-21T16:50:11Z"
+      "asOf": "2026-09-22T15:23:54Z"
     }
   },
   "rosterHistory": {
@@ -2175,11 +2190,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 3,
-      "text": "3-2-3",
-      "played": 8,
+      "text": "4-2-3",
+      "played": 9,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2339,10 +2354,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Pritchett Field, Huntsville",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "7-0",
         "links": {
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=674159",
+          "box score": "https://gobearkats.com/sports/womens-soccer/stats/2026/a-m-san-antonio/boxscore/15713",
+          "recap": "https://gobearkats.com/news/2026/9/21/soccer-kats-roll-past-texas-am-san-antonio",
           "history": "https://gobearkats.com/sports/wsoc/opponent-history/am-san-antonio/545"
         }
       },
@@ -3483,7 +3499,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobearkats.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-21T16:50:11Z"
+      "asOf": "2026-09-22T15:23:54Z"
     }
   },
   "commitments": [
@@ -3507,7 +3523,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/ashtyn-magnuson/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null,
           "profileCreated": "2025-03-21"
         }
@@ -3700,7 +3716,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/karter-russell/pid-177701",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/sam-houston-state/clgid-292/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null
         }
       ],
@@ -3713,7 +3729,7 @@
         "club": "Austin Sting",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-21",
+        "updated": "2026-09-22",
         "state": null,
         "country": null
       },
@@ -3735,7 +3751,7 @@
       "club": "Atletico Dallas",
       "state": "TX",
       "city": "Rowlett",
-      "highSchool": "",
+      "highSchool": "Sachse",
       "college": "sam-houston-state",
       "status": "verbal",
       "announced": null,
@@ -3747,8 +3763,16 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/lia-lopez/pid-179231",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/sam-houston-state/clgid-292/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null
+        },
+        {
+          "kind": "soccerwire",
+          "url": "https://www.soccerwire.com/player/lia-lopez/",
+          "firstSeen": "2026-09-22",
+          "lastSeen": "2026-09-22",
+          "missingSince": null,
+          "profileCreated": "2025-12-13"
         }
       ],
       "flags": [],
@@ -3760,14 +3784,22 @@
         "club": null,
         "status": "unmatched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-21"
+        "updated": "2026-09-22",
+        "conflict": [
+          {
+            "raw": "Atlético Dallas Youth",
+            "source": "SoccerWire",
+            "updated": "2026-09-21"
+          }
+        ]
       },
       "approxDate": {
-        "date": "2026-09-06",
-        "basis": "first seen by CollegeDash"
+        "date": "2025-12-13",
+        "basis": "SoccerWire profile created"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
+        "soccerwire",
         "tds"
       ]
     },
@@ -3791,7 +3823,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/reagan-mermis/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null,
           "profileCreated": "2025-12-12"
         }
@@ -3839,14 +3871,14 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/sarah-wheeler/pid-170913",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/sam-houston-state/clgid-292/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null
         },
         {
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/sarah-wheeler/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null,
           "profileCreated": "2026-04-03"
         }
@@ -3860,7 +3892,7 @@
         "club": "Challenge SC",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-21",
+        "updated": "2026-09-22",
         "state": null,
         "country": null
       },
@@ -3895,7 +3927,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/lacy-edens/pid-171421",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/sam-houston-state/clgid-292/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-21",
+          "lastSeen": "2026-09-22",
           "missingSince": null
         }
       ],
@@ -3908,7 +3940,7 @@
         "club": "FC Dallas",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-21",
+        "updated": "2026-09-22",
         "state": null,
         "country": null
       },
@@ -3925,6 +3957,12 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Kats roll past Texas A&M-San Antonio",
+        "url": "https://gobearkats.com/news/2026/9/21/soccer-kats-roll-past-texas-am-san-antonio",
+        "date": "2026-09-21",
+        "recruiting": false
+      },
       {
         "title": "Bearkats shut out McNeese",
         "url": "https://gobearkats.com/news/2026/9/13/soccer-bearkats-shut-out-mcneese",
@@ -3990,18 +4028,12 @@
         "url": "https://gobearkats.com/news/2025/12/19/soccer-bolin-receives-cusa-service-award",
         "date": "2025-12-19",
         "recruiting": false
-      },
-      {
-        "title": "Kats bow out of CUSA Championships",
-        "url": "https://gobearkats.com/news/2025/11/4/soccer-kats-bow-out-of-cusa-championships",
-        "date": "2025-11-04",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://gobearkats.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-21T16:50:22Z"
+      "asOf": "2026-09-22T15:24:10Z"
     }
   },
   "camps": {
@@ -4032,7 +4064,7 @@
     "2028": 1
   },
   "_build": {
-    "builtAt": "2026-09-21T17:07:10Z",
+    "builtAt": "2026-09-22T15:38:10Z",
     "completeness": 1.0,
     "sections": {
       "school": true,
