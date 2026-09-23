@@ -79,17 +79,21 @@ def main(argv=None) -> int:
     probe = bad_values(b"x?api_key=abcdef0123456789&y %26api_key%3Dzz a?API-KEY=q", b"")
     allowed = bad_values(b"x?api_key=REDACTED&y a?api_key=RED b?api_key=DEMO_KEY c?api_key=&d", b"")
     where = a.ref or "working tree"
-    if probe != 3 or allowed != 0:
-        print(f"FAIL self-check: planted {probe} of 3 found, {allowed} allowed forms flagged")
-        return 1
-    if not scanned:
-        print(f"FAIL no tracked files under {', '.join(DIRS)} in {where}")
-        return 1
+    checks = [
+        ("self-check: planted values are found", probe == 3),
+        ("self-check: REDACTED, a cut REDACTED, DEMO_KEY and an empty value are allowed", allowed == 0),
+        (f"tracked files under {', '.join(DIRS)} in {where} were scanned", scanned > 0),
+        (f"no tracked file in {where} holds an api_key value", not hits),
+    ]
     for path, n in hits:
         print(f"  FAIL {path}: {n} api_key value(s) that are not redacted")  # path and count only
-    print(f"{scanned} tracked file(s) in {where}: {len(hits)} with an api_key value")
-    return 1 if hits else 0
-
+    for name, passed in checks:
+        if not passed:
+            print(f"  FAIL {name}")
+    print(f"{scanned} tracked file(s) in {where}; {len(hits)} with an api_key value")
+    passed = sum(1 for _, p in checks if p)
+    print(f"{passed} of {len(checks)} checks passed")
+    return 0 if passed == len(checks) else 1
 
 if __name__ == "__main__":
     sys.exit(main())
