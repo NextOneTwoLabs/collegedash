@@ -41,13 +41,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { expectedRpi } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = process.env.COND_TEST_PUBLIC || path.join(HERE, '..', 'public');
 const HTML = process.env.COND_TEST_HTML || path.join(PUBLIC, 'index.html');
 const INDEX_URL = 'data/programs/index.json';
-const RPI_SEASON = 2025;
 const SHIPPED = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
+// The RPI season is read from the index, not hardcoded (issue #62): the latest ranked season, in progress while it is played.
+const { season: RPI_SEASON, label: RPI_LABEL } = expectedRpi(SHIPPED);
 /* The divisions build.py reads national titles from a champions table for (CHAMPION_TABLES), read from build.py
    itself: in those a zero title count is a real zero (issue #206); in any other it is "not collected". */
 const TITLE_TABLE_DIVISIONS = (() => {
@@ -191,7 +193,8 @@ function subtitleBefore(sb, rows) {
   if (f.region.length) bits.push(`${escFor(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${escFor(f.classYear.join(', '))}`);
   if (S.q) bits.push(`matching “${escFor(S.qRaw)}”`);
-  bits.push(`sorted by ${sb.SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
+  // The RPI option names its season, in progress or not, since issue #62; every other label is as it shipped.
+  bits.push(`sorted by ${f.sort === 'rpi' ? RPI_LABEL : sb.SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
   return bits.join(' · ');
 }
 
