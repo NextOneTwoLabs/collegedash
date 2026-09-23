@@ -142,6 +142,29 @@ def test_matching() -> None:
     # fails if a division with no table starts inheriting another division's
     ok("a D3 program matches nothing, because there is no D3 table yet",
        not build.title_matches(entry("some-d3", "D3", "Grand Valley State University"), "Grand Valley State", "D3"))
+    # The D3 path (#94): with no D3 table a D3 program publishes no titles and nothing raises; the years a
+    # source claims are kept as unsourced, exactly as for any division without a table.
+    d3 = entry("test-d3", "D3", "Test College of Example", "Example")
+    ok("with no D3 table, national_titles gives a D3 program no titles and keeps the claim as unsourced",
+       build.national_titles(d3, [2019]) == ([], [2019]))
+    ok("and D3_TITLE_SLUGS exists, empty, for the table's reviewed joins", build.D3_TITLE_SLUGS == {})
+    saved_tables, saved_pins = build.CHAMPION_TABLES, build.D3_TITLE_SLUGS
+    try:
+        # the shape the cited D3 table will have: keyed by champion NAME, like D2's
+        build.CHAMPION_TABLES = {**saved_tables, "D3": {2018: "Example", 2019: "Pinned Champion"}}
+        # fails if the D3 path is not the name-keyed join D2 uses (e.g. a slug comparison, or D2's table read for D3)
+        ok("with a D3 table, a D3 champion joins its program by normalised name",
+           build.national_titles(d3, []) == ([2018], []))
+        ok("a D2 program of the same name is not given the D3 title", build.national_titles({**d3, "division": "D2"}, [])[0] == [])
+        pinned = entry("pinned-d3", "D3", "Pinned Champion College of Nowhere")
+        ok("a D3 name normalisation cannot reach needs a pin", not build.title_matches(pinned, "Pinned Champion", "D3"))
+        build.D3_TITLE_SLUGS = {"Pinned Champion": "pinned-d3"}
+        # fails if D3's pins are not read (or D2's are read for D3)
+        ok("D3_TITLE_SLUGS settles it", build.title_matches(pinned, "Pinned Champion", "D3"))
+        ok("and D2_TITLE_SLUGS is not read for D3", build.D2_TITLE_SLUGS.get("Pinned Champion") is None
+           and not build.title_matches(entry("pinned-d2", "D2", "Nowhere"), "Pinned Champion", "D3"))
+    finally:
+        build.CHAMPION_TABLES, build.D3_TITLE_SLUGS = saved_tables, saved_pins
 
 
 # ---------- what the build publishes ----------
