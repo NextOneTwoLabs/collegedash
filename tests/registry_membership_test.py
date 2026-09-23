@@ -755,6 +755,15 @@ D2_COLLECTION_HOLDS = {
     "st-cloud-state": "no-athletics-source", "puerto-rico-bayamon": "no-athletics-source",
 }
 
+# issue #253: D3 entries whose athletics URL is still the college's main website, reviewed. Each host
+# refused CollegeDashBot with a 403 (the D3 batch summaries on #94, and athletics.mtholyoke.edu on the
+# #253 search), so no athletics site could be confirmed; they wait for the 403 retry, not a guess.
+D3_MAIN_SITE_ATHLETICS_REVIEWED = {
+    "beloit-college": "www.beloit.edu 403 (d3-b5)", "colby-college": "www.colby.edu 403 (d3-b2)",
+    "delaware-valley": "delval.edu 403 (d3-b6)",
+    "mount-holyoke-college": "athletics.mtholyoke.edu 403 on the #253 search",
+}
+
 
 def unexplained_entries(reg: dict) -> list[str]:
     """Slugs in reg.programs no membership state explains: not published, not staged (division in
@@ -1022,8 +1031,14 @@ def test_committed() -> None:
     # onboarded is deliberately not asserted: `onboard west-florida` flips it, and that must not turn this red
     ok("West Florida is a D1 entry in registry.programs with its orgId", uwf in programs and uwf["ids"].get("ncaaOrgId") == 11740
        and uwf["division"] == "D1", str(uwf))
-    # fails if a value supplied from memory enters the registry (the spike's gogusties.com)
-    ok("no athletics URL came from memory", "gogusties" not in json.dumps(reg))
+    # fails if a value supplied from memory enters the registry (the spike's gogusties.com). Issue #253 set
+    # gustavus-adolphus-college's athletics.baseUrl to it from evidence (linked from www.gustavus.edu, roster
+    # fetched and parsed, 31 players), so that one field is the only place it may appear.
+    unsourced = copy.deepcopy(reg)
+    for p in unsourced.get("programs") or []:
+        if p["slug"] == "gustavus-adolphus-college" and p["athletics"]["baseUrl"] == "https://gogusties.com":
+            p["athletics"]["baseUrl"] = None
+    ok("no athletics URL came from memory", "gogusties" not in json.dumps(unsourced))
 
     # --- the Division II entries (issue #94): staged, and after publishing (#197) still checked
     # Every check below is about the entries themselves, so it applies whether D2 is staged or onboarded; only
@@ -1197,6 +1212,18 @@ def test_committed() -> None:
                       or "data/scorecard-bulk.json" not in (p["location"].get("note") or "")]
         ok("every D3 Scorecard id beyond the builder's joins names its source in location.note", not unsourced3,
            f"no sourced note: {unsourced3}")
+        # issue #253: the Directory often gives a D3 college's main website as its athletics URL, where
+        # /sports/womens-soccer/roster is a 404. Fails if a D3 entry's athletics host is the college's own
+        # website domain (from its collected College Scorecard row) and it is not one of the reviewed
+        # exceptions below: hosts that refused CollegeDashBot (403), left for the 403 retry.
+        main_site3 = []
+        for p in d3:
+            sc = common.load_source(p["slug"], "scorecard") or {}
+            web = rb.site_domain((sc.get("data") or {}).get("website"))
+            if web and rb.site_domain(p["athletics"]["baseUrl"]) == web:
+                main_site3.append(p["slug"])
+        ok("#253: no D3 athletics URL is the college's main website, beyond the reviewed 403-refused ones",
+           set(main_site3) <= set(D3_MAIN_SITE_ATHLETICS_REVIEWED), str(sorted(set(main_site3) - set(D3_MAIN_SITE_ATHLETICS_REVIEWED))))
 
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing
