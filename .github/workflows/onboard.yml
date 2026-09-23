@@ -1,0 +1,254 @@
+name: Onboard a batch
+
+# Runs one onboarding batch - the `python collegedash.py onboard --slugs-file ... --no-bios` command the D2
+# batches ran on a local machine (#94, #143/#172) - in Actions, so collecting a division costs no agent
+# session (issue #242; D3 is being staged under #190).
+#
+# Dispatch it by hand with a division and a comma-separated list of conferences, or of slugs, or both:
+#   division=D3 conferences="Liberty League,New England Small College Athletic Conference"
+#   division=D3 slugs="some-slug,another-slug"
+# A conference selects its programs that are not onboarded yet and not under a collectionHold, as
+# `onboard --all --conference` does; a slug named explicitly is collected even if it is onboarded already.
+#
+# NEVER ON MAIN. The job checks out main, switches to the branch onboard/<batch name> (continuing it when it
+# already exists) before anything is collected, and pushes only to that branch. Nothing here merges it: a
+# person or an agent opens the PR from the link in the Summary tab. The PR is not opened from here on
+# purpose: a PR opened with the workflow's GITHUB_TOKEN does not start the Tests workflow, so it would sit
+# with no checks.
+#
+# What the branch gets, one commit per run:
+#   programs/<slug>/**                       the batch's collected sources, for the slugs in the plan only
+#   public/data/registry.json                their `onboarded` flags (and the platform athletics detects)
+#   data/onboard-batches/<batch name>.json   the batch summary: per program roster, schedule and staff rows,
+#   data/onboard-batches/<batch name>.md     collector failures, 403/429 hosts and skipReason (also the
+#                                            Summary tab)
+# Nothing else. build() output under public/data, the RPI tables `onboard` refreshes on the way, and
+# public/archive/refresh-state.json change on main every day, so carrying them would make every batch PR
+# conflict with the daily refresh; main's next refresh (or a build_only dispatch of refresh.yml) rebuilds
+# from the merged sources. The per-collector outcomes refresh-state would have held are in the summary.
+#
+# Guards, all before a request is made unless stated:
+#   - inputs travel in env, never interpolated into a shell line, and are checked by
+#     .github/scripts/onboard_batch.py against the registry on the branch: the division must be staged
+#     (registry.stagedDivisions, which passes --collect-staged-divisions) or already published; every
+#     conference must exist in it; every slug must exist and be in it; at least one conference or slug;
+#     at most 60 programs (see MAX_PROGRAMS there for the D2 timings behind that number).
+#   - collectionHold entries are never collected: the plan leaves them out and names them in the
+#     summary, and `onboard` itself skips or refuses them (#216/#218) if one got through.
+#   - after the run, the summary refuses to let anything be committed if a program outside the plan, or
+#     outside its division, had its `onboarded` flag changed, or if the registry's division lists changed.
+#
+# Politeness is the collectors' own and is not configured here: the CollegeDashBot User-Agent, robots.txt,
+# the per-host gate and Crawl-delay. The one addition is the D2 batches' rule: after a host's first HTTP 403
+# or 429, no further request is sent to it for the rest of the batch.
+#
+# dry_run=true runs the whole path with no network - every request is refused before it is sent - writes
+# the summary to the Summary tab and makes the commit on the runner, but pushes nothing. Use it to check a
+# batch's plan and the workflow itself; every collector reports a failure, by design.
+#
+# Time: on the D2 timings a batch costs about 7 minutes per 16 programs (16 workers); 60 programs is about
+# 30 minutes. The collect step stops at 300 minutes and the job at 350, under the 360-minute limit; a
+# collect step that times out still has its partial collection committed and summarised.
+#
+# Concurrency: the refresh-data group is refresh.yml's, so a batch never runs at the same time as the daily
+# refresh and never pushes while it does. GitHub keeps ONE pending run per group and cancels an older
+# pending one when another is queued: dispatch one batch at a time, and not while a batch is still
+# running, or a queued daily refresh can be the run that gets cancelled.
+
+on:
+  workflow_dispatch:
+    inputs:
+      division:
+        description: "Division, e.g. D3. Must be staged (registry.stagedDivisions) or already published"
+        type: string
+        required: true
+      conferences:
+        description: "Conferences, comma-separated, exactly as the registry names them. Selects each one's programs not yet onboarded"
+        type: string
+        default: ""
+      slugs:
+        description: "Program slugs, comma-separated (collected even if already onboarded)"
+        type: string
+        default: ""
+      batch_name:
+        description: "Branch onboard/<batch_name>; a-z, 0-9 and hyphens. Empty = derived from division and conferences"
+        type: string
+        default: ""
+      dry_run:
+        description: "No network and no push: check the plan and the workflow; every collector reports a failure"
+        type: boolean
+        default: false
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  onboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Pure: reads the inputs only, makes no request, imports nothing from collect/. A bad batch_name or an
+      # empty item in a list fails here, in seconds.
+      - name: Name the batch
+        id: name
+        env:
+          DIVISION_INPUT: ${{ inputs.division }}
+          CONFERENCES_INPUT: ${{ inputs.conferences }}
+          SLUGS_INPUT: ${{ inputs.slugs }}
+          BATCH_NAME_INPUT: ${{ inputs.batch_name }}
+        run: |
+          python .github/scripts/onboard_batch.py name --division "$DIVISION_INPUT" --conferences "$CONFERENCES_INPUT" \
+            --slugs "$SLUGS_INPUT" --batch-name "$BATCH_NAME_INPUT"
+
+      # Off main before anything is collected. An existing onboard/<name> is continued (a re-run adds a commit
+      # on top of it); a new one starts from main. The registry as the branch starts is kept aside for the
+      # guard in the summary step.
+      - name: Prepare the batch branch
+        env:
+          BRANCH: ${{ steps.name.outputs.branch }}
+        run: |
+          case "$BRANCH" in
+            onboard/?*) ;;
+            *) echo "::error title=onboard::refusing branch '$BRANCH': a batch is only ever committed to onboard/<name>"; exit 1 ;;
+          esac
+          if git fetch --depth=1 origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" 2>/dev/null; then
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            echo "::notice title=onboard::$BRANCH already exists; this run adds a commit on top of it"
+          else
+            git checkout -B "$BRANCH"
+          fi
+          mkdir -p "$RUNNER_TEMP/onboard"
+          git show HEAD:public/data/registry.json > "$RUNNER_TEMP/onboard/base-registry.json"
+
+      - name: Plan the batch
+        id: plan
+        env:
+          DIVISION_INPUT: ${{ inputs.division }}
+          CONFERENCES_INPUT: ${{ inputs.conferences }}
+          SLUGS_INPUT: ${{ inputs.slugs }}
+          BATCH_NAME_INPUT: ${{ inputs.batch_name }}
+        run: |
+          python .github/scripts/onboard_batch.py plan --division "$DIVISION_INPUT" --conferences "$CONFERENCES_INPUT" \
+            --slugs "$SLUGS_INPUT" --batch-name "$BATCH_NAME_INPUT" --out-dir "$RUNNER_TEMP/onboard"
+
+      - run: pip install -r requirements.txt
+
+      # onboard's own exit: 0 clean, 1 some collector failed (expected now and then; the summary names each),
+      # 2 refused or crashed. continue-on-error so that what was collected is still summarised and committed.
+      - name: Collect
+        id: collect
+        continue-on-error: true
+        timeout-minutes: 300
+        env:
+          SCORECARD_API_KEY: ${{ secrets.SCORECARD_API_KEY }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set +e
+          flag=
+          if [ "$DRY_RUN" = "true" ]; then
+            flag=--no-network
+          elif [ -z "$SCORECARD_API_KEY" ]; then
+            echo "::warning title=onboard::SCORECARD_API_KEY is not set, so the scorecard collector uses DEMO_KEY (30 requests an hour). Its first 429 stops api.data.gov for the rest of the batch, and every program after that reports a scorecard failure."
+          fi
+          python .github/scripts/onboard_batch.py run --plan "$RUNNER_TEMP/onboard/plan.json" --out "$RUNNER_TEMP/onboard/run.json" $flag
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      # Also the registry guard: exit 3 when the run changed `onboarded` outside the plan or its division.
+      - name: Summarize the batch
+        id: summary
+        if: always() && steps.plan.outcome == 'success'
+        env:
+          NAME: ${{ steps.name.outputs.name }}
+        run: |
+          python .github/scripts/onboard_batch.py summarize --plan "$RUNNER_TEMP/onboard/plan.json" \
+            --run "$RUNNER_TEMP/onboard/run.json" --base-registry "$RUNNER_TEMP/onboard/base-registry.json" \
+            --json-out "data/onboard-batches/$NAME.json" --md-out "data/onboard-batches/$NAME.md"
+
+      - name: Commit to the batch branch
+        if: always() && steps.plan.outcome == 'success'
+        env:
+          BRANCH: ${{ steps.name.outputs.branch }}
+          NAME: ${{ steps.name.outputs.name }}
+          DIVISION: ${{ steps.plan.outputs.division }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SUMMARY_OUTCOME: ${{ steps.summary.outcome }}
+        run: |
+          slugs_file="$RUNNER_TEMP/onboard/slugs.txt"
+          case "$BRANCH" in
+            onboard/?*) ;;
+            *) echo "::error title=onboard::refusing branch '$BRANCH': a batch is only ever committed to onboard/<name>"; exit 1 ;;
+          esac
+          if [ "$(git rev-parse --abbrev-ref HEAD)" != "$BRANCH" ]; then
+            echo "::error title=onboard::the checkout is on $(git rev-parse --abbrev-ref HEAD), not $BRANCH; nothing is committed"
+            exit 1
+          fi
+          if [ "$SUMMARY_OUTCOME" != "success" ]; then
+            echo "::error title=onboard::the batch summary did not complete, or its registry guard refused what this run did to public/data/registry.json (see that step). Nothing is committed or pushed; the collection exists only on this runner."
+            exit 1
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Only the batch's own files. Everything else the run changed (build output, rpi tables,
+          # refresh-state) stays out: see the note at the top of this file.
+          git add -- public/data/registry.json
+          n=0
+          while IFS= read -r slug; do
+            case "$slug" in ""|*[!a-z0-9-]*) continue ;; esac
+            n=$((n + 1))
+            if [ -e "programs/$slug" ]; then git add -- "programs/$slug"; fi
+          done < "$slugs_file"
+          # a summary alone is not a batch: a run that collected nothing (onboard refused, or crashed before
+          # its first program) leaves no branch behind; its summary is in the Summary tab
+          if git diff --cached --quiet; then
+            echo "::warning title=onboard::this run changed none of the batch's sources or onboarded flags; nothing is committed or pushed"
+            exit 0
+          fi
+          for f in "data/onboard-batches/$NAME.json" "data/onboard-batches/$NAME.md"; do
+            if [ -e "$f" ]; then git add -- "$f"; fi
+          done
+          git commit -q -m "data: onboard $NAME ($DIVISION, $n programs)" \
+            -m "Collected by the Onboard a batch workflow, run ${GITHUB_RUN_ID:-local}. Sources, onboarded flags and the batch summary in data/onboard-batches/$NAME.md; nothing published. Issue 242."
+          echo "committed $(git diff --name-only HEAD~1 HEAD | wc -l) file(s); left uncommitted: $(git status --porcelain --untracked-files=all | wc -l) path(s)"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "::notice title=onboard::dry run: the commit above would have been pushed to $BRANCH. Nothing was pushed."
+            exit 0
+          fi
+          if git push origin "HEAD:refs/heads/$BRANCH"; then
+            echo "::notice title=onboard::pushed to $BRANCH. Open the PR: https://github.com/${GITHUB_REPOSITORY}/compare/main...$BRANCH?expand=1"
+            exit 0
+          fi
+          # $BRANCH moved while this ran (someone pushed to it). Never force: keep the collection on a branch of
+          # its own instead, still under onboard/.
+          fallback="$BRANCH-run-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}"
+          if git push origin "HEAD:refs/heads/$fallback"; then
+            echo "::error title=onboard::$BRANCH moved while this batch ran, so the collection was pushed to $fallback instead. Reconcile the two by hand."
+          else
+            echo "::error title=onboard::pushing to $BRANCH and to $fallback both failed. The collection exists only on this runner; re-dispatch the batch."
+          fi
+          exit 1
+
+      - name: Fail if the batch crashed
+        if: always() && steps.plan.outcome == 'success'
+        env:
+          COLLECT_CODE: ${{ steps.collect.outputs.code }}
+          COLLECT_OUTCOME: ${{ steps.collect.outcome }}
+        run: |
+          case "$COLLECT_CODE" in
+            0) exit 0 ;;
+            1) echo "::warning title=onboard::some collectors failed; the Summary tab names each one. What was collected is on the branch."; exit 0 ;;
+            *) echo "::error title=onboard::the collect step ended with '${COLLECT_CODE:-no exit code}' (outcome $COLLECT_OUTCOME): refused, crashed, or timed out. Whatever it collected was committed above."; exit 1 ;;
+          esac
