@@ -1,0 +1,746 @@
+{
+ "batchName": "d3-b2",
+ "branch": "onboard/d3-b2",
+ "division": "D3",
+ "divisionState": "staged",
+ "conferences": [
+  "United East Conference",
+  "State University of New York Athletic Conference",
+  "Empire 8",
+  "New England Small College Athletic Conference"
+ ],
+ "requestedSlugs": [],
+ "held": [],
+ "run": {
+  "exit": 1,
+  "startedAt": "2026-09-23T18:56:49Z",
+  "wallSeconds": 150.5,
+  "perProgramSeconds": 3.1,
+  "noNetwork": false,
+  "requests": 879,
+  "statuses": {
+   "200": 560,
+   "301": 289,
+   "302": 9,
+   "403": 8,
+   "404": 13
+  },
+  "stoppedHosts": {
+   "www.psubrandywineathletics.com": 403,
+   "athletics.hbg.psu.edu": 403,
+   "www.kickswithkrech.com": 403,
+   "delhibroncos.com": 403,
+   "www.sagegators.com": 403,
+   "www.oswegosoccercamps.com": 403,
+   "www.colby.edu": 403,
+   "www.jumbosoccerclinics.com": 403
+  },
+  "refusedTotal": 15
+ },
+ "totals": {
+  "runs": 384,
+  "failed": 33,
+  "notRun": 0,
+  "rosterZero": [
+   "penn-state-harrisburg",
+   "penn-state-brandywine",
+   "valley-forge",
+   "suny-cortland",
+   "suny-delhi",
+   "russell-sage-college",
+   "bowdoin-college",
+   "colby-college",
+   "hamilton-college",
+   "middlebury-college",
+   "wesleyan-ct"
+  ]
+ },
+ "guard": [],
+ "programs": [
+  {
+   "slug": "cairn",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 17,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "cedar-crest-college",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 20,
+   "scheduleRows": 23,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "keystone-college",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 16,
+   "scheduleRows": 11,
+   "staffRows": 0,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "lancaster-bible-college",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "notre-dame-maryland",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 17,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "penn-college",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 21,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-harrisburg",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://athletics.hbg.psu.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: athletics.hbg.psu.edu stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "athletics.hbg.psu.edu": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-berks",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-abington",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 21,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-brandywine",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.psubrandywineathletics.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.psubrandywineathletics.com stopped after its first HTTP 403; no request s"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.psubrandywineathletics.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "st-marys-college-maryland",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 25,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {
+    "www.kickswithkrech.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "valley-forge",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "giving up after 3 attempts: _StampingHTTPSPool(host='uvfpatriots.com', port=443): Max retries exceeded with url: /sports",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: _StampingHTTPSPool(host='uvfpatriots.com', port=443): Max retries exceeded with url: /sports"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "wilson-college",
+   "conference": "United East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 23,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "alfred-state-college",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 18,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-buffalo-state",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 18,
+   "staffRows": 8,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-canton",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 22,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-cobleskill",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 20,
+   "scheduleRows": 14,
+   "staffRows": 1,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-cortland",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.cortland.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.cortland.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-delhi",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://delhibroncos.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: delhibroncos.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "delhibroncos.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "suny-fredonia",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 21,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-morrisville",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 24,
+   "scheduleRows": 18,
+   "staffRows": 1,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-oneonta",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 19,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-oswego",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 21,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {
+    "www.oswegosoccercamps.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "suny-plattsburgh",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 33,
+   "scheduleRows": 16,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-potsdam",
+   "conference": "State University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 21,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "alfred",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 20,
+   "staffRows": 11,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-brockport",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 22,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "elmira-college",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-geneseo",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 28,
+   "scheduleRows": 19,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "hartwick-college",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 19,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "houghton",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 17,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "keuka-college",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "nazareth",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 33,
+   "scheduleRows": 19,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suny-polytechnic",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 19,
+   "scheduleRows": 18,
+   "staffRows": 0,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "russell-sage-college",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.sagegators.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.sagegators.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.sagegators.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "st-john-fisher",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 17,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "utica",
+   "conference": "Empire 8",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 28,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "amherst-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 15,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "bates-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 15,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "bowdoin-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.bowdoin.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.bowdoin.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "colby-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.colby.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.colby.edu stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.colby.edu": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "connecticut-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 33,
+   "scheduleRows": 18,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "hamilton-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.hamilton.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.hamilton.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "middlebury-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.middlebury.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.middlebury.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "trinity-college-ct",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 18,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "tufts",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 15,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {
+    "www.jumbosoccerclinics.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "wesleyan-ct",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.wesleyan.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.wesleyan.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "williams-college",
+   "conference": "New England Small College Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 17,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  }
+ ],
+ "compareUrl": "https://github.com/NextOneTwoLabs/collegedash/compare/main...onboard/d3-b2?expand=1"
+}
