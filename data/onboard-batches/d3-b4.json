@@ -1,0 +1,733 @@
+{
+ "batchName": "d3-b4",
+ "branch": "onboard/d3-b4",
+ "division": "D3",
+ "divisionState": "staged",
+ "conferences": [
+  "Centennial Conference",
+  "Conference of New England",
+  "Heartland Collegiate Athletic Conference",
+  "Southern California Intercollegiate Athletic Conf.",
+  "City University of New York Athletic Conference"
+ ],
+ "requestedSlugs": [],
+ "held": [],
+ "run": {
+  "exit": 1,
+  "startedAt": "2026-09-23T19:04:14Z",
+  "wallSeconds": 155.1,
+  "perProgramSeconds": 3.2,
+  "noNetwork": false,
+  "requests": 937,
+  "statuses": {
+   "200": 575,
+   "301": 346,
+   "302": 3,
+   "403": 6,
+   "404": 7
+  },
+  "stoppedHosts": {
+   "www.ecgulls.com": 403,
+   "www.curryathletics.com": 403,
+   "www.wentworthathletics.com": 403,
+   "www.gosuffolkrams.com": 403,
+   "athletics.anderson.edu": 403,
+   "www.blufftonbeavers.com": 403
+  },
+  "refusedTotal": 18
+ },
+ "totals": {
+  "runs": 384,
+  "failed": 28,
+  "notRun": 0,
+  "rosterZero": [
+   "bryn-mawr-college",
+   "mcdaniel-college",
+   "curry-college",
+   "endicott-college",
+   "suffolk",
+   "wentworth-institute-technology",
+   "anderson-in",
+   "bluffton",
+   "rose-hulman"
+  ]
+ },
+ "guard": [],
+ "programs": [
+  {
+   "slug": "bryn-mawr-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.brynmawr.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.brynmawr.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "dickinson-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 18,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "franklin-marshall-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 25,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "gettysburg-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 18,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "haverford-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 21,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "johns-hopkins",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 18,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "mcdaniel-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.mcdaniel.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.mcdaniel.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "muhlenberg-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 18,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "swarthmore-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "ursinus-college",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 17,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "washington-college-md",
+   "conference": "Centennial Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "curry-college",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.curryathletics.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.curryathletics.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.curryathletics.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "endicott-college",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.ecgulls.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.ecgulls.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.ecgulls.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "gordon-college",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 20,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "hartford",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 17,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "johnson-wales-providence",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 21,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "new-england",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 22,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "nichols-college",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 21,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "roger-williams",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 21,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "suffolk",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.gosuffolkrams.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.gosuffolkrams.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.gosuffolkrams.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "wentworth-institute-technology",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.wentworthathletics.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.wentworthathletics.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.wentworthathletics.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "western-new-england",
+   "conference": "Conference of New England",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 33,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "anderson-in",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://athletics.anderson.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: athletics.anderson.edu stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "athletics.anderson.edu": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "berea-college",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "bluffton",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.blufftonbeavers.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.blufftonbeavers.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.blufftonbeavers.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "earlham-college",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 15,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "franklin-college",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 18,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "hanover-college",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "manchester",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 16,
+   "scheduleRows": 15,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "mount-st-joseph",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 19,
+   "staffRows": 9,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "rose-hulman",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "athletics: unsupported site platform at https://www.rose-hulman.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "transylvania",
+   "conference": "Heartland Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "azusa-pacific",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "california-lutheran",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 24,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "caltech",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 19,
+   "scheduleRows": 15,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "chapman",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 39,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "claremont-mudd-scripps",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 19,
+   "staffRows": 3,
+   "failures": {
+    "scorecard": "scorecard: no results for claremont-mudd-scripps",
+    "climate": "climate: no coordinates for claremont-mudd-scripps"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "la-verne",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 23,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "occidental-college",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 27,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "pomona-pitzer-colleges",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "redlands",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 24,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "whittier-college",
+   "conference": "Southern California Intercollegiate Athletic Conf.",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 20,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "brooklyn-college",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "city-college-new-york",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "john-jay-college",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 20,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "lehman-college",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 17,
+   "staffRows": 0,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "medgar-evers-college",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 13,
+   "scheduleRows": 12,
+   "staffRows": 0,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "york-college-ny",
+   "conference": "City University of New York Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 16,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  }
+ ],
+ "compareUrl": "https://github.com/NextOneTwoLabs/collegedash/compare/main...onboard/d3-b4?expand=1"
+}
