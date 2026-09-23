@@ -323,8 +323,8 @@ def test_loader(registry: dict) -> None:
     ok("today no snapshot and archive sheet cover the same season anyway",
        not (set(finals) & set(build.load_rpi_history())), str(sorted(set(finals) & set(build.load_rpi_history()))))
     cur = build.load_rpi_current()
-    ok("current.json is still the finished season, so today it is excluded",
-       cur["season"] == FINISHED and cur_season not in finals, f"current.json season {cur['season']}")
+    ok(f"current.json is the in-progress {cur_season} season",
+       cur["season"] == cur_season and cur_season in finals, f"current.json season {cur['season']}")
 
     tmp = tempfile.mkdtemp(prefix="seasons-loader-")
     try:
@@ -334,6 +334,14 @@ def test_loader(registry: dict) -> None:
         ok("current.json is picked up once its season is the one being played", cur_season in f, str(sorted(f)))
         ok("and the finished season still comes from its own snapshot",
            f[FINISHED]["throughGames"] == snap["throughGames"], str(f[FINISHED].get("throughGames")))
+
+        # If current.json is still a past/finished season, it is excluded and the snapshot stands.
+        with swapped(RPI_OUT_DIR=scratch_rpi(tmp + "/past", cur_season=FINISHED)):
+            f_past = build.load_rpi_finals(cur_season)
+        ok("a finished-season current.json is not picked up as the season being played",
+           cur_season not in f_past and FINISHED in f_past, str(sorted(f_past)))
+        ok("and the finished season still comes from its own snapshot, not current.json",
+           f_past[FINISHED]["throughGames"] == snap["throughGames"], str(f_past[FINISHED].get("throughGames")))
 
         # A archive sheet takes the rank, but must not take the snapshot away: archive rows carry
         # no record, and the snapshot is where the record for those seasons lives.
@@ -464,8 +472,12 @@ def test_build(registry: dict, built: str, log: str) -> None:
     check_published_against(entitlements(registry), rows, built, "build")
     check_anchor(registry, rows, "build")
 
+    cur_season = registry["season"]["current"]
+    cur_live = 1 if cur_season in build.load_rpi_finals(cur_season) else 0
+
     # Issue #3's own examples, and the coverage each one is expected to have.
-    for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
+    for slug, ranked in (("alcorn-state", 17 + cur_live), ("utrgv", 10 + cur_live),
+                         ("new-haven", 1 + cur_live), ("vanderbilt", 18 + cur_live)):
         got = [s["year"] for s in profile(built, slug)["seasons"] if s.get("rpiRank")]
         ok(f"{slug} publishes {ranked} ranked seasons", len(got) == ranked, str(sorted(got)))
     # fails if new-haven's D1 rank leaks onto a season it played before joining D1 (issue #153).
@@ -473,9 +485,10 @@ def test_build(registry: dict, built: str, log: str) -> None:
     # carries New Haven's real D2-era results too (2023, 2024) - that is data, not a defect. The
     # only thing that must stay true is that no year before 2025 carries an RPI claim.
     nh_seasons = profile(built, "new-haven")["seasons"]
-    ok("new-haven, a 2025 D1 newcomer, has exactly one ranked season and it is 2025",
-       [s["year"] for s in nh_seasons if s.get("rpiRank")] == [FINISHED],
-       str([s["year"] for s in nh_seasons if s.get("rpiRank")]))
+    nh_ranked = [s["year"] for s in nh_seasons if s.get("rpiRank")]
+    ok("new-haven, a 2025 D1 newcomer, publishes only D1-era ranked seasons",
+       nh_ranked == ([cur_season, FINISHED] if cur_live else [FINISHED]),
+       str(nh_ranked))
     ok("and no season before 2025 carries an rpiRank or an rpi block",
        not early_rpi_claims(nh_seasons, FINISHED), str(early_rpi_claims(nh_seasons, FINISHED)))
     ok("alcorn-state's ranks come from the AlcornState archive key the registry now names",
