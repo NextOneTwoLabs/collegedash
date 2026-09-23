@@ -91,9 +91,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
+      # No token in .git/config for the hours the collectors spend fetching the web (PR #245 review): the
+      # repository is public, so fetching needs none, and the commit step hands the token to the push alone.
       - uses: actions/checkout@v4
         with:
           ref: main
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -123,11 +126,21 @@ jobs:
             onboard/?*) ;;
             *) echo "::error title=onboard::refusing branch '$BRANCH': a batch is only ever committed to onboard/<name>"; exit 1 ;;
           esac
-          if git fetch --depth=1 origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" 2>/dev/null; then
+          # ls-remote exits 2 only when the ref is absent, so a failed lookup stops here instead of being
+          # mistaken for "no such branch" and starting a second one from main
+          set +e
+          git ls-remote --exit-code --heads origin "refs/heads/$BRANCH" > /dev/null
+          found=$?
+          set -e
+          if [ "$found" = 0 ]; then
+            git fetch --depth=1 origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
             git checkout -B "$BRANCH" "origin/$BRANCH"
             echo "::notice title=onboard::$BRANCH already exists; this run adds a commit on top of it"
-          else
+          elif [ "$found" = 2 ]; then
             git checkout -B "$BRANCH"
+          else
+            echo "::error title=onboard::could not ask origin whether $BRANCH exists (git ls-remote exited $found); nothing was collected"
+            exit 1
           fi
           mkdir -p "$RUNNER_TEMP/onboard"
           git show HEAD:public/data/registry.json > "$RUNNER_TEMP/onboard/base-registry.json"
@@ -186,6 +199,7 @@ jobs:
           DIVISION: ${{ steps.plan.outputs.division }}
           DRY_RUN: ${{ inputs.dry_run }}
           SUMMARY_OUTCOME: ${{ steps.summary.outcome }}
+          PUSH_TOKEN: ${{ github.token }}
         run: |
           slugs_file="$RUNNER_TEMP/onboard/slugs.txt"
           case "$BRANCH" in
@@ -227,14 +241,19 @@ jobs:
             echo "::notice title=onboard::dry run: the commit above would have been pushed to $BRANCH. Nothing was pushed."
             exit 0
           fi
-          if git push origin "HEAD:refs/heads/$BRANCH"; then
+          # the token reaches git here and nowhere else: checkout did not persist it (see the checkout step)
+          auth=()
+          if [ -n "${PUSH_TOKEN:-}" ]; then
+            auth=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')")
+          fi
+          if git "${auth[@]}" push origin "HEAD:refs/heads/$BRANCH"; then
             echo "::notice title=onboard::pushed to $BRANCH. Open the PR: https://github.com/${GITHUB_REPOSITORY}/compare/main...$BRANCH?expand=1"
             exit 0
           fi
           # $BRANCH moved while this ran (someone pushed to it). Never force: keep the collection on a branch of
           # its own instead, still under onboard/.
           fallback="$BRANCH-run-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}"
-          if git push origin "HEAD:refs/heads/$fallback"; then
+          if git "${auth[@]}" push origin "HEAD:refs/heads/$fallback"; then
             echo "::error title=onboard::$BRANCH moved while this batch ran, so the collection was pushed to $fallback instead. Reconcile the two by hand."
           else
             echo "::error title=onboard::pushing to $BRANCH and to $fallback both failed. The collection exists only on this runner; re-dispatch the batch."

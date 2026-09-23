@@ -251,31 +251,46 @@ def install_wrapper(common, collegedash, *, no_network: bool):
         finally:
             current.slug = prev
 
+    host_locks: dict[str, threading.Lock] = {}
+
+    def host_lock(host: str) -> threading.Lock:
+        with state["lock"]:
+            lk = host_locks.get(host)
+            if lk is None:
+                lk = host_locks[host] = threading.Lock()
+            return lk
+
     def send(self, request, **kwargs):
         host = (urlsplit(request.url).hostname or "").lower()
         slug = getattr(current, "slug", None) or "(batch)"
-        with state["lock"]:
-            code = state["stopped"].get(host)
-            if no_network:
-                state["refused"][host] += 1
-            elif code is not None:
-                state["refused"][host] += 1
-                state["perProgram"][slug]["blockedHosts"].setdefault(host, code)
         if no_network:
+            with state["lock"]:
+                state["refused"][host] += 1
             raise requests.exceptions.ConnectionError(f"onboard dry run: no request is sent ({host})")
-        if code is not None:
-            raise requests.exceptions.ConnectionError(f"onboard batch: {host} stopped after its first HTTP {code}; no request sent")
-        resp = original_send(self, request, **kwargs)
-        first = False
-        with state["lock"]:
-            state["requests"] += 1
-            state["perProgram"][slug]["requests"] += 1
-            state["statuses"][resp.status_code] += 1
-            if resp.status_code in (403, 429):
-                first = host not in state["stopped"]
-                state["stopped"].setdefault(host, resp.status_code)
-                state["perProgram"][slug]["blockedHosts"].setdefault(host, resp.status_code)
-                state["hits"].append({"host": host, "status": resp.status_code, "program": slug})
+        # The stop check and the send happen under one per-host lock (PR #245 review). Checked before the
+        # lock only, every thread already queued at the host's gate inside original_send had passed the
+        # check, and each of them still sent after the first 403/429: 8 of 8 in the review's test. The gate
+        # already lets one request at a time reach a host, so this lock costs no throughput; redirect hops
+        # are separate send() calls made one after another in the same thread, so it cannot deadlock.
+        with host_lock(host):
+            with state["lock"]:
+                code = state["stopped"].get(host)
+                if code is not None:
+                    state["refused"][host] += 1
+                    state["perProgram"][slug]["blockedHosts"].setdefault(host, code)
+            if code is not None:
+                raise requests.exceptions.ConnectionError(f"onboard batch: {host} stopped after its first HTTP {code}; no request sent")
+            resp = original_send(self, request, **kwargs)
+            first = False
+            with state["lock"]:
+                state["requests"] += 1
+                state["perProgram"][slug]["requests"] += 1
+                state["statuses"][resp.status_code] += 1
+                if resp.status_code in (403, 429):
+                    first = host not in state["stopped"]
+                    state["stopped"].setdefault(host, resp.status_code)
+                    state["perProgram"][slug]["blockedHosts"].setdefault(host, resp.status_code)
+                    state["hits"].append({"host": host, "status": resp.status_code, "program": slug})
         if resp.status_code in (403, 429) and first:
             common.log(f"!! onboard batch: HTTP {resp.status_code} from {host}; no further request will be sent to it")
         return resp

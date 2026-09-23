@@ -27,6 +27,8 @@ Cases:
   host-stop        through the real collect.common transport, against two local HTTP servers: after a host's
                    first 403 (or 429) nothing more is sent to it, other hosts are unaffected, each hit is
                    attributed to the program collecting; --no-network sends nothing at all
+  host-stop-concurrent  many threads at once against one always-403 and one always-429 host (PR #245 review):
+                   each host receives exactly one request, however many threads were already queued at its gate
   summary          rows (roster, schedule, staff), failures, not-run collectors, 403/429 hosts, skipReason, and
                    the registry guard: `onboarded` flipped outside the plan or its division, or a division list
                    changed, exits 3
@@ -51,11 +53,13 @@ import subprocess
 import sys
 import tempfile
 import threading
+import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 YML = os.environ.get("ONBOARD_YML") or os.path.join(ROOT, ".github", "workflows", "onboard.yml")
 REFRESH_YML = os.path.join(ROOT, ".github", "workflows", "refresh.yml")
-HELPER = os.path.join(ROOT, ".github", "scripts", "onboard_batch.py")
+# ONBOARD_BATCH_HELPER runs these checks against another copy of the helper (to show a check failing on old code)
+HELPER = os.environ.get("ONBOARD_BATCH_HELPER") or os.path.join(ROOT, ".github", "scripts", "onboard_batch.py")
 sys.path.insert(0, ROOT)
 
 _spec = importlib.util.spec_from_file_location("onboard_batch", HELPER)
@@ -165,6 +169,12 @@ def test_shape():
     names = [s["name"] or s["uses"] for s in steps()]
     co = next(s for s in steps() if s["uses"].startswith("actions/checkout@"))
     ok("checkout is of main, by name", re.search(r"^\s+ref:\s*main\s*$", "\n".join(co["lines"]), re.M), co["lines"])
+    ok("checkout does not persist the token in .git/config (PR #245 review)",
+       re.search(r"^\s+persist-credentials:\s*false\s*$", "\n".join(co["lines"]), re.M), co["lines"])
+    token_steps = [s["name"] or s["uses"] for s in steps() if re.search(r"github\.token|secrets\.GITHUB_TOKEN", "\n".join(s["lines"]))]
+    ok("the token is handed only to the commit step, whose push uses it", token_steps == ["Commit to the batch branch"], token_steps)
+    ok("the token reaches git only as a -c option on the push",
+       'auth=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic' in run_block(step("Commit to the batch branch")["lines"]))
     order = [names.index(n) for n in ("Name the batch", "Prepare the batch branch", "Plan the batch", "Collect",
                                        "Summarize the batch", "Commit to the batch branch")]
     ok("the branch is prepared before the plan and the collection, and the commit comes last", order == sorted(order), names)
@@ -193,7 +203,7 @@ def test_never_main():
     ok("there is at least one push to check", len(pushes) >= 2, pushes)
     for p in pushes:
         ok(f"push targets the batch branch or its fallback: {p[:80]}",
-           re.search(r'git push origin "HEAD:refs/heads/\$(BRANCH|fallback)"', p), p)
+           re.search(r'git (?:"\$\{auth\[@\]\}" )?push origin "HEAD:refs/heads/\$(BRANCH|fallback)"', p), p)
         ok(f"push does not name main: {p[:60]}", "main" not in p, p)
         ok(f"push is not forced: {p[:60]}", not re.search(r"(--force|\s-f\b|\+HEAD|\+refs)", p), p)
     ok("nothing merges or opens a PR from the workflow", not re.search(r"\bgit merge\b|\bgh pr\b|pulls", TEXT))
@@ -404,6 +414,56 @@ def test_host_stop():
             s.shutdown()
 
 
+def test_host_stop_concurrent(threads: int = 8):
+    print(f"host-stop-concurrent: {threads} threads at once per host; each host must receive exactly one request")
+    import requests
+    from collect import common
+
+    servers = [http.server.ThreadingHTTPServer(("127.0.0.1", 0), _Handler) for _ in range(2)]
+    for s in servers:
+        threading.Thread(target=s.serve_forever, daemon=True).start()
+    forbidden = f"http://127.0.0.1:{servers[0].server_address[1]}/forbidden"
+    limited = f"http://localhost:{servers[1].server_address[1]}/limited"
+    original_send = common._PoliteAdapter.send
+    # a short gap and 429 backoff keep the case quick; they change how long a queued thread waits at the gate,
+    # not whether it is queued there, which is what this case is about
+    saved = (common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.BACKOFF_429_SECONDS)
+    common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.BACKOFF_429_SECONDS = 0.2, 0.0, 0.2
+    try:
+        _Handler.hits = []
+        state = ob.install_wrapper(common, types.SimpleNamespace(collect_one=lambda *a, **k: None), no_network=False)
+        barrier = threading.Barrier(threads * 2)
+        outcomes: list = []
+
+        def one(url):
+            barrier.wait()
+            try:
+                with common._session() as s:
+                    r = s.get(url, timeout=10, proxies={"http": None, "https": None})
+                outcomes.append(r.status_code)
+            except requests.exceptions.ConnectionError:
+                outcomes.append("refused")
+
+        workers = [threading.Thread(target=one, args=(u,)) for u in [forbidden] * threads + [limited] * threads]
+        for w in workers:
+            w.start()
+        for w in workers:
+            w.join(60)
+        port_a, port_b = servers[0].server_address[1], servers[1].server_address[1]
+        got_a = sum(1 for n, _ in _Handler.hits if n == port_a)
+        got_b = sum(1 for n, _ in _Handler.hits if n == port_b)
+        ok(f"the always-403 host received exactly 1 of {threads} concurrent requests", got_a == 1, f"received {got_a}")
+        ok(f"the always-429 host received exactly 1 of {threads} concurrent requests", got_b == 1, f"received {got_b}")
+        ok("every other request was refused without being sent", outcomes.count("refused") == 2 * threads - 2
+           and sum(state["refused"].values()) == 2 * threads - 2, (outcomes, dict(state["refused"])))
+        ok("the wrapper counts 2 sent", state["requests"] == 2, state["requests"])
+    finally:
+        common._PoliteAdapter.send = original_send
+        common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.BACKOFF_429_SECONDS = saved
+        for s in servers:
+            s.shutdown()
+
+
 # ---------- summary ----------
 
 def test_summary():
@@ -577,7 +637,7 @@ def collect_in(work, temp, slugs=("a1", "b2")):
 
 def env_for(temp, **kw):
     e = {"BRANCH": "onboard/t", "NAME": "t", "DIVISION": "D3", "DRY_RUN": "false", "SUMMARY_OUTCOME": "success",
-         "RUNNER_TEMP": temp, "GITHUB_REPOSITORY": "owner/repo", "GITHUB_RUN_ID": "77", "GITHUB_RUN_ATTEMPT": "1"}
+         "RUNNER_TEMP": temp, "GITHUB_REPOSITORY": "owner/repo", "GITHUB_RUN_ID": "77", "GITHUB_RUN_ATTEMPT": "1", "PUSH_TOKEN": "harness-token"}
     e.update(kw)
     return e
 
@@ -612,6 +672,10 @@ def test_commit_steps(tmp):
        committed(origin, "onboard/t") == EXPECTED, committed(origin, "onboard/t"))
     ok("the commit says what it is", "data: onboard t (D3, 2 programs)" in git(origin, "log", "-1", "--format=%B", "onboard/t", check=False))
     ok("the PR link is printed", "compare/main...onboard/t?expand=1" in out, out[-400:])
+    import base64
+    cfg = open(os.path.join(work, ".git", "config"), encoding="utf-8").read()
+    ok("after the push the token is not in the clone's config, plain or encoded",
+       "harness-token" not in cfg and base64.b64encode(b"x-access-token:harness-token").decode() not in cfg)
 
     print("commit-existing-branch: a re-run adds a commit on top of onboard/<name>")
     origin, work, temp = setup(tmp, "existing", existing_branch=True)
@@ -650,6 +714,13 @@ def test_commit_steps(tmp):
         ok(f"commit refuses BRANCH={b!r}", code == 1 and "refusing branch" in out, out[-300:])
     ok("main is untouched and no branch was created", git(origin, "rev-parse", "refs/heads/main") == main0
        and remote_branches(origin) == ["main"])
+
+    print("prepare-lookup-failed: an unreachable origin is an error, not 'no such branch'")
+    origin, work, temp = setup(tmp, "lookup")
+    git(work, "remote", "set-url", "origin", os.path.join(tmp, "lookup", "missing.git"))
+    code, out = run_step("Prepare the batch branch", work, env_for(temp))
+    ok("prepare exits 1 and stays on main", code == 1 and "could not ask origin" in out
+       and git(work, "rev-parse", "--abbrev-ref", "HEAD") == "main", out[-300:])
 
     print("commit-off-branch: a checkout not on the batch branch commits nothing")
     origin, work, temp = setup(tmp, "offbranch")
@@ -694,6 +765,7 @@ def main(argv=None) -> int:
     test_plan()
     test_shipped_registry()
     test_host_stop()
+    test_host_stop_concurrent()
     test_summary()
     tmp = tempfile.mkdtemp(prefix="onboard-steps-")
     try:
