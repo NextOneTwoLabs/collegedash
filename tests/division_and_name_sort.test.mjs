@@ -47,6 +47,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { expectedRpi } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -562,7 +563,7 @@ test('a saved sort survives the new default, and an unknown one does not break t
   await ready(kept.sandbox);
   kept.sandbox.location.hash = '#/';
   await kept.sandbox.renderList();
-  assert.ok(kept.sandbox.document.querySelector('#app').innerHTML.includes('sorted by RPI 2025'),
+  assert.ok(kept.sandbox.document.querySelector('#app').innerHTML.includes(`sorted by ${expectedRpi(SHIPPED).label}`), // the season is read from the data (#62)
     'the page does not say which sort a returning visitor is on');
 
   // and a value this page has never written, or no longer writes

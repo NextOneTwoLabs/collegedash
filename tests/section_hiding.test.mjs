@@ -24,11 +24,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { expectedRpi } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const HTML = process.env.SECTION_TEST_HTML || path.join(PUBLIC, 'index.html');
-const RPI_SEASON = 2025;
+// The RPI season is read from the index, not hardcoded (issue #62): the latest ranked season, labelled in progress while
+// it is being played; the Record column is the last finished season, which an in-progress season never is.
+const RPI = expectedRpi(JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data/programs/index.json'), 'utf8')));
+const RPI_SEASON = RPI.season;
 
 /* ---------- stub DOM ---------- */
 function makeElement(name) {
@@ -173,7 +177,7 @@ const expectProfile = p => {
 const factShown = (html, label) => html.includes(`<div class="label">${label}</div>`);
 const foot = html => (html.match(/<div class="foot"><span>([\s\S]*?)<span class="foot-actions">/) || [])[1] || '';
 const seeRow = html => ({
-  'RPI fact': factShown(html, `RPI ${RPI_SEASON}`), 'US rank fact': factShown(html, 'US rank (THE)'),
+  'RPI fact': factShown(html, RPI.label), 'US rank fact': factShown(html, 'US rank (THE)'),
   'Undergrads fact': factShown(html, 'Undergrads'), 'Tuition fact': factShown(html, 'Tuition / yr'),
   'Commits foot': /Commits/.test(foot(html)), 'roster foot': /on roster/.test(foot(html)),
 });
@@ -342,7 +346,7 @@ test('table columns: a data column is left out only when no row on screen has da
   S.filters.moreStats = true; S.filters.classYear = [];
   const heads = html => [...html.matchAll(/<th class="[^"]*"\s*(?:data-sort="[^"]*")?>([^<]*)<\/th>/g)].map(m => m[1]);
   const all = heads(page.sandbox.tableHtml(REAL_INDEX.programs));
-  assert.deepEqual(all, ['#', '', 'Program', `Record ${RPI_SEASON}`, 'Admit', 'Undergrads', 'Tuition / yr', 'Commits', 'Titles', 'College Cups', 'Region', 'Type', ''],
+  assert.deepEqual(all, ['#', '', 'Program', `Record ${RPI.finished}`, 'Admit', 'Undergrads', 'Tuition / yr', 'Commits', 'Titles', 'College Cups', 'Region', 'Type', ''],
     'the full D1 table lost a column');
   const d2 = heads(page.sandbox.tableHtml([rowOf(bare.slug), rowOf(committed.slug)]));
   assert.deepEqual(d2, ['', 'Program', 'Undergrads', 'Tuition / yr', 'Commits', 'Region', 'Type', ''], 'the synthetic D2 table columns');
