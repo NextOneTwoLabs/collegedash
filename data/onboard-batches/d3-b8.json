@@ -1,0 +1,833 @@
+{
+ "batchName": "d3-b8",
+ "branch": "onboard/d3-b8",
+ "division": "D3",
+ "divisionState": "staged",
+ "conferences": [
+  "Northwest Conference",
+  "Massachusetts State Collegiate Athletic Conference",
+  "American Rivers Conference",
+  "Allegheny Mountain Collegiate Conference",
+  "North Coast Athletic Conference",
+  "Collegiate Conference of the South"
+ ],
+ "requestedSlugs": [],
+ "held": [],
+ "run": {
+  "exit": 1,
+  "startedAt": "2026-09-23T19:18:03Z",
+  "wallSeconds": 447.4,
+  "perProgramSeconds": 9.3,
+  "noNetwork": false,
+  "requests": 681,
+  "statuses": {
+   "200": 427,
+   "202": 2,
+   "301": 223,
+   "403": 17,
+   "404": 9,
+   "500": 3
+  },
+  "stoppedHosts": {
+   "athletics.mcla.edu": 403,
+   "www.bsubears.com": 403,
+   "www.salemstatevikings.com": 403,
+   "www.fitchburgfalcons.com": 403,
+   "www.westfieldstateowls.com": 403,
+   "www.mmabucs.com": 403,
+   "www.fsurams.com": 403,
+   "willamette.prestosports.com": 403,
+   "www.wsulancers.com": 403,
+   "simpsonathletics.com": 403,
+   "athletics.carlow.edu": 403,
+   "larochesports.com": 403,
+   "www.psaltoonalions.com": 403,
+   "athletics.pittbradford.org": 403,
+   "www.wittenbergtigers.com": 403,
+   "psblions.com": 403,
+   "www.huntingdonhawks.com": 403
+  },
+  "refusedTotal": 51
+ },
+ "totals": {
+  "runs": 384,
+  "failed": 68,
+  "notRun": 0,
+  "rosterZero": [
+   "george-fox",
+   "lewis-clark-college",
+   "whitman-college",
+   "willamette",
+   "bridgewater-state",
+   "fitchburg-state",
+   "framingham-state",
+   "mcla",
+   "massachusetts-maritime-academy",
+   "salem-state",
+   "westfield-state",
+   "worcester-state",
+   "central-college-ia",
+   "dubuque",
+   "simpson-college",
+   "carlow",
+   "la-roche",
+   "penn-state-altoona",
+   "penn-state-behrend",
+   "pittsburgh-bradford",
+   "wittenberg",
+   "huntingdon-college"
+  ]
+ },
+ "guard": [],
+ "programs": [
+  {
+   "slug": "george-fox",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.gfubruins.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.gfubruins.com/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "lewis-clark-college",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "giving up after 3 attempts: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "linfield",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 36,
+   "scheduleRows": 21,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "pacific-lutheran",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 36,
+   "scheduleRows": 22,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "pacific-or",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 23,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "puget-sound",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 28,
+   "scheduleRows": 22,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "whitman-college",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.whitman.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.whitman.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "whitworth",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 20,
+   "scheduleRows": 19,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "willamette",
+   "conference": "Northwest Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://willamette.prestosports.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: willamette.prestosports.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "willamette.prestosports.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "bridgewater-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.bsubears.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.bsubears.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.bsubears.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "fitchburg-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.fitchburgfalcons.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.fitchburgfalcons.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.fitchburgfalcons.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "framingham-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.fsurams.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.fsurams.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.fsurams.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "mcla",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://athletics.mcla.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: athletics.mcla.edu stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "athletics.mcla.edu": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "massachusetts-maritime-academy",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.mmabucs.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.mmabucs.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.mmabucs.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "salem-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.salemstatevikings.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.salemstatevikings.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.salemstatevikings.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "westfield-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.westfieldstateowls.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.westfieldstateowls.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.westfieldstateowls.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "worcester-state",
+   "conference": "Massachusetts State Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.wsulancers.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.wsulancers.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.wsulancers.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "buena-vista",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 24,
+   "scheduleRows": 16,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "central-college-ia",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.central.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.central.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "coe-college",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 22,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "dubuque",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "giving up after 3 attempts: _StampingHTTPSPool(host='www.dbq.edu', port=443): Max retries exceeded with url: /sports/wom",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: _StampingHTTPSPool(host='www.dbq.edu', port=443): Max retries exceeded with url: /sports/wom"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "loras-college",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 43,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "nebraska-wesleyan",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 28,
+   "scheduleRows": 17,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "simpson-college",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://simpsonathletics.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: simpsonathletics.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "simpsonathletics.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "wartburg-college",
+   "conference": "American Rivers Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 22,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "carlow",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://athletics.carlow.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: athletics.carlow.edu stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "athletics.carlow.edu": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "hilbert-college",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 15,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "la-roche",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://larochesports.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: larochesports.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "larochesports.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "mount-aloysius-college",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-altoona",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.psaltoonalions.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.psaltoonalions.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.psaltoonalions.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "penn-state-behrend",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "scorecard": "giving up after 3 attempts: HTTP 500 for https://api.data.gov/ed/collegescorecard/v1/schools?api_key=REDACTED",
+    "climate": "climate: no coordinates for penn-state-behrend",
+    "athletics": "HTTP 403 for https://psblions.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: psblions.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "psblions.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "pittsburgh-bradford",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://athletics.pittbradford.org/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: athletics.pittbradford.org stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "athletics.pittbradford.org": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "pittsburgh-greensburg",
+   "conference": "Allegheny Mountain Collegiate Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 19,
+   "scheduleRows": 16,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "denison",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "depauw",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "john-carroll",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 41,
+   "scheduleRows": 19,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "kenyon-college",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 28,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "oberlin-college",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 24,
+   "scheduleRows": 15,
+   "staffRows": 12,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "ohio-wesleyan",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "wittenberg",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.wittenbergtigers.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.wittenbergtigers.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.wittenbergtigers.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "college-wooster",
+   "conference": "North Coast Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "agnes-scott-college",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 19,
+   "scheduleRows": 19,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "asbury",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 22,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "belhaven",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 22,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "covenant-college",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 16,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "huntingdon-college",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.huntingdonhawks.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.huntingdonhawks.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.huntingdonhawks.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "lagrange-college",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 16,
+   "scheduleRows": 20,
+   "staffRows": 1,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "piedmont",
+   "conference": "Collegiate Conference of the South",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 38,
+   "scheduleRows": 29,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  }
+ ],
+ "compareUrl": "https://github.com/NextOneTwoLabs/collegedash/compare/main...onboard/d3-b8?expand=1"
+}
