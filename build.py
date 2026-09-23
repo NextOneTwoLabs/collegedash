@@ -240,8 +240,10 @@ def check_no_stale_profiles(registry: dict) -> bool:
 # below and no count anchor, silently - staging D3 without writing its count down here would pass
 # every check that exists. check_staged_registry() fails that case too, on purpose.
 #
-# Empty since #197: D2 was published (moved to onboardedDivisions), and nothing else is staged.
-STAGED_DIVISION_COUNTS: dict[str, int] = {}
+# D2 left this dict when it was published (#197). D3 is staged by #190: the 2026-27 Directory lists 416
+# D3 programs, and 415 of them are staged entries in `programs`. The 416th is saint-francis, published
+# in D1 before #100, which stays in heldPrograms until D3 is onboarded.
+STAGED_DIVISION_COUNTS: dict[str, int] = {"D3": 415}
 
 # A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
 # hyphen - the shape every slug in the registry already has (collect/registry_builder.py's
