@@ -1452,10 +1452,11 @@ def test_reviewed_slugs() -> None:
     refused("FIX an override with capitals or a doubled hyphen is refused", {301: ("Eastern--PA", "x")}, "Eastern--PA", "not a valid slug")
     refused("FIX an override with an underscore is refused", {301: ("eastern_pa", "x")}, "eastern_pa", "not a valid slug")
     refused("FIX an override with a trailing hyphen is refused", {301: ("eastern-", "x")}, "eastern-", "not a valid slug")
-    # The shipped table is the owner's 2026-09-23 decision on #190: all 41 proposed D3 renames. That it was applied
+    # The shipped table is the owner's decision: all 41 D3 renames proposed on #190 (2026-09-23), plus mcla and
+    # penn-college added on #247. That it was applied
     # is checked against the committed registry in test_committed; here, that the table itself is usable.
     shipped = getattr(rb, "REVIEWED_SLUGS", {})
-    ok("the shipped table holds the 41 D3 renames the owner accepted (#190)", len(shipped) == 41, str(len(shipped)))
+    ok("the shipped table holds the 43 D3 renames the owner accepted (#190, #247)", len(shipped) == 43, str(len(shipped)))
     ok("every shipped slug is well formed and no two share one",
        all(rb.SLUG_SHAPE.match(s) for s, _ in shipped.values()) and len({s for s, _ in shipped.values()}) == len(shipped),
        str([s for s, _ in shipped.values() if not rb.SLUG_SHAPE.match(s)]))

@@ -252,8 +252,9 @@ REVIEWED_NOT_LISTED = {
 # is taken exactly or the build refuses: one that is not a valid slug, that two overrides share, or that an
 # entry already holds is an error, never quietly moved down the ladder to something nobody reviewed.
 #
-# Division III, all 41 renames proposed on #190 and accepted by the owner as written (2026-09-23). The comment
-# on each line is the slug the ladder gives without the override.
+# Division III, 43 renames: all 41 proposed on #190 and accepted by the owner as written (2026-09-23), plus
+# mcla and penn-college, which the owner added on #247. The comment on each line is the slug the ladder gives
+# without the override.
 _D3_GENERIC = "#190: the ladder's slug is a generic word"
 _D3_LONG = "#190: the ladder's slug is over 30 characters"
 _D3_SUNY = "#190: one pattern, suny-<campus>, for all 18 SUNY campuses"
@@ -277,6 +278,8 @@ REVIEWED_SLUGS: dict[int, tuple[str, str]] = {
     282: ("hobart-william-smith", _D3_LONG),  # hobart-and-william-smith-colleges
     321: ("john-jay-college", _D3_LONG),  # john-jay-college-criminal-justice
     751: ("washington-jefferson", _D3_LONG),  # washington-and-jefferson-college
+    486: ("mcla", _D3_LONG + ", added by the owner on #247"),  # massachusetts-college-liberal-arts
+    30190: ("penn-college", _D3_LONG + ", added by the owner on #247"),  # pennsylvania-college-technology
     78: ("suny-brockport", _D3_SUNY),  # state-new-york-brockport
     85: ("suny-buffalo-state", _D3_SUNY),  # buffalo-state-state-new-york
     30165: ("suny-canton", _D3_SUNY),  # state-new-york-canton
