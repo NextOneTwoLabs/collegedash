@@ -19,6 +19,9 @@ Covers, in order:
   old-entry     onboard_batch.program_row redacts a refresh-state entry written by code before #258
   redact        common.redact, rule by rule, including the truncation order, short env values, and
                 data fields (a camp link's key= parameter) that are left alone
+  cut-order     redact before cutting, pinned where the order matters: a bare key (env backstop) or a
+                user:password (userinfo rule) split by the cut, at error_text (60/120/160/200/300),
+                program_row (120), render_md (60) and report_refresh on an unredacted result
 
 Nothing here touches the network or the repository's data: common's paths point at a scratch tree and
 the HTTP session is a stand-in.
@@ -324,12 +327,90 @@ def test_redact() -> None:
             os.environ["SCORECARD_API_KEY"] = saved
 
 
+CUTS = (60, 120, 160, 200, 300)
+
+
+@contextlib.contextmanager
+def env_key(value: str | None):
+    saved = os.environ.get("SCORECARD_API_KEY")
+    if value is None:
+        os.environ.pop("SCORECARD_API_KEY", None)
+    else:
+        os.environ["SCORECARD_API_KEY"] = value
+    try:
+        yield
+    finally:
+        if saved is None:
+            os.environ.pop("SCORECARD_API_KEY", None)
+        else:
+            os.environ["SCORECARD_API_KEY"] = saved
+
+
+def crossing(n: int, key: str) -> str:
+    """A bare key (no name=, so only the env backstop can find it) that the cut at n splits."""
+    return "x" * (n - 10) + key + " tail"
+
+
+def userinfo_crossing(n: int, key: str) -> str:
+    """A user:password URL whose password the cut at n splits, before the @ (only the userinfo rule finds it)."""
+    head = "x" * (n - 10 - len("https://bot:"))
+    return head + "https://bot:" + key + "@h.example/p tail"
+
+
+def test_cut_order() -> None:
+    """Redact, then cut. Cutting first leaves a key split at the cut that no rule can recognise any more:
+    a bare key (the env backstop needs the whole value) or a password cut before its @ (the userinfo rule
+    needs the @). Every other case keys a name=value, which is safe in either order, so only these fail
+    when a sink cuts first."""
+    key = secrets.token_hex(20)
+    for n in CUTS:
+        with env_key(key):
+            ok(f"cut-order: error_text, bare key across the cut at {n}",
+               not leaks(common.error_text(Exception(crossing(n, key)), n), key))
+        with env_key(None):
+            ok(f"cut-order: error_text, user:password across the cut at {n}",
+               not leaks(common.error_text(Exception(userinfo_crossing(n, key)), n), key))
+    # program_row cuts at 120 (and render_md at 60): an entry written by code before #258
+    ob = load_onboard_batch()
+    at, started = "2026-09-20T00:00:00Z", "2026-09-19T00:00:00Z"
+    md = {"batchName": "x", "division": "D3", "divisionState": "staged", "conferences": [], "requestedSlugs": [],
+          "held": [], "guard": [], "totals": {"failed": 1, "runs": 8, "notRun": 0}, "run": {}}
+    for label, text, env in (("bare key", crossing(120, key), key), ("user:password", userinfo_crossing(120, key), None)):
+        with env_key(env):
+            state = {"alpha.scorecard": {"ok": False, "error": text, "at": at}}
+            row = ob.program_row("alpha", {"alpha": prog("alpha")}, state, {}, started)
+            ok(f"cut-order: program_row, old entry with a {label} across character 120",
+               "scorecard" in row["failures"] and not leaks(json.dumps(row), key))
+            # render_md on its own: a row whose failure text nothing redacted, split by its [:60] cut
+            raw = {**row, "failures": {"scorecard": crossing(60, key) if env else userinfo_crossing(60, key)}}
+            ok(f"cut-order: render_md, unredacted failure with a {label} across character 60",
+               not leaks(ob.render_md({**md, "programs": [raw]}), key))
+    # report_refresh on a result nothing upstream redacted: its own redaction has to do the work, before
+    # its [:120] log line, [:200] ::warning and [:160] step summary cut, and in lastRun.failures
+    for label, env in (("bare key", key), ("user:password", None)):
+        out = io.StringIO()
+        with scratch(key) as tmp, env_key(env):
+            step = os.path.join(tmp, "step-summary.md")
+            os.environ["GITHUB_ACTIONS"] = "true"
+            os.environ["GITHUB_STEP_SUMMARY"] = step
+            results = [{"program": f"p{n}", "collector": "scorecard", "outcome": "failed",
+                        "error": (crossing(n, key) if env else userinfo_crossing(n, key))} for n in (120, 160, 200)]
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                collegedash.report_refresh(results, threshold=0.5, mode="test")
+            last = (common.load_refresh_state().get("lastRun") or {}).get("failures") or []
+            ok(f"cut-order: report_refresh records the {label} failures", len(last) == 3 and os.path.exists(step))
+            found = files_with_key(tmp, key)
+            ok(f"cut-order: report_refresh, {label}: no written file holds a piece of the key", not found,
+               f"in {found}")
+        ok(f"cut-order: report_refresh, {label}: its output holds no piece of the key", not leaks(out.getvalue(), key))
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
-    for case in (test_header, test_end_to_end, test_old_entry, test_redact):
+    for case in (test_header, test_end_to_end, test_old_entry, test_redact, test_cut_order):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
