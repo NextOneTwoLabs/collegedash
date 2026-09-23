@@ -1,0 +1,703 @@
+{
+ "batchName": "d3-b7",
+ "branch": "onboard/d3-b7",
+ "division": "D3",
+ "divisionState": "staged",
+ "conferences": [
+  "Southern Collegiate Athletic Conference",
+  "Ohio Athletic Conference",
+  "Southern Athletic Association",
+  "St. Louis Intercollegiate Athletic Conference",
+  "Little East Conference"
+ ],
+ "requestedSlugs": [],
+ "held": [],
+ "run": {
+  "exit": 1,
+  "startedAt": "2026-09-23T19:14:47Z",
+  "wallSeconds": 140.9,
+  "perProgramSeconds": 3.1,
+  "noNetwork": false,
+  "requests": 836,
+  "statuses": {
+   "200": 531,
+   "202": 2,
+   "301": 288,
+   "302": 1,
+   "403": 7,
+   "404": 7
+  },
+  "stoppedHosts": {
+   "www.acroos.com": 403,
+   "www.gocentenary.com": 403,
+   "www.fightingmuskies.com": 403,
+   "onusports.com": 403,
+   "blackburnbeavers.com": 403,
+   "www.eurekareddevils.com": 403,
+   "www.rhodessoccercamps.com": 403
+  },
+  "refusedTotal": 18
+ },
+ "totals": {
+  "runs": 360,
+  "failed": 31,
+  "notRun": 0,
+  "rosterZero": [
+   "austin-college",
+   "centenary-college-la",
+   "capital-oh",
+   "muskingum",
+   "ohio-northern",
+   "wilmington-college-oh",
+   "blackburn-college",
+   "eureka-college",
+   "greenville",
+   "westminster-college-mo"
+  ]
+ },
+ "guard": [],
+ "programs": [
+  {
+   "slug": "austin-college",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.acroos.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.acroos.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.acroos.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "centenary-college-la",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.gocentenary.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.gocentenary.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.gocentenary.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "concordia-texas",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 19,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "dallas",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 18,
+   "scheduleRows": 13,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "hendrix-college",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 34,
+   "scheduleRows": 18,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "letourneau",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 18,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "ozarks-ar",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 22,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "st-thomas-tx",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 19,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "texas-lutheran",
+   "conference": "Southern Collegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 19,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "baldwin-wallace",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 40,
+   "scheduleRows": 20,
+   "staffRows": 7,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "capital-oh",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.capital.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.capital.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "heidelberg",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 17,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "marietta-college",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 24,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "mount-union",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 16,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "muskingum",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.fightingmuskies.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.fightingmuskies.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.fightingmuskies.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "ohio-northern",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://onusports.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: onusports.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "onusports.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "otterbein",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 33,
+   "scheduleRows": 16,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "wilmington-college-oh",
+   "conference": "Ohio Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.wilmington.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.wilmington.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "berry-college",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "centre-college",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 39,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "maryville-college-tn",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 21,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "millsaps-college",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "oglethorpe",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 20,
+   "scheduleRows": 19,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "rhodes-college",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 0,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {
+    "www.rhodessoccercamps.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "sewanee",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 20,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "southwestern-tx",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 35,
+   "scheduleRows": 21,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "trinity-tx",
+   "conference": "Southern Athletic Association",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 21,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "blackburn-college",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://blackburnbeavers.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: blackburnbeavers.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "blackburnbeavers.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "eureka-college",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 403 for https://www.eurekareddevils.com/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "giving up after 3 attempts: onboard batch: www.eurekareddevils.com stopped after its first HTTP 403; no request sent"
+   },
+   "notRun": [],
+   "blockedHosts": {
+    "www.eurekareddevils.com": 403
+   },
+   "skipReason": null
+  },
+  {
+   "slug": "greenville",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "HTTP 404 for https://www.greenville.edu/sports/womens-soccer/roster",
+    "news": "news: athletics platform unknown (athletics collector has not succeeded yet)",
+    "camps": "HTTP 404 for https://www.greenville.edu/sports/womens-soccer/roster"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "lyon-college",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 21,
+   "scheduleRows": 20,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "mississippi-for-women",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 20,
+   "scheduleRows": 17,
+   "staffRows": 1,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "principia-college",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "spalding",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "webster",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 24,
+   "scheduleRows": 14,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "westminster-college-mo",
+   "conference": "St. Louis Intercollegiate Athletic Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": false,
+   "rosterRows": 0,
+   "scheduleRows": 0,
+   "staffRows": 0,
+   "failures": {
+    "athletics": "athletics: roster page is rendered in the browser at https://www.wcbluejays.com/sports/womens-soccer/roster; set athleti",
+    "news": "news: parsed 0 items from https://www.wcbluejays.com/sports/womens-soccer/archives (markup change?)"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "eastern-connecticut-state",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 25,
+   "scheduleRows": 16,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "keene-state-college",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 30,
+   "scheduleRows": 21,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "massachusetts-boston",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 26,
+   "scheduleRows": 21,
+   "staffRows": 3,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "massachusetts-dartmouth",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 22,
+   "scheduleRows": 20,
+   "staffRows": 5,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "plymouth-state",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 24,
+   "scheduleRows": 22,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "rhode-island-college",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 23,
+   "scheduleRows": 17,
+   "staffRows": 2,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "southern-maine",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 31,
+   "scheduleRows": 22,
+   "staffRows": 4,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "vermont-state-castleton",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 29,
+   "scheduleRows": 18,
+   "staffRows": 9,
+   "failures": {
+    "scorecard": "scorecard: no results for vermont-state-castleton",
+    "climate": "climate: no coordinates for vermont-state-castleton"
+   },
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  },
+  {
+   "slug": "western-connecticut-state",
+   "conference": "Little East Conference",
+   "onboarded": true,
+   "athleticsFromThisRun": true,
+   "rosterRows": 32,
+   "scheduleRows": 18,
+   "staffRows": 6,
+   "failures": {},
+   "notRun": [],
+   "blockedHosts": {},
+   "skipReason": null
+  }
+ ],
+ "compareUrl": "https://github.com/NextOneTwoLabs/collegedash/compare/main...onboard/d3-b7?expand=1"
+}
