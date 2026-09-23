@@ -277,12 +277,21 @@ def test_build() -> None:
     # (not a national champion: check_titles would then fail validate for a reason of its own)
     moved = next(s for s in published if s not in set(build.NCAA_D1_WOMENS_CHAMPIONS.values()))
     reg2 = copy.deepcopy(reg)
+    # with D3 staged (#190), a staged D3 entry must carry a D3 conference as the Directory spells it, not a D1 label
+    d3_conference = next((q["conference"] for q in reg2["programs"] if q["division"] == "D3"), None)
     for p in reg2["programs"]:
         if p["slug"] == moved:
             p["division"] = "D3"
+            if d3_conference:
+                p["conference"] = d3_conference
     # a real reclassification of a long-standing program is a reviewed edit to build.REVIEWED_UNPUBLISHED (R1);
     # the scenario makes that edit for its duration
     build.REVIEWED_UNPUBLISHED = {**build.REVIEWED_UNPUBLISHED, moved: "test: reclassified to D3"}
+    # With D3 staged (#190) the moved program is one more staged D3 entry, collected but still not published, so
+    # the scenario also moves the D3 count anchor by one for its duration; otherwise validate fails on the count
+    saved_counts = build.STAGED_DIVISION_COUNTS
+    if "D3" in saved_counts:
+        build.STAGED_DIVISION_COUNTS = {**saved_counts, "D3": saved_counts["D3"] + 1}
     tmp = tempfile.mkdtemp(prefix="prune-build-")
     progs = os.path.join(tmp, "programs")
     swap = dict(PROGRAMS_OUT_DIR=progs, COMMITS_OUT_DIR=os.path.join(tmp, "commitments"), CAMPS_OUT_DIR=os.path.join(tmp, "camps"))
@@ -330,6 +339,7 @@ def test_build() -> None:
             ok("which fails validate as a whole", not passed and "STALE ghost-program" in out.getvalue())
     finally:
         build.REVIEWED_UNPUBLISHED = {k: v for k, v in build.REVIEWED_UNPUBLISHED.items() if k != moved}
+        build.STAGED_DIVISION_COUNTS = saved_counts
         shutil.rmtree(tmp, ignore_errors=True)
 
 

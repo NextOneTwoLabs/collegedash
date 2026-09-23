@@ -48,9 +48,10 @@ Membership policy (the owner's decisions on issue #94), applied on every build:
     changes or removes one; a build keeps it with the rest of the entry.
 
 Existing entries are preserved: a build writes only `division`, `conference` and `ids.ncaaOrgId`
-on a program that stays. data/registry-build-report.json records every decision.
+on a program that stays. data/registry-build-report-<division>.json records every decision, per division:
+a run writes the file of each division it decided something in and leaves the others untouched.
 
-    python collegedash.py registry build        # writes registry + report
+    python collegedash.py registry build        # writes registry + the reports of the divisions it touched
 """
 
 from __future__ import annotations
@@ -80,7 +81,50 @@ TDS_CONFERENCES = [
     ("sun-belt", 32), ("united-athletic-conference", 1056), ("west-coast", 21),
 ]
 SCORECARD_BULK = os.path.join(common.DATA_DIR, "scorecard-bulk.json")
-REPORT_PATH = os.path.join(common.DATA_DIR, "registry-build-report.json")
+
+
+def report_path(division: str) -> str:
+    """The build report for one division: data/registry-build-report-<d1|d2|d3>.json (issue #190).
+
+    One file per division, so staging D3 cannot overwrite the evidence of the D2 run that the membership
+    checks read, and a later run that decides nothing in a division leaves that division's file untouched."""
+    return os.path.join(common.DATA_DIR, f"registry-build-report-{division.lower()}.json")
+
+
+# The report lists that name programs. A division's report keeps only its own rows of these; every other
+# field describes the whole run and is copied as it is.
+DIVISION_LISTS = ("staged", "reclassified", "held", "returned", "added", "notAdded", "newPrograms")
+# The lists in which a row means the run DECIDED something in that division, so its report is written.
+# Not `staged`: it lists every staged entry on every build, so a build that changes nothing would rewrite
+# the staged division's report with empty `added` and `newPrograms` and erase the evidence of its staging run.
+# Not `notAdded` either: rows left for a later run (--limit) are not a decision about the division.
+DECISION_LISTS = ("reclassified", "held", "returned", "added")
+
+
+def division_reports(report: dict, division_of_slug: dict, division_of_name: dict) -> dict[str, dict]:
+    """division -> that division's share of a run report, for each division the run decided something in.
+
+    A row's division is its own `division` (a reclassification's `to`), else its slug's division in the
+    registry just written. `unmatched` and `contestedScorecardRows` are filtered the same way, the latter by
+    the Directory names claiming the row; `counts` is recomputed from the filtered `unmatched`."""
+
+    def division_of(row: dict):
+        return row.get("to") or row.get("division") or division_of_slug.get(row.get("slug"))
+
+    touched = sorted({division_of(r) for key in DECISION_LISTS for r in report.get(key) or []} - {None})
+    out = {}
+    for d in touched:
+        rep = dict(report)
+        for key in DIVISION_LISTS:
+            rep[key] = [r for r in report.get(key) or [] if division_of(r) == d]
+        rep["unmatched"] = {f: kept for f, slugs in (report.get("unmatched") or {}).items()
+                            for kept in [[s for s in slugs if division_of_slug.get(s) == d]] if kept}
+        rep["contestedScorecardRows"] = {u: names for u, names in (report.get("contestedScorecardRows") or {}).items()
+                                         if any(division_of_name.get(n) == d for n in names)}
+        if "counts" in report:
+            rep["counts"] = {k: len(v) for k, v in rep["unmatched"].items()}
+        out[d] = rep
+    return out
 
 # A build that would take more than this share of the published programs out of `programs` raises
 # instead of writing. A truncated or failed Directory response looks exactly like a mass departure.
@@ -200,14 +244,63 @@ REVIEWED_NOT_LISTED = {
 
 # Reviewed by the owner (issue #190): the slug a NEW program takes when the ladder's own choice is not the one
 # to publish -- a generic word ("eastern"), a name read straight off a long official title, or a campus that
-# should follow its siblings' pattern. orgId -> (slug, reason). Empty until the owner decides.
+# should follow its siblings' pattern. orgId -> (slug, reason).
 #
 # Only a Directory row the registry does not hold yet is named from here. A slug is a permanent URL and the
 # builder never renames an entry it already holds, so an override for an orgId already in the registry does
 # nothing -- which is also why the table has to land before the division it names is staged. A reviewed slug
 # is taken exactly or the build refuses: one that is not a valid slug, that two overrides share, or that an
 # entry already holds is an error, never quietly moved down the ladder to something nobody reviewed.
-REVIEWED_SLUGS: dict[int, tuple[str, str]] = {}
+#
+# Division III, all 41 renames proposed on #190 and accepted by the owner as written (2026-09-23). The comment
+# on each line is the slug the ladder gives without the override.
+_D3_GENERIC = "#190: the ladder's slug is a generic word"
+_D3_LONG = "#190: the ladder's slug is over 30 characters"
+_D3_SUNY = "#190: one pattern, suny-<campus>, for all 18 SUNY campuses"
+_D3_SIBLING = "#190: follows its sibling campuses, or mends a name the ladder cut up"
+REVIEWED_SLUGS: dict[int, tuple[str, str]] = {
+    8968: ("eastern-pa", _D3_GENERIC),  # eastern
+    652: ("sewanee", _D3_GENERIC),  # south (University of the South)
+    124: ("catholic-dc", _D3_GENERIC),  # catholic
+    117: ("capital-oh", _D3_GENERIC),  # capital
+    412: ("methodist-nc", _D3_GENERIC),  # methodist
+    30264: ("regent-va", _D3_GENERIC),  # regent
+    142: ("claremont-mudd-scripps", _D3_LONG),  # claremont-mckenna-harvey-mudd-scripps-colleges
+    538: ("penn-state-behrend", _D3_LONG),  # pennsylvania-state-univ-erie-behrend-college
+    588: ("rutgers-camden", _D3_LONG),  # rutgers-state-univ-new-jersey-camden
+    589: ("rutgers-newark", _D3_LONG),  # rutgers-state-univ-new-jersey-newark
+    398: ("mit", _D3_LONG),  # massachusetts-institute-technology
+    89: ("caltech", _D3_LONG),  # california-institute-technology
+    570: ("rensselaer", _D3_LONG),  # rensselaer-polytechnic-institute
+    808: ("wpi", _D3_LONG),  # worcester-polytechnic-institute
+    585: ("rose-hulman", _D3_LONG),  # rose-hulman-institute-technology
+    282: ("hobart-william-smith", _D3_LONG),  # hobart-and-william-smith-colleges
+    321: ("john-jay-college", _D3_LONG),  # john-jay-college-criminal-justice
+    751: ("washington-jefferson", _D3_LONG),  # washington-and-jefferson-college
+    78: ("suny-brockport", _D3_SUNY),  # state-new-york-brockport
+    85: ("suny-buffalo-state", _D3_SUNY),  # buffalo-state-state-new-york
+    30165: ("suny-canton", _D3_SUNY),  # state-new-york-canton
+    30083: ("suny-cobleskill", _D3_SUNY),  # state-new-york-cobleskill
+    168: ("suny-cortland", _D3_SUNY),  # state-new-york-cortland
+    30225: ("suny-delhi", _D3_SUNY),  # state-new-york-delhi
+    242: ("suny-fredonia", _D3_SUNY),  # state-new-york-fredonia
+    247: ("suny-geneseo", _D3_SUNY),  # state-new-york-geneseo
+    478: ("suny-maritime", _D3_SUNY),  # state-new-york-maritime-college
+    30067: ("suny-morrisville", _D3_SUNY),  # state-new-york-morrisville
+    475: ("suny-new-paltz", _D3_SUNY),  # state-new-york-new-paltz
+    524: ("suny-old-westbury", _D3_SUNY),  # state-new-york-old-westbury
+    526: ("suny-oneonta", _D3_SUNY),  # state-new-york-oneonta
+    530: ("suny-oswego", _D3_SUNY),  # state-new-york-oswego
+    547: ("suny-plattsburgh", _D3_SUNY),  # plattsburgh-state-new-york
+    9500: ("suny-polytechnic", _D3_SUNY),  # state-new-york-polytechnic-institute
+    552: ("suny-potsdam", _D3_SUNY),  # state-new-york-potsdam
+    30029: ("suny-purchase", _D3_SUNY),  # purchase-college-state-new-york
+    1340: ("st-josephs-ny-long-island", _D3_SIBLING),  # st-josephs-new-york-l-i
+    30044: ("penn-state-berks", _D3_SIBLING),  # penn-state-berks-college
+    803: ("wisconsin-stout", _D3_SIBLING),  # wisconsin-stout-polytechnic
+    722: ("coast-guard", _D3_SIBLING),  # u-s-coast-guard-academy
+    724: ("merchant-marine", _D3_SIBLING),  # u-s-merchant-marine-academy
+}
 SLUG_SHAPE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")  # the shape build.STAGED_SLUG_SHAPE checks on every staged entry
 
 # Time zones come from the coordinates, never from the state (issue #110). The state table this
@@ -1099,6 +1192,8 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
     def mutate(reg):
         holder["membership"] = apply_membership(reg, directory, bulk, today=common.today(), new_entries=new_entries,
                                                 timezone_lookup=timezone_at)
+        holder["division"] = {p["slug"]: p.get("division")
+                              for p in list(reg.get("programs") or []) + list(reg.get("heldPrograms") or [])}
 
     common.update_registry(mutate)
     m = holder["membership"]
@@ -1111,7 +1206,9 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
               "newPrograms": evidence, "unmatched": dict(unmatched),
               "lowConfidence": [{"slug": u["slug"], "evidence": u["evidence"]} for u in m["unresolved"]]}
     report["counts"] = {k: len(v) for k, v in report["unmatched"].items()}
-    common.write_json(REPORT_PATH, report)
+    by_name = {r["name"]: r["division"] for r in missing}
+    for division, rep in division_reports(report, holder["division"], by_name).items():
+        common.write_json(report_path(division), rep)
     common.log(f"registry: {m['slugs']['published']} published, {m['slugs']['staged']} staged ({', '.join(staged) or '-'}), "
                f"{m['slugs']['held']} held; identity {m['identity']}; "
                f"added {len(m['added'])}, held now {len(m['held'])}, returned {len(m['returned'])}, reclassified "

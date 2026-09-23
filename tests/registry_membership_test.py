@@ -37,6 +37,7 @@ Covers, in order:
 from __future__ import annotations
 
 import argparse
+import collections
 import copy
 import json
 import os
@@ -1140,7 +1141,9 @@ def test_committed() -> None:
         # domain plus state match), not inferred from the registry, so a hand-filled id cannot pass as one.
         # Issue #171: an id outside that set may exist only when it was filled by hand from a cited source,
         # and then location.note must name the Scorecard row and the file it was read from.
-        report = common.read_json(os.path.join(common.DATA_DIR, "registry-build-report.json")) or {}
+        # One report per division (#190): staging D3 wrote registry-build-report-d3.json and left the D2 run's
+        # report, the evidence read here, byte for byte as the D2 staging run wrote it.
+        report = common.read_json(rb.report_path("D2")) or {}
         exact = {r["slug"] for r in report.get("newPrograms") or [] if r.get("scorecard") == "exact"}
         joined = [p for p in d2 if p["slug"] in exact and p["ids"]["scorecardUnitId"] is not None]
         # fails if the builder's join drifts: an exact join lost, or the report rewritten with a different count
@@ -1161,6 +1164,39 @@ def test_committed() -> None:
         # fails if an apostrophe leaves a stray letter behind ("saint-martin-s")
         ok("no slug ends in a stray -s from an apostrophe", not [s for s in qualified + [p["slug"] for p in d2] if s.endswith("-s")],
            str([p["slug"] for p in d2 if p["slug"].endswith("-s")]))
+
+    # --- the Division III entries (issue #190): staged, named with the owner's reviewed slugs
+    ok("D3 is either staged or onboarded, so the D3 checks below run", "D3" in staged_divs or d3_on,
+       f"stagedDivisions {staged_divs}, onboardedDivisions {reg.get('onboardedDivisions')}")
+    if "D3" in staged_divs or d3_on:
+        d3 = [p for p in programs if p["division"] == "D3"]
+        # fails if the D3 list is short or long: the 2026-27 Directory list is 416 programs, one of them
+        # saint-francis, which stays in heldPrograms until D3 is onboarded
+        ok("all 416 D3 programs are in the registry: 415 in programs, saint-francis the 416th",
+           len(d3) == (416 if d3_on else 415) and bool(sf), str(len(d3)))
+        by_org = {p["ids"].get("ncaaOrgId"): p for p in everything}
+        # fails if the registry was built without the owner's table, or the table was edited after the build
+        # (an override only names a NEW program, so a late edit silently does nothing)
+        unapplied = [(org, slug, (by_org.get(org) or {}).get("slug")) for org, (slug, _) in rb.REVIEWED_SLUGS.items()
+                     if (by_org.get(org) or {}).get("slug") != slug]
+        ok(f"every one of the {len(rb.REVIEWED_SLUGS)} reviewed slugs names its orgId in the registry", not unapplied,
+           str(unapplied[:5]))
+        # Which ids the builder joined, from its own D3 report, as for D2 above: exact (website domain plus state)
+        # or on the registrable domain. Anything else would have to be hand-filled and name its source.
+        report3 = common.read_json(rb.report_path("D3")) or {}
+        kinds = collections.Counter(r.get("scorecard") for r in report3.get("newPrograms") or [])
+        builder3 = {r["slug"] for r in report3.get("newPrograms") or [] if r.get("scorecard") in ("exact", "registrable")}
+        joined3 = [p for p in d3 if p["slug"] in builder3 and p["ids"]["scorecardUnitId"] is not None]
+        # fails if the builder's D3 join drifts, or the D3 report is rewritten with a different count
+        ok("399 of the 415 join a Scorecard row by website domain (393 exact, 6 on the registrable domain)",
+           kinds["exact"] == 393 and kinds["registrable"] == 6 and len(joined3) == 399,
+           f"report exact {kinds['exact']}, registrable {kinds['registrable']}, with an id in the registry {len(joined3)}")
+        hand3 = [p for p in d3 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in builder3]
+        unsourced3 = [p["slug"] for p in hand3
+                      if f"College Scorecard row {p['ids']['scorecardUnitId']}" not in (p["location"].get("note") or "")
+                      or "data/scorecard-bulk.json" not in (p["location"].get("note") or "")]
+        ok("every D3 Scorecard id beyond the builder's joins names its source in location.note", not unsourced3,
+           f"no sourced note: {unsourced3}")
 
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing
@@ -1225,13 +1261,19 @@ def test_staged_division_count_anchor() -> None:
             result = build.check_staged_registry(reg)
         return result, buf.getvalue()
 
-    # D3 is staged, but build.STAGED_DIVISION_COUNTS names only D2 - the exact gap issue #149 is
+    # D3 is staged, but build.STAGED_DIVISION_COUNTS does not name it - the exact gap issue #149 is
     # about: a division staged later and never added to the dict must fail loudly, not pass with
-    # no count anchor at all.
+    # no count anchor at all. The shipped dict names D3 (#190), so D3 is taken out of it for this case.
     reg = {"onboardedDivisions": ["D1"], "stagedDivisions": ["D3"],
            "programs": [prog("gamma-d3", 900, "https://gogamma.com", "OH", division="D3", conference="Old Conf", org=900)],
            "heldPrograms": []}
-    result, out = run_check(reg)
+    saved = dict(build.STAGED_DIVISION_COUNTS)
+    try:
+        build.STAGED_DIVISION_COUNTS.pop("D3", None)
+        result, out = run_check(reg)
+    finally:
+        build.STAGED_DIVISION_COUNTS.clear()
+        build.STAGED_DIVISION_COUNTS.update(saved)
     # fails if a staged division with no entry in STAGED_DIVISION_COUNTS passes silently
     ok("a staged division missing from STAGED_DIVISION_COUNTS fails the check", not result, out)
     ok("names the division, what to do, and when to do it",
@@ -1248,6 +1290,46 @@ def test_staged_division_count_anchor() -> None:
     finally:
         build.STAGED_DIVISION_COUNTS.clear()
         build.STAGED_DIVISION_COUNTS.update(saved)
+
+
+def test_division_reports() -> None:
+    print("build reports: one per division, each with only its own rows (#190)")
+    split = getattr(rb, "division_reports", None)
+    if split is None:
+        ok("FIX registry_builder.division_reports exists", False, "no division_reports on this code")
+        return
+    report = {"builtAt": "2026-09-23T00:00:00Z", "stagedDivisions": ["D3"], "timezoneDisagreement": [{"slug": "x1"}],
+              "staged": [], "returned": [],
+              "added": [{"slug": "a2", "division": "D2"}, {"slug": "a3", "division": "D3"}],
+              "notAdded": [{"orgId": 9, "name": "N3", "division": "D3"}],
+              "held": [{"slug": "h1", "reason": "not-in-directory", "division": None}],
+              "reclassified": [{"slug": "r1", "from": "D2", "to": "D1"}],
+              "newPrograms": [{"slug": "a2"}, {"slug": "a3"}],
+              "unmatched": {"colors": ["a2", "a3"], "nickname": ["a3"]}, "counts": {"colors": 2, "nickname": 1},
+              "contestedScorecardRows": {"11": ["Name A2", "Name B2"], "22": ["Name A3", "x1 (already in the registry)"]}}
+    by_slug = {"a2": "D2", "a3": "D3", "h1": "D1", "r1": "D1", "x1": "D1"}
+    by_name = {"Name A2": "D2", "Name B2": "D2", "Name A3": "D3", "N3": "D3"}
+    out = split(report, by_slug, by_name)
+    ok("a report is split into the divisions it decided something in", sorted(out) == ["D1", "D2", "D3"], str(sorted(out)))
+    d1, d2, d3 = out.get("D1", {}), out.get("D2", {}), out.get("D3", {})
+    ok("D2 keeps only its own rows", [r["slug"] for r in d2.get("added", [])] == ["a2"] and [r["slug"] for r in d2.get("newPrograms", [])] == ["a2"]
+       and d2.get("unmatched") == {"colors": ["a2"]} and d2.get("counts") == {"colors": 1}
+       and list(d2.get("contestedScorecardRows", {})) == ["11"] and d2.get("notAdded") == [], str(d2))
+    ok("D3 keeps only its own rows, notAdded included", [r["slug"] for r in d3.get("added", [])] == ["a3"] and len(d3.get("notAdded", [])) == 1
+       and d3.get("unmatched") == {"colors": ["a3"], "nickname": ["a3"]} and list(d3.get("contestedScorecardRows", {})) == ["22"], str(d3))
+    ok("a hold with no division and a reclassification go by the registry's division, and `to`",
+       [r["slug"] for r in d1.get("held", [])] == ["h1"] and [r["slug"] for r in d1.get("reclassified", [])] == ["r1"]
+       and d1.get("added") == [], str(d1))
+    ok("run fields are copied to every division's report", all(o.get("builtAt") == report["builtAt"]
+                                                              and o.get("timezoneDisagreement") == [{"slug": "x1"}] for o in out.values()))
+    ok("the input report is not modified", report["added"][0]["slug"] == "a2" and len(report["added"]) == 2)
+    quiet = {k: ([] if isinstance(v, list) else v) for k, v in report.items()}
+    ok("a run that decided nothing writes no report", split(quiet, by_slug, by_name) == {}, str(split(quiet, by_slug, by_name)))
+    # fails if the `staged` status list (every staged entry, on every build) counts as a decision: the next
+    # build after staging D3 would then rewrite the D3 report with nothing added and erase its join evidence
+    rerun = dict(quiet, staged=[{"slug": "a3", "division": "D3", "orgId": 3}])
+    ok("a later build that only finds D3 still staged leaves the D3 report alone", split(rerun, by_slug, by_name) == {},
+       str(sorted(split(rerun, by_slug, by_name))))
 
 
 def test_reviewed_slugs() -> None:
@@ -1315,6 +1397,18 @@ def test_reviewed_slugs() -> None:
             # fails if build() names new programs without the table
             ok("FIX build() names the new D3 program from REVIEWED_SLUGS: eastern-pa",
                build_err is None and slugs.get(301) == "eastern-pa", str(build_err or slugs))
+            # This build adds a D1 row (epsilon) and a D3 row (Eastern) and only finds edward-waters still staged in D2.
+            # fails if it writes (overwrites) the D2 report, or the old single run report -- the way staging D3 used
+            # to erase the D2 join evidence test_committed reads (#190)
+            report_path = getattr(rb, "report_path", lambda d: None)
+            reports = sorted(os.path.basename(p) for p in written if "registry-build-report" in os.path.basename(p))
+            ok("FIX a build writes the report of each division it added to (D1, D3) and leaves D2's alone",
+               build_err is None and reports == ["registry-build-report-d1.json", "registry-build-report-d3.json"]
+               and report_path("D3") in written, str(reports))
+            d3_rep = written.get(report_path("D3")) or {}
+            ok("and that report is D3's: the new row in added and newPrograms",
+               [r["slug"] for r in d3_rep.get("added") or []] == ["eastern-pa"]
+               and [r["slug"] for r in d3_rep.get("newPrograms") or []] == ["eastern-pa"], str(d3_rep.get("added")))
             # fails if an override is applied to (or checked against) an entry the registry already holds. The two GUARD
             # checks pass on code without the table too (nothing there renames anything); the mutation that applies
             # the table to every orgId, not only to rows being added, is what they catch
@@ -1358,8 +1452,14 @@ def test_reviewed_slugs() -> None:
     refused("FIX an override with capitals or a doubled hyphen is refused", {301: ("Eastern--PA", "x")}, "Eastern--PA", "not a valid slug")
     refused("FIX an override with an underscore is refused", {301: ("eastern_pa", "x")}, "eastern_pa", "not a valid slug")
     refused("FIX an override with a trailing hyphen is refused", {301: ("eastern-", "x")}, "eastern-", "not a valid slug")
-    ok("CONTROL the shipped table is empty until the owner decides (#190)", getattr(rb, "REVIEWED_SLUGS", {}) == {},
-       str(getattr(rb, "REVIEWED_SLUGS", None)))
+    # The shipped table is the owner's 2026-09-23 decision on #190: all 41 proposed D3 renames. That it was applied
+    # is checked against the committed registry in test_committed; here, that the table itself is usable.
+    shipped = getattr(rb, "REVIEWED_SLUGS", {})
+    ok("the shipped table holds the 41 D3 renames the owner accepted (#190)", len(shipped) == 41, str(len(shipped)))
+    ok("every shipped slug is well formed and no two share one",
+       all(rb.SLUG_SHAPE.match(s) for s, _ in shipped.values()) and len({s for s, _ in shipped.values()}) == len(shipped),
+       str([s for s, _ in shipped.values() if not rb.SLUG_SHAPE.match(s)]))
+    ok("every shipped override gives a reason", all(isinstance(r, str) and r.strip() for _, r in shipped.values()))
 
 
 def main(argv=None) -> int:
@@ -1376,6 +1476,7 @@ def main(argv=None) -> int:
     test_independent_label_guard()
     test_slugs()
     test_reviewed_slugs()
+    test_division_reports()
     test_new_entry()
     test_timezones()
     test_committed()
