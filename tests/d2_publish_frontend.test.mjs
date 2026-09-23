@@ -35,6 +35,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { expectedRpi, expectedRpiOf, reEscape } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
@@ -51,8 +52,9 @@ const COMMITTED_INDEX = readJson('data/programs/index.json');
 const REAL_INDEX = { ...COMMITTED_INDEX, programs: COMMITTED_INDEX.programs.filter((p) => p.division === 'D1') };
 const D1_FILES = { 'data/programs/index.json': REAL_INDEX };
 const row = (slug) => { const r = REAL_INDEX.programs.find((p) => p.slug === slug); assert.ok(r, `no ${slug} in the index`); return r; };
-const RPI_SEASON = 2025;
-const rpiOfRow = (p) => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find((r) => r.year === RPI_SEASON)?.rank ?? null;
+// The RPI season is read from the index, not hardcoded (issue #62): the latest ranked season, in progress while it is played.
+const RPI = expectedRpi(REAL_INDEX), RPI_SEASON = RPI.season;
+const rpiOfRow = expectedRpiOf(REAL_INDEX);
 const UNRANKED_D1 = REAL_INDEX.programs.find((p) => p.division === 'D1' && rpiOfRow(p) == null)?.slug;
 const TITLE_YEARS_D2 = [2009, 2010, 2013, 2015, 2016, 2019, 2021];
 
@@ -262,7 +264,7 @@ test('RPI and College Cups are left out for Division II: card, table, profile, g
   const pg = await ready(MIXED_FILES);
   const cards = await list(pg);
   assert.doesNotMatch(card(cards, 'test-d2-champion'), /RPI/, 'the Division II card shows an RPI fact');
-  assert.match(card(cards, 'north-carolina'), /RPI 2025/);
+  assert.ok(card(cards, 'north-carolina').includes(RPI.label), `the Division I card lacks its ${RPI.label} fact`);
   const table = await list(pg, { view: 'table', moreStats: true });
   const champ = cells(tableRow(table, 'test-d2-champion'));
   const cupsIdx = cells(tableRow(table, 'north-carolina')).findIndex((x) => x.html === String(row('north-carolina').collegeCups));
@@ -270,7 +272,7 @@ test('RPI and College Cups are left out for Division II: card, table, profile, g
   assert.equal(champ[cupsIdx].html, '', 'the Division II College Cups cell is not empty');
   const o = await profile(pg, 'test-d2-champion');
   assert.doesNotMatch(subtitle(o.app), /RPI/);
-  assert.doesNotMatch(o.app, /<div class="stat-label">RPI 2025<\/div>/, 'the glance shows an RPI');
+  assert.doesNotMatch(o.app, /<div class="stat-label">RPI/, 'the glance shows an RPI');
   assert.doesNotMatch(o.app, /<dt>College Cups<\/dt>/, 'the glance shows College Cups');
   assert.doesNotMatch(o.tab, /College Cups|RPI, recent seasons| · RPI #/, 'the overview shows an RPI or College Cups part');
   assert.deepEqual(tabLabels(o.app).filter((l) => /History/.test(l)), ['History']);
@@ -279,8 +281,8 @@ test('RPI and College Cups are left out for Division II: card, table, profile, g
   assert.doesNotMatch(h.tab, /College Cup \(final four\)/);
   assert.match(h.tab, /<h3>Season by season<\/h3>/, 'the season table itself was dropped');
   pg.sb.S.compare = ['north-carolina', 'test-d2-champion']; await pg.sb.renderCompare();
-  for (const label of ['RPI 2025', 'RPI 2024', 'Avg RPI, last 5 seasons', 'College Cups']) {
-    const m = pg.app().match(new RegExp(`<tr><th>${label}</th><td>[^<]*</td><td>([\\s\\S]*?)</td></tr>`));
+  for (const label of [RPI.label, `RPI ${RPI_SEASON - 1}`, 'Avg RPI, last 5 seasons', 'College Cups']) {
+    const m = pg.app().match(new RegExp(`<tr><th>${reEscape(label)}</th><td>[^<]*</td><td>([\\s\\S]*?)</td></tr>`));
     assert.equal(m?.[1], '<span class="muted small">not applicable to Division II</span>', `Compare ${label}`);
   }
 });

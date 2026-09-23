@@ -524,7 +524,6 @@ const S = {
   // Ask (#165). S.ask is set only by /api/status {ask: true}; while it is false no ask markup or behaviour exists.
   ask: false, askPending: false, askMsg: '', askResult: null,
 };
-const RPI_SEASON = 2025;
 const NCAA_RPI_URL = 'https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-soccer-rpi';
 // The 2007–2024 end-of-season archive: Chris Thomas, "RPI for Division I Women's Soccer" (issue #102).
 const RPI_ARCHIVE_URL = 'https://sites.google.com/site/rpifordivisioniwomenssoccer/Home';
@@ -722,7 +721,8 @@ const COND_FIELDS = [
   { key: 'sat25', label: 'SAT, 25th percentile', chip: 'SAT 25th pct', missing: 'no SAT score', unit: 'score', ops: ORDER_OPS,
     get: p => p.sat25 },
   // The RPI the cards and table show (rpiOf: the ranking season only), not whatever lastSeason happens to hold.
-  { key: 'rpiRank', label: `RPI ${RPI_SEASON}`, chip: 'RPI', missing: `no ${RPI_SEASON} RPI`, unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
+  // Getters: the season is read from the loaded index (rpiSeasons, issue #62), which does not exist yet here.
+  { key: 'rpiRank', get label() { return rpiLabel(); }, chip: 'RPI', get missing() { return rpiSeason() ? `no ${rpiSeason()} RPI` : 'no RPI'; }, unit: 'rank', ops: COND_OPS, lowerIsBetter: true,
     get: p => rpiOf(p), applies: p => appliesTo('rpi', p) },
   { key: 'nationalTitles', label: 'National titles', chip: 'Titles', missing: 'no national-title count', unit: 'count', ops: COND_OPS,
     get: p => titleCount(p, p.nationalTitles) },
@@ -968,10 +968,39 @@ function renderObserved() {
   document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
 }
 const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
+/* ---------- which RPI season the page shows (issue #62) ----------
+   Read from the published index, never hardcoded, so a new season needs no edit here. build.py reads the
+   NCAA's live table (current.json) only for the season being played (index.season.current, the registry's)
+   and a finished season only from its last weekly snapshot, and writes each program's ranks into rpiHistory.
+   So the latest year any program has a rank for IS the season of the table the site holds, and:
+     season      that year: the rank the cards, table, filter and sort use;
+     inProgress  it is the season being played - the live weekly table, labelled "in progress" everywhere a
+                 rank from it is shown (owner, 2026-09-23). It stays in progress until the registry moves to
+                 the next season, which is when the build starts reading its final snapshot instead;
+     finished    the last ranked season before the season being played: what "Record" and the last-season
+                 figures mean. An in-progress season is never it.
+   Memoised per loaded index: rpiOf runs inside sort comparators. */
+let rpiMemo = { index: undefined };
+function rpiSeasons() {
+  const idx = S.index;
+  if (rpiMemo.index === idx) return rpiMemo;
+  const current = idx?.season?.current ?? null;
+  const years = [...new Set((idx?.programs || []).flatMap(p => (p.rpiHistory || []).map(h => h.year)))].sort((a, b) => b - a);
+  const season = years[0] ?? null;
+  const finished = years.find(y => current == null || y < current) ?? (current != null ? current - 1 : null);
+  rpiMemo = { index: idx, season, inProgress: season != null && season === current, finished };
+  return rpiMemo;
+}
+const rpiSeason = () => rpiSeasons().season;
+const rpiInProgress = () => rpiSeasons().inProgress;
+const finishedSeason = () => rpiSeasons().finished;
+const IN_PROGRESS = 'in progress';
+const rpiLabel = () => rpiSeason() == null ? 'RPI' : `RPI ${rpiSeason()}${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}`;
 // RPI for the ranking season, from the program's own row in the published index: build.py joins the RPI
-// tables to each program by its curated ids and writes the result into lastSeason and rpiHistory. The page
-// no longer reads the tables themselves, and the site no longer serves them (issue #100).
-const rpiOf = p => (p.lastSeason?.year === RPI_SEASON ? p.lastSeason.rpiRank : null) ?? (p.rpiHistory || []).find(r => r.year === RPI_SEASON)?.rank ?? null;
+// tables to each program by its curated ids and writes the result into rpiHistory (every ranked season,
+// the one in progress included). The page no longer reads the tables themselves, and the site no longer
+// serves them (issue #100).
+const rpiOf = p => (p.rpiHistory || []).find(r => r.year === rpiSeason())?.rank ?? null;
 // The RPI sort's key: ranked programs by rank, then unranked Division I programs (999, as before), then programs
 // whose division RPI does not apply to (#198) - after them, and never shown as missing.
 const rpiSortKey = p => appliesTo('rpi', p) ? (rpiOf(p) ?? 999) : 1999;
@@ -1006,7 +1035,7 @@ const HONOR_LISTS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaA
 const has = {
   // index rows: cards and table
   rowRpi: r => appliesTo('rpi', r) && rpiOf(r) != null,
-  rowRecord: r => r.lastSeason?.year === RPI_SEASON && !!r.lastSeason.record,
+  rowRecord: r => r.lastSeason?.year === finishedSeason() && !!r.lastSeason.record,
   rowAcademicRank: r => r.academicRank != null,
   rowCommits: r => Object.keys(r.commitmentsByYear || {}).length > 0,
   rowRoster: r => r.rosterSize != null,
@@ -1105,7 +1134,9 @@ function pruneConfToDivisions() {
   S.filters.conf = S.filters.conf.filter(c => visible.has(c));
 }
 // Name first, to match the default in S.filters. The select's order is cosmetic; the default is there.
-const SORTS = [['name', 'Name'], ['rpi', `RPI ${RPI_SEASON}`], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
+const SORTS = [['name', 'Name'], ['rpi', 'RPI'], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
+// The RPI option's label names the season it sorts by, read from the data (issue #62), so it is not stored above.
+const sortLabel = k => k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1];
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
@@ -1158,7 +1189,7 @@ function renderSidebar() {
       <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="${S.ask ? 'School, mascot, or a question…' : 'School or mascot…'}" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
       <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
       <div class="sidebar-section-title">Browse</div>
-      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k, l]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>`}
+      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select></div>`}
       ${divisionBlock}
       ${condBlock}
       <div class="browse-label">Region</div>
@@ -1549,14 +1580,14 @@ async function renderList() {
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
-  bits.push(`sorted by ${SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
+  bits.push(`sorted by ${sortLabel(f.sort) || 'RPI'}`);
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${RPI_SEASON}`), tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
   const app = $('#app');
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
@@ -1576,7 +1607,7 @@ function cardHtml(p) {
   const tc = teamColors(p), cy = S.filters.classYear;
   const years = Object.entries(p.commitmentsByYear || {});
   const commits = years.length ? years.map(([y, n]) => cy.includes(y) ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
-  const facts = [has.rowRpi(p) ? fact(`RPI ${RPI_SEASON}`, rpiCell(p)) : '', has.rowAcademicRank(p) ? fact('US rank (THE)', rankHtml(p), rankTitle(p)) : '',
+  const facts = [has.rowRpi(p) ? fact(rpiLabel(), rpiCell(p)) : '', has.rowAcademicRank(p) ? fact('US rank (THE)', rankHtml(p), rankTitle(p)) : '',
     p.undergradEnrollment != null ? fact('Undergrads', fmtNum(p.undergradEnrollment)) : '',
     p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
   const foot = [has.rowCommits(p) ? `Commits ${commits}` : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
@@ -1602,7 +1633,7 @@ function tableHtml(rows) {
     ['rank', '#', 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
     ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
-    ['record', `Record ${RPI_SEASON}`, 'num', p => p.lastSeason?.year === RPI_SEASON ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
+    ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
     ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
@@ -1619,7 +1650,7 @@ function tableHtml(rows) {
     <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
-    <div class="table-footnote">RPI and record are the ${RPI_SEASON} season as published by the NCAA${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
+    <div class="table-footnote">${rpiInProgress() ? `RPI (#) is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table · Record is the ${finishedSeason()} season` : `RPI and record are the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
   </div>`;
 }
 
@@ -1966,7 +1997,7 @@ const LINK_TAB = { roster: 'roster', schedule: 'schedule', news: 'news', camps: 
 const linkHasSection = (k, p) => !LINK_TAB[k] || TAB_HAS[LINK_TAB[k]](p);
 function glanceHtml(p, row) {
   const seasons = p.seasons || [];
-  const s25 = seasons.find(s => s.year === RPI_SEASON);
+  const rpiRow = seasons.find(s => s.year === rpiSeason()); // the RPI season's row (issue #62); in progress while it is being played
   const cur = seasons.find(s => s.inProgress);
   const sch = p.school || {}, pr = p.program || {};
   // next unplayed game on or after today, and the most recent played one - from the schedule the profile already carries
@@ -1992,7 +2023,7 @@ function glanceHtml(p, row) {
       <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
     </div>
     <div class="glance-stats">
-      ${s25?.rpiRank && appliesTo('rpi', p) ? `<div><div class="stat-label">RPI ${RPI_SEASON}</div><div class="stat-value">${s25?.rpiRank ? `#${s25.rpiRank}` : '—'}</div>${s25?.record ? `<div class="stat-sub">${esc(s25.record)}${s25.ncaaResult ? ` · ${esc(s25.ncaaResult)}` : ''}</div>` : ''}</div>` : ''}
+      ${rpiRow?.rpiRank && appliesTo('rpi', p) ? `<div><div class="stat-label">RPI ${rpiSeason()}</div><div class="stat-value">${rpiRow?.rpiRank ? `#${rpiRow.rpiRank}` : '—'}</div>${rpiInProgress() ? `<div class="stat-sub">${IN_PROGRESS}${rpiRow.rpi?.through ? ` · through ${esc(fmtDate(rpiRow.rpi.through))}` : ''}</div>` : rpiRow?.record ? `<div class="stat-sub">${esc(rpiRow.record)}${rpiRow.ncaaResult ? ` · ${esc(rpiRow.ncaaResult)}` : ''}</div>` : ''}</div>` : ''}
       ${cur || has.titles(p) ? `<div><div class="stat-label">${cur ? `${cur.year} so far` : titlesLabel(p.division)}</div><div class="stat-value">${cur ? esc(cur.record || '—') : (pr.nationalTitles || []).length}</div>${cur && has.titles(p) ? `<div class="stat-sub">${titlesPhrase((pr.nationalTitles || []).length, p.division)}</div>` : ''}</div>` : ''}
       ${sch.admissionRate != null ? `<div><div class="stat-label">Admit rate</div><div class="stat-value">${fmtPct(sch.admissionRate)}</div><div class="stat-sub">whole university</div></div>` : ''}
       ${sch.undergradEnrollment != null ? `<div><div class="stat-label">Undergrads</div><div class="stat-value">${fmtNum(sch.undergradEnrollment)}</div><div class="stat-sub">${esc((sch.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))}</div></div>` : ''}
@@ -2027,7 +2058,7 @@ async function renderProfile(slug, tab) {
   const hiddenAsked = shownTabs.some(([k]) => k === tab) ? null : TABS.find(([k]) => k === tab);
   if (hiddenAsked) { tab = 'overview'; history.replaceState(null, '', `#/p/${slug}`); }
   const app = $('#app');
-  const s25 = (p.seasons || []).find(s => s.year === RPI_SEASON);
+  const rpiRow = (p.seasons || []).find(s => s.year === rpiSeason());
   const failed = p._build.failed || [];
   const notices = [];
   if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
@@ -2035,7 +2066,7 @@ async function renderProfile(slug, tab) {
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
-  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), s25?.rpiRank && appliesTo('rpi', p) ? `RPI ${RPI_SEASON} <b>#${s25.rpiRank}</b>` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
+  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
@@ -2067,7 +2098,7 @@ async function tabOverview(p) {
     </div>
     ${rpiPts.length || has.roster(p) ? `<div class="grid g2">
       ${rpiPts.length ? `<div class="card"><h3>RPI, recent seasons</h3>
-        <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, yMin: 1, yMax: Math.max(25, ...rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 25, label: '#25' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
+        <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, yMin: 1, yMax: Math.max(25, ...rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}${s.inProgress ? ` ${IN_PROGRESS}` : ''}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 25, label: '#25' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
         <p class="small muted">Lower is better. End-of-season RPI; the current season shows the latest weekly rank once published.</p></div>` : ''}
       ${has.roster(p) ? `<div class="card"><h3>Roster snapshot${p.roster ? ` ${p.roster.season}` : ''}</h3>
         ${p.roster ? `<p>${p.roster.count} players · graduating this year: ${Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none listed'}</p>
@@ -2137,13 +2168,13 @@ async function tabHistory(p) {
   const withRpi = rpi ? p.seasons.filter(s => s.rpiRank).sort((a, b) => a.year - b.year) : [];
   const chart = svgLine({
     width: 1160, height: 300, yInverted: true, yMin: 1, yMax: Math.max(30, ...withRpi.map(s => s.rpiRank)),
-    series: [{ name: 'RPI rank', color: 'var(--s1)', points: withRpi.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank} (${s.record || ''})` })) }],
+    series: [{ name: 'RPI rank', color: 'var(--s1)', points: withRpi.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank} (${s.record || ''})${s.inProgress ? `, ${IN_PROGRESS}` : ''}` })) }],
     xTicks: withRpi.filter((s, i) => i % 2 === 0 || i === withRpi.length - 1).map(s => ({ x: s.year, label: String(s.year) })),
     yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 20, label: '#20' }, { y: 30, label: '#30' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'End-of-season RPI rank by year',
   });
   const yearsList = (label, arr) => `<tr><th>${label}</th><td>${arr.length ? `<b>${arr.length}</b> — ${arr.join(', ')}` : '—'}</td></tr>`;
   return `${withRpi.length ? `<div class="card section"><h3>RPI rank by season</h3><div class="chart">${chart}</div>
-      <p class="small muted">Lower is better. 2007–2024 are end-of-season ranks from <a href="${RPI_ARCHIVE_URL}" target="_blank" rel="noopener">Chris Thomas’s RPI archive</a>: from 2010 he restates them as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so they are not the ranks that stood at the time (2007–2009 use the overtime rules and formula of those years); 2025 onward are the NCAA's own published ranks. No 2020 (COVID season).</p></div>` : ''}
+      <p class="small muted">Lower is better. 2007–2024 are end-of-season ranks from <a href="${RPI_ARCHIVE_URL}" target="_blank" rel="noopener">Chris Thomas’s RPI archive</a>: from 2010 he restates them as if the No Overtime rule and the 2024 NCAA RPI formula had been in effect, so they are not the ranks that stood at the time (2007–2009 use the overtime rules and formula of those years); 2025 onward are the NCAA's own published ranks, and a season marked in progress shows its latest weekly rank. No 2020 (COVID season).</p></div>` : ''}
     <div class="grid g2">
       ${has.honors(p) ? `<div class="card"><h3>Honors</h3><table>
         ${yearsList(p.division === 'D1' || !p.division ? 'NCAA championships' : `NCAA ${esc(p.division)} championships`, pr.nationalTitles)}${yearsList('NCAA runner-up', pr.nationalRunnerUp)}${cups ? yearsList('College Cup (final four)', pr.collegeCups) : ''}
@@ -2153,7 +2184,7 @@ async function tabHistory(p) {
         ${prov(pr._meta?.wikipedia)}</div>` : ''}
       ${has.seasons(p) ? `<div class="card"><h3>Season by season</h3><div class="tscroll" style="max-height:520px;overflow-y:auto"><table>
         <tr><th>Year</th><th>Coach</th><th>Record</th><th>Conf</th><th>Finish</th><th>NCAA</th>${rpi ? '<th class="num">RPI</th><th class="num">Seed</th><th class="num">KPI</th><th class="num">Massey</th>' : ''}</tr>
-        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ' <span class="badge">live</span>' : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td>${rpi ? `<td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td>` : ''}</tr>`).join('')}</table></div></div>` : ''}
+        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ` <span class="badge">${IN_PROGRESS}</span>` : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td>${rpi ? `<td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td>` : ''}</tr>`).join('')}</table></div></div>` : ''}
     </div>`;
 }
 
@@ -2313,10 +2344,10 @@ async function renderCompare() {
       ['6-yr graduation rate', p => fmtPct(p.school?.gradRate6yr)], ['Setting', p => esc(p.school?.locale || '—')],
     ]],
     ['Soccer', [
-      [`RPI ${RPI_SEASON}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
-      [`RPI ${RPI_SEASON - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === RPI_SEASON - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      [rpiLabel(), p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason()); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      [`RPI ${rpiSeason() - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason() - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       ['Avg RPI, last 5 seasons', p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
-      [`${RPI_SEASON} record`, p => { const s = p.seasons.find(x => x.year === RPI_SEASON); return s?.record ? `${esc(s.record)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
+      [`${finishedSeason()} record`, p => { const s = p.seasons.find(x => x.year === finishedSeason()); return s?.record ? `${esc(s.record)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
       ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
       ['National titles', p => p.division === 'D1' || !p.division ? p.program.nationalTitles.length : `${p.program.nationalTitles.length} <span class="muted small">NCAA ${esc(p.division)}</span>`],
       ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],
