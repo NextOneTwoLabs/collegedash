@@ -106,6 +106,41 @@ class SkipCollector(RuntimeError):
     a failure, so `refresh --failed` and the dashboard do not keep nagging about it."""
 
 
+# ---------- secrets in error and log text (issue #258) ----------
+
+# Env vars holding credentials a collector sends. Their values are replaced literally wherever they
+# appear in error or log text, as a backstop to the parameter rule below.
+SECRET_ENV_VARS = ("SCORECARD_API_KEY",)
+REDACTED = "REDACTED"
+_SECRET_PARAM_RE = re.compile(
+    r"(?i)((?:[?&;]|%3F|%26)"  # the delimiter before the name; %3F/%26 for a URL nested (encoded) in another
+    r"(?:api[_-]?key|apikey|key|access_token|auth_token|client_secret|token|secret|password|passwd|pwd"
+    r"|signature|sig)"
+    r"(?:=|%3D))"
+    r"(?:(?!%26|%23)[^&#\s\"'()<>])*")  # the value ends at & # whitespace quotes ( ) < > or an encoded & #
+_USERINFO_RE = re.compile(r"(?i)(\b[a-z][a-z0-9+.-]*://)[^/\s@:]+:[^/\s@]+@")
+
+
+def redact(text) -> str:
+    """`text` with credential values removed: the value of any key/token/secret/password-like URL
+    parameter, the user:password of a URL, and the literal value of each SECRET_ENV_VARS variable that
+    is set and at least 8 characters long (a short or empty value would redact ordinary text). For
+    error and log text only, never data fields. Redact before truncating: a cut can split the
+    parameter name and hide the value from the rule."""
+    s = "" if text is None else str(text)
+    for name in SECRET_ENV_VARS:
+        v = os.environ.get(name) or ""
+        if len(v) >= 8 and v in s:
+            s = s.replace(v, REDACTED)
+    s = _SECRET_PARAM_RE.sub(lambda m: m.group(1) + REDACTED, s)
+    return _USERINFO_RE.sub(lambda m: m.group(1) + REDACTED + "@", s)
+
+
+def error_text(e, limit: int) -> str:
+    """str(e) redacted, then cut to `limit` characters: what any error stored or printed goes through."""
+    return redact(str(e))[:limit]
+
+
 # ---------- time ----------
 
 def now_iso() -> str:
@@ -134,7 +169,7 @@ def log_traceback() -> None:
     import sys
     import traceback
     label = getattr(_log_context, "label", None)
-    text = traceback.format_exc()
+    text = redact(traceback.format_exc())
     if label:
         text = "".join(f"{label} | {line}\n" for line in text.rstrip("\n").split("\n"))
     with _log_lock:
@@ -146,13 +181,14 @@ def annotate(line: str) -> None:
     """Print a GitHub Actions workflow command (`::warning ...`) on its own line: no timestamp
     prefix, which Actions would not parse, and under the log lock so a worker thread cannot split
     it across another thread's output."""
+    line = redact(line)
     with _log_lock:
         print(line, flush=True)
 
 
 def log(msg: str) -> None:
     label = getattr(_log_context, "label", None)
-    line = f"[{_dt.datetime.now().strftime('%H:%M:%S')}] " + (f"{label} | " if label else "") + msg
+    line = f"[{_dt.datetime.now().strftime('%H:%M:%S')}] " + (f"{label} | " if label else "") + redact(msg)
     with _log_lock:  # print() writes the text and the newline separately; threads must not split them
         print(line, flush=True)
 
@@ -628,7 +664,7 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
                 return f.read(), meta
 
     if os.environ.get("COLLEGEDASH_OFFLINE"):
-        raise FetchError(f"offline and not cached: {url}")
+        raise FetchError(f"offline and not cached: {redact(url)}")
 
     hdrs = dict(DEFAULT_HEADERS)
     if headers:
@@ -667,15 +703,15 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
             write_json(meta_path, meta)
             return resp.content, meta
         if resp.status_code in RETRY_STATUSES:
-            last_err = FetchError(f"HTTP {resp.status_code} for {url}")
+            last_err = FetchError(f"HTTP {resp.status_code} for {redact(url)}")
             # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
             # gate already holds the host that answered for this long; this thread pauses with it.
             _retry.attempt = attempt + 1
             time.sleep(_backoff_seconds(resp.status_code))
             _retry.attempt = 1
             continue
-        raise FetchError(f"HTTP {resp.status_code} for {url}")
-    raise FetchError(f"giving up after {retries} attempts: {last_err}")  # last_err names the URL
+        raise FetchError(f"HTTP {resp.status_code} for {redact(url)}")
+    raise FetchError(f"giving up after {retries} attempts: {redact(last_err)}")  # last_err names the URL
 
 
 def fetch_text(url: str, **kw) -> tuple[str, dict]:

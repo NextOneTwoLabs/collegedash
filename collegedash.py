@@ -94,13 +94,13 @@ def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, d
         entry = {"ok": True}
     except common.SkipCollector as e:  # nothing to collect for this program; not a failure
         common.log(f"-- {name} skipped for {program['slug']}: {e}")
-        r.update(outcome="skipped", error=str(e)[:300])
-        entry = {"ok": True, "skipped": str(e)[:300]}
+        r.update(outcome="skipped", error=common.error_text(e, 300))
+        entry = {"ok": True, "skipped": common.error_text(e, 300)}
     except Exception as e:  # keep going; partial progress is still committed
         common.log(f"!! {name} failed for {program['slug']}: {e}")
         common.log_traceback()
-        r.update(outcome="failed", error=str(e)[:300])
-        entry = {"ok": False, "error": str(e)[:300]}
+        r.update(outcome="failed", error=common.error_text(e, 300))
+        entry = {"ok": False, "error": common.error_text(e, 300)}
     entry["at"] = common.now_iso()  # when the collector finished, not when the batch was written
     return r, entry
 
@@ -536,7 +536,7 @@ def cmd_refresh(args):
             results.append({"program": "-", "collector": "rpi", "outcome": "ok", "error": ""})
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
-            results.append({"program": "-", "collector": "rpi", "outcome": "failed", "error": str(e)[:300]})
+            results.append({"program": "-", "collector": "rpi", "outcome": "failed", "error": common.error_text(e, 300)})
     # --coach-bios fetches the head coach's bio with player bios off (the weekly and full runs, issue #168);
     # without either, a run with player bios fetches it too, and a --no-bios run keeps the stored one
     results += collect_plan(plan, reg, bios=not args.no_bios, coach_bios=args.coach_bios or not args.no_bios,
@@ -580,7 +580,7 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
             common.log(f"!! {program['slug']}: worker error after {len(results)} of {len(collectors)} collectors: {e}")
             common.log_traceback()
             for c in collectors[len(results):]:
-                results.append({"program": program["slug"], "collector": c, "outcome": "failed", "error": str(e)[:300]})
+                results.append({"program": program["slug"], "collector": c, "outcome": "failed", "error": common.error_text(e, 300)})
         finally:
             if entries:
                 record_outcomes(program["slug"], entries)
@@ -609,7 +609,9 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
     """Print the run summary, record it in refresh-state as lastRun, annotate GitHub Actions, and
     return the exit code: 0 when the failed share is within the threshold, 1 when above it."""
     total = len(results)
-    failed = [r for r in results if r["outcome"] == "failed"]
+    # every error below is printed, annotated, written to the step summary and committed in refresh-state:
+    # redact it once here (issue #258), whatever wrote it
+    failed = [{**r, "error": common.redact(r.get("error"))} for r in results if r["outcome"] == "failed"]
     skipped = sum(1 for r in results if r["outcome"] == "skipped")
     ok = total - len(failed) - skipped
     share = len(failed) / total if total else 0.0

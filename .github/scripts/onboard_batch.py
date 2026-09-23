@@ -41,6 +41,7 @@ import time
 import traceback
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # tests point it at a scratch tree
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # this checkout's code; never moved
 REGISTRY = os.path.join(ROOT, "public", "data", "registry.json")
 COLLECTORS = ["scorecard", "climate", "wikipedia", "athletics", "tds", "soccerwire", "news", "camps"]
 
@@ -53,6 +54,15 @@ MAX_PROGRAMS = 60
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$|^[a-z0-9]$")
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 DIVISION_RE = re.compile(r"^D[1-9]$")
+
+
+def _redact(text) -> str:
+    """The redact() of this checkout's collect/common.py (ROOT can be a scratch tree without code): error
+    text read from refresh-state is redacted again here, since a runner's entries can predate issue #258."""
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from collect.common import redact
+    return redact(text)
 
 
 class Refused(Exception):
@@ -370,7 +380,7 @@ def program_row(slug: str, reg_by_slug: dict, refresh_state: dict, run: dict, st
         if not e or (started and str(e.get("at") or "") < started):
             not_run.append(c)  # no entry from THIS run: the run stopped before it, or it never started
         elif not e.get("ok"):
-            failures[c] = str(e.get("error") or "")[:120]
+            failures[c] = _redact(e.get("error") or "")[:120]
     blocked = ((run.get("perProgram") or {}).get(slug) or {}).get("blockedHosts") or {}
     # the row counts are read from the athletics source on disk; when this run did not write it (athletics
     # failed, was skipped, or never ran) they are an earlier collection's, or zero, and are marked as such
@@ -420,7 +430,7 @@ def render_md(summary: dict) -> str:
              "| --- | --- | ---: | ---: | ---: | --- | --- | --- |"]
     esc = lambda t: str(t).replace("|", "\\|").replace("\n", " ")
     for r in s["programs"]:
-        fails = ", ".join(f"{c}: {esc(e)[:60]}" for c, e in r["failures"].items())
+        fails = ", ".join(f"{c}: {esc(_redact(e))[:60]}" for c, e in r["failures"].items())
         if r["notRun"]:
             fails = (fails + "; " if fails else "") + "not run: " + ", ".join(r["notRun"])
         old = "" if r["athleticsFromThisRun"] or not (r["rosterRows"] or r["scheduleRows"] or r["staffRows"]) else " (earlier)"
