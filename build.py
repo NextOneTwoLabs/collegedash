@@ -1433,9 +1433,9 @@ def collector_outcomes(slug: str, state: dict) -> tuple[list[dict], list[dict]]:
         if "." in collector:
             continue
         if entry.get("ok") is False:
-            failed.append({"collector": collector, "error": str(entry.get("error", ""))[:300], "at": entry.get("at")})
+            failed.append({"collector": collector, "error": common.redact(entry.get("error", ""))[:300], "at": entry.get("at")})
         elif entry.get("skipped"):
-            skipped.append({"collector": collector, "reason": str(entry["skipped"])[:300], "at": entry.get("at")})
+            skipped.append({"collector": collector, "reason": common.redact(entry["skipped"])[:300], "at": entry.get("at")})
     failed.sort(key=lambda f: f["collector"])
     skipped.sort(key=lambda f: f["collector"])
     return failed, skipped

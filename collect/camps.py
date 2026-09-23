@@ -440,7 +440,7 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0) -> d
     try:
         html, meta = common.fetch_text(url, max_age_hours=max_age_hours, retries=1, timeout=30)
     except common.FetchError as e:
-        out["error"] = str(e)[:200]
+        out["error"] = common.error_text(e, 200)
         return out
     final = meta.get("finalUrl") or url
     out["finalUrl"] = final

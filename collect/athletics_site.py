@@ -221,7 +221,7 @@ def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
     except common.FetchError as e:
         common.log(f"  head coach bio failed for {head['name']}: {e}")
         return {"name": head["name"], "url": head["bioUrl"], "firstSeason": None, "conflict": False, "statements": [],
-                "error": str(e)[:200]}
+                "error": common.error_text(e, 200)}
     parsed = coach_bio.first_season(html, head["name"], school_names(program))
     common.log(f"  head coach bio: {head['name']} first season {parsed['firstSeason']}"
                + (" (the page contradicts itself)" if parsed["conflict"] else "")

@@ -74,13 +74,14 @@ def collect(program: dict, registry: dict) -> dict:
     demo, meta = False, {}
     if r is None:
         key, demo = _api_key(registry)
-        params = {"api_key": key, "fields": ",".join(FIELDS)}
+        # the key goes in a header, never the URL: a URL reaches error text, logs and the HTTP cache (#258)
+        params = {"fields": ",".join(FIELDS)}
         if unit_id:
             params["id"] = str(unit_id)
         else:
             params["school.name"] = program["name"]
         url = src["api"] + "?" + urllib.parse.urlencode(params)
-        payload, meta = common.fetch_json(url, max_age_hours=24 * 30)
+        payload, meta = common.fetch_json(url, headers={"X-Api-Key": key}, max_age_hours=24 * 30)
         results = payload.get("results") or []
         if not results:
             raise common.FetchError(f"scorecard: no results for {program['slug']}")
@@ -125,7 +126,7 @@ def collect(program: dict, registry: dict) -> dict:
         "retentionRate": g("latest.student.retention_rate.four_year.full_time"),
         "medianEarnings10yr": g("latest.earnings.10_yrs_after_entry.median"),
     }
-    # Never write the API key into the repo.
+    # Never write the API key into the repo (it is sent as a header, so it is not in params either).
     public_url = src["api"] + "?" + urllib.parse.urlencode({k: v for k, v in params.items() if k != "api_key"})
     common.save_source(program["slug"], NAME, data, url=public_url, collector=NAME,
                        extra={"demoKey": demo, "fromCache": meta.get("fromCache", False)})
