@@ -483,8 +483,30 @@ def fixtures(args) -> int:
         ok(f"price {raw!r} -> {want!r}", _entry is not None and got == want,
            missing("_entry") if _entry is None else f"got {got!r}")
 
+    print("snapshot: extract_camps output on every pre-#292 extract fixture is byte-identical")
+    want = json.load(open(SNAPSHOT, encoding="utf-8"))
+    got = extract_snapshot(spec)
+    for f in sorted(want):
+        ok(f"snapshot {f}", got.get(f) == want[f],
+           f"now {json.dumps(got.get(f), ensure_ascii=False)[:400]}")
+
     print(f"\n{total - len(fails)} of {total} checks passed" + (f"; FAILED: {fails}" if fails else ""))
     return 1 if fails else 0
+
+
+# Recorded ONCE, on the code before #292's session parser and generic date-then-name step, and
+# committed before either change. Never regenerate it to make a failure go away: a diff here means an
+# existing page's rows changed, which #292's review ruled must not happen.
+SNAPSHOT = os.path.join(FIXTURES, "extract-snapshot.json")
+
+
+def extract_snapshot(spec: dict) -> dict:
+    out = {}
+    for fx in spec["extract"]:
+        entries = camps.extract_camps(_read(fx["file"]), fx["pageUrl"], published=fx.get("published"),
+                                      title=fx.get("title"), body_only=bool(fx.get("bodyOnly")))
+        out[fx["file"]] = [{**e, "campType": camps.classify_camp(e.get("name"))} for e in entries]
+    return json.loads(json.dumps(out, ensure_ascii=False, sort_keys=True, default=str))
 
 
 def main(argv=None) -> int:
@@ -495,9 +517,20 @@ def main(argv=None) -> int:
     ap.add_argument("--cache-dir", help="read roster pages from this .cache/http directory (e.g. the main checkout's)")
     ap.add_argument("--titles", action="store_true", help="print accepted/rejected news titles instead of the sweep")
     ap.add_argument("--fixtures", action="store_true", help="run the regression fixtures under tests/fixtures/camps/")
+    ap.add_argument("--write-snapshot", action="store_true",
+                    help="record tests/fixtures/camps/extract-snapshot.json (refuses to overwrite an existing one)")
     args = ap.parse_args(argv)
     if args.cache_dir:
         common.CACHE_DIR = args.cache_dir
+    if args.write_snapshot:
+        if os.path.exists(SNAPSHOT):
+            print(f"refusing to overwrite {SNAPSHOT}: it is the pre-#292 baseline")
+            return 1
+        spec = json.load(open(os.path.join(FIXTURES, "fixtures.json"), encoding="utf-8"))
+        with open(SNAPSHOT, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(extract_snapshot(spec), f, ensure_ascii=False, sort_keys=True, indent=1)
+            f.write("\n")
+        return 0
     if args.fixtures:
         return fixtures(args)
     if args.titles:
