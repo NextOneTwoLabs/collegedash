@@ -101,12 +101,25 @@ def test_social_links_come_with_the_list_link():
     ok("player whose list item has none gets none", p["Pat Sample"]["social"] == {}, p["Pat Sample"]["social"])
 
 
+def with_social(html: str, bio_id: int, handle: str) -> str:
+    """Add a made-up social block (reserved .test host) to the list item whose link ends in /<bio_id>."""
+    m = f'/{bio_id}">'
+    s_i = html.index(m)
+    end = html.index("</h3></div>", s_i) + len("</h3></div>")
+    return html[:end] + f'<div class="sidearm-roster-player-social"><a href="https://instagram.com.example.test/{handle}">Instagram</a></div>' + html[end:]
+
+
 def test_ambiguous_names_are_not_linked():
     # Two list items with the same name: no way to tell which bio is whose, so neither is taken.
-    html = fixture().replace(">Pat Sample</a>", ">Alex Placeholder</a>")
+    # Both same-name list items carry a handle, so no join by list order can dodge the check.
+    html = with_social(with_social(fixture().replace(">Pat Sample</a>", ">Alex Placeholder</a>"),
+                                   9001, "placeholder_one"), 9003, "placeholder_three")
     p = by_name(sidearm.parse_roster(html, BASE))
     ok("duplicate list name leaves the table player unlinked", p["Alex Placeholder"]["bioUrl"] is None,
        p["Alex Placeholder"])
+    # A wrong join would publish one person's handle on another person's row (Bianque, PR #331).
+    ok("unlinked row takes no social link from a same-name list item", p["Alex Placeholder"]["social"] == {},
+       p["Alex Placeholder"]["social"])
     ok("unmatched table name stays unlinked", p["Pat Sample"]["bioUrl"] is None, p["Pat Sample"])
     ok("unique name beside them is linked", p["Mary Kate Example"]["bioUrl"] is not None, p["Mary Kate Example"])
 
@@ -114,8 +127,9 @@ def test_ambiguous_names_are_not_linked():
 def test_duplicate_table_names_are_not_linked():
     # Two TABLE rows with the same name and one list item: the one bio cannot belong to both rows, so
     # neither takes it (a join that only checked the list side would give both rows the same URL).
-    html = fixture().replace('<td class="player_firstname">Pat</td><td class="player_lastname">Sample</td>',
-                             '<td class="player_firstname">Alex</td><td class="player_lastname">Placeholder</td>')
+    html = with_social(fixture().replace(
+        '<td class="player_firstname">Pat</td><td class="player_lastname">Sample</td>',
+        '<td class="player_firstname">Alex</td><td class="player_lastname">Placeholder</td>'), 9001, "placeholder_two")
     players = sidearm.parse_roster(html, BASE)["players"]
     twins = [x for x in players if x["name"] == "Alex Placeholder"]
     ok("the table has two rows of the same name", len(twins) == 2, [x["name"] for x in players])
@@ -123,6 +137,8 @@ def test_duplicate_table_names_are_not_linked():
        [x["bioUrl"] for x in twins])
     ok("neither duplicate table row takes the list position", all(x["pos"] == "" for x in twins),
        [x["pos"] for x in twins])
+    ok("neither duplicate table row takes the list item's social link", all(x["social"] == {} for x in twins),
+       [x["social"] for x in twins])
     mk = next((x for x in players if x["name"] == "Mary Kate Example"), {})
     ok("unique name beside them is still linked", mk.get("bioUrl") == f"{BASE}/mary-kate-example/9002", mk)
 
