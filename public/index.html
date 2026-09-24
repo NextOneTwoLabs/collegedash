@@ -290,6 +290,14 @@ tr:hover td { background: var(--row-hover); }
 .standings-table th.sortable:hover, .standings-table th.sort-active { color: var(--accent-text); }
 .standings-table th.sort-active::after { content: ' ▾'; font-size: 9px; }
 .standings-table th.sort-active.sort-asc::after { content: ' ▴'; }
+/* #285: every data header is a button, so it takes focus and Enter/Space sort it; it looks like the header text. */
+.standings-table th .th-sort { all: unset; cursor: pointer; }
+/* the RPI header names its season ("RPI 2026 (in progress)"); it wraps rather than widening a column of short numbers */
+.standings-table th[data-sort="rpi"] { white-space: normal; width: 1%; min-width: 64px; }
+.standings-table th .th-sort:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; border-radius: 3px; }
+.sort-dir { flex: none; padding: 7px 10px; font-size: 13px; font-family: var(--font); color: var(--text-primary); background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
+.sort-dir:hover { border-color: var(--accent-text); }
+.sort-dir:focus-visible { border-color: var(--accent-text); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 .standings-table td { padding: 11px 12px; border-bottom: 1px solid var(--border-light); vertical-align: middle; transition: background var(--transition-fast); }
 .standings-table tbody tr:last-child td { border-bottom: none; }
 .standings-table tr:hover td { background: var(--row-hover); }
@@ -521,7 +529,7 @@ const S = {
      nothing else, so an RPI default would drop every D3 and D2 program to the bottom of the first
      screen the moment they are published; Name is the one ordering that means the same thing in
      every division (owner's decision on #94). A visitor who already has a sort saved keeps it. */
-  filters: { conf: [], region: [], division: [], sort: 'name', classYear: [], view: 'cards', moreStats: false, cond: [] }, // conf/region/division/classYear: [] = all; cond: condition chips, [] = none (#166)
+  filters: { conf: [], region: [], division: [], sort: 'name', sortDir: null, classYear: [], view: 'cards', moreStats: false, cond: [] }, // conf/region/division/classYear: [] = all; cond: condition chips, [] = none (#166)
   sidebarTab: 'programs', residency: '',
   condForm: null, // the open "+ Add" condition form, {field, op, text, error}; never persisted
   // Ask (#165). S.ask is set only by /api/status {ask: true}; while it is false no ask markup or behaviour exists.
@@ -864,6 +872,8 @@ for (const k of ['conf', 'region', 'division', 'classYear']) { const v = S.filte
 // Conditions: anything a saved cd.filters holds that is not exactly a registered field, an op that field
 // allows and a finite number is dropped here, silently, and never thrown on (a save from before #166 has none).
 S.filters.cond = sanitizeConds(S.filters.cond);
+// Sort direction (#285): 'asc', 'desc', or null for the sort's own natural direction; anything else a save holds is dropped.
+if (S.filters.sortDir !== 'asc' && S.filters.sortDir !== 'desc') S.filters.sortDir = null;
 // multi-select pill groups: toggling a value removes it or adds it; "All" clears the group, so All and a value are never both active
 function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
 const pillAttrs = (attr, value, on) => `class="pill${on ? ' active' : ''}" data-${attr}="${esc(value)}" aria-pressed="${on}"`;
@@ -1145,7 +1155,10 @@ function pruneConfToDivisions() {
 // Name first, to match the default in S.filters. The select's order is cosmetic; the default is there.
 const SORTS = [['name', 'Name'], ['rpi', 'RPI'], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
 // The RPI option's label names the season it sorts by, read from the data (issue #62), so it is not stored above.
-const sortLabel = k => k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1];
+// Sorts reached only from a table header (#285) are not in SORTS - SORTS is also the Ask Worker's contract - so the
+// sidebar select lists the active one as an extra option while it is active, and the two never disagree.
+const sortLabel = k => k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1] ?? SORT_SPECS[k]?.label();
+const sortOptions = () => SORTS.map(s => s[0]).concat(SORTS.some(s => s[0] === S.filters.sort) || !SORT_SPECS[S.filters.sort] ? [] : [S.filters.sort]);
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
@@ -1198,7 +1211,7 @@ function renderSidebar() {
       <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="${S.ask ? 'School, mascot, or a question…' : 'School or mascot…'}" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
       <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
       <div class="sidebar-section-title">Browse</div>
-      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${SORTS.map(([k]) => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select></div>`}
+      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
       ${divisionBlock}
       ${condBlock}
       <div class="browse-label">Region</div>
@@ -1233,7 +1246,8 @@ function renderSidebar() {
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   wireConditions(sb);
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
-  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { f.sort = e.target.value; saveState(); rerenderForFilters(); };
+  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
+  const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   const q = $('#q');
@@ -1332,7 +1346,7 @@ function askSwitchedOn() {
   renderSidebar();
   if (typing) $('#q')?.focus();
 }
-const askKey = () => { const f = S.filters; return JSON.stringify([f.division, f.conf, f.region, f.classYear, f.cond, f.sort]); };
+const askKey = () => { const f = S.filters; return JSON.stringify([f.division, f.conf, f.region, f.classYear, f.cond, f.sort, f.sortDir]); };
 function renderAskSlot() {
   const slot = $('#askSlot'); if (!slot) return;
   const text = S.qRaw.trim();
@@ -1361,7 +1375,7 @@ async function askQuestion(text) {
 // value the page cannot show is dropped here even if the Worker let it through.
 function applyAsk(a) {
   const f = S.filters, strs = x => Array.isArray(x) ? x.filter(s => typeof s === 'string') : [];
-  const prev = { filters: JSON.parse(JSON.stringify({ division: f.division, conf: f.conf, region: f.region, classYear: f.classYear, cond: f.cond, sort: f.sort })), qRaw: S.qRaw };
+  const prev = { filters: JSON.parse(JSON.stringify({ division: f.division, conf: f.conf, region: f.region, classYear: f.classYear, cond: f.cond, sort: f.sort, sortDir: f.sortDir })), qRaw: S.qRaw };
   const years = (S.index.season?.gradYears || []).map(String);
   f.division = strs(a.division).filter(d => (S.index.divisions || []).includes(d));
   f.conf = strs(a.conf).filter(c => Object.prototype.hasOwnProperty.call(S.index.byConf, c));
@@ -1369,7 +1383,7 @@ function applyAsk(a) {
   f.classYear = strs(a.classYear).filter(y => years.includes(y));
   f.cond = sanitizeConds(a.cond);
   const sort = SORTS.find(s => s[0] === a.sort);
-  if (sort) f.sort = sort[0];
+  if (sort) { f.sort = sort[0]; f.sortDir = null; }
   pruneConfToDivisions();
   const parts = [...f.division.map(divisionName), ...f.conf, ...f.region.map(r => `${r} region`),
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
@@ -1412,7 +1426,7 @@ function route() {
   }
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
-  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.conf = []; saveState(); location.replace('#/'); return; }
+  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
@@ -1568,25 +1582,70 @@ function filteredPrograms() {
   const score = new Map();
   idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
   let rows = idx.programs.filter(p => matchesFilters(p, score));
-  rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || sortCmp(f.sort)(a, b));
+  const cmp = sortCmp(f.sort, sortDir());
+  rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || cmp(a, b));
   return rows;
 }
 const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missing last (Infinity - Infinity is NaN)
 // commits for the selected recruiting classes (all classes when none is selected)
 const commitsFor = (p, years) => Object.entries(p.commitmentsByYear || {}).filter(([y]) => !years.length || years.includes(y)).reduce((a, [, n]) => a + n, 0);
 const classLabel = years => years.length ? `Commits ${years.map(y => `'${String(y).slice(2)}`).join('+')}` : 'Commits';
-function sortCmp(key) {
-  const cy = S.filters.classYear;
-  return (a, b) => key === 'name' ? byDisplayName(a, b)
-    : key === 'admit' ? (a.admissionRate ?? 1) - (b.admissionRate ?? 1)
-    : key === 'titles' ? (divisionOrder(a) - divisionOrder(b)) || (b.nationalTitles - a.nationalTitles)
-    : key === 'tuition' ? tuitionOf(a) - tuitionOf(b)
-    : key === 'undergrads' ? (b.undergradEnrollment ?? -1) - (a.undergradEnrollment ?? -1)
-    : key === 'record' ? (b.lastSeason?.record || '').localeCompare(a.lastSeason?.record || '')
-    : key === 'commits' ? commitsFor(b, cy) - commitsFor(a, cy)
-    : key === 'conference' ? (a.conference || '').localeCompare(b.conference || '')
-    : key === 'academicRank' ? ((a.academicRank ?? 1e9) - (b.academicRank ?? 1e9)) || byDisplayName(a, b)
-    : rpiSortKey(a) - rpiSortKey(b);
+/* ---------- sorting (#285) ----------
+   One spec per sortable column. key(p) is the value the column shows, or null when it shows '—' or nothing;
+   miss(p) orders the rows without one (1 = no value, 2 = the measure does not apply to the division, #198).
+   Rows without a value come last in BOTH directions; only the rows with one are reversed. Ties, and the rows
+   without a value, fall back to Name A-Z so the order is total. dir is the column's natural first click.
+   Record sorts by win percentage, ties counting half a win: (W + T/2) / (W + L + T).
+   Tuition sorts by the out-of-state figure (the in-state one when that is all a school publishes), as the
+   sidebar's "Tuition (out-of-state)" always has. Titles stay grouped by division (#198) twice over: among the
+   programs with titles, then among the '—' rows after them. Keys are read once per row per sort (the comparator memoises them), not once per comparison. */
+const winPct = rec => { const m = /^(\d+)-(\d+)(?:-(\d+))?$/.exec(rec || ''); if (!m) return null; const w = +m[1], l = +m[2], t = +(m[3] || 0); return w + l + t ? (w + t / 2) / (w + l + t) : null; };
+const byText = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'accent' }) || a.localeCompare(b);
+const SORT_SPECS = {
+  name: { dir: 'asc', label: () => 'Name', key: p => p, cmp: byDisplayName },
+  rpi: { dir: 'asc', label: rpiLabel, key: p => appliesTo('rpi', p) ? rpiOf(p) : null, miss: p => appliesTo('rpi', p) ? 1 : 2 },
+  record: { dir: 'desc', label: () => `Record ${finishedSeason() ?? ''}`.trim(), key: p => p.lastSeason?.year === finishedSeason() ? winPct(p.lastSeason.record) : null },
+  admit: { dir: 'asc', label: () => 'Admission rate', key: p => p.admissionRate ?? null },
+  academicRank: { dir: 'asc', label: () => 'US rank (THE)', key: p => p.academicRank ?? null },
+  tuition: { dir: 'asc', label: () => 'Tuition (out-of-state)', key: p => p.tuitionOutOfState ?? p.tuitionInState ?? null },
+  undergrads: { dir: 'desc', label: () => 'Undergrads', key: p => p.undergradEnrollment ?? null },
+  commits: { dir: 'desc', label: () => classLabel(S.filters.classYear), key: p => commitsFor(p, S.filters.classYear) },
+  titles: { dir: 'desc', label: () => 'National titles', key: p => p.nationalTitles || null, group: divisionOrder, miss: divisionOrder },
+  cups: { dir: 'desc', label: () => 'College Cups', key: p => appliesTo('collegeCups', p) ? p.collegeCups || null : null, miss: p => appliesTo('collegeCups', p) ? 1 : 2 },
+  region: { dir: 'asc', label: () => 'Region', key: p => p.region || null, cmp: byText },
+  type: { dir: 'asc', label: () => 'Type', key: p => (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '') || null, cmp: byText },
+  conference: { dir: 'asc', label: () => 'Conference', key: p => p.conference || null, cmp: byText },
+};
+// The direction on screen: the visitor's choice, else the sort's natural one.
+const sortDir = () => S.filters.sortDir || SORT_SPECS[S.filters.sort]?.dir || 'asc';
+// The one writer of the sort (table header, sidebar select, sidebar direction button): a new key starts in its
+// natural direction; the key already active (a second header click, or the direction button) flips it.
+function setSort(key) {
+  const f = S.filters;
+  if (!SORT_SPECS[key]) return;
+  f.sortDir = key === f.sort ? (sortDir() === 'asc' ? 'desc' : 'asc') : null;
+  f.sort = key;
+  saveState();
+}
+const sortDirLabel = () => `Sort direction: ${sortDir() === 'asc' ? 'ascending' : 'descending'}`;
+const sortDirArrow = () => sortDir() === 'asc' ? '▴' : '▾';
+const sortDirBtn = () => `<button type="button" class="sort-dir" id="sortDir" title="${sortDirLabel()}" aria-label="${sortDirLabel()}">${sortDirArrow()}</button>`;
+// After any sort change, the sidebar's select and direction button are brought up to date IN PLACE - rebuilding the
+// sidebar would take focus out of whichever control the visitor is on (and out of the search box).
+function syncSortControls() {
+  const sel = $('#sortSelect'), btn = $('#sortDir');
+  if (sel) { sel.innerHTML = sortOptions().map(k => `<option value="${k}">${esc(sortLabel(k))}</option>`).join(''); sel.value = S.filters.sort; }
+  if (btn) { btn.title = sortDirLabel(); btn.setAttribute('aria-label', sortDirLabel()); btn.textContent = sortDirArrow(); }
+}
+function sortCmp(key, dir) {
+  const spec = SORT_SPECS[key] || SORT_SPECS.rpi;
+  const sign = (dir || spec.dir) === 'desc' ? -1 : 1, cmp = spec.cmp || ((x, y) => x - y);
+  const memo = new Map(), k = p => { if (!memo.has(p)) memo.set(p, spec.key(p)); return memo.get(p); };
+  return (a, b) => {
+    const x = k(a), y = k(b);
+    if (x == null || y == null) return x == null && y == null ? ((spec.miss?.(a) ?? 1) - (spec.miss?.(b) ?? 1)) || byDisplayName(a, b) : x == null ? 1 : -1;
+    return (spec.group ? spec.group(a) - spec.group(b) : 0) || sign * cmp(x, y) || byDisplayName(a, b);
+  };
 }
 async function renderList() {
   const idx = await loadIndex();
@@ -1605,7 +1664,7 @@ async function renderList() {
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
-  bits.push(`sorted by ${sortLabel(f.sort) || 'RPI'}`);
+  bits.push(`sorted by ${sortLabel(f.sort) || 'RPI'}${f.sortDir && f.sortDir !== SORT_SPECS[f.sort]?.dir ? `, ${f.sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`);
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
@@ -1617,13 +1676,15 @@ async function renderList() {
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
-  app.querySelectorAll('th[data-sort]').forEach(th => th.onclick = () => { f.sort = th.dataset.sort; saveState(); renderSidebar(); renderList(); });
+  // The table is rebuilt on a sort, so focus goes back to the header just used: Enter, Enter again flips it back.
+  app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { const k = b.closest('th').dataset.sort;
+    setSort(k); syncSortControls(); await renderList(); $('#app').querySelector(`th[data-sort="${k}"] .th-sort`)?.focus(); });
   const more = $('#moreStats'); if (more) more.onclick = () => { f.moreStats = !f.moreStats; saveState(); renderList(); };
 }
 // A data column is left out when no row on screen has data for it (issue #115); rows without data still show
 // a dash in a column that stays. Columns not listed here (star, program name, compare) always show.
 const TABLE_COL_HAS = {
-  rank: p => has.rowRpi(p), record: p => has.rowRecord(p), admit: p => p.admissionRate != null,
+  rank: p => has.rowRpi(p), usrank: p => p.academicRank != null, record: p => has.rowRecord(p), admit: p => p.admissionRate != null,
   ug: p => p.undergradEnrollment != null, tuition: p => p.tuitionInState != null || p.tuitionOutOfState != null,
   commits: (p, cy) => commitsFor(p, cy) > 0, titles: p => has.rowTitles(p), cups: p => has.rowCups(p),
   region: p => !!p.region, type: p => !!p.ownership,
@@ -1655,27 +1716,31 @@ function cardHtml(p) {
 function tableHtml(rows) {
   const f = S.filters, cy = f.classYear;
   const cols = [
-    ['rank', '#', 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
+    ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
-    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`, 'name'],
+    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${[divisionTag(p.division), esc(p.conference || ''), p.city ? `${esc(p.city)}, ${esc(p.state || '')}` : ''].filter(Boolean).join(' · ')}</span></span></div>`, 'name'],
     ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
+    ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
     ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
     ['commits', classLabel(cy), 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
     ['titles', 'Titles', 'num col-extra', p => p.division === 'D1' || !p.division ? p.nationalTitles || '—' : p.nationalTitles ? `<span title="${esc(titlesPhrase(p.nationalTitles, p.division))}">${p.nationalTitles} ${esc(p.division)}</span>` : '—', 'titles'],
-    ['cups', 'College Cups', 'num col-extra', p => appliesTo('collegeCups', p) ? p.collegeCups || '—' : ''],
-    ['region', 'Region', 'col-extra', p => esc(p.region || '—')],
-    ['type', 'Type', 'col-extra', p => esc((p.ownership || '—').replace(/ (nonprofit|for-profit)$/, ''))],
+    ['cups', 'College Cups', 'num col-extra', p => appliesTo('collegeCups', p) ? p.collegeCups || '—' : '', 'cups'],
+    ['region', 'Region', 'col-extra', p => esc(p.region || '—'), 'region'],
+    ['type', 'Type', 'col-extra', p => esc((p.ownership || '—').replace(/ (nonprofit|for-profit)$/, '')), 'type'],
     ['cmp', '', '', p => cmpBtn(p.slug)],
   ].filter(([k]) => !rows.length || !TABLE_COL_HAS[k] || rows.some(p => TABLE_COL_HAS[k](p, cy)));
-  const head = cols.map(([k, label, cls, , sortKey]) => `<th class="${cls}${sortKey ? ' sortable' : ''}${sortKey && f.sort === sortKey ? ' sort-active' : ''}" ${sortKey ? `data-sort="${sortKey}"` : ''}>${esc(label)}</th>`).join('');
-  const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn]) => `<td class="${cls}">${fn(p)}</td>`).join('')}</tr>`).join('');
+  const dir = sortDir(), shown = (cls, sortKey) => sortKey && sortKey === f.sort ? cls.replace('col-extra', '').trim() : cls;
+  const SORT_NOTE = { tuition: 'Sorts by out-of-state tuition', record: 'Sorts by win percentage, a tie counting half a win' };
+  const head = cols.map(([k, label, cls, , sortKey]) => { const on = sortKey && f.sort === sortKey;
+    return `<th class="${shown(cls, sortKey)}${sortKey ? ' sortable' : ''}${on ? ` sort-active sort-${dir}` : ''}"${sortKey ? ` data-sort="${sortKey}"` : ''}${on ? ` aria-sort="${dir === 'asc' ? 'ascending' : 'descending'}"` : ''}>${sortKey ? `<button type="button" class="th-sort"${SORT_NOTE[sortKey] ? ` title="${SORT_NOTE[sortKey]}"` : ''}>${esc(label)}</button>` : esc(label)}</th>`; }).join('');
+  const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn, sortKey]) => `<td class="${shown(cls, sortKey)}">${fn(p)}</td>`).join('')}</tr>`).join('');
   return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">
     <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
-    <div class="table-footnote">${rpiInProgress() ? `RPI (#) is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table · Record is the ${finishedSeason()} season` : `RPI and record are the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
+    <div class="table-footnote">${rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table · Record is the ${finishedSeason()} season` : `RPI and record are the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
   </div>`;
 }
 

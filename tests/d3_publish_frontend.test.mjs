@@ -257,9 +257,15 @@ test('titles: real D3 champions\' cards show their titles from the committed ind
 test('titles sort: Division I first, Division III after, never interleaved', async () => {
   const pg = await ready(MIXED_FILES);
   const order = cardSlugs(await list(pg, { sort: 'titles' }));
-  const firstD3 = order.findIndex((s) => s.startsWith('test-d3-'));
-  assert.ok(firstD3 > 0 && order.slice(firstD3).every((s) => s.startsWith('test-d3-')), `Division III interleaved at ${firstD3}`);
-  assert.equal(order[firstD3], 'test-d3-champion');
+  // Since #285 programs with no titles ('—') follow every program with any; each run keeps Division I first (#198).
+  const titled = new Set(MIXED_INDEX.programs.filter((p) => p.nationalTitles).map((p) => p.slug));
+  const split = order.findIndex((s) => !titled.has(s));
+  assert.ok(split > 0 && order.slice(split).every((s) => !titled.has(s)), `a program without titles sorted among those with: at ${split}`);
+  for (const run of [order.slice(0, split), order.slice(split)]) {
+    const firstD3 = run.findIndex((s) => s.startsWith('test-d3-'));
+    assert.ok(firstD3 > 0 && run.slice(firstD3).every((s) => s.startsWith('test-d3-')), `Division III interleaved at ${firstD3}`);
+  }
+  assert.equal(order[split - 1], 'test-d3-champion');
 });
 
 // ---------- the scholarship sentence ----------
