@@ -127,10 +127,10 @@ test('an in-progress season is never the finished season: Record and last-season
   assert.ok(sb.rpiInProgress() && sb.finishedSeason() < sb.rpiSeason(), 'the live season counted as finished');
   const alpha = sb.S.index.programs.find(p => p.slug === 'alpha');
   const table = sb.tableHtml(sb.S.index.programs);
-  assert.match(table, /<th[^>]*>Record 2025<\/th>/, 'the Record column is not the finished season');
+  assert.match(table, /<th[^>]*>(?:<button[^>]*>)?Record 2025(?:<\/button>)?<\/th>/, 'the Record column is not the finished season');
   assert.doesNotMatch(table, /Record 2026/);
   assert.match(sb.tableHtml([alpha]), /<span class="num-strong">18-4-2<\/span>/, 'the Record cell is not the finished season\'s record');
-  assert.match(table, /RPI \(#\) is the 2026 season, in progress[^<]*· Record is the 2025 season/, 'the footnote does not say which is which');
+  assert.match(table, /RPI is the 2026 season, in progress[^<]*· Record is the 2025 season/, 'the footnote does not say which is which');
   await sb.renderProfile('alpha');
   // Compare's finished-season row is 2025's record, and the in-progress record is only under "Current record"
   sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();

@@ -242,9 +242,17 @@ test('titles sort: Division I counts first, then Division II, never interleaved'
   const pg = await ready(MIXED_FILES);
   const order = cardSlugs(await list(pg, { sort: 'titles' }));
   const division = new Map(MIXED_INDEX.programs.map((p) => [p.slug, p.division]));
-  const firstD2 = order.findIndex((s) => division.get(s) === 'D2');
-  assert.ok(firstD2 > 0 && order.slice(firstD2).every((s) => division.get(s) === 'D2'), `a Division II program sorted among Division I: first D2 at ${firstD2} of ${order.length}`);
-  assert.deepEqual(order.slice(firstD2), ['test-d2-champion', 'test-d2-plain'], 'within Division II, 7 titles did not sort before 0');
+  // Since #285 a program with no titles ('—') sorts after every program with any, so the list is two runs -
+  // with titles, then without - and each run keeps Division I before Division II, never interleaved (#198).
+  const titled = new Set(MIXED_INDEX.programs.filter((p) => p.nationalTitles).map((p) => p.slug));
+  const split = order.findIndex((s) => !titled.has(s));
+  assert.ok(split > 0 && order.slice(split).every((s) => !titled.has(s)), `a program without titles sorted among those with: at ${split}`);
+  for (const run of [order.slice(0, split), order.slice(split)]) {
+    const firstD2 = run.findIndex((s) => division.get(s) === 'D2');
+    assert.ok(firstD2 > 0 && run.slice(firstD2).every((s) => division.get(s) === 'D2'), `a Division II program sorted among Division I: first D2 at ${firstD2} of ${run.length}`);
+  }
+  assert.equal(order[split - 1], 'test-d2-champion', 'Division II with 7 titles is not the last program with titles');
+  assert.equal(order.at(-1), 'test-d2-plain', 'Division II with 0 titles is not last');
   assert.equal(order[0], 'north-carolina');
 });
 

@@ -193,8 +193,10 @@ function subtitleBefore(sb, rows) {
   if (f.region.length) bits.push(`${escFor(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${escFor(f.classYear.join(', '))}`);
   if (S.q) bits.push(`matching “${escFor(S.qRaw)}”`);
-  // The RPI option names its season, in progress or not, since issue #62; every other label is as it shipped.
-  bits.push(`sorted by ${f.sort === 'rpi' ? RPI_LABEL : sb.SORTS.find(s => s[0] === f.sort)?.[1] || 'RPI'}`);
+  // The RPI option names its season, in progress or not, since issue #62; every other label is as it shipped,
+  // except that the header-only sorts name themselves since #285 (they used to fall back to "RPI", which was wrong).
+  const headerOnly = { record: `Record ${expectedRpi(SHIPPED).finished}`, commits: 'Commits', conference: 'Conference' };
+  bits.push(`sorted by ${f.sort === 'rpi' ? RPI_LABEL : sb.SORTS.find(s => s[0] === f.sort)?.[1] || headerOnly[f.sort] || 'RPI'}`);
   return bits.join(' · ');
 }
 
@@ -431,7 +433,10 @@ const d1Only = await ready(loadPage({ index: { ...SHIPPED, programs: SHIPPED.pro
 test('no chips: Program View rows are in byte-identical order to the code that shipped before, and the subtitle is unchanged', async () => {
   const real = d1Only;
   const { S, filteredPrograms, matchScore, normText, renderList } = real.sb;
-  const sortCmp = sortCmpBefore(S); // the ordering as it shipped, not the page's
+  // #285 changed the ordering itself on purpose (blanks last, record by win percentage, name as the tiebreak), so
+  // from then on the ordering is the page's and this test guards the predicate; tests/table_sort.test.mjs pins
+  // the ordering. sortCmpBefore stays above as the record of what shipped before #166.
+  const sortCmp = key => real.sb.sortCmp(key);
   // every key sortCmp handles: the sidebar's sorts and the table-header-only ones
   const sorts = ['name', 'rpi', 'admit', 'academicRank', 'tuition', 'undergrads', 'titles', 'record', 'commits', 'conference'];
   const confs = [[], ['SEC'], ['ACC', 'Big Ten']];
