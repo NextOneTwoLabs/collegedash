@@ -636,11 +636,10 @@ NCAA_D1_WOMENS_CHAMPIONS = {
 # 1988 is the first tournament and 2020 was cancelled for COVID, so both are absent on purpose. No year
 # is entered here that neither source shows; an unsourced year is reported by check_titles, never guessed.
 #
-# Keyed by champion NAME, not by slug as the D1 table is, because no Division II program is in the
-# registry yet: their slugs do not exist to be written down. title_matches() joins a name to a program
+# Keyed by champion NAME, not by slug as the D1 table is, so the table stays the source's own words and
+# a champion that is no longer a D2 program still has its year recorded. title_matches() joins a name to a program
 # by exact normalised comparison with its registry name or short name, and D2_TITLE_SLUGS pins the ones
-# that comparison cannot reach. That table is empty today and gains an entry per D2 champion as D2
-# programs are onboarded - "Metro State" against "Metropolitan State University of Denver", say.
+# that comparison cannot reach - "Metro State" against "Metropolitan State University of Denver", say.
 NCAA_D2_WOMENS_CHAMPIONS = {
     1988: "Cal State East Bay", 1989: "Barry", 1990: "Sonoma State", 1991: "Cal State Dominguez Hills",
     1992: "Barry", 1993: "Barry", 1994: "Franklin Pierce", 1995: "Franklin Pierce",
@@ -653,9 +652,23 @@ NCAA_D2_WOMENS_CHAMPIONS = {
     2018: "Bridgeport", 2019: "Grand Valley State", 2021: "Grand Valley State",
     2022: "Western Washington", 2023: "Point Loma", 2024: "Cal Poly Pomona", 2025: "Florida Tech",
 }
-# Reviewed joins from a D2 champion name to a registry slug, for the ones normalisation cannot reach.
-# Empty while no D2 program is published; each entry is a reviewed line in the PR that adds it.
-D2_TITLE_SLUGS: dict[str, str] = {}
+# Reviewed joins from a D2 champion name to a registry slug, for the ones normalisation cannot reach (#271).
+# Names re-read against NCAA.com's D2 history on 2026-09-24: all 37 played years agree with the table above.
+# 30 of the 37 years join a D2 program: 24 by exact name, 6 through these pins. The other 7 join nothing by
+# design, because title_matches() reads only a program's own division's table (as UC San Diego in D3):
+#   Kennesaw State (2003), Nebraska-Omaha (2005), UC San Diego (2000, 2001) - now the D1 programs
+#     kennesaw-state, omaha and uc-san-diego;
+#   West Florida (2012) - now the D1 (ASUN) program west-florida;
+#   Saint Rose (2011) - the college closed in 2024;
+#   Sonoma State (1990) - the university discontinued athletics in 2025; not in the registry.
+D2_TITLE_SLUGS: dict[str, str] = {
+    "Cal State East Bay": "california-state-east-bay",
+    "Cal State Dominguez Hills": "california-state-dominguez-hills",
+    "Metro State": "metropolitan-state-denver",
+    "Point Loma": "point-loma-nazarene",
+    "Cal Poly Pomona": "california-state-polytechnic-pomona",
+    "Florida Tech": "florida-institute-technology",
+}
 # NCAA Division III women's soccer champions by season, named as NCAA.com's own championship history
 # writes them (https://www.ncaa.com/history/soccer-women/d3, read 2026-09-23). Every played year was
 # cross-checked against Wikipedia's "NCAA Division III women's soccer tournament" results table on the
