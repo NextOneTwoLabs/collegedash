@@ -404,6 +404,15 @@ jobs:
               # documented event here (README, "Refresh runs and failures": rpi: no season table
               # resolved), which is exactly why a gate failure keeps the run's collection on a
               # branch rather than discarding it.
+              #
+              # The two review reports go back to main's published copy first (issue #235). build() reads
+              # each one as the "previous" report to mark names new since the last build; without this it
+              # read the copy this run's own first build wrote (refresh, or the build_only step), so every
+              # refresh reported 0 new. Tolerant, as in publish_sources_only: main may have no copy yet,
+              # and then the build writes a first report.
+              for report in data/clubs-review.json data/schools-review.json; do
+                git checkout FETCH_HEAD -- "$report" 2>/dev/null || rm -f "$report"
+              done
               if ! python collegedash.py build; then
                 if publish_sources_only "build failed" "$attempt"; then exit 1; fi
               elif ! python collegedash.py validate; then

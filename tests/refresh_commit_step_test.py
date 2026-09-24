@@ -59,6 +59,10 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   stray-locks             (#321) a killed run left <file>.lock files beside sources, profiles and data/. With
                           the repository's real .gitignore seeded on main, none reaches main or a sources
                           branch; a control run without it shows `git add -A` would have published them.
+  review-reports-previous (#235) the rebuild after the rebase reads main's published data/clubs-review.json as
+                          the previous report: a key main's copy lacks is published as new, and firstSeen is
+                          main's. A control run of the step without the restore publishes nothing new, as
+                          every refresh did before #235. With no report on main, the rebuild writes a first one.
 """
 
 from __future__ import annotations
@@ -94,9 +98,9 @@ def ok(name: str, cond: bool, detail: str = "") -> bool:
 
 # ---------- the step, verbatim ----------
 
-def extract_step(path: str, name: str = "Commit changed data") -> str:
+def extract_step(path: str, name: str = "Commit changed data", text: str | None = None) -> str:
     """The `run: |` block of the named step, dedented exactly as YAML's literal block scalar does."""
-    lines = open(path, encoding="utf-8").read().splitlines()
+    lines = (text if text is not None else open(path, encoding="utf-8").read()).splitlines()
     start = next(i for i, l in enumerate(lines) if re.match(rf"\s*- name: {re.escape(name)}\s*$", l))
     run = next(i for i in range(start + 1, len(lines)) if re.match(r"\s*run: \|\s*$", lines[i]))
     body = []
@@ -206,9 +210,23 @@ case "$cmd" in
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/commitments/index.json
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/camps/index.json
     if [ -f FIFTH_OUTPUT ]; then mkdir -p public/data/extra; printf '{"x": 1}\n' > public/data/extra/x.json; fi
-    # the two review reports build() writes outside public/data (issues #228, #229), on every build
+    # the two review reports build() writes outside public/data (issues #228, #229), on every build.
+    # The clubs report keeps just enough of clubs.Recorder's contract to see which copy the build read as
+    # "previous" (issue #235): its "unmatched" keys are the published sources' contents, each as key@firstSeen.
+    # firstSeen is carried from the previous report, or is HARNESS_TODAY for a key it lacks, and such a key is
+    # also listed in "new".
     mkdir -p data
-    printf '{"builtAt": "%s"}\n' "$stamp" > data/clubs-review.json
+    prev=""
+    if [ -f data/clubs-review.json ]; then prev=$(sed -n 's/.*"unmatched": "\([^"]*\)".*/\1/p' data/clubs-review.json); fi
+    unmatched=""; new=""
+    for s in $slugs; do
+      k=$(tr -d '"\n' < "programs/$s/sources/athletics.json" 2>/dev/null || echo none)
+      seen=""
+      for e in $prev; do case "$e" in "$k@"*) seen=${e#*@} ;; esac; done
+      if [ -z "$seen" ]; then seen=${HARNESS_TODAY:-run-day}; new="${new:+$new }$k"; fi
+      unmatched="${unmatched:+$unmatched }$k@$seen"
+    done
+    printf '{"builtAt": "%s", "unmatched": "%s", "new": "%s"}\n' "$stamp" "$unmatched" "$new" > data/clubs-review.json
     printf '{"builtAt": "%s"}\n' "$stamp" > data/schools-review.json
     ;;
   validate)
@@ -243,7 +261,7 @@ def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
 
 
 def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None, run_files=None,
-             seed_files=None):
+             seed_files=None, yml_text=None):
     """Returns (exit code, output, origin path, main-before sha, upstream sha, run clone path)."""
     root = os.path.join(tmp, name)
     origin = os.path.join(root, "origin.git")
@@ -305,7 +323,7 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
 
     script = os.path.join(root, "step.sh")
     with open(script, "w", encoding="utf-8", newline="\n") as f:
-        f.write(extract_step(YML))
+        f.write(extract_step(YML, text=yml_text))  # yml_text: a variant of the workflow, for a control run
     r = subprocess.run([BASH, "-e", script], cwd=work, env=env, capture_output=True, timeout=300)
     out = (r.stdout + r.stderr).decode(errors="replace")
     return r.returncode, out, origin, c1, work
@@ -700,6 +718,61 @@ def test_stray_locks(tmp):
         ok("gated: the branch still carries the collection", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
 
 
+def without_report_restore(yml: str) -> tuple[str, int]:
+    """The workflow minus the #235 restore before the rebuild (the one in publish_sources_only stays)."""
+    return re.subn(r'( *)for report in data/clubs-review\.json data/schools-review\.json; do\n'
+                   r'\1  git checkout FETCH_HEAD -- "\$report" 2>/dev/null \|\| rm -f "\$report"\n'
+                   r'\1done\n(\1if ! python collegedash\.py build; then\n)', r"\2", yml)
+
+
+def report_fields(files: dict[str, bytes]) -> tuple[dict[str, str], list[str]]:
+    """data/clubs-review.json as the stand-in writes it: {key: firstSeen}, and the keys marked new."""
+    doc = json.loads(files.get("data/clubs-review.json", b"{}") or b"{}")
+    seen = dict(e.split("@", 1) for e in (doc.get("unmatched") or "").split())
+    return seen, (doc.get("new") or "").split()
+
+
+def test_review_reports_previous(tmp):
+    print("review-reports-previous (#235): the rebuild reads main's published report as the previous one")
+    # main's report before the run: beta's key, first seen day-0. While the run collects, main moves and its
+    # report now knows alpha's collected key too (first seen day-main) and has beta at day-main. The run
+    # collects alpha-v2-collected and ghost-v2-collected; its own first build marks both new.
+    seed = {"data/clubs-review.json": b'{"builtAt": "old", "unmatched": "beta-v1@day-0", "new": ""}\n'}
+
+    def main_moves(files):
+        files["README.md"] = b"moved\n"
+        files["data/clubs-review.json"] = (b'{"builtAt": "main", "unmatched": "alpha-v2-collected@day-main beta-v1@day-main", '
+                                           b'"new": ""}\n')
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "review-previous", upstream=main_moves, seed_files=seed)
+    seen, new = report_fields(tree_files(origin, "refs/heads/main"))
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("FIX a key main's report lacks is published as new", new == ["ghost-v2-collected"], (new, seen))
+    ok("FIX and dated the run's day", seen.get("ghost-v2-collected") == "run-day", seen)
+    ok("FIX a key main's report has is not new, and keeps main's firstSeen", "alpha-v2-collected" not in new
+       and seen.get("alpha-v2-collected") == "day-main", (new, seen))
+    ok("FIX firstSeen of an older key is main's current one, not the copy the run started from",
+       seen.get("beta-v1") == "day-main", seen)
+
+    # control: the same run through the step without the restore reads the run's own first-build copy
+    text, n = without_report_restore(open(YML, encoding="utf-8").read())
+    ok("control: the restore before the rebuild is found exactly once", n == 1, n)
+    code, out, origin, c1, _ = run_case(tmp, "review-previous-control", upstream=main_moves, seed_files=seed, yml_text=text)
+    seen, new = report_fields(tree_files(origin, "refs/heads/main"))
+    ok("control: the step succeeds", code == 0, out[-1500:])
+    ok("control: without it nothing is new (the 0-new refreshes on main before #235)", new == [], (new, seen))
+
+    # main has no report yet: the restore deletes the run's copy and the build writes a first report
+    def main_moves_no_report(files):
+        files["README.md"] = b"moved\n"
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "review-previous-absent", upstream=main_moves_no_report)
+    seen, new = report_fields(tree_files(origin, "refs/heads/main"))
+    ok("absent on main: the step succeeds", code == 0, out[-1500:])
+    ok("absent on main: a first report, every key new", sorted(new) == ["alpha-v2-collected", "beta-v1", "ghost-v2-collected"],
+       (new, seen))
+
+
 def test_fifth_output(tmp):
     print("fifth-output (#82): build writes an output the gate does not restore, and validate fails")
     def readme(files):
@@ -725,7 +798,7 @@ def main(argv=None) -> int:
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
              test_build_gate, test_fifth_output, test_review_reports,
-             test_refused_hosts_file, test_stray_locks]
+             test_refused_hosts_file, test_stray_locks, test_review_reports_previous]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
