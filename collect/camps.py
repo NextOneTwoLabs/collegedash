@@ -4,7 +4,9 @@ through an all-sports camps hub when the link is generic), plus camps announced 
 
 Writes programs/<slug>/sources/camps.json:
   { campsUrl, discoveredVia: registry|anchor|json|null, hubUrl, finalUrl, host, vendor, pageTitle,
-    robotsBlocked, fetchError, camps[], newsCamps[], newsScanned }
+    robotsBlocked, hostRefused, fetchError, parsed, linkReused, camps[], newsCamps[], newsScanned }
+  hostRefused: the camp host is in data/camps-refused-hosts.json and was not requested (issue #284);
+  linkReused: campsUrl is the stored one (--camps-stored-link), not rediscovered from the roster page.
   camps[] / newsCamps[] entries: { name, startDate, endDate, dateText, precision: day|month|null,
     yearInferred, location, ages, price, registerUrl, sourceUrl, confidence: "heuristic",
     newsTitle, newsUrl, newsDate (news only) }
@@ -61,9 +63,12 @@ reads less than the page offers.
 
 from __future__ import annotations
 
+import collections
 import datetime as _dt
 import json
+import os
 import re
+import threading
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
@@ -425,22 +430,191 @@ def detect_vendor(url: str | None, html: str | None, base_host: str) -> str | No
     return "external"
 
 
+# ---------- camp hosts that refused us (issue #284) ----------
+#
+# Camps run daily, so a camp host that refuses this collector would otherwise be refused daily. The
+# first 403 or 429 a camp page (or hub hop) gets from a host OUTSIDE the program's athletics site
+# records that host in data/camps-refused-hosts.json, and no camps fetch sends it another request -
+# not even robots.txt - in this run or any later one:
+#   - the check runs twice: in fetch_checked before robots.txt (a recorded host costs nothing and the
+#     program's camps.json says why: hostRefused), and in common's _PoliteAdapter.send through a host
+#     guard, inside the host gate, for every redirect hop - so a link that redirects onto a recorded
+#     host stops there, and a second worker queued on a host behind the first one's 403 sees it recorded;
+#   - an athletics-site host is never recorded (its refusals are registry skipReason work), and news
+#     article fetches never record;
+#   - 403 entries stay until a PR deletes them. 429 entries (owner decision on #284): on a run with
+#     --camps-retry-429 (the Monday weekly), an entry at least RETRY_429_AFTER_DAYS old gets exactly one
+#     fetch; a 2xx answer removes the entry, anything else keeps it with firstAt unchanged, so it is
+#     tried again the following Monday. The one fetch may follow a redirect on that host;
+#   - the file is written only when an entry is added or removed (sorted keys, no per-run fields), so
+#     a daily data commit does not touch it and a clearing PR is not undone by the run's rebase.
+#     Clear an entry between runs, not while one is in progress. Per-run counts are logged in the
+#     refresh summary (refused_summary()).
+REFUSED_PATH = os.path.join(common.DATA_DIR, "camps-refused-hosts.json")
+REFUSE_STATUSES = (403, 429)
+RETRY_429_AFTER_DAYS = 7
+_settings = {"stored_link": False, "retry_429": False}
+_refused_lock = threading.Lock()
+_refused: dict | None = None             # host -> entry, loaded from REFUSED_PATH once per process
+_retry_owner: dict[str, object] = {}     # host -> the guard holding its one 429 retry, or "spent"
+STATS: collections.Counter = collections.Counter()
+
+
+def configure(*, stored_link: bool = False, retry_429: bool = False) -> None:
+    """Set by `refresh` from --camps-stored-link / --camps-retry-429 (refresh.yml decides the day)."""
+    _settings["stored_link"], _settings["retry_429"] = bool(stored_link), bool(retry_429)
+
+
+def reset_refused() -> None:
+    """Forget the loaded file and this process's retry tokens and counts (tests)."""
+    global _refused
+    with _refused_lock:
+        _refused = None
+        _retry_owner.clear()
+        STATS.clear()
+
+
+def _entries() -> dict:
+    global _refused
+    if _refused is None:
+        _refused = dict(common.read_json(REFUSED_PATH, {}) or {})
+    return _refused
+
+
+def _write_refused(host: str, entry: dict | None) -> None:
+    """Add (entry) or remove (None) one host in the file: a locked read-modify-write, sorted keys."""
+    with common._locked(REFUSED_PATH):
+        cur = dict(common.read_json(REFUSED_PATH, {}) or {})
+        if entry is None:
+            if host not in cur:
+                return
+            cur.pop(host)
+        else:
+            if host in cur:
+                return
+            cur[host] = entry
+        os.makedirs(os.path.dirname(REFUSED_PATH), exist_ok=True)
+        tmp = REFUSED_PATH + ".tmp"
+        with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(dict(sorted(cur.items())), f, indent=2, sort_keys=True, ensure_ascii=False)
+            f.write("\n")
+        os.replace(tmp, REFUSED_PATH)
+
+
+def _retry_due(e: dict) -> bool:
+    if not _settings["retry_429"] or e.get("status") != 429:
+        return False
+    try:
+        first = _dt.date.fromisoformat(str(e.get("firstAt"))[:10])
+    except ValueError:
+        return True  # an unreadable date must not keep a 429 host blocked for good
+    return (_dt.datetime.now(_dt.timezone.utc).date() - first).days >= RETRY_429_AFTER_DAYS
+
+
+def _refused_text(host: str, e: dict) -> str:
+    return f"camp host {host} refused us (HTTP {e.get('status')}, recorded {e.get('firstAt')}); not requested"
+
+
+def refused_reason(host: str) -> str | None:
+    """Why `host` must not be requested, or None. A 429 host whose retry is due and not yet taken
+    passes here; the guard in the host gate then hands its one retry to exactly one fetch."""
+    with _refused_lock:
+        e = _entries().get(host)
+        if not e:
+            return None
+        if _retry_due(e) and _retry_owner.get(host) != "spent":
+            return None  # not yet retried, or being retried by another worker: the host gate decides
+        STATS["skipped"] += 1
+        return _refused_text(host, e)
+
+
+class _CampGuard:
+    """The host guard for one camps fetch (see common.host_guard)."""
+
+    def __init__(self, slug: str | None, base_host: str, record: bool):
+        self.slug, self.base_host, self.record = slug, base_host, record
+
+    def before(self, host: str, url: str) -> str | None:
+        with _refused_lock:
+            e = _entries().get(host)
+            if not e:
+                return None
+            owner = _retry_owner.get(host)
+            if owner is self:
+                return None  # a redirect hop of the fetch that holds this host's retry
+            if owner is None and _retry_due(e):
+                _retry_owner[host] = self
+                STATS["retried"] += 1
+                common.log(f"camps: retrying 429 host {host} (recorded {e.get('firstAt')})")
+                return None
+            STATS["skipped"] += 1
+            return _refused_text(host, e)
+
+    def after(self, host: str, url: str, status: int) -> None:
+        with _refused_lock:
+            if _retry_owner.get(host) is self:
+                if 300 <= status < 400:
+                    return  # a hop on the way; the answer that decides is still to come
+                _retry_owner[host] = "spent"
+                if 200 <= status < 300:
+                    _entries().pop(host, None)
+                    _write_refused(host, None)
+                    STATS["unblocked"] += 1
+                    common.annotate(f"::notice title=camps::camp host {host} answered {status} on its weekly 429 "
+                                    f"retry and is no longer skipped (data/camps-refused-hosts.json)")
+                else:
+                    STATS["kept"] += 1
+                    common.log(f"camps: 429 host {host} answered {status} on its retry; still skipped")
+                return
+            if (status not in REFUSE_STATUSES or not self.record or host in _entries()
+                    or re.sub(r"^www\.", "", host) == re.sub(r"^www\.", "", self.base_host or "")):
+                return
+            entry = {"status": status, "firstAt": common.today(), "program": self.slug, "url": _http_url(url)}
+            _entries()[host] = entry
+            _write_refused(host, entry)
+            STATS["recorded"] += 1
+            common.annotate(f"::warning title=camps::camp host {host} refused us (HTTP {status}, {self.slug}); recorded in "
+                            f"data/camps-refused-hosts.json and not requested again"
+                            + (" until a Monday retry" if status == 429 else " until a PR removes it"))
+
+
+def refused_summary() -> str | None:
+    """One line of this run's refused-host counts for the refresh summary, or None when all are 0."""
+    if not any(STATS.values()):
+        return None
+    return ("camps refused hosts: " + ", ".join(f"{k} {STATS[k]}" for k in ("recorded", "skipped", "retried", "unblocked", "kept"))
+            + f"; {len(_entries())} on file")
+
+
 # ---------- fetching with robots ----------
 
-def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0) -> dict:
-    """Fetch a camp page. Hosts outside the athletics site are checked against robots.txt before
+def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0, slug: str | None = None,
+                  record: bool = True) -> dict:
+    """Fetch a camp page. A host recorded in data/camps-refused-hosts.json is not requested at all
+    (hostRefused). Hosts outside the athletics site are checked against robots.txt before
     the request (denied = no request at all) and again on the final host after redirects (denied =
-    the body is discarded and its `.cache/http` entry removed). Returns {url, finalUrl, html,
-    robotsBlocked, error, nonHtml}; nonHtml is True when the page was fetched but is not HTML (a PDF,
-    an empty body, another content type), so nothing could be parsed."""
-    out = {"url": url, "finalUrl": None, "html": None, "robotsBlocked": False, "error": None, "nonHtml": False}
+    the body is discarded and its `.cache/http` entry removed). A 403/429 from an off-site host is
+    recorded unless record=False (news articles). Returns {url, finalUrl, html, robotsBlocked,
+    hostRefused, error, status, nonHtml}; nonHtml is True when the page was fetched but is not HTML (a
+    PDF, an empty body, another content type), so nothing could be parsed; status is the HTTP status
+    of a failed fetch."""
+    out = {"url": url, "finalUrl": None, "html": None, "robotsBlocked": False, "hostRefused": False,
+           "error": None, "status": None, "nonHtml": False}
+    why = refused_reason(_host(url))
+    if why:
+        out["hostRefused"], out["error"] = True, why
+        return out
     if not _same_site(url, base_host) and not common.robots_allowed(url):
         out["robotsBlocked"] = True
         return out
     try:
-        html, meta = common.fetch_text(url, max_age_hours=max_age_hours, retries=1, timeout=30)
+        with common.host_guard(_CampGuard(slug, base_host, record)):
+            html, meta = common.fetch_text(url, max_age_hours=max_age_hours, retries=1, timeout=30)
+    except common.HostRefused as e:
+        out["hostRefused"], out["error"] = True, common.error_text(e, 200)
+        return out
     except common.FetchError as e:
-        out["error"] = common.error_text(e, 200)
+        out["error"], out["status"] = common.error_text(e, 200), e.status
         return out
     final = meta.get("finalUrl") or url
     out["finalUrl"] = final
@@ -1439,7 +1613,7 @@ def _news_camps(slug: str, base_host: str) -> tuple[list[dict], int]:
         url, title, published = it["url"], it["title"], it.get("date")
         entries = []
         try:
-            r = fetch_checked(url, base_host, max_age_hours=24 * 7)
+            r = fetch_checked(url, base_host, max_age_hours=24 * 7, slug=slug, record=False)  # news never records (#284)
             if r["html"]:
                 entries = extract_camps(r["html"], r["finalUrl"] or url, published=published, title=title, body_only=True)
         except Exception as e:  # a single article must not sink the collector
@@ -1463,13 +1637,18 @@ def collect(program: dict, registry: dict) -> dict:
         raise common.FetchError("camps: no athletics baseUrl in registry")
     base_host = _host(base)
     data = {"campsUrl": None, "discoveredVia": None, "hubUrl": None, "finalUrl": None, "host": None, "vendor": None,
-            "pageTitle": None, "robotsBlocked": False, "fetchError": None, "parsed": False,
-            "camps": [], "newsCamps": [], "newsScanned": 0}
+            "pageTitle": None, "robotsBlocked": False, "hostRefused": False, "fetchError": None, "parsed": False,
+            "linkReused": False, "camps": [], "newsCamps": [], "newsScanned": 0}
     roster_url = f"{base}{a.get('sportPath', '')}/roster"
     link = None
     registry_url = _http_url(a.get("campsUrl"))
     if a.get("campsUrl") and not registry_url:
         common.log(f"camps: registry athletics.campsUrl is not an http(s) URL, ignored: {a['campsUrl']!r}")
+
+    def discover():
+        html, _ = common.fetch_text(roster_url, max_age_hours=24)
+        return find_camps_link(html, roster_url)
+
     if registry_url:
         link = {"url": registry_url, "text": "registry", "via": "registry", "female": True, "soccer": True}
     else:
@@ -1478,10 +1657,27 @@ def collect(program: dict, registry: dict) -> dict:
         platform = a.get("platform") or "auto"
         if platform != "auto":
             roster_url = adapters.get(platform).urls(program, registry)["roster"]
-        html, _ = common.fetch_text(roster_url, max_age_hours=24)
-        link = find_camps_link(html, roster_url)
+        # --camps-stored-link (the Jan-Jul non-Monday runs, issue #284): reuse the link the last run
+        # found instead of fetching the roster page to find it again. The stored campsUrl is already the
+        # hub hop's target, so there is no hop either; a program with no stored link stays linkless until
+        # Monday's rediscovery, and one with no camps.json yet (newly onboarded) discovers as usual.
+        prev = (common.load_source(slug, NAME) or {}).get("data") if _settings["stored_link"] else None
+        if isinstance(prev, dict):
+            data["linkReused"] = True
+            stored = _http_url(prev.get("campsUrl"))
+            if stored:
+                link = {"url": stored, "text": "stored", "via": prev.get("discoveredVia") or "stored",
+                        "female": True, "soccer": True, "hub": _http_url(prev.get("hubUrl"))}
+        else:
+            link = discover()
     source_url = roster_url
-    r = fetch_checked(link["url"], base_host) if link else None
+    r = fetch_checked(link["url"], base_host, slug=slug) if link else None
+    if data["linkReused"] and link and r["status"] in (404, 410):
+        # the school moved its camp page: find the new one now rather than on Monday (one roster request)
+        common.log(f"camps: stored link {link['url']} answered {r['status']}; rediscovering from {roster_url}")
+        data["linkReused"] = False
+        link = discover()
+        r = fetch_checked(link["url"], base_host, slug=slug) if link else None
     if link and not link.get("vouched", True) and not _page_vouches(
             r["finalUrl"] or link["url"], r["html"], base_host, set(link.get("schoolTokens") or ())):
         why = "the page" if r["html"] else "robots.txt" if r["robotsBlocked"] else (r["error"] or "the unreadable page")
@@ -1490,6 +1686,7 @@ def collect(program: dict, registry: dict) -> dict:
         link = None
     if link:
         data["campsUrl"], data["discoveredVia"] = link["url"], link["via"]
+        data["hubUrl"] = link.get("hub")
         source_url = link["url"]
         if r["html"] and _same_site(r["finalUrl"] or link["url"], base_host) and not (link["female"] or link["soccer"]):
             hop = find_hub_hop(r["html"], r["finalUrl"] or link["url"], {roster_url, link["url"]})
@@ -1497,11 +1694,12 @@ def collect(program: dict, registry: dict) -> dict:
                 common.log(f"camps: hub {r['finalUrl'] or link['url']} -> {hop['url']} ({hop['text'][:50]})")
                 data["hubUrl"], data["campsUrl"] = link["url"], hop["url"]
                 source_url = hop["url"]
-                r2 = fetch_checked(hop["url"], base_host)
+                r2 = fetch_checked(hop["url"], base_host, slug=slug)
                 r = r2 if (r2["html"] or r2["robotsBlocked"]) else {**r2, "finalUrl": r2["finalUrl"] or hop["url"]}
         data["finalUrl"] = r["finalUrl"] or data["campsUrl"]
         data["host"] = _host(data["finalUrl"])
         data["robotsBlocked"] = r["robotsBlocked"]
+        data["hostRefused"] = r["hostRefused"]
         data["fetchError"] = r["error"]
         data["vendor"] = detect_vendor(data["finalUrl"], r["html"], base_host)
         data["parsed"] = bool(r["html"])  # False: robots, fetch error, or a PDF/empty/non-HTML page (nothing to read)
@@ -1513,11 +1711,14 @@ def collect(program: dict, registry: dict) -> dict:
         common.log(f"camps: {data['campsUrl']} via {data['discoveredVia']}"
                    + (f" -> {data['finalUrl']}" if data["finalUrl"] != data["campsUrl"] else "")
                    + (" [robots: link only]" if data["robotsBlocked"] else "")
+                   + (" [refused host: link only]" if data["hostRefused"] else "")
+                   + (" [stored link]" if data["linkReused"] else "")
                    + (f" [fetch failed: {data['fetchError']}]" if data["fetchError"] else "")
                    + (" [not HTML: link only]" if r.get("nonHtml") else "")
                    + f": {len(data['camps'])} dated camps ({data['vendor']})")
     else:
-        common.log(f"camps: no camps link found on {roster_url}")
+        common.log("camps: no camps link stored (rediscovered on Mondays)" if data["linkReused"]
+                   else f"camps: no camps link found on {roster_url}")
     data["newsCamps"], data["newsScanned"] = _news_camps(slug, base_host)
     if data["newsCamps"]:
         common.log(f"camps: {len(data['newsCamps'])} camp entries from {data['newsScanned']} archived news items")
