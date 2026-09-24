@@ -373,6 +373,31 @@ _gates_lock = threading.Lock()
 _sending = threading.local()   # the request this thread is sending: .gate, .sent_at
 _retry = threading.local()     # fetch()'s attempt number (1-based), so the gate can scale a backoff
 
+# A caller-scoped host veto (issue #284). A caller that must never send a request to certain hosts -
+# camps, for the camp hosts that refused it with a 403/429 - installs a guard with host_guard() around
+# its own fetch. _PoliteAdapter.send consults it INSIDE the host gate, for the first request and every
+# redirect hop: every hop, because a link on one host that redirects onto a recorded host must not
+# reach it; inside the gate, because workers heading for one host are serialised there, so the second
+# sees what the first one's answer recorded. guard.before(host, url) returns a reason to refuse
+# (nothing is sent; HostRefused is raised) or None; guard.after(host, url, status) sees every answer
+# while the gate is still held. Fetches made without a guard - every other collector, robots.txt - are
+# unaffected.
+_host_guard = threading.local()
+
+
+class HostRefused(FetchError):
+    """A request the thread's host guard vetoed: nothing was sent to that host."""
+
+
+@contextlib.contextmanager
+def host_guard(guard):
+    prev = getattr(_host_guard, "guard", None)
+    _host_guard.guard = guard
+    try:
+        yield
+    finally:
+        _host_guard.guard = prev
+
 
 def _gate(host: str) -> _HostGate:
     with _gates_lock:
@@ -461,7 +486,12 @@ class _PoliteAdapter(HTTPAdapter):
         self.poolmanager.pool_classes_by_scheme = {"http": _StampingHTTPPool, "https": _StampingHTTPSPool}
 
     def send(self, request, **kwargs):
+        guard = getattr(_host_guard, "guard", None)
         with _polite(request.url) as g:
+            if guard is not None:
+                why = guard.before(_host(request.url), request.url)
+                if why:
+                    raise HostRefused(why, final_url=request.url)
             try:
                 resp = super().send(request, **kwargs)
                 if resp.status_code in RETRY_STATUSES:
@@ -471,6 +501,8 @@ class _PoliteAdapter(HTTPAdapter):
             except requests.RequestException:
                 _hold(g, _backoff_seconds(None))
                 raise
+            if guard is not None:
+                guard.after(_host(request.url), request.url, resp.status_code)
             return resp
 
 

@@ -3,24 +3,33 @@ name: Refresh program data
 # Public-web collectors only (athletics sites, TopDrawerSoccer, SoccerWire, NCAA RPI, Scorecard).
 # The social scout never runs here - it needs the logged-in browser profile on your own PC.
 #
-#   daily 11:00 UTC  -> commitments (TDS + SoccerWire), news, NCAA RPI
+#   daily 11:00 UTC  -> commitments (TDS + SoccerWire), news, ID camps, NCAA RPI
 #   Aug-Dec daily    -> also rosters/schedules (no bios), so results land the morning after a game
 #                       (about 2,800 extra requests and +60-90 min per run; the runner has no HTTP cache).
 #                       The head coach's stored bio year is kept, not fetched (issue #168)
 #   Mondays          -> also rosters/schedules (no player bios, but each head coach's bio page: one request
-#                       per program, --coach-bios, issue #168), Wikipedia and ID camps (camp pages are
-#                       seasonal; one request per program plus one per camp site, honouring
-#                       robots.txt); school facts and climate only on a manual "full" run
-#                       (Scorecard falls back to DEMO_KEY, 30 requests/hour, until the
+#                       per program, --coach-bios, issue #168) and Wikipedia; school facts and climate only
+#                       on a manual "full" run (Scorecard falls back to DEMO_KEY, 30 requests/hour, until the
 #                       SCORECARD_API_KEY secret is set)
+# ID camps daily (issue #284; about 1,600 requests on a discovering run, 1,400 on a stored-link one, at
+# 942 programs). Each run fetches every program's camp page, plus robots.txt once per off-site camp host.
+# How the camp LINK is found depends on the day:
+#   Mondays and Aug-Dec -> rediscovered from the roster page. Aug-Dec that page comes from this run's cache,
+#                          because athletics fetched the same URL a moment earlier, so it costs nothing
+#   Jan-Jul, not Monday -> --camps-stored-link: the link the last run stored, no roster request and no hub
+#                          hop (a 404/410 on it rediscovers at once)
+# A camp host outside the athletics site that answers 403 or 429 is recorded in
+# data/camps-refused-hosts.json and never requested again by camps. A 403 stays until a PR deletes the
+# entry (between runs); a 429 gets one retry on the first Monday at least 7 days after it was recorded
+# (--camps-retry-429), and is dropped if that retry answers 2xx (collect/camps.py has the rules).
 #
 # Manual dispatch, highest precedence first:
 #   build_only=true  -> no collector at all; rebuild public/data from the stored
 #                       programs/*/sources/*.json, validate, commit as "data: rebuild" (~1 min)
 #   only="a,b"       -> run just those collectors (validated against collegedash.py's COLLECTORS
 #                       plus rpi). Use it to republish one collector's data after a parser fix -
-#                       e.g. only=camps is 350 collector runs (one roster page plus the camp page
-#                       it finds) rather than the full run's ~1,400 runs and ~2,800 requests.
+#                       e.g. only=camps is ~942 collector runs (one roster page plus the camp page
+#                       it finds, per program) rather than the full run's thousands.
 #   full=true        -> every collector, with head-coach bio pages but no player bio pages
 #   otherwise the schedule branches above.
 # Whatever the mode, the commit step rebuilds public/data from the stored sources after it rebases
@@ -154,11 +163,11 @@ jobs:
           elif [ "$FULL_INPUT" = "true" ]; then
             python collegedash.py refresh --no-bios --coach-bios --mode full
           elif [ "$(date -u +%u)" = "1" ]; then
-            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --coach-bios --mode weekly
+            python collegedash.py refresh --only athletics,wikipedia,tds,soccerwire,news,camps,rpi --no-bios --coach-bios --camps-retry-429 --mode weekly
           elif [ "$(date -u +%m)" -ge 8 ]; then   # Aug-Dec, in season: schedules/results daily
-            python collegedash.py refresh --only athletics,tds,soccerwire,news,rpi --no-bios --mode daily
+            python collegedash.py refresh --only athletics,tds,soccerwire,news,camps,rpi --no-bios --mode daily
           else
-            python collegedash.py refresh --only tds,soccerwire,news,rpi --mode daily
+            python collegedash.py refresh --only tds,soccerwire,news,camps,rpi --camps-stored-link --mode daily
           fi
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"

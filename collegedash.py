@@ -518,7 +518,9 @@ def cmd_refresh(args):
         entry = state.get(f"{p['slug']}.{c}")
         return isinstance(entry, dict) and entry.get("ok") is False
 
-    plan = [(p, [c for c in only if c in COLLECTORS and wanted(p, c)]) for p in programs]
+    # COLLECTORS order, whatever order --only lists them in: camps mines the archive news writes, and
+    # reads the roster page athletics already fetched this run (issue #284)
+    plan = [(p, [c for c in COLLECTORS if c in only and wanted(p, c)]) for p in programs]
     plan = [(p, cs) for p, cs in plan if cs]
     run_rpi = "rpi" in only or (not args.only and not args.failed)
     if args.dry_run:
@@ -528,6 +530,9 @@ def cmd_refresh(args):
         print(f"-- {len(plan)} programs, {total} collector runs" + (", plus rpi current" if run_rpi else ""))
         return 0
     clear_not_recorded()
+    if any("camps" in cs for _, cs in plan):
+        from collect import camps
+        camps.configure(stored_link=args.camps_stored_link, retry_429=args.camps_retry_429)
     results = []
     if run_rpi:
         from collect import rpi
@@ -545,6 +550,11 @@ def cmd_refresh(args):
         common.log("nothing to refresh")
         return 0
     import build
+    if any("camps" in cs for _, cs in plan):
+        from collect import camps
+        line = camps.refused_summary()  # this run's refused-camp-host counts (issue #284)
+        if line:
+            common.log(line)
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
 
@@ -758,6 +768,12 @@ def main(argv=None):
     p.add_argument("--coach-bios", action="store_true",
                    help="fetch each head coach's bio page (one request per program) even with --no-bios; without it a "
                         "--no-bios run keeps the stored head-coach bio (issue #168)")
+    p.add_argument("--camps-stored-link", action="store_true",
+                   help="camps: reuse each program's stored camp link instead of fetching the roster page to find it "
+                        "(refresh.yml's Jan-Jul non-Monday runs; issue #284)")
+    p.add_argument("--camps-retry-429", action="store_true",
+                   help="camps: give each camp host recorded for a 429 at least 7 days ago one retry "
+                        "(refresh.yml's Monday run; issue #284)")
     p.add_argument("--failed", action="store_true", help="only collectors whose last run failed (per refresh-state)")
     p.add_argument("--dry-run", action="store_true", help="print what would run, run nothing")
     p.add_argument("--fail-threshold", type=float, default=float(os.environ.get("COLLEGEDASH_FAIL_THRESHOLD", "0.05")),

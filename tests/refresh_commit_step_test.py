@@ -239,7 +239,7 @@ def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
     return files
 
 
-def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None):
+def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None, run_files=None):
     """Returns (exit code, output, origin path, main-before sha, upstream sha, run clone path)."""
     root = os.path.join(tmp, name)
     origin = os.path.join(root, "origin.git")
@@ -267,6 +267,11 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
         f.write('"ghost-v2-collected"\n')
     with open(os.path.join(work, "public", "data", "rpi", "current.json"), "w", newline="\n") as f:
         f.write('{"season": 2026}\n')
+    for path, body in (run_files or {}).items():  # other files the collection itself writes (not build outputs)
+        full = os.path.join(work, *path.split("/"))
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        with open(full, "wb") as f:
+            f.write(body)
     if run_registry is not None:  # the run's own registry change (a registry build or onboard during the run)
         with open(os.path.join(work, "public", "data", "registry.json"), "w", newline="\n") as f:
             f.write(json.dumps({"published": run_registry}) + "\n")
@@ -565,6 +570,35 @@ def test_build_gate(tmp):
     ok("an ::error says build failed", "::error" in out and "build failed" in out)
 
 
+REFUSED = "data/camps-refused-hosts.json"
+REFUSED_BODY = json.dumps({"camps.example.com": {"firstAt": "2026-09-24", "status": 403}}, indent=2).encode() + b"\n"
+
+
+def test_refused_hosts_file(tmp):
+    print("refused-hosts-file (#284): the collection adds data/camps-refused-hosts.json, which upstream lacks")
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    # gated: validate fails. The file is collected data, not a build output, so the gate's restore must
+    # leave it alone: it travels with the collection to the sources branch, and main does not get it
+    code, out, origin, c1, _ = run_case(tmp, "refused-gated", upstream=readme, run_markers=("VALIDATE_FAILS",),
+                                        run_files={REFUSED: REFUSED_BODY})
+    ok("gated: the step fails", code != 0, out[-800:])
+    ok("gated: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    bs = branches(origin)
+    ok("gated: one sources branch", len(bs) == 1, bs)
+    if len(bs) == 1:
+        # fails if the file joins the tolerant-restore list (the restore would delete it from the branch)
+        ok("FIX gated: the sources branch carries the refused-hosts file", tree_files(origin, bs[0]).get(REFUSED) == REFUSED_BODY,
+           sorted(tree_files(origin, bs[0]))[:20])
+    ok("gated: main does not have it", REFUSED not in tree_files(origin, "refs/heads/main"))
+    # happy path: published with the run's collection
+    code, out, origin, c1, _ = run_case(tmp, "refused-published", upstream=readme, run_files={REFUSED: REFUSED_BODY})
+    ok("published: the step succeeds", code == 0, out[-1500:])
+    ok("FIX published: main gets the refused-hosts file", tree_files(origin, "refs/heads/main").get(REFUSED) == REFUSED_BODY)
+    ok("published: no sources branch", branches(origin) == [])
+
+
 def test_review_reports(tmp):
     print("review-reports (#228, #229): build writes data/*-review.json outside public/data, and validate fails")
     # Upstream has never built a review report. The gate's restore must not fail on the missing paths (a
@@ -637,7 +671,8 @@ def main(argv=None) -> int:
     cases = [test_deleted_upstream, test_deleted_and_gated, test_deleted_registry_kept, test_deletion_direction,
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
-             test_build_gate, test_fifth_output, test_review_reports]
+             test_build_gate, test_fifth_output, test_review_reports,
+             test_refused_hosts_file]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
