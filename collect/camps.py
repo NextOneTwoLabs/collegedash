@@ -1683,12 +1683,15 @@ def classify_camp(name: str | None, ages: str | None = None) -> str:
         return "unknown"
     if CAMP_AGE_RE.search(t):
         return "youth"
+    if TEAM_CAMP_RE.search(t):
+        # Owner ruling on #292: a team camp is never `id`, whatever other words the name carries -
+        # new-england's 'Girls Soccer High School Team Camp' read `id` on `high school` alone. It sits
+        # below the youth tokens (a 'Youth Team Camp' is still youth) and above every ID token.
+        return "youth" if CAMP_DAY_RE.search(t) else "unknown"
     if CAMP_ID_RE.search(t):
         return "id"
     if CAMP_DAY_RE.search(t):
         return "youth"
-    if TEAM_CAMP_RE.search(t):
-        return "unknown"  # a team camp is not an ID event at any age (owner ruling, #292 review)
     return _ages_class(ages)
 
 

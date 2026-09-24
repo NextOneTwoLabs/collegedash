@@ -281,6 +281,12 @@ def test_classify() -> None:
         ("Goalkeeper Camp", "6th - 12th Grade", "unknown"),  # straddles
         ("Overnight Team Camp", "14 - 19", "unknown"),       # team camps stay out of id
         ("Team Camps", "grades 9-12", "unknown"),
+        # the team exclusion beats the name's ID words too (owner ruling on #292); fails if the team
+        # check is moved back below CAMP_ID_RE, where 'high school' / 'ID' would win
+        ("Girls Soccer High School Team Camp", None, "unknown"),
+        ("High School Team Camp", "grades 9-12", "unknown"),
+        ("ID Team Camp", None, "unknown"),
+        ("Youth Team Camp", None, "youth"),
         ("Youth ID Camp", "13-18", "youth"),                 # the name still wins
         ("Spring ID Camp", "Ages 6-12", "id"),               # ...in both directions
         ("Soccer Camp", None, "unknown"),
