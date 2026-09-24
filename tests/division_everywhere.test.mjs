@@ -8,11 +8,11 @@
 // people), one each from D1, D2 and D3. For every place a fixture program's name is shown, the text between that
 // name and the next program's name (or 700 characters, whichever is sooner) must carry that program's division tag.
 //
-// Views rendered: Table, Cards, Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Clubs & schools
+// Views rendered: Table, Cards, Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Pipelines
 // (a club's programs; a D1 program's page, whose subtitle carries the line while the "Clubs feeding X" /
 // "High schools feeding X" headings stay short; a club and a program together; the Program box's suggestions),
 // Compare column headers, Compare "Add a school" results, program profile (subtitle and glance panel), not-found
-// "Did you mean". The clubs and schools index is Division I only, so a D2 or D3 program's Clubs & schools URL is
+// "Did you mean". The clubs and schools index is Division I only, so a D2 or D3 program's Pipelines URL is
 // checked separately: its note names the division in words (#310).
 //
 // The mutation check is built in: the same views are rendered again from a copy of the page whose programLine()
@@ -117,16 +117,16 @@ async function renderAll(transform) {
   sb.S.compare = [...SLUGS];
   sb.S.sidebarTab = 'compare'; sb.renderSidebar(); out.push(['Sidebar compare', $('#sidebar').innerHTML, short, PROGS]);
   await sb.renderCamps(); out.push(['ID Camps', app(), short, PROGS]);
-  // Clubs & schools (#310): one page, three boxes; the selection comes from the URL. The subtitle and the results
+  // Pipelines (#310): one page, three boxes; the selection comes from the URL. The subtitle and the results
   // are separate elements under the stub DOM, so both are read.
   const trends = async q => { sb.location.hash = `#/trends${q ? `?${q}` : ''}`; await sb.renderTrends(); return `<p>${$('#trSub').innerHTML}</p>${$('#trResults').innerHTML}`; };
-  out.push(['Clubs & schools (a club\'s programs)', await trends('club=fxc'), short, PROGS]);
+  out.push(['Pipelines (a club\'s programs)', await trends('club=fxc'), short, PROGS]);
   const d1 = PROGS.filter(p => p.division === 'D1');
   for (const p of d1) {
-    out.push([`Clubs & schools (${p.division} program page)`, await trends(`program=${p.slug}`), short, [p]]);
-    out.push([`Clubs & schools (club with ${p.division} program)`, await trends(`club=fxc&program=${p.slug}`), short, [p]]);
+    out.push([`Pipelines (${p.division} program page)`, await trends(`program=${p.slug}`), short, [p]]);
+    out.push([`Pipelines (club with ${p.division} program)`, await trends(`club=fxc&program=${p.slug}`), short, [p]]);
   }
-  await trends(''); sb.trendsFillList('program'); out.push(['Clubs & schools Program box suggestions', $('#trList-program').innerHTML, short, d1]);
+  await trends(''); sb.trendsFillList('program'); out.push(['Pipelines Program box suggestions', $('#trList-program').innerHTML, short, d1]);
   const offIndex = [];
   for (const p of PROGS.filter(p => p.division !== 'D1')) offIndex.push([p, await trends(`program=${p.slug}`)]);
   sb.S.profiles = sb.S.profiles || {};
@@ -149,8 +149,8 @@ function checkView([view, html, nameOf, progs]) {
   let seen = 0;
   for (const p of progs) {
     const at = new Set();
-    // The name as its own element (">Name<"), leading a subtitle (">Name · …", the Clubs & schools program page), or
-    // after a club or school in a Clubs & schools pairing ("Club × Name", heading and subtitle).
+    // The name as its own element (">Name<"), leading a subtitle (">Name · …", the Pipelines program page), or
+    // after a club or school in a Pipelines pairing ("Club × Name", heading and subtitle).
     const shown = [`>${nameOf(p)}<`, `>${nameOf(p)} · `, ` × ${nameOf(p)}<`, ` × ${nameOf(p)} · `].flatMap(s => [...html.matchAll(new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))].map(m => m.index));
     for (const i of shown) {
       if (html.startsWith('<option', html.lastIndexOf('<', i))) continue; // the picker's options: checked by their optgroup below
@@ -169,7 +169,7 @@ test('every program-listing view shows each program with its division (D1, D2, D
   REAL = await renderAll();
   for (const v of REAL) checkView(v);
   const names = REAL.map(v => v[0]);
-  for (const need of ['Table', 'ID Camps', 'Clubs & schools (a club\'s programs)', 'Clubs & schools (D1 program page)', 'Clubs & schools Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
+  for (const need of ['Table', 'ID Camps', 'Pipelines (a club\'s programs)', 'Pipelines (D1 program page)', 'Pipelines Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
 });
 
 test('the program line reads "D1 · Conference · City, ST", the Table\'s form', async () => {
@@ -177,12 +177,12 @@ test('the program line reads "D1 · Conference · City, ST", the Table\'s form',
   assert.match(table, /<span class="team-sub"><span class="div-tag" title="[^"]+">D2<\/span><span class="pl-rest"> · Test D2 Conference · Bravoton, CA<\/span><\/span>/);
 });
 
-test('the Clubs & schools program page subtitle reads "Name · D1 · Conference · City, ST · counts" (#308 in the #310 design)', () => {
-  const page = REAL.find(v => v[0] === 'Clubs & schools (D1 program page)')[1];
+test('the Pipelines program page subtitle reads "Name · D1 · Conference · City, ST · counts" (#308 in the #310 design)', () => {
+  const page = REAL.find(v => v[0] === 'Pipelines (D1 program page)')[1];
   assert.match(page, /^<p>AlphaTU · <span class="div-tag" title="Division I">D1<\/span><span class="pl-rest"> · Test D1 Conference · Alphaville, CA<\/span> · 3 current players, 2 former, 1 commit<\/p>/);
 });
 
-test('a D2 or D3 program on Clubs & schools (Division I index) is named with its division in words', () => {
+test('a D2 or D3 program on Pipelines (Division I index) is named with its division in words', () => {
   assert.equal(REAL.offIndex.length, 2);
   for (const [p, html] of REAL.offIndex) {
     const words = { D2: 'Division II', D3: 'Division III' }[p.division];
@@ -190,7 +190,7 @@ test('a D2 or D3 program on Clubs & schools (Division I index) is named with its
   }
 });
 
-test('at narrow widths the Clubs & schools table hides the rest of the line, never the division', () => {
+test('at narrow widths the Pipelines table hides the rest of the line, never the division', () => {
   const css = fs.readFileSync(PAGE, 'utf8');
   assert.ok(/\.trend-table \.team-sub \.pl-rest[^{]*\{ display: none; \}/.test(css), 'the narrow rule does not hide .pl-rest');
   assert.ok(!/\.trend-table \.team-sub(,| \{)/.test(css), 'a narrow rule still hides the whole line, division included');
