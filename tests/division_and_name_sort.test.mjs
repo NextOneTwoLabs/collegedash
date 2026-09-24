@@ -11,7 +11,7 @@
 //
 // Single-division data (issue #110): the single-division tests used to read the shipped index and assert
 // it held exactly one division, so onboarding D2 would have turned them red without anything being wrong.
-// They now run against REAL, the shipped rows of the division that holds the most programs - which IS the
+// They now run against REAL, the shipped D1 rows (the largest division until D3 was published, #94) - which IS the
 // shipped index while the site publishes one division - and a separate test checks the shipped index
 // itself against what it actually contains.
 //
@@ -185,9 +185,10 @@ async function ready(sb) {
 /* ---------- the real published index, and a synthetic three-division one built from it ---------- */
 const SHIPPED = JSON.parse(fs.readFileSync(path.join(PUBLIC, INDEX_URL), 'utf8'));
 const DIV_COUNTS = SHIPPED.programs.reduce((m, p) => (m[p.division] = (m[p.division] || 0) + 1, m), {});
-const BIGGEST = Object.keys(DIV_COUNTS).sort((a, b) => DIV_COUNTS[b] - DIV_COUNTS[a] || a.localeCompare(b))[0];
-// The shipped rows of one division: the whole shipped index while the site publishes one division.
-const REAL = { ...SHIPPED, programs: SHIPPED.programs.filter(p => p.division === BIGGEST) };
+// The shipped rows of one division, D1, named explicitly (#94): with D3 published, D3 holds the most rows,
+// and the single-division tests below are written against D1's conferences, subtitle and names.
+const SINGLE = 'D1';
+const REAL = { ...SHIPPED, programs: SHIPPED.programs.filter(p => p.division === SINGLE) };
 const D3_CONFS = ['NESCAC', 'Centennial', 'UAA', 'DIII Independent'];
 const D2_CONFS = ['Peach Belt', 'GLIAC'];
 // Real rows with division and conference reassigned, so every other field stays real and the views
@@ -222,10 +223,10 @@ test('the shipped index carries a division on every row, and the page lists exac
 
 test('the single-division data the next tests use holds exactly one division, and all its rows', async () => {
   await ready(real.sandbox);
-  assert.ok(REAL.programs.length > 300, `only ${REAL.programs.length} rows in ${BIGGEST}, too few for the synthetic index below`);
-  assert.deepEqual(plain(S.index.divisions), [BIGGEST], 'the single-division page holds more than one division');
-  assert.equal(S.index.byDiv[BIGGEST], REAL.programs.length);
-  assert.equal(REAL.programs.length, DIV_COUNTS[BIGGEST]);
+  assert.ok(REAL.programs.length > 300, `only ${REAL.programs.length} rows in ${SINGLE}, too few for the synthetic index below`);
+  assert.deepEqual(plain(S.index.divisions), [SINGLE], 'the single-division page holds more than one division');
+  assert.equal(S.index.byDiv[SINGLE], REAL.programs.length);
+  assert.equal(REAL.programs.length, DIV_COUNTS[SINGLE]);
   // the per-division split of the conference tally must reconstruct the site-wide tally exactly
   const rebuilt = {};
   for (const d of S.index.divisions) for (const [c, n] of Object.entries(S.index.byDivConf[d])) rebuilt[c] = (rebuilt[c] || 0) + n;
@@ -277,7 +278,7 @@ test('with one division there is no Division pill row and no conference grouping
 });
 
 test('with one division the list still calls itself NCAA Division I women\'s soccer', async () => {
-  assert.equal(BIGGEST, 'D1', 'the largest published division is no longer D1; this label test names Division I');
+  assert.equal(SINGLE, 'D1', 'the single-division rows are no longer D1; this label test names Division I');
   real.sandbox.location.hash = '#/';
   await real.sandbox.renderList();
   assert.ok(app().includes("NCAA Division I women's soccer"),

@@ -185,7 +185,7 @@ const INVALID = {
   'a conference the site does not carry': { conf: ['Gulf South'] },
   'a region that is not a pill': { region: ['Pacific Northwest'] },
   'a recruiting class the site does not track': { classYear: ['2035'] },
-  'a division the site does not publish': { division: ['D3'] },
+  'a division the site does not publish': { division: ['NAIA'] },
   'a sort the page does not have': { sort: 'record' },
   'no filter at all': {},
 };

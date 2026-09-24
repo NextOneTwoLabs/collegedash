@@ -284,14 +284,20 @@ def test_build() -> None:
             p["division"] = "D3"
             if d3_conference:
                 p["conference"] = d3_conference
+    # With D3 published (#94) no division is left unpublished, so for this scenario D3 goes back to staged: the
+    # moved program and every real D3 entry are then collected but not published, and none of them may keep a page
+    d3_slugs = {q["slug"] for q in reg2["programs"] if q["division"] == "D3"}
+    if "D3" in reg2["onboardedDivisions"]:
+        reg2["onboardedDivisions"] = [d for d in reg2["onboardedDivisions"] if d != "D3"]
+        reg2["stagedDivisions"] = [*(reg2.get("stagedDivisions") or []), "D3"]
     # a real reclassification of a long-standing program is a reviewed edit to build.REVIEWED_UNPUBLISHED (R1);
     # the scenario makes that edit for its duration
     build.REVIEWED_UNPUBLISHED = {**build.REVIEWED_UNPUBLISHED, moved: "test: reclassified to D3"}
-    # With D3 staged (#190) the moved program is one more staged D3 entry, collected but still not published, so
-    # the scenario also moves the D3 count anchor by one for its duration; otherwise validate fails on the count
+    # With D3 staged the moved program is one more staged D3 entry, collected but still not published, so the
+    # scenario sets the D3 count anchor to the staged entries it made, moved one included, for its duration;
+    # otherwise validate fails on the count
     saved_counts = build.STAGED_DIVISION_COUNTS
-    if "D3" in saved_counts:
-        build.STAGED_DIVISION_COUNTS = {**saved_counts, "D3": saved_counts["D3"] + 1}
+    build.STAGED_DIVISION_COUNTS = {**saved_counts, "D3": len(d3_slugs)}
     tmp = tempfile.mkdtemp(prefix="prune-build-")
     progs = os.path.join(tmp, "programs")
     swap = dict(PROGRAMS_OUT_DIR=progs, COMMITS_OUT_DIR=os.path.join(tmp, "commitments"), CAMPS_OUT_DIR=os.path.join(tmp, "camps"))
@@ -312,7 +318,7 @@ def test_build() -> None:
             with contextlib.redirect_stdout(buf):
                 build.build(reg2, allow_unexplained_prune=frozenset({"ghost-program"}))
             on_disk = build.profile_slugs_on_disk(progs)
-            want = set(published) - {moved}
+            want = set(published) - d3_slugs
             ok("with the one-shot override the unexplained profile is pruned", "ghost-program" not in on_disk)
             # fails if a program whose division is not onboarded keeps its page
             ok(f"{moved}, moved to a division that is not onboarded, is pruned", moved not in on_disk)

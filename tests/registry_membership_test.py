@@ -1021,10 +1021,13 @@ def test_committed() -> None:
 
     by = {p["slug"]: p for p in everything}
     sf, mvsu, uwf = by.get("saint-francis"), by.get("mississippi-val"), by.get("west-florida")
-    # held exactly while D3 is not onboarded; published (and hold-free) once it is
+    # held while D3 is not onboarded; published (and hold-free) once it is. D3 was published first, without it
+    # (#94, the owner's minimal switch): saint-francis follows in its own PR, which sets this to False.
+    SAINT_FRANCIS_FOLLOWS_D3 = True
     d3_on = "D3" in (reg.get("onboardedDivisions") or [])
-    ok("Saint Francis is D3, held exactly while D3 is not onboarded", bool(sf) and sf["division"] == "D3"
-       and sf["ids"].get("ncaaOrgId") == 600 and ((sf in programs and "hold" not in sf) if d3_on
+    sf_published = d3_on and not SAINT_FRANCIS_FOLLOWS_D3
+    ok("Saint Francis is D3, held until it follows D3 into publication", bool(sf) and sf["division"] == "D3"
+       and sf["ids"].get("ncaaOrgId") == 600 and ((sf in programs and "hold" not in sf) if sf_published
                                                    else (sf in held and sf["hold"]["reason"] == "division-not-onboarded")),
        str(sf and sf.get("hold")))
     ok("Mississippi Valley State is held as in no list", mvsu in held and mvsu["hold"]["reason"] == "not-in-directory", str(mvsu and mvsu.get("hold")))
@@ -1188,7 +1191,7 @@ def test_committed() -> None:
         # fails if the D3 list is short or long: the 2026-27 Directory list is 416 programs, one of them
         # saint-francis, which stays in heldPrograms until D3 is onboarded
         ok("all 416 D3 programs are in the registry: 415 in programs, saint-francis the 416th",
-           len(d3) == (416 if d3_on else 415) and bool(sf), str(len(d3)))
+           len(d3) == (416 if sf_published else 415) and bool(sf), str(len(d3)))
         by_org = {p["ids"].get("ncaaOrgId"): p for p in everything}
         # fails if the registry was built without the owner's table, or the table was edited after the build
         # (an override only names a NEW program, so a late edit silently does nothing)
