@@ -27,7 +27,8 @@ every key already contained in the cleaned name (a search reaches those through 
 absent when empty, so the file stays small:
   * a club's: its reviewed aliases and former names from data/clubs.json ("mvla");
   * a school's: the spellings seen on rosters and recruiting records that resolved to it, as
-    `schools.school_key` reduced them ("southlake carroll" for the school NCES files as "Carroll Senior H S").
+    `schools.school_key` reduced them ("southlake carroll" for the school NCES files as "CARROLL H S" in
+    Southlake, TX, which that spelling reaches through the city-prefix rule of #325).
     A spelling is a school's name as a roster printed it, never a person's.
 
 The three columns are three disjoint populations, so a program's current + past is a count of
