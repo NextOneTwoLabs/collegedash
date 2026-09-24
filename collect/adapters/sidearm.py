@@ -261,14 +261,24 @@ def _norm_header(text: str) -> str:
 def _header_index(table) -> tuple[dict[str, int], int, str]:
     """Return (header index, number of header rows, caption). Staff tables have a caption row
     ('Coaching Staff') above the real header row. Header names are canonicalised through
-    HEADER_ALIASES; the first column wins when two headers fold onto the same key."""
+    HEADER_ALIASES; the first column wins when two headers fold onto the same key.
+
+    One exception (issue #313): a legacy Sidearm grid table (mercy) heads first AND last name 'Name'
+    twice, side by side (<td class="player_firstname"> / <td class="player_lastname">). The second of
+    two adjacent 'Name' headers is indexed as "last name", so the row loop can join the two."""
     rows = table.find_all("tr")[:2]
     caption = ""
     for n, tr in enumerate(rows, start=1):
-        heads = [_norm_header(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
+        raw = [common.clean(c.get_text(" ")).lower() for c in tr.find_all(["th", "td"])]
+        heads = [HEADER_ALIASES.get(h, h) for h in raw]
         if "name" in heads:
             idx: dict[str, int] = {}
             for i, h in enumerate(heads):
+                # both headers literally 'Name': 'Name | Full Name' (both alias to "name") is not a
+                # first/last pair and must not be joined into a doubled name
+                if (raw[i] == "name" and i > 0 and raw[i - 1] == "name" and idx.get("name") == i - 1
+                        and "last name" not in idx):
+                    idx["last name"] = i
                 idx.setdefault(h, i)
             return idx, n, caption
         caption = " ".join(heads)
@@ -421,7 +431,8 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                     or ("pos" in idx and not any(k in idx for k in ("#", "ht", "year", "hometown"))))
         if "name" in idx and "pos" in idx and not is_staff:
             real_prev = _prev_col(idx)
-            ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
+            ci = {"num": _col(idx, "#"), "name": _col(idx, "name"), "last": idx.get("last name"),
+                  "pos": _col(idx, "pos"), "ht": _col(idx, "ht"),
                   "yr": _col(idx, "year"), "home": _home_col(idx),
                   "hs": _col(idx, "high school"), "prev": real_prev, "club": _col(idx, "club"),
                   "major": _col(idx, "major", "academic major"),
@@ -443,6 +454,8 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                 name = cell("name")
                 if not name or name.lower() in ("name", "full name"):
                     continue
+                if ci["last"] is not None:  # first and last name in two 'Name' columns (issue #313)
+                    name = common.clean(f"{name} {cell('last')}")
                 hometown = cell("home")
                 prev = cell("prev")
                 if ci["hs"] is not None:
@@ -549,6 +562,17 @@ def _parse_person_cards(soup: BeautifulSoup, base_url: str, social_by_url: dict)
     return players
 
 
+def _list_view_social(li) -> dict:
+    """Instagram / X links from a legacy list-view item's social block."""
+    social: dict[str, str] = {}
+    for a in li.select(".sidearm-roster-player-social a[href]"):
+        if "instagram.com" in a["href"]:
+            social.setdefault("instagram", a["href"])
+        elif "twitter.com" in a["href"] or "x.com/" in a["href"]:
+            social.setdefault("x", a["href"])
+    return social
+
+
 def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
     """Players from the legacy Sidearm list view, li.sidearm-roster-player (issue #156). Used only when
     neither the tables nor the person cards gave a player. Some legacy pages (Mercyhurst, Hawaii-Hilo)
@@ -580,12 +604,7 @@ def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
         forms = [re.sub(r"\s*\([^)]*\)\s*$", "", common.clean(x.get_text(" ")))
                  for x in li.select(".sidearm-roster-player-position-long-short")]
         pos = forms[-1] if forms else re.sub(r"\s*\([^)]*\)\s*$", "", first(li, "position"))
-        social = {}
-        for a in li.select(".sidearm-roster-player-social a[href]"):
-            if "instagram.com" in a["href"]:
-                social.setdefault("instagram", a["href"])
-            elif "twitter.com" in a["href"] or "x.com/" in a["href"]:
-                social.setdefault("x", a["href"])
+        social = _list_view_social(li)
         record = _player_record(
             number=first(li, "jersey-number"), name=name, pos_label=pos, height=first(li, "height"),
             class_label=first(li, "academic-year"), hometown=first(li, "hometown"), high_school=first(li, "highschool"),
@@ -639,7 +658,9 @@ def _fill_blank_positions_from_list_view(players: list[dict], soup: BeautifulSou
     from the list item with the same bio URL. Nothing else changes: a non-empty table label (even one
     norm_pos cannot map) is kept, a label that is not a playing position ('Manager') is not taken,
     and a player is matched only by bio URL, never by row order (the ordering trap of issue #183).
-    Rows with no player link (mercy's table) are left as they are."""
+    A table with no player link in any row (mercy's) is first given its bio URLs by exact unique
+    name in _link_unlinked_table_from_list_view (issue #313); other rows with no link are left as
+    they are."""
     if not any(not p["posLabel"] for p in players):
         return
     by_url: dict[str, str] = {}
@@ -653,6 +674,39 @@ def _fill_blank_positions_from_list_view(players: list[dict], soup: BeautifulSou
         if label and _is_position_label(label):
             p["posLabel"] = label
             p["pos"] = common.norm_pos(label)
+
+
+def _link_unlinked_table_from_list_view(players: list[dict], soup: BeautifulSoup, base_url: str) -> None:
+    """Issue #313. Some legacy Sidearm grid tables (mercy) carry no player link in any row, while the
+    list view beside them (li.sidearm-roster-player) links every player. With no bio URL the table
+    rows could not be joined to the list, so their blank positions stayed blank and no bio was read.
+    Only when NOT ONE table player has a bio URL, take each player's URL from the list item whose
+    name is the same (case-insensitive, whitespace-normalised), and only when that name occurs once
+    in the table and once in the list - never by row order (issue #183). A table with even one
+    linked row is left exactly as it was. A player linked this way also takes the list item's social
+    links when the table gave none (these pages have no person cards to take them from)."""
+    if not players or any(p["bioUrl"] for p in players):
+        return
+    items: dict[str, list[str]] = {}
+    social_by_url: dict[str, dict] = {}
+    for li in soup.select("li.sidearm-roster-player"):
+        name_el = li.select_one(".sidearm-roster-player-name h3") or li.select_one(".sidearm-roster-player-name a")
+        link = li.select_one(".sidearm-roster-player-name a[href]")
+        href = link["href"] if link else li.get("data-player-url")
+        if name_el is not None and href:
+            url = urljoin(base_url, href)
+            items.setdefault(common.clean(name_el.get_text(" ")).lower(), []).append(url)
+            social_by_url.setdefault(url, _list_view_social(li))
+    in_table: dict[str, int] = {}
+    for p in players:
+        in_table[p["name"].lower()] = in_table.get(p["name"].lower(), 0) + 1
+    for p in players:
+        key = p["name"].lower()
+        urls_ = items.get(key, [])
+        if in_table[key] == 1 and len(set(urls_)) == 1:
+            p["bioUrl"] = urls_[0]
+            if not p["social"]:
+                p["social"] = dict(social_by_url.get(urls_[0], {}))
 
 
 def looks_client_rendered(html: str) -> bool:
@@ -681,6 +735,7 @@ def parse_roster(html: str, base_url: str) -> dict:
 
     players, staff = parse_roster_tables(soup, base_url, social_by_url)
     if players:
+        _link_unlinked_table_from_list_view(players, soup, base_url)
         _fill_blank_positions_from_list_view(players, soup, base_url)
     if not players:
         players = _parse_person_cards(soup, base_url, social_by_url)
