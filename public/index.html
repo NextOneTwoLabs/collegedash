@@ -2148,11 +2148,12 @@ async function renderTrends() {
   const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Pipelines' }];
   const tabs = listTabs('trends');
   const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  const title = 'From Youth Clubs/High Schools to Colleges'; // owner's wording (#329): every state of the page uses it
   const subtitle = 'Clubs and high schools behind college rosters';
   let doc;
   if (!S.trends) { // first entry: the one file for all divisions is ~330 KB gzipped, a visible wait on a phone
     TR = null;
-    app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle, tabs })
+    app.innerHTML = pageHeader({ crumbs, title, subtitle, tabs })
       + `<div class="content-body"><div class="card" id="trLoading" role="status"><h3>Loading…</h3><p class="muted">Loading the clubs and high-schools index for Division I, II and III programs.</p></div></div>`;
     wireTabs();
   }
@@ -2160,7 +2161,7 @@ async function renderTrends() {
     TR = null; // S.trends stays unset, so Try again (or the next entry) fetches again
     if (currentView() !== 'trends') return;
     const missing = /HTTP 404/.test(String(err?.message || ''));
-    app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle, tabs })
+    app.innerHTML = pageHeader({ crumbs, title, subtitle, tabs })
       + `<div class="content-body"><div class="card" id="trFailed">${missing
         ? '<h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p>'
         : '<h3>Could not load</h3><p class="muted">The clubs and high-schools index did not load. Check your connection and try again.</p>'}<p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div></div>`;
@@ -2178,7 +2179,7 @@ async function renderTrends() {
     ents: { club: ents('club'), school: hasSchools ? ents('school') : [] },
     pastLabel: seasons.length ? `${seasons[0]}–${seasons[seasons.length - 1]} rosters` : 'stored past rosters',
     sel: {}, hash: '', editing: {}, opts: {}, at: {}, said: '', tok: 0 };
-  app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: '<span id="trSub"></span>', tabs })
+  app.innerHTML = pageHeader({ crumbs, title, subtitle: '<span id="trSub"></span>', tabs })
     + `<div class="content-body">${askBanner()}<div class="card trend-picker" role="group" aria-label="Choose a club, a high school and a program">${TR_KINDS.map(trendsBoxHtml).join('')}</div>
       <div class="sr-only" id="trLive" aria-live="polite"></div><div id="trResults"></div></div>`;
   wireAskBanner(); wireTabs();
@@ -2768,7 +2769,7 @@ async function tabRoster(p) {
     <div class="card"><h3>${r.season} roster · ${r.count} players</h3><div class="tscroll"><table>
       <tr><th class="num">#</th><th>Name</th><th>Pos</th><th>Class</th><th>Ht</th><th>Hometown</th><th>High school</th><th>Club</th><th>Major</th></tr>${rows}</table></div>
       ${prov(r._meta, 'Club comes from TopDrawerSoccer / SoccerWire commitment records where available; "bio text" means a best-effort read of the official bio.'
-        + ` <a href="${esc(trendsUrl({ program: p.slug }))}">Where ${esc(displayName(p))}'s players come from →</a>`)}</div>`;
+        + ` <a href="${esc(trendsUrl({ program: p.slug }))}">${esc(displayName(p))}'s youth clubs and high schools →</a>`)}</div>`;
 }
 
 async function tabCommitments(p) {
