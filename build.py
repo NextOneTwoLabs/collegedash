@@ -597,13 +597,42 @@ NCAA_D2_WOMENS_CHAMPIONS = {
 # Reviewed joins from a D2 champion name to a registry slug, for the ones normalisation cannot reach.
 # Empty while no D2 program is published; each entry is a reviewed line in the PR that adds it.
 D2_TITLE_SLUGS: dict[str, str] = {}
-# Division III (#94): the cited NCAA_D3_WOMENS_CHAMPIONS table is added in its own PR, keyed by champion name
-# as D2's is, together with its "D3" entry in CHAMPION_TABLES below and 'D3' in public/index.html's
-# TITLE_TABLE_DIVISIONS (the two must name the same divisions). Until then a D3 program matches nothing and
-# publishes no titles. The D3 join needs no other code: title_matches() reads a name-keyed table, and this
-# pin table, for every division but D1.
-D3_TITLE_SLUGS: dict[str, str] = {}
-CHAMPION_TABLES = {"D1": NCAA_D1_WOMENS_CHAMPIONS, "D2": NCAA_D2_WOMENS_CHAMPIONS}
+# NCAA Division III women's soccer champions by season, named as NCAA.com's own championship history
+# writes them (https://www.ncaa.com/history/soccer-women/d3, read 2026-09-23). Every played year was
+# cross-checked against Wikipedia's "NCAA Division III women's soccer tournament" results table on the
+# same day and the two agree on the champion in all 39; they differ only in how a name is written
+# ("SUNY Cortland" / "Cortland", "TCNJ" / "Trenton State" in 1993-94, "Oneonta State" / "SUNY Oneonta",
+# "Wheaton (Ill.)" / "Wheaton (IL)"), and NCAA.com's spelling is kept. 1986 is the first tournament and 2020
+# was cancelled for COVID ("Canceled due to Covid-19"), so 2020 is absent on purpose (#94).
+#
+# Keyed by champion NAME, as D2's is. UC San Diego's five titles (1989, 1995-97, 1999) join no program: UCSD
+# is now the D1 program uc-san-diego, and title_matches() reads only a program's own division's table.
+NCAA_D3_WOMENS_CHAMPIONS = {
+    1986: "Rochester", 1987: "Rochester", 1988: "William Smith", 1989: "UC San Diego", 1990: "Ithaca",
+    1991: "Ithaca", 1992: "SUNY Cortland", 1993: "TCNJ", 1994: "TCNJ", 1995: "UC San Diego",
+    1996: "UC San Diego", 1997: "UC San Diego", 1998: "Macalester", 1999: "UC San Diego", 2000: "TCNJ",
+    2001: "Ohio Wesleyan", 2002: "Ohio Wesleyan", 2003: "Oneonta State", 2004: "Wheaton (IL)", 2005: "Messiah",
+    2006: "Wheaton (Ill.)", 2007: "Wheaton (Ill.)", 2008: "Messiah", 2009: "Messiah", 2010: "Hardin-Simmons",
+    2011: "Messiah", 2012: "Messiah", 2013: "William Smith", 2014: "Lynchburg", 2015: "Williams",
+    2016: "Washington-St. Louis", 2017: "Williams", 2018: "Williams", 2019: "Messiah",
+    2021: "Christopher Newport", 2022: "Johns Hopkins", 2023: "Cal Lutheran", 2024: "Washington-St. Louis",
+    2025: "Washington-St. Louis",
+}
+# Reviewed joins from a D3 champion name to a registry slug, for the ones normalisation cannot reach (#94).
+# "William Smith" and "Wheaton (IL)" would also match through the registry shortName; they are pinned so a
+# title never depends on a shortName edit.
+D3_TITLE_SLUGS: dict[str, str] = {
+    "SUNY Cortland": "suny-cortland",
+    "TCNJ": "college-new-jersey",
+    "Oneonta State": "suny-oneonta",
+    "Wheaton (IL)": "wheaton-college-il",
+    "Wheaton (Ill.)": "wheaton-college-il",
+    "Washington-St. Louis": "washington-st-louis",
+    "Cal Lutheran": "california-lutheran",
+    "William Smith": "hobart-william-smith",
+}
+# The keys here and public/index.html's TITLE_TABLE_DIVISIONS must name the same divisions.
+CHAMPION_TABLES = {"D1": NCAA_D1_WOMENS_CHAMPIONS, "D2": NCAA_D2_WOMENS_CHAMPIONS, "D3": NCAA_D3_WOMENS_CHAMPIONS}
 
 _TITLE_NAME_DROP = re.compile(r"\b(the|university|universities|college|of|at)\b")
 

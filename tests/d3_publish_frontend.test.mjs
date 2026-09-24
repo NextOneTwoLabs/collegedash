@@ -7,20 +7,20 @@
 // fixture generated in this file from committed profiles:
 //   - test-d3-full: north-carolina's row and profile relabelled D3. It deliberately KEEPS an RPI rank, RPI
 //     history and a College Cup count, so every "not applicable" check passes because the division rule hides
-//     them, not because the data is empty. Its title count is 0, as every D3 program's is while build.py has no
-//     D3 champions table;
+//     them, not because the data is empty. Its title count is 0, a D3 program that never won the D3 title;
 //   - test-d3-thin: bridgeport's row and profile relabelled D3. Bridgeport is a real published program whose
 //     athletics host refuses the collector (registry athletics.skipReason), so this is the thin shape the ~50
 //     refused D3 programs will publish in: no roster, schedule, staff or season, school facts and climate kept;
 //   - test-d3-champion: stanford relabelled D3 with 3 titles, the shape a D3 champion takes once the D3 table
-//     is added (the page reads a count > 0 in any division).
+//     is added (the page reads a count > 0 in any division). The real D3 champions are checked from the
+//     committed index too (#94: build.py has the D3 table).
 // Two of them come FIRST in the index, so the sorts are tested on order they have to impose.
 //
 // What this proves:
 //   - RPI and College Cups do not apply to Division III (NOT_APPLICABLE, #246): card, table, profile, glance,
 //     History and Compare; the chips exclude D3 and say so, never as missing data; the RPI sort puts D3 last;
-//   - titles by division with no D3 table: no title figure on a D3 profile, no error, the titles chip counts a
-//     D3 zero as not collected; a D3 count > 0 reads "3 NCAA D3 titles";
+//   - titles with the D3 table (#94): no title figure on a D3 profile with none, no error, the titles chip counts
+//     a D3 zero as a known 0; a D3 count > 0 reads "3 NCAA D3 titles"; real D3 champions' cards show theirs;
 //   - the Division III scholarship sentence, on D3 only; D1 and D2 keep theirs;
 //   - the thin D3 profile renders every tab without throwing and shows no empty athletics sections;
 //   - Division I is unaffected: every tab of a D1 profile renders byte for byte the same with D3 loaded.
@@ -213,16 +213,17 @@ test('the rpiRank and collegeCups chips exclude Division III as not applicable, 
   }
 });
 
-// ---------- titles, with no Division III champions table ----------
+// ---------- titles, with the Division III champions table (#94) ----------
 
-test('titles: TITLE_TABLE_DIVISIONS has no D3 while build.py has no D3 table', () => {
+test('titles: TITLE_TABLE_DIVISIONS names the divisions build.py has a champions table for, D3 included (#94)', () => {
   const pg = loadPage();
   const m = fs.readFileSync(path.join(ROOT, 'build.py'), 'utf8').match(/^CHAMPION_TABLES = \{([^}]*)\}/m);
   const tables = [...m[1].matchAll(/"([^"]+)"\s*:/g)].map((x) => x[1]);
   assert.deepEqual(plain(pg.sb.TITLE_TABLE_DIVISIONS), tables);
+  assert.ok(tables.includes('D3'), `build.py CHAMPION_TABLES has no D3: ${tables}`);
 });
 
-test('titles: a D3 program with no table shows no title figure and no error; a D3 count reads "3 NCAA D3 titles"', async () => {
+test('titles: a D3 program with no titles shows no title figure and no error; a D3 count reads "3 NCAA D3 titles"', async () => {
   const pg = await ready(MIXED_FILES);
   const cards = await list(pg);
   assert.doesNotMatch(card(cards, 'test-d3-full'), /class="titles"/);
@@ -230,18 +231,27 @@ test('titles: a D3 program with no table shows no title figure and no error; a D
   for (const slug of ['test-d3-full', 'test-d3-thin']) {
     const o = await profile(pg, slug);
     assert.doesNotMatch(subtitle(o.app).replace(/<[^>]*>/g, ''), /title/, // the visible text: the division tag's hover attribute is not a title count (#278)
-      `${slug}: the subtitle names a title count with no D3 table`);
-    assert.doesNotMatch(o.app + o.tab, /NCAA D3 titles|National titles/, `${slug}: a title figure shows with no D3 table`);
+      `${slug}: the subtitle names a title count for a program with none`);
+    assert.doesNotMatch(o.app + o.tab, /NCAA D3 titles|National titles/, `${slug}: a title figure shows for a program with none`);
     const h = await profile(pg, slug, 'history');
-    assert.doesNotMatch(h.tab, /NCAA D3 championships<\/th><td><b>0/, `${slug}: History states a zero it cannot vouch for`);
+    assert.doesNotMatch(h.tab, /NCAA D3 championships<\/th><td><b>0/, `${slug}: History lists a zero championships row`);
   }
   const c = await profile(pg, 'test-d3-champion');
   assert.match(subtitle(c.app), /3 NCAA D3 titles/);
   const h = await profile(pg, 'test-d3-champion', 'history');
   assert.match(h.tab, /<tr><th>NCAA D3 championships<\/th><td><b>3<\/b>/);
-  // the titles chip: a D3 zero is "not collected" (hidden for missing data), not a known 0
+  // the titles chip: with the D3 table (#94) a D3 zero is a known 0, so no D3 program is hidden for missing data
   const sub = subtitle(await list(pg, { cond: [{ field: 'nationalTitles', op: '>=', value: 0 }] }));
-  assert.match(sub, /2 hidden: no national-title count/, sub);
+  assert.doesNotMatch(sub, /hidden: no national-title count/, sub);
+});
+
+// fails if the committed D3 champions lose their titles on the card: the real index, not a fixture (#94)
+test('titles: real D3 champions\' cards show their titles from the committed index', async () => {
+  const pg = await ready({ 'data/programs/index.json': COMMITTED_INDEX });
+  const cards = await list(pg, { division: ['D3'] });
+  assert.match(card(cards, 'messiah'), /<span class="titles">6 NCAA D3 titles<\/span>/);
+  assert.match(card(cards, 'hobart-william-smith'), /<span class="titles">2 NCAA D3 titles<\/span>/);
+  assert.match(card(cards, 'california-lutheran'), /<span class="titles">1 NCAA D3 title<\/span>/);
 });
 
 test('titles sort: Division I first, Division III after, never interleaved', async () => {

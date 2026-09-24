@@ -707,11 +707,10 @@ const titlesLabel = division => division === 'D1' || !division ? 'National title
    is excluded as not applicable before this is read.) */
 const d1Count = (p, v) => (p.division === 'D1' || v > 0) ? v : null;
 /* A national-title count is read from the program's OWN division's NCAA champions table (build.py
-   CHAMPION_TABLES, issue #113), so a zero is a real zero in every division that has one: Division I and
-   Division II (issue #206). A division without a table keeps d1Count's rule: its zero is "not collected", so
-   a Division III program shows no title count until build.py has a Division III table (#94), and then 'D3'
-   is added here in the same PR. This list must name exactly the divisions CHAMPION_TABLES does. */
-const TITLE_TABLE_DIVISIONS = ['D1', 'D2'];
+   CHAMPION_TABLES, issue #113), so a zero is a real zero in every division that has one: Division I,
+   Division II (issue #206) and Division III (#94). A division without a table keeps d1Count's rule: its zero
+   is "not collected". This list must name exactly the divisions CHAMPION_TABLES does. */
+const TITLE_TABLE_DIVISIONS = ['D1', 'D2', 'D3'];
 const titleCount = (p, v) => (TITLE_TABLE_DIVISIONS.includes(p.division) || v > 0) ? v : null;
 const COND_FIELDS = [
   { key: 'admissionRate', label: 'Admission rate', chip: 'Admission', missing: 'no admission rate', unit: 'percent', ops: ORDER_OPS,

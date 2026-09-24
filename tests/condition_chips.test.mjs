@@ -212,9 +212,8 @@ test('registry: exactly the ten fields shipped, each complete, and each accessor
   }
   assert.deepEqual(plain(COND_FIELDS.filter(d => d.lowerIsBetter).map(d => d.key)), ['academicRank', 'rpiRank'], 'the lower-is-better fields');
   assert.ok(!COND_FIELDS.find(d => d.key === 'admissionRate').ops.includes('='), 'equality on a rate is not offered');
-  // Every shipped row is D1 today, so non-D1 rows are added. D3 has no champions table: its zero title and
-  // College Cup counts must read as "no data", while a real title still counts. D2 has one (#206): its zero
-  // title count is a real 0, and its zero College Cup count is still "no data".
+  // Non-D1 rows are added. D2 (#206) and D3 (#94) have a champions table: a zero title count is a real 0,
+  // and a zero College Cup count is still "no data".
   const rows = [...SHIPPED.programs, { slug: 'synthetic-d3', division: 'D3', nationalTitles: 0, collegeCups: 0 },
     { slug: 'synthetic-d3-champion', division: 'D3', nationalTitles: 2, collegeCups: 3 },
     { slug: 'synthetic-d2', division: 'D2', nationalTitles: 0, collegeCups: 0 },
@@ -222,7 +221,7 @@ test('registry: exactly the ten fields shipped, each complete, and each accessor
   assert.deepEqual(plain(real.sb.TITLE_TABLE_DIVISIONS), TITLE_TABLE_DIVISIONS, 'the page and build.py disagree on which divisions have a champions table');
   const titles = COND_FIELDS.find(d => d.key === 'nationalTitles');
   assert.equal(titles.get(rows.find(p => p.slug === 'synthetic-d2')), 0, 'a D2 program with no titles reads as no data, not 0');
-  assert.equal(titles.get(rows.find(p => p.slug === 'synthetic-d3')), null, 'a D3 zero (no champions table) reads as a known 0');
+  assert.equal(titles.get(rows.find(p => p.slug === 'synthetic-d3')), 0, 'a D3 zero (D3 has a champions table, #94) reads as a known 0');
   assert.equal(real.sb.condStatus(rows.find(p => p.slug === 'synthetic-d2'), [{ field: 'nationalTitles', op: '>=', value: 1 }]), 'fail',
     'Titles >= 1 on a D2 program with no titles: hidden for missing data instead of simply not matching');
   for (const d of COND_FIELDS) {
