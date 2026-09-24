@@ -432,7 +432,8 @@ def test_fixtures_carry_no_contact_details() -> None:
     #    roster-high-school-previous-schools-combined-column (Sam Houston) and
     #    roster-two-hometown-prefixed-columns (Prairie View A&M) - the last two from Huatuo's
     #    review of the first version of this fix (PR #231)
-    ok("privacy: there are fixtures to check", len(names) == 33, str(names))
+    # 34 since issue #313 added the synthetic roster-first-last-name-columns-no-links
+    ok("privacy: there are fixtures to check", len(names) == 34, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
