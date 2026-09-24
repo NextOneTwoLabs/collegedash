@@ -263,6 +263,19 @@ class Table:
         return Match(raw, key, state, "unmatched")
 
 
+def club_state(table: "Table", high_school: str | None, hometown: str | None) -> dict:
+    """#339: the one state club matching may use for a player, from `table` (the same school table
+    the build's own school match uses), as {"state": "VA" | None, "school": <school match status>}.
+
+    Honestly stated: this is the player's HOMETOWN state, used only when a school of that name exists
+    in NCES in that state (the match looks names up only inside the hometown's state), so it is a
+    conservative filter on the hometown, never an independent high-school state. Any status other
+    than "matched" (unmatched, ambiguous, none, outside-us) gives no state, whatever the hometown says.
+    Read-only: it never touches a school review recorder."""
+    m = table.match(high_school, hometown)
+    return {"state": m.state if m.status == "matched" else None, "school": m.status}
+
+
 _cache: dict[str, Table] = {}
 
 

@@ -98,14 +98,16 @@ class TableError(ValueError):
 class Match:
     """What one raw club string resolved to. `status` is matched / unmatched / not-a-club / none."""
 
-    __slots__ = ("raw", "key", "clubId", "name", "state", "country", "status")
+    __slots__ = ("raw", "key", "clubId", "name", "state", "country", "status", "hsState", "split")
 
-    def __init__(self, raw, key, club=None, club_id=None, status="unmatched"):
+    def __init__(self, raw, key, club=None, club_id=None, status="unmatched", hs_state=None, split=None):
         self.raw, self.key, self.status = raw, key, status
         self.clubId = club_id
         self.name = (club or {}).get("name")
         self.state = (club or {}).get("state")
         self.country = (club or {}).get("country")
+        self.hsState = hs_state  # #339: set when a state-split key resolved by the player's state
+        self.split = split       # #339: why a state-split key stayed unmatched
 
     @property
     def outside_us(self) -> bool:
@@ -120,6 +122,11 @@ class Match:
             out["country"] = self.country
             if self.outside_us:
                 out["outsideUS"] = True
+            if self.hsState:
+                out["via"] = "high-school state"
+                out["hsState"] = self.hsState
+        if self.split:
+            out["stateSplit"] = self.split
         return out
 
 
@@ -130,13 +137,19 @@ class Table:
         self.updated = doc.get("updated")
         self.clubs = {c["id"]: c for c in doc.get("clubs") or []}
         self.aliases: dict[str, str] = {}
+        # #339: a same-name key shared by clubs in different states -> {state: club id}
+        self.split: dict[str, dict[str, str]] = {}
         self.notAClub: dict[str, str] = {}
         if len(self.clubs) != len(doc.get("clubs") or []):
             raise TableError("data/clubs.json: two clubs share an id")
         for club in self.clubs.values():
             for name in [club["name"], *(club.get("formerNames") or [])]:
                 self._add_alias(clean_key(name), club["id"], f"the name of {club['id']}")
+        split_entries = {}
         for key, target in (doc.get("aliases") or {}).items():
+            if isinstance(target, dict) and "byState" in target:
+                split_entries[key] = target
+                continue
             club_id = target["club"] if isinstance(target, dict) else target
             if club_id not in self.clubs:
                 raise TableError(f"data/clubs.json: alias {key!r} points at unknown club {club_id!r}")
@@ -144,12 +157,39 @@ class Table:
                 raise TableError(f"data/clubs.json: alias {key!r} is not a cleaned key "
                                  f"(expected {clean_key(key)!r})")
             self._add_alias(key, club_id, "an alias")
+        for key, target in split_entries.items():
+            self._add_split(key, target)
         for key, reason in (doc.get("notAClub") or {}).items():
             if clean_key(key) != key:
                 raise TableError(f"data/clubs.json: notAClub key {key!r} is not a cleaned key")
-            if key in self.aliases:
+            if key in self.aliases or key in self.split:
                 raise TableError(f"data/clubs.json: {key!r} is both an alias and notAClub")
             self.notAClub[key] = reason
+
+    def _add_split(self, key: str, target: dict) -> None:
+        """#339: validate and store one state-split alias, {"byState": {"VA": id, "CA": id}, ...}.
+        The same key rules as any alias apply (cleaned; not a club name, former name, alias or
+        notAClub key), plus: never `club` and `byState` together, at least two states, each a
+        two-letter code naming a known club whose own `state`, if set, is that state."""
+        where = f"data/clubs.json: state-split alias {key!r}"
+        if "club" in target:
+            raise TableError(f"{where} has both `club` and `byState`")
+        by_state = target.get("byState")
+        if not isinstance(by_state, dict) or len(by_state) < 2:
+            raise TableError(f"{where} needs `byState` with at least two states (one state is a plain alias)")
+        if not key or clean_key(key) != key:
+            raise TableError(f"{where} is not a cleaned key (expected {clean_key(key)!r})")
+        if key in self.aliases:
+            raise TableError(f"{where} is already a club name or alias of {self.aliases[key]!r}")
+        for state, club_id in by_state.items():
+            if not re.fullmatch(r"[A-Z]{2}", str(state)):
+                raise TableError(f"{where}: {state!r} is not a two-letter state code")
+            if club_id not in self.clubs:
+                raise TableError(f"{where} points at unknown club {club_id!r}")
+            own = self.clubs[club_id].get("state")
+            if own and own != state:
+                raise TableError(f"{where}: {club_id!r} is a {own} club, listed under {state}")
+        self.split[key] = dict(by_state)
 
     def _add_alias(self, key: str, club_id: str, what: str) -> None:
         if not key:
@@ -159,12 +199,23 @@ class Table:
             raise TableError(f"data/clubs.json: {key!r} is {what} but already maps to {other!r}")
         self.aliases[key] = club_id
 
-    def match(self, raw: str | None) -> Match:
+    def match(self, raw: str | None, hs: dict | None = None) -> Match:
+        """`hs` (#339) is schools.club_state(...) for the player, or None (a recruit, or no school
+        table). Only a state-split key reads it; every other key matches exactly as before."""
         key = clean_key(raw)
         if not key:
             return Match(raw, key, status="none")
         if key in self.notAClub:
             return Match(raw, key, status="not-a-club")
+        by_state = self.split.get(key)
+        if by_state is not None:
+            state = (hs or {}).get("state")
+            club_id = by_state.get(state) if state else None
+            if club_id:
+                return Match(raw, key, self.clubs[club_id], club_id, "matched", hs_state=state)
+            return Match(raw, key, status="unmatched", split={
+                "reason": "state matches neither club" if state else "no high-school state",
+                "school": (hs or {}).get("school"), "states": sorted(by_state)})
         club_id = self.aliases.get(key)
         if club_id:
             return Match(raw, key, self.clubs[club_id], club_id, "matched")
@@ -195,7 +246,7 @@ def season_date(season: int | None) -> str | None:
     return f"{int(season)}-08-01" if season else None
 
 
-def resolve(candidates: list[dict], table: Table | None = None) -> dict | None:
+def resolve(candidates: list[dict], table: Table | None = None, hs: dict | None = None) -> dict | None:
     """Pick the club for one player or recruit from every candidate we hold.
 
     Each candidate is `{"raw", "source", "updated"}`, where `updated` is an ISO date:
@@ -211,6 +262,9 @@ def resolve(candidates: list[dict], table: Table | None = None) -> dict | None:
       2. when they disagree, the most recently updated candidate wins (the owner's decision on
          #228). `conflict` records that it happened, and with what, so the profile can say so;
       3. an undated candidate never beats a dated one, and PRECEDENCE breaks a remaining tie.
+
+    `hs` (#339) is the player's schools.club_state(...): candidates are grouped by what they match
+    FOR THIS PLAYER, so a roster "Beach FC ECNL" and a TDS "Beach FC (VA)" for a VA player agree.
     """
     table = table or load_table()
     cands = [c for c in candidates if (c or {}).get("raw")]
@@ -222,7 +276,7 @@ def resolve(candidates: list[dict], table: Table | None = None) -> dict | None:
         return PRECEDENCE.index(src) if src in PRECEDENCE else len(PRECEDENCE)
 
     def identity(c):
-        m = table.match(c["raw"])
+        m = table.match(c["raw"], hs)
         return m.clubId or f"key:{m.key}"
 
     groups: dict[str, list[dict]] = {}
@@ -242,7 +296,8 @@ def resolve(candidates: list[dict], table: Table | None = None) -> dict | None:
     return winner
 
 
-def annotate(record: dict, candidates: list[dict], table: Table | None = None) -> dict | None:
+def annotate(record: dict, candidates: list[dict], table: Table | None = None,
+             hs: dict | None = None) -> dict | None:
     """Write `club`, `clubSource` and `clubInfo` onto one player or commitment record.
 
     `club` and `clubSource` keep the shape the profile page already reads; `clubInfo` carries the
@@ -250,11 +305,11 @@ def annotate(record: dict, candidates: list[dict], table: Table | None = None) -
     unmatched club is visible as unmatched rather than as a blank.
     """
     table = table or load_table()
-    chosen = resolve(candidates, table)
+    chosen = resolve(candidates, table, hs)
     if not chosen:
         record["clubInfo"] = None
         return None
-    m = table.match(chosen["raw"])
+    m = table.match(chosen["raw"], hs)
     info = m.as_dict(chosen.get("source"), chosen.get("updated"))
     if chosen.get("conflict"):
         info["conflict"] = chosen["conflict"]
@@ -291,14 +346,14 @@ class Recorder:
         self.with_club = 0
 
     def observe(self, raw: str | None, *, source: str, division: str = "D1", slug: str | None = None,
-                counts_as_record: bool = True) -> None:
+                counts_as_record: bool = True, hs: dict | None = None) -> None:
         if counts_as_record:
             self.records += 1
         key = clean_key(raw)
         if not key:
             return
         self.with_club += 1
-        m = self.table.match(raw)
+        m = self.table.match(raw, hs)
         if m.status != "unmatched":
             self.matched_occurrences += 1
             return
@@ -310,6 +365,10 @@ class Recorder:
         row["divisions"][division] = row["divisions"].get(division, 0) + 1
         if slug:
             row["programs"].add(slug)
+        if m.split:  # #339: a state-split key left unmatched, counted by why
+            why = row.setdefault("stateSplit", {})
+            k = f"{m.split['reason']} (school: {m.split['school']})" if m.split.get("school") else m.split["reason"]
+            why[k] = why.get(k, 0) + 1
 
     def report(self, previous: dict | None = None, *, today: str | None = None) -> dict:
         today = today or common.today()
@@ -334,6 +393,7 @@ class Recorder:
                 "programs": len(row["programs"]),
                 "firstSeen": first_seen,
                 "new": row["key"] not in prev_rows,
+                **({"stateSplit": dict(sorted(row["stateSplit"].items()))} if row.get("stateSplit") else {}),
                 "suggestion": ({"club": club_id, "name": self.table.clubs[club_id]["name"],
                                 "why": "groups with this club when brackets, league tags, colours and SC/FC are ignored"}
                                if club_id else None),

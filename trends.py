@@ -127,8 +127,12 @@ def out_path() -> str:
 def search_aliases(table, club_id: str, name: str | None) -> list[str]:
     """The reviewed keys of `club_id` (aliases and former names) that a substring search over the
     name would not already find: a key contained in the cleaned name adds no match and is left out.
-    Shortest first, then alphabetical, so the page can show the shortest key a query hit ("MVLA")."""
-    return _aka((k for k, cid in table.aliases.items() if cid == club_id), name)
+    Shortest first, then alphabetical, so the page can show the shortest key a query hit ("MVLA").
+    A state-split key (#339, "beach fc ecnl") is searchable under every club it can resolve to."""
+    split = getattr(table, "split", {}) or {}
+    keys = [k for k, cid in table.aliases.items() if cid == club_id]
+    keys += [k for k, by_state in split.items() if club_id in by_state.values()]
+    return _aka(keys, name)
 
 
 def _aka(keys, name: str | None) -> list[str]:
@@ -306,8 +310,11 @@ class Recorder:
                     rows = list(next((v for k, v in cands.items() if self.same_person(k, q["name"])), []))
                 if column.get(n):
                     rows.append({"raw": column[n], "source": "roster page", "updated": clubs.season_date(int(y))})
-                chosen = clubs.resolve(rows, self.table) if rows else None
-                info = self.table.match(chosen["raw"]).as_dict() if chosen else None
+                # #339: the same state the build uses, from the same school table (schools.club_state)
+                st = (_schools.club_state(table, q.get("highSchool"), q.get("hometown"))
+                      if rows and table is not None and hasattr(_schools, "club_state") else None)
+                chosen = clubs.resolve(rows, self.table, st) if rows else None
+                info = self.table.match(chosen["raw"], st).as_dict() if chosen else None
                 hs = (q.get("highSchool") or "").strip()
                 if hs:
                     cov["past"]["schoolNamed"] += 1

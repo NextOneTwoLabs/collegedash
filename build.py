@@ -1208,15 +1208,20 @@ def club_candidates(tds, sw) -> dict[str, list[dict]]:
     return out
 
 
-def annotate_roster_clubs(roster: dict | None, ath, tds, sw, table=None) -> None:
+def annotate_roster_clubs(roster: dict | None, ath, tds, sw, table=None, school_table=None) -> None:
     """Give every current-roster player a `clubInfo` (raw string, cleaned key, canonical id when the
     reviewed table knows it, status) and let the most recent source win, per issue #228.
 
     The roster page's own Club column is dated with the start of its season, not with the day we
-    fetched it: see `clubs.season_date`."""
+    fetched it: see `clubs.season_date`.
+
+    #339: a same-name key shared by clubs in different states resolves by `schools.club_state`,
+    read from `school_table` - the same table the build's school match uses. The schools are not
+    annotated first (that would reorder every profile's keys); the lookup here is read-only."""
     if not roster:
         return
     table = table or clubs.load_table()
+    school_table = school_table or schools.load_table()
     cands = club_candidates(tds, sw)
     stored = ((ath or {}).get("data", {}).get("roster") or {}).get("players") or []
     column = {common.norm_name(p["name"]): (p.get("club") or "").strip() for p in stored}
@@ -1229,22 +1234,28 @@ def annotate_roster_clubs(roster: dict | None, ath, tds, sw, table=None) -> None
         rows = list(found)
         if column.get(key):
             rows.append({"raw": column[key], "source": "roster page", "updated": season_date})
-        clubs.annotate(q, rows, table)
+        clubs.annotate(q, rows, table, schools.club_state(school_table, q.get("highSchool"), q.get("hometown")))
 
 
-def observe_clubs(recorder, ath, tds, sw, *, slug: str, division: str) -> None:
+def observe_clubs(recorder, ath, tds, sw, *, slug: str, division: str, school_table=None) -> None:
     """Count every club string this program holds into the review report, matched or not.
 
     SoccerWire's `allRecords` is what the roster join reads, and it contains its `records`, so only
-    `allRecords` is counted here - counting both would double every current recruit."""
+    `allRecords` is counted here - counting both would double every current recruit.
+
+    #339: roster rows (current and past) pass the row's `schools.club_state` from `school_table`, so
+    a state-split key counts as matched where it resolves. Read-only: never the school recorder.
+    Recruits carry no matched school, so they pass none."""
     if recorder is None:
         return
+    school_table = school_table or schools.load_table()
     data = (ath or {}).get("data") or {}
     seasons = [("roster page", ((data.get("roster") or {}).get("players")) or [])]
     seasons += [("roster page (past season)", pl or []) for pl in (data.get("rosterHistory") or {}).values()]
     for source, players in seasons:
         for p in players:
-            recorder.observe(p.get("club"), source=source, division=division, slug=slug)
+            hs = schools.club_state(school_table, p.get("highSchool"), p.get("hometown")) if p.get("club") else None
+            recorder.observe(p.get("club"), source=source, division=division, slug=slug, hs=hs)
     for r in ((tds or {}).get("data", {}).get("records") or {}).values():
         recorder.observe(r.get("club"), source="TopDrawerSoccer", division=division, slug=slug)
     for r in ((sw or {}).get("data", {}).get("allRecords") or []):
@@ -1740,8 +1751,8 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
     reviewed = common.load_reviewed(slug)
 
     roster, roster_hist = build_roster(ath, build_club_lookup(tds, sw))
-    annotate_roster_clubs(roster, ath, tds, sw, club_table)
-    observe_clubs(club_recorder, ath, tds, sw, slug=slug, division=program.get("division", "D1"))
+    annotate_roster_clubs(roster, ath, tds, sw, club_table, school_table)
+    observe_clubs(club_recorder, ath, tds, sw, slug=slug, division=program.get("division", "D1"), school_table=school_table)
     if roster:
         roster["_slug"] = slug  # for the review report's per-program count; dropped below
     annotate_roster_schools(roster, division=program.get("division", "D1"), table=school_table,
@@ -1963,7 +1974,8 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     club_recorder = clubs.Recorder(club_table)
     school_table = schools.load_table(reload=True)  # derived from NCES by tools/schools_nces.py; a bad file raises here
     school_recorder = schools.Recorder(school_table)
-    trends_recorder = trends.Recorder(club_table, candidates=club_candidates, same_person=same_person)  # issue #230
+    trends_recorder = trends.Recorder(club_table, candidates=club_candidates, same_person=same_person,  # issue #230
+                                      school_table=school_table)  # #339: one school table for every state lookup
     rows, all_commits, all_camps = [], [], []
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
