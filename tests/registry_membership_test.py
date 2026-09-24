@@ -1233,6 +1233,25 @@ def test_committed() -> None:
                 main_site3.append(p["slug"])
         ok("#253: no D3 athletics URL is the college's main website, beyond the reviewed 403-refused ones",
            set(main_site3) <= set(D3_MAIN_SITE_ATHLETICS_REVIEWED), str(sorted(set(main_site3) - set(D3_MAIN_SITE_ATHLETICS_REVIEWED))))
+        # #94 (D3 names): as for D2 (#200), a filled D3 shortName or nickname cites its source in namesNote, and a
+        # namesNote cites something. Fails if either field is set with no Wikipedia citation, or a note stands alone.
+        named3 = [p for p in d3 if p.get("shortName") or p.get("nickname")]
+        ok("#94: a filled D3 shortName or nickname cites Wikipedia's D3 list in namesNote",
+           all("wikipedia.org/wiki/List_of_NCAA_Division_III_institutions" in (p.get("namesNote") or "") for p in named3),
+           str([p["slug"] for p in named3 if "List_of_NCAA_Division_III_institutions" not in (p.get("namesNote") or "")][:5]))
+        ok("#94: a D3 namesNote appears only alongside a shortName or a nickname",
+           all(bool(p.get("namesNote")) == bool(p.get("shortName") or p.get("nickname")) for p in d3),
+           str([p["slug"] for p in d3 if bool(p.get("namesNote")) != bool(p.get("shortName") or p.get("nickname"))][:5]))
+        # fails if the names are dropped or a new D3 entry arrives unnamed: every collected D3 program has a
+        # nickname except valley-forge, which has no row on the source page; held campuses (#269) have none
+        ok("#94: every collected D3 program has a nickname except valley-forge (no Wikipedia row)",
+           sorted(p["slug"] for p in d3 if not p.get("collectionHold") and not p.get("nickname")) == ["valley-forge"]
+           and not any(p.get("nickname") for p in d3 if p.get("collectionHold")),
+           str(sorted(p["slug"] for p in d3 if not p.get("collectionHold") and not p.get("nickname"))[:5]))
+        # the TPM's ruling on #94: the six Penn State campuses keep an empty shortName
+        penn3 = [p for p in d3 if p["slug"].startswith("penn-state-")]
+        ok("#94: the 6 Penn State campuses have no shortName (TPM ruling)", len(penn3) == 6 and not any(p.get("shortName") for p in penn3),
+           str([(p["slug"], p.get("shortName")) for p in penn3]))
 
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing

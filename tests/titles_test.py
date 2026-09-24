@@ -12,8 +12,8 @@ titles published none, `validate` exited 0, and nothing said so. Titles are now 
 for the program's own division, and a year no table supports is reported instead of dropped.
 
 Covers, in order:
-  tables     the committed D1 and D2 champions tables: shape, coverage, no duplicate or invented year,
-             and the D2 sources cited in build.py
+  tables     the committed D1, D2 and D3 champions tables: shape, coverage, no duplicate or invented year,
+             and the D2 and D3 sources cited in build.py
   matching   title_matches: a slug for D1, an exact normalised school name for D2, a pinned override,
              and the near-misses it deliberately refuses
   build      national_titles per division, including the exact #113 reproduction, and what
@@ -27,6 +27,7 @@ Covers, in order:
 from __future__ import annotations
 
 import argparse
+import collections
 import contextlib
 import copy
 import io
@@ -110,6 +111,18 @@ def test_tables() -> None:
        sum(1 for v in d2.values() if v == "Grand Valley State") == 7,
        sum(1 for v in d2.values() if v == "Grand Valley State"))
     ok("every division with a table is a division the site knows", set(build.CHAMPION_TABLES) <= {"D1", "D2", "D3"})
+    # The D3 table (#94): NCAA.com's championship history, cross-checked against Wikipedia's results table.
+    d3 = build.NCAA_D3_WOMENS_CHAMPIONS
+    # fails if a year is invented or a played year dropped: the D3 tournament starts in 1986 and 2020 was cancelled
+    ok("the D3 table is 1986-2025 with 2020 absent, 39 years",
+       set(d3) == set(range(1986, 2026)) - {2020} and len(d3) == 39, f"{len(d3)} years, missing {sorted(set(range(1986, 2026)) - set(d3))}")
+    ok("no D3 year is blank or a record in parentheses", all(isinstance(v, str) and v.strip() and "-0-" not in v for v in d3.values()),
+       [v for v in d3.values() if not (isinstance(v, str) and v.strip() and "-0-" not in v)])
+    ok("the D3 table is the one CHAMPION_TABLES reads for D3", build.CHAMPION_TABLES.get("D3") is d3)
+    ok("both D3 sources are cited in build.py", "ncaa.com/history/soccer-women/d3" in src
+       and "NCAA Division III women's soccer tournament" in src, "citation missing")
+    ok("Messiah has the most D3 titles, 6", collections.Counter(d3.values()).most_common(1) == [("Messiah", 6)],
+       collections.Counter(d3.values()).most_common(2))
 
 
 # ---------- matching ----------
@@ -139,19 +152,30 @@ def test_matching() -> None:
     finally:
         build.D2_TITLE_SLUGS = saved
     ok("the pin table is empty while no D2 program is published", build.D2_TITLE_SLUGS == {})
+    # fails if a division starts inheriting another division's table: a D3 school named like a D2 champion
+    ok("a D3 program is not given a D2 table's title", build.national_titles(
+        entry("some-d3", "D3", "Grand Valley State University", "Grand Valley State"), [])[0] == [])
     # fails if a division with no table starts inheriting another division's
-    ok("a D3 program matches nothing, because there is no D3 table yet",
-       not build.title_matches(entry("some-d3", "D3", "Grand Valley State University"), "Grand Valley State", "D3"))
-    # The D3 path (#94): with no D3 table a D3 program publishes no titles and nothing raises; the years a
-    # source claims are kept as unsourced, exactly as for any division without a table.
+    ok("a program in a division with no table matches nothing",
+       not build.title_matches(entry("some-x", "DX", "Messiah University", "Messiah"), "Messiah", "DX"))
     d3 = entry("test-d3", "D3", "Test College of Example", "Example")
-    ok("with no D3 table, national_titles gives a D3 program no titles and keeps the claim as unsourced",
+    ok("a D3 program the D3 table does not name gets no titles and keeps a claim as unsourced",
        build.national_titles(d3, [2019]) == ([], [2019]))
-    ok("and D3_TITLE_SLUGS exists, empty, for the table's reviewed joins", build.D3_TITLE_SLUGS == {})
+    # The committed D3 pins (#94): each names a D3 program in the registry, and joins a name the table has.
+    reg_d3 = {p["slug"] for p in common.load_registry()["programs"] if p.get("division") == "D3"}
+    ok("every D3 pin names a D3 program in the registry", set(build.D3_TITLE_SLUGS.values()) <= reg_d3,
+       sorted(set(build.D3_TITLE_SLUGS.values()) - reg_d3))
+    ok("every D3 pin is a name the D3 table uses", set(build.D3_TITLE_SLUGS) <= set(build.NCAA_D3_WOMENS_CHAMPIONS.values()),
+       sorted(set(build.D3_TITLE_SLUGS) - set(build.NCAA_D3_WOMENS_CHAMPIONS.values())))
+    # fails if the William Smith pin is dropped: the registry name "Hobart and William Smith Colleges" cannot reach it
+    hws = entry("hobart-william-smith", "D3", "Hobart and William Smith Colleges", None)
+    ok("William Smith's titles reach hobart-william-smith through its pin, with no shortName needed",
+       build.national_titles(hws, [])[0] == [1988, 2013], build.national_titles(hws, [])[0])
     saved_tables, saved_pins = build.CHAMPION_TABLES, build.D3_TITLE_SLUGS
     try:
         # the shape the cited D3 table will have: keyed by champion NAME, like D2's
         build.CHAMPION_TABLES = {**saved_tables, "D3": {2018: "Example", 2019: "Pinned Champion"}}
+        build.D3_TITLE_SLUGS = {}
         # fails if the D3 path is not the name-keyed join D2 uses (e.g. a slug comparison, or D2's table read for D3)
         ok("with a D3 table, a D3 champion joins its program by normalised name",
            build.national_titles(d3, []) == ([2018], []))
@@ -234,7 +258,7 @@ def test_check() -> None:
         passed, out = run_check(tmp, programs, good)
         ok("correct titles in both divisions pass", passed, out)
         held = sum(len(profile_of(p)["nationalTitles"]) for p in programs)
-        rest = len(build.NCAA_D1_WOMENS_CHAMPIONS) + len(build.NCAA_D2_WOMENS_CHAMPIONS) - held
+        rest = sum(len(t) for t in build.CHAMPION_TABLES.values()) - held  # D3 (#94) counts too: none of its programs is here
         # fails if a champion year is neither published nor counted as belonging to an unpublished program
         ok("and every other champion year is counted as belonging to a program the site does not publish",
            f"note: titles: {rest} champion years" in out, out)
@@ -327,14 +351,23 @@ def test_committed() -> None:
                      if (d, y) not in published and any(q.get("division") == d and build.title_matches(q, champion, d) for q in programs))
     # fails if a published D2 champion stops publishing one of its title years
     ok("every non-D1 champion year whose champion is published is published", not missing, str(missing[:4]))
-    # D3 is published ahead of its champions table (#94, the owner's minimal switch); the table follows in
-    # its own PR, which removes D3 from this set. The second check fails the day that table lands without it.
-    pending = {"D3"}
-    ok("no published program is in a division with no champions table, D3 excepted until its table lands (#94)",
-       all(p.get("division") in build.CHAMPION_TABLES or p.get("division") in pending for p in programs),
-       sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES) - pending))
-    ok("the D3 exception is still needed: D3 has no champions table yet", not (pending & set(build.CHAMPION_TABLES)),
-       sorted(pending & set(build.CHAMPION_TABLES)))
+    # D3 was published ahead of its champions table (#273); the table landed with the D3 names (#94), so no
+    # division is excepted any more.
+    ok("no published program is in a division with no champions table",
+       all(p.get("division") in build.CHAMPION_TABLES for p in programs),
+       sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES)))
+    # fails if a D3 champion year that should reach a published program does not: 34 of the 39 played years
+    # join a published D3 program; the other 5 are UC San Diego's, now the D1 program uc-san-diego (#94)
+    d3pub = [p for p in programs if p.get("division") == "D3"]
+    joins = {y: [p["slug"] for p in d3pub if build.title_matches(p, c, "D3")] for y, c in build.NCAA_D3_WOMENS_CHAMPIONS.items()}
+    ok("34 D3 champion years join exactly one published D3 program; the 5 unjoined are UC San Diego's",
+       sum(1 for v in joins.values() if len(v) == 1) == 34 and not any(len(v) > 1 for v in joins.values())
+       and sorted(y for y, v in joins.items() if not v) == [1989, 1995, 1996, 1997, 1999],
+       str({y: v for y, v in joins.items() if len(v) != 1}))
+    ok("and those 34 are published in the D3 champions' profiles",
+       {y: s for (d, y), s in published.items() if d == "D3"} == {y: v[0] for y, v in joins.items() if len(v) == 1},
+       str(sorted(set({y: s for (d, y), s in published.items() if d == "D3"}.items())
+                  ^ set({y: v[0] for y, v in joins.items() if len(v) == 1}.items()))[:4]))
 
 
 def main(argv=None) -> int:
