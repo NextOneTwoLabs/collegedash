@@ -41,6 +41,8 @@
   --row-hover: #f3f5f8;
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05); --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08); --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
   --warn-bg: rgba(217, 119, 6, 0.10); --warn-text: #7a4d00;
+  /* division tints: the fallback for a program with no team colours (#276); text on them is --text-primary */
+  --div-d1: #dde6f3; --div-d2: #dcece4; --div-d3: #efe6d8;
 }
 [data-theme="dark"] {
   color-scheme: dark;
@@ -54,6 +56,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3); --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4); --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --s1: #7cb3fb; --s3: #34d399; --s4: #fbbf24; --good-text: #34d399; --critical: #f87171; --warn-bg: rgba(251, 191, 36, 0.12); --warn-text: #fbbf24;
   --s1-wash: rgba(96, 165, 250, 0.14);
+  --div-d1: #243149; --div-d2: #213a30; --div-d3: #3b3226;
 }
 /* aliases: the section renderers were written against the older token names */
 :root {
@@ -567,9 +570,13 @@ function luminance(hex) { const rgb = hexRgb(hex); if (!rgb) return null;
   return 0.2126 * r + 0.7152 * g + 0.0722 * b; }
 // WCAG: white and near-black give equal contrast at L = 0.179; above it dark text wins
 function contrastText(hex) { const L = luminance(hex); return L == null ? 'var(--text-primary)' : L > 0.179 ? '#111111' : '#ffffff'; }
+const DIVISION_TINT = { D1: 'var(--div-d1)', D2: 'var(--div-d2)', D3: 'var(--div-d3)' }; // tokens set per theme in the CSS
 function teamColors(p) {
   const c = (p.colors || []).filter(hexRgb).map(h => '#' + h.replace('#', '')); // only real hex values reach style=""
-  if (!c.length) return { primary: null, secondary: null, text: null, neutral: true };
+  if (!c.length) { // no colours on file: a quiet tint for the program's division (#276), never invented school colours
+    const tint = DIVISION_TINT[p.division];
+    return tint ? { primary: tint, secondary: tint, text: 'var(--text-primary)', neutral: false }
+                : { primary: null, secondary: null, text: null, neutral: true }; } // unknown division: the old grey
   return { primary: c[0], secondary: c[1] || null, text: contrastText(c[0]), neutral: false };
 }
 const bandAttrs = tc => tc.neutral ? 'class="band neutral"' : `class="band" style="background:${esc(tc.primary)};color:${tc.text}"`;
