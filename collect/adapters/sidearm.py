@@ -140,6 +140,7 @@ _POLL_GROUP = rf"{_POLL_TOKEN}(?:\s*/\s*#?\s*{_POLL_TOKEN})*"
 RANK_PREFIXES = [
     # (regex, kind) - kind 'rank' sets opponentRank, 'seed' sets opponentSeed, 'label' neither
     (re.compile(rf"^\(\s*(\d{{1,2}})\s*-\s*seed\s*\)\s*", re.I), "seed"),          # (5-Seed)
+    (re.compile(rf"^\(\s*#\s*(\d{{1,2}})\s+seed(?:ed)?\s*\)\s*", re.I), "seed"),   # (#1 Seed): daemen, issue #302
     (re.compile(rf"^[\[(]\s*#?\s*({_POLL_GROUP})\s*[\])]\s*", re.I), "bracket"),      # (6) [8] (RV) (25/19)
     (re.compile(rf"^#\s*({_POLL_GROUP})\s+seed(?:ed|s)?\b\.?\s*", re.I), "seed"),     # #2 Seed, #5 Seeded
     (re.compile(rf"^#\s*({_POLL_GROUP})\s*", re.I), "rank"),                            # #21 #14/#16 #T18 #RV/8/17
@@ -934,7 +935,12 @@ def _legacy_date(date_el, season: int | None) -> str | None:
     a page whose <title> states no year - is handled once per page in _parse_legacy_games instead.
     """
     lines = _lines(date_el)
-    m = LEGACY_DATE_RE.match(lines[0]) if lines else None
+    return _legacy_date_text(lines[0], season) if lines else None
+
+
+def _legacy_date_text(line: str, season: int | None) -> str | None:
+    """ISO date from a legacy date line ('Aug 16 (Sun)') and the season, or None."""
+    m = LEGACY_DATE_RE.match(line)
     if not m:
         return None
     mon = MONTHS.get(m.group(1).lower()[:3])
@@ -962,6 +968,40 @@ def _legacy_result(li) -> tuple[str | None, str | None]:
         return None, None
     sm = LEGACY_SCORE_RE.search(" ".join(lines))
     return result, f"{sm.group(1)}-{sm.group(2)}" if sm else None
+
+
+# A weekday ahead of the month, as the two-team row writes its date ('Sat, Aug 30').
+LEGACY_WEEKDAY_PREFIX_RE = re.compile(r"^(?:mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)[a-z]*\.?,?\s+", re.I)
+
+
+def _two_team_date(li, season: int | None) -> str | None:
+    """The date of a two-team legacy row (issue #302, daemen).
+
+    This variant of the legacy theme has no .sidearm-schedule-game-opponent-date. It prints the date in
+    .sidearm-schedule-game-date with the weekday first ('Sat, Aug 30'), so the weekday is dropped and the
+    rest is read exactly as _legacy_date reads a legacy date. Only reached for a row that has no
+    opponent-date element and does have the two-team block (.sidearm-schedule-game-team-school), so no
+    other legacy row changes."""
+    lines = _lines(li.select_one(".sidearm-schedule-game-date"))
+    return _legacy_date_text(LEGACY_WEEKDAY_PREFIX_RE.sub("", lines[0]), season) if lines else None
+
+
+def _two_team_result(li) -> tuple[str | None, str | None]:
+    """(result, score) for a two-team legacy row (issue #302, daemen).
+
+    The row prints each side's goals in its own .sidearm-schedule-game-result, under
+    .sidearm-schedule-game-team-opponent and .sidearm-schedule-game-team-school, and no W/L/T letter, so
+    _legacy_result finds nothing. The result follows from the two numbers, and the score is written the
+    program's goals first, as the rest of the corpus stores it. Both sides must be a bare number: an
+    unplayed, cancelled or postponed row leaves them empty or says so, and gets no result. A level score is a
+    tie, as a shootout is in the season record."""
+    def goals(side: str) -> int | None:
+        text = " ".join(_lines(li.select_one(f".sidearm-schedule-game-team-{side} .sidearm-schedule-game-result")))
+        return int(text) if re.fullmatch(r"\d{1,2}", text) else None
+    own, opp = goals("school"), goals("opponent")
+    if own is None or opp is None:
+        return None, None
+    return ("W" if own > opp else "L" if own < opp else "T"), f"{own}-{opp}"
 
 
 def _legacy_location_tokens(li) -> list[str]:
@@ -1033,8 +1073,15 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
 
         loc_toks = [t for t in _legacy_location_tokens(li) if not LEGACY_NON_PLACE_RE.match(t)]
         result, score = _legacy_result(li)
+        date_el = li.select_one(".sidearm-schedule-game-opponent-date")
+        date = _legacy_date(date_el, season)
+        if date_el is None and li.select_one(".sidearm-schedule-game-team-school"):
+            # the two-team row (issue #302): see _two_team_date and _two_team_result
+            date = _two_team_date(li, season)
+            if result is None:
+                result, score = _two_team_result(li)
         games.append({
-            "date": _legacy_date(li.select_one(".sidearm-schedule-game-opponent-date"), season),
+            "date": date,
             "datetime": None,
             "exhibition": exhibition,
             "conferenceGame": conference,
