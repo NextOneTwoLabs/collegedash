@@ -611,15 +611,24 @@ def test_flip(registry: dict) -> None:
         # entitlements are read from the relabelled tables, the same ones the rebuild read
         check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "flip")
         check_anchor(registry, rows, "flip")
-        ok(f"no lastSeason is the newly labelled {cur_season}",
-           not [r for r in rows.values() if (r.get("lastSeason") or {}).get("year") == cur_season])
+        as_cur = [slug for slug, r in rows.items() if (r.get("lastSeason") or {}).get("year") == cur_season]
+        if LAST_DONE == cur_season:
+            # issue #249: once the final RPI is on disk the newly labelled season is the finished one
+            ok(f"the newly labelled {cur_season} is lastSeason now its final RPI is on disk, vanderbilt's too",
+               bool(as_cur) and "vanderbilt" in as_cur, f"{len(as_cur)} programs")
+        else:
+            ok(f"no lastSeason is the newly labelled {cur_season}", not as_cur, f"{len(as_cur)}: {as_cur[:6]}")
         check_in_progress(registry, rows, built, "flip", os.path.join(tmp, "rpi"))
         s = season_of(vandy["seasons"], FINISHED)
         ok(f"vanderbilt {FINISHED} survives as #8, 18-4-2, not in progress",
            (s.get("rpiRank"), s.get("record"), s.get("inProgress")) == (8, "18-4-2", None), str(s))
         nxt = season_of(vandy["seasons"], cur_season)
-        ok(f"and the newly labelled {cur_season} is the in-progress season",
-           nxt.get("inProgress") is True, str(nxt))
+        if LAST_DONE == cur_season:
+            ok(f"and the newly labelled {cur_season} is ranked and no longer in progress (final RPI on disk)",
+               bool(nxt.get("rpiRank")) and not nxt.get("inProgress"), str(nxt))
+        else:
+            ok(f"and the newly labelled {cur_season} is the in-progress season",
+               nxt.get("inProgress") is True, str(nxt))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -656,9 +665,14 @@ def test_archive_extended(registry: dict) -> None:
            v.get("rpiRank") not in (None, 8)
            and v.get("rpi", {}).get("source") == "end-of-season (Chris Thomas archive)", str(v))
         ok("while its record still comes from the snapshot", v.get("record") == "18-4-2", str(v.get("record")))
-        ok("and the list row agrees with the profile",
-           (rows["vanderbilt"]["lastSeason"]["rpiRank"], rows["vanderbilt"]["lastSeason"]["record"])
-           == (v["rpiRank"], "18-4-2"), str(rows["vanderbilt"]["lastSeason"]))
+        # The list row is lastSeason: FINISHED's archive-ranked row until the final RPI is on disk,
+        # then LAST_DONE's (issue #249). Either way it must be the profile's row for that season.
+        lr = rows["vanderbilt"]["lastSeason"]
+        want = v if LAST_DONE == FINISHED else season_of(profile(built, "vanderbilt")["seasons"], LAST_DONE)
+        ok(f"and the list row agrees with the profile's {LAST_DONE} row",
+           (lr.get("year"), lr.get("rpiRank"), lr.get("record"))
+           == (LAST_DONE, want.get("rpiRank"), "18-4-2" if LAST_DONE == FINISHED else want.get("record"))
+           and bool(want.get("rpiRank")) and bool(want.get("record")), f"{lr} vs {want}")
         ok("a program with no Wikipedia history keeps the season it only has from RPI",
            season_of(profile(built, "utrgv")["seasons"], FINISHED).get("record"),
            str(season_of(profile(built, "utrgv")["seasons"], FINISHED)))
