@@ -1096,7 +1096,13 @@ function campsAbsence(p) { // the skipped or failed camps collection behind a mi
 }
 
 /* ---------- favourites and compare ---------- */
-function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar(); }
+// The Shortlist view is built from S.favorites, so on #/shortlist it is redrawn too: syncToggles only
+// flips stars in place, which left an unsaved card, the "N saved programs" count and the Compare link
+// on screen until a reload, and never showed the empty state after the last one (issue #203).
+function toggleFav(slug) {
+  S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar();
+  if (currentView() === 'shortlist') renderShortlist().catch(e => console.error(e));
+}
 function toggleCompare(slug) {
   const i = S.compare.indexOf(slug);
   if (i >= 0) S.compare.splice(i, 1);
