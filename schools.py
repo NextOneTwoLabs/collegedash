@@ -273,7 +273,8 @@ def club_state(table: "Table", high_school: str | None, hometown: str | None) ->
     than "matched" (unmatched, ambiguous, none, outside-us) gives no state, whatever the hometown says.
     Read-only: it never touches a school review recorder."""
     m = table.match(high_school, hometown)
-    return {"state": m.state if m.status == "matched" else None, "school": m.status}
+    status = getattr(m, "status", None)
+    return {"state": getattr(m, "state", None) if status == "matched" else None, "school": status}
 
 
 _cache: dict[str, Table] = {}
