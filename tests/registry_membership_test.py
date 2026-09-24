@@ -1199,7 +1199,7 @@ def test_committed() -> None:
     if "D3" in staged_divs or d3_on:
         d3 = [p for p in programs if p["division"] == "D3"]
         # fails if the D3 list is short or long: the 2026-27 Directory list is 416 programs, one of them
-        # saint-francis, which stays in heldPrograms until D3 is onboarded
+        # saint-francis, held until it followed D3 into publication (#94)
         ok("all 416 D3 programs are in the registry: 415 in programs, saint-francis the 416th",
            len(d3) == (416 if sf_published else 415) and bool(sf), str(len(d3)))
         by_org = {p["ids"].get("ncaaOrgId"): p for p in everything}
