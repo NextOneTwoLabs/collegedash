@@ -1,0 +1,6925 @@
+{
+  "issue": 276,
+  "source": "athletics-site",
+  "generated": "2026-09-24T03:28:12Z",
+  "rule": {
+    "deltaE": "CIE76",
+    "secondaryMinDeltaE": 10,
+    "guardHosts": 3,
+    "denylist": [
+      "#FFFFFF/#FFFFFF"
+    ],
+    "sampleSeed": 276
+  },
+  "counts": {
+    "targets": 393,
+    "accepted": 363,
+    "acceptedByDivision": {
+      "D3": 314,
+      "D2": 49
+    },
+    "rejected": {
+      "rejected: black-without-chromatic-secondary": 4,
+      "rejected: denylisted": 16,
+      "rejected: no-source": 1,
+      "rejected: primary-grey": 5,
+      "rejected: primary-white": 2
+    },
+    "skipped": {},
+    "failed": {
+      "failed: fetch": 2
+    },
+    "skippedForSkipReason": 49,
+    "refusedHosts": 0,
+    "liveRequests": 389,
+    "templates": {
+      "classic": 389,
+      "nuxt": 1,
+      "not fetched": 2,
+      "none": 1
+    },
+    "secondaryStored": 170
+  },
+  "review": {
+    "guarded": [
+      {
+        "slug": "agnes-scott-college",
+        "division": "D3",
+        "host": "www.ascscotties.com",
+        "finalHost": "ascscotties.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "alfred-state-college",
+        "division": "D3",
+        "host": "www.alfredstateathletics.com",
+        "finalHost": "alfredstateathletics.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "calvin",
+        "division": "D3",
+        "host": "calvinknights.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "chapman",
+        "division": "D3",
+        "host": "www.chapmanathletics.com",
+        "finalHost": "athletics.chapman.edu",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "george-fox",
+        "division": "D3",
+        "host": "athletics.georgefox.edu",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "lagrange-college",
+        "division": "D3",
+        "host": "www.lagrangepanthers.com",
+        "finalHost": "lagrangepanthers.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "norwich",
+        "division": "D3",
+        "host": "www.norwichathletics.com",
+        "finalHost": "norwichathletics.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "occidental-college",
+        "division": "D3",
+        "host": "www.oxyathletics.com",
+        "finalHost": "oxyathletics.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "oglethorpe",
+        "division": "D3",
+        "host": "www.gopetrels.com",
+        "finalHost": "gopetrels.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "ozarks-ar",
+        "division": "D3",
+        "host": "www.uofoathletics.com",
+        "finalHost": "uofoathletics.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "saint-marys-college-in",
+        "division": "D3",
+        "host": "belles.saintmarys.edu",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "st-thomas-tx",
+        "division": "D3",
+        "host": "www.ustcelts.com",
+        "finalHost": "ustcelts.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "suny-polytechnic",
+        "division": "D3",
+        "host": "wildcats.sunypoly.edu",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "texas-lutheran",
+        "division": "D3",
+        "host": "tlubulldogs.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "trevecca-nazarene",
+        "division": "D2",
+        "host": "www.tnutrojans.com",
+        "finalHost": "tnutrojans.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      },
+      {
+        "slug": "whittier-college",
+        "division": "D3",
+        "host": "www.wcpoets.com",
+        "finalHost": "wcpoets.com",
+        "template": "classic",
+        "primary": "#FFFFFF",
+        "secondary": "#FFFFFF",
+        "theme": "#FFFFFF",
+        "outcome": "rejected: denylisted"
+      }
+    ],
+    "themeMismatch": [],
+    "blackPrimaryAccepted": [
+      {
+        "slug": "college-wooster",
+        "division": "D3",
+        "host": "www.woosterathletics.com",
+        "finalHost": "woosterathletics.com",
+        "template": "classic",
+        "primary": "#000000",
+        "secondary": "#F7BF0A",
+        "theme": "#000000",
+        "outcome": "accepted",
+        "colors": [
+          "#000000",
+          "#F7BF0A"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "elmhurst",
+        "division": "D3",
+        "host": "elmhurstbluejays.com",
+        "template": "classic",
+        "primary": "#001528",
+        "secondary": "#5AACDD",
+        "theme": "#001528",
+        "outcome": "accepted",
+        "colors": [
+          "#001528",
+          "#5AACDD"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "gordon-college",
+        "division": "D3",
+        "host": "athletics.gordon.edu",
+        "template": "classic",
+        "primary": "#0A1724",
+        "secondary": "#0D95D1",
+        "theme": "#0A1724",
+        "outcome": "accepted",
+        "colors": [
+          "#0A1724",
+          "#0D95D1"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "john-carroll",
+        "division": "D3",
+        "host": "www.jcusports.com",
+        "finalHost": "jcusports.com",
+        "template": "classic",
+        "primary": "#041C2C",
+        "secondary": "#B9975B",
+        "theme": "#041C2C",
+        "outcome": "accepted",
+        "colors": [
+          "#041C2C",
+          "#B9975B"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "lyon-college",
+        "division": "D3",
+        "host": "lyonscots.com",
+        "template": "classic",
+        "primary": "#001632",
+        "secondary": "#811D1D",
+        "theme": "#001632",
+        "outcome": "accepted",
+        "colors": [
+          "#001632",
+          "#811D1D"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "manchester",
+        "division": "D3",
+        "host": "www.muspartans.com",
+        "finalHost": "muspartans.com",
+        "template": "classic",
+        "primary": "#000000",
+        "secondary": "#EEB111",
+        "theme": "#000000",
+        "outcome": "accepted",
+        "colors": [
+          "#000000",
+          "#EEB111"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "mississippi-for-women",
+        "division": "D3",
+        "host": "www.owlsathletics.com",
+        "finalHost": "owlsathletics.com",
+        "template": "classic",
+        "primary": "#001C31",
+        "secondary": "#8BBAEC",
+        "theme": "#001C31",
+        "outcome": "accepted",
+        "colors": [
+          "#001C31",
+          "#8BBAEC"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "pratt-institute",
+        "division": "D3",
+        "host": "www.goprattgo.com",
+        "finalHost": "goprattgo.com",
+        "template": "classic",
+        "primary": "#000000",
+        "secondary": "#FFC425",
+        "theme": "#000000",
+        "outcome": "accepted",
+        "colors": [
+          "#000000",
+          "#FFC425"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      },
+      {
+        "slug": "southwestern-tx",
+        "division": "D3",
+        "host": "www.southwesternpirates.com",
+        "finalHost": "southwesternpirates.com",
+        "template": "classic",
+        "primary": "#000000",
+        "secondary": "#FFCD00",
+        "theme": "#000000",
+        "outcome": "accepted",
+        "colors": [
+          "#000000",
+          "#FFCD00"
+        ],
+        "flags": [
+          "black-primary"
+        ]
+      }
+    ],
+    "randomAcceptedD3": [
+      {
+        "slug": "albright-college",
+        "division": "D3",
+        "host": "www.albrightathletics.com",
+        "finalHost": "albrightathletics.com",
+        "template": "classic",
+        "primary": "#C80000",
+        "secondary": "#E5E5E5",
+        "theme": "#C80000",
+        "outcome": "accepted",
+        "colors": [
+          "#C80000"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "asbury",
+        "division": "D3",
+        "host": "www.asburyeagles.com",
+        "finalHost": "asburyeagles.com",
+        "template": "classic",
+        "primary": "#49176D",
+        "secondary": "#222222",
+        "theme": "#49176D",
+        "outcome": "accepted",
+        "colors": [
+          "#49176D"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "aurora",
+        "division": "D3",
+        "host": "athletics.aurora.edu",
+        "template": "classic",
+        "primary": "#003591",
+        "secondary": "#F2F2F2",
+        "outcome": "accepted",
+        "colors": [
+          "#003591"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "capital-oh",
+        "division": "D3",
+        "host": "athletics.capital.edu",
+        "template": "classic",
+        "primary": "#330072",
+        "secondary": "#FFFFFF",
+        "theme": "#330072",
+        "outcome": "accepted",
+        "colors": [
+          "#330072"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "eastern-connecticut-state",
+        "division": "D3",
+        "host": "gowarriorathletics.com",
+        "template": "classic",
+        "primary": "#002656",
+        "secondary": "#820A2B",
+        "theme": "#002656",
+        "outcome": "accepted",
+        "colors": [
+          "#002656",
+          "#820A2B"
+        ]
+      },
+      {
+        "slug": "grove-city-college",
+        "division": "D3",
+        "host": "athletics.gcc.edu",
+        "template": "classic",
+        "primary": "#CC0000",
+        "secondary": "#FFFFFF",
+        "theme": "#CC0000",
+        "outcome": "accepted",
+        "colors": [
+          "#CC0000"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "hamline",
+        "division": "D3",
+        "host": "www.hamlineathletics.com",
+        "finalHost": "hamlineathletics.com",
+        "template": "classic",
+        "primary": "#9C1F2F",
+        "secondary": "#FFFFFF",
+        "theme": "#9C1F2F",
+        "outcome": "accepted",
+        "colors": [
+          "#9C1F2F"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "hanover-college",
+        "division": "D3",
+        "host": "athletics.hanover.edu",
+        "template": "classic",
+        "primary": "#003DA5",
+        "secondary": "#990000",
+        "theme": "#003DA5",
+        "outcome": "accepted",
+        "colors": [
+          "#003DA5",
+          "#990000"
+        ]
+      },
+      {
+        "slug": "hardin-simmons",
+        "division": "D3",
+        "host": "hsuathletics.com",
+        "template": "classic",
+        "primary": "#581483",
+        "secondary": "#FFC72C",
+        "theme": "#581483",
+        "outcome": "accepted",
+        "colors": [
+          "#581483",
+          "#FFC72C"
+        ]
+      },
+      {
+        "slug": "lawrence",
+        "division": "D3",
+        "host": "vikings.lawrence.edu",
+        "template": "classic",
+        "primary": "#002A3A",
+        "secondary": "#DEDEDE",
+        "theme": "#002A3A",
+        "outcome": "accepted",
+        "colors": [
+          "#002A3A"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "linfield",
+        "division": "D3",
+        "host": "golinfieldwildcats.com",
+        "template": "classic",
+        "primary": "#441166",
+        "secondary": "#DD1144",
+        "theme": "#441166",
+        "outcome": "accepted",
+        "colors": [
+          "#441166",
+          "#DD1144"
+        ]
+      },
+      {
+        "slug": "lycoming-college",
+        "division": "D3",
+        "host": "lycomingathletics.com",
+        "template": "classic",
+        "primary": "#092E58",
+        "secondary": "#E9AF10",
+        "theme": "#092E58",
+        "outcome": "accepted",
+        "colors": [
+          "#092E58",
+          "#E9AF10"
+        ]
+      },
+      {
+        "slug": "mcdaniel-college",
+        "division": "D3",
+        "host": "mcdanielathletics.com",
+        "template": "classic",
+        "primary": "#054731",
+        "secondary": "#F5D116",
+        "theme": "#054731",
+        "outcome": "accepted",
+        "colors": [
+          "#054731",
+          "#F5D116"
+        ]
+      },
+      {
+        "slug": "mcmurry",
+        "division": "D3",
+        "host": "www.mcmurrysports.com",
+        "finalHost": "mcmurrysports.com",
+        "template": "classic",
+        "primary": "#6F1830",
+        "secondary": "#232323",
+        "theme": "#6F1830",
+        "outcome": "accepted",
+        "colors": [
+          "#6F1830"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "misericordia",
+        "division": "D3",
+        "host": "athletics.misericordia.edu",
+        "template": "classic",
+        "primary": "#0051BA",
+        "secondary": "#F9D616",
+        "theme": "#0051BA",
+        "outcome": "accepted",
+        "colors": [
+          "#0051BA",
+          "#F9D616"
+        ]
+      },
+      {
+        "slug": "neumann",
+        "division": "D3",
+        "host": "www.neumannathletics.com",
+        "template": "classic",
+        "primary": "#003F72",
+        "secondary": "#FFD100",
+        "theme": "#003F72",
+        "outcome": "accepted",
+        "colors": [
+          "#003F72",
+          "#FFD100"
+        ]
+      },
+      {
+        "slug": "north-park",
+        "division": "D3",
+        "host": "athletics.northpark.edu",
+        "template": "classic",
+        "primary": "#0057A8",
+        "secondary": "#FCCE08",
+        "theme": "#0057A8",
+        "outcome": "accepted",
+        "colors": [
+          "#0057A8",
+          "#FCCE08"
+        ]
+      },
+      {
+        "slug": "otterbein",
+        "division": "D3",
+        "host": "www.otterbeincardinals.com",
+        "finalHost": "otterbeincardinals.com",
+        "template": "classic",
+        "primary": "#990000",
+        "secondary": "#D5C296",
+        "theme": "#990000",
+        "outcome": "accepted",
+        "colors": [
+          "#990000",
+          "#D5C296"
+        ]
+      },
+      {
+        "slug": "pacific-or",
+        "division": "D3",
+        "host": "www.goboxers.com",
+        "finalHost": "goboxers.com",
+        "template": "classic",
+        "primary": "#990000",
+        "secondary": "#666666",
+        "outcome": "accepted",
+        "colors": [
+          "#990000"
+        ],
+        "flags": [
+          "secondary-dropped"
+        ]
+      },
+      {
+        "slug": "st-lawrence",
+        "division": "D3",
+        "host": "www.saintsathletics.com",
+        "finalHost": "saintsathletics.com",
+        "template": "classic",
+        "primary": "#AA2023",
+        "secondary": "#4B2C24",
+        "theme": "#AA2023",
+        "outcome": "accepted",
+        "colors": [
+          "#AA2023",
+          "#4B2C24"
+        ]
+      }
+    ]
+  },
+  "refusedHosts": [],
+  "skippedForSkipReason": [
+    "albertus-magnus-college",
+    "anderson-in",
+    "austin-college",
+    "beloit-college",
+    "blackburn-college",
+    "bluffton",
+    "bridgewater-state",
+    "carlow",
+    "carnegie-mellon",
+    "centenary-college-la",
+    "colby-college",
+    "concordia-college-moorhead",
+    "curry-college",
+    "delaware-valley",
+    "elms-college",
+    "endicott-college",
+    "eureka-college",
+    "fitchburg-state",
+    "framingham-state",
+    "goucher-college",
+    "huntingdon-college",
+    "juniata-college",
+    "la-roche",
+    "lasell",
+    "lesley",
+    "mitchell-college",
+    "moravian",
+    "mount-holyoke-college",
+    "muskingum",
+    "ohio-northern",
+    "olivet",
+    "penn-state-altoona",
+    "penn-state-behrend",
+    "penn-state-brandywine",
+    "penn-state-harrisburg",
+    "pittsburgh-bradford",
+    "regis-college-ma",
+    "russell-sage-college",
+    "saint-joseph-ct",
+    "salem-state",
+    "schreiner",
+    "simpson-college",
+    "suffolk",
+    "suny-delhi",
+    "valley-forge",
+    "westfield-state",
+    "willamette",
+    "wittenberg",
+    "worcester-state"
+  ],
+  "groundTruth": [
+    {
+      "slug": "minot-state",
+      "division": "D2",
+      "host": "www.msubeavers.com",
+      "finalHost": "msubeavers.com",
+      "template": "classic",
+      "primary": "#CE0E2D",
+      "secondary": "#006341",
+      "theme": "#CE0E2D",
+      "outcome": "accepted",
+      "colors": [
+        "#CE0E2D",
+        "#006341"
+      ],
+      "wikipedia": [
+        "#006242",
+        "#CF102D"
+      ]
+    },
+    {
+      "slug": "catawba-college",
+      "division": "D2",
+      "host": "www.catawbaathletics.com",
+      "finalHost": "catawbaathletics.com",
+      "template": "classic",
+      "primary": "#13294E",
+      "secondary": "#C91235",
+      "theme": "#13294E",
+      "outcome": "accepted",
+      "colors": [
+        "#13294E",
+        "#C91235"
+      ],
+      "wikipedia": [
+        "#13294E",
+        "#989AA5"
+      ]
+    },
+    {
+      "slug": "flagler-college",
+      "division": "D2",
+      "host": "www.flaglerathletics.com",
+      "finalHost": "flaglerathletics.com",
+      "template": "classic",
+      "primary": "#A4343A",
+      "secondary": "#FFB81C",
+      "theme": "#A4343A",
+      "outcome": "accepted",
+      "colors": [
+        "#A4343A",
+        "#FFB81C"
+      ],
+      "wikipedia": [
+        "#A52238",
+        "#F4811F"
+      ]
+    },
+    {
+      "slug": "wisconsin-parkside",
+      "division": "D2",
+      "host": "www.parksiderangers.com",
+      "finalHost": "parksiderangers.com",
+      "template": "classic",
+      "primary": "#00502F",
+      "secondary": "#00703C",
+      "theme": "#00502F",
+      "outcome": "accepted",
+      "colors": [
+        "#00502F",
+        "#00703C"
+      ],
+      "wikipedia": [
+        "#004631",
+        "#213629"
+      ]
+    },
+    {
+      "slug": "wisconsin-superior",
+      "division": "D3",
+      "host": "www.uwsyellowjackets.com",
+      "finalHost": "uwsyellowjackets.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#403F3F",
+      "theme": "#000000",
+      "outcome": "rejected: black-without-chromatic-secondary",
+      "wikipedia": [
+        "#000000",
+        "#FCD647"
+      ]
+    },
+    {
+      "slug": "lincoln-mo",
+      "division": "D2",
+      "host": "www.lubluetigers.com",
+      "finalHost": "lubluetigers.com",
+      "template": "classic",
+      "primary": "#003263",
+      "secondary": "#0E4C88",
+      "theme": "#003263",
+      "outcome": "accepted",
+      "colors": [
+        "#003263",
+        "#0E4C88"
+      ],
+      "wikipedia": [
+        "#102548",
+        "#898B8E"
+      ]
+    },
+    {
+      "slug": "jamestown",
+      "division": "D2",
+      "host": "jimmiepride.com",
+      "template": "classic",
+      "primary": "#E86725",
+      "secondary": "#E8E8E8",
+      "theme": "#E86725",
+      "outcome": "accepted",
+      "colors": [
+        "#E86725"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ],
+      "wikipedia": [
+        "#F2622B",
+        "#080808"
+      ]
+    },
+    {
+      "slug": "kentucky-wesleyan-college",
+      "division": "D2",
+      "host": "kwcpanthers.com",
+      "template": "classic",
+      "primary": "#392082",
+      "secondary": "#FFFFFF",
+      "theme": "#392082",
+      "outcome": "accepted",
+      "colors": [
+        "#392082"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ],
+      "wikipedia": [
+        "#392082",
+        "#A7A8AA"
+      ]
+    },
+    {
+      "slug": "adelphi",
+      "division": "D2",
+      "host": "www.aupanthers.com",
+      "finalHost": "aupanthers.com",
+      "template": "classic",
+      "primary": "#FFB500",
+      "secondary": "#581E00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFB500",
+        "#581E00"
+      ],
+      "wikipedia": [
+        "#4F2C1D",
+        "#FFB500"
+      ]
+    },
+    {
+      "slug": "wisconsin-stevens-point",
+      "division": "D3",
+      "host": "athletics.uwsp.edu",
+      "template": "classic",
+      "primary": "#FFC423",
+      "secondary": "#512698",
+      "theme": "#FFC423",
+      "outcome": "accepted",
+      "colors": [
+        "#FFC423",
+        "#512698"
+      ],
+      "wikipedia": [
+        "#59178A",
+        "#FCC917"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "slug": "adrian-college",
+      "division": "D3",
+      "host": "www.adrianbulldogs.com",
+      "finalHost": "adrianbulldogs.com",
+      "template": "classic",
+      "primary": "#FFC425",
+      "secondary": "#000000",
+      "theme": "#FFC425",
+      "outcome": "accepted",
+      "colors": [
+        "#FFC425"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "agnes-scott-college",
+      "division": "D3",
+      "host": "www.ascscotties.com",
+      "finalHost": "ascscotties.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "alabama-huntsville",
+      "division": "D2",
+      "host": "uahchargers.com",
+      "template": "classic",
+      "primary": "#0046AD",
+      "secondary": "#FFFFFF",
+      "theme": "#0046AD",
+      "outcome": "accepted",
+      "colors": [
+        "#0046AD"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "albion-college",
+      "division": "D3",
+      "host": "www.gobrits.com",
+      "finalHost": "gobrits.com",
+      "template": "classic",
+      "primary": "#4B306A",
+      "secondary": "#D5CA9F",
+      "theme": "#4B306A",
+      "outcome": "accepted",
+      "colors": [
+        "#4B306A",
+        "#D5CA9F"
+      ]
+    },
+    {
+      "slug": "albright-college",
+      "division": "D3",
+      "host": "www.albrightathletics.com",
+      "finalHost": "albrightathletics.com",
+      "template": "classic",
+      "primary": "#C80000",
+      "secondary": "#E5E5E5",
+      "theme": "#C80000",
+      "outcome": "accepted",
+      "colors": [
+        "#C80000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "alfred",
+      "division": "D3",
+      "host": "www.gosaxons.com",
+      "finalHost": "gosaxons.com",
+      "template": "classic",
+      "primary": "#623393",
+      "secondary": "#F7A81B",
+      "theme": "#623393",
+      "outcome": "accepted",
+      "colors": [
+        "#623393",
+        "#F7A81B"
+      ]
+    },
+    {
+      "slug": "alfred-state-college",
+      "division": "D3",
+      "host": "www.alfredstateathletics.com",
+      "finalHost": "alfredstateathletics.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "allegheny-college",
+      "division": "D3",
+      "host": "www.alleghenygators.com",
+      "finalHost": "alleghenygators.com",
+      "template": "classic",
+      "primary": "#002144",
+      "secondary": "#FEDA48",
+      "theme": "#002144",
+      "outcome": "accepted",
+      "colors": [
+        "#002144",
+        "#FEDA48"
+      ]
+    },
+    {
+      "slug": "alma-college",
+      "division": "D3",
+      "host": "www.almascots.com",
+      "finalHost": "almascots.com",
+      "template": "classic",
+      "primary": "#8A2432",
+      "secondary": "#2D8389",
+      "theme": "#8A2432",
+      "outcome": "accepted",
+      "colors": [
+        "#8A2432",
+        "#2D8389"
+      ]
+    },
+    {
+      "slug": "alvernia",
+      "division": "D3",
+      "host": "athletics.alvernia.edu",
+      "finalHost": "auwolves.com",
+      "template": "classic",
+      "primary": "#9B2743",
+      "secondary": "#F0B310",
+      "theme": "#9B2743",
+      "outcome": "accepted",
+      "colors": [
+        "#9B2743",
+        "#F0B310"
+      ]
+    },
+    {
+      "slug": "alverno-college",
+      "division": "D3",
+      "host": "athletics.alverno.edu",
+      "template": "classic",
+      "primary": "#98002E",
+      "secondary": "#FDB714",
+      "outcome": "accepted",
+      "colors": [
+        "#98002E",
+        "#FDB714"
+      ]
+    },
+    {
+      "slug": "amherst-college",
+      "division": "D3",
+      "host": "athletics.amherst.edu",
+      "template": "classic",
+      "primary": "#3F1F69",
+      "secondary": "#E2E1DB",
+      "theme": "#3F1F69",
+      "outcome": "accepted",
+      "colors": [
+        "#3F1F69"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "arcadia",
+      "division": "D3",
+      "host": "www.arcadiaknights.com",
+      "finalHost": "arcadiaknights.com",
+      "template": "classic",
+      "primary": "#B30838",
+      "secondary": "#808285",
+      "theme": "#B30838",
+      "outcome": "accepted",
+      "colors": [
+        "#B30838"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "asbury",
+      "division": "D3",
+      "host": "www.asburyeagles.com",
+      "finalHost": "asburyeagles.com",
+      "template": "classic",
+      "primary": "#49176D",
+      "secondary": "#222222",
+      "theme": "#49176D",
+      "outcome": "accepted",
+      "colors": [
+        "#49176D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "auburn-montgomery",
+      "division": "D2",
+      "host": "www.aumathletics.com",
+      "finalHost": "aumathletics.com",
+      "template": "classic",
+      "primary": "#F04E29",
+      "secondary": "#000000",
+      "theme": "#F04E29",
+      "outcome": "accepted",
+      "colors": [
+        "#F04E29"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "augsburg",
+      "division": "D3",
+      "host": "athletics.augsburg.edu",
+      "template": "classic",
+      "primary": "#7E0841",
+      "secondary": "#C6C7C9",
+      "outcome": "accepted",
+      "colors": [
+        "#7E0841"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "augustana-sd",
+      "division": "D2",
+      "host": "www.goaugie.com",
+      "finalHost": "goaugie.com",
+      "template": "classic",
+      "primary": "#002147",
+      "secondary": "#FED100",
+      "theme": "#002147",
+      "outcome": "accepted",
+      "colors": [
+        "#002147",
+        "#FED100"
+      ]
+    },
+    {
+      "slug": "aurora",
+      "division": "D3",
+      "host": "athletics.aurora.edu",
+      "template": "classic",
+      "primary": "#003591",
+      "secondary": "#F2F2F2",
+      "outcome": "accepted",
+      "colors": [
+        "#003591"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "averett",
+      "division": "D3",
+      "host": "www.averettcougars.com",
+      "finalHost": "averettcougars.com",
+      "template": "classic",
+      "primary": "#002B5C",
+      "secondary": "#FDBB30",
+      "theme": "#002B5C",
+      "outcome": "accepted",
+      "colors": [
+        "#002B5C",
+        "#FDBB30"
+      ]
+    },
+    {
+      "slug": "azusa-pacific",
+      "division": "D3",
+      "host": "athletics.apu.edu",
+      "template": "classic",
+      "primary": "#990000",
+      "secondary": "#FFFFFF",
+      "theme": "#990000",
+      "outcome": "accepted",
+      "colors": [
+        "#990000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "babson-college",
+      "division": "D3",
+      "host": "www.babsonathletics.com",
+      "finalHost": "babsonathletics.com",
+      "template": "classic",
+      "primary": "#006644",
+      "secondary": "#A3AAAE",
+      "theme": "#006644",
+      "outcome": "accepted",
+      "colors": [
+        "#006644"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "baldwin-wallace",
+      "division": "D3",
+      "host": "www.bwyellowjackets.com",
+      "finalHost": "bwyellowjackets.com",
+      "template": "classic",
+      "primary": "#3D2D1F",
+      "secondary": "#FFCC33",
+      "theme": "#3D2D1F",
+      "outcome": "accepted",
+      "colors": [
+        "#3D2D1F",
+        "#FFCC33"
+      ]
+    },
+    {
+      "slug": "bard-college",
+      "division": "D3",
+      "host": "www.bardathletics.com",
+      "finalHost": "bardathletics.com",
+      "template": "classic",
+      "primary": "#696969",
+      "secondary": "#000000",
+      "theme": "#696969",
+      "outcome": "rejected: primary-grey"
+    },
+    {
+      "slug": "bates-college",
+      "division": "D3",
+      "host": "www.gobatesbobcats.com",
+      "finalHost": "gobatesbobcats.com",
+      "template": "classic",
+      "primary": "#981328",
+      "secondary": "#B2B3B2",
+      "theme": "#981328",
+      "outcome": "accepted",
+      "colors": [
+        "#981328"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "batten",
+      "division": "D3",
+      "host": "vwuathletics.com",
+      "finalHost": "battenathletics.com",
+      "template": "classic",
+      "primary": "#003861",
+      "secondary": "#687681",
+      "theme": "#003861",
+      "outcome": "accepted",
+      "colors": [
+        "#003861"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "belhaven",
+      "division": "D3",
+      "host": "blazers.belhaven.edu",
+      "template": "classic",
+      "primary": "#005030",
+      "secondary": "#F2AE00",
+      "theme": "#005030",
+      "outcome": "accepted",
+      "colors": [
+        "#005030",
+        "#F2AE00"
+      ]
+    },
+    {
+      "slug": "benedictine-il",
+      "division": "D3",
+      "host": "www.benueagles.com",
+      "finalHost": "benueagles.com",
+      "template": "classic",
+      "primary": "#EB1C24",
+      "secondary": "#807F83",
+      "theme": "#EB1C24",
+      "outcome": "accepted",
+      "colors": [
+        "#EB1C24"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "berea-college",
+      "division": "D3",
+      "host": "www.bereaathletics.com",
+      "finalHost": "bereaathletics.com",
+      "template": "classic",
+      "primary": "#004175",
+      "secondary": "#FFFFFF",
+      "theme": "#004175",
+      "outcome": "accepted",
+      "colors": [
+        "#004175"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "berry-college",
+      "division": "D3",
+      "host": "www.berryvikings.com",
+      "finalHost": "berryvikings.com",
+      "template": "classic",
+      "primary": "#00205B",
+      "secondary": "#A2AAAD",
+      "theme": "#00205B",
+      "outcome": "accepted",
+      "colors": [
+        "#00205B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "bethany-college-wv",
+      "division": "D3",
+      "host": "bethanybison.com",
+      "template": "classic",
+      "primary": "#115740",
+      "secondary": "#A2A569",
+      "theme": "#115740",
+      "outcome": "accepted",
+      "colors": [
+        "#115740",
+        "#A2A569"
+      ]
+    },
+    {
+      "slug": "bethany-lutheran-college",
+      "division": "D3",
+      "host": "www.blcvikings.com",
+      "finalHost": "blcvikings.com",
+      "template": "classic",
+      "primary": "#95111E",
+      "secondary": "#000000",
+      "theme": "#95111E",
+      "outcome": "accepted",
+      "colors": [
+        "#95111E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "bethel-mn",
+      "division": "D3",
+      "host": "athletics.bethel.edu",
+      "template": "classic",
+      "primary": "#002856",
+      "secondary": "#85734F",
+      "theme": "#002856",
+      "outcome": "accepted",
+      "colors": [
+        "#002856",
+        "#85734F"
+      ]
+    },
+    {
+      "slug": "bluefield-state",
+      "division": "D2",
+      "host": "gobstate.com",
+      "template": "classic",
+      "primary": "#152C52",
+      "secondary": "#CAAD81",
+      "theme": "#152C52",
+      "outcome": "accepted",
+      "colors": [
+        "#152C52",
+        "#CAAD81"
+      ]
+    },
+    {
+      "slug": "bowdoin-college",
+      "division": "D3",
+      "host": "athletics.bowdoin.edu",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#B0B7BC",
+      "theme": "#000000",
+      "outcome": "rejected: black-without-chromatic-secondary"
+    },
+    {
+      "slug": "brandeis",
+      "division": "D3",
+      "host": "www.brandeisjudges.com",
+      "finalHost": "brandeisjudges.com",
+      "template": "classic",
+      "primary": "#1A325D",
+      "secondary": "#FFFFFF",
+      "theme": "#1A325D",
+      "outcome": "accepted",
+      "colors": [
+        "#1A325D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "brevard-college",
+      "division": "D3",
+      "host": "www.bctornados.com",
+      "finalHost": "bctornados.com",
+      "template": "classic",
+      "primary": "#003C78",
+      "secondary": "#7C8081",
+      "theme": "#003C78",
+      "outcome": "accepted",
+      "colors": [
+        "#003C78"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "bridgewater-college-va",
+      "division": "D3",
+      "host": "www.bridgewatereagles.com",
+      "finalHost": "bridgewatereagles.com",
+      "template": "classic",
+      "primary": "#8E0020",
+      "secondary": "#8D724B",
+      "theme": "#8E0020",
+      "outcome": "accepted",
+      "colors": [
+        "#8E0020",
+        "#8D724B"
+      ]
+    },
+    {
+      "slug": "brooklyn-college",
+      "division": "D3",
+      "host": "brooklyncollegeathletics.com",
+      "finalHost": "www.brooklyncollegeathletics.com",
+      "template": "classic",
+      "primary": "#521010",
+      "secondary": "#DE6D10",
+      "theme": "#521010",
+      "outcome": "accepted",
+      "colors": [
+        "#521010",
+        "#DE6D10"
+      ]
+    },
+    {
+      "slug": "bryn-mawr-college",
+      "division": "D3",
+      "host": "gobrynmawr.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFC600",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: primary-white"
+    },
+    {
+      "slug": "buena-vista",
+      "division": "D3",
+      "host": "www.bvuathletics.com",
+      "finalHost": "bvuathletics.com",
+      "template": "classic",
+      "primary": "#002244",
+      "secondary": "#FECB00",
+      "theme": "#002244",
+      "outcome": "accepted",
+      "colors": [
+        "#002244",
+        "#FECB00"
+      ]
+    },
+    {
+      "slug": "cairn",
+      "division": "D3",
+      "host": "www.cairnhighlanders.com",
+      "template": "classic",
+      "primary": "#882345",
+      "secondary": "#C5C6C8",
+      "theme": "#882345",
+      "outcome": "accepted",
+      "colors": [
+        "#882345"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "california-lutheran",
+      "division": "D3",
+      "host": "www.clusports.com",
+      "finalHost": "clusports.com",
+      "template": "classic",
+      "primary": "#3B2360",
+      "secondary": "#FFCB05",
+      "theme": "#3B2360",
+      "outcome": "accepted",
+      "colors": [
+        "#3B2360",
+        "#FFCB05"
+      ]
+    },
+    {
+      "slug": "california-merced",
+      "division": "D2",
+      "host": "www.ucmercedbobcats.com",
+      "finalHost": "ucmercedbobcats.com",
+      "template": "classic",
+      "primary": "#002F65",
+      "secondary": "#CB9A2B",
+      "theme": "#002F65",
+      "outcome": "accepted",
+      "colors": [
+        "#002F65",
+        "#CB9A2B"
+      ]
+    },
+    {
+      "slug": "california-santa-cruz",
+      "division": "D3",
+      "host": "www.goslugs.com",
+      "finalHost": "goslugs.com:443",
+      "template": "nuxt",
+      "primary": "#041E42",
+      "secondary": "#FFCD00",
+      "outcome": "accepted",
+      "colors": [
+        "#041E42",
+        "#FFCD00"
+      ]
+    },
+    {
+      "slug": "california-state-chico",
+      "division": "D2",
+      "host": "www.chicowildcats.com",
+      "finalHost": "chicowildcats.com",
+      "template": "classic",
+      "primary": "#8F0836",
+      "secondary": "#4D4C4C",
+      "theme": "#8F0836",
+      "outcome": "accepted",
+      "colors": [
+        "#8F0836"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "california-state-dominguez-hills",
+      "division": "D2",
+      "host": "www.gotoros.com",
+      "finalHost": "gotoros.com",
+      "template": "classic",
+      "primary": "#6F0028",
+      "secondary": "#D9A000",
+      "theme": "#6F0028",
+      "outcome": "accepted",
+      "colors": [
+        "#6F0028",
+        "#D9A000"
+      ]
+    },
+    {
+      "slug": "california-state-east-bay",
+      "division": "D2",
+      "host": "www.eastbaypioneers.com",
+      "finalHost": "eastbaypioneers.com",
+      "template": "classic",
+      "primary": "#DC0032",
+      "secondary": "#DADADA",
+      "theme": "#DC0032",
+      "outcome": "accepted",
+      "colors": [
+        "#DC0032"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "california-state-los-angeles",
+      "division": "D2",
+      "host": "www.lagoldeneagles.com",
+      "finalHost": "lagoldeneagles.com",
+      "template": "classic",
+      "primary": "#FFCE00",
+      "secondary": "#231F20",
+      "theme": "#FFCE00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFCE00"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "california-state-monterey-bay",
+      "division": "D2",
+      "host": "www.otterathletics.com",
+      "finalHost": "otterathletics.com",
+      "template": "classic",
+      "primary": "#003768",
+      "secondary": "#689466",
+      "theme": "#003768",
+      "outcome": "accepted",
+      "colors": [
+        "#003768",
+        "#689466"
+      ]
+    },
+    {
+      "slug": "california-state-polytechnic-humboldt",
+      "division": "D2",
+      "host": "humboldtathletics.com",
+      "template": "classic",
+      "primary": "#004C46",
+      "secondary": "#FFC72C",
+      "theme": "#004C46",
+      "outcome": "accepted",
+      "colors": [
+        "#004C46",
+        "#FFC72C"
+      ]
+    },
+    {
+      "slug": "california-state-polytechnic-pomona",
+      "division": "D2",
+      "host": "www.broncoathletics.com",
+      "finalHost": "broncoathletics.com",
+      "template": "classic",
+      "primary": "#005030",
+      "secondary": "#FFB81C",
+      "theme": "#005030",
+      "outcome": "accepted",
+      "colors": [
+        "#005030",
+        "#FFB81C"
+      ]
+    },
+    {
+      "slug": "california-state-san-bernardino",
+      "division": "D2",
+      "host": "www.csusbathletics.com",
+      "finalHost": "csusbathletics.com",
+      "template": "classic",
+      "primary": "#016AA9",
+      "secondary": "#818285",
+      "theme": "#016AA9",
+      "outcome": "accepted",
+      "colors": [
+        "#016AA9"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "california-state-san-marcos",
+      "division": "D2",
+      "host": "csusmcougars.com",
+      "template": "classic",
+      "primary": "#007AC3",
+      "secondary": "#30A6D4",
+      "theme": "#007AC3",
+      "outcome": "accepted",
+      "colors": [
+        "#007AC3",
+        "#30A6D4"
+      ]
+    },
+    {
+      "slug": "california-state-stanislaus",
+      "division": "D2",
+      "host": "www.warriorathletics.com",
+      "finalHost": "warriorathletics.com",
+      "template": "classic",
+      "primary": "#C9282D",
+      "secondary": "#D8AA26",
+      "theme": "#C9282D",
+      "outcome": "accepted",
+      "colors": [
+        "#C9282D",
+        "#D8AA26"
+      ]
+    },
+    {
+      "slug": "caltech",
+      "division": "D3",
+      "host": "www.gocaltech.com",
+      "finalHost": "gocaltech.com",
+      "template": "classic",
+      "primary": "#FF6C0C",
+      "secondary": "#FFFFFF",
+      "theme": "#FF6C0C",
+      "outcome": "accepted",
+      "colors": [
+        "#FF6C0C"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "calvin",
+      "division": "D3",
+      "host": "calvinknights.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "capital-oh",
+      "division": "D3",
+      "host": "athletics.capital.edu",
+      "template": "classic",
+      "primary": "#330072",
+      "secondary": "#FFFFFF",
+      "theme": "#330072",
+      "outcome": "accepted",
+      "colors": [
+        "#330072"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "carleton-college",
+      "division": "D3",
+      "host": "athletics.carleton.edu",
+      "template": "classic",
+      "primary": "#0B3960",
+      "secondary": "#F3B61D",
+      "theme": "#0B3960",
+      "outcome": "accepted",
+      "colors": [
+        "#0B3960",
+        "#F3B61D"
+      ]
+    },
+    {
+      "slug": "carroll-wi",
+      "division": "D3",
+      "host": "www.gopios.com",
+      "finalHost": "gopios.com",
+      "template": "classic",
+      "primary": "#F26722",
+      "secondary": "#002B5C",
+      "theme": "#F26722",
+      "outcome": "accepted",
+      "colors": [
+        "#F26722",
+        "#002B5C"
+      ]
+    },
+    {
+      "slug": "carthage-college",
+      "division": "D3",
+      "host": "athletics.carthage.edu",
+      "template": "classic",
+      "primary": "#D71920",
+      "secondary": "#F2F2F2",
+      "theme": "#D71920",
+      "outcome": "accepted",
+      "colors": [
+        "#D71920"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "case-western-reserve",
+      "division": "D3",
+      "host": "athletics.case.edu",
+      "template": "classic",
+      "primary": "#003071",
+      "secondary": "#999999",
+      "theme": "#003071",
+      "outcome": "accepted",
+      "colors": [
+        "#003071"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "cedar-crest-college",
+      "division": "D3",
+      "host": "www.cedarcrestathletics.com",
+      "outcome": "failed: fetch"
+    },
+    {
+      "slug": "centenary-nj",
+      "division": "D3",
+      "host": "www.centenarycyclones.com",
+      "finalHost": "centenarycyclones.com",
+      "template": "classic",
+      "primary": "#1F374B",
+      "secondary": "#3E3E3E",
+      "theme": "#1F374B",
+      "outcome": "accepted",
+      "colors": [
+        "#1F374B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "central-college-ia",
+      "division": "D3",
+      "host": "athletics.central.edu",
+      "template": "classic",
+      "primary": "#CB2026",
+      "secondary": "#990000",
+      "theme": "#CB2026",
+      "outcome": "accepted",
+      "colors": [
+        "#CB2026",
+        "#990000"
+      ]
+    },
+    {
+      "slug": "central-missouri",
+      "division": "D2",
+      "host": "ucmathletics.com",
+      "template": "classic",
+      "primary": "#C41E25",
+      "secondary": "#000000",
+      "theme": "#C41E25",
+      "outcome": "accepted",
+      "colors": [
+        "#C41E25"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "centre-college",
+      "division": "D3",
+      "host": "www.centrecolonels.com",
+      "finalHost": "centrecolonels.com",
+      "template": "classic",
+      "primary": "#FFCD00",
+      "secondary": "#040707",
+      "theme": "#FFCD00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFCD00"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "chapman",
+      "division": "D3",
+      "host": "www.chapmanathletics.com",
+      "finalHost": "athletics.chapman.edu",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "chatham",
+      "division": "D3",
+      "host": "www.gochathamcougars.com",
+      "finalHost": "gochathamcougars.com",
+      "template": "classic",
+      "primary": "#4C4685",
+      "secondary": "#C1C1C1",
+      "theme": "#4C4685",
+      "outcome": "accepted",
+      "colors": [
+        "#4C4685"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "chicago",
+      "division": "D3",
+      "host": "athletics.uchicago.edu",
+      "template": "classic",
+      "primary": "#880000",
+      "secondary": "#FFFFFF",
+      "theme": "#880000",
+      "outcome": "accepted",
+      "colors": [
+        "#880000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "christian-brothers",
+      "division": "D2",
+      "host": "www.cbubucs.com",
+      "finalHost": "cbubucs.com",
+      "template": "classic",
+      "primary": "#CC092F",
+      "secondary": "#4D4D4D",
+      "theme": "#CC092F",
+      "outcome": "accepted",
+      "colors": [
+        "#CC092F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "christopher-newport",
+      "division": "D3",
+      "host": "cnusports.com",
+      "finalHost": "www.cnusports.com",
+      "template": "classic",
+      "primary": "#0039A6",
+      "secondary": "#A5ACB0",
+      "theme": "#0039A6",
+      "outcome": "accepted",
+      "colors": [
+        "#0039A6"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "city-college-new-york",
+      "division": "D3",
+      "host": "www.ccnyathletics.com",
+      "finalHost": "ccnyathletics.com",
+      "template": "classic",
+      "primary": "#563580",
+      "secondary": "#7A50B0",
+      "theme": "#563580",
+      "outcome": "accepted",
+      "colors": [
+        "#563580",
+        "#7A50B0"
+      ]
+    },
+    {
+      "slug": "claremont-mudd-scripps",
+      "division": "D3",
+      "host": "www.cmsathletics.org",
+      "finalHost": "cmsathletics.org",
+      "template": "classic",
+      "primary": "#60001E",
+      "secondary": "#FDB813",
+      "theme": "#60001E",
+      "outcome": "accepted",
+      "colors": [
+        "#60001E",
+        "#FDB813"
+      ]
+    },
+    {
+      "slug": "clark-ma",
+      "division": "D3",
+      "host": "clarkathletics.com",
+      "template": "classic",
+      "primary": "#F04138",
+      "secondary": "#A7B1B7",
+      "theme": "#F04138",
+      "outcome": "accepted",
+      "colors": [
+        "#F04138"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "clarkson",
+      "division": "D3",
+      "host": "www.clarksonathletics.com",
+      "finalHost": "clarksonathletics.com",
+      "template": "classic",
+      "primary": "#02522B",
+      "secondary": "#EFC610",
+      "theme": "#02522B",
+      "outcome": "accepted",
+      "colors": [
+        "#02522B",
+        "#EFC610"
+      ]
+    },
+    {
+      "slug": "coast-guard",
+      "division": "D3",
+      "host": "coastguardathletics.com",
+      "template": "classic",
+      "primary": "#1A428A",
+      "secondary": "#E04403",
+      "theme": "#1A428A",
+      "outcome": "accepted",
+      "colors": [
+        "#1A428A",
+        "#E04403"
+      ]
+    },
+    {
+      "slug": "coe-college",
+      "division": "D3",
+      "host": "www.kohawkathletics.com",
+      "finalHost": "kohawkathletics.com",
+      "template": "classic",
+      "primary": "#880011",
+      "secondary": "#D3902F",
+      "theme": "#880011",
+      "outcome": "accepted",
+      "colors": [
+        "#880011",
+        "#D3902F"
+      ]
+    },
+    {
+      "slug": "colby-sawyer-college",
+      "division": "D3",
+      "host": "www.colby-sawyerathletics.com",
+      "template": "classic",
+      "primary": "#0092CD",
+      "secondary": "#6B6B6B",
+      "outcome": "accepted",
+      "colors": [
+        "#0092CD"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "college-new-jersey",
+      "division": "D3",
+      "host": "www.tcnjathletics.com",
+      "finalHost": "tcnjathletics.com",
+      "template": "classic",
+      "primary": "#004677",
+      "secondary": "#FEBD10",
+      "theme": "#004677",
+      "outcome": "accepted",
+      "colors": [
+        "#004677",
+        "#FEBD10"
+      ]
+    },
+    {
+      "slug": "college-saint-benedict",
+      "division": "D3",
+      "host": "www.gobennies.com",
+      "finalHost": "gobennies.com",
+      "template": "classic",
+      "primary": "#BD0F34",
+      "secondary": "#00A0DF",
+      "theme": "#BD0F34",
+      "outcome": "accepted",
+      "colors": [
+        "#BD0F34",
+        "#00A0DF"
+      ]
+    },
+    {
+      "slug": "college-st-scholastica",
+      "division": "D3",
+      "host": "www.csssaints.com",
+      "finalHost": "csssaints.com",
+      "template": "classic",
+      "primary": "#00447C",
+      "secondary": "#FFCB00",
+      "outcome": "accepted",
+      "colors": [
+        "#00447C",
+        "#FFCB00"
+      ]
+    },
+    {
+      "slug": "college-wooster",
+      "division": "D3",
+      "host": "www.woosterathletics.com",
+      "finalHost": "woosterathletics.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#F7BF0A",
+      "theme": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#000000",
+        "#F7BF0A"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "colorado-school-mines",
+      "division": "D2",
+      "host": "minesathletics.com",
+      "template": "classic",
+      "primary": "#21314D",
+      "secondary": "#21314D",
+      "outcome": "accepted",
+      "colors": [
+        "#21314D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "colorado-state-pueblo",
+      "division": "D2",
+      "host": "www.gothunderwolves.com",
+      "finalHost": "gothunderwolves.com",
+      "template": "classic",
+      "primary": "#00205B",
+      "secondary": "#C8102E",
+      "theme": "#00205B",
+      "outcome": "accepted",
+      "colors": [
+        "#00205B",
+        "#C8102E"
+      ]
+    },
+    {
+      "slug": "concordia-chicago",
+      "division": "D3",
+      "host": "www.cucougars.com",
+      "template": "classic",
+      "primary": "#7B1632",
+      "secondary": "#FFC72C",
+      "theme": "#7B1632",
+      "outcome": "accepted",
+      "colors": [
+        "#7B1632",
+        "#FFC72C"
+      ]
+    },
+    {
+      "slug": "concordia-irvine",
+      "division": "D2",
+      "host": "www.cuigoldeneagles.com",
+      "finalHost": "cuigoldeneagles.com",
+      "template": "classic",
+      "primary": "#004C23",
+      "secondary": "#FDB724",
+      "outcome": "accepted",
+      "colors": [
+        "#004C23",
+        "#FDB724"
+      ]
+    },
+    {
+      "slug": "concordia-st-paul",
+      "division": "D2",
+      "host": "cspbears.com",
+      "template": "classic",
+      "primary": "#002C5F",
+      "secondary": "#E7B220",
+      "theme": "#002C5F",
+      "outcome": "accepted",
+      "colors": [
+        "#002C5F",
+        "#E7B220"
+      ]
+    },
+    {
+      "slug": "concordia-texas",
+      "division": "D3",
+      "host": "athletics.concordia.edu",
+      "template": "classic",
+      "primary": "#2D1245",
+      "secondary": "#FCB930",
+      "theme": "#2D1245",
+      "outcome": "accepted",
+      "colors": [
+        "#2D1245",
+        "#FCB930"
+      ]
+    },
+    {
+      "slug": "concordia-wisconsin",
+      "division": "D3",
+      "host": "www.cuwfalcons.com",
+      "finalHost": "cuwfalcons.com",
+      "template": "classic",
+      "primary": "#B1B3B3",
+      "secondary": "#245699",
+      "theme": "#B1B3B3",
+      "outcome": "rejected: primary-grey"
+    },
+    {
+      "slug": "cornell-college",
+      "division": "D3",
+      "host": "www.cornellrams.com",
+      "finalHost": "cornellrams.com",
+      "template": "classic",
+      "primary": "#523178",
+      "secondary": "#CCCCCC",
+      "theme": "#523178",
+      "outcome": "accepted",
+      "colors": [
+        "#523178"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "covenant-college",
+      "division": "D3",
+      "host": "athletics.covenant.edu",
+      "template": "classic",
+      "primary": "#003399",
+      "secondary": "#FFFFFF",
+      "theme": "#003399",
+      "outcome": "accepted",
+      "colors": [
+        "#003399"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "crown-college-mn",
+      "division": "D3",
+      "host": "athletics.crown.edu",
+      "template": "classic",
+      "primary": "#49176D",
+      "secondary": "#717174",
+      "theme": "#49176D",
+      "outcome": "accepted",
+      "colors": [
+        "#49176D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "dallas",
+      "division": "D3",
+      "host": "www.udallasathletics.com",
+      "finalHost": "udallasathletics.com",
+      "template": "classic",
+      "primary": "#1A3F70",
+      "secondary": "#D8B266",
+      "theme": "#1A3F70",
+      "outcome": "accepted",
+      "colors": [
+        "#1A3F70",
+        "#D8B266"
+      ]
+    },
+    {
+      "slug": "dean-college",
+      "division": "D3",
+      "host": "www.deanbulldogs.com",
+      "finalHost": "deanbulldogs.com",
+      "template": "classic",
+      "primary": "#8B2331",
+      "secondary": "#FDB813",
+      "theme": "#8B2331",
+      "outcome": "accepted",
+      "colors": [
+        "#8B2331",
+        "#FDB813"
+      ]
+    },
+    {
+      "slug": "delta-state",
+      "division": "D2",
+      "host": "www.gostatesmen.com",
+      "finalHost": "gostatesmen.com",
+      "template": "classic",
+      "primary": "#008751",
+      "secondary": "#CCCCCC",
+      "theme": "#008751",
+      "outcome": "accepted",
+      "colors": [
+        "#008751"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "denison",
+      "division": "D3",
+      "host": "www.denisonbigred.com",
+      "finalHost": "bigred.denison.edu",
+      "template": "classic",
+      "primary": "#C8032B",
+      "secondary": "#FFFFFF",
+      "theme": "#C8032B",
+      "outcome": "accepted",
+      "colors": [
+        "#C8032B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "depauw",
+      "division": "D3",
+      "host": "depauwtigers.com",
+      "template": "classic",
+      "primary": "#111C24",
+      "secondary": "#FFC72C",
+      "theme": "#111C24",
+      "outcome": "accepted",
+      "colors": [
+        "#111C24",
+        "#FFC72C"
+      ]
+    },
+    {
+      "slug": "desales",
+      "division": "D3",
+      "host": "athletics.desales.edu",
+      "template": "classic",
+      "primary": "#002855",
+      "secondary": "#BA0C2F",
+      "theme": "#002855",
+      "outcome": "accepted",
+      "colors": [
+        "#002855",
+        "#BA0C2F"
+      ]
+    },
+    {
+      "slug": "dickinson-college",
+      "division": "D3",
+      "host": "www.dickinsonathletics.com",
+      "finalHost": "dickinsonathletics.com",
+      "template": "classic",
+      "primary": "#D01F2E",
+      "secondary": "#231F20",
+      "theme": "#D01F2E",
+      "outcome": "accepted",
+      "colors": [
+        "#D01F2E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "dominican-california",
+      "division": "D2",
+      "host": "www.dominicanathletics.com",
+      "finalHost": "dominicanathletics.com",
+      "template": "classic",
+      "primary": "#FFD200",
+      "secondary": "#000000",
+      "theme": "#FFD200",
+      "outcome": "accepted",
+      "colors": [
+        "#FFD200"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "dominican-il",
+      "division": "D3",
+      "host": "www.dustars.com",
+      "finalHost": "dustars.com",
+      "template": "classic",
+      "primary": "#1F3C6C",
+      "secondary": "#FCBD31",
+      "theme": "#1F3C6C",
+      "outcome": "accepted",
+      "colors": [
+        "#1F3C6C",
+        "#FCBD31"
+      ]
+    },
+    {
+      "slug": "drew",
+      "division": "D3",
+      "host": "www.drewrangers.com",
+      "finalHost": "drewrangers.com",
+      "template": "classic",
+      "primary": "#003060",
+      "secondary": "#025234",
+      "theme": "#003060",
+      "outcome": "accepted",
+      "colors": [
+        "#003060",
+        "#025234"
+      ]
+    },
+    {
+      "slug": "dubuque",
+      "division": "D3",
+      "host": "udspartans.com",
+      "template": "classic",
+      "primary": "#003DA5",
+      "secondary": "#FFFFFF",
+      "theme": "#003DA5",
+      "outcome": "accepted",
+      "colors": [
+        "#003DA5"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "earlham-college",
+      "division": "D3",
+      "host": "www.goearlham.com",
+      "finalHost": "goearlham.com",
+      "template": "classic",
+      "primary": "#5D0000",
+      "secondary": "#1A1A1A",
+      "theme": "#5D0000",
+      "outcome": "accepted",
+      "colors": [
+        "#5D0000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "east-texas-baptist",
+      "division": "D3",
+      "host": "www.goetbutigers.com",
+      "finalHost": "goetbutigers.com",
+      "template": "classic",
+      "primary": "#082342",
+      "secondary": "#EDAD1D",
+      "theme": "#082342",
+      "outcome": "accepted",
+      "colors": [
+        "#082342",
+        "#EDAD1D"
+      ]
+    },
+    {
+      "slug": "eastern-connecticut-state",
+      "division": "D3",
+      "host": "gowarriorathletics.com",
+      "template": "classic",
+      "primary": "#002656",
+      "secondary": "#820A2B",
+      "theme": "#002656",
+      "outcome": "accepted",
+      "colors": [
+        "#002656",
+        "#820A2B"
+      ]
+    },
+    {
+      "slug": "eastern-mennonite",
+      "division": "D3",
+      "host": "www.emuroyals.com",
+      "finalHost": "emuroyals.com",
+      "template": "classic",
+      "primary": "#0056B8",
+      "secondary": "#7A7C80",
+      "theme": "#0056B8",
+      "outcome": "accepted",
+      "colors": [
+        "#0056B8"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "eastern-pa",
+      "division": "D3",
+      "host": "www.goeasterneagles.com",
+      "finalHost": "goeasterneagles.com",
+      "template": "classic",
+      "primary": "#6E2636",
+      "secondary": "#636B70",
+      "theme": "#6E2636",
+      "outcome": "accepted",
+      "colors": [
+        "#6E2636"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "edgewood",
+      "division": "D3",
+      "host": "www.edgewoodeagles.com",
+      "finalHost": "edgewoodeagles.com",
+      "template": "classic",
+      "primary": "#BB0000",
+      "secondary": "#BBBDC0",
+      "theme": "#BB0000",
+      "outcome": "accepted",
+      "colors": [
+        "#BB0000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "elizabethtown-college",
+      "division": "D3",
+      "host": "www.etownbluejays.com",
+      "finalHost": "etownbluejays.com",
+      "template": "classic",
+      "primary": "#0A4E91",
+      "secondary": "#C8C8C8",
+      "theme": "#0A4E91",
+      "outcome": "accepted",
+      "colors": [
+        "#0A4E91"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "elmhurst",
+      "division": "D3",
+      "host": "elmhurstbluejays.com",
+      "template": "classic",
+      "primary": "#001528",
+      "secondary": "#5AACDD",
+      "theme": "#001528",
+      "outcome": "accepted",
+      "colors": [
+        "#001528",
+        "#5AACDD"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "elmira-college",
+      "division": "D3",
+      "host": "athletics.elmira.edu",
+      "template": "classic",
+      "primary": "#4A2467",
+      "secondary": "#EEB51D",
+      "outcome": "accepted",
+      "colors": [
+        "#4A2467",
+        "#EEB51D"
+      ]
+    },
+    {
+      "slug": "embry-riddle-aeronautical-fl",
+      "division": "D2",
+      "host": "www.erauathletics.com",
+      "finalHost": "erauathletics.com",
+      "template": "classic",
+      "primary": "#03539E",
+      "secondary": "#F5B828",
+      "theme": "#03539E",
+      "outcome": "accepted",
+      "colors": [
+        "#03539E",
+        "#F5B828"
+      ]
+    },
+    {
+      "slug": "emerson-college",
+      "division": "D3",
+      "host": "www.emersonlions.com",
+      "finalHost": "emersonlions.com",
+      "template": "classic",
+      "primary": "#410099",
+      "secondary": "#F3C300",
+      "theme": "#410099",
+      "outcome": "accepted",
+      "colors": [
+        "#410099",
+        "#F3C300"
+      ]
+    },
+    {
+      "slug": "emmanuel-college-ma",
+      "division": "D3",
+      "host": "www.goecsaints.com",
+      "finalHost": "goecsaints.com",
+      "template": "classic",
+      "primary": "#004B87",
+      "secondary": "#F6BE00",
+      "theme": "#004B87",
+      "outcome": "accepted",
+      "colors": [
+        "#004B87",
+        "#F6BE00"
+      ]
+    },
+    {
+      "slug": "emory",
+      "division": "D3",
+      "host": "www.emoryathletics.com",
+      "finalHost": "emoryathletics.com",
+      "template": "classic",
+      "primary": "#002D5D",
+      "secondary": "#D08A00",
+      "theme": "#002D5D",
+      "outcome": "accepted",
+      "colors": [
+        "#002D5D",
+        "#D08A00"
+      ]
+    },
+    {
+      "slug": "fairleigh-dickinson-florham",
+      "division": "D3",
+      "host": "www.fdudevils.com",
+      "finalHost": "fdudevils.com",
+      "template": "classic",
+      "primary": "#70273D",
+      "secondary": "#003379",
+      "theme": "#70273D",
+      "outcome": "accepted",
+      "colors": [
+        "#70273D",
+        "#003379"
+      ]
+    },
+    {
+      "slug": "farmingdale-state-college",
+      "division": "D3",
+      "host": "www.farmingdalesports.com",
+      "finalHost": "farmingdalesports.com",
+      "template": "classic",
+      "primary": "#004C45",
+      "secondary": "#CCCCCC",
+      "theme": "#004C45",
+      "outcome": "accepted",
+      "colors": [
+        "#004C45"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "felician",
+      "division": "D2",
+      "host": "www.felicianuathletics.com",
+      "finalHost": "felicianuathletics.com",
+      "template": "classic",
+      "primary": "#203104",
+      "secondary": "#FFDD46",
+      "theme": "#203104",
+      "outcome": "accepted",
+      "colors": [
+        "#203104",
+        "#FFDD46"
+      ]
+    },
+    {
+      "slug": "florida-institute-technology",
+      "division": "D2",
+      "host": "floridatechsports.com",
+      "template": "classic",
+      "primary": "#630C0D",
+      "secondary": "#97989C",
+      "theme": "#630C0D",
+      "outcome": "accepted",
+      "colors": [
+        "#630C0D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "franciscan-steubenville",
+      "division": "D3",
+      "host": "www.franciscanathletics.com",
+      "finalHost": "franciscanathletics.com",
+      "template": "classic",
+      "primary": "#004813",
+      "secondary": "#B1943A",
+      "theme": "#004813",
+      "outcome": "accepted",
+      "colors": [
+        "#004813",
+        "#B1943A"
+      ]
+    },
+    {
+      "slug": "franklin-college",
+      "division": "D3",
+      "host": "franklingrizzlies.com",
+      "template": "classic",
+      "primary": "#0C2340",
+      "secondary": "#FFB81B",
+      "theme": "#0C2340",
+      "outcome": "accepted",
+      "colors": [
+        "#0C2340",
+        "#FFB81B"
+      ]
+    },
+    {
+      "slug": "franklin-marshall-college",
+      "division": "D3",
+      "host": "www.godiplomats.com",
+      "finalHost": "godiplomats.com",
+      "template": "classic",
+      "primary": "#0033AB",
+      "secondary": "#666666",
+      "theme": "#0033AB",
+      "outcome": "accepted",
+      "colors": [
+        "#0033AB"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "geneva-college",
+      "division": "D3",
+      "host": "athletics.geneva.edu",
+      "template": "classic",
+      "primary": "#C99A2C",
+      "secondary": "#353535",
+      "theme": "#C99A2C",
+      "outcome": "accepted",
+      "colors": [
+        "#C99A2C"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "george-fox",
+      "division": "D3",
+      "host": "athletics.georgefox.edu",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "gettysburg-college",
+      "division": "D3",
+      "host": "www.gettysburgsports.com",
+      "finalHost": "gettysburgsports.com",
+      "template": "classic",
+      "primary": "#1A2D5D",
+      "secondary": "#E87313",
+      "theme": "#1A2D5D",
+      "outcome": "accepted",
+      "colors": [
+        "#1A2D5D",
+        "#E87313"
+      ]
+    },
+    {
+      "slug": "gordon-college",
+      "division": "D3",
+      "host": "athletics.gordon.edu",
+      "template": "classic",
+      "primary": "#0A1724",
+      "secondary": "#0D95D1",
+      "theme": "#0A1724",
+      "outcome": "accepted",
+      "colors": [
+        "#0A1724",
+        "#0D95D1"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "greensboro-college",
+      "division": "D3",
+      "host": "www.greensborocollegesports.com",
+      "finalHost": "greensborocollegesports.com",
+      "template": "classic",
+      "primary": "#007853",
+      "secondary": "#FFFFFF",
+      "theme": "#007853",
+      "outcome": "accepted",
+      "colors": [
+        "#007853"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "greenville",
+      "division": "D3",
+      "host": "greenvillepanthers.com",
+      "template": "classic",
+      "primary": "#F47B20",
+      "secondary": "#333333",
+      "theme": "#F47B20",
+      "outcome": "accepted",
+      "colors": [
+        "#F47B20"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "grinnell-college",
+      "division": "D3",
+      "host": "pioneers.grinnell.edu",
+      "template": "classic",
+      "primary": "#8B1411",
+      "secondary": "#FFFFFF",
+      "theme": "#8B1411",
+      "outcome": "accepted",
+      "colors": [
+        "#8B1411"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "grove-city-college",
+      "division": "D3",
+      "host": "athletics.gcc.edu",
+      "template": "classic",
+      "primary": "#CC0000",
+      "secondary": "#FFFFFF",
+      "theme": "#CC0000",
+      "outcome": "accepted",
+      "colors": [
+        "#CC0000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "guilford-college",
+      "division": "D3",
+      "host": "guilfordquakers.com",
+      "template": "classic",
+      "primary": "#981B36",
+      "secondary": "#FFFFFF",
+      "theme": "#981B36",
+      "outcome": "accepted",
+      "colors": [
+        "#981B36"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "gustavus-adolphus-college",
+      "division": "D3",
+      "host": "gogusties.com",
+      "template": "classic",
+      "primary": "#FFCF00",
+      "secondary": "#000000",
+      "theme": "#FFCF00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFCF00"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "gwynedd-mercy",
+      "division": "D3",
+      "host": "gwyneddathletics.com",
+      "template": "classic",
+      "primary": "#D7A900",
+      "secondary": "#A71930",
+      "theme": "#D7A900",
+      "outcome": "accepted",
+      "colors": [
+        "#D7A900",
+        "#A71930"
+      ]
+    },
+    {
+      "slug": "hamilton-college",
+      "division": "D3",
+      "host": "athletics.hamilton.edu",
+      "template": "classic",
+      "primary": "#002F86",
+      "secondary": "#D6BA8B",
+      "theme": "#002F86",
+      "outcome": "accepted",
+      "colors": [
+        "#002F86",
+        "#D6BA8B"
+      ]
+    },
+    {
+      "slug": "hamline",
+      "division": "D3",
+      "host": "www.hamlineathletics.com",
+      "finalHost": "hamlineathletics.com",
+      "template": "classic",
+      "primary": "#9C1F2F",
+      "secondary": "#FFFFFF",
+      "theme": "#9C1F2F",
+      "outcome": "accepted",
+      "colors": [
+        "#9C1F2F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hanover-college",
+      "division": "D3",
+      "host": "athletics.hanover.edu",
+      "template": "classic",
+      "primary": "#003DA5",
+      "secondary": "#990000",
+      "theme": "#003DA5",
+      "outcome": "accepted",
+      "colors": [
+        "#003DA5",
+        "#990000"
+      ]
+    },
+    {
+      "slug": "hardin-simmons",
+      "division": "D3",
+      "host": "hsuathletics.com",
+      "template": "classic",
+      "primary": "#581483",
+      "secondary": "#FFC72C",
+      "theme": "#581483",
+      "outcome": "accepted",
+      "colors": [
+        "#581483",
+        "#FFC72C"
+      ]
+    },
+    {
+      "slug": "harding",
+      "division": "D2",
+      "host": "www.hardingsports.com",
+      "finalHost": "hardingsports.com",
+      "template": "classic",
+      "primary": "#A28448",
+      "secondary": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#A28448"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hartford",
+      "division": "D3",
+      "host": "hartfordhawks.com",
+      "template": "classic",
+      "primary": "#C30013",
+      "secondary": "#141414",
+      "theme": "#C30013",
+      "outcome": "accepted",
+      "colors": [
+        "#C30013"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hartwick-college",
+      "division": "D3",
+      "host": "www.hartwickhawks.com",
+      "template": "classic",
+      "primary": "#0033A1",
+      "secondary": "#EBEBEB",
+      "theme": "#0033A1",
+      "outcome": "accepted",
+      "colors": [
+        "#0033A1"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "haverford-college",
+      "division": "D3",
+      "host": "www.haverfordathletics.com",
+      "finalHost": "haverfordathletics.com",
+      "template": "classic",
+      "primary": "#A20000",
+      "secondary": "#000000",
+      "theme": "#A20000",
+      "outcome": "accepted",
+      "colors": [
+        "#A20000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hawaii-hilo",
+      "division": "D2",
+      "host": "hiloathletics.com",
+      "template": "classic",
+      "primary": "#ED2C23",
+      "secondary": "#FFFFFF",
+      "theme": "#ED2C23",
+      "outcome": "accepted",
+      "colors": [
+        "#ED2C23"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "heidelberg",
+      "division": "D3",
+      "host": "bergathletics.com",
+      "template": "classic",
+      "primary": "#E35205",
+      "secondary": "#000000",
+      "theme": "#E35205",
+      "outcome": "accepted",
+      "colors": [
+        "#E35205"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hendrix-college",
+      "division": "D3",
+      "host": "www.hendrixwarriors.com",
+      "finalHost": "hendrixwarriors.com",
+      "template": "classic",
+      "primary": "#F58025",
+      "secondary": "#313131",
+      "theme": "#F58025",
+      "outcome": "accepted",
+      "colors": [
+        "#F58025"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hilbert-college",
+      "division": "D3",
+      "host": "www.hilberthawks.com",
+      "finalHost": "hilberthawks.com",
+      "template": "classic",
+      "primary": "#005DAA",
+      "secondary": "#E2DBD1",
+      "theme": "#005DAA",
+      "outcome": "accepted",
+      "colors": [
+        "#005DAA",
+        "#E2DBD1"
+      ]
+    },
+    {
+      "slug": "hiram-college",
+      "division": "D3",
+      "host": "www.hiramterriers.com",
+      "finalHost": "hiramterriers.com",
+      "template": "classic",
+      "primary": "#003D79",
+      "secondary": "#A30234",
+      "theme": "#003D79",
+      "outcome": "accepted",
+      "colors": [
+        "#003D79",
+        "#A30234"
+      ]
+    },
+    {
+      "slug": "hobart-william-smith",
+      "division": "D3",
+      "host": "www.hwsathletics.com",
+      "finalHost": "hwsathletics.com",
+      "template": "classic",
+      "primary": "#CCCCCC",
+      "secondary": "#545454",
+      "theme": "#CCCCCC",
+      "outcome": "rejected: primary-grey"
+    },
+    {
+      "slug": "hollins",
+      "division": "D3",
+      "host": "www.hollinssports.com",
+      "finalHost": "hollinssports.com",
+      "template": "classic",
+      "primary": "#086747",
+      "secondary": "#086747",
+      "theme": "#086747",
+      "outcome": "accepted",
+      "colors": [
+        "#086747"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hood-college",
+      "division": "D3",
+      "host": "www.hoodathletics.com",
+      "finalHost": "hoodathletics.com",
+      "template": "classic",
+      "primary": "#00263E",
+      "secondary": "#A49A94",
+      "theme": "#00263E",
+      "outcome": "accepted",
+      "colors": [
+        "#00263E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "hope-college",
+      "division": "D3",
+      "host": "athletics.hope.edu",
+      "template": "classic",
+      "primary": "#002244",
+      "secondary": "#C45114",
+      "theme": "#002244",
+      "outcome": "accepted",
+      "colors": [
+        "#002244",
+        "#C45114"
+      ]
+    },
+    {
+      "slug": "houghton",
+      "division": "D3",
+      "host": "athletics.houghton.edu",
+      "template": "classic",
+      "primary": "#37174A",
+      "secondary": "#B5A66B",
+      "outcome": "accepted",
+      "colors": [
+        "#37174A",
+        "#B5A66B"
+      ]
+    },
+    {
+      "slug": "howard-payne",
+      "division": "D3",
+      "host": "www.hpusports.com",
+      "finalHost": "hpusports.com",
+      "template": "classic",
+      "primary": "#002159",
+      "secondary": "#B4975A",
+      "theme": "#002159",
+      "outcome": "accepted",
+      "colors": [
+        "#002159",
+        "#B4975A"
+      ]
+    },
+    {
+      "slug": "husson",
+      "division": "D3",
+      "host": "www.hussoneagles.com",
+      "finalHost": "hussoneagles.com",
+      "template": "classic",
+      "primary": "#004B43",
+      "secondary": "#B4975A",
+      "theme": "#004B43",
+      "outcome": "accepted",
+      "colors": [
+        "#004B43",
+        "#B4975A"
+      ]
+    },
+    {
+      "slug": "illinois-institute-technology",
+      "division": "D3",
+      "host": "www.illinoistechathletics.com",
+      "finalHost": "illinoistechathletics.com",
+      "template": "none",
+      "outcome": "rejected: no-source"
+    },
+    {
+      "slug": "illinois-wesleyan",
+      "division": "D3",
+      "host": "www.iwusports.com",
+      "template": "classic",
+      "primary": "#006747",
+      "secondary": "#D1D4D3",
+      "theme": "#006747",
+      "outcome": "accepted",
+      "colors": [
+        "#006747"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "immaculata",
+      "division": "D3",
+      "host": "www.gomightymacs.com",
+      "finalHost": "gomightymacs.com",
+      "template": "classic",
+      "primary": "#003479",
+      "secondary": "#79BDE8",
+      "theme": "#003479",
+      "outcome": "accepted",
+      "colors": [
+        "#003479",
+        "#79BDE8"
+      ]
+    },
+    {
+      "slug": "indiana-pennsylvania",
+      "division": "D2",
+      "host": "iupathletics.com",
+      "template": "classic",
+      "primary": "#9E1B32",
+      "secondary": "#000000",
+      "theme": "#9E1B32",
+      "outcome": "accepted",
+      "colors": [
+        "#9E1B32"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "ithaca-college",
+      "division": "D3",
+      "host": "athletics.ithaca.edu",
+      "template": "classic",
+      "primary": "#013474",
+      "secondary": "#FFD51D",
+      "theme": "#013474",
+      "outcome": "accepted",
+      "colors": [
+        "#013474",
+        "#FFD51D"
+      ]
+    },
+    {
+      "slug": "john-carroll",
+      "division": "D3",
+      "host": "www.jcusports.com",
+      "finalHost": "jcusports.com",
+      "template": "classic",
+      "primary": "#041C2C",
+      "secondary": "#B9975B",
+      "theme": "#041C2C",
+      "outcome": "accepted",
+      "colors": [
+        "#041C2C",
+        "#B9975B"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "john-jay-college",
+      "division": "D3",
+      "host": "www.johnjayathletics.com",
+      "finalHost": "johnjayathletics.com",
+      "template": "classic",
+      "primary": "#002DA5",
+      "secondary": "#00A5E3",
+      "outcome": "accepted",
+      "colors": [
+        "#002DA5",
+        "#00A5E3"
+      ]
+    },
+    {
+      "slug": "johns-hopkins",
+      "division": "D3",
+      "host": "www.hopkinssports.com",
+      "finalHost": "hopkinssports.com",
+      "template": "classic",
+      "primary": "#68AEE0",
+      "secondary": "#FFFFFF",
+      "theme": "#68AEE0",
+      "outcome": "accepted",
+      "colors": [
+        "#68AEE0"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "johnson-wales-charlotte",
+      "division": "D3",
+      "host": "charlotte.jwuathletics.com",
+      "template": "classic",
+      "primary": "#00529C",
+      "secondary": "#F0B410",
+      "theme": "#00529C",
+      "outcome": "accepted",
+      "colors": [
+        "#00529C",
+        "#F0B410"
+      ]
+    },
+    {
+      "slug": "johnson-wales-providence",
+      "division": "D3",
+      "host": "providence.jwuathletics.com",
+      "template": "classic",
+      "primary": "#004680",
+      "secondary": "#FFCE2D",
+      "theme": "#004680",
+      "outcome": "accepted",
+      "colors": [
+        "#004680",
+        "#FFCE2D"
+      ]
+    },
+    {
+      "slug": "kalamazoo-college",
+      "division": "D3",
+      "host": "hornets.kzoo.edu",
+      "template": "classic",
+      "primary": "#EA6820",
+      "secondary": "#A1A1A1",
+      "theme": "#EA6820",
+      "outcome": "accepted",
+      "colors": [
+        "#EA6820"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "kean",
+      "division": "D3",
+      "host": "www.keanathletics.com",
+      "finalHost": "keanathletics.com",
+      "template": "classic",
+      "primary": "#003057",
+      "secondary": "#FFFFFF",
+      "theme": "#003057",
+      "outcome": "accepted",
+      "colors": [
+        "#003057"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "keene-state-college",
+      "division": "D3",
+      "host": "www.keeneowls.com",
+      "finalHost": "keeneowls.com",
+      "template": "classic",
+      "primary": "#CE0E2D",
+      "secondary": "#000000",
+      "theme": "#CE0E2D",
+      "outcome": "accepted",
+      "colors": [
+        "#CE0E2D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "kenyon-college",
+      "division": "D3",
+      "host": "athletics.kenyon.edu",
+      "template": "classic",
+      "primary": "#4B2E84",
+      "secondary": "#EBEBEB",
+      "theme": "#4B2E84",
+      "outcome": "accepted",
+      "colors": [
+        "#4B2E84"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "keuka-college",
+      "division": "D3",
+      "host": "www.keukaathletics.com",
+      "finalHost": "keukaathletics.com",
+      "template": "classic",
+      "primary": "#234131",
+      "secondary": "#FFFFFF",
+      "theme": "#234131",
+      "outcome": "accepted",
+      "colors": [
+        "#234131"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "keystone-college",
+      "division": "D3",
+      "host": "www.gokcgiants.com",
+      "template": "classic",
+      "primary": "#F27521",
+      "secondary": "#003D7E",
+      "theme": "#F27521",
+      "outcome": "accepted",
+      "colors": [
+        "#F27521",
+        "#003D7E"
+      ]
+    },
+    {
+      "slug": "king",
+      "division": "D2",
+      "host": "www.kingtornado.com",
+      "template": "classic",
+      "primary": "#1A428A",
+      "secondary": "#CF102D",
+      "theme": "#1A428A",
+      "outcome": "accepted",
+      "colors": [
+        "#1A428A",
+        "#CF102D"
+      ]
+    },
+    {
+      "slug": "kings-college-pa",
+      "division": "D3",
+      "host": "kingscollegeathletics.com",
+      "template": "classic",
+      "primary": "#C41230",
+      "secondary": "#FFFFFF",
+      "theme": "#C41230",
+      "outcome": "accepted",
+      "colors": [
+        "#C41230"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "knox-college",
+      "division": "D3",
+      "host": "prairiefire.knox.edu",
+      "template": "classic",
+      "primary": "#4F2683",
+      "secondary": "#FDB913",
+      "theme": "#4F2683",
+      "outcome": "accepted",
+      "colors": [
+        "#4F2683",
+        "#FDB913"
+      ]
+    },
+    {
+      "slug": "la-verne",
+      "division": "D3",
+      "host": "www.leopardathletics.com",
+      "finalHost": "leopardathletics.com",
+      "template": "classic",
+      "primary": "#2C5234",
+      "secondary": "#FF8200",
+      "theme": "#2C5234",
+      "outcome": "accepted",
+      "colors": [
+        "#2C5234",
+        "#FF8200"
+      ]
+    },
+    {
+      "slug": "lagrange-college",
+      "division": "D3",
+      "host": "www.lagrangepanthers.com",
+      "finalHost": "lagrangepanthers.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "lake-forest-college",
+      "division": "D3",
+      "host": "www.goforesters.com",
+      "finalHost": "goforesters.com",
+      "template": "classic",
+      "primary": "#E31937",
+      "secondary": "#000000",
+      "theme": "#E31937",
+      "outcome": "accepted",
+      "colors": [
+        "#E31937"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "lakeland",
+      "division": "D3",
+      "host": "lakelandmuskies.com",
+      "template": "classic",
+      "primary": "#002566",
+      "secondary": "#FFC20F",
+      "theme": "#002566",
+      "outcome": "accepted",
+      "colors": [
+        "#002566",
+        "#FFC20F"
+      ]
+    },
+    {
+      "slug": "lawrence",
+      "division": "D3",
+      "host": "vikings.lawrence.edu",
+      "template": "classic",
+      "primary": "#002A3A",
+      "secondary": "#DEDEDE",
+      "theme": "#002A3A",
+      "outcome": "accepted",
+      "colors": [
+        "#002A3A"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "lebanon-valley-college",
+      "division": "D3",
+      "host": "www.godutchmen.com",
+      "finalHost": "godutchmen.com",
+      "template": "classic",
+      "primary": "#00325B",
+      "secondary": "#AAAAAA",
+      "outcome": "accepted",
+      "colors": [
+        "#00325B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "lehman-college",
+      "division": "D3",
+      "host": "www.lehmanathletics.com",
+      "finalHost": "lehmanathletics.com",
+      "template": "classic",
+      "primary": "#083A81",
+      "theme": "#083A81",
+      "outcome": "accepted",
+      "colors": [
+        "#083A81"
+      ]
+    },
+    {
+      "slug": "letourneau",
+      "division": "D3",
+      "host": "www.letuathletics.com",
+      "finalHost": "letuathletics.com",
+      "template": "classic",
+      "primary": "#F8B435",
+      "secondary": "#004B8D",
+      "theme": "#F8B435",
+      "outcome": "accepted",
+      "colors": [
+        "#F8B435",
+        "#004B8D"
+      ]
+    },
+    {
+      "slug": "lewis-clark-college",
+      "division": "D3",
+      "host": "golcathletics.com",
+      "template": "classic",
+      "primary": "#ED7739",
+      "secondary": "#494949",
+      "theme": "#ED7739",
+      "outcome": "accepted",
+      "colors": [
+        "#ED7739"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "linfield",
+      "division": "D3",
+      "host": "golinfieldwildcats.com",
+      "template": "classic",
+      "primary": "#441166",
+      "secondary": "#DD1144",
+      "theme": "#441166",
+      "outcome": "accepted",
+      "colors": [
+        "#441166",
+        "#DD1144"
+      ]
+    },
+    {
+      "slug": "loras-college",
+      "division": "D3",
+      "host": "www.duhawks.com",
+      "finalHost": "duhawks.com",
+      "template": "classic",
+      "primary": "#432B7C",
+      "secondary": "#D1B888",
+      "theme": "#432B7C",
+      "outcome": "accepted",
+      "colors": [
+        "#432B7C",
+        "#D1B888"
+      ]
+    },
+    {
+      "slug": "lubbock-christian",
+      "division": "D2",
+      "host": "www.lcuchaps.com",
+      "finalHost": "lcuchaps.com",
+      "template": "classic",
+      "primary": "#10147E",
+      "secondary": "#ED1C24",
+      "theme": "#10147E",
+      "outcome": "accepted",
+      "colors": [
+        "#10147E",
+        "#ED1C24"
+      ]
+    },
+    {
+      "slug": "luther-college",
+      "division": "D3",
+      "host": "luthernorse.com",
+      "template": "classic",
+      "primary": "#004C97",
+      "secondary": "#FFFFFF",
+      "theme": "#004C97",
+      "outcome": "accepted",
+      "colors": [
+        "#004C97"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "lycoming-college",
+      "division": "D3",
+      "host": "lycomingathletics.com",
+      "template": "classic",
+      "primary": "#092E58",
+      "secondary": "#E9AF10",
+      "theme": "#092E58",
+      "outcome": "accepted",
+      "colors": [
+        "#092E58",
+        "#E9AF10"
+      ]
+    },
+    {
+      "slug": "lynchburg",
+      "division": "D3",
+      "host": "www.lynchburgsports.com",
+      "finalHost": "lynchburgsports.com",
+      "template": "classic",
+      "primary": "#E4002B",
+      "secondary": "#000000",
+      "theme": "#E4002B",
+      "outcome": "accepted",
+      "colors": [
+        "#E4002B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "lyon-college",
+      "division": "D3",
+      "host": "lyonscots.com",
+      "template": "classic",
+      "primary": "#001632",
+      "secondary": "#811D1D",
+      "theme": "#001632",
+      "outcome": "accepted",
+      "colors": [
+        "#001632",
+        "#811D1D"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "macalester-college",
+      "division": "D3",
+      "host": "athletics.macalester.edu",
+      "template": "classic",
+      "primary": "#01426A",
+      "secondary": "#E24725",
+      "theme": "#01426A",
+      "outcome": "accepted",
+      "colors": [
+        "#01426A",
+        "#E24725"
+      ]
+    },
+    {
+      "slug": "maine-farmington",
+      "division": "D3",
+      "host": "www.goumfbeavers.com",
+      "finalHost": "goumfbeavers.com",
+      "template": "classic",
+      "primary": "#68092B",
+      "secondary": "#373737",
+      "theme": "#68092B",
+      "outcome": "accepted",
+      "colors": [
+        "#68092B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "maine-maritime-academy",
+      "division": "D3",
+      "host": "www.marinersports.org",
+      "finalHost": "marinersports.org",
+      "template": "classic",
+      "primary": "#0168B3",
+      "secondary": "#FEE252",
+      "theme": "#0168B3",
+      "outcome": "accepted",
+      "colors": [
+        "#0168B3",
+        "#FEE252"
+      ]
+    },
+    {
+      "slug": "maine-presque-isle",
+      "division": "D3",
+      "host": "owls.umpi.edu",
+      "template": "classic",
+      "primary": "#0057A0",
+      "secondary": "#FFD44F",
+      "theme": "#0057A0",
+      "outcome": "accepted",
+      "colors": [
+        "#0057A0",
+        "#FFD44F"
+      ]
+    },
+    {
+      "slug": "manchester",
+      "division": "D3",
+      "host": "www.muspartans.com",
+      "finalHost": "muspartans.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#EEB111",
+      "theme": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#000000",
+        "#EEB111"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "manhattanville",
+      "division": "D3",
+      "host": "www.govaliants.com",
+      "finalHost": "govaliants.com",
+      "template": "classic",
+      "primary": "#B10021",
+      "secondary": "#979797",
+      "theme": "#B10021",
+      "outcome": "accepted",
+      "colors": [
+        "#B10021"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "maranatha-baptist",
+      "division": "D3",
+      "host": "mbusabercats.com",
+      "template": "classic",
+      "primary": "#041E41",
+      "secondary": "#F5C400",
+      "theme": "#041E41",
+      "outcome": "accepted",
+      "colors": [
+        "#041E41",
+        "#F5C400"
+      ]
+    },
+    {
+      "slug": "marian-wi",
+      "division": "D3",
+      "host": "www.sabreathletics.com",
+      "finalHost": "sabreathletics.com",
+      "template": "classic",
+      "primary": "#006CB7",
+      "secondary": "#000000",
+      "theme": "#006CB7",
+      "outcome": "accepted",
+      "colors": [
+        "#006CB7"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "marietta-college",
+      "division": "D3",
+      "host": "pioneers.marietta.edu",
+      "template": "classic",
+      "primary": "#002664",
+      "secondary": "#CACAC8",
+      "theme": "#002664",
+      "outcome": "accepted",
+      "colors": [
+        "#002664"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "martin-luther-college",
+      "division": "D3",
+      "host": "www.mlcknights.com",
+      "finalHost": "mlcknights.com",
+      "template": "classic",
+      "primary": "#CE1126",
+      "secondary": "#252525",
+      "theme": "#CE1126",
+      "outcome": "accepted",
+      "colors": [
+        "#CE1126"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mary-baldwin",
+      "division": "D3",
+      "host": "www.marybaldwinathletics.com",
+      "finalHost": "marybaldwinathletics.com",
+      "template": "classic",
+      "primary": "#FFC524",
+      "secondary": "#53585B",
+      "theme": "#FFC524",
+      "outcome": "accepted",
+      "colors": [
+        "#FFC524"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mary-hardin-baylor",
+      "division": "D3",
+      "host": "cruathletics.com",
+      "template": "classic",
+      "primary": "#3B1872",
+      "secondary": "#2B2B2B",
+      "theme": "#3B1872",
+      "outcome": "accepted",
+      "colors": [
+        "#3B1872"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mary-washington",
+      "division": "D3",
+      "host": "www.umweagles.com",
+      "finalHost": "umweagles.com",
+      "template": "classic",
+      "primary": "#002D61",
+      "secondary": "#8DC9F7",
+      "theme": "#002D61",
+      "outcome": "accepted",
+      "colors": [
+        "#002D61",
+        "#8DC9F7"
+      ]
+    },
+    {
+      "slug": "marymount-va",
+      "division": "D3",
+      "host": "www.marymountsaints.com",
+      "finalHost": "marymountsaints.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#171C8F",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: primary-white"
+    },
+    {
+      "slug": "maryville-college-tn",
+      "division": "D3",
+      "host": "www.mcscots.com",
+      "finalHost": "mcscots.com",
+      "template": "classic",
+      "primary": "#640A28",
+      "secondary": "#FF6600",
+      "theme": "#640A28",
+      "outcome": "accepted",
+      "colors": [
+        "#640A28",
+        "#FF6600"
+      ]
+    },
+    {
+      "slug": "marywood",
+      "division": "D3",
+      "host": "www.marywoodpacers.com",
+      "finalHost": "marywoodpacers.com",
+      "template": "classic",
+      "primary": "#266727",
+      "secondary": "#FDAA0E",
+      "theme": "#266727",
+      "outcome": "accepted",
+      "colors": [
+        "#266727",
+        "#FDAA0E"
+      ]
+    },
+    {
+      "slug": "massachusetts-boston",
+      "division": "D3",
+      "host": "www.beaconsathletics.com",
+      "finalHost": "beaconsathletics.com",
+      "template": "classic",
+      "primary": "#4267B2",
+      "secondary": "#000000",
+      "theme": "#4267B2",
+      "outcome": "accepted",
+      "colors": [
+        "#4267B2"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "massachusetts-dartmouth",
+      "division": "D3",
+      "host": "www.corsairathletics.com",
+      "finalHost": "corsairathletics.com",
+      "template": "classic",
+      "primary": "#0F223F",
+      "secondary": "#FFFFFF",
+      "theme": "#0F223F",
+      "outcome": "accepted",
+      "colors": [
+        "#0F223F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mcdaniel-college",
+      "division": "D3",
+      "host": "mcdanielathletics.com",
+      "template": "classic",
+      "primary": "#054731",
+      "secondary": "#F5D116",
+      "theme": "#054731",
+      "outcome": "accepted",
+      "colors": [
+        "#054731",
+        "#F5D116"
+      ]
+    },
+    {
+      "slug": "mcmurry",
+      "division": "D3",
+      "host": "www.mcmurrysports.com",
+      "finalHost": "mcmurrysports.com",
+      "template": "classic",
+      "primary": "#6F1830",
+      "secondary": "#232323",
+      "theme": "#6F1830",
+      "outcome": "accepted",
+      "colors": [
+        "#6F1830"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "medgar-evers-college",
+      "division": "D3",
+      "host": "www.mecathletics.com",
+      "finalHost": "mecathletics.com",
+      "template": "classic",
+      "primary": "#231F20",
+      "secondary": "#FDD044",
+      "theme": "#231F20",
+      "outcome": "rejected: primary-grey"
+    },
+    {
+      "slug": "merchant-marine",
+      "division": "D3",
+      "host": "usmmasports.com",
+      "template": "classic",
+      "primary": "#093A88",
+      "secondary": "#6C6C6C",
+      "theme": "#093A88",
+      "outcome": "accepted",
+      "colors": [
+        "#093A88"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "meredith-college",
+      "division": "D3",
+      "host": "www.goavengingangels.com",
+      "finalHost": "goavengingangels.com",
+      "template": "classic",
+      "primary": "#8B1535",
+      "secondary": "#FFFFFF",
+      "theme": "#8B1535",
+      "outcome": "accepted",
+      "colors": [
+        "#8B1535"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "messiah",
+      "division": "D3",
+      "host": "www.gomessiah.com",
+      "finalHost": "gomessiah.com",
+      "template": "classic",
+      "primary": "#004B85",
+      "secondary": "#BEC0C2",
+      "theme": "#004B85",
+      "outcome": "accepted",
+      "colors": [
+        "#004B85"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "methodist-nc",
+      "division": "D3",
+      "host": "www.mumonarchs.com",
+      "finalHost": "mumonarchs.com",
+      "template": "classic",
+      "primary": "#00573D",
+      "secondary": "#252525",
+      "theme": "#00573D",
+      "outcome": "accepted",
+      "colors": [
+        "#00573D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "metropolitan-state-denver",
+      "division": "D2",
+      "host": "www.roadrunnersathletics.com",
+      "finalHost": "roadrunnersathletics.com",
+      "template": "classic",
+      "primary": "#002C4F",
+      "secondary": "#A70029",
+      "outcome": "accepted",
+      "colors": [
+        "#002C4F",
+        "#A70029"
+      ]
+    },
+    {
+      "slug": "michigan-technological",
+      "division": "D2",
+      "host": "www.michigantechhuskies.com",
+      "finalHost": "michigantechhuskies.com",
+      "template": "classic",
+      "primary": "#FFCD00",
+      "secondary": "#999999",
+      "theme": "#FFCD00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFCD00"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "middlebury-college",
+      "division": "D3",
+      "host": "athletics.middlebury.edu",
+      "template": "classic",
+      "primary": "#0D395F",
+      "secondary": "#ECECEC",
+      "theme": "#0D395F",
+      "outcome": "accepted",
+      "colors": [
+        "#0D395F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "millikin",
+      "division": "D3",
+      "host": "athletics.millikin.edu",
+      "template": "classic",
+      "primary": "#003255",
+      "secondary": "#DEDFE0",
+      "theme": "#003255",
+      "outcome": "accepted",
+      "colors": [
+        "#003255"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "millsaps-college",
+      "division": "D3",
+      "host": "www.gomajors.com",
+      "finalHost": "gomajors.com",
+      "template": "classic",
+      "primary": "#330066",
+      "secondary": "#CCCCCC",
+      "theme": "#330066",
+      "outcome": "accepted",
+      "colors": [
+        "#330066"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "minnesota-crookston",
+      "division": "D2",
+      "host": "www.goldeneaglesports.com",
+      "finalHost": "goldeneaglesports.com",
+      "template": "classic",
+      "primary": "#7A0019",
+      "secondary": "#FFCC33",
+      "theme": "#7A0019",
+      "outcome": "accepted",
+      "colors": [
+        "#7A0019",
+        "#FFCC33"
+      ]
+    },
+    {
+      "slug": "minnesota-morris",
+      "division": "D3",
+      "host": "www.morriscougars.com",
+      "finalHost": "morriscougars.com",
+      "template": "classic",
+      "primary": "#7A0019",
+      "secondary": "#FFCC33",
+      "outcome": "accepted",
+      "colors": [
+        "#7A0019",
+        "#FFCC33"
+      ]
+    },
+    {
+      "slug": "minnesota-state-moorhead",
+      "division": "D2",
+      "host": "msumdragons.com",
+      "finalHost": "www.msumdragons.com",
+      "template": "classic",
+      "primary": "#FF0026",
+      "secondary": "#6A6A6A",
+      "theme": "#FF0026",
+      "outcome": "accepted",
+      "colors": [
+        "#FF0026"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "misericordia",
+      "division": "D3",
+      "host": "athletics.misericordia.edu",
+      "template": "classic",
+      "primary": "#0051BA",
+      "secondary": "#F9D616",
+      "theme": "#0051BA",
+      "outcome": "accepted",
+      "colors": [
+        "#0051BA",
+        "#F9D616"
+      ]
+    },
+    {
+      "slug": "mississippi-for-women",
+      "division": "D3",
+      "host": "www.owlsathletics.com",
+      "finalHost": "owlsathletics.com",
+      "template": "classic",
+      "primary": "#001C31",
+      "secondary": "#8BBAEC",
+      "theme": "#001C31",
+      "outcome": "accepted",
+      "colors": [
+        "#001C31",
+        "#8BBAEC"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "missouri-science-and-technology",
+      "division": "D2",
+      "host": "www.minerathletics.com",
+      "finalHost": "minerathletics.com",
+      "template": "classic",
+      "primary": "#154734",
+      "secondary": "#CEB888",
+      "theme": "#154734",
+      "outcome": "accepted",
+      "colors": [
+        "#154734",
+        "#CEB888"
+      ]
+    },
+    {
+      "slug": "missouri-southern-state",
+      "division": "D2",
+      "host": "mssulions.com",
+      "template": "classic",
+      "primary": "#00693E",
+      "secondary": "#F5CF47",
+      "theme": "#00693E",
+      "outcome": "accepted",
+      "colors": [
+        "#00693E",
+        "#F5CF47"
+      ]
+    },
+    {
+      "slug": "missouri-western-state",
+      "division": "D2",
+      "host": "www.gogriffons.com",
+      "finalHost": "gogriffons.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#191C1F",
+      "outcome": "rejected: black-without-chromatic-secondary"
+    },
+    {
+      "slug": "mit",
+      "division": "D3",
+      "host": "www.mitathletics.com",
+      "finalHost": "mitathletics.com",
+      "template": "classic",
+      "primary": "#9D1B34",
+      "secondary": "#CCCCCC",
+      "outcome": "accepted",
+      "colors": [
+        "#9D1B34"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "monmouth-college-il",
+      "division": "D3",
+      "host": "monmouthscots.com",
+      "template": "classic",
+      "primary": "#D3282F",
+      "secondary": "#E7E7E7",
+      "theme": "#D3282F",
+      "outcome": "accepted",
+      "colors": [
+        "#D3282F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "montana-state-billings",
+      "division": "D2",
+      "host": "www.msubsports.com",
+      "finalHost": "msubsports.com",
+      "template": "classic",
+      "primary": "#003E6C",
+      "secondary": "#FFCA05",
+      "theme": "#003E6C",
+      "outcome": "accepted",
+      "colors": [
+        "#003E6C",
+        "#FFCA05"
+      ]
+    },
+    {
+      "slug": "montclair-state",
+      "division": "D3",
+      "host": "www.montclairathletics.com",
+      "finalHost": "montclairathletics.com",
+      "template": "classic",
+      "primary": "#CE1141",
+      "secondary": "#E5E5E5",
+      "theme": "#CE1141",
+      "outcome": "accepted",
+      "colors": [
+        "#CE1141"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mount-aloysius-college",
+      "division": "D3",
+      "host": "www.mountieathletics.com",
+      "finalHost": "mountieathletics.com",
+      "template": "classic",
+      "primary": "#005599",
+      "secondary": "#F2F2F3",
+      "theme": "#005599",
+      "outcome": "accepted",
+      "colors": [
+        "#005599"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mount-saint-mary-college-ny",
+      "division": "D3",
+      "host": "www.msmcknights.com",
+      "finalHost": "msmcknights.com",
+      "template": "classic",
+      "primary": "#0168B3",
+      "secondary": "#C2C2C2",
+      "theme": "#0168B3",
+      "outcome": "accepted",
+      "colors": [
+        "#0168B3"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "mount-saint-vincent",
+      "division": "D3",
+      "host": "umsvathletics.com",
+      "template": "classic",
+      "primary": "#003057",
+      "secondary": "#C99700",
+      "theme": "#003057",
+      "outcome": "accepted",
+      "colors": [
+        "#003057",
+        "#C99700"
+      ]
+    },
+    {
+      "slug": "mount-st-joseph",
+      "division": "D3",
+      "host": "www.msjlions.com",
+      "finalHost": "msjlions.com",
+      "template": "classic",
+      "primary": "#003366",
+      "secondary": "#FFCC00",
+      "theme": "#003366",
+      "outcome": "accepted",
+      "colors": [
+        "#003366",
+        "#FFCC00"
+      ]
+    },
+    {
+      "slug": "mount-union",
+      "division": "D3",
+      "host": "athletics.mountunion.edu",
+      "template": "classic",
+      "primary": "#752F8A",
+      "secondary": "#000000",
+      "theme": "#752F8A",
+      "outcome": "accepted",
+      "colors": [
+        "#752F8A"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "muhlenberg-college",
+      "division": "D3",
+      "host": "www.muhlenbergsports.com",
+      "finalHost": "muhlenbergsports.com",
+      "template": "classic",
+      "primary": "#A30726",
+      "secondary": "#C0C0C0",
+      "theme": "#A30726",
+      "outcome": "accepted",
+      "colors": [
+        "#A30726"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "nazareth",
+      "division": "D3",
+      "host": "www.nazathletics.com",
+      "finalHost": "nazathletics.com",
+      "template": "classic",
+      "primary": "#5F3797",
+      "secondary": "#333333",
+      "theme": "#5F3797",
+      "outcome": "accepted",
+      "colors": [
+        "#5F3797"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "nebraska-kearney",
+      "division": "D2",
+      "host": "www.lopers.com",
+      "finalHost": "lopers.com",
+      "template": "classic",
+      "primary": "#D28E00",
+      "secondary": "#004B84",
+      "outcome": "accepted",
+      "colors": [
+        "#D28E00",
+        "#004B84"
+      ]
+    },
+    {
+      "slug": "nebraska-wesleyan",
+      "division": "D3",
+      "host": "www.nwusports.com",
+      "finalHost": "nwusports.com",
+      "template": "classic",
+      "primary": "#CDB95D",
+      "secondary": "#BAAF92",
+      "theme": "#CDB95D",
+      "outcome": "accepted",
+      "colors": [
+        "#CDB95D",
+        "#BAAF92"
+      ]
+    },
+    {
+      "slug": "neumann",
+      "division": "D3",
+      "host": "www.neumannathletics.com",
+      "template": "classic",
+      "primary": "#003F72",
+      "secondary": "#FFD100",
+      "theme": "#003F72",
+      "outcome": "accepted",
+      "colors": [
+        "#003F72",
+        "#FFD100"
+      ]
+    },
+    {
+      "slug": "new-mexico-highlands",
+      "division": "D2",
+      "host": "www.nmhuathletics.com",
+      "finalHost": "nmhuathletics.com",
+      "template": "classic",
+      "primary": "#502D7F",
+      "secondary": "#FFFFFF",
+      "theme": "#502D7F",
+      "outcome": "accepted",
+      "colors": [
+        "#502D7F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "nichols-college",
+      "division": "D3",
+      "host": "www.nicholsathletics.com",
+      "finalHost": "nicholsathletics.com",
+      "template": "classic",
+      "primary": "#005840",
+      "secondary": "#343434",
+      "outcome": "accepted",
+      "colors": [
+        "#005840"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "north-carolina-pembroke",
+      "division": "D2",
+      "host": "www.uncpbraves.com",
+      "finalHost": "uncpbraves.com",
+      "template": "classic",
+      "primary": "#B5985A",
+      "secondary": "#000000",
+      "theme": "#B5985A",
+      "outcome": "accepted",
+      "colors": [
+        "#B5985A"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "north-carolina-wesleyan",
+      "division": "D3",
+      "host": "ncwsports.com",
+      "template": "classic",
+      "primary": "#003C69",
+      "secondary": "#D7A900",
+      "theme": "#003C69",
+      "outcome": "accepted",
+      "colors": [
+        "#003C69",
+        "#D7A900"
+      ]
+    },
+    {
+      "slug": "north-central",
+      "division": "D3",
+      "host": "www.ncurams.com",
+      "finalHost": "ncurams.com",
+      "template": "classic",
+      "primary": "#003D7D",
+      "secondary": "#CBB576",
+      "theme": "#003D7D",
+      "outcome": "accepted",
+      "colors": [
+        "#003D7D",
+        "#CBB576"
+      ]
+    },
+    {
+      "slug": "north-central-college",
+      "division": "D3",
+      "host": "northcentralcardinals.com",
+      "template": "classic",
+      "primary": "#C30202",
+      "secondary": "#FFFFFF",
+      "theme": "#C30202",
+      "outcome": "accepted",
+      "colors": [
+        "#C30202"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "north-park",
+      "division": "D3",
+      "host": "athletics.northpark.edu",
+      "template": "classic",
+      "primary": "#0057A8",
+      "secondary": "#FCCE08",
+      "theme": "#0057A8",
+      "outcome": "accepted",
+      "colors": [
+        "#0057A8",
+        "#FCCE08"
+      ]
+    },
+    {
+      "slug": "northwestern-st-paul",
+      "division": "D3",
+      "host": "unweagles.com",
+      "template": "classic",
+      "primary": "#2E1A47",
+      "secondary": "#EAAA00",
+      "theme": "#2E1A47",
+      "outcome": "accepted",
+      "colors": [
+        "#2E1A47",
+        "#EAAA00"
+      ]
+    },
+    {
+      "slug": "norwich",
+      "division": "D3",
+      "host": "www.norwichathletics.com",
+      "finalHost": "norwichathletics.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "notre-dame-maryland",
+      "division": "D3",
+      "host": "www.notredamegators.com",
+      "finalHost": "notredamegators.com",
+      "template": "classic",
+      "primary": "#2A6EBB",
+      "secondary": "#13355B",
+      "theme": "#2A6EBB",
+      "outcome": "accepted",
+      "colors": [
+        "#2A6EBB",
+        "#13355B"
+      ]
+    },
+    {
+      "slug": "oberlin-college",
+      "division": "D3",
+      "host": "www.goyeo.com",
+      "finalHost": "goyeo.com",
+      "template": "classic",
+      "primary": "#A6192E",
+      "secondary": "#FFC72C",
+      "theme": "#A6192E",
+      "outcome": "accepted",
+      "colors": [
+        "#A6192E",
+        "#FFC72C"
+      ]
+    },
+    {
+      "slug": "occidental-college",
+      "division": "D3",
+      "host": "www.oxyathletics.com",
+      "finalHost": "oxyathletics.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "oglethorpe",
+      "division": "D3",
+      "host": "www.gopetrels.com",
+      "finalHost": "gopetrels.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "ohio-wesleyan",
+      "division": "D3",
+      "host": "battlingbishops.com",
+      "template": "classic",
+      "primary": "#AC1A2F",
+      "secondary": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#AC1A2F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "oklahoma-christian",
+      "division": "D2",
+      "host": "www.oceagles.com",
+      "finalHost": "oceagles.com",
+      "template": "classic",
+      "primary": "#660000",
+      "secondary": "#0F0F0F",
+      "theme": "#660000",
+      "outcome": "accepted",
+      "colors": [
+        "#660000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "otterbein",
+      "division": "D3",
+      "host": "www.otterbeincardinals.com",
+      "finalHost": "otterbeincardinals.com",
+      "template": "classic",
+      "primary": "#990000",
+      "secondary": "#D5C296",
+      "theme": "#990000",
+      "outcome": "accepted",
+      "colors": [
+        "#990000",
+        "#D5C296"
+      ]
+    },
+    {
+      "slug": "ozarks-ar",
+      "division": "D3",
+      "host": "www.uofoathletics.com",
+      "finalHost": "uofoathletics.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "pacific-lutheran",
+      "division": "D3",
+      "host": "www.golutes.com",
+      "finalHost": "golutes.com",
+      "template": "classic",
+      "primary": "#FDB913",
+      "secondary": "#000000",
+      "theme": "#FDB913",
+      "outcome": "accepted",
+      "colors": [
+        "#FDB913"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "pacific-or",
+      "division": "D3",
+      "host": "www.goboxers.com",
+      "finalHost": "goboxers.com",
+      "template": "classic",
+      "primary": "#990000",
+      "secondary": "#666666",
+      "outcome": "accepted",
+      "colors": [
+        "#990000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "penn-college",
+      "division": "D3",
+      "host": "athletics.pct.edu",
+      "finalHost": "pctwildcats.com",
+      "template": "classic",
+      "primary": "#3366FF",
+      "secondary": "#E7E6E6",
+      "theme": "#3366FF",
+      "outcome": "accepted",
+      "colors": [
+        "#3366FF"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "penn-state-abington",
+      "division": "D3",
+      "host": "www.abingtonsports.com",
+      "finalHost": "abingtonsports.com",
+      "template": "classic",
+      "primary": "#00063E",
+      "secondary": "#B8B8B8",
+      "theme": "#00063E",
+      "outcome": "accepted",
+      "colors": [
+        "#00063E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "penn-state-berks",
+      "division": "D3",
+      "host": "www.psuberksathletics.com",
+      "finalHost": "psuberksathletics.com",
+      "template": "classic",
+      "primary": "#012853",
+      "secondary": "#BFBFBF",
+      "theme": "#012853",
+      "outcome": "accepted",
+      "colors": [
+        "#012853"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "pfeiffer",
+      "division": "D3",
+      "host": "www.gofalconsports.com",
+      "finalHost": "gofalconsports.com",
+      "template": "classic",
+      "primary": "#FDDA24",
+      "secondary": "#2D2926",
+      "theme": "#FDDA24",
+      "outcome": "accepted",
+      "colors": [
+        "#FDDA24"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "piedmont",
+      "division": "D3",
+      "host": "www.piedmontlions.com",
+      "finalHost": "piedmontlions.com",
+      "template": "classic",
+      "primary": "#144734",
+      "secondary": "#B5A268",
+      "theme": "#144734",
+      "outcome": "accepted",
+      "colors": [
+        "#144734",
+        "#B5A268"
+      ]
+    },
+    {
+      "slug": "pittsburgh-greensburg",
+      "division": "D3",
+      "host": "pittgreensburgathletics.com",
+      "template": "classic",
+      "primary": "#003594",
+      "secondary": "#292929",
+      "theme": "#003594",
+      "outcome": "accepted",
+      "colors": [
+        "#003594"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "pittsburgh-johnstown",
+      "division": "D2",
+      "host": "pittjohnstownathletics.com",
+      "template": "classic",
+      "primary": "#1A3DA5",
+      "secondary": "#FDB81D",
+      "theme": "#1A3DA5",
+      "outcome": "accepted",
+      "colors": [
+        "#1A3DA5",
+        "#FDB81D"
+      ]
+    },
+    {
+      "slug": "plymouth-state",
+      "division": "D3",
+      "host": "athletics.plymouth.edu",
+      "template": "classic",
+      "primary": "#135841",
+      "secondary": "#FFFFFF",
+      "theme": "#135841",
+      "outcome": "accepted",
+      "colors": [
+        "#135841"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "pomona-pitzer-colleges",
+      "division": "D3",
+      "host": "www.sagehens.com",
+      "finalHost": "sagehens.com",
+      "template": "classic",
+      "primary": "#003EAB",
+      "secondary": "#FFFFFF",
+      "theme": "#003EAB",
+      "outcome": "accepted",
+      "colors": [
+        "#003EAB"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "pratt-institute",
+      "division": "D3",
+      "host": "www.goprattgo.com",
+      "finalHost": "goprattgo.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#FFC425",
+      "theme": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#000000",
+        "#FFC425"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "principia-college",
+      "division": "D3",
+      "host": "www.principiaathletics.com",
+      "finalHost": "athletics.principiacollege.edu",
+      "template": "classic",
+      "primary": "#112C53",
+      "secondary": "#B48D50",
+      "theme": "#112C53",
+      "outcome": "accepted",
+      "colors": [
+        "#112C53",
+        "#B48D50"
+      ]
+    },
+    {
+      "slug": "puget-sound",
+      "division": "D3",
+      "host": "www.loggerathletics.com",
+      "finalHost": "loggerathletics.com",
+      "template": "classic",
+      "primary": "#660000",
+      "secondary": "#8E8E8E",
+      "theme": "#660000",
+      "outcome": "accepted",
+      "colors": [
+        "#660000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "purdue-northwest",
+      "division": "D2",
+      "host": "www.pnwathletics.com",
+      "finalHost": "pnwathletics.com",
+      "template": "classic",
+      "primary": "#E6D395",
+      "secondary": "#000000",
+      "theme": "#E6D395",
+      "outcome": "accepted",
+      "colors": [
+        "#E6D395"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "ramapo-college",
+      "division": "D3",
+      "host": "www.ramapoathletics.com",
+      "finalHost": "ramapoathletics.com",
+      "template": "classic",
+      "primary": "#900028",
+      "secondary": "#D5D5D5",
+      "theme": "#900028",
+      "outcome": "accepted",
+      "colors": [
+        "#900028"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "randolph-college",
+      "division": "D3",
+      "host": "www.randolphwildcats.com",
+      "finalHost": "randolphwildcats.com",
+      "template": "classic",
+      "primary": "#F7D417",
+      "secondary": "#000000",
+      "theme": "#F7D417",
+      "outcome": "accepted",
+      "colors": [
+        "#F7D417"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "randolph-macon-college",
+      "division": "D3",
+      "host": "www.rmcathletics.com",
+      "finalHost": "rmcathletics.com",
+      "template": "classic",
+      "primary": "#FFCF00",
+      "secondary": "#FFFFFF",
+      "theme": "#FFCF00",
+      "outcome": "accepted",
+      "colors": [
+        "#FFCF00"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "redlands",
+      "division": "D3",
+      "host": "www.goredlands.com",
+      "finalHost": "goredlands.com",
+      "template": "classic",
+      "primary": "#580E0E",
+      "secondary": "#807876",
+      "theme": "#580E0E",
+      "outcome": "accepted",
+      "colors": [
+        "#580E0E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "regent-va",
+      "division": "D3",
+      "host": "regentroyals.com",
+      "template": "classic",
+      "primary": "#002F6C",
+      "secondary": "#FFFFFF",
+      "theme": "#002F6C",
+      "outcome": "accepted",
+      "colors": [
+        "#002F6C"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rensselaer",
+      "division": "D3",
+      "host": "www.rpiathletics.com",
+      "finalHost": "rpiathletics.com",
+      "template": "classic",
+      "primary": "#DA291C",
+      "secondary": "#A2AAAD",
+      "theme": "#DA291C",
+      "outcome": "accepted",
+      "colors": [
+        "#DA291C"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rhode-island-college",
+      "division": "D3",
+      "host": "www.goanchormen.com",
+      "template": "classic",
+      "primary": "#602233",
+      "secondary": "#D5B853",
+      "theme": "#602233",
+      "outcome": "accepted",
+      "colors": [
+        "#602233",
+        "#D5B853"
+      ]
+    },
+    {
+      "slug": "rhodes-college",
+      "division": "D3",
+      "host": "www.rhodeslynx.com",
+      "finalHost": "rhodeslynx.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#D1D2D3",
+      "outcome": "rejected: black-without-chromatic-secondary"
+    },
+    {
+      "slug": "ripon-college",
+      "division": "D3",
+      "host": "riponredhawks.com",
+      "template": "classic",
+      "primary": "#BE0D34",
+      "secondary": "#000000",
+      "theme": "#BE0D34",
+      "outcome": "accepted",
+      "colors": [
+        "#BE0D34"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rivier",
+      "division": "D3",
+      "host": "www.rivierathletics.com",
+      "finalHost": "rivierathletics.com",
+      "template": "classic",
+      "primary": "#0D1132",
+      "secondary": "#0064A4",
+      "theme": "#0D1132",
+      "outcome": "accepted",
+      "colors": [
+        "#0D1132",
+        "#0064A4"
+      ]
+    },
+    {
+      "slug": "roanoke-college",
+      "division": "D3",
+      "host": "maroons.roanoke.edu",
+      "finalHost": "roanokemaroons.com",
+      "template": "classic",
+      "primary": "#872046",
+      "secondary": "#FFFFFF",
+      "theme": "#872046",
+      "outcome": "accepted",
+      "colors": [
+        "#872046"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rochester",
+      "division": "D3",
+      "host": "uofrathletics.com",
+      "template": "classic",
+      "primary": "#FFD82B",
+      "secondary": "#001E5F",
+      "theme": "#FFD82B",
+      "outcome": "accepted",
+      "colors": [
+        "#FFD82B",
+        "#001E5F"
+      ]
+    },
+    {
+      "slug": "rochester-institute-technology",
+      "division": "D3",
+      "host": "www.ritathletics.com",
+      "finalHost": "ritathletics.com",
+      "template": "classic",
+      "primary": "#C75300",
+      "secondary": "#313131",
+      "theme": "#C75300",
+      "outcome": "accepted",
+      "colors": [
+        "#C75300"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rockford",
+      "division": "D3",
+      "host": "www.rockfordregents.com",
+      "finalHost": "rockfordregents.com",
+      "template": "classic",
+      "primary": "#5B3F99",
+      "secondary": "#C5C6C8",
+      "theme": "#5B3F99",
+      "outcome": "accepted",
+      "colors": [
+        "#5B3F99"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "roger-williams",
+      "division": "D3",
+      "host": "www.rwuhawks.com",
+      "finalHost": "rwuhawks.com",
+      "template": "classic",
+      "primary": "#003D6E",
+      "secondary": "#EBEBEB",
+      "theme": "#003D6E",
+      "outcome": "accepted",
+      "colors": [
+        "#003D6E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rose-hulman",
+      "division": "D3",
+      "host": "athletics.rose-hulman.edu",
+      "template": "classic",
+      "primary": "#800000",
+      "secondary": "#5A0000",
+      "theme": "#800000",
+      "outcome": "accepted",
+      "colors": [
+        "#800000",
+        "#5A0000"
+      ]
+    },
+    {
+      "slug": "rowan",
+      "division": "D3",
+      "host": "www.rowanathletics.com",
+      "template": "classic",
+      "primary": "#571B00",
+      "secondary": "#FFCF01",
+      "theme": "#571B00",
+      "outcome": "accepted",
+      "colors": [
+        "#571B00",
+        "#FFCF01"
+      ]
+    },
+    {
+      "slug": "rutgers-camden",
+      "division": "D3",
+      "host": "www.scarletraptors.com",
+      "finalHost": "scarletraptors.com",
+      "template": "classic",
+      "primary": "#D20F0D",
+      "secondary": "#1C1F1E",
+      "theme": "#D20F0D",
+      "outcome": "accepted",
+      "colors": [
+        "#D20F0D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "rutgers-newark",
+      "division": "D3",
+      "host": "www.rutgersnewarkathletics.com",
+      "finalHost": "rutgersnewarkathletics.com",
+      "template": "classic",
+      "primary": "#C60306",
+      "secondary": "#C7C7C7",
+      "theme": "#C60306",
+      "outcome": "accepted",
+      "colors": [
+        "#C60306"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "saint-elizabeth",
+      "division": "D3",
+      "host": "seueagles.com",
+      "template": "classic",
+      "primary": "#003366",
+      "secondary": "#0062AA",
+      "theme": "#003366",
+      "outcome": "accepted",
+      "colors": [
+        "#003366",
+        "#0062AA"
+      ]
+    },
+    {
+      "slug": "saint-josephs-college-me",
+      "division": "D3",
+      "host": "www.gomonks.com",
+      "finalHost": "gomonks.com",
+      "template": "classic",
+      "primary": "#0246BE",
+      "secondary": "#C9CACC",
+      "theme": "#0246BE",
+      "outcome": "accepted",
+      "colors": [
+        "#0246BE"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "saint-marys-college-in",
+      "division": "D3",
+      "host": "belles.saintmarys.edu",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "saint-marys-minnesota",
+      "division": "D3",
+      "host": "www.saintmaryssports.com",
+      "finalHost": "saintmaryssports.com",
+      "template": "classic",
+      "primary": "#002146",
+      "secondary": "#DA1A32",
+      "theme": "#002146",
+      "outcome": "accepted",
+      "colors": [
+        "#002146",
+        "#DA1A32"
+      ]
+    },
+    {
+      "slug": "saint-vincent-college",
+      "division": "D3",
+      "host": "athletics.stvincent.edu",
+      "template": "classic",
+      "primary": "#1D5632",
+      "secondary": "#DCAA00",
+      "theme": "#1D5632",
+      "outcome": "accepted",
+      "colors": [
+        "#1D5632",
+        "#DCAA00"
+      ]
+    },
+    {
+      "slug": "salem-college-nc",
+      "division": "D3",
+      "host": "salemcollegeathletics.com",
+      "template": "classic",
+      "primary": "#004C97",
+      "secondary": "#FFD000",
+      "theme": "#004C97",
+      "outcome": "accepted",
+      "colors": [
+        "#004C97",
+        "#FFD000"
+      ]
+    },
+    {
+      "slug": "salisbury",
+      "division": "D3",
+      "host": "www.suseagulls.com",
+      "finalHost": "suseagulls.com",
+      "template": "classic",
+      "primary": "#800000",
+      "secondary": "#FFC420",
+      "theme": "#800000",
+      "outcome": "accepted",
+      "colors": [
+        "#800000",
+        "#FFC420"
+      ]
+    },
+    {
+      "slug": "salve-regina",
+      "division": "D3",
+      "host": "www.salveathletics.com",
+      "finalHost": "salveathletics.com",
+      "template": "classic",
+      "primary": "#002D58",
+      "secondary": "#009457",
+      "theme": "#002D58",
+      "outcome": "accepted",
+      "colors": [
+        "#002D58",
+        "#009457"
+      ]
+    },
+    {
+      "slug": "sarah-lawrence-college",
+      "division": "D3",
+      "host": "www.gogryphons.com",
+      "finalHost": "gogryphons.com",
+      "template": "classic",
+      "primary": "#B5985A",
+      "secondary": "#00573D",
+      "theme": "#B5985A",
+      "outcome": "accepted",
+      "colors": [
+        "#B5985A",
+        "#00573D"
+      ]
+    },
+    {
+      "slug": "scranton",
+      "division": "D3",
+      "host": "athletics.scranton.edu",
+      "template": "classic",
+      "primary": "#47176B",
+      "secondary": "#FFFFFF",
+      "theme": "#47176B",
+      "outcome": "accepted",
+      "colors": [
+        "#47176B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "sewanee",
+      "division": "D3",
+      "host": "sewaneetigers.com",
+      "template": "classic",
+      "primary": "#582C83",
+      "secondary": "#FFFFFF",
+      "theme": "#582C83",
+      "outcome": "accepted",
+      "colors": [
+        "#582C83"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "shenandoah",
+      "division": "D3",
+      "host": "www.suhornets.com",
+      "finalHost": "suhornets.com",
+      "template": "classic",
+      "primary": "#003E7E",
+      "secondary": "#D11242",
+      "theme": "#003E7E",
+      "outcome": "accepted",
+      "colors": [
+        "#003E7E",
+        "#D11242"
+      ]
+    },
+    {
+      "slug": "simmons",
+      "division": "D3",
+      "host": "athletics.simmons.edu",
+      "template": "classic",
+      "primary": "#003A70",
+      "secondary": "#EFC041",
+      "theme": "#003A70",
+      "outcome": "accepted",
+      "colors": [
+        "#003A70",
+        "#EFC041"
+      ]
+    },
+    {
+      "slug": "skidmore-college",
+      "division": "D3",
+      "host": "skidmoreathletics.com",
+      "template": "classic",
+      "primary": "#006A52",
+      "secondary": "#FFC600",
+      "theme": "#006A52",
+      "outcome": "accepted",
+      "colors": [
+        "#006A52",
+        "#FFC600"
+      ]
+    },
+    {
+      "slug": "smith-college",
+      "division": "D3",
+      "host": "www.gosmithbears.com",
+      "finalHost": "gosmithbears.com",
+      "template": "classic",
+      "primary": "#00386B",
+      "secondary": "#00386B",
+      "theme": "#00386B",
+      "outcome": "accepted",
+      "colors": [
+        "#00386B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "southern-maine",
+      "division": "D3",
+      "host": "www.southernmainehuskies.com",
+      "finalHost": "southernmainehuskies.com",
+      "template": "classic",
+      "primary": "#192D5B",
+      "secondary": "#192D5B",
+      "theme": "#192D5B",
+      "outcome": "accepted",
+      "colors": [
+        "#192D5B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "southern-virginia",
+      "division": "D3",
+      "host": "knightathletics.com",
+      "template": "classic",
+      "primary": "#9E1B32",
+      "secondary": "#1B1B1B",
+      "theme": "#9E1B32",
+      "outcome": "accepted",
+      "colors": [
+        "#9E1B32"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "southwestern-tx",
+      "division": "D3",
+      "host": "www.southwesternpirates.com",
+      "finalHost": "southwesternpirates.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#FFCD00",
+      "theme": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#000000",
+        "#FFCD00"
+      ],
+      "flags": [
+        "black-primary"
+      ]
+    },
+    {
+      "slug": "spalding",
+      "division": "D3",
+      "host": "www.spaldingathletics.com",
+      "finalHost": "spaldingathletics.com",
+      "template": "classic",
+      "primary": "#0E1E82",
+      "secondary": "#FFFFFF",
+      "theme": "#0E1E82",
+      "outcome": "accepted",
+      "colors": [
+        "#0E1E82"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "springfield-college",
+      "division": "D3",
+      "host": "springfieldcollegepride.com",
+      "template": "classic",
+      "primary": "#8B2232",
+      "secondary": "#BDBBBB",
+      "theme": "#8B2232",
+      "outcome": "accepted",
+      "colors": [
+        "#8B2232"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "st-catherine",
+      "division": "D3",
+      "host": "www.stkatesathletics.com",
+      "finalHost": "stkatesathletics.com",
+      "template": "classic",
+      "primary": "#4F2970",
+      "secondary": "#260E38",
+      "theme": "#4F2970",
+      "outcome": "accepted",
+      "colors": [
+        "#4F2970",
+        "#260E38"
+      ]
+    },
+    {
+      "slug": "st-john-fisher",
+      "division": "D3",
+      "host": "www.sjfathletics.com",
+      "finalHost": "sjfathletics.com",
+      "template": "classic",
+      "primary": "#993333",
+      "secondary": "#F7D778",
+      "theme": "#993333",
+      "outcome": "accepted",
+      "colors": [
+        "#993333",
+        "#F7D778"
+      ]
+    },
+    {
+      "slug": "st-lawrence",
+      "division": "D3",
+      "host": "www.saintsathletics.com",
+      "finalHost": "saintsathletics.com",
+      "template": "classic",
+      "primary": "#AA2023",
+      "secondary": "#4B2C24",
+      "theme": "#AA2023",
+      "outcome": "accepted",
+      "colors": [
+        "#AA2023",
+        "#4B2C24"
+      ]
+    },
+    {
+      "slug": "st-marys-college-maryland",
+      "division": "D3",
+      "host": "www.smcmathletics.com",
+      "finalHost": "smcmathletics.com",
+      "template": "classic",
+      "primary": "#00205C",
+      "secondary": "#F3C10D",
+      "theme": "#00205C",
+      "outcome": "accepted",
+      "colors": [
+        "#00205C",
+        "#F3C10D"
+      ]
+    },
+    {
+      "slug": "st-norbert-college",
+      "division": "D3",
+      "host": "athletics.snc.edu",
+      "template": "classic",
+      "primary": "#0D4000",
+      "secondary": "#FFB83D",
+      "theme": "#0D4000",
+      "outcome": "accepted",
+      "colors": [
+        "#0D4000",
+        "#FFB83D"
+      ]
+    },
+    {
+      "slug": "st-olaf-college",
+      "division": "D3",
+      "host": "athletics.stolaf.edu",
+      "template": "classic",
+      "primary": "#E3A025",
+      "secondary": "#242121",
+      "theme": "#E3A025",
+      "outcome": "accepted",
+      "colors": [
+        "#E3A025"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "st-thomas-tx",
+      "division": "D3",
+      "host": "www.ustcelts.com",
+      "finalHost": "ustcelts.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "stevens-institute-technology",
+      "division": "D3",
+      "host": "www.stevensducks.com",
+      "finalHost": "stevensducks.com",
+      "template": "classic",
+      "primary": "#A32638",
+      "secondary": "#9D9FA2",
+      "theme": "#A32638",
+      "outcome": "accepted",
+      "colors": [
+        "#A32638"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "stevenson",
+      "division": "D3",
+      "host": "www.gomustangsports.com",
+      "finalHost": "gomustangsports.com",
+      "template": "classic",
+      "primary": "#005847",
+      "secondary": "#FFFFFF",
+      "theme": "#005847",
+      "outcome": "accepted",
+      "colors": [
+        "#005847"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "stockton",
+      "division": "D3",
+      "host": "www.stocktonathletics.com",
+      "finalHost": "stocktonathletics.com",
+      "template": "classic",
+      "primary": "#65B2E9",
+      "secondary": "#CBC9C9",
+      "theme": "#65B2E9",
+      "outcome": "accepted",
+      "colors": [
+        "#65B2E9"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "sul-ross-state",
+      "division": "D2",
+      "host": "www.srlobos.com",
+      "finalHost": "srlobos.com",
+      "template": "classic",
+      "primary": "#B60001",
+      "secondary": "#C0C0C0",
+      "theme": "#B60001",
+      "outcome": "accepted",
+      "colors": [
+        "#B60001"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-brockport",
+      "division": "D3",
+      "host": "gobrockport.com",
+      "template": "classic",
+      "primary": "#084D17",
+      "secondary": "#FFCD38",
+      "theme": "#084D17",
+      "outcome": "accepted",
+      "colors": [
+        "#084D17",
+        "#FFCD38"
+      ]
+    },
+    {
+      "slug": "suny-buffalo-state",
+      "division": "D3",
+      "host": "www.buffalostateathletics.com",
+      "finalHost": "buffalostateathletics.com",
+      "template": "classic",
+      "primary": "#D25F15",
+      "secondary": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#D25F15"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-canton",
+      "division": "D3",
+      "host": "www.rooathletics.com",
+      "finalHost": "rooathletics.com",
+      "template": "classic",
+      "primary": "#16355A",
+      "secondary": "#C1A875",
+      "theme": "#16355A",
+      "outcome": "accepted",
+      "colors": [
+        "#16355A",
+        "#C1A875"
+      ]
+    },
+    {
+      "slug": "suny-cobleskill",
+      "division": "D3",
+      "host": "fightingtigers.cobleskill.edu",
+      "template": "classic",
+      "primary": "#FF6600",
+      "secondary": "#262626",
+      "theme": "#FF6600",
+      "outcome": "accepted",
+      "colors": [
+        "#FF6600"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-cortland",
+      "division": "D3",
+      "host": "www.cortlandreddragons.com",
+      "template": "classic",
+      "primary": "#970001",
+      "secondary": "#970001",
+      "theme": "#970001",
+      "outcome": "accepted",
+      "colors": [
+        "#970001"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-fredonia",
+      "division": "D3",
+      "host": "www.fredoniabluedevils.com",
+      "finalHost": "fredoniabluedevils.com",
+      "template": "classic",
+      "primary": "#006EC7",
+      "secondary": "#EFAE00",
+      "theme": "#006EC7",
+      "outcome": "accepted",
+      "colors": [
+        "#006EC7",
+        "#EFAE00"
+      ]
+    },
+    {
+      "slug": "suny-geneseo",
+      "division": "D3",
+      "host": "www.geneseoknights.com",
+      "finalHost": "geneseoknights.com",
+      "template": "classic",
+      "primary": "#082057",
+      "secondary": "#333333",
+      "theme": "#082057",
+      "outcome": "accepted",
+      "colors": [
+        "#082057"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-maritime",
+      "division": "D3",
+      "host": "www.maritimeathletics.com",
+      "finalHost": "maritimeathletics.com",
+      "template": "classic",
+      "primary": "#00275D",
+      "secondary": "#780032",
+      "theme": "#00275D",
+      "outcome": "accepted",
+      "colors": [
+        "#00275D",
+        "#780032"
+      ]
+    },
+    {
+      "slug": "suny-morrisville",
+      "division": "D3",
+      "host": "morrisvillemustangs.com",
+      "template": "classic",
+      "primary": "#000000",
+      "secondary": "#FFFFFF",
+      "theme": "#000000",
+      "outcome": "rejected: black-without-chromatic-secondary"
+    },
+    {
+      "slug": "suny-new-paltz",
+      "division": "D3",
+      "host": "www.nphawks.com",
+      "finalHost": "nphawks.com",
+      "template": "classic",
+      "primary": "#003E7E",
+      "secondary": "#F68428",
+      "theme": "#003E7E",
+      "outcome": "accepted",
+      "colors": [
+        "#003E7E",
+        "#F68428"
+      ]
+    },
+    {
+      "slug": "suny-old-westbury",
+      "division": "D3",
+      "host": "www.oldwestburypanthers.com",
+      "template": "classic",
+      "primary": "#0A6333",
+      "secondary": "#CCCCCC",
+      "theme": "#0A6333",
+      "outcome": "accepted",
+      "colors": [
+        "#0A6333"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-oneonta",
+      "division": "D3",
+      "host": "www.oneontaathletics.com",
+      "finalHost": "oneontaathletics.com",
+      "template": "classic",
+      "primary": "#CB2C30",
+      "secondary": "#1D1C18",
+      "theme": "#CB2C30",
+      "outcome": "accepted",
+      "colors": [
+        "#CB2C30"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-oswego",
+      "division": "D3",
+      "host": "oswegolakers.com",
+      "template": "classic",
+      "primary": "#046330",
+      "secondary": "#F0B410",
+      "theme": "#046330",
+      "outcome": "accepted",
+      "colors": [
+        "#046330",
+        "#F0B410"
+      ]
+    },
+    {
+      "slug": "suny-plattsburgh",
+      "division": "D3",
+      "host": "www.gocardinalsports.com",
+      "finalHost": "gocardinalsports.com",
+      "template": "classic",
+      "primary": "#262626",
+      "secondary": "#CF102D",
+      "theme": "#262626",
+      "outcome": "rejected: primary-grey"
+    },
+    {
+      "slug": "suny-polytechnic",
+      "division": "D3",
+      "host": "wildcats.sunypoly.edu",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "suny-potsdam",
+      "division": "D3",
+      "host": "www.potsdambears.com",
+      "finalHost": "potsdambears.com",
+      "template": "classic",
+      "primary": "#81002B",
+      "secondary": "#000000",
+      "theme": "#81002B",
+      "outcome": "accepted",
+      "colors": [
+        "#81002B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "suny-purchase",
+      "division": "D3",
+      "host": "www.purchasecollegeathletics.com",
+      "template": "classic",
+      "primary": "#022151",
+      "secondary": "#F36C00",
+      "theme": "#022151",
+      "outcome": "accepted",
+      "colors": [
+        "#022151",
+        "#F36C00"
+      ]
+    },
+    {
+      "slug": "susquehanna",
+      "division": "D3",
+      "host": "suriverhawks.com",
+      "template": "classic",
+      "primary": "#651C32",
+      "secondary": "#FFFFFF",
+      "theme": "#651C32",
+      "outcome": "accepted",
+      "colors": [
+        "#651C32"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "swarthmore-college",
+      "division": "D3",
+      "host": "swarthmoreathletics.com",
+      "template": "classic",
+      "primary": "#A20B32",
+      "secondary": "#F2F2F2",
+      "theme": "#A20B32",
+      "outcome": "accepted",
+      "colors": [
+        "#A20B32"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "sweet-briar-college",
+      "division": "D3",
+      "host": "www.vixenathletics.com",
+      "finalHost": "vixenathletics.com",
+      "template": "classic",
+      "primary": "#002A4B",
+      "secondary": "#ED2B74",
+      "outcome": "accepted",
+      "colors": [
+        "#002A4B",
+        "#ED2B74"
+      ]
+    },
+    {
+      "slug": "texas-dallas",
+      "division": "D2",
+      "host": "utdcomets.com",
+      "template": "classic",
+      "primary": "#00351A",
+      "secondary": "#C75812",
+      "theme": "#00351A",
+      "outcome": "accepted",
+      "colors": [
+        "#00351A",
+        "#C75812"
+      ]
+    },
+    {
+      "slug": "texas-lutheran",
+      "division": "D3",
+      "host": "tlubulldogs.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "texas-tyler",
+      "division": "D2",
+      "host": "www.uttylerpatriots.com",
+      "finalHost": "uttylerpatriots.com",
+      "template": "classic",
+      "primary": "#CB6015",
+      "secondary": "#002F6C",
+      "theme": "#CB6015",
+      "outcome": "accepted",
+      "colors": [
+        "#CB6015",
+        "#002F6C"
+      ]
+    },
+    {
+      "slug": "thiel-college",
+      "division": "D3",
+      "host": "www.thielathletics.com",
+      "finalHost": "thielathletics.com",
+      "template": "classic",
+      "primary": "#152049",
+      "secondary": "#9D8B43",
+      "theme": "#152049",
+      "outcome": "accepted",
+      "colors": [
+        "#152049",
+        "#9D8B43"
+      ]
+    },
+    {
+      "slug": "thomas-college",
+      "division": "D3",
+      "host": "www.thomasathletics.com",
+      "finalHost": "athletics.thomas.edu",
+      "template": "classic",
+      "primary": "#B52C1F",
+      "secondary": "#B52C1F",
+      "theme": "#B52C1F",
+      "outcome": "accepted",
+      "colors": [
+        "#B52C1F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "thomas-jefferson",
+      "division": "D2",
+      "host": "www.jeffersonrams.com",
+      "template": "classic",
+      "primary": "#152456",
+      "secondary": "#59B7DF",
+      "theme": "#152456",
+      "outcome": "accepted",
+      "colors": [
+        "#152456",
+        "#59B7DF"
+      ]
+    },
+    {
+      "slug": "transylvania",
+      "division": "D3",
+      "host": "www.transysports.com",
+      "template": "classic",
+      "primary": "#9D2235",
+      "secondary": "#323535",
+      "theme": "#9D2235",
+      "outcome": "accepted",
+      "colors": [
+        "#9D2235"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "trevecca-nazarene",
+      "division": "D2",
+      "host": "www.tnutrojans.com",
+      "finalHost": "tnutrojans.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "trine",
+      "division": "D3",
+      "host": "www.trinethunder.com",
+      "finalHost": "trinethunder.com",
+      "template": "classic",
+      "primary": "#003767",
+      "secondary": "#B5A66B",
+      "theme": "#003767",
+      "outcome": "accepted",
+      "colors": [
+        "#003767",
+        "#B5A66B"
+      ]
+    },
+    {
+      "slug": "trinity-college-ct",
+      "division": "D3",
+      "host": "www.bantamsports.com",
+      "finalHost": "bantamsports.com",
+      "template": "classic",
+      "primary": "#003057",
+      "secondary": "#FFCD00",
+      "theme": "#003057",
+      "outcome": "accepted",
+      "colors": [
+        "#003057",
+        "#FFCD00"
+      ]
+    },
+    {
+      "slug": "trinity-tx",
+      "division": "D3",
+      "host": "www.trinitytigers.com",
+      "finalHost": "trinitytigers.com",
+      "template": "classic",
+      "primary": "#723130",
+      "secondary": "#000000",
+      "theme": "#723130",
+      "outcome": "accepted",
+      "colors": [
+        "#723130"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "truman-state",
+      "division": "D2",
+      "host": "www.trumanbulldogs.com",
+      "finalHost": "trumanbulldogs.com",
+      "template": "classic",
+      "primary": "#510C76",
+      "secondary": "#9E9E9E",
+      "theme": "#510C76",
+      "outcome": "accepted",
+      "colors": [
+        "#510C76"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "tufts",
+      "division": "D3",
+      "host": "www.gotuftsjumbos.com",
+      "finalHost": "gotuftsjumbos.com",
+      "template": "classic",
+      "primary": "#306DAB",
+      "secondary": "#512C1D",
+      "theme": "#306DAB",
+      "outcome": "accepted",
+      "colors": [
+        "#306DAB",
+        "#512C1D"
+      ]
+    },
+    {
+      "slug": "union-college-ny",
+      "division": "D3",
+      "host": "www.unionathletics.com",
+      "finalHost": "unionathletics.com",
+      "template": "classic",
+      "primary": "#801E2C",
+      "secondary": "#545454",
+      "theme": "#801E2C",
+      "outcome": "accepted",
+      "colors": [
+        "#801E2C"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "ursinus-college",
+      "division": "D3",
+      "host": "www.ursinusathletics.com",
+      "finalHost": "ursinusathletics.com",
+      "template": "classic",
+      "primary": "#98012E",
+      "secondary": "#FCB034",
+      "theme": "#98012E",
+      "outcome": "accepted",
+      "colors": [
+        "#98012E",
+        "#FCB034"
+      ]
+    },
+    {
+      "slug": "utica",
+      "division": "D3",
+      "host": "www.uticapioneers.com",
+      "finalHost": "uticapioneers.com",
+      "template": "classic",
+      "primary": "#F15C22",
+      "secondary": "#083757",
+      "theme": "#F15C22",
+      "outcome": "accepted",
+      "colors": [
+        "#F15C22",
+        "#083757"
+      ]
+    },
+    {
+      "slug": "vassar-college",
+      "division": "D3",
+      "host": "www.vassarathletics.com",
+      "template": "classic",
+      "primary": "#75101D",
+      "secondary": "#7B7B7B",
+      "theme": "#75101D",
+      "outcome": "accepted",
+      "colors": [
+        "#75101D"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "warren-wilson-college",
+      "division": "D3",
+      "host": "warrenwilsonowls.com",
+      "template": "classic",
+      "primary": "#004976",
+      "secondary": "#006A4E",
+      "theme": "#004976",
+      "outcome": "accepted",
+      "colors": [
+        "#004976",
+        "#006A4E"
+      ]
+    },
+    {
+      "slug": "wartburg-college",
+      "division": "D3",
+      "host": "www.go-knights.net",
+      "finalHost": "go-knights.net",
+      "template": "classic",
+      "primary": "#F58025",
+      "secondary": "#000000",
+      "theme": "#F58025",
+      "outcome": "accepted",
+      "colors": [
+        "#F58025"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "washington-and-lee",
+      "division": "D3",
+      "host": "generalssports.com",
+      "template": "classic",
+      "primary": "#00529B",
+      "secondary": "#000000",
+      "outcome": "accepted",
+      "colors": [
+        "#00529B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "washington-college-md",
+      "division": "D3",
+      "host": "www.washingtoncollegesports.com",
+      "finalHost": "washcollsports.com",
+      "template": "classic",
+      "primary": "#650205",
+      "secondary": "#FFFFFF",
+      "theme": "#650205",
+      "outcome": "accepted",
+      "colors": [
+        "#650205"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "washington-jefferson",
+      "division": "D3",
+      "host": "www.gopresidents.com",
+      "finalHost": "gopresidents.com",
+      "template": "classic",
+      "primary": "#B5121B",
+      "secondary": "#E5E5E5",
+      "theme": "#B5121B",
+      "outcome": "accepted",
+      "colors": [
+        "#B5121B"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "washington-st-louis",
+      "division": "D3",
+      "host": "washubears.com",
+      "template": "classic",
+      "primary": "#BA0C2F",
+      "secondary": "#215732",
+      "theme": "#BA0C2F",
+      "outcome": "accepted",
+      "colors": [
+        "#BA0C2F",
+        "#215732"
+      ]
+    },
+    {
+      "slug": "waynesburg",
+      "division": "D3",
+      "host": "www.waynesburgsports.com",
+      "finalHost": "waynesburgsports.com",
+      "template": "classic",
+      "primary": "#BD4F19",
+      "secondary": "#D7D7DB",
+      "outcome": "accepted",
+      "colors": [
+        "#BD4F19"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "webster",
+      "division": "D3",
+      "host": "websterathletics.com",
+      "outcome": "failed: fetch"
+    },
+    {
+      "slug": "wellesley-college",
+      "division": "D3",
+      "host": "www.wellesleyblue.com",
+      "finalHost": "wellesleyblue.com",
+      "template": "classic",
+      "primary": "#0018A8",
+      "secondary": "#0018A8",
+      "theme": "#0018A8",
+      "outcome": "accepted",
+      "colors": [
+        "#0018A8"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wesleyan-ct",
+      "division": "D3",
+      "host": "athletics.wesleyan.edu",
+      "template": "classic",
+      "primary": "#D72121",
+      "secondary": "#000000",
+      "theme": "#D72121",
+      "outcome": "accepted",
+      "colors": [
+        "#D72121"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "western-connecticut-state",
+      "division": "D3",
+      "host": "www.westconnathletics.com",
+      "finalHost": "westconnathletics.com",
+      "template": "classic",
+      "primary": "#001A37",
+      "secondary": "#D64000",
+      "theme": "#001A37",
+      "outcome": "accepted",
+      "colors": [
+        "#001A37",
+        "#D64000"
+      ]
+    },
+    {
+      "slug": "western-new-england",
+      "division": "D3",
+      "host": "www.wnegoldenbears.com",
+      "finalHost": "wnegoldenbears.com",
+      "template": "classic",
+      "primary": "#004B8D",
+      "secondary": "#F5A700",
+      "theme": "#004B8D",
+      "outcome": "accepted",
+      "colors": [
+        "#004B8D",
+        "#F5A700"
+      ]
+    },
+    {
+      "slug": "westminster-college-mo",
+      "division": "D3",
+      "host": "wcbluejays.wcmo.edu",
+      "template": "classic",
+      "primary": "#003767",
+      "secondary": "#79BDE8",
+      "theme": "#003767",
+      "outcome": "accepted",
+      "colors": [
+        "#003767",
+        "#79BDE8"
+      ]
+    },
+    {
+      "slug": "westminster-college-pa",
+      "division": "D3",
+      "host": "athletics.westminster.edu",
+      "template": "classic",
+      "primary": "#003865",
+      "secondary": "#B1B3B6",
+      "theme": "#003865",
+      "outcome": "accepted",
+      "colors": [
+        "#003865"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wheaton-college-il",
+      "division": "D3",
+      "host": "athletics.wheaton.edu",
+      "template": "classic",
+      "primary": "#00407E",
+      "secondary": "#E36F1E",
+      "theme": "#00407E",
+      "outcome": "accepted",
+      "colors": [
+        "#00407E",
+        "#E36F1E"
+      ]
+    },
+    {
+      "slug": "wheaton-college-ma",
+      "division": "D3",
+      "host": "wheatoncollegelyons.com",
+      "template": "classic",
+      "primary": "#1374BA",
+      "secondary": "#8BB8E8",
+      "outcome": "accepted",
+      "colors": [
+        "#1374BA",
+        "#8BB8E8"
+      ]
+    },
+    {
+      "slug": "whitman-college",
+      "division": "D3",
+      "host": "whitmanblues.com",
+      "template": "classic",
+      "primary": "#001F5B",
+      "secondary": "#6CB2E2",
+      "theme": "#001F5B",
+      "outcome": "accepted",
+      "colors": [
+        "#001F5B",
+        "#6CB2E2"
+      ]
+    },
+    {
+      "slug": "whittier-college",
+      "division": "D3",
+      "host": "www.wcpoets.com",
+      "finalHost": "wcpoets.com",
+      "template": "classic",
+      "primary": "#FFFFFF",
+      "secondary": "#FFFFFF",
+      "theme": "#FFFFFF",
+      "outcome": "rejected: denylisted"
+    },
+    {
+      "slug": "whitworth",
+      "division": "D3",
+      "host": "www.whitworthpirates.com",
+      "finalHost": "whitworthpirates.com",
+      "template": "classic",
+      "primary": "#990000",
+      "secondary": "#000000",
+      "theme": "#990000",
+      "outcome": "accepted",
+      "colors": [
+        "#990000"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "widener",
+      "division": "D3",
+      "host": "www.widenerpride.com",
+      "finalHost": "widenerpride.com",
+      "template": "classic",
+      "primary": "#0039A5",
+      "secondary": "#D6D6D6",
+      "theme": "#0039A5",
+      "outcome": "accepted",
+      "colors": [
+        "#0039A5"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wilkes",
+      "division": "D3",
+      "host": "www.gowilkesu.com",
+      "finalHost": "gowilkesu.com",
+      "template": "classic",
+      "primary": "#002F5F",
+      "secondary": "#00386B",
+      "theme": "#002F5F",
+      "outcome": "accepted",
+      "colors": [
+        "#002F5F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "william-paterson-new-jersey",
+      "division": "D3",
+      "host": "www.wpupioneers.com",
+      "template": "classic",
+      "primary": "#E56927",
+      "secondary": "#454442",
+      "theme": "#E56927",
+      "outcome": "accepted",
+      "colors": [
+        "#E56927"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "william-peace",
+      "division": "D3",
+      "host": "www.gopeacepacers.com",
+      "finalHost": "gopeacepacers.com",
+      "template": "classic",
+      "primary": "#007042",
+      "secondary": "#BDBDBD",
+      "theme": "#007042",
+      "outcome": "accepted",
+      "colors": [
+        "#007042"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "williams-college",
+      "division": "D3",
+      "host": "ephsports.williams.edu",
+      "template": "classic",
+      "primary": "#FCD205",
+      "secondary": "#492872",
+      "theme": "#FCD205",
+      "outcome": "accepted",
+      "colors": [
+        "#FCD205",
+        "#492872"
+      ]
+    },
+    {
+      "slug": "wilmington-college-oh",
+      "division": "D3",
+      "host": "wilmingtonquakers.com",
+      "template": "classic",
+      "primary": "#024E43",
+      "secondary": "#7AB800",
+      "theme": "#024E43",
+      "outcome": "accepted",
+      "colors": [
+        "#024E43",
+        "#7AB800"
+      ]
+    },
+    {
+      "slug": "wilson-college",
+      "division": "D3",
+      "host": "www.wilsonphoenix.com",
+      "finalHost": "wilsonphoenix.com",
+      "template": "classic",
+      "primary": "#1C3F95",
+      "secondary": "#999999",
+      "theme": "#1C3F95",
+      "outcome": "accepted",
+      "colors": [
+        "#1C3F95"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wisconsin-lutheran-college",
+      "division": "D3",
+      "host": "www.wlcsports.com",
+      "finalHost": "wlcsports.com",
+      "template": "classic",
+      "primary": "#006643",
+      "secondary": "#BCBEC0",
+      "theme": "#006643",
+      "outcome": "accepted",
+      "colors": [
+        "#006643"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wisconsin-stout",
+      "division": "D3",
+      "host": "stoutbluedevils.com",
+      "template": "classic",
+      "primary": "#001243",
+      "secondary": "#FFFFFF",
+      "theme": "#001243",
+      "outcome": "accepted",
+      "colors": [
+        "#001243"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wisconsin-whitewater",
+      "division": "D3",
+      "host": "www.uwwsports.com",
+      "finalHost": "uwwsports.com",
+      "template": "classic",
+      "primary": "#502D7F",
+      "secondary": "#000000",
+      "theme": "#502D7F",
+      "outcome": "accepted",
+      "colors": [
+        "#502D7F"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "wpi",
+      "division": "D3",
+      "host": "athletics.wpi.edu",
+      "template": "classic",
+      "primary": "#AC2B37",
+      "secondary": "#A9B0B7",
+      "theme": "#AC2B37",
+      "outcome": "accepted",
+      "colors": [
+        "#AC2B37"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "yeshiva",
+      "division": "D3",
+      "host": "www.yumacs.com",
+      "finalHost": "yumacs.com",
+      "template": "classic",
+      "primary": "#005696",
+      "secondary": "#F2F2F2",
+      "theme": "#005696",
+      "outcome": "accepted",
+      "colors": [
+        "#005696"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "york-college-ny",
+      "division": "D3",
+      "host": "www.yorkathletics.com",
+      "finalHost": "yorkathletics.com",
+      "template": "classic",
+      "primary": "#C70001",
+      "secondary": "#313131",
+      "theme": "#C70001",
+      "outcome": "accepted",
+      "colors": [
+        "#C70001"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    },
+    {
+      "slug": "york-college-pa",
+      "division": "D3",
+      "host": "www.ycpspartans.com",
+      "finalHost": "ycpspartans.com",
+      "template": "classic",
+      "primary": "#00853E",
+      "secondary": "#000000",
+      "theme": "#00853E",
+      "outcome": "accepted",
+      "colors": [
+        "#00853E"
+      ],
+      "flags": [
+        "secondary-dropped"
+      ]
+    }
+  ]
+}
