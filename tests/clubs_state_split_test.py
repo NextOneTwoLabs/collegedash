@@ -200,6 +200,28 @@ def test_trends_past_and_search():
         ok(f"search: 'shore fc ecnl' is searchable under {cid}", "shore fc ecnl" in aka, aka)
 
 
+def test_retired_ids():
+    # part C: a merged-away id points at a live row; never a live row itself, never at a missing one
+    d = doc()
+    d["retired"] = {"old-shore": "shore-fc-va"}
+    ok("retired: a merged-away id resolves to its live club", clubs.Table(d).retired == {"old-shore": "shore-fc-va"})
+    for label, retired in (("a retired id that is still a row", {"harbor-sc": "shore-fc-va"}),
+                           ("a retired id pointing at a missing row", {"old-shore": "nope"}),
+                           ("a chain (target is itself retired)", {"a-old": "b-old", "b-old": "shore-fc-va"})):
+        d = doc()
+        d["retired"] = retired
+        try:
+            clubs.Table(d)
+            ok(f"retired: {label} is refused", False)
+        except clubs.TableError:
+            ok(f"retired: {label} is refused", True)
+    t = clubs.load_table(reload=True)
+    ok("committed table: pda-south and beach-futbol-club-ca are retired into pda / beach-fc-ca",
+       t.retired == {"pda-south": "pda", "beach-futbol-club-ca": "beach-fc-ca"}, t.retired)
+    r = trends.Recorder(t, candidates=lambda tds, sw: {}, school_table=SCH)
+    ok("trends index carries retiredClubs", r.index().get("retiredClubs") == t.retired)
+
+
 def test_committed_table():
     t = clubs.load_table(reload=True)
     ok("committed table: 'beach fc ecnl' splits VA/CA",
@@ -243,7 +265,8 @@ def main(argv=None) -> int:
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_match_by_state, test_club_state_uses_only_a_matched_school, test_resolve_groups_by_the_players_state,
-                 test_table_validation, test_build_and_review_report, test_trends_past_and_search, test_committed_table,
+                 test_table_validation, test_build_and_review_report, test_trends_past_and_search, test_retired_ids,
+                 test_committed_table,
                  test_data_every_state_resolved_club_agrees_with_the_matched_school):
         try:
             case()

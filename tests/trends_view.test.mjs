@@ -282,6 +282,30 @@ test('#310 raw: ids resolve through the alias table, value by value; an unknown 
   assert.ok(page.results().includes('There is no club “raw:qqq” in the clubs and schools index') && page.results().includes('How to read this'), 'a box with no known value is left out');
 });
 
+test('#339 a merged-away club id lands on the club it went into, alone or among several; a spelling two clubs claim stays put; an unknown id still reads "not in the index"', async () => {
+  const doc = fixture();
+  doc.retiredClubs = { 'old-mvla': 'mvla', 'gone-to-nowhere': 'no-such-club' };
+  const cl = doc.clubs, n = cl.id.length;
+  doc.clubs = { ...cl, id: [...cl.id, 'shore-ca', 'shore-va'], name: [...cl.name, 'Shore FC (CA)', 'Shore FC (VA)'],
+    state: [...cl.state, 'CA', 'VA'], aka: { ...cl.aka, [n]: ['shore fc ecnl'], [n + 1]: ['shore fc ecnl'] } };
+  let page = await open('#/trends?club=old-mvla', doc);
+  assert.equal(page.sandbox.location.hash, '#/trends?club=mvla', 'rewritten to the live club id');
+  assert.equal(page.hist.pushes, 0, 'with replaceState');
+  assert.deepEqual(chipNames(page, 'club'), ['Mountain View Los Altos SC']);
+  page = await open('#/trends?club=surf,old-mvla', doc);
+  assert.equal(page.sandbox.location.hash, '#/trends?club=surf,mvla', 'a retired id among several values: only it is rewritten, order kept');
+  assert.deepEqual(chipNames(page, 'club'), ['San Diego Surf', 'Mountain View Los Altos SC']);
+  page = await open('#/trends?club=mvla,old-mvla', doc);
+  assert.equal(page.sandbox.location.hash, '#/trends?club=mvla', 'a retired id resolving to a value already picked is not doubled');
+  page = await open('#/trends?club=gone-to-nowhere', doc);
+  assert.deepEqual(chipNames(page, 'club'), ['gone-to-nowhere — not in the index'], 'a retired id whose target is missing is not followed');
+  page = await open('#/trends?club=raw%3Ashore%20fc%20ecnl', doc);
+  assert.equal(page.sandbox.location.hash, '#/trends?club=raw%3Ashore%20fc%20ecnl', 'a state-split spelling is not guessed onto one of its two clubs');
+  page = await open('#/trends?club=pda-south', doc);
+  assert.deepEqual(chipNames(page, 'club'), ['pda-south — not in the index'], 'an id the index does not retire still reads "not in the index"');
+  assert.ok(page.el('#trChips-club').innerHTML.includes('tr-chip missing'));
+});
+
 /* ---------- division everywhere, #315 ---------- */
 test('division everywhere: program chips, suggestions and result lines carry D1/D2/D3', async () => {
   const p2 = await open('#/trends', searchFixture());

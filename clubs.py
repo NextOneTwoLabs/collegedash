@@ -139,6 +139,10 @@ class Table:
         self.aliases: dict[str, str] = {}
         # #339: a same-name key shared by clubs in different states -> {state: club id}
         self.split: dict[str, dict[str, str]] = {}
+        # #339 part C: a club id merged away -> the live club it went into, so a saved Pipelines link
+        # (#/trends?club=<old id>) still lands. Every target is a live row and no retired id is still a
+        # row, which also rules out chains and cycles.
+        self.retired: dict[str, str] = {}
         self.notAClub: dict[str, str] = {}
         if len(self.clubs) != len(doc.get("clubs") or []):
             raise TableError("data/clubs.json: two clubs share an id")
@@ -159,6 +163,12 @@ class Table:
             self._add_alias(key, club_id, "an alias")
         for key, target in split_entries.items():
             self._add_split(key, target)
+        for old, new in (doc.get("retired") or {}).items():
+            if old in self.clubs:
+                raise TableError(f"data/clubs.json: retired id {old!r} is still a club row")
+            if new not in self.clubs:
+                raise TableError(f"data/clubs.json: retired id {old!r} points at {new!r}, which is not a live club row")
+            self.retired[old] = new
         for key, reason in (doc.get("notAClub") or {}).items():
             if clean_key(key) != key:
                 raise TableError(f"data/clubs.json: notAClub key {key!r} is not a cleaned key")

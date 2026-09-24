@@ -366,6 +366,8 @@ class Recorder:
         doc = {
             "updated": common.now_iso(), "format": FORMAT, "divisions": sorted(self.cov),
             "commitDivisions": list(COMMIT_DIVISIONS), "season": self.season,
+            # #339 part C: merged-away club ids -> the live club, for saved #/trends?club=<old id> links
+            "retiredClubs": dict(sorted((getattr(self.table, "retired", None) or {}).items())),
             "pastSeasons": sorted(self.past_seasons), "commitStatuses": list(COMMIT_STATUSES),
             "columns": list(COLUMNS), "coverage": self._coverage(),
             "programs": {s: self.programs[s] for s in program_ids},
