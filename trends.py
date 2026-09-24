@@ -18,9 +18,17 @@ What is written: `public/data/trends/index.json`, one small file the page loads 
         "commits": {"recruits", "clubKnown", "schoolNamed", "schoolKnown"}
       },
       "programs": {slug: {"current", "past", "commits", "clubKnown": [c, p, m], "schoolKnown": [c, p, m]}},
-      "clubs":    {clubId | "raw:<key>": {"name", "state", "unmatched"?, "programs": {slug: [c, p, m]}}},
-      "schools":  {schoolId: {"name", "city", "state", "programs": {slug: [c, p, m]}}} | null
+      "clubs":    {clubId | "raw:<key>": {"name", "state", "unmatched"?, "aka"?, "programs": {slug: [c, p, m]}}},
+      "schools":  {schoolId: {"name", "city", "state", "aka"?, "programs": {slug: [c, p, m]}}} | null
     }
+
+`aka` (issue #307) is what the page's name search needs beyond the canonical name, as cleaned keys, minus
+every key already contained in the cleaned name (a search reaches those through the name), shortest first,
+absent when empty, so the file stays small:
+  * a club's: its reviewed aliases and former names from data/clubs.json ("mvla");
+  * a school's: the spellings seen on rosters and recruiting records that resolved to it, as
+    `schools.school_key` reduced them ("southlake carroll" for the school NCES files as "Carroll Senior H S").
+    A spelling is a school's name as a roster printed it, never a person's.
 
 The three columns are three disjoint populations, so a program's current + past is a count of
 distinct people and commits can be read beside it without being added in:
@@ -86,6 +94,19 @@ def out_path() -> str:
     return os.path.join(out_dir(), "index.json")
 
 
+def search_aliases(table, club_id: str, name: str | None) -> list[str]:
+    """The reviewed keys of `club_id` (aliases and former names) that a substring search over the
+    name would not already find: a key contained in the cleaned name adds no match and is left out.
+    Shortest first, then alphabetical, so the page can show the shortest key a query hit ("MVLA")."""
+    return _aka((k for k, cid in table.aliases.items() if cid == club_id), name)
+
+
+def _aka(keys, name: str | None) -> list[str]:
+    """`keys` less the empty ones and those contained in the cleaned `name`, shortest first."""
+    own = clubs.clean_key(name)
+    return sorted({k for k in keys if k and k not in own}, key=lambda k: (len(k), k))
+
+
 def _pct(n: int, d: int) -> int | None:
     return None if not d else round(100 * n / d)
 
@@ -115,6 +136,7 @@ class Recorder:
         self.programs: dict[str, dict] = {}
         self.clubs: dict[str, dict] = {}
         self.schools: dict[str, dict] = {}
+        self._school_keys: dict[str, set[str]] = {}
 
     # ----- the school table, only when the module exists ---------------------------------------
     def school_table(self):
@@ -131,8 +153,11 @@ class Recorder:
             cid = info["clubId"]
             if cid not in self.clubs:
                 club = self.table.clubs.get(cid) or {}
-                self.clubs[cid] = {"name": club.get("name") or info.get("club") or info.get("raw"),
-                                   "state": club.get("state"), "programs": {}}
+                name = club.get("name") or info.get("club") or info.get("raw")
+                self.clubs[cid] = {"name": name, "state": club.get("state"), "programs": {}}
+                aka = search_aliases(self.table, cid, name)
+                if aka:
+                    self.clubs[cid]["aka"] = aka
             return self.clubs[cid]
         key = info.get("key") or clubs.clean_key(info.get("raw"))
         if not key:
@@ -149,6 +174,8 @@ class Recorder:
         if sid not in self.schools:
             self.schools[sid] = {"name": info.get("school") or info.get("raw"), "city": info.get("city"),
                                  "state": info.get("state"), "programs": {}}
+        if info.get("key"):
+            self._school_keys.setdefault(sid, set()).add(info["key"])
         return self.schools[sid]
 
     @staticmethod
@@ -270,8 +297,14 @@ class Recorder:
             "columns": list(COLUMNS), "coverage": cov,
             "programs": {s: self.programs[s] for s in sorted(self.programs)},
             "clubs": {k: self.clubs[k] for k in sorted(self.clubs)},
-            "schools": {k: self.schools[k] for k in sorted(self.schools)} if self.schools_seen else None,
+            "schools": {k: self._with_aka(self.schools[k], self._school_keys.get(k)) for k in sorted(self.schools)}
+                       if self.schools_seen else None,
         }
+
+    @staticmethod
+    def _with_aka(entry: dict, keys) -> dict:
+        aka = _aka(keys or (), entry.get("name"))
+        return {**{k: v for k, v in entry.items() if k != "programs"}, **({"aka": aka} if aka else {}), "programs": entry["programs"]}
 
     def write(self, path: str | None = None) -> dict:
         """Compact JSON, not common.write_json's indented form: the index is thousands of three-number

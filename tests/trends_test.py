@@ -5,7 +5,8 @@
 
 Offline and in memory: a small fixture of profiles, stored sources and a club table shaped like the
 real ones. The one file written goes to a temp directory. Nothing under public/ or data/ is read
-or touched except `data/clubs.json`'s loader being bypassed by a fixture table.
+or touched except `data/clubs.json`'s loader being bypassed by a fixture table, and read once by
+test_search_aka to check the aliases MVLA's search needs (#307).
 
 What this proves
 ----------------
@@ -313,6 +314,29 @@ def test_schools_field_gate() -> None:
     ok("feeders_for a school carries the city", trends.feeders_for(with_, "school", "alpha")[0].get("city") == "Rocklin")
 
 
+def test_search_aka() -> None:
+    """#307: the keys the page's search needs beyond a name, and nothing a name search already reaches."""
+    real = trends.search_aliases(clubs.load_table(), "mountain-view-los-altos-sc", "Mountain View Los Altos SC")
+    ok("MVLA's reviewed short name is carried, shortest first", real[:1] == ["mvla"], real)
+    ok("an alias inside the name is left out", "mountain view los altos" not in real, real)
+    table = clubs.Table({"clubs": [{"id": "x-sc", "name": "X SC", "state": "CA"}],
+                         "aliases": {"xsc united": "x-sc", "x": "x-sc"}, "notAClub": {}})
+    rec = trends.Recorder(table, candidates=lambda t, s: {}, same_person=lambda a, b: False, school_table=NoSchools())
+    rec._club_entry({"status": "matched", "clubId": "x-sc", "raw": "X SC"})
+    rec._club_entry({"status": "unmatched", "raw": "Zeta United", "key": "zeta united"})
+    for key in ("southlake carroll", "carroll senior", "southlake carroll"):
+        rec._school_entry({"raw": key, "key": key, "schoolId": "ccd:9", "school": "Carroll Senior H S", "city": "Southlake",
+                           "state": "TX", "status": "matched"})
+    rec._school_entry(SCHOOL_OK)
+    rec.schools_seen = True
+    doc = rec.index()
+    ok("a club carries its aliases the name does not contain", doc["clubs"]["x-sc"].get("aka") == ["xsc united"], doc["clubs"]["x-sc"])
+    ok("an unmatched spelling carries none", "aka" not in doc["clubs"]["raw:zeta united"], doc["clubs"]["raw:zeta united"])
+    ok("a school carries its roster spellings once, less those inside its name",
+       doc["schools"]["ccd:9"].get("aka") == ["southlake carroll"], doc["schools"]["ccd:9"])
+    ok("a school seen only under its own name carries none", "aka" not in doc["schools"]["ccd:1"], doc["schools"]["ccd:1"])
+
+
 def test_written_file() -> None:
     rec = record()
     with tempfile.TemporaryDirectory() as tmp:
@@ -372,7 +396,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args().verbose
-    for fn in (test_counts_equal_a_direct_computation, test_commits_never_enter_a_total, test_schools_field_gate,
+    for fn in (test_counts_equal_a_direct_computation, test_commits_never_enter_a_total, test_schools_field_gate, test_search_aka,
                test_written_file, test_out_dir_follows_the_programs_dir, test_build_hook_is_wired, test_answer_shapes):
         print(fn.__name__)
         fn()

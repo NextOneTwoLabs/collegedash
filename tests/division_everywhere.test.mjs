@@ -9,10 +9,11 @@
 // name and the next program's name (or 700 characters, whichever is sooner) must carry that program's division tag.
 //
 // Views rendered: Table, Cards, Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Clubs & schools
-// (a club's programs), Clubs & schools (one program's page: its subtitle carries the line; the "Clubs feeding X" /
-// "High schools feeding X" headings stay short), Compare column headers, Compare "Add a school" results, program profile (subtitle and
-// glance panel), not-found "Did you mean". The Clubs & schools program picker (a native <select>, which cannot
-// hold markup) is checked separately: each option sits in an <optgroup> named for its division.
+// (a club's programs; a D1 program's page, whose subtitle carries the line while the "Clubs feeding X" /
+// "High schools feeding X" headings stay short; a club and a program together; the Program box's suggestions),
+// Compare column headers, Compare "Add a school" results, program profile (subtitle and glance panel), not-found
+// "Did you mean". The clubs and schools index is Division I only, so a D2 or D3 program's Clubs & schools URL is
+// checked separately: its note names the division in words (#310).
 //
 // The mutation check is built in: the same views are rendered again from a copy of the page whose programLine()
 // drops the division, and every view must then fail. That proves each check can fail and that every view gets
@@ -64,12 +65,12 @@ function makeElement(name) {
   const el = {
     _name: name, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0, _on: {},
     dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
-    setAttribute() { }, getAttribute: () => null, addEventListener(t, fn) { el._on[t] = fn; }, removeEventListener() { },
+    setAttribute() { }, removeAttribute() { }, getAttribute: () => null, addEventListener(t, fn) { el._on[t] = fn; }, removeEventListener() { },
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null, matches: () => false, focus() { }, contains: () => false,
   };
   return el;
 }
-const HANDLES = ['S', 'renderList', 'renderSidebar', 'loadIndex', 'renderShortlist', 'renderCamps', 'renderTrends', 'renderCompare', 'renderProfile', 'renderNotFound'];
+const HANDLES = ['S', 'trendsFillList', 'renderList', 'renderSidebar', 'loadIndex', 'renderShortlist', 'renderCamps', 'renderTrends', 'renderCompare', 'renderProfile', 'renderNotFound'];
 function loadPage(transform = s => s) {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
@@ -116,8 +117,18 @@ async function renderAll(transform) {
   sb.S.compare = [...SLUGS];
   sb.S.sidebarTab = 'compare'; sb.renderSidebar(); out.push(['Sidebar compare', $('#sidebar').innerHTML, short, PROGS]);
   await sb.renderCamps(); out.push(['ID Camps', app(), short, PROGS]);
-  await sb.renderTrends('club', 'fxc'); out.push(['Clubs & schools (a club\'s programs)', app(), short, PROGS]);
-  for (const p of PROGS) { await sb.renderTrends('program', p.slug); out.push([`Clubs & schools (${p.division} program page)`, app(), short, [p]]); }
+  // Clubs & schools (#310): one page, three boxes; the selection comes from the URL. The subtitle and the results
+  // are separate elements under the stub DOM, so both are read.
+  const trends = async q => { sb.location.hash = `#/trends${q ? `?${q}` : ''}`; await sb.renderTrends(); return `<p>${$('#trSub').innerHTML}</p>${$('#trResults').innerHTML}`; };
+  out.push(['Clubs & schools (a club\'s programs)', await trends('club=fxc'), short, PROGS]);
+  const d1 = PROGS.filter(p => p.division === 'D1');
+  for (const p of d1) {
+    out.push([`Clubs & schools (${p.division} program page)`, await trends(`program=${p.slug}`), short, [p]]);
+    out.push([`Clubs & schools (club with ${p.division} program)`, await trends(`club=fxc&program=${p.slug}`), short, [p]]);
+  }
+  await trends(''); sb.trendsFillList('program'); out.push(['Clubs & schools Program box suggestions', $('#trList-program').innerHTML, short, d1]);
+  const offIndex = [];
+  for (const p of PROGS.filter(p => p.division !== 'D1')) offIndex.push([p, await trends(`program=${p.slug}`)]);
   sb.S.profiles = sb.S.profiles || {};
   await sb.renderCompare(); await settle();
   const cmp = app();
@@ -128,6 +139,7 @@ async function renderAll(transform) {
   add._on.input(); out.push(['Compare "Add a school" results', $('#cmpResults').innerHTML, short, PROGS]);
   for (const p of PROGS) { await sb.renderProfile(p.slug, 'overview'); await settle(); out.push([`Profile (${p.division})`, app(), short, [p]]); }
   sb.renderNotFound({ title: 'Page not found', message: 'x', suggestions: PROGS }); out.push(['Not found "Did you mean"', app(), long, PROGS]);
+  out.offIndex = offIndex;
   return out;
 }
 
@@ -137,8 +149,9 @@ function checkView([view, html, nameOf, progs]) {
   let seen = 0;
   for (const p of progs) {
     const at = new Set();
-    // The name as its own element (">Name<"), or leading a subtitle (">Name · …", the Clubs & schools program page).
-    const shown = [`>${nameOf(p)}<`, `>${nameOf(p)} · `].flatMap(s => [...html.matchAll(new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))].map(m => m.index));
+    // The name as its own element (">Name<"), leading a subtitle (">Name · …", the Clubs & schools program page), or
+    // after a club or school in a Clubs & schools pairing ("Club × Name", heading and subtitle).
+    const shown = [`>${nameOf(p)}<`, `>${nameOf(p)} · `, ` × ${nameOf(p)}<`, ` × ${nameOf(p)} · `].flatMap(s => [...html.matchAll(new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))].map(m => m.index));
     for (const i of shown) {
       if (html.startsWith('<option', html.lastIndexOf('<', i))) continue; // the picker's options: checked by their optgroup below
       seen++; at.add(p.slug);
@@ -156,7 +169,7 @@ test('every program-listing view shows each program with its division (D1, D2, D
   REAL = await renderAll();
   for (const v of REAL) checkView(v);
   const names = REAL.map(v => v[0]);
-  for (const need of ['Table', 'ID Camps', 'Clubs & schools (a club\'s programs)', 'Clubs & schools (D1 program page)', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
+  for (const need of ['Table', 'ID Camps', 'Clubs & schools (a club\'s programs)', 'Clubs & schools (D1 program page)', 'Clubs & schools Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
 });
 
 test('the program line reads "D1 · Conference · City, ST", the Table\'s form', async () => {
@@ -164,13 +177,16 @@ test('the program line reads "D1 · Conference · City, ST", the Table\'s form',
   assert.match(table, /<span class="team-sub"><span class="div-tag" title="[^"]+">D2<\/span><span class="pl-rest"> · Test D2 Conference · Bravoton, CA<\/span><\/span>/);
 });
 
-test('the Clubs & schools program picker groups its programs under their division', async () => {
-  const trends = REAL.find(v => v[0].startsWith('Clubs'))[1];
-  const groups = [...trends.matchAll(/<optgroup label="([^"]+)">([\s\S]*?)<\/optgroup>/g)];
-  for (const p of PROGS) {
-    const g = groups.find(m => m[2].includes(`value="${p.slug}"`));
-    assert.ok(g, `${p.slug} is not inside an optgroup`);
-    assert.match(g[1], new RegExp(`Division ${{ D1: 'I', D2: 'II', D3: 'III' }[p.division]}\\b`), `${p.slug} is grouped under ${g[1]}`);
+test('the Clubs & schools program page subtitle reads "Name · D1 · Conference · City, ST · counts" (#308 in the #310 design)', () => {
+  const page = REAL.find(v => v[0] === 'Clubs & schools (D1 program page)')[1];
+  assert.match(page, /^<p>AlphaTU · <span class="div-tag" title="Division I">D1<\/span><span class="pl-rest"> · Test D1 Conference · Alphaville, CA<\/span> · 3 current players, 2 former, 1 commit<\/p>/);
+});
+
+test('a D2 or D3 program on Clubs & schools (Division I index) is named with its division in words', () => {
+  assert.equal(REAL.offIndex.length, 2);
+  for (const [p, html] of REAL.offIndex) {
+    const words = { D2: 'Division II', D3: 'Division III' }[p.division];
+    assert.ok(html.includes(`${p.shortName} is a ${words} program`), `${p.slug}: the note does not name ${words}`);
   }
 });
 
