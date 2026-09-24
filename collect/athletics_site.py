@@ -162,8 +162,16 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         try:
             h, _ = common.fetch_text(u["scheduleSeason"](y), max_age_hours=24 * 30)
             s = ad.parse_schedule(h, base)
-            if s["games"]:
-                sched_hist[str(y)] = s["games"]
+            if not s["games"]:
+                continue
+            fall, dated = schedule_season_share(s["games"], y)
+            if dated and not 2 * fall > dated:
+                # an old-season URL that served another season (issue #301): not stored, so a history year
+                # is either that season's page or absent
+                common.log(f"  {y} schedule not stored: {fall} of {dated} dated games are Aug-Dec {y}, "
+                           f"so the page is not the {y} season")
+                continue
+            sched_hist[str(y)] = s["games"]
         except common.FetchError as e:
             common.log(f"  {y} schedule unavailable: {e}")
 
@@ -185,6 +193,19 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     data = common.unwrap_links(data)
     common.save_source(slug, NAME, data, url=u["roster"], collector=NAME, extra=extra)
     return data
+
+
+def schedule_season_share(games: list[dict], year: int) -> tuple[int, int]:
+    """(games dated August-December of `year`, games with a date) for a history schedule page (issue #301).
+
+    The collector stores a history year only when more than half of its dated games fall in that window, the
+    date half of build.schedule_valid_for (issue #287), which stays the final guard: it also needs a result
+    and places undated pages. Some old-season URLs serve the current season (29 stored years were copies of
+    2026) and one served a spring schedule (gonzaga 2024); both fail here. A page with no dates is stored and
+    left to the build. Dates are ISO (YYYY-MM-DD...), as every adapter writes them."""
+    dated = [str(g["date"]) for g in games if g.get("date")]
+    fall = [d for d in dated if d[:4] == str(year) and "08" <= d[5:7] <= "12"]
+    return len(fall), len(dated)
 
 
 def _coach_bio_for_run(slug: str, staff: list[dict], program: dict, fetch: bool) -> dict | None:
