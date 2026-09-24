@@ -867,6 +867,50 @@ def build_program_section(program, wiki, ath) -> dict:
     }
 
 
+# Issue #202. A profile's Honors lists come from the Wikipedia infobox, its season table's NCAA result from
+# the article's year-by-year table, and nothing compared the two, so where the article contradicts itself the
+# page did too: Stanford's infobox lists 2014 as a College Cup, its table row says "NCAA Third Round" (a copy
+# of the 2013 row). Stanford's own 2014 schedule settles it: quarterfinal win over Florida, then a College Cup
+# semifinal loss to Florida State. The honors are the finish these lists vouch for, highest first; each is
+# checked separately (national titles also against the champions table, see national_titles).
+HONOR_FINISHES = (("nationalTitles", 3, "NCAA Champions"), ("nationalRunnerUp", 2, "NCAA Runner-up"),
+                  ("collegeCups", 1, "NCAA College Cup"))
+_FINISH_LEVELS = (
+    (3, re.compile(r"champion(?!ship)|\b1st\b", re.I)),
+    # 'Final' and 'Finals' reached the final; 'Semifinal', 'Quarterfinal' and 'Final Four' did not
+    (2, re.compile(r"runner|(?<![a-z-])finals?\b(?!\s*(?:4|four))|\b2nd\b", re.I)),
+    (1, re.compile(r"college cup|semi-?finals?|final\s*(?:4|four)|\bt-?3rd\b", re.I)),
+)
+
+
+def ncaa_finish_level(result: str | None) -> int | None:
+    """How far a season-table NCAA result says the team went, on HONOR_FINISHES' scale: 3 champion, 2 final,
+    1 College Cup, 0 any earlier round or an unplaced mention; None when the row records no result."""
+    if not result:
+        return None
+    return next((level for level, pattern in _FINISH_LEVELS if pattern.search(result)), 0)
+
+
+def reconcile_ncaa_results(seasons: list[dict], program: dict) -> list[int]:
+    """Make each season's NCAA result agree with the Honors lists published beside it, and return the years
+    it changed. A season an Honors list places at the College Cup or beyond, whose row records a lesser finish
+    or none, takes the finish the list vouches for; ncaaResultFrom says so and keeps the row's own text. A row
+    at or beyond its list's finish is left as written ('NCAA College Cup Semifinals' stays)."""
+    changed = []
+    for s in seasons:
+        want = next(((level, label) for key, level, label in HONOR_FINISHES
+                      if s.get("year") in (program.get(key) or [])), None)
+        if not want:
+            continue
+        have = ncaa_finish_level(s.get("ncaaResult"))
+        if have is not None and have >= want[0]:
+            continue
+        s["ncaaResultFrom"] = {"source": "honors", "seasonTable": s.get("ncaaResult")}
+        s["ncaaResult"] = want[1]
+        changed.append(s["year"])
+    return changed
+
+
 def _record_from_games(games: list[dict]) -> dict:
     real = [g for g in games if not g.get("exhibition")]
     w = sum(1 for g in real if g.get("result") == "W")
@@ -1578,6 +1622,10 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
     for section, patch in (curated.get("overrides") or {}).items():
         if isinstance(profile.get(section), dict) and isinstance(patch, dict):
             _deep_update(profile[section], patch)
+    # after the overrides, so the season table agrees with the Honors the page actually shows (issue #202).
+    # D1 only: the College Cup is Division I's final four, and the page shows no College Cups for D2 or D3.
+    if profile["division"] == "D1":
+        reconcile_ncaa_results(profile["seasons"], profile["program"])
 
     commits_by_year = defaultdict(int)
     for c in profile["commitments"]:
