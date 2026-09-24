@@ -730,7 +730,8 @@ def test_card() -> None:
 
     for what, needle in (
             ("the sort options keep Admission rate", "['admit', 'Admission rate']"),
-            ("sortCmp keeps its admit key", "key === 'admit' ? (a.admissionRate ?? 1)"),
+            # the sort's keys live in SORT_SPECS since #285 (sortCmp reads them); admit still sorts on admissionRate
+            ("sortCmp keeps its admit key", "admit: { dir: 'asc', label: () => 'Admission rate', key: p => p.admissionRate ?? null }"),
             ("the table keeps its Admit column", "['admit', 'Admit', 'num', p => fmtPct(p.admissionRate)"),
             ("the at-a-glance panel keeps Admit rate", 'Admit rate</div><div class="stat-value">${fmtPct(sch.admissionRate)}'),
             ("the Overview tab keeps Admission rate", "tile('Admission rate', fmtPct(sch.admissionRate)"),
