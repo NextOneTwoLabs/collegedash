@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:11Z"
+        "asOf": "2026-09-24T16:02:24Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-5-0",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Bill Kelly"
     },
     {
@@ -894,7 +894,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:58:11Z"
+      "asOf": "2026-09-24T16:02:24Z"
     }
   },
   "rosterHistory": {
@@ -1621,10 +1621,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "text": "2-5-0",
+      "played": 7,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 2
@@ -1780,11 +1780,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Williamsport, Pa.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-3",
         "links": {
-          "watch": "https://go.flocollege.com/teams/landmark-lycoming?sp=conf-partner-k7p2",
-          "live stats": "https://lycomingathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://athletics.elmira.edu/news/2026/9/23/womens-soccer-soaring-eagles-early-goal-not-enough-in-road-match-at-lycoming.aspx",
+          "box score": "https://athletics.elmira.edu/sports/womens-soccer/stats/2026/lycoming-college/boxscore/14782",
           "history": "https://athletics.elmira.edu/sports/womens-soccer/opponent-history/lycoming-college/40"
         }
       },
@@ -2923,13 +2923,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:58:11Z"
+      "asOf": "2026-09-24T16:02:24Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Soaring Eagles Early Goal Not Enough in Road Match at Lycoming",
+        "url": "https://athletics.elmira.edu/news/2026/9/23/womens-soccer-soaring-eagles-early-goal-not-enough-in-road-match-at-lycoming.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Cobos First Shutout Lands Her Empire 8 Co-Defensive Player of the Week",
         "url": "https://athletics.elmira.edu/news/2026/9/21/womens-soccer-cobos-first-shutout-lands-her-empire-8-co-defensive-player-of-the-week.aspx",
@@ -2994,7 +3000,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:58:17Z"
+      "asOf": "2026-09-24T16:02:34Z"
     }
   },
   "camps": {
@@ -3008,20 +3014,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:17Z"
+        "asOf": "2026-09-24T16:02:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3035,10 +3041,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:24Z"
+      }
+    ]
   }
 }

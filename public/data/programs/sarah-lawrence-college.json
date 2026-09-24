@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gogryphons.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:17Z"
+        "asOf": "2026-09-24T16:07:58Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-0-5",
+      "record": "2-1-5",
       "wins": 2,
-      "losses": 0,
+      "losses": 1,
       "ties": 5,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "1-0-1",
       "headCoach": "Maurizio Grillo"
     },
@@ -938,7 +938,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gogryphons.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:17Z"
+      "asOf": "2026-09-24T16:07:58Z"
     }
   },
   "rosterHistory": {
@@ -1606,10 +1606,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 0,
+      "losses": 1,
       "ties": 5,
-      "text": "2-0-5",
-      "played": 7,
+      "text": "2-1-5",
+      "played": 8,
       "scheduled": 19,
       "confText": "1-0-1",
       "exhibitions": 0
@@ -1751,11 +1751,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Yonkers, N.Y., Fleming Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://fan.hudl.com/usa/ny/bronxville/organization/78877/sarah-lawrence-colle/team/433189/sarah-lawrence-womens-soccer",
-          "live stats": "https://gogryphons.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.gogryphons.com/sports/womens-soccer/stats/2026/william-paterson/boxscore/5839",
+          "recap": "https://www.gogryphons.com/news/2026/9/23/womens-soccer-sarah-lawrence-falls-to-william-paterson-2-1.aspx",
           "history": "https://www.gogryphons.com/sports/womens-soccer/opponent-history/william-paterson/10"
         }
       },
@@ -3131,13 +3131,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gogryphons.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:17Z"
+      "asOf": "2026-09-24T16:07:58Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Falls to William Paterson, 2-1",
+        "url": "https://gogryphons.com/news/2026/9/23/womens-soccer-sarah-lawrence-falls-to-william-paterson-2-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Workman Scores as Women's Soccer Battles Kean to 1-1 Draw",
         "url": "https://gogryphons.com/news/2026/9/21/workman-scores-as-womens-soccer-battles-kean-to-1-1-draw.aspx",
@@ -3203,18 +3209,12 @@
         "url": "https://www.gogryphons.com/news/2014/5/16/SPORTSMED_0516142315.aspx",
         "date": "2014-05-16",
         "recruiting": false
-      },
-      {
-        "title": "Virtual Tour",
-        "url": "https://www.gogryphons.com/news/2013/7/3/VirtualTours.aspx",
-        "date": "2013-07-03",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.gogryphons.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:22Z"
+      "asOf": "2026-09-24T16:08:15Z"
     }
   },
   "camps": {
@@ -3228,20 +3228,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gogryphons.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:24Z"
+        "asOf": "2026-09-24T16:08:18Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3255,10 +3255,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:58Z"
+      }
+    ]
   }
 }

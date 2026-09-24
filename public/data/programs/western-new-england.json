@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.wnegoldenbears.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:21Z"
+        "asOf": "2026-09-24T16:09:46Z"
       }
     }
   },
@@ -342,7 +342,7 @@
   ],
   "roster": {
     "season": 2026,
-    "count": 33,
+    "count": 31,
     "players": [
       {
         "number": "00",
@@ -545,26 +545,6 @@
         "clubInfo": null
       },
       {
-        "number": "9",
-        "name": "Natalia Estrada Rangel",
-        "pos": "F",
-        "posLabel": "F",
-        "height": "5-7",
-        "heightIn": 67,
-        "classLabel": "So.",
-        "classCode": "SO",
-        "hometown": "Edinburg, Texas",
-        "highSchool": "McAllen Memorial",
-        "previousSchool": "",
-        "major": "Criminal Justice",
-        "club": "",
-        "bioUrl": "https://www.wnegoldenbears.com/sports/womens-soccer/roster/natalia-estrada-rangel/11788",
-        "social": {},
-        "bio": {},
-        "clubSource": null,
-        "clubInfo": null
-      },
-      {
         "number": "10",
         "name": "Emily Smith",
         "pos": "D",
@@ -739,26 +719,6 @@
         "major": "Criminal Justice",
         "club": "",
         "bioUrl": "https://www.wnegoldenbears.com/sports/womens-soccer/roster/jenna-chiasson/11804",
-        "social": {},
-        "bio": {},
-        "clubSource": null,
-        "clubInfo": null
-      },
-      {
-        "number": "20",
-        "name": "Victoria Estrada Rangel",
-        "pos": "M/D",
-        "posLabel": "M/D",
-        "height": "5-3",
-        "heightIn": 63,
-        "classLabel": "Fr.",
-        "classCode": "FR",
-        "hometown": "Edinburg, Texas",
-        "highSchool": "McAllen Memorial",
-        "previousSchool": "",
-        "major": "Neuroscience",
-        "club": "",
-        "bioUrl": "https://www.wnegoldenbears.com/sports/womens-soccer/roster/victoria-estrada-rangel/11807",
         "social": {},
         "bio": {},
         "clubSource": null,
@@ -1029,7 +989,7 @@
         "GR": 0
       },
       "M": {
-        "FR": 4,
+        "FR": 3,
         "R-FR": 0,
         "SO": 7,
         "R-SO": 0,
@@ -1042,7 +1002,7 @@
       "F": {
         "FR": 3,
         "R-FR": 0,
-        "SO": 3,
+        "SO": 2,
         "R-SO": 0,
         "JR": 3,
         "R-JR": 0,
@@ -1053,10 +1013,10 @@
     },
     "byClass": {
       "JR": 10,
-      "SO": 11,
+      "SO": 10,
       "SR": 3,
       "GR": 1,
-      "FR": 8
+      "FR": 7
     },
     "graduatingByPos": {
       "GK": 1,
@@ -1066,7 +1026,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wnegoldenbears.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:21Z"
+      "asOf": "2026-09-24T16:09:46Z"
     }
   },
   "rosterHistory": {
@@ -1338,7 +1298,8 @@
         "ella lupo",
         "gabby sansone",
         "janelle lambert",
-        "makenna dailey"
+        "makenna dailey",
+        "natalia estrada rangel"
       ]
     },
     "2024": {
@@ -3213,7 +3174,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wnegoldenbears.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:21Z"
+      "asOf": "2026-09-24T16:09:46Z"
     }
   },
   "commitments": [],
@@ -3284,7 +3245,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.wnegoldenbears.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:25Z"
+      "asOf": "2026-09-24T16:09:53Z"
     }
   },
   "camps": {
@@ -3304,14 +3265,14 @@
       {
         "source": "camps",
         "url": "https://www.wnegoldenbears.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:25Z"
+        "asOf": "2026-09-24T16:09:53Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3325,10 +3286,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:46Z"
+      }
+    ]
   }
 }

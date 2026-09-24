@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.central.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:20:37Z"
+        "asOf": "2026-09-24T16:00:44Z"
       }
     }
   },
@@ -1063,7 +1063,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.central.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:20:37Z"
+      "asOf": "2026-09-24T16:00:44Z"
     }
   },
   "rosterHistory": {
@@ -3339,7 +3339,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.central.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:20:37Z"
+      "asOf": "2026-09-24T16:00:44Z"
     }
   },
   "commitments": [],
@@ -3410,7 +3410,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.central.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:20:41Z"
+      "asOf": "2026-09-24T16:00:56Z"
     }
   },
   "camps": {
@@ -3430,14 +3430,14 @@
       {
         "source": "camps",
         "url": "https://web.central.edu/athletics/portal/?camp=Central_Dutch_Prospect_Camp",
-        "asOf": "2026-09-23T21:20:49Z"
+        "asOf": "2026-09-24T16:01:03Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3451,10 +3451,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:44Z"
+      }
+    ]
   }
 }

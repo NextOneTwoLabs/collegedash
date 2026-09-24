@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.iwusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:13:18Z"
+        "asOf": "2026-09-24T16:03:18Z"
       }
     }
   },
@@ -376,7 +376,7 @@
         "heightIn": null,
         "classLabel": "Fr.",
         "classCode": "FR",
-        "hometown": "Plainview, New York",
+        "hometown": "Plainview, N.Y.",
         "highSchool": "Plainview Old Bethpage",
         "previousSchool": "",
         "major": "",
@@ -943,7 +943,7 @@
         "classLabel": "Fr.",
         "classCode": "FR",
         "hometown": "Morton, Ill.",
-        "highSchool": "Morton High School",
+        "highSchool": "Morton",
         "previousSchool": "",
         "major": "",
         "club": "",
@@ -1124,7 +1124,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.iwusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:13:18Z"
+      "asOf": "2026-09-24T16:03:18Z"
     }
   },
   "rosterHistory": {
@@ -1935,7 +1935,7 @@
         "conferenceGame": true,
         "homeAway": "A",
         "opponent": "North Central",
-        "opponentRank": 18,
+        "opponentRank": 16,
         "opponentSeed": null,
         "location": "Naperville, Ill., Benedetti-Wehrli Stadium",
         "result": null,
@@ -3275,7 +3275,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.iwusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:13:18Z"
+      "asOf": "2026-09-24T16:03:18Z"
     }
   },
   "commitments": [],
@@ -3346,7 +3346,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.iwusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:21Z"
+      "asOf": "2026-09-24T16:03:23Z"
     }
   },
   "camps": {
@@ -3366,14 +3366,14 @@
       {
         "source": "camps",
         "url": "https://www.titansoccercamps.com/titan-summer-id-camps.cfm",
-        "asOf": "2026-09-23T19:13:27Z"
+        "asOf": "2026-09-24T16:03:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3387,10 +3387,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:18Z"
+      }
+    ]
   }
 }

@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hoodathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:38Z"
+        "asOf": "2026-09-24T16:02:54Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-5-0",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Molly Kovarik"
     },
     {
@@ -921,7 +921,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hoodathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:38Z"
+      "asOf": "2026-09-24T16:02:54Z"
     }
   },
   "rosterHistory": {
@@ -1567,10 +1567,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "text": "2-5-0",
+      "played": 7,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 0
@@ -1694,11 +1694,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Fredericksburg, VA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "2-1",
         "links": {
-          "watch": "https://team1sports.com/umweagles/",
-          "live stats": "https://hoodathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.hoodathletics.com/news/2026/9/23/womens-soccer-womens-soccer-hunted-down-by-the-eagles.aspx",
+          "box score": "https://www.hoodathletics.com/sports/womens-soccer/stats/2026/university-of-mary-washington/boxscore/12121",
           "history": "https://www.hoodathletics.com/sports/womens-soccer/opponent-history/university-of-mary-washington/37"
         }
       },
@@ -2943,13 +2943,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hoodathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:38Z"
+      "asOf": "2026-09-24T16:02:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's soccer hunted down by the Eagles",
+        "url": "https://hoodathletics.com/news/2026/9/23/womens-soccer-womens-soccer-hunted-down-by-the-eagles.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer shutout Royals at home",
         "url": "https://hoodathletics.com/news/2026/9/19/womens-soccer-blazers-shutout-royals-at-home.aspx",
@@ -3014,7 +3020,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hoodathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:47Z"
+      "asOf": "2026-09-24T16:02:58Z"
     }
   },
   "camps": {
@@ -3028,7 +3034,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Blazer Soccer Fall ID Clinic",
@@ -3058,14 +3064,14 @@
       {
         "source": "camps",
         "url": "https://www.blazersoccercamps.com/",
-        "asOf": "2026-09-23T19:12:52Z"
+        "asOf": "2026-09-24T16:03:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3079,10 +3085,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:54Z"
+      }
+    ]
   }
 }

@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://uwoshkoshtitans.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:20Z"
+        "asOf": "2026-09-24T16:10:16Z"
       }
     }
   },
@@ -328,12 +328,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-0",
+      "record": "4-2-1",
       "wins": 4,
       "losses": 2,
-      "ties": 0,
+      "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Erin Coppernoll"
     },
     {
@@ -1109,7 +1109,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uwoshkoshtitans.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:20Z"
+      "asOf": "2026-09-24T16:10:16Z"
     }
   },
   "rosterHistory": {
@@ -1838,9 +1838,9 @@
     "record": {
       "wins": 4,
       "losses": 2,
-      "ties": 0,
-      "text": "4-2-0",
-      "played": 6,
+      "ties": 1,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 27,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -1996,12 +1996,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Oshkosh, Wis., J. J. Keller Field at Titan Stadium",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://www.wiacnetwork.com/uwoshkosh/?B=4180266",
-          "live stats": "https://uwoshkoshtitans.com/sidearmstats/wsoc/summary",
-          "tickets": "https://eventmanager.vbotickets.com/tickets.asp?Page=Event&eid=203655",
+          "box score": "https://uwoshkoshtitans.com/sports/womens-soccer/stats/2026/carthage-college/boxscore/19496",
+          "recap": "https://uwoshkoshtitans.com/news/2026/9/23/womens-soccer-titans-firebirds-battle-to-tie.aspx",
           "history": "https://uwoshkoshtitans.com/sports/womens-soccer/opponent-history/carthage-college/12"
         }
       },
@@ -3410,13 +3409,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uwoshkoshtitans.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:20Z"
+      "asOf": "2026-09-24T16:10:16Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Titans, Firebirds Battle To Tie",
+        "url": "https://uwoshkoshtitans.com/news/2026/9/23/womens-soccer-titans-firebirds-battle-to-tie.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Titans Post Fourth Shutout Of Season In 151 Derby Victory Over Dubuque",
         "url": "https://uwoshkoshtitans.com/news/2026/9/19/womens-soccer-titans-post-fourth-shutout-of-season-in-151-derby-victory-over-dubuque.aspx",
@@ -3481,7 +3486,7 @@
     "_meta": {
       "source": "news",
       "url": "https://uwoshkoshtitans.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:23Z"
+      "asOf": "2026-09-24T16:10:23Z"
     }
   },
   "camps": {
@@ -3495,20 +3500,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://womenssoccer.uwoshkoshsportscamps.com/",
-        "asOf": "2026-09-23T20:47:26Z"
+        "asOf": "2026-09-24T16:10:25Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3522,10 +3527,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:16Z"
+      }
+    ]
   }
 }

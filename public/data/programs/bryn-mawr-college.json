@@ -285,7 +285,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gobrynmawr.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:20:52Z"
+        "asOf": "2026-09-24T15:59:48Z"
       }
     }
   },
@@ -293,13 +293,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-0",
+      "record": "1-6-0",
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "0-1-0",
+      "gamesPlayed": 7,
+      "confRecord": "0-2-0",
       "headCoach": "Claire Scanlan"
     },
     {
@@ -935,7 +935,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobrynmawr.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:20:52Z"
+      "asOf": "2026-09-24T15:59:48Z"
     }
   },
   "rosterHistory": {
@@ -1538,12 +1538,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "1-5-0",
-      "played": 6,
+      "text": "1-6-0",
+      "played": 7,
       "scheduled": 16,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 0
     },
     "games": [
@@ -1662,14 +1662,14 @@
         "conferenceGame": true,
         "homeAway": "H",
         "opponent": "Swarthmore College",
-        "opponentRank": null,
+        "opponentRank": 21,
         "opponentSeed": null,
         "location": "Bryn Mawr, PA / Applebee Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-6",
         "links": {
-          "watch": "https://www.centennialconference.tv/brynmawr/",
-          "live stats": "https://gobrynmawr.com/sidearmstats/wsoc/summary",
+          "box score": "https://gobrynmawr.com/sports/womens-soccer/stats/2026/swarthmore-college/boxscore/4625",
+          "recap": "https://gobrynmawr.com/news/2026/9/23/soccer-drops-home-match-to-no-21-swarthmore.aspx",
           "history": "https://gobrynmawr.com/sports/womens-soccer/opponent-history/swarthmore-college/10"
         }
       },
@@ -2780,13 +2780,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobrynmawr.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:20:52Z"
+      "asOf": "2026-09-24T15:59:48Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Soccer Drops Home Match to No. 21 Swarthmore",
+        "url": "https://gobrynmawr.com/news/2026/9/23/soccer-drops-home-match-to-no-21-swarthmore.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Bryn Mawr Holds McDaniel Scoreless in Second Half, Despite Falling 2-0 in Conference Play",
         "url": "https://gobrynmawr.com/news/2026/9/19/soccer-bryn-mawr-holds-mcdaniel-scoreless-in-second-half-despite-falling-2-0-in-conference-play.aspx",
@@ -2851,7 +2857,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gobrynmawr.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:20:59Z"
+      "asOf": "2026-09-24T15:59:58Z"
     }
   },
   "camps": {
@@ -2865,20 +2871,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://gobrynmawr.com/sports/2024/2/1/soccer-camps-and-clinics.aspx",
-        "asOf": "2026-09-23T21:21:10Z"
+        "asOf": "2026-09-24T16:00:00Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2892,10 +2898,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:48Z"
+      }
+    ]
   }
 }

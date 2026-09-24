@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.neumannathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:41Z"
+        "asOf": "2026-09-24T16:05:53Z"
       }
     }
   },
@@ -312,12 +312,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-3-0",
+      "record": "2-4-0",
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Kurt Nusshag"
     },
     {
@@ -894,7 +894,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.neumannathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:41Z"
+      "asOf": "2026-09-24T16:05:53Z"
     }
   },
   "rosterHistory": {
@@ -1515,10 +1515,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "text": "2-3-0",
-      "played": 5,
+      "text": "2-4-0",
+      "played": 6,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1640,11 +1640,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Aston, Pa., Neumann University Turf Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://gomacsports.tv/neumann/",
-          "live stats": "https://www.neumannathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.neumannathletics.com/sports/womens-soccer/stats/2026/rutgers-university-camden/boxscore/13094",
+          "recap": "https://www.neumannathletics.com/news/2026/9/23/womens-soccer-womens-soccer-slowed-by-rutgers-camden.aspx",
           "history": "https://www.neumannathletics.com/sports/womens-soccer/opponent-history/rutgers-camden/66"
         }
       },
@@ -2959,13 +2959,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.neumannathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:41Z"
+      "asOf": "2026-09-24T16:05:53Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Slowed by Rutgers-Camden",
+        "url": "https://neumannathletics.com/news/2026/9/23/womens-soccer-womens-soccer-slowed-by-rutgers-camden.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Blanks Wilson College",
         "url": "https://neumannathletics.com/news/2026/9/19/womens-soccer-womens-soccer-blanks-wilson-college.aspx",
@@ -3030,7 +3036,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.neumannathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:52Z"
+      "asOf": "2026-09-24T16:05:57Z"
     }
   },
   "camps": {
@@ -3044,7 +3050,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Fall ID Clinic",
@@ -3143,14 +3149,14 @@
       {
         "source": "camps",
         "url": "https://www.nusportscamps.com/",
-        "asOf": "2026-09-23T19:12:55Z"
+        "asOf": "2026-09-24T16:05:59Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3164,10 +3170,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:53Z"
+      }
+    ]
   }
 }

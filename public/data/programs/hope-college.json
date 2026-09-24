@@ -328,7 +328,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.hope.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:14Z"
+        "asOf": "2026-09-24T16:02:54Z"
       }
     }
   },
@@ -336,12 +336,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
-      "wins": 3,
+      "record": "4-2-1",
+      "wins": 4,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Holly Van Noord"
     },
     {
@@ -970,7 +970,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.hope.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:14Z"
+      "asOf": "2026-09-24T16:02:54Z"
     }
   },
   "rosterHistory": {
@@ -1706,11 +1706,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 16,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1834,11 +1834,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Springfield, OH",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://tigersportsnetwork.com/",
-          "live stats": "https://wittenbergtigers.com/sports/wsoc/2026-27/boxscores/20260923_ilua.xml",
+          "recap": "https://athletics.hope.edu/news/2026/9/23/womens-soccer-scores-three-first-half-goals-wins-at-wittenberg.aspx",
+          "box score": "https://athletics.hope.edu/sports/womens-soccer/stats/2026/wittenberg-university/boxscore/18586",
           "history": "https://athletics.hope.edu/sports/womens-soccer/opponent-history/wittenberg-university/185"
         }
       },
@@ -1849,7 +1849,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "University of Chicago",
-        "opponentRank": null,
+        "opponentRank": 3,
         "opponentSeed": null,
         "location": "Chicago, IL",
         "result": null,
@@ -3019,13 +3019,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.hope.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:14Z"
+      "asOf": "2026-09-24T16:02:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Scores Three First-Half Goals, Cruises Past Wittenberg",
+        "url": "https://athletics.hope.edu/news/2026/9/23/womens-soccer-scores-three-first-half-goals-wins-at-wittenberg.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Strikes First, Tops Ohio Northern",
         "url": "https://athletics.hope.edu/news/2026/9/19/womens-soccer-strikes-first-tops-ohio-northern.aspx",
@@ -3091,18 +3097,12 @@
         "url": "https://athletics.hope.edu/news/2022/7/19/fightsong.aspx",
         "date": "2022-07-19",
         "recruiting": false
-      },
-      {
-        "title": "SUBSCRIBE",
-        "url": "https://athletics.hope.edu/news/2022/7/19/general-email-sports-report-signup.aspx",
-        "date": "2022-07-19",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.hope.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:20Z"
+      "asOf": "2026-09-24T16:03:00Z"
     }
   },
   "camps": {
@@ -3116,7 +3116,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [
       {
         "name": "Fall ID Camp",
@@ -3146,14 +3146,14 @@
       {
         "source": "camps",
         "url": "https://www.hopewomenssoccer.com/",
-        "asOf": "2026-09-23T19:12:22Z"
+        "asOf": "2026-09-24T16:03:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3167,10 +3167,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:54Z"
+      }
+    ]
   }
 }

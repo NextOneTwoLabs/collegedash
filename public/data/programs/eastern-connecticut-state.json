@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gowarriorathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:27Z"
+        "asOf": "2026-09-24T16:01:30Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-0",
-      "wins": 5,
+      "record": "6-1-0",
+      "wins": 6,
       "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "2-0-0",
       "headCoach": "Sarah Tompkins"
     },
@@ -1011,7 +1011,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gowarriorathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:27Z"
+      "asOf": "2026-09-24T16:01:30Z"
     }
   },
   "rosterHistory": {
@@ -1680,11 +1680,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 1,
       "ties": 0,
-      "text": "5-1-0",
-      "played": 6,
+      "text": "6-1-0",
+      "played": 7,
       "scheduled": 16,
       "confText": "2-0-0",
       "exhibitions": 0
@@ -1808,11 +1808,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Mansfield, Conn., Rick McCarthy Field (turf)",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://www.flocollege.com/schools/6469647-eastern-connecticut-state",
-          "live stats": "https://gowarriorathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://gowarriorathletics.com/sports/womens-soccer/stats/2026/union-college/boxscore/7916",
+          "recap": "https://gowarriorathletics.com/news/2026/9/23/two-goal-first-half-for-corona-helps-womens-soccer-stave-off-union-college.aspx",
           "history": "https://gowarriorathletics.com/sports/womens-soccer/opponent-history/union-college/166"
         }
       },
@@ -2916,13 +2916,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gowarriorathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:27Z"
+      "asOf": "2026-09-24T16:01:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Two-Goal First Half for Corona Helps Women's Soccer Stave Off Union College",
+        "url": "https://gowarriorathletics.com/news/2026/9/23/two-goal-first-half-for-corona-helps-womens-soccer-stave-off-union-college.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Burnell Earns First LEC Offensive Player of the Week for Women’s Soccer, Harmon and Balgach Repeat as LEC Goalkeeper and Rookie of the Week",
         "url": "https://gowarriorathletics.com/news/2026/9/21/burnell-earns-first-lec-offensive-player-of-the-week-for-womens-soccer-harmon-and-balgach-repeat-as-lec-goalkeeper-and-rookie-of-the-week.aspx",
@@ -2987,7 +2993,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gowarriorathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:29Z"
+      "asOf": "2026-09-24T16:01:37Z"
     }
   },
   "camps": {
@@ -3001,20 +3007,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://gowarriorathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:29Z"
+        "asOf": "2026-09-24T16:01:37Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3028,10 +3034,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:30Z"
+      }
+    ]
   }
 }

@@ -293,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.bowdoin.edu/sports/wsoc/roster",
-        "asOf": "2026-09-23T21:20:27Z"
+        "asOf": "2026-09-24T15:59:41Z"
       }
     }
   },
@@ -301,12 +301,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-0",
-      "wins": 3,
+      "record": "4-3-0",
+      "wins": 4,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "1-3-0",
       "headCoach": "Brianne Smithson"
     },
@@ -976,7 +976,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bowdoin.edu/sports/wsoc/roster",
-      "asOf": "2026-09-23T21:20:27Z"
+      "asOf": "2026-09-24T15:59:41Z"
     }
   },
   "rosterHistory": {
@@ -1636,11 +1636,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 0,
-      "text": "3-3-0",
-      "played": 6,
+      "text": "4-3-0",
+      "played": 7,
       "scheduled": 15,
       "confText": "1-3-0",
       "exhibitions": 0
@@ -1764,11 +1764,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Boston, Mass.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-1",
         "links": {
-          "watch": "https://go.flocollege.com/teams/emerson-college?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=emerson-college",
-          "live stats": "https://emersonlions.com/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.bowdoin.edu/sports/womens-soccer/stats/2026/emerson/boxscore/14157",
+          "recap": "https://athletics.bowdoin.edu/news/2026/9/23/womens-soccer-returns-to-win-column-with-road-triumph-at-emerson.aspx",
           "history": "https://athletics.bowdoin.edu/sports/womens-soccer/opponent-history/emerson-college/57"
         }
       },
@@ -2871,13 +2871,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bowdoin.edu/sports/wsoc/schedule",
-      "asOf": "2026-09-23T21:20:27Z"
+      "asOf": "2026-09-24T15:59:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Returns to Win Column With Road Triumph at Emerson",
+        "url": "https://athletics.bowdoin.edu/news/2026/9/23/womens-soccer-returns-to-win-column-with-road-triumph-at-emerson.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Falls at home to Williams Sunday",
         "url": "https://athletics.bowdoin.edu/news/2026/9/20/mens-soccer-womens-soccer-falls-at-home-to-williams-sunday.aspx",
@@ -2942,7 +2948,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.bowdoin.edu/sports/wsoc/archives",
-      "asOf": "2026-09-23T21:20:30Z"
+      "asOf": "2026-09-24T15:59:46Z"
     }
   },
   "camps": {
@@ -2956,20 +2962,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.nesocceracademy.com/new-england-soccer-academy_-id-clinic-series.cfm",
-        "asOf": "2026-09-23T21:20:36Z"
+        "asOf": "2026-09-24T15:59:52Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2983,10 +2989,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:41Z"
+      }
+    ]
   }
 }

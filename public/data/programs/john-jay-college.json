@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.johnjayathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:26Z"
+        "asOf": "2026-09-24T16:03:29Z"
       }
     }
   },
@@ -319,12 +319,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-0",
+      "record": "1-4-1",
       "wins": 1,
       "losses": 4,
-      "ties": 0,
+      "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Ajani Clunie"
     },
     {
@@ -858,7 +858,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.johnjayathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:06:26Z"
+      "asOf": "2026-09-24T16:03:29Z"
     }
   },
   "rosterHistory": {
@@ -1409,9 +1409,9 @@
     "record": {
       "wins": 1,
       "losses": 4,
-      "ties": 0,
-      "text": "1-4-0",
-      "played": 5,
+      "ties": 1,
+      "text": "1-4-1",
+      "played": 6,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 0
@@ -1549,12 +1549,12 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Field #70, Randall's Island - Soccer",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://johnjayathletics.com/watch/",
-          "live stats": "https://johnjayathletics.com/sidearmstats/wsoc/summary",
-          "history": "https://www.johnjayathletics.com/sports/womens-soccer/opponent-history/kean-university/2"
+          "recap": "https://www.johnjayathletics.com/news/2026/9/23/womens-soccer-and-kean-jersey-city-battle-to-scoreless-draw-at-randalls-island-wednesday.aspx",
+          "box score": "https://www.johnjayathletics.com/sports/womens-soccer/stats/2026/kean-jersey-city/boxscore/12385",
+          "history": "https://www.johnjayathletics.com/sports/womens-soccer/opponent-history/kean-jersey-city/394"
         }
       },
       {
@@ -2859,13 +2859,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.johnjayathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:06:26Z"
+      "asOf": "2026-09-24T16:03:29Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer And Kean Jersey City Battle To Scoreless Draw At Randall's Island Wednesday",
+        "url": "https://johnjayathletics.com/news/2026/9/23/womens-soccer-and-kean-jersey-city-battle-to-scoreless-draw-at-randalls-island-wednesday.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Ava Lopez Named CUNYAC Women's Soccer Player of the Week",
         "url": "https://johnjayathletics.com/news/2026/9/21/ava-lopez-named-cunyac-womens-soccer-player-of-the-week.aspx",
@@ -2930,7 +2936,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.johnjayathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:31Z"
+      "asOf": "2026-09-24T16:03:36Z"
     }
   },
   "camps": {
@@ -2944,20 +2950,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.johnjayathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:31Z"
+        "asOf": "2026-09-24T16:03:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2971,10 +2977,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:29Z"
+      }
+    ]
   }
 }

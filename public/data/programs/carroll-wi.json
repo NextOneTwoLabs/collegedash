@@ -328,7 +328,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gopios.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:13:27Z"
+        "asOf": "2026-09-24T16:00:27Z"
       }
     }
   },
@@ -1155,7 +1155,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gopios.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:13:27Z"
+      "asOf": "2026-09-24T16:00:27Z"
     }
   },
   "rosterHistory": {
@@ -3414,7 +3414,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gopios.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:13:27Z"
+      "asOf": "2026-09-24T16:00:27Z"
     }
   },
   "commitments": [],
@@ -3485,7 +3485,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gopios.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:31Z"
+      "asOf": "2026-09-24T16:00:34Z"
     }
   },
   "camps": {
@@ -3505,14 +3505,14 @@
       {
         "source": "camps",
         "url": "https://www.gopios.com/sports/2025/4/4/carroll-university-mens-womens-soccer-camps.aspx",
-        "asOf": "2026-09-23T19:13:35Z"
+        "asOf": "2026-09-24T16:00:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3526,10 +3526,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:27Z"
+      }
+    ]
   }
 }

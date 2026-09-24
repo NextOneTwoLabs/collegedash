@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.unionathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:45Z"
+        "asOf": "2026-09-24T16:09:19Z"
       }
     }
   },
@@ -294,12 +294,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-2",
+      "record": "2-3-2",
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Karen Perron"
     },
     {
@@ -976,7 +976,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.unionathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:09:19Z"
     }
   },
   "rosterHistory": {
@@ -1675,10 +1675,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
-      "text": "2-2-2",
-      "played": 6,
+      "text": "2-3-2",
+      "played": 7,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1802,10 +1802,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Willimantic, CT",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "live stats": "https://gowarriorathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.unionathletics.com/sports/womens-soccer/stats/2026/eastern-connecticut-state/boxscore/27392",
+          "recap": "https://www.unionathletics.com/news/2026/9/23/womens-soccer-can-t-overcome-slow-start-at-eastern-ct.aspx",
           "history": "https://www.unionathletics.com/sports/womens-soccer/opponent-history/eastern-connecticut-state/167"
         }
       },
@@ -3052,7 +3053,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.unionathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:09:19Z"
     }
   },
   "commitments": [],
@@ -3062,6 +3063,24 @@
       {
         "title": "Women's Hockey Starts 2026-27 Season at Franklin Pierce",
         "url": "https://unionathletics.com/news/2026/9/23/womens-ice-hockey-womens-hockey-starts-2026-27-season-at-franklin-pierce.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "Women's Tennis Cruises to Win in Liberty League Opener",
+        "url": "https://unionathletics.com/news/2026/9/23/womens-tennis-cruises-to-win-in-liberty-league-opener.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "Field Hockey Starts Strong, Can't Hold On in Loss to #4 Williams",
+        "url": "https://unionathletics.com/news/2026/9/23/field-hockey-starts-strong-can-t-hold-on-in-loss-to-4-williams.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "Women's Soccer Can't Overcome Slow Start at Eastern CT",
+        "url": "https://unionathletics.com/news/2026/9/23/womens-soccer-can-t-overcome-slow-start-at-eastern-ct.aspx",
         "date": "2026-09-23",
         "recruiting": false
       },
@@ -3112,18 +3131,12 @@
         "url": "https://unionathletics.com/news/2026/9/19/mens-soccer-settles-for-2-2-draw-with-plattsburgh-state.aspx",
         "date": "2026-09-19",
         "recruiting": false
-      },
-      {
-        "title": "Men's Tennis Hosts Annual Garnet Charger Invitational",
-        "url": "https://unionathletics.com/news/2026/9/19/mens-tennis-hosts-annual-garnet-charger-invitational.aspx",
-        "date": "2026-09-19",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.unionathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:53Z"
+      "asOf": "2026-09-24T16:09:30Z"
     }
   },
   "camps": {
@@ -3137,20 +3150,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.unionathletics.com/camp/wsoc",
-        "asOf": "2026-09-23T19:09:00Z"
+        "asOf": "2026-09-24T16:09:32Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3164,10 +3177,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:19Z"
+      }
+    ]
   }
 }

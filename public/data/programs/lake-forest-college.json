@@ -327,7 +327,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goforesters.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:46Z"
+        "asOf": "2026-09-24T16:03:41Z"
       }
     }
   },
@@ -335,13 +335,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "7-0-1",
-      "wins": 7,
+      "record": "8-0-1",
+      "wins": 8,
       "losses": 0,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 9,
+      "confRecord": "2-0-0",
       "headCoach": "T.R. Bell '96"
     },
     {
@@ -1119,7 +1119,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goforesters.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:46Z"
+      "asOf": "2026-09-24T16:03:41Z"
     }
   },
   "rosterHistory": {
@@ -1781,13 +1781,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 7,
+      "wins": 8,
       "losses": 0,
       "ties": 1,
-      "text": "7-0-1",
-      "played": 8,
+      "text": "8-0-1",
+      "played": 9,
       "scheduled": 21,
-      "confText": "1-0-0",
+      "confText": "2-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -1945,11 +1945,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Appleton, WI",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://watchmidwestsports.com/lawrencevikings/",
-          "live stats": "https://vikings.lawrence.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.goforesters.com/sports/womens-soccer/stats/2026/lawrence-university/boxscore/13986",
+          "recap": "https://www.goforesters.com/news/2026/9/23/womens-soccer-lake-forest-defeats-previously-unbeaten-lawrence-2-0.aspx",
           "history": "https://www.goforesters.com/sports/womens-soccer/opponent-history/lawrence-university/15"
         }
       },
@@ -3364,13 +3364,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goforesters.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:46Z"
+      "asOf": "2026-09-24T16:03:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Lake Forest Defeats Previously Unbeaten Lawrence 2-0",
+        "url": "https://goforesters.com/news/2026/9/23/womens-soccer-lake-forest-defeats-previously-unbeaten-lawrence-2-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Annabelle Schroeder Repeats as MWC Offensive Performer of the Week",
         "url": "https://goforesters.com/news/2026/9/21/womens-soccer-annabelle-schroeder-repeats-as-mwc-offensive-performer-of-the-week.aspx",
@@ -3435,7 +3441,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goforesters.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:55Z"
+      "asOf": "2026-09-24T16:03:53Z"
     }
   },
   "camps": {
@@ -3449,20 +3455,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.goforesters.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:56Z"
+        "asOf": "2026-09-24T16:03:53Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3476,10 +3482,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:41Z"
+      }
+    ]
   }
 }

@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.purchasecollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:28Z"
+        "asOf": "2026-09-24T16:07:21Z"
       }
     }
   },
@@ -287,13 +287,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-1-2",
+      "record": "0-2-2",
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 3,
-      "confRecord": "0-0-1",
+      "gamesPlayed": 4,
+      "confRecord": "0-1-1",
       "headCoach": "Hardeepak \"Nick\" Malvai"
     },
     {
@@ -929,7 +929,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.purchasecollegeathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:28Z"
+      "asOf": "2026-09-24T16:07:21Z"
     }
   },
   "rosterHistory": {
@@ -1458,12 +1458,12 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "0-1-2",
-      "played": 3,
+      "text": "0-2-2",
+      "played": 4,
       "scheduled": 18,
-      "confText": "0-0-1",
+      "confText": "0-1-1",
       "exhibitions": 0
     },
     "games": [
@@ -1531,11 +1531,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Purchase, NY",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://fan.hudl.com/usa/ny/purchase/organization/94309/suny---purchase-coll",
-          "live stats": "http://sidearmstats.com/purchase/wsoc/",
+          "box score": "https://www.purchasecollegeathletics.com/sports/womens-soccer/stats/2026/university-of-mount-saint-vincent/boxscore/6615",
+          "recap": "https://www.purchasecollegeathletics.com/news/2026/9/23/womens-soccer-bested-by-mount-st-vincent.aspx",
           "history": "https://www.purchasecollegeathletics.com/sports/womens-soccer/opponent-history/university-of-mount-saint-vincent/96"
         }
       },
@@ -2814,13 +2814,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.purchasecollegeathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:28Z"
+      "asOf": "2026-09-24T16:07:21Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Bested by Mount St. Vincent",
+        "url": "https://purchasecollegeathletics.com/news/2026/9/23/womens-soccer-bested-by-mount-st-vincent.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Panthers Collect Tie at Old Westbury",
         "url": "https://purchasecollegeathletics.com/news/2026/9/19/womens-soccer-panthers-collect-tie-at-old-westbury.aspx",
@@ -2885,7 +2891,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.purchasecollegeathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:32Z"
+      "asOf": "2026-09-24T16:07:30Z"
     }
   },
   "camps": {
@@ -2899,20 +2905,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.purchasecollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:32Z"
+        "asOf": "2026-09-24T16:07:30Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2926,10 +2932,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:21Z"
+      }
+    ]
   }
 }

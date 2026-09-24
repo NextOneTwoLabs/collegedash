@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://suriverhawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:21:37Z"
+        "asOf": "2026-09-24T16:08:55Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-1-0",
-      "wins": 6,
+      "record": "7-1-0",
+      "wins": 7,
       "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Nick Hoover '06"
     },
     {
@@ -1061,7 +1061,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://suriverhawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:21:37Z"
+      "asOf": "2026-09-24T16:08:55Z"
     }
   },
   "rosterHistory": {
@@ -1874,11 +1874,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 6,
+      "wins": 7,
       "losses": 1,
       "ties": 0,
-      "text": "6-1-0",
-      "played": 7,
+      "text": "7-1-0",
+      "played": 8,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -2056,11 +2056,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Stevenson, MD",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://team1sports.com/gomustangsports/",
-          "live stats": "https://gomustangsports.com/sidearmstats/wsoc/summary",
+          "box score": "https://suriverhawks.com/sports/womens-soccer/stats/2026/stevenson-university/boxscore/13796",
+          "recap": "https://suriverhawks.com/news/2026/9/23/womens-soccer-baczors-early-header-lifts-river-hawks-past-stevenson.aspx",
           "history": "https://suriverhawks.com/sports/womens-soccer/opponent-history/stevenson-university/135"
         }
       },
@@ -2185,7 +2185,7 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.flocollege.com/signup?redirect=%2Flive%2F269639&utm_campaign=839460susquehannavsmo&utm_medium=partner&utm_source=multiple&utm_content=signup&contract_id=0063m00000u4k10aaa&coverage_id=&sp=conf-partner-k7p2",
+          "watch": "https://go.flocollege.com/teams/landmark-moravian?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=moravian",
           "live stats": "https://moraviansports.com/sports/wsoc/2026-27/boxscores/20261017_89za.xml",
           "history": "https://suriverhawks.com/sports/womens-soccer/opponent-history/moravian-university/109"
         }
@@ -3459,13 +3459,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://suriverhawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:21:37Z"
+      "asOf": "2026-09-24T16:08:55Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Baczor's Early Header Lifts River Hawks Past Stevenson",
+        "url": "https://suriverhawks.com/news/2026/9/23/womens-soccer-baczors-early-header-lifts-river-hawks-past-stevenson.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "River Hawks Blank Notre Dame (Md.) 2-Nil",
         "url": "https://suriverhawks.com/news/2026/9/18/womens-soccer-river-hawks-blank-notre-dame-md-2-nil.aspx",
@@ -3530,7 +3536,7 @@
     "_meta": {
       "source": "news",
       "url": "https://suriverhawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:21:41Z"
+      "asOf": "2026-09-24T16:09:00Z"
     }
   },
   "camps": {
@@ -3544,20 +3550,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://suriverhawks.com/camp",
-        "asOf": "2026-09-23T21:21:45Z"
+        "asOf": "2026-09-24T16:09:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3571,10 +3577,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:55Z"
+      }
+    ]
   }
 }

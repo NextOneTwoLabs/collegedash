@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.saintmaryssports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:38Z"
+        "asOf": "2026-09-24T16:08:33Z"
       }
     }
   },
@@ -287,12 +287,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
+      "record": "1-5-1",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "0-2-0",
       "headCoach": "Averi Cash"
     },
@@ -1230,7 +1230,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:38Z"
+      "asOf": "2026-09-24T16:08:33Z"
     }
   },
   "rosterHistory": {
@@ -2219,10 +2219,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "text": "1-5-1",
+      "played": 7,
       "scheduled": 20,
       "confText": "0-2-0",
       "exhibitions": 0
@@ -2362,11 +2362,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Menomonie, WI / Nelson Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "4-0",
         "links": {
-          "watch": "https://wiacnetwork.com/stout/",
-          "live stats": "https://stoutbluedevils.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.saintmaryssports.com/news/2026/9/23/womens-soccer-cardinals-fall-to-the-blue-devils.aspx",
+          "box score": "https://www.saintmaryssports.com/sports/womens-soccer/stats/2026/university-of-wisconsin-stout/boxscore/25365",
           "history": "https://www.saintmaryssports.com/sports/womens-soccer/opponent-history/university-of-wisconsin-stout/173"
         }
       },
@@ -3661,13 +3661,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:38Z"
+      "asOf": "2026-09-24T16:08:33Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Cardinals Fall to the Blue Devils",
+        "url": "https://saintmaryssports.com/news/2026/9/23/womens-soccer-cardinals-fall-to-the-blue-devils.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Oles Pressure Too Much for Cardinals",
         "url": "https://saintmaryssports.com/news/2026/9/19/womens-soccer-oles-pressure-too-much-for-cardinals.aspx",
@@ -3732,7 +3738,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:42Z"
+      "asOf": "2026-09-24T16:08:39Z"
     }
   },
   "camps": {
@@ -3746,20 +3752,20 @@
     "robotsBlocked": true,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://smumn.universitytickets.com/w/event.aspx?id=1739&p=1",
-        "asOf": "2026-09-23T19:01:51Z"
+        "asOf": "2026-09-24T16:08:48Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3773,10 +3779,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:33Z"
+      }
+    ]
   }
 }

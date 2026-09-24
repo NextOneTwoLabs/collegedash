@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://wheatoncollegelyons.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:09Z"
+        "asOf": "2026-09-24T16:10:06Z"
       }
     }
   },
@@ -287,12 +287,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-2",
-      "wins": 3,
+      "record": "4-2-2",
+      "wins": 4,
       "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "1-0-1",
       "headCoach": "Mary-Frances Monroe"
     },
@@ -380,7 +380,7 @@
         "hometown": "Simsbury, Conn.",
         "highSchool": "Simsbury",
         "previousSchool": "",
-        "major": "Business",
+        "major": "Biology (Pre-PA)",
         "club": "",
         "bioUrl": "https://wheatoncollegelyons.com/sports/womens-soccer/roster/olivia-king/7791",
         "social": {},
@@ -909,7 +909,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://wheatoncollegelyons.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:09Z"
+      "asOf": "2026-09-24T16:10:06Z"
     }
   },
   "rosterHistory": {
@@ -1483,11 +1483,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 2,
-      "text": "3-2-2",
-      "played": 7,
+      "text": "4-2-2",
+      "played": 8,
       "scheduled": 18,
       "confText": "1-0-1",
       "exhibitions": 0
@@ -1629,11 +1629,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Norton, MA, Christina Mirrione ’99 Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://flosports.link/4wZMYpG",
-          "live stats": "https://wheatoncollegelyons.com/sidearmstats/wsoc/summary",
+          "box score": "https://wheatoncollegelyons.com/sports/womens-soccer/stats/2026/fitchburg-state-college/boxscore/10192",
+          "recap": "https://wheatoncollegelyons.com/news/2026/9/23/parsons-lifts-womens-soccer-over-fitchburg-state-2-1.aspx",
           "history": "https://wheatoncollegelyons.com/sports/womens-soccer/opponent-history/fitchburg-state-college/80"
         }
       },
@@ -2860,13 +2860,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://wheatoncollegelyons.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:09Z"
+      "asOf": "2026-09-24T16:10:06Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Parsons Lifts Women's Soccer Over Fitchburg State, 2-1",
+        "url": "https://wheatoncollegelyons.com/news/2026/9/23/parsons-lifts-womens-soccer-over-fitchburg-state-2-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Plays WPI to 0-0 Draw; King Records Third Shutout",
         "url": "https://wheatoncollegelyons.com/news/2026/9/21/womens-soccer-plays-wpi-to-0-0-draw-king-records-third-shutout.aspx",
@@ -2931,7 +2937,7 @@
     "_meta": {
       "source": "news",
       "url": "https://wheatoncollegelyons.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:15Z"
+      "asOf": "2026-09-24T16:10:10Z"
     }
   },
   "camps": {
@@ -2945,20 +2951,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 404 for https://cvent.me/v4qVa9",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://cvent.me/v4qVa9",
-        "asOf": "2026-09-23T19:02:21Z"
+        "asOf": "2026-09-24T16:10:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2972,10 +2978,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:06Z"
+      }
+    ]
   }
 }

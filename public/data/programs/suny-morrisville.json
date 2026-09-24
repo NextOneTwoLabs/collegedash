@@ -268,7 +268,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://morrisvillemustangs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:50Z"
+        "asOf": "2026-09-24T16:05:21Z"
       }
     }
   },
@@ -313,7 +313,7 @@
   ],
   "roster": {
     "season": 2026,
-    "count": 24,
+    "count": 23,
     "players": [
       {
         "number": "00",
@@ -676,26 +676,6 @@
         "clubInfo": null
       },
       {
-        "number": "21",
-        "name": "Jamyson Kelly",
-        "pos": "D",
-        "posLabel": "D",
-        "height": "5-3",
-        "heightIn": 63,
-        "classLabel": "Fr.",
-        "classCode": "FR",
-        "hometown": "Oriskany, N.Y.",
-        "highSchool": "Oriskany",
-        "previousSchool": "",
-        "major": "",
-        "club": "",
-        "bioUrl": "https://morrisvillemustangs.com/sports/womens-soccer/roster/jamyson-kelly/6126",
-        "social": {},
-        "bio": {},
-        "clubSource": null,
-        "clubInfo": null
-      },
-      {
         "number": "22",
         "name": "Savanna Scheifla",
         "pos": "M/F",
@@ -809,7 +789,7 @@
         "GR": 0
       },
       "D": {
-        "FR": 5,
+        "FR": 4,
         "R-FR": 0,
         "SO": 1,
         "R-SO": 0,
@@ -843,7 +823,7 @@
       }
     },
     "byClass": {
-      "FR": 13,
+      "FR": 12,
       "SO": 3,
       "JR": 4,
       "SR": 4
@@ -855,7 +835,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://morrisvillemustangs.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:50Z"
+      "asOf": "2026-09-24T16:05:21Z"
     }
   },
   "rosterHistory": {
@@ -2513,7 +2493,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://morrisvillemustangs.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:50Z"
+      "asOf": "2026-09-24T16:05:21Z"
     }
   },
   "commitments": [],
@@ -2584,7 +2564,7 @@
     "_meta": {
       "source": "news",
       "url": "https://morrisvillemustangs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:54Z"
+      "asOf": "2026-09-24T16:05:36Z"
     }
   },
   "camps": {
@@ -2628,14 +2608,14 @@
       {
         "source": "camps",
         "url": "https://morrisvillemustangs.com/sports/2019/7/17/information-camps-clinics-index",
-        "asOf": "2026-09-23T18:57:56Z"
+        "asOf": "2026-09-24T16:05:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2649,10 +2629,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:21Z"
+      }
+    ]
   }
 }

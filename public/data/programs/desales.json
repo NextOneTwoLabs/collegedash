@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.desales.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:54Z"
+        "asOf": "2026-09-24T16:01:25Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-3-2",
+      "record": "1-4-2",
       "wins": 1,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Melina Couzis"
     },
     {
@@ -995,7 +995,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.desales.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:54Z"
+      "asOf": "2026-09-24T16:01:25Z"
     }
   },
   "rosterHistory": {
@@ -1740,10 +1740,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
-      "text": "1-3-2",
-      "played": 6,
+      "text": "1-4-2",
+      "played": 7,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1867,9 +1867,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Immaculata, PA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
+          "box score": "https://athletics.desales.edu/sports/womens-soccer/stats/2026/immaculata-university/boxscore/10174",
+          "recap": "https://athletics.desales.edu/news/2026/9/23/womens-soccer-falls-2-0-to-immaculata.aspx",
           "history": "https://athletics.desales.edu/sports/womens-soccer/opponent-history/immaculata-university/17"
         }
       },
@@ -3121,7 +3123,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.desales.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:54Z"
+      "asOf": "2026-09-24T16:01:25Z"
     }
   },
   "commitments": [
@@ -3145,7 +3147,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/brianna-mckeever/",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-23",
+          "lastSeen": "2026-09-24",
           "missingSince": null,
           "profileCreated": "2026-01-31"
         }
@@ -3176,6 +3178,12 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Falls 2-0 to Immaculata",
+        "url": "https://athletics.desales.edu/news/2026/9/23/womens-soccer-falls-2-0-to-immaculata.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Versus Rutgers-Camden Ends in a 1-1 Draw",
         "url": "https://athletics.desales.edu/news/2026/9/19/womens-soccer-versus-rutgers-camden-ends-in-a-1-1-draw.aspx",
@@ -3240,7 +3248,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.desales.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:04Z"
+      "asOf": "2026-09-24T16:01:34Z"
     }
   },
   "camps": {
@@ -3254,13 +3262,13 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 202 for https://register.ryzer.com/camp.cfm?id=331769",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://register.ryzer.com/camp.cfm?id=331769",
-        "asOf": "2026-09-23T19:13:06Z"
+        "asOf": "2026-09-24T16:01:34Z"
       }
     ]
   },
@@ -3269,7 +3277,7 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.89,
     "sections": {
       "school": true,
@@ -3283,10 +3291,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:25Z"
+      }
+    ]
   }
 }

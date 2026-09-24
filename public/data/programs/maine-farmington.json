@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goumfbeavers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:23Z"
+        "asOf": "2026-09-24T16:04:24Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-5-0",
+      "record": "0-6-0",
       "wins": 0,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Molly Wilkie"
     },
     {
@@ -844,7 +844,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goumfbeavers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:23Z"
+      "asOf": "2026-09-24T16:04:24Z"
     }
   },
   "rosterHistory": {
@@ -1424,10 +1424,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "0-5-0",
-      "played": 5,
+      "text": "0-6-0",
+      "played": 6,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -1565,11 +1565,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Biddeford, ME",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-12",
         "links": {
-          "watch": "https://athletics.une.edu/sports/2016/9/2/watch-womens-soccer.aspx",
-          "live stats": "https://athletics.une.edu/sidearmstats/wsoc/summary",
+          "recap": "https://www.goumfbeavers.com/news/2026/9/23/womens-soccer-nor-easter-topple-beavers-in-non-conference-action.aspx",
+          "box score": "https://www.goumfbeavers.com/sports/womens-soccer/stats/2026/university-of-new-england/boxscore/6818",
           "history": "https://www.goumfbeavers.com/sports/womens-soccer/opponent-history/university-of-new-england/204"
         }
       },
@@ -2830,13 +2830,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goumfbeavers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:23Z"
+      "asOf": "2026-09-24T16:04:24Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Nor’Easter Topple Beavers in Non-Conference Action",
+        "url": "https://goumfbeavers.com/news/2026/9/23/womens-soccer-nor-easter-topple-beavers-in-non-conference-action.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Farmington Falls to Maine Maritime in NAC Opener",
         "url": "https://goumfbeavers.com/news/2026/9/19/womens-soccer-farmington-falls-to-maine-maritime-in-nac-opener.aspx",
@@ -2901,7 +2907,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goumfbeavers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:26Z"
+      "asOf": "2026-09-24T16:04:28Z"
     }
   },
   "camps": {
@@ -2915,20 +2921,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.goumfbeavers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:27Z"
+        "asOf": "2026-09-24T16:04:29Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2942,10 +2948,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:25Z"
+      }
+    ]
   }
 }

@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.salveathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:50Z"
+        "asOf": "2026-09-24T16:07:56Z"
       }
     }
   },
@@ -320,12 +320,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-1-3",
-      "wins": 2,
+      "record": "3-1-3",
+      "wins": 3,
       "losses": 1,
       "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "1-0-0",
       "headCoach": "Tanya Roberts"
     },
@@ -1044,7 +1044,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.salveathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:50Z"
+      "asOf": "2026-09-24T16:07:56Z"
     }
   },
   "rosterHistory": {
@@ -1876,11 +1876,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 1,
       "ties": 3,
-      "text": "2-1-3",
-      "played": 6,
+      "text": "3-1-3",
+      "played": 7,
       "scheduled": 21,
       "confText": "1-0-0",
       "exhibitions": 0
@@ -2004,12 +2004,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Newport, RI, Toppa Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://flosports.link/4h8bIa1",
-          "live stats": "https://salveathletics.com/sidearmstats/wsoc/summary",
-          "tickets": "https://bit.ly/SeahawkTickets",
+          "box score": "https://www.salveathletics.com/sports/womens-soccer/stats/2026/johnson-wales-university/boxscore/12066",
+          "recap": "https://www.salveathletics.com/news/2026/9/23/womens-soccer-sienna-mastroianni-sends-seahawks-to-a-2-0-win.aspx",
           "history": "https://www.salveathletics.com/sports/womens-soccer/opponent-history/johnson-wales-university/58"
         }
       },
@@ -3275,7 +3274,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.salveathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:50Z"
+      "asOf": "2026-09-24T16:07:56Z"
     }
   },
   "commitments": [],
@@ -3289,6 +3288,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Sienna Mastroianni sends Seahawks to a 2-0 win",
+        "url": "https://salveathletics.com/news/2026/9/23/womens-soccer-sienna-mastroianni-sends-seahawks-to-a-2-0-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Salve Regina erupts in second half for 6-0 win",
         "url": "https://salveathletics.com/news/2026/9/19/womens-soccer-salve-regina-erupts-in-second-half-for-6-0-win.aspx",
@@ -3353,7 +3358,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.salveathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:55Z"
+      "asOf": "2026-09-24T16:08:12Z"
     }
   },
   "camps": {
@@ -3367,20 +3372,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://salve.nbsstore.net/womens-soccer-clinic-2026",
-        "asOf": "2026-09-23T19:01:59Z"
+        "asOf": "2026-09-24T16:08:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3394,10 +3399,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:56Z"
+      }
+    ]
   }
 }

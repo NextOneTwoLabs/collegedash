@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://pioneers.marietta.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:15:53Z"
+        "asOf": "2026-09-24T16:04:45Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
-      "wins": 1,
+      "record": "2-4-1",
+      "wins": 2,
       "losses": 4,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Zack Votra"
     },
     {
@@ -977,7 +977,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.marietta.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:15:53Z"
+      "asOf": "2026-09-24T16:04:45Z"
     }
   },
   "rosterHistory": {
@@ -1758,11 +1758,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 4,
       "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "text": "2-4-1",
+      "played": 7,
       "scheduled": 24,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1886,12 +1886,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Adrian, MI",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://www.youtube.com/@AdrianCollegeTV",
-          "live stats": "https://adrianbulldogs.com/sidearmstats/wsoc/summary",
-          "tickets": "https://events.hometownticketing.com/boxoffice/adriancollege/L2VtYmVkL2V2ZW50LzgyNg%3D%3D",
+          "box score": "https://pioneers.marietta.edu/sports/womens-soccer/stats/2026/adrian-college/boxscore/11960",
+          "recap": "https://pioneers.marietta.edu/news/2026/9/23/womens-soccer-womens-soccer-holds-off-adrian-2-1.aspx",
           "history": "https://pioneers.marietta.edu/sports/womens-soccer/opponent-history/adrian-college/35"
         }
       },
@@ -3174,13 +3173,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.marietta.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:15:53Z"
+      "asOf": "2026-09-24T16:04:45Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer holds off Adrian, 2-1",
+        "url": "https://pioneers.marietta.edu/news/2026/9/23/womens-soccer-womens-soccer-holds-off-adrian-2-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s soccer plays Ohio Wesleyan to a scoreless draw",
         "url": "https://pioneers.marietta.edu/news/2026/9/20/womens-soccer-womens-soccer-plays-ohio-wesleyan-to-a-scoreless-draw.aspx",
@@ -3245,7 +3250,7 @@
     "_meta": {
       "source": "news",
       "url": "https://pioneers.marietta.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:15:57Z"
+      "asOf": "2026-09-24T16:04:53Z"
     }
   },
   "camps": {
@@ -3259,7 +3264,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Fall ID Clinic",
@@ -3289,14 +3294,14 @@
       {
         "source": "camps",
         "url": "https://www.votracoachconsultingllc.com/",
-        "asOf": "2026-09-23T19:16:00Z"
+        "asOf": "2026-09-24T16:04:55Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3310,10 +3315,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:45Z"
+      }
+    ]
   }
 }

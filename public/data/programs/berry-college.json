@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.berryvikings.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:15:41Z"
+        "asOf": "2026-09-24T15:59:30Z"
       }
     }
   },
@@ -1008,7 +1008,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.berryvikings.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:15:41Z"
+      "asOf": "2026-09-24T15:59:30Z"
     }
   },
   "rosterHistory": {
@@ -1951,7 +1951,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "The College of New Jersey",
-        "opponentRank": null,
+        "opponentRank": 14,
         "opponentSeed": null,
         "location": "Ewing, NJ",
         "result": null,
@@ -1969,7 +1969,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "Montclair State University",
-        "opponentRank": null,
+        "opponentRank": 23,
         "opponentSeed": null,
         "location": "Montclair, NJ",
         "result": null,
@@ -3152,7 +3152,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.berryvikings.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:15:41Z"
+      "asOf": "2026-09-24T15:59:30Z"
     }
   },
   "commitments": [],
@@ -3230,7 +3230,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.berryvikings.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:15:46Z"
+      "asOf": "2026-09-24T15:59:38Z"
     }
   },
   "camps": {
@@ -3250,14 +3250,14 @@
       {
         "source": "camps",
         "url": "http://www.berrysoccercamps.com",
-        "asOf": "2026-09-23T19:15:54Z"
+        "asOf": "2026-09-24T15:59:45Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3271,10 +3271,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:30Z"
+      }
+    ]
   }
 }

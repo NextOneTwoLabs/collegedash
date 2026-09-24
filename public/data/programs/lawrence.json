@@ -250,7 +250,7 @@
       },
       {
         "name": "Shayni Paul",
-        "title": "Assistant Coach",
+        "title": "Associate Head Coach",
         "isHeadCoach": false,
         "isCoach": true,
         "bioUrl": "https://vikings.lawrence.edu/sports/womens-soccer/roster/coaches/shayni-paul/848",
@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://vikings.lawrence.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:45Z"
+        "asOf": "2026-09-24T16:03:52Z"
       }
     }
   },
@@ -302,13 +302,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-0-3",
+      "record": "5-1-3",
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 8,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 9,
+      "confRecord": "1-1-0",
       "headCoach": "Joe Sagar"
     },
     {
@@ -1005,7 +1005,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:03:52Z"
     }
   },
   "rosterHistory": {
@@ -1739,12 +1739,12 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 3,
-      "text": "5-0-3",
-      "played": 8,
+      "text": "5-1-3",
+      "played": 9,
       "scheduled": 18,
-      "confText": "1-0-0",
+      "confText": "1-1-0",
       "exhibitions": 1
     },
     "games": [
@@ -1918,11 +1918,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Appleton, WI, The Banta Bowl",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://watchmidwestsports.com/lawrencevikings/",
-          "live stats": "https://vikings.lawrence.edu/sidearmstats/wsoc/",
+          "box score": "https://vikings.lawrence.edu/sports/womens-soccer/stats/2026/lake-forest-college/boxscore/6009",
+          "recap": "https://vikings.lawrence.edu/news/2026/9/24/womens-soccer-vikings-unable-to-overcome-first-half-deficit.aspx",
           "history": "https://vikings.lawrence.edu/sports/womens-soccer/opponent-history/lake-forest-college/70"
         }
       },
@@ -3247,13 +3247,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:03:52Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Vikings Unable to Overcome First-Half Deficit",
+        "url": "https://vikings.lawrence.edu/news/2026/9/24/womens-soccer-vikings-unable-to-overcome-first-half-deficit.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
       {
         "title": "Kalt scores twice as Vikings rally past Illinois College in MWC opener",
         "url": "https://vikings.lawrence.edu/news/2026/9/20/womens-soccer-kalt-scores-twice-as-vikings-rally-past-illinois-college-in-mwc-opener.aspx",
@@ -3318,7 +3324,7 @@
     "_meta": {
       "source": "news",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:52Z"
+      "asOf": "2026-09-24T16:04:00Z"
     }
   },
   "camps": {
@@ -3332,20 +3338,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://vikings.lawrence.edu/sports/2020/5/20/information-camps-clinics-index.aspx",
-        "asOf": "2026-09-23T19:08:54Z"
+        "asOf": "2026-09-24T16:04:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3359,10 +3365,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:52Z"
+      }
+    ]
   }
 }

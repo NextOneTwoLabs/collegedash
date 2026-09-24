@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://providence.jwuathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:01Z"
+        "asOf": "2026-09-24T16:03:29Z"
       }
     }
   },
@@ -287,12 +287,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-1",
+      "record": "2-5-1",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "1-0-1",
       "headCoach": "Chris Flint"
     },
@@ -1038,7 +1038,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://providence.jwuathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:01Z"
+      "asOf": "2026-09-24T16:03:29Z"
     }
   },
   "rosterHistory": {
@@ -1848,10 +1848,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "2-4-1",
-      "played": 7,
+      "text": "2-5-1",
+      "played": 8,
       "scheduled": 21,
       "confText": "1-0-1",
       "exhibitions": 0
@@ -1986,20 +1986,20 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Newport, R.I.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://go.flocollege.com/teams/salve-regina-university?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=salve-regina",
-          "live stats": "https://salveathletics.com/sidearmstats/wsoc/summary"
+          "box score": "https://providence.jwuathletics.com/sports/womens-soccer/stats/2026/salve-regina/boxscore/10453",
+          "recap": "https://providence.jwuathletics.com/news/2026/9/23/womens-soccer-salve-regina-downs-jwu-in-womens-soccer-2-0.aspx"
         }
       },
       {
-        "date": "2026-09-26",
+        "date": "2026-09-28",
         "datetime": null,
         "exhibition": false,
         "conferenceGame": true,
         "homeAway": "H",
-        "opponent": "Gordon",
+        "opponent": "Gordon (from 9/26)",
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Providence, R.I., Scotts Miracle-Gro Athletic Complex",
@@ -3348,13 +3348,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://providence.jwuathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:01Z"
+      "asOf": "2026-09-24T16:03:29Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Salve Regina downs JWU in women's soccer, 2-0",
+        "url": "https://providence.jwuathletics.com/news/2026/9/23/womens-soccer-salve-regina-downs-jwu-in-womens-soccer-2-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer nabs Defensive Player, Rookie of the Week",
         "url": "https://providence.jwuathletics.com/news/2026/9/21/womens-soccer-nabs-defensive-player-rookie-of-the-week.aspx",
@@ -3419,7 +3425,7 @@
     "_meta": {
       "source": "news",
       "url": "https://providence.jwuathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:09Z"
+      "asOf": "2026-09-24T16:03:37Z"
     }
   },
   "camps": {
@@ -3433,7 +3439,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Women's Soccer Advanced ID Clinics",
@@ -3463,14 +3469,14 @@
       {
         "source": "camps",
         "url": "https://providence.jwuathletics.com/sports/2023/7/11/womens-soccer-advanced-id-clinics.aspx",
-        "asOf": "2026-09-23T19:05:11Z"
+        "asOf": "2026-09-24T16:03:42Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3484,10 +3490,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:29Z"
+      }
+    ]
   }
 }

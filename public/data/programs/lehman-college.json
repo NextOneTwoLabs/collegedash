@@ -261,7 +261,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.lehmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:23Z"
+        "asOf": "2026-09-24T16:04:02Z"
       }
     }
   },
@@ -729,7 +729,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lehmanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:06:23Z"
+      "asOf": "2026-09-24T16:04:02Z"
     }
   },
   "rosterHistory": {
@@ -2310,13 +2310,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lehmanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:06:23Z"
+      "asOf": "2026-09-24T16:04:02Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Men’s Soccer Play To A Draw Against Baruch",
+        "url": "https://lehmanathletics.com/news/2026/9/23/mens-soccer-mens-soccer-play-to-a-draw-against-baruch.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "Women’s Tennis Falter Against Hunter",
+        "url": "https://lehmanathletics.com/news/2026/9/23/womens-tennis-womens-tennis-falter-against-hunter.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Volleyball Drop CUNYAC Match At Baruch",
         "url": "https://lehmanathletics.com/news/2026/9/22/womens-volleyball-womens-volleyball-drop-cunyac-match-at-baruch.aspx",
@@ -2381,7 +2393,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.lehmanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:27Z"
+      "asOf": "2026-09-24T16:04:09Z"
     }
   },
   "camps": {
@@ -2395,20 +2407,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.lehmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:27Z"
+        "asOf": "2026-09-24T16:04:10Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.67,
     "sections": {
       "school": true,
@@ -2422,10 +2434,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:02Z"
+      }
+    ]
   }
 }

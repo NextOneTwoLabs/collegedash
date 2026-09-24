@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.uticapioneers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:45Z"
+        "asOf": "2026-09-24T16:09:37Z"
       }
     }
   },
@@ -296,13 +296,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-2",
+      "record": "3-2-3",
       "wins": 3,
       "losses": 2,
-      "ties": 2,
+      "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "0-0-1",
+      "gamesPlayed": 8,
+      "confRecord": "0-0-2",
       "headCoach": "Brooke Barbuto"
     },
     {
@@ -958,7 +958,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uticapioneers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:58:45Z"
+      "asOf": "2026-09-24T16:09:37Z"
     }
   },
   "rosterHistory": {
@@ -1728,11 +1728,11 @@
     "record": {
       "wins": 3,
       "losses": 2,
-      "ties": 2,
-      "text": "3-2-2",
-      "played": 7,
+      "ties": 3,
+      "text": "3-2-3",
+      "played": 8,
       "scheduled": 18,
-      "confText": "0-0-1",
+      "confText": "0-0-2",
       "exhibitions": 0
     },
     "games": [
@@ -1872,11 +1872,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Oneonta, NY, Elmore Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://www.empire8network.com/hartwick/",
-          "live stats": "https://uticapioneers.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.uticapioneers.com/sports/womens-soccer/stats/2026/hartwick-college/boxscore/16347",
+          "recap": "https://www.uticapioneers.com/news/2026/9/23/womens-soccer-pioneers-battle-hartwick-to-0-0-draw-in-conference-matchup.aspx",
           "history": "https://www.uticapioneers.com/sports/womens-soccer/opponent-history/hartwick-college/10"
         }
       },
@@ -3053,13 +3053,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uticapioneers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:58:45Z"
+      "asOf": "2026-09-24T16:09:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Pioneers Battle Hartwick to 0-0 Draw in Conference Matchup",
+        "url": "https://uticapioneers.com/news/2026/9/23/womens-soccer-pioneers-battle-hartwick-to-0-0-draw-in-conference-matchup.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Pioneer Primer 9/21/26 | Hat Tricks, Long-Awaited Rankings, & Potential Volleyball Milestones Set Up This Week in Pioneer Athletics",
         "url": "https://uticapioneers.com/news/2026/9/21/general-pioneer-primer-9-21-26-hat-tricks-long-awaited-rankings-potential-volleyball-milestones-set-up-this-week-in-pioneer-athletics.aspx",
@@ -3124,7 +3130,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.uticapioneers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:58:48Z"
+      "asOf": "2026-09-24T16:09:43Z"
     }
   },
   "camps": {
@@ -3138,20 +3144,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.uticawomenssoccercampsandclinics.com/",
-        "asOf": "2026-09-23T18:58:54Z"
+        "asOf": "2026-09-24T16:09:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3165,10 +3171,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:37Z"
+      }
+    ]
   }
 }

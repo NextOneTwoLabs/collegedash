@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.vassarathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:49Z"
+        "asOf": "2026-09-24T16:09:18Z"
       }
     }
   },
@@ -294,12 +294,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-0-2",
-      "wins": 3,
+      "record": "4-0-2",
+      "wins": 4,
       "losses": 0,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
+      "confRecord": "1-0-0",
       "headCoach": "Madeline Buckley"
     },
     {
@@ -996,7 +997,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.vassarathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:49Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "rosterHistory": {
@@ -1730,13 +1731,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 0,
       "ties": 2,
-      "text": "3-0-2",
-      "played": 5,
+      "text": "4-0-2",
+      "played": 6,
       "scheduled": 18,
-      "confText": "0-0-0",
+      "confText": "1-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -1840,11 +1841,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Poughkeepsie, NY, Gordon Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-0",
         "links": {
-          "watch": "https://boxcast.tv/channel/loahinlmrwacuko8pfih?_gl=1*59kvnd*_gcl_au*MTM2MDIzMzgzNC4xNzgwNTAzOTA0LjM3OTY4NTcwOS4xNzgwNTkxMzA0LjE3ODA1OTI4OTg.*_ga*MTk2MzkyMDE4MS4xNzgwNTAzOTAz*_ga_PXBBF7HVWQ*czE3ODA1OTEyOTMkbzIkZzEkdDE3ODA1OTI4OTckajMkbDAkaDA.",
-          "live stats": "http://www.sidearmstats.com/vassar/wsoc",
+          "box score": "https://www.vassarathletics.com/sports/womens-soccer/stats/2026/bard-college/boxscore/18933",
+          "recap": "https://www.vassarathletics.com/news/2026/9/23/womens-soccer-10-womens-soccer-overwhelms-bard-5-0.aspx",
           "history": "https://www.vassarathletics.com/sports/womens-soccer/opponent-history/bard-college/63"
         }
       },
@@ -3120,13 +3121,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.vassarathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:49Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "#10 Women’s Soccer Overwhelms Bard, 5-0",
+        "url": "https://vassarathletics.com/news/2026/9/23/womens-soccer-10-womens-soccer-overwhelms-bard-5-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "#10 Vassar, #RV NYU End In Scoreless Draw",
         "url": "https://vassarathletics.com/news/2026/9/19/womens-soccer-10-vassar-rv-nyu-end-in-scoreless-draw.aspx",
@@ -3191,7 +3198,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.vassarathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:59Z"
+      "asOf": "2026-09-24T16:09:26Z"
     }
   },
   "camps": {
@@ -3205,7 +3212,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Vassar Women's Soccer Camps and Clinics",
@@ -3258,14 +3265,14 @@
       {
         "source": "camps",
         "url": "https://www.vassarwsoccercampsandclinics.com/index.cfm",
-        "asOf": "2026-09-23T19:09:01Z"
+        "asOf": "2026-09-24T16:09:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3279,10 +3286,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:19Z"
+      }
+    ]
   }
 }

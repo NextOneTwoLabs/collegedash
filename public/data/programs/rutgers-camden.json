@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.scarletraptors.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:13Z"
+        "asOf": "2026-09-24T16:07:54Z"
       }
     }
   },
@@ -310,12 +310,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-0-3",
-      "wins": 3,
+      "record": "4-0-3",
+      "wins": 4,
       "losses": 0,
       "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Kevin Luber"
     },
     {
@@ -1172,7 +1172,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.scarletraptors.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:13Z"
+      "asOf": "2026-09-24T16:07:54Z"
     }
   },
   "rosterHistory": {
@@ -1845,11 +1845,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 0,
       "ties": 3,
-      "text": "3-0-3",
-      "played": 6,
+      "text": "4-0-3",
+      "played": 7,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1972,11 +1972,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Aston Township, PA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://gomacsports.tv/neumann/",
-          "live stats": "https://www.neumannathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.scarletraptors.com/sports/womens-soccer/stats/2026/neumann-university/boxscore/6914",
+          "recap": "https://www.scarletraptors.com/news/2026/9/23/reeves-scores-two-as-womens-soccer-blanks-neumann-3-0.aspx",
           "history": "https://www.scarletraptors.com/sports/womens-soccer/opponent-history/neumann-university/8"
         }
       },
@@ -3225,13 +3225,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.scarletraptors.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:13Z"
+      "asOf": "2026-09-24T16:07:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Reeves scores two as Women's Soccer blanks Neumann, 3-0",
+        "url": "https://scarletraptors.com/news/2026/9/23/reeves-scores-two-as-womens-soccer-blanks-neumann-3-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "This Week In Rutgers-Camden Athletics - September 21-27",
         "url": "https://scarletraptors.com/news/2026/9/21/general-this-week-in-rutgers-camden-athletics-september-21-27.aspx",
@@ -3296,7 +3302,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.scarletraptors.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:16Z"
+      "asOf": "2026-09-24T16:08:05Z"
     }
   },
   "camps": {
@@ -3310,20 +3316,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.scarletraptors.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:16Z"
+        "asOf": "2026-09-24T16:08:06Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3337,10 +3343,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:54Z"
+      }
+    ]
   }
 }

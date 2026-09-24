@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.uwsp.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:42Z"
+        "asOf": "2026-09-24T16:10:30Z"
       }
     }
   },
@@ -895,7 +895,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:42Z"
+      "asOf": "2026-09-24T16:10:30Z"
     }
   },
   "rosterHistory": {
@@ -2863,7 +2863,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:42Z"
+      "asOf": "2026-09-24T16:10:30Z"
     }
   },
   "commitments": [],
@@ -2940,7 +2940,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:45Z"
+      "asOf": "2026-09-24T16:10:35Z"
     }
   },
   "camps": {
@@ -2960,14 +2960,14 @@
       {
         "source": "camps",
         "url": "https://athletics.uwsp.edu/documents/2021/6/14/Camp_Health_Form_Combined.pdf?path=at",
-        "asOf": "2026-09-23T20:47:47Z"
+        "asOf": "2026-09-24T16:10:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2981,10 +2981,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:30Z"
+      }
+    ]
   }
 }

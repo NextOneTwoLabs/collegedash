@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.wilsonphoenix.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:35Z"
+        "asOf": "2026-09-24T16:10:22Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-7-1",
+      "record": "0-8-1",
       "wins": 0,
-      "losses": 7,
+      "losses": 8,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "headCoach": "Terry Harris"
     },
     {
@@ -871,7 +871,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wilsonphoenix.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:35Z"
+      "asOf": "2026-09-24T16:10:22Z"
     }
   },
   "rosterHistory": {
@@ -1542,10 +1542,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 7,
+      "losses": 8,
       "ties": 1,
-      "text": "0-7-1",
-      "played": 8,
+      "text": "0-8-1",
+      "played": 9,
       "scheduled": 23,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1697,11 +1697,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Huntingdon, Pa.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-5",
         "links": {
-          "watch": "https://portal.stretchinternet.com/wilson/",
-          "live stats": "https://wilsonphoenix.com/sidearmstats/wsoc/"
+          "box score": "https://www.wilsonphoenix.com/sports/womens-soccer/stats/2026/juniata-college/boxscore/4547",
+          "recap": "https://www.wilsonphoenix.com/news/2026/9/23/womens-soccer-phoenix-downed-by-eagles.aspx"
         }
       },
       {
@@ -2999,13 +2999,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wilsonphoenix.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:35Z"
+      "asOf": "2026-09-24T16:10:22Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Phoenix Downed By Eagles",
+        "url": "https://wilsonphoenix.com/news/2026/9/23/womens-soccer-phoenix-downed-by-eagles.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Knights Too Much For Phoenix On Wilson Weekend",
         "url": "https://wilsonphoenix.com/news/2026/9/19/womens-soccer-knights-too-much-for-phoenix-on-wilson-weekend.aspx",
@@ -3070,7 +3076,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.wilsonphoenix.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:42Z"
+      "asOf": "2026-09-24T16:10:28Z"
     }
   },
   "camps": {
@@ -3084,20 +3090,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.wilsonphoenix.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:42Z"
+        "asOf": "2026-09-24T16:10:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3111,10 +3117,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:22Z"
+      }
+    ]
   }
 }

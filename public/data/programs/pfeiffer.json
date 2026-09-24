@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gofalconsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:37Z"
+        "asOf": "2026-09-24T16:06:53Z"
       }
     }
   },
@@ -327,13 +327,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-2",
-      "wins": 2,
+      "record": "3-2-2",
+      "wins": 3,
       "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 7,
+      "confRecord": "2-0-0",
       "headCoach": "Acasio Roche III"
     },
     {
@@ -1047,7 +1047,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gofalconsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:37Z"
+      "asOf": "2026-09-24T16:06:53Z"
     }
   },
   "rosterHistory": {
@@ -1584,13 +1584,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 2,
       "ties": 2,
-      "text": "2-2-2",
-      "played": 6,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 19,
-      "confText": "1-0-0",
+      "confText": "2-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -1712,9 +1712,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Greensboro, N.C.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
+          "recap": "https://www.gofalconsports.com/news/2026/9/23/womens-soccer-stewarts-goal-sends-pfeiffer-women-to-1-0-road-win-at-rival-greensboro.aspx",
           "history": "https://www.gofalconsports.com/sports/womens-soccer/opponent-history/greensboro-college/84"
         }
       },
@@ -2845,13 +2846,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gofalconsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:37Z"
+      "asOf": "2026-09-24T16:06:53Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Stewart's Goal Sends Pfeiffer Women to 1-0 Road Win at Rival Greensboro",
+        "url": "https://gofalconsports.com/news/2026/9/23/womens-soccer-stewarts-goal-sends-pfeiffer-women-to-1-0-road-win-at-rival-greensboro.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Spencer and Browning Score in Pfeiffer's 2-1 USA South Road Win at William Peace",
         "url": "https://gofalconsports.com/news/2026/9/20/womens-soccer-spencer-and-browning-score-in-pfeiffers-2-1-usa-south-road-win-at-william-peace.aspx",
@@ -2916,7 +2923,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gofalconsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:41Z"
+      "asOf": "2026-09-24T16:06:58Z"
     }
   },
   "camps": {
@@ -2930,20 +2937,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gofalconsports.com/sports/2021/6/2/information-camps.aspx",
-        "asOf": "2026-09-23T19:09:43Z"
+        "asOf": "2026-09-24T16:07:03Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2957,10 +2964,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:53Z"
+      }
+    ]
   }
 }

@@ -327,7 +327,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.uchicago.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:39Z"
+        "asOf": "2026-09-24T16:00:35Z"
       }
     }
   },
@@ -335,12 +335,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-0-0",
+      "record": "6-1-0",
       "wins": 6,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Amy Howley Reifert"
     },
     {
@@ -1126,7 +1126,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uchicago.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:39Z"
+      "asOf": "2026-09-24T16:00:35Z"
     }
   },
   "rosterHistory": {
@@ -1977,10 +1977,10 @@
     "season": 2026,
     "record": {
       "wins": 6,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "text": "6-0-0",
-      "played": 6,
+      "text": "6-1-0",
+      "played": 7,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2104,10 +2104,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Grand Rapids, MI | Calvin Soccer Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "live stats": "https://athletics.uchicago.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.uchicago.edu/sports/womens-soccer/stats/2026/calvin/boxscore/14929",
+          "recap": "https://athletics.uchicago.edu/news/2026/9/23/-3-womens-soccer-falls-to-calvin-on-the-road.aspx",
           "history": "https://athletics.uchicago.edu/sports/womens-soccer/opponent-history/calvin-university/192"
         }
       },
@@ -3484,13 +3485,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uchicago.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:39Z"
+      "asOf": "2026-09-24T16:00:35Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "#3 Women's Soccer Falls to Calvin on the Road",
+        "url": "https://athletics.uchicago.edu/news/2026/9/23/-3-womens-soccer-falls-to-calvin-on-the-road.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "#3 Women's Soccer Travels to Michigan to Battle Calvin",
         "url": "https://athletics.uchicago.edu/news/2026/9/22/-3-womens-soccer-travels-to-michigan-to-battle-calvin.aspx",
@@ -3555,7 +3562,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.uchicago.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:43Z"
+      "asOf": "2026-09-24T16:00:38Z"
     }
   },
   "camps": {
@@ -3569,20 +3576,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://universityofchicagowomenssoccer.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-23T19:09:45Z"
+        "asOf": "2026-09-24T16:00:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3596,10 +3603,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:35Z"
+      }
+    ]
   }
 }

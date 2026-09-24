@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.thielathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:19Z"
+        "asOf": "2026-09-24T16:09:04Z"
       }
     }
   },
@@ -920,7 +920,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.thielathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:19Z"
+      "asOf": "2026-09-24T16:09:04Z"
     }
   },
   "rosterHistory": {
@@ -2710,7 +2710,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.thielathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:19Z"
+      "asOf": "2026-09-24T16:09:04Z"
     }
   },
   "commitments": [],
@@ -2788,7 +2788,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.thielathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:25Z"
+      "asOf": "2026-09-24T16:09:10Z"
     }
   },
   "camps": {
@@ -2808,14 +2808,14 @@
       {
         "source": "camps",
         "url": "https://www.thielathletics.com/sports/2023/5/17/2025-26 Camps and Clinic.aspx",
-        "asOf": "2026-09-23T19:01:29Z"
+        "asOf": "2026-09-24T16:09:12Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.67,
     "sections": {
       "school": true,
@@ -2829,10 +2829,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:04Z"
+      }
+    ]
   }
 }

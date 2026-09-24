@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.uwlathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:26Z"
+        "asOf": "2026-09-24T16:10:24Z"
       }
     }
   },
@@ -328,12 +328,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "7-0-0",
-      "wins": 7,
+      "record": "8-0-0",
+      "wins": 8,
       "losses": 0,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Jason Murphy"
     },
     {
@@ -1287,7 +1287,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwlathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:26Z"
+      "asOf": "2026-09-24T16:10:24Z"
     }
   },
   "rosterHistory": {
@@ -2047,11 +2047,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 7,
+      "wins": 8,
       "losses": 0,
       "ties": 0,
-      "text": "7-0-0",
-      "played": 7,
+      "text": "8-0-0",
+      "played": 8,
       "scheduled": 23,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2209,12 +2209,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "La Crosse, WI",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "7-0",
         "links": {
-          "watch": "https://www.wiacnetwork.com/uwlacrosse/",
-          "live stats": "https://uwlathletics.com/sidearmstats/wsoc/summary",
-          "tickets": "https://gofan.co/event/6786023?schoolId=WI100293",
+          "box score": "https://www.uwlathletics.com/sports/womens-soccer/stats/2026/north-park-university-ill-/boxscore/8923",
+          "recap": "https://www.uwlathletics.com/news/2026/9/23/caya-sawadski-and-zamborini-score-twice-in-win-over-north-park.aspx",
           "history": "https://www.uwlathletics.com/sports/womens-soccer/opponent-history/north-park-university/89"
         }
       },
@@ -3741,7 +3740,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwlathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:26Z"
+      "asOf": "2026-09-24T16:10:24Z"
     }
   },
   "commitments": [],
@@ -3755,6 +3754,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Caya, Sawadski and Zamborini Score Twice in Win over North Park; Caya Records 100th Career Point; UWL Matches Best Start in School History",
+        "url": "https://uwlathletics.com/news/2026/9/23/caya-sawadski-and-zamborini-score-twice-in-win-over-north-park.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Five Players Notch Goal in Win at Spalding; Nicolai and Young Combine for Shutout; UWL Remains Undefeated",
         "url": "https://uwlathletics.com/news/2026/9/20/five-players-notch-goal-in-win-at-spalding.aspx",
@@ -3819,7 +3824,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.uwlathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:30Z"
+      "asOf": "2026-09-24T16:10:30Z"
     }
   },
   "camps": {
@@ -3833,7 +3838,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Purchase GK Camp Leotard",
@@ -3863,14 +3868,14 @@
       {
         "source": "camps",
         "url": "http://www.uwlcamps.com/",
-        "asOf": "2026-09-23T20:47:36Z"
+        "asOf": "2026-09-24T16:10:35Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3884,10 +3889,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:24Z"
+      }
+    ]
   }
 }

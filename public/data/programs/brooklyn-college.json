@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://brooklyncollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:20:45Z"
+        "asOf": "2026-09-24T16:00:13Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-3-2",
+      "record": "0-4-2",
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Agathangelos Tsantsaridis"
     },
     {
@@ -896,7 +896,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://brooklyncollegeathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:20:45Z"
+      "asOf": "2026-09-24T16:00:13Z"
     }
   },
   "rosterHistory": {
@@ -1432,10 +1432,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
-      "text": "0-3-2",
-      "played": 5,
+      "text": "0-4-2",
+      "played": 6,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1556,11 +1556,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Media, PA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://www.psucampusathletics.com/psubrandywine/",
-          "live stats": "https://psubrandywineathletics.com/sports/wsoc/2026-27/boxscores/20260923_6v7j.xml",
+          "box score": "https://brooklyncollegeathletics.com/sports/womens-soccer/stats/2026/penn-state-brandywine/boxscore/6263",
+          "recap": "https://brooklyncollegeathletics.com/news/2026/9/23/bc-womens-soccer-unable-to-complete-comeback-at-penn-state-brandywine.aspx",
           "history": "https://brooklyncollegeathletics.com/sports/womens-soccer/opponent-history/penn-state-brandywine/242"
         }
       },
@@ -2779,13 +2779,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://brooklyncollegeathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:20:45Z"
+      "asOf": "2026-09-24T16:00:13Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "BC Women's Soccer Unable to Complete Comeback at Penn State Brandywine",
+        "url": "https://brooklyncollegeathletics.com/news/2026/9/23/bc-womens-soccer-unable-to-complete-comeback-at-penn-state-brandywine.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Brooklyn Women's Soccer Falters at Kean",
         "url": "https://brooklyncollegeathletics.com/news/2026/9/19/brooklyn-womens-soccer-falters-at-kean.aspx",
@@ -2850,7 +2856,7 @@
     "_meta": {
       "source": "news",
       "url": "https://brooklyncollegeathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:20:51Z"
+      "asOf": "2026-09-24T16:00:23Z"
     }
   },
   "camps": {
@@ -2864,20 +2870,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.brooklyncollegeathletics.com/registrations/#!/camp/1",
-        "asOf": "2026-09-23T21:20:55Z"
+        "asOf": "2026-09-24T16:00:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2891,10 +2897,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:14Z"
+      }
+    ]
   }
 }

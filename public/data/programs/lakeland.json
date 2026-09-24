@@ -271,7 +271,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://lakelandmuskies.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:48Z"
+        "asOf": "2026-09-24T16:03:41Z"
       }
     }
   },
@@ -279,12 +279,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-6-0",
-      "wins": 1,
+      "record": "2-6-0",
+      "wins": 2,
       "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Alexander Pagonis"
     },
     {
@@ -720,7 +720,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://lakelandmuskies.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:48Z"
+      "asOf": "2026-09-24T16:03:41Z"
     }
   },
   "rosterHistory": {
@@ -1325,11 +1325,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 6,
       "ties": 0,
-      "text": "1-6-0",
-      "played": 7,
+      "text": "2-6-0",
+      "played": 8,
       "scheduled": 21,
       "confText": null,
       "exhibitions": 0
@@ -1470,12 +1470,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Home, Taylor Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "http://www.lakelandmuskies.com/muskieslive",
-          "live stats": "https://lakelandmuskies.com/sidearmstats/wsoc/summary",
-          "tickets": "https://fan.hudl.com/usa/wi/plymouth/organization/23084/lakeland-college/tickets",
+          "box score": "https://lakelandmuskies.com/sports/womens-soccer/stats/2026/marian-university/boxscore/9094",
+          "recap": "https://lakelandmuskies.com/news/2026/9/23/09-23-26WSOCvsMarian.aspx",
           "history": "https://lakelandmuskies.com/sports/womens-soccer/opponent-history/marian-university/23"
         }
       },
@@ -2652,13 +2651,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://lakelandmuskies.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:48Z"
+      "asOf": "2026-09-24T16:03:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Lakeland makes lone shot count, ends long losing streak to Marian behind Sperber goal, Steinbock saves",
+        "url": "https://lakelandmuskies.com/news/2026/9/23/09-23-26WSOCvsMarian.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "Muskies wrap up September homestand hosting Sabres for Alumni Night",
+        "url": "https://lakelandmuskies.com/news/2026/9/23/09-22-26WSOCvsMarianNotes.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Benedictine strikes early, tops Lakeland 3-0 on women’s soccer Senior Day",
         "url": "https://lakelandmuskies.com/news/2026/9/20/09-19-26WSOCvsBenedictineSrDay.aspx",
@@ -2723,7 +2734,7 @@
     "_meta": {
       "source": "news",
       "url": "https://lakelandmuskies.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:52Z"
+      "asOf": "2026-09-24T16:03:54Z"
     }
   },
   "camps": {
@@ -2737,7 +2748,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Women's Soccer ID Camp",
@@ -2767,14 +2778,14 @@
       {
         "source": "camps",
         "url": "http://lakeland.edu/wsoccer",
-        "asOf": "2026-09-23T18:45:02Z"
+        "asOf": "2026-09-24T16:04:05Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2788,10 +2799,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:41Z"
+      }
+    ]
   }
 }

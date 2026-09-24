@@ -102,7 +102,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.cmsathletics.org/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:41Z"
+        "asOf": "2026-09-24T16:00:37Z"
       }
     }
   },
@@ -110,13 +110,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-2",
+      "record": "4-2-2",
       "wins": 4,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "1-0-1",
+      "gamesPlayed": 8,
+      "confRecord": "1-1-1",
       "headCoach": "David Nolan"
     },
     {
@@ -903,7 +903,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:41Z"
+      "asOf": "2026-09-24T16:00:37Z"
     }
   },
   "rosterHistory": {
@@ -1665,12 +1665,12 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "4-1-2",
-      "played": 7,
+      "text": "4-2-2",
+      "played": 8,
       "scheduled": 18,
-      "confText": "1-0-1",
+      "confText": "1-1-1",
       "exhibitions": 1
     },
     "games": [
@@ -1817,11 +1817,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Claremont, CA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://flosports.link/45neVvj",
-          "live stats": "https://sagehens.com/sidearmstats/wsoc/summary"
+          "box score": "https://www.cmsathletics.org/sports/womens-soccer/stats/2026/pomona-pitzer/boxscore/10215",
+          "recap": "https://www.cmsathletics.org/news/2026/9/23/no-12-pomona-pitzer-womens-soccer-hangs-on-to-defeat-cms-1-0.aspx"
         }
       },
       {
@@ -3017,7 +3017,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:41Z"
+      "asOf": "2026-09-24T16:00:37Z"
     }
   },
   "commitments": [
@@ -3041,7 +3041,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/jesselyn-lee/",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-23",
+          "lastSeen": "2026-09-24",
           "missingSince": null,
           "profileCreated": "2023-10-22"
         }
@@ -3072,6 +3072,12 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "No. 12 Pomona-Pitzer Women's Soccer Hangs On to Defeat CMS 1-0",
+        "url": "https://cmsathletics.org/news/2026/9/23/no-12-pomona-pitzer-womens-soccer-hangs-on-to-defeat-cms-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Carmel Randolph Captures Defensive Player of the Week Honors for Athenas Soccer",
         "url": "https://cmsathletics.org/news/2026/9/21/womens-soccer-carmel-randolph-captures-defensive-player-of-the-week-honors-for-athenas-soccer.aspx",
@@ -3136,7 +3142,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:47Z"
+      "asOf": "2026-09-24T16:00:45Z"
     }
   },
   "camps": {
@@ -3150,13 +3156,13 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.carteesoccercamp.com",
-        "asOf": "2026-09-23T19:05:52Z"
+        "asOf": "2026-09-24T16:00:51Z"
       }
     ]
   },
@@ -3165,7 +3171,7 @@
     "2026": 1
   },
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.67,
     "sections": {
       "school": false,
@@ -3179,12 +3185,17 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "scorecard: never collected",
       "climate: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:37Z"
+      }
+    ]
   }
 }

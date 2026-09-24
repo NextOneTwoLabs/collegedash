@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.uwwsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:35Z"
+        "asOf": "2026-09-24T16:10:36Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-2-1",
-      "wins": 5,
+      "record": "6-2-1",
+      "wins": 6,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "headCoach": "Dan Montanye"
     },
     {
@@ -1357,7 +1357,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwwsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:35Z"
+      "asOf": "2026-09-24T16:10:36Z"
     }
   },
   "rosterHistory": {
@@ -2036,11 +2036,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 2,
       "ties": 1,
-      "text": "5-2-1",
-      "played": 8,
+      "text": "6-2-1",
+      "played": 9,
       "scheduled": 26,
       "confText": null,
       "exhibitions": 0
@@ -2200,11 +2200,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Whitewater, WI, Robert Fiskum Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://wiacnetwork.com/whitewater/",
-          "live stats": "http://www.sidearmstats.com/uww/wsoc/",
+          "recap": "https://www.uwwsports.com/news/2026/9/23/womens-soccer-dehnes-first-half-goal-lifts-warhawks-over-wheaton.aspx",
+          "box score": "https://www.uwwsports.com/sports/womens-soccer/stats/2026/wheaton/boxscore/23187",
           "history": "https://www.uwwsports.com/sports/womens-soccer/opponent-history/wheaton-college-ill-/16"
         }
       },
@@ -3618,13 +3618,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwwsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:35Z"
+      "asOf": "2026-09-24T16:10:36Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Dehne's First Half Goal Lifts Warhawks over Wheaton",
+        "url": "https://uwwsports.com/news/2026/9/23/womens-soccer-dehnes-first-half-goal-lifts-warhawks-over-wheaton.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Stalemate at Fiskum; Warhawks Draw with Carroll",
         "url": "https://uwwsports.com/news/2026/9/21/womens-soccer-stalemate-at-fiskum-warhawks-draw-with-carroll.aspx",
@@ -3689,7 +3695,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.uwwsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:39Z"
+      "asOf": "2026-09-24T16:10:44Z"
     }
   },
   "camps": {
@@ -3703,20 +3709,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.uww.edu/ce/camps/athletic/soccer?path=wsoc",
-        "asOf": "2026-09-23T20:47:46Z"
+        "asOf": "2026-09-24T16:10:55Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3730,10 +3736,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:36Z"
+      }
+    ]
   }
 }

@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.golutes.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:18:32Z"
+        "asOf": "2026-09-24T16:06:27Z"
       }
     }
   },
@@ -302,13 +302,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
+      "record": "3-2-2",
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "1-0-1",
+      "gamesPlayed": 7,
+      "confRecord": "1-1-1",
       "headCoach": "Seth Spidahl"
     },
     {
@@ -1124,7 +1124,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.golutes.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:18:32Z"
+      "asOf": "2026-09-24T16:06:27Z"
     }
   },
   "rosterHistory": {
@@ -2111,12 +2111,12 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 20,
-      "confText": "1-0-1",
+      "confText": "1-1-1",
       "exhibitions": 2
     },
     "games": [
@@ -2270,10 +2270,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Tacoma, Wash. (University of Puget Sound)",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://flosports.link/3RntH1V",
+          "box score": "https://www.golutes.com/sports/womens-soccer/stats/2026/university-of-puget-sound/boxscore/11348",
+          "recap": "https://www.golutes.com/news/2026/9/23/womens-soccer-novotny-goal-not-enough-to-extend-35-game-nwc-streak.aspx",
           "history": "https://www.golutes.com/sports/womens-soccer/opponent-history/university-of-puget-sound/78"
         }
       },
@@ -3772,13 +3773,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.golutes.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:18:32Z"
+      "asOf": "2026-09-24T16:06:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Novotny Goal Not Enough to Extend 35-Game NWC Streak",
+        "url": "https://golutes.com/news/2026/9/23/womens-soccer-novotny-goal-not-enough-to-extend-35-game-nwc-streak.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Lutes Battle George Fox to Scoreless Draw",
         "url": "https://golutes.com/news/2026/9/20/lutes-battle-george-fox-to-scoreless-draw.aspx",
@@ -3843,7 +3850,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.golutes.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:18:37Z"
+      "asOf": "2026-09-24T16:06:38Z"
     }
   },
   "camps": {
@@ -3857,20 +3864,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://plucamps.com",
-        "asOf": "2026-09-23T19:18:39Z"
+        "asOf": "2026-09-24T16:06:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3884,10 +3891,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:27Z"
+      }
+    ]
   }
 }

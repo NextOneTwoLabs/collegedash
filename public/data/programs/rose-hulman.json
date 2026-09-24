@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.rose-hulman.edu/sports/wsoc/roster",
-        "asOf": "2026-09-23T21:21:29Z"
+        "asOf": "2026-09-24T16:07:37Z"
       }
     }
   },
@@ -304,12 +304,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-0",
-      "wins": 4,
+      "record": "5-1-0",
+      "wins": 5,
       "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Amy Helliwell"
     },
     {
@@ -1105,7 +1105,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/roster",
-      "asOf": "2026-09-23T21:21:29Z"
+      "asOf": "2026-09-24T16:07:37Z"
     }
   },
   "rosterHistory": {
@@ -1949,11 +1949,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 0,
-      "text": "4-1-0",
-      "played": 5,
+      "text": "5-1-0",
+      "played": 6,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2059,11 +2059,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Terre Haute, Ind., Rose-Hulman Soccer Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://www.indianasrn.org/Games_RHIT.php",
-          "live stats": "https://athletics.rose-hulman.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.rose-hulman.edu/sports/womens-soccer/stats/2026/depauw/boxscore/14017",
+          "recap": "https://athletics.rose-hulman.edu/news/2026/9/23/womens-soccer-rose-hulman-topples-the-tigers-in-shutout-victory.aspx",
           "history": "https://athletics.rose-hulman.edu/sports/womens-soccer/opponent-history/depauw-university/22"
         }
       },
@@ -3320,13 +3320,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/schedule",
-      "asOf": "2026-09-23T21:21:29Z"
+      "asOf": "2026-09-24T16:07:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Rose-Hulman Looks to Continue Win Streak in Road Match-Up with Berea",
+        "url": "https://athletics.rose-hulman.edu/news/2026/9/24/womens-soccer-rose-hulman-looks-to-continue-win-streak-in-road-match-up-with-berea.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
+      {
+        "title": "Rose-Hulman Topples the Tigers in Shutout Victory",
+        "url": "https://athletics.rose-hulman.edu/news/2026/9/23/womens-soccer-rose-hulman-topples-the-tigers-in-shutout-victory.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Fightin' Engineers Conclude Homestand against DePauw",
         "url": "https://athletics.rose-hulman.edu/news/2026/9/21/womens-soccer-fightin-engineers-conclude-homestand-against-depauw.aspx",
@@ -3386,18 +3398,12 @@
         "url": "https://athletics.rose-hulman.edu/news/2026/6/9/womens-tennis-camille-clark-named-hcac-female-athlete-of-the-year.aspx",
         "date": "2026-06-09",
         "recruiting": false
-      },
-      {
-        "title": "Mobile App",
-        "url": "https://athletics.rose-hulman.edu/news/2020/11/2/general-rose-hulman-athletics-releases-new-mobile-app-11-2-2020.aspx",
-        "date": "2020-11-02",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/archives",
-      "asOf": "2026-09-23T21:21:32Z"
+      "asOf": "2026-09-24T16:07:47Z"
     }
   },
   "camps": {
@@ -3411,20 +3417,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.rose-hulman.edu/documents/2026/2/23/2026_ROSE_WSOC_July_18_Prospect_Camp_Form.docx",
-        "asOf": "2026-09-23T21:21:35Z"
+        "asOf": "2026-09-24T16:07:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3438,10 +3444,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:37Z"
+      }
+    ]
   }
 }

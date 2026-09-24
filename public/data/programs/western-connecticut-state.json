@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.westconnathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:37Z"
+        "asOf": "2026-09-24T16:09:39Z"
       }
     }
   },
@@ -319,12 +319,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-3",
+      "record": "4-1-4",
       "wins": 4,
       "losses": 1,
-      "ties": 3,
+      "ties": 4,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "confRecord": "2-0-0",
       "headCoach": "Alex Harrison"
     },
@@ -1061,7 +1061,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.westconnathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:37Z"
+      "asOf": "2026-09-24T16:09:39Z"
     }
   },
   "rosterHistory": {
@@ -1771,9 +1771,9 @@
     "record": {
       "wins": 4,
       "losses": 1,
-      "ties": 3,
-      "text": "4-1-3",
-      "played": 8,
+      "ties": 4,
+      "text": "4-1-4",
+      "played": 9,
       "scheduled": 18,
       "confText": "2-0-0",
       "exhibitions": 0
@@ -1933,11 +1933,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Danbury, Conn., The Westside Athletic Complex",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://flosports.link/4xGGuff",
-          "live stats": "https://westconnathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.westconnathletics.com/sports/womens-soccer/stats/2026/russell-sage-college/boxscore/6022",
+          "recap": "https://www.westconnathletics.com/news/2026/9/23/westconn-womens-soccer-salvages-tie-against-sage.aspx",
           "history": "https://www.westconnathletics.com/sports/womens-soccer/opponent-history/russell-sage-college/45"
         }
       },
@@ -3346,13 +3346,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.westconnathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:37Z"
+      "asOf": "2026-09-24T16:09:39Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Santana and Regan Named Wolves of the Week",
+        "url": "https://westconnathletics.com/news/2026/9/23/general-santana-and-regan-named-wolves-of-the-week.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "WestConn Women's Soccer Salvages Tie Against Sage",
+        "url": "https://westconnathletics.com/news/2026/9/23/westconn-womens-soccer-salvages-tie-against-sage.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "WestConn's Regan Collects Second LEC Women's Soccer Goalkeeper Of The Week Award",
         "url": "https://westconnathletics.com/news/2026/9/21/westconns-regan-collects-second-lec-womens-soccer-goalkeeper-of-the-week-award.aspx",
@@ -3417,7 +3429,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.westconnathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:40Z"
+      "asOf": "2026-09-24T16:09:47Z"
     }
   },
   "camps": {
@@ -3431,20 +3443,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.westconnathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:40Z"
+        "asOf": "2026-09-24T16:09:47Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3458,10 +3470,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:39Z"
+      }
+    ]
   }
 }

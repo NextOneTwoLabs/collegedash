@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.catholicathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:15Z"
+        "asOf": "2026-09-24T16:00:17Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
-      "wins": 3,
+      "record": "4-2-1",
+      "wins": 4,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Casey Sommers"
     },
     {
@@ -1053,7 +1053,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.catholicathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:15Z"
+      "asOf": "2026-09-24T16:00:17Z"
     }
   },
   "rosterHistory": {
@@ -1892,11 +1892,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2020,11 +2020,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Washington, D.C., Carlini Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://flosports.link/4gyMH6b",
-          "live stats": "https://catholicathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.catholicathletics.com/sports/womens-soccer/stats/2026/st-marys-md-/boxscore/7958",
+          "recap": "https://www.catholicathletics.com/news/2026/9/23/womens-soccer-scullys-early-goal-secures-catholic-soccer-home-win.aspx",
           "history": "https://www.catholicathletics.com/sports/womens-soccer/opponent-history/st-marys-college-of-maryland/27"
         }
       },
@@ -3306,13 +3306,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.catholicathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:15Z"
+      "asOf": "2026-09-24T16:00:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Scully’s Early Goal Secures Catholic Win Over St. Mary's",
+        "url": "https://catholicathletics.com/news/2026/9/23/womens-soccer-scullys-early-goal-secures-catholic-soccer-home-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Cardinals Unable to Hold Off Shenandoah on Senior Day",
         "url": "https://catholicathletics.com/news/2026/9/19/womens-soccer-cardinals-unable-to-hold-off-shenandoah-on-senior-day.aspx",
@@ -3383,7 +3389,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.catholicathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:23Z"
+      "asOf": "2026-09-24T16:00:25Z"
     }
   },
   "camps": {
@@ -3397,20 +3403,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.catholicathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:25Z"
+        "asOf": "2026-09-24T16:00:26Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3424,10 +3430,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:17Z"
+      }
+    ]
   }
 }

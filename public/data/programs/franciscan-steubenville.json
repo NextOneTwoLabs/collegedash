@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:23Z"
+        "asOf": "2026-09-24T16:01:58Z"
       }
     }
   },
@@ -312,13 +312,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-1",
-      "wins": 4,
+      "record": "5-0-1",
+      "wins": 5,
       "losses": 0,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 6,
+      "confRecord": "2-0-0",
       "headCoach": "Nick Miller"
     },
     {
@@ -995,7 +995,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:23Z"
+      "asOf": "2026-09-24T16:01:58Z"
     }
   },
   "rosterHistory": {
@@ -1715,13 +1715,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 0,
       "ties": 1,
-      "text": "4-0-1",
-      "played": 5,
+      "text": "5-0-1",
+      "played": 6,
       "scheduled": 18,
-      "confText": "1-0-0",
+      "confText": "2-0-0",
       "exhibitions": 1
     },
     "games": [
@@ -1857,11 +1857,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Steubenville, OH, Trinity Health System Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://pacdigitalnetwork.com/franciscanu/",
-          "live stats": "https://franciscanathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.franciscanathletics.com/sports/womens-soccer/stats/2026/chatham-university/boxscore/6884",
           "history": "https://www.franciscanathletics.com/sports/womens-soccer/opponent-history/chatham-university/38"
         }
       },
@@ -3053,13 +3052,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:23Z"
+      "asOf": "2026-09-24T16:01:58Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "3-0 Three Times",
+        "url": "https://franciscanathletics.com/news/2026/9/24/womens-soccer-wsoc-v-cha.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Hosts Conference Home Opener Against Chatham",
         "url": "https://franciscanathletics.com/news/2026/9/22/womens-soccer-hosts-conference-home-opener-against-chatham.aspx",
@@ -3124,7 +3129,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:31Z"
+      "asOf": "2026-09-24T16:02:09Z"
     }
   },
   "camps": {
@@ -3138,20 +3143,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:32Z"
+        "asOf": "2026-09-24T16:02:09Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3165,10 +3170,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:58Z"
+      }
+    ]
   }
 }

@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:38Z"
+        "asOf": "2026-09-24T16:02:22Z"
       }
     }
   },
@@ -286,13 +286,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-1",
+      "record": "2-5-1",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "0-1-0",
+      "gamesPlayed": 8,
+      "confRecord": "0-2-0",
       "headCoach": "Kirsten Koester"
     },
     {
@@ -1069,7 +1069,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:38Z"
+      "asOf": "2026-09-24T16:02:22Z"
     }
   },
   "rosterHistory": {
@@ -1686,12 +1686,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "2-4-1",
-      "played": 7,
+      "text": "2-5-1",
+      "played": 8,
       "scheduled": 18,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 0
     },
     "games": [
@@ -1831,11 +1831,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Galesburg, IL",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://watchmidwestsports.com/knox/?B=4069785",
-          "live stats": "https://prairiefire.knox.edu/sidearmstats/wsoc/summary",
+          "box score": "https://pioneers.grinnell.edu/sports/womens-soccer/stats/2026/knox-college/boxscore/20303",
+          "recap": "https://pioneers.grinnell.edu/news/2026/9/23/womens-soccer-grinnell-rally-falls-short-in-2-1-womens-soccer-loss-at-knox.aspx",
           "history": "https://pioneers.grinnell.edu/sports/womens-soccer/opponent-history/knox-college/9"
         }
       },
@@ -3002,13 +3002,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:38Z"
+      "asOf": "2026-09-24T16:02:22Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Grinnell rally falls short in 2-1 women's soccer loss at Knox",
+        "url": "https://pioneers.grinnell.edu/news/2026/9/23/womens-soccer-grinnell-rally-falls-short-in-2-1-womens-soccer-loss-at-knox.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Pioneer women's soccer team owns the stat sheet, but loses 2-0 at Monmouth",
         "url": "https://pioneers.grinnell.edu/news/2026/9/19/womens-soccer-pioneer-womens-soccer-team-owns-the-stat-sheet-but-loses-2-0-at-monmouth.aspx",
@@ -3073,7 +3079,7 @@
     "_meta": {
       "source": "news",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:44Z"
+      "asOf": "2026-09-24T16:02:27Z"
     }
   },
   "camps": {
@@ -3087,20 +3093,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:44Z"
+        "asOf": "2026-09-24T16:02:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3114,10 +3120,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:22Z"
+      }
+    ]
   }
 }

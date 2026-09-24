@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://lycomingathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:26Z"
+        "asOf": "2026-09-24T16:04:15Z"
       }
     }
   },
@@ -312,12 +312,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-0",
-      "wins": 3,
+      "record": "4-3-0",
+      "wins": 4,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Kenny Fern"
     },
     {
@@ -1110,7 +1110,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://lycomingathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:26Z"
+      "asOf": "2026-09-24T16:04:15Z"
     }
   },
   "rosterHistory": {
@@ -1877,11 +1877,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 0,
-      "text": "3-3-0",
-      "played": 6,
+      "text": "4-3-0",
+      "played": 7,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 0
@@ -2022,10 +2022,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Williamsport, Pa., UPMC Field at Keiper Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-1",
         "links": {
-          "live stats": "http://www.sidearmstats.com/lycoming/wsoc/",
+          "recap": "https://lycomingathletics.com/news/2026/9/23/womens-soccer-trio-of-second-half-scores-send-lycoming-over-elmira.aspx",
+          "box score": "https://lycomingathletics.com/sports/womens-soccer/stats/2026/elmira/boxscore/17688",
           "history": "https://lycomingathletics.com/sports/womens-soccer/opponent-history/elmira-college/36"
         }
       },
@@ -3294,13 +3295,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://lycomingathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:26Z"
+      "asOf": "2026-09-24T16:04:15Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Trio of second-half scores send Lycoming over Elmira",
+        "url": "https://lycomingathletics.com/news/2026/9/23/womens-soccer-trio-of-second-half-scores-send-lycoming-over-elmira.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Mosley named Landmark Conference Offensive Athlete of the Week",
         "url": "https://lycomingathletics.com/news/2026/9/21/womens-soccer-mosley-named-landmark-conference-offensive-athlete-of-the-week.aspx",
@@ -3365,7 +3372,7 @@
     "_meta": {
       "source": "news",
       "url": "https://lycomingathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:36Z"
+      "asOf": "2026-09-24T16:04:19Z"
     }
   },
   "camps": {
@@ -3379,20 +3386,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://lycomingathletics.com/sports/2009/9/16/MBB_Camps.aspx",
-        "asOf": "2026-09-23T19:09:40Z"
+        "asOf": "2026-09-24T16:04:30Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3406,10 +3413,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:15Z"
+      }
+    ]
   }
 }

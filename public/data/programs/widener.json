@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.widenerpride.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:50Z"
+        "asOf": "2026-09-24T16:09:57Z"
       }
     }
   },
@@ -319,12 +319,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-1",
+      "record": "4-3-1",
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Melissa Franks"
     },
     {
@@ -997,7 +997,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.widenerpride.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:50Z"
+      "asOf": "2026-09-24T16:09:57Z"
     }
   },
   "rosterHistory": {
@@ -1702,10 +1702,10 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "4-2-1",
-      "played": 7,
+      "text": "4-3-1",
+      "played": 8,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -1847,11 +1847,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Glenside, Pa.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://gomacsports.tv/arcadia/",
-          "live stats": "https://arcadiaknights.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.widenerpride.com/news/2026/9/23/womens-soccer-womens-soccer-comes-up-short-against-arcadia-1-0.aspx",
+          "box score": "https://www.widenerpride.com/sports/womens-soccer/stats/2026/arcadia/boxscore/14482",
           "history": "https://www.widenerpride.com/sports/womens-soccer/opponent-history/arcadia-university/27"
         }
       },
@@ -3009,13 +3009,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.widenerpride.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:50Z"
+      "asOf": "2026-09-24T16:09:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Comes Up Short Against Arcadia, 1-0",
+        "url": "https://widenerpride.com/news/2026/9/23/womens-soccer-womens-soccer-comes-up-short-against-arcadia-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Abanyie Named MAC Commonwealth Defensive Player of the Week",
         "url": "https://widenerpride.com/news/2026/9/22/womens-soccer-abanyie-named-mac-commonwealth-defensive-player-of-the-week.aspx",
@@ -3080,7 +3086,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.widenerpride.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:03Z"
+      "asOf": "2026-09-24T16:10:05Z"
     }
   },
   "camps": {
@@ -3094,20 +3100,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://fan.hudl.com/program-2026-widener-772537057919",
-        "asOf": "2026-09-23T19:13:06Z"
+        "asOf": "2026-09-24T16:10:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3121,10 +3127,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:57Z"
+      }
+    ]
   }
 }

@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.haverfordathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:47Z"
+        "asOf": "2026-09-24T16:02:42Z"
       }
     }
   },
@@ -294,13 +294,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
+      "record": "3-2-2",
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "0-0-1",
+      "gamesPlayed": 7,
+      "confRecord": "0-1-1",
       "headCoach": "Jamie Schneck"
     },
     {
@@ -995,7 +995,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.haverfordathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:47Z"
+      "asOf": "2026-09-24T16:02:42Z"
     }
   },
   "rosterHistory": {
@@ -1727,12 +1727,12 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 21,
-      "confText": "0-0-1",
+      "confText": "0-1-1",
       "exhibitions": 0
     },
     "games": [
@@ -1870,10 +1870,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Collegeville, Pa.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "live stats": "https://ursinusathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.haverfordathletics.com/sports/womens-soccer/stats/2026/ursinus/boxscore/8298",
+          "recap": "https://www.haverfordathletics.com/news/2026/9/23/womens-soccer-falls-to-ursinus-1-0.aspx",
           "history": "https://www.haverfordathletics.com/sports/womens-soccer/opponent-history/ursinus-college/14"
         }
       },
@@ -3154,13 +3155,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.haverfordathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:47Z"
+      "asOf": "2026-09-24T16:02:42Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Falls to Ursinus, 1-0",
+        "url": "https://haverfordathletics.com/news/2026/9/23/womens-soccer-falls-to-ursinus-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Grabs One Point in Centennial Conference Opener",
         "url": "https://haverfordathletics.com/news/2026/9/19/womens-soccer-grabs-one-point-in-centennial-conference-opener.aspx",
@@ -3225,7 +3232,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.haverfordathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:04:52Z"
+      "asOf": "2026-09-24T16:02:47Z"
     }
   },
   "camps": {
@@ -3239,20 +3246,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://haverfordathletics.com/sports/2025/5/16/information-camps-index.aspx",
-        "asOf": "2026-09-23T19:04:54Z"
+        "asOf": "2026-09-24T16:02:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3266,10 +3273,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:42Z"
+      }
+    ]
   }
 }

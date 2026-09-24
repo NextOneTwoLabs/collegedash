@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.snc.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:56Z"
+        "asOf": "2026-09-24T16:08:37Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-1",
-      "wins": 2,
+      "record": "3-5-1",
+      "wins": 3,
       "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
-      "confRecord": "1-1-0",
+      "gamesPlayed": 9,
+      "confRecord": "2-1-0",
       "headCoach": "Katie Guns"
     },
     {
@@ -1052,7 +1052,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.snc.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:56Z"
+      "asOf": "2026-09-24T16:08:37Z"
     }
   },
   "rosterHistory": {
@@ -1834,13 +1834,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 5,
       "ties": 1,
-      "text": "2-5-1",
-      "played": 8,
+      "text": "3-5-1",
+      "played": 9,
       "scheduled": 19,
-      "confText": "1-1-0",
+      "confText": "2-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -1990,10 +1990,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "De Pere, Wis., Donald J. Schneider Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "live stats": "https://athletics.snc.edu/sidearmstats/wsoc/summary"
+          "box score": "https://athletics.snc.edu/sports/womens-soccer/stats/2026/wisconsin-lutheran-college/boxscore/21785",
+          "recap": "https://athletics.snc.edu/news/2026/9/23/womens-soccer-st-norbert-scores-late-to-down-warriors.aspx"
         }
       },
       {
@@ -3228,13 +3229,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.snc.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:56Z"
+      "asOf": "2026-09-24T16:08:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "St. Norbert Scores Late to Down Warriors",
+        "url": "https://athletics.snc.edu/news/2026/9/23/womens-soccer-st-norbert-scores-late-to-down-warriors.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "St. Norbert Falls to Scarlet Hawks",
         "url": "https://athletics.snc.edu/news/2026/9/19/womens-soccer-st-norbert-falls-to-scarlet-hawks.aspx",
@@ -3299,7 +3306,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.snc.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:04Z"
+      "asOf": "2026-09-24T16:08:44Z"
     }
   },
   "camps": {
@@ -3313,20 +3320,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.snc.edu/documents/2026/4/10/SNC_WSOC_ID_Camp_Waiver_2026.pdf",
-        "asOf": "2026-09-23T18:45:11Z"
+        "asOf": "2026-09-24T16:08:50Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3340,10 +3347,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:37Z"
+      }
+    ]
   }
 }

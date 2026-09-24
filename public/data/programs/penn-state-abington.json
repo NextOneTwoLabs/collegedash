@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.abingtonsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:26Z"
+        "asOf": "2026-09-24T16:06:40Z"
       }
     }
   },
@@ -294,12 +294,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-6-1",
+      "record": "0-7-1",
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Ylber Mezani"
     },
     {
@@ -811,7 +811,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.abingtonsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:26Z"
+      "asOf": "2026-09-24T16:06:40Z"
     }
   },
   "rosterHistory": {
@@ -1335,10 +1335,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
-      "text": "0-6-1",
-      "played": 7,
+      "text": "0-7-1",
+      "played": 8,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -1480,11 +1480,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Reading, Pa.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-4",
         "links": {
-          "watch": "https://gomacsports.tv/alverniawolves/",
-          "live stats": "https://auwolves.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.abingtonsports.com/news/2026/9/23/womens-soccer-abington-falls-to-golden-wolves.aspx",
+          "box score": "https://www.abingtonsports.com/sports/womens-soccer/stats/2026/alvernia-university/boxscore/5230",
           "history": "https://www.abingtonsports.com/sports/womens-soccer/opponent-history/alvernia-university/25"
         }
       },
@@ -2702,13 +2702,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.abingtonsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:26Z"
+      "asOf": "2026-09-24T16:06:40Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Abington Falls to Golden Wolves",
+        "url": "https://abingtonsports.com/news/2026/9/23/womens-soccer-abington-falls-to-golden-wolves.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Abington Falls to Ramapo on the Road",
         "url": "https://abingtonsports.com/news/2026/9/19/womens-soccer-abington-falls-to-ramapo-on-the-road.aspx",
@@ -2773,7 +2779,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.abingtonsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:30Z"
+      "asOf": "2026-09-24T16:06:54Z"
     }
   },
   "camps": {
@@ -2787,20 +2793,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://abington.psu.edu/kids-and-teens-college-summer-camps",
-        "asOf": "2026-09-23T18:57:35Z"
+        "asOf": "2026-09-24T16:07:00Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2814,10 +2820,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:40Z"
+      }
+    ]
   }
 }

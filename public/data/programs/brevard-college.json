@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:58Z"
+        "asOf": "2026-09-24T15:59:47Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-2",
-      "wins": 4,
+      "record": "5-0-2",
+      "wins": 5,
       "losses": 0,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Juan Mascaro Jr."
     },
     {
@@ -1110,7 +1110,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:58Z"
+      "asOf": "2026-09-24T15:59:47Z"
     }
   },
   "rosterHistory": {
@@ -1972,11 +1972,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 0,
       "ties": 2,
-      "text": "4-0-2",
-      "played": 6,
+      "text": "5-0-2",
+      "played": 7,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 0
@@ -2100,11 +2100,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Brevard, N.C.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-0",
         "links": {
-          "watch": "https://flosports.link/4gaUVB6",
-          "live stats": "https://bctornados.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.bctornados.com/news/2026/9/23/womens-soccer-lorangers-first-half-hat-trick-propels-tornados-to-victory.aspx",
+          "box score": "https://www.bctornados.com/sports/womens-soccer/stats/2026/salem/boxscore/6420",
           "history": "https://www.bctornados.com/sports/womens-soccer/opponent-history/salem-college/173"
         }
       },
@@ -3432,13 +3432,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bctornados.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:58Z"
+      "asOf": "2026-09-24T15:59:47Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Loranger’s First-Half Hat Trick Propels Tornados to Victory",
+        "url": "https://bctornados.com/news/2026/9/23/womens-soccer-lorangers-first-half-hat-trick-propels-tornados-to-victory.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Nunez Notches Second Defender of the Week Accolade of 2026",
         "url": "https://bctornados.com/news/2026/9/22/womens-soccer-nunez-notches-second-defender-of-the-week-accolade-of-2026.aspx",
@@ -3504,18 +3510,12 @@
         "url": "https://bctornados.com/news/2026/7/31/general-brevard-college-athletics-announces-second-annual-tornados-clays-classic.aspx",
         "date": "2026-07-31",
         "recruiting": false
-      },
-      {
-        "title": "2026 BESPYs Recap",
-        "url": "https://bctornados.com/news/2026/5/5/general-brevard-college-student-athletes-honored-at-2026-bespy-awards.aspx",
-        "date": "2026-05-05",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.bctornados.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:06Z"
+      "asOf": "2026-09-24T15:59:56Z"
     }
   },
   "camps": {
@@ -3529,20 +3529,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:06Z"
+        "asOf": "2026-09-24T15:59:56Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3556,10 +3556,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:47Z"
+      }
+    ]
   }
 }

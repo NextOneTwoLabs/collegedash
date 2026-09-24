@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.wlcsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:50Z"
+        "asOf": "2026-09-24T16:10:30Z"
       }
     }
   },
@@ -303,13 +303,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-0-0",
+      "record": "5-1-0",
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 6,
+      "confRecord": "1-1-0",
       "headCoach": "Matt Eisold"
     },
     {
@@ -1024,7 +1024,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wlcsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:50Z"
+      "asOf": "2026-09-24T16:10:30Z"
     }
   },
   "rosterHistory": {
@@ -1792,12 +1792,12 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "text": "5-0-0",
-      "played": 5,
+      "text": "5-1-0",
+      "played": 6,
       "scheduled": 20,
-      "confText": "1-0-0",
+      "confText": "1-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -1901,11 +1901,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "De Pere, Wis. / Donald J. Schneider Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://boxcast.tv/view/st-norbert-womens-soccer-vs-wisconsin-lutheran-fwc7jyqvoxexrmukxgvd?_gl=1*1ayn19p*_gcl_au*OTQ4MzA4MjU2LjE3NzYxOTYwMjEuMTQxNjgwMTY5NC4xNzgxMTIwMzAxLjE3ODExMjI1MTg.*_ga*MTMyNTA3NjQxMC4xNzI5NzMxMjAx*_ga_PXBBF7HVWQ*czE3ODExMjAyOTYkbzczMCRnMSR0MTc4MTEyMjUxNyRqMTUkbDAkaDA.",
-          "live stats": "https://athletics.snc.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.wlcsports.com/sports/womens-soccer/stats/2026/st-norbert/boxscore/8668",
+          "recap": "https://www.wlcsports.com/news/2026/9/23/womens-soccer-st-norbert-scores-late-to-hand-warriors-first-loss-of-season.aspx",
           "history": "https://www.wlcsports.com/sports/womens-soccer/opponent-history/st-norbert-college/145"
         }
       },
@@ -3111,13 +3111,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wlcsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:50Z"
+      "asOf": "2026-09-24T16:10:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "St. Norbert Scores Late To Hand Warriors First Loss Of Season",
+        "url": "https://wlcsports.com/news/2026/9/23/womens-soccer-st-norbert-scores-late-to-hand-warriors-first-loss-of-season.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Zarling Snags First Career NACC Weekly Award",
         "url": "https://wlcsports.com/news/2026/9/22/womens-soccer-zarling-snags-first-career-nacc-weekly-award.aspx",
@@ -3182,7 +3188,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.wlcsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:58Z"
+      "asOf": "2026-09-24T16:10:37Z"
     }
   },
   "camps": {
@@ -3196,20 +3202,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 202 for https://register.ryzer.com/camp.cfm?sport=43&id=342787",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://register.ryzer.com/camp.cfm?sport=43&id=342787",
-        "asOf": "2026-09-23T18:45:02Z"
+        "asOf": "2026-09-24T16:10:39Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3223,10 +3229,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:30Z"
+      }
+    ]
   }
 }

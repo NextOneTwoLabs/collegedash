@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gomightymacs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:47Z"
+        "asOf": "2026-09-24T16:03:15Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-0",
-      "wins": 4,
+      "record": "5-2-0",
+      "wins": 5,
       "losses": 2,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Seamus O'Connor"
     },
     {
@@ -941,7 +941,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gomightymacs.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:47Z"
+      "asOf": "2026-09-24T16:03:15Z"
     }
   },
   "rosterHistory": {
@@ -1563,11 +1563,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 2,
       "ties": 0,
-      "text": "4-2-0",
-      "played": 6,
+      "text": "5-2-0",
+      "played": 7,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 2
@@ -1739,11 +1739,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Immaculata, Pa., Draper Walsh Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://atlanticeastnetwork.com/immaculata",
-          "live stats": "https://gomightymacs.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.gomightymacs.com/news/2026/9/23/womens-soccer-tackles-desales-bulldogs-in-shutout-win.aspx",
+          "box score": "https://www.gomightymacs.com/sports/womens-soccer/stats/2026/desales-university/boxscore/8224",
           "history": "https://www.gomightymacs.com/sports/womens-soccer/opponent-history/desales-university/12"
         }
       },
@@ -2992,13 +2992,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gomightymacs.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:47Z"
+      "asOf": "2026-09-24T16:03:15Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Tackles DeSales Bulldogs in Shutout Win",
+        "url": "https://gomightymacs.com/news/2026/9/23/womens-soccer-tackles-desales-bulldogs-in-shutout-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Hosts DeSales Wednesday Evening",
         "url": "https://gomightymacs.com/news/2026/9/22/womens-soccer-hosts-desales-wednesday-evening.aspx",
@@ -3063,7 +3069,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gomightymacs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:51Z"
+      "asOf": "2026-09-24T16:03:20Z"
     }
   },
   "camps": {
@@ -3077,20 +3083,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gomightymacs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:51Z"
+        "asOf": "2026-09-24T16:03:20Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3104,10 +3110,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:15Z"
+      }
+    ]
   }
 }

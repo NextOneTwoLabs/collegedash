@@ -292,7 +292,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://websterathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:28Z"
+        "asOf": "2026-09-24T16:09:41Z"
       }
     }
   },
@@ -300,12 +300,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-0",
-      "wins": 2,
+      "record": "3-2-0",
+      "wins": 3,
       "losses": 2,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "headCoach": "Luigi Scire"
     },
     {
@@ -882,7 +882,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://websterathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:28Z"
+      "asOf": "2026-09-24T16:09:41Z"
     }
   },
   "rosterHistory": {
@@ -1476,11 +1476,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 2,
       "ties": 0,
-      "text": "2-2-0",
-      "played": 4,
+      "text": "3-2-0",
+      "played": 5,
       "scheduled": 14,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1568,9 +1568,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Jacksonville, IL",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
+          "box score": "https://websterathletics.com/sports/womens-soccer/stats/2026/illinois-college/boxscore/13685",
+          "recap": "https://websterathletics.com/news/2026/9/23/womens-soccer-rally-past-illinois-college-2-1.aspx",
           "history": "https://websterathletics.com/sports/womens-soccer/opponent-history/illinois-college/14"
         }
       },
@@ -1587,6 +1589,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://fan.hudl.com/usa/il/carlinville/organization/11959/blackburn-college/watch?ib=4361271",
+          "live stats": "https://www.blackburnbeavers.com/sports/wsoc/2026-27/boxscores/20260926_inuj.xml",
           "history": "https://websterathletics.com/sports/womens-soccer/opponent-history/blackburn-college/11"
         }
       },
@@ -2714,13 +2718,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://websterathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:28Z"
+      "asOf": "2026-09-24T16:09:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Rally Past Illinois College, 2-1",
+        "url": "https://websterathletics.com/news/2026/9/23/womens-soccer-rally-past-illinois-college-2-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Shuts Out Hendrix, 1-0",
         "url": "https://websterathletics.com/news/2026/9/18/womens-soccer-womens-soccer-shuts-out-hendrix-1-0.aspx",
@@ -2785,7 +2795,7 @@
     "_meta": {
       "source": "news",
       "url": "https://websterathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:31Z"
+      "asOf": "2026-09-24T16:09:51Z"
     }
   },
   "camps": {
@@ -2799,7 +2809,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Athletic Camps",
@@ -2852,14 +2862,14 @@
       {
         "source": "camps",
         "url": "https://websterathletics.com/sports/2008/1/8/GORLOKCAMPS.aspx",
-        "asOf": "2026-09-23T19:16:33Z"
+        "asOf": "2026-09-24T16:09:54Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2873,10 +2883,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:41Z"
+      }
+    ]
   }
 }

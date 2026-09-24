@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.oldwestburypanthers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:29Z"
+        "asOf": "2026-09-24T16:08:57Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-0-2",
+      "record": "1-1-2",
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 3,
-      "confRecord": "0-0-1",
+      "gamesPlayed": 4,
+      "confRecord": "0-1-1",
       "headCoach": "Jeff Littwin"
     },
     {
@@ -913,7 +913,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.oldwestburypanthers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:29Z"
+      "asOf": "2026-09-24T16:08:57Z"
     }
   },
   "rosterHistory": {
@@ -1379,12 +1379,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 0,
+      "losses": 1,
       "ties": 2,
-      "text": "1-0-2",
-      "played": 3,
+      "text": "1-1-2",
+      "played": 4,
       "scheduled": 18,
-      "confText": "0-0-1",
+      "confText": "0-1-1",
       "exhibitions": 0
     },
     "games": [
@@ -1500,11 +1500,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Old Westbury, NY, Panther Park",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://fan.hudl.com/usa/ny/old-westbury/organization/51594/suny-college-at-old",
-          "live stats": "https://www.oldwestburypanthers.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.oldwestburypanthers.com/sports/womens-soccer/stats/2026/manhattanville-university/boxscore/9052",
+          "recap": "https://www.oldwestburypanthers.com/news/2026/9/24/womens-soccer-panthers-drop-late-decision-to-manhattanville.aspx",
           "history": "https://www.oldwestburypanthers.com/sports/womens-soccer/opponent-history/manhattanville-university/55"
         }
       },
@@ -2709,13 +2709,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.oldwestburypanthers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:29Z"
+      "asOf": "2026-09-24T16:08:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Panthers Drop Late Decision to Manhattanville",
+        "url": "https://oldwestburypanthers.com/news/2026/9/24/womens-soccer-panthers-drop-late-decision-to-manhattanville.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
       {
         "title": "Panthers Battle Purchase to 1-1 Draw at Panther Park",
         "url": "https://oldwestburypanthers.com/news/2026/9/20/womens-soccer-panthers-battle-purchase-to-1-1-draw-at-panther-park.aspx",
@@ -2780,7 +2786,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.oldwestburypanthers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:33Z"
+      "asOf": "2026-09-24T16:09:02Z"
     }
   },
   "camps": {
@@ -2794,20 +2800,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.oldwestburypanthers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:33Z"
+        "asOf": "2026-09-24T16:09:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2821,10 +2827,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:57Z"
+      }
+    ]
   }
 }

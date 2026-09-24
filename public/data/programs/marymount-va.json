@@ -293,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.marymountsaints.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:48Z"
+        "asOf": "2026-09-24T16:04:39Z"
       }
     }
   },
@@ -301,12 +301,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-4-1",
       "wins": 2,
       "losses": 4,
-      "ties": 0,
+      "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Heather Lipp"
     },
     {
@@ -1081,7 +1081,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.marymountsaints.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:48Z"
+      "asOf": "2026-09-24T16:04:39Z"
     }
   },
   "rosterHistory": {
@@ -2018,9 +2018,9 @@
     "record": {
       "wins": 2,
       "losses": 4,
-      "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "ties": 1,
+      "text": "2-4-1",
+      "played": 7,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2144,11 +2144,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Newport News, Va. / Captains Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://fan.hudl.com/usa/va/newport-news/organization/23838/christopher-newport/video?shared=true",
-          "live stats": "https://www.cnusports.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.marymountsaints.com/sports/womens-soccer/stats/2026/christopher-newport-university/boxscore/8204",
+          "recap": "https://www.marymountsaints.com/news/2026/9/23/womens-soccer-wsoc-marymount-battles-to-0-0-draw.aspx",
           "history": "https://www.marymountsaints.com/sports/womens-soccer/opponent-history/christopher-newport-university/12"
         }
       },
@@ -3603,13 +3603,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.marymountsaints.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:48Z"
+      "asOf": "2026-09-24T16:04:39Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "WSOC: Marymount Battles to 0-0 Draw at RV CNU",
+        "url": "https://marymountsaints.com/news/2026/9/23/womens-soccer-wsoc-marymount-battles-to-0-0-draw.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "WSOC: Saints Narrowly Fall to Lynchburg 2-1",
         "url": "https://marymountsaints.com/news/2026/9/19/womens-soccer-wsoc-saints-narrowly-fall-to-lynchburg-2-1.aspx",
@@ -3680,7 +3686,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.marymountsaints.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:53Z"
+      "asOf": "2026-09-24T16:04:47Z"
     }
   },
   "camps": {
@@ -3694,20 +3700,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://girlssoccer.marymountsportscamps.com/",
-        "asOf": "2026-09-23T20:47:55Z"
+        "asOf": "2026-09-24T16:04:50Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3721,10 +3727,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:39Z"
+      }
+    ]
   }
 }

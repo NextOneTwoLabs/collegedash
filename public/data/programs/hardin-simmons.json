@@ -281,7 +281,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://hsuathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:58Z"
+        "asOf": "2026-09-24T16:02:37Z"
       }
     }
   },
@@ -289,12 +289,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-1",
-      "wins": 2,
+      "record": "3-2-1",
+      "wins": 3,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Rusty Oglesby"
     },
     {
@@ -971,7 +971,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hsuathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:58Z"
+      "asOf": "2026-09-24T16:02:37Z"
     }
   },
   "rosterHistory": {
@@ -1754,11 +1754,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 2,
       "ties": 1,
-      "text": "2-2-1",
-      "played": 5,
+      "text": "3-2-1",
+      "played": 6,
       "scheduled": 16,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1859,11 +1859,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Seguin, Texas",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-1",
         "links": {
-          "watch": "https://go.flocollege.com/teams/hardin-simmons?sp=conf-partner-k7p1&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=hardin-simmons",
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=661920"
+          "box score": "https://hsuathletics.com/sports/womens-soccer/stats/2026/texas-lutheran/boxscore/6926",
+          "recap": "https://hsuathletics.com/news/2026/9/23/womens-soccer-cowgirls-score-five-more-goals-at-texas-lutheran.aspx"
         }
       },
       {
@@ -3104,13 +3104,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hsuathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:58Z"
+      "asOf": "2026-09-24T16:02:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Cowgirls Score Five More Goals At Texas Lutheran",
+        "url": "https://hsuathletics.com/news/2026/9/23/womens-soccer-cowgirls-score-five-more-goals-at-texas-lutheran.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Cowgirls Bury Southwestern Texas With 5-0 Win",
         "url": "https://hsuathletics.com/news/2026/9/19/womens-soccer-cowgirls-bury-southwestern-texas-with-5-0-win.aspx",
@@ -3175,7 +3181,7 @@
     "_meta": {
       "source": "news",
       "url": "https://hsuathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:48:09Z"
+      "asOf": "2026-09-24T16:02:43Z"
     }
   },
   "camps": {
@@ -3189,20 +3195,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hsusoccercamps.com/",
-        "asOf": "2026-09-23T20:48:13Z"
+        "asOf": "2026-09-24T16:02:47Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3216,10 +3222,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:37Z"
+      }
+    ]
   }
 }

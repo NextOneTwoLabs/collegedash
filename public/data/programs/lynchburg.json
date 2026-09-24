@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.lynchburgsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:21Z"
+        "asOf": "2026-09-24T16:04:14Z"
       }
     }
   },
@@ -312,12 +312,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-0-0",
-      "wins": 6,
+      "record": "7-0-0",
+      "wins": 7,
       "losses": 0,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
+      "confRecord": "1-0-0",
       "headCoach": "Dr. Todd Olsen"
     },
     {
@@ -1094,7 +1095,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lynchburgsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:21Z"
+      "asOf": "2026-09-24T16:04:14Z"
     }
   },
   "rosterHistory": {
@@ -1917,13 +1918,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 6,
+      "wins": 7,
       "losses": 0,
       "ties": 0,
-      "text": "6-0-0",
-      "played": 6,
+      "text": "7-0-0",
+      "played": 7,
       "scheduled": 21,
-      "confText": "0-0-0",
+      "confText": "1-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2045,11 +2046,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Winchester, Va.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://flosports.link/4m4hvNe",
-          "live stats": "https://suhornets.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.lynchburgsports.com/sports/womens-soccer/stats/2026/shenandoah/boxscore/10551",
+          "recap": "https://www.lynchburgsports.com/news/2026/9/23/womens-soccer-hornets-post-7-0-start-for-first-time-since-2014.aspx",
           "history": "https://www.lynchburgsports.com/sports/womens-soccer/opponent-history/shenandoah-university/75"
         }
       },
@@ -2080,10 +2081,11 @@
         "opponent": "Emory",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Charlotte, N.C.",
+        "location": "Charlotte, N.C. / Charlotte Soccer Academy",
         "result": null,
         "score": null,
         "links": {
+          "live stats": "https://emoryathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.lynchburgsports.com/sports/womens-soccer/opponent-history/emory-university/79"
         }
       },
@@ -3389,13 +3391,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lynchburgsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:21Z"
+      "asOf": "2026-09-24T16:04:14Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Hornets Post 7-0 Start for First Time Since 2014",
+        "url": "https://lynchburgsports.com/news/2026/9/23/womens-soccer-hornets-post-7-0-start-for-first-time-since-2014.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Rogstad's Penalty Kick Lifts Hornets Past Marymount",
         "url": "https://lynchburgsports.com/news/2026/9/19/womens-soccer-rogstads-penalty-kick-lifts-hornets-past-marymount.aspx",
@@ -3460,7 +3468,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.lynchburgsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:30Z"
+      "asOf": "2026-09-24T16:04:18Z"
     }
   },
   "camps": {
@@ -3474,7 +3482,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "2027 Winter ID Clinic: January 17th",
@@ -3527,14 +3535,14 @@
       {
         "source": "camps",
         "url": "https://www.lynchburgsoccercamp.com/",
-        "asOf": "2026-09-23T18:45:32Z"
+        "asOf": "2026-09-24T16:04:20Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3548,10 +3556,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:14Z"
+      }
+    ]
   }
 }

@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://ncwsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:04Z"
+        "asOf": "2026-09-24T16:05:56Z"
       }
     }
   },
@@ -296,13 +296,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-2-1",
+      "record": "1-3-1",
       "wins": 1,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 4,
-      "confRecord": "0-1-0",
+      "gamesPlayed": 5,
+      "confRecord": "0-2-0",
       "headCoach": "Beverly Biancur"
     },
     {
@@ -917,7 +917,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ncwsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:04Z"
+      "asOf": "2026-09-24T16:05:56Z"
     }
   },
   "rosterHistory": {
@@ -1568,12 +1568,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "1-2-1",
-      "played": 4,
+      "text": "1-3-1",
+      "played": 5,
       "scheduled": 19,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 0
     },
     "games": [
@@ -1707,11 +1707,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Buena Vista, Va.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://www.flocollege.com/live/273673",
-          "live stats": "https://knightathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://ncwsports.com/sports/womens-soccer/stats/2026/southern-virginia-university/boxscore/5660",
+          "recap": "https://ncwsports.com/news/2026/9/23/womens-soccer-nc-wesleyan-fights-through-tough-road-match.aspx",
           "history": "https://ncwsports.com/sports/womens-soccer/opponent-history/southern-virginia-university/121"
         }
       },
@@ -1728,6 +1728,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.flocollege.com/live/273651",
+          "live stats": "https://gofalconsports.com/sidearmstats/wsoc/summary",
           "history": "https://ncwsports.com/sports/womens-soccer/opponent-history/pfeiffer-university/99"
         }
       },
@@ -2912,13 +2914,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ncwsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:04Z"
+      "asOf": "2026-09-24T16:05:56Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "NC Wesleyan Fights Through Tough Road Match",
+        "url": "https://ncwsports.com/news/2026/9/23/womens-soccer-nc-wesleyan-fights-through-tough-road-match.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "NC Wesleyan Shows Fight in USA South Opener",
         "url": "https://ncwsports.com/news/2026/9/19/womens-soccer-nc-wesleyan-shows-fight-in-usa-south-opener.aspx",
@@ -2983,7 +2991,7 @@
     "_meta": {
       "source": "news",
       "url": "https://ncwsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:15Z"
+      "asOf": "2026-09-24T16:06:01Z"
     }
   },
   "camps": {
@@ -2997,7 +3005,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "2026 Battling Bishops Youth Day Camp (Co-ed)",
@@ -3143,19 +3151,19 @@
       {
         "source": "camps",
         "url": "https://ncwsports.com/sports/2024/1/18/n-c-wesleyan-womens-soccer-camps.aspx",
-        "asOf": "2026-09-23T19:09:20Z"
+        "asOf": "2026-09-24T16:06:06Z"
       },
       {
         "source": "news",
         "url": "https://ncwsports.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-23T19:09:15Z"
+        "asOf": "2026-09-24T16:06:01Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3169,10 +3177,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:56Z"
+      }
+    ]
   }
 }

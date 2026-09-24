@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ramapoathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:02Z"
+        "asOf": "2026-09-24T16:07:17Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-0-1",
+      "record": "3-0-2",
       "wins": 3,
       "losses": 0,
-      "ties": 1,
+      "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "headCoach": "Abby Shiffler"
     },
     {
@@ -920,7 +920,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ramapoathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:02Z"
+      "asOf": "2026-09-24T16:07:17Z"
     }
   },
   "rosterHistory": {
@@ -1527,9 +1527,9 @@
     "record": {
       "wins": 3,
       "losses": 0,
-      "ties": 1,
-      "text": "3-0-1",
-      "played": 4,
+      "ties": 2,
+      "text": "3-0-2",
+      "played": 5,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -1633,11 +1633,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Mahwah, NJ, Athletic Center Turf",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://fan.hudl.com/usa/nj/mahwah/organization/125546/ramapo-college",
-          "live stats": "http://www.sidearmstats.com/ramapo/wsoc",
+          "recap": "https://www.ramapoathletics.com/news/2026/9/23/womens-soccer-ramapo-penn-college-play-to-scoreless-draw.aspx",
+          "box score": "https://www.ramapoathletics.com/sports/womens-soccer/stats/2026/penn-college/boxscore/15222",
           "history": "https://www.ramapoathletics.com/sports/womens-soccer/opponent-history/penn-college/494"
         }
       },
@@ -2769,13 +2769,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ramapoathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:02Z"
+      "asOf": "2026-09-24T16:07:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "RAMAPO, PENN COLLEGE PLAY TO SCORELESS DRAW",
+        "url": "https://ramapoathletics.com/news/2026/9/23/womens-soccer-ramapo-penn-college-play-to-scoreless-draw.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "KORINCHAK SCORES TWICE AS RAMAPO BLANKS PENN STATE ABINGTON, 4-0",
         "url": "https://ramapoathletics.com/news/2026/9/19/womens-soccer-korinchak-scores-twice-as-ramapo-blanks-penn-state-abington-4-0.aspx",
@@ -2840,7 +2846,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ramapoathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:06Z"
+      "asOf": "2026-09-24T16:07:20Z"
     }
   },
   "camps": {
@@ -2854,20 +2860,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.ramapoathletics.com/sports/2023/10/19/MSOC_0204150112.aspx",
-        "asOf": "2026-09-23T19:12:08Z"
+        "asOf": "2026-09-24T16:07:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2881,10 +2887,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:17Z"
+      }
+    ]
   }
 }

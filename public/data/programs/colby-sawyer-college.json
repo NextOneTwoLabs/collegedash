@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.colby-sawyerathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:25Z"
+        "asOf": "2026-09-24T16:00:54Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
+      "record": "1-4-2",
       "wins": 1,
       "losses": 4,
-      "ties": 1,
+      "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Brendon Boates"
     },
     {
@@ -885,7 +885,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.colby-sawyerathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:25Z"
+      "asOf": "2026-09-24T16:00:54Z"
     }
   },
   "rosterHistory": {
@@ -1505,9 +1505,9 @@
     "record": {
       "wins": 1,
       "losses": 4,
-      "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "ties": 2,
+      "text": "1-4-2",
+      "played": 7,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -1630,11 +1630,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "New London, NH, Sally Shaw Veitch Track & Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://team1sports.com/colbysawyerchargers/",
-          "live stats": "https://www.colby-sawyerathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.colby-sawyerathletics.com/news/2026/9/24/womens-soccer-womens-soccer-battles-saint-josephs-me-to-scoreless-deadlock.aspx",
+          "box score": "https://www.colby-sawyerathletics.com/sports/womens-soccer/stats/2026/saint-josephs-maine-/boxscore/11438",
           "history": "https://www.colby-sawyerathletics.com/sports/womens-soccer/opponent-history/saint-josephs-maine-/190"
         }
       },
@@ -2976,13 +2976,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.colby-sawyerathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:25Z"
+      "asOf": "2026-09-24T16:00:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "WOMEN'S SOCCER BATTLES SAINT JOSEPH'S (ME) TO SCORELESS DEADLOCK",
+        "url": "https://colby-sawyerathletics.com/news/2026/9/24/womens-soccer-womens-soccer-battles-saint-josephs-me-to-scoreless-deadlock.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
       {
         "title": "WOMEN'S SOCCER BATTLES SIMMONS TO DRAW",
         "url": "https://colby-sawyerathletics.com/news/2026/9/19/womens-soccer-womens-soccer-battles-simmons-to-draw.aspx",
@@ -3047,7 +3053,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.colby-sawyerathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:29Z"
+      "asOf": "2026-09-24T16:01:00Z"
     }
   },
   "camps": {
@@ -3061,7 +3067,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Clinic August 15th",
@@ -3097,19 +3103,19 @@
       {
         "source": "camps",
         "url": "https://wsoccer.colby-sawyercamps.com/",
-        "asOf": "2026-09-23T18:44:36Z"
+        "asOf": "2026-09-24T16:01:06Z"
       },
       {
         "source": "news",
         "url": "https://www.colby-sawyerathletics.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-23T18:44:29Z"
+        "asOf": "2026-09-24T16:01:00Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3123,10 +3129,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:54Z"
+      }
+    ]
   }
 }

@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.southernmainehuskies.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:42Z"
+        "asOf": "2026-09-24T16:08:21Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-1",
-      "wins": 3,
+      "record": "4-3-1",
+      "wins": 4,
       "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "1-0-0",
       "headCoach": "Martyn Keen"
     },
@@ -1022,7 +1022,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southernmainehuskies.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:42Z"
+      "asOf": "2026-09-24T16:08:21Z"
     }
   },
   "rosterHistory": {
@@ -1850,11 +1850,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 1,
-      "text": "3-3-1",
-      "played": 7,
+      "text": "4-3-1",
+      "played": 8,
       "scheduled": 22,
       "confText": "1-0-0",
       "exhibitions": 0
@@ -1996,11 +1996,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": null,
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-3",
         "links": {
-          "watch": "https://flosports.link/4x4VLGc",
-          "live stats": "https://southernmainehuskies.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.southernmainehuskies.com/sports/womens-soccer/stats/2026/university-of-maine-at-fort-kent/boxscore/14541",
+          "recap": "https://www.southernmainehuskies.com/news/2026/9/23/womens-soccer-big-second-half-propels-southern-maine-past-umfk.aspx",
           "history": "https://www.southernmainehuskies.com/sports/womens-soccer/opponent-history/university-of-maine-at-fort-kent/195"
         }
       },
@@ -3476,13 +3476,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southernmainehuskies.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:42Z"
+      "asOf": "2026-09-24T16:08:21Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Big Second Half Propels Southern Maine Past UMFK",
+        "url": "https://southernmainehuskies.com/news/2026/9/23/womens-soccer-big-second-half-propels-southern-maine-past-umfk.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Bates Edges Out Southern Maine 1-0",
         "url": "https://southernmainehuskies.com/news/2026/9/19/womens-soccer-bates-edges-out-southern-maine-1-0.aspx",
@@ -3547,7 +3553,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.southernmainehuskies.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:45Z"
+      "asOf": "2026-09-24T16:08:31Z"
     }
   },
   "camps": {
@@ -3561,20 +3567,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://usm.maine.edu/sports-camps-clinics/coed-soccer-day-camp-june/",
-        "asOf": "2026-09-23T19:16:47Z"
+        "asOf": "2026-09-24T16:08:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3588,10 +3594,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:22Z"
+      }
+    ]
   }
 }

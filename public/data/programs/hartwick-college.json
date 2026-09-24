@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hartwickhawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:09Z"
+        "asOf": "2026-09-24T16:02:42Z"
       }
     }
   },
@@ -287,12 +287,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-3-2",
+      "record": "1-3-3",
       "wins": 1,
       "losses": 3,
-      "ties": 2,
+      "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Brian Knapp"
     },
     {
@@ -965,7 +965,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:58:09Z"
+      "asOf": "2026-09-24T16:02:42Z"
     }
   },
   "rosterHistory": {
@@ -1588,9 +1588,9 @@
     "record": {
       "wins": 1,
       "losses": 3,
-      "ties": 2,
-      "text": "1-3-2",
-      "played": 6,
+      "ties": 3,
+      "text": "1-3-3",
+      "played": 7,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -1714,11 +1714,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Oneonta, NY, Elmore Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://www.empire8network.com/hartwick/",
-          "live stats": "https://www.hartwickhawks.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.hartwickhawks.com/news/2026/9/23/womens-soccer-draws-with-utica-in-e8-contest.aspx",
+          "box score": "https://www.hartwickhawks.com/sports/womens-soccer/stats/2026/utica-university/boxscore/7842",
           "history": "https://www.hartwickhawks.com/sports/womens-soccer/opponent-history/utica-university/41"
         }
       },
@@ -2843,13 +2843,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:58:09Z"
+      "asOf": "2026-09-24T16:02:42Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Draws with Utica in E8 Contest",
+        "url": "https://hartwickhawks.com/news/2026/9/23/womens-soccer-draws-with-utica-in-e8-contest.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Kelsey Bollen Tabbed Empire 8 Women's Soccer Co-Defensive Player of the Week",
         "url": "https://hartwickhawks.com/news/2026/9/21/kelsey-bollen-tabbed-empire-8-womens-soccer-co-defensive-player-of-the-week.aspx",
@@ -2914,7 +2920,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:58:16Z"
+      "asOf": "2026-09-24T16:02:49Z"
     }
   },
   "camps": {
@@ -2928,20 +2934,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hartwickhawks.com/sports/2022/3/22/test.aspx",
-        "asOf": "2026-09-23T18:58:22Z"
+        "asOf": "2026-09-24T16:02:52Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2955,10 +2961,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:42Z"
+      }
+    ]
   }
 }

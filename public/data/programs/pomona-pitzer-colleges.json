@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.sagehens.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:05Z"
+        "asOf": "2026-09-24T16:07:01Z"
       }
     }
   },
@@ -303,13 +303,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-1",
-      "wins": 3,
+      "record": "4-1-1",
+      "wins": 4,
       "losses": 1,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
-      "confRecord": "1-0-1",
+      "gamesPlayed": 6,
+      "confRecord": "2-0-1",
       "headCoach": "Miranda Armstrong"
     },
     {
@@ -1086,7 +1086,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sagehens.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:06:05Z"
+      "asOf": "2026-09-24T16:07:01Z"
     }
   },
   "rosterHistory": {
@@ -1816,13 +1816,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 1,
       "ties": 1,
-      "text": "3-1-1",
-      "played": 5,
+      "text": "4-1-1",
+      "played": 6,
       "scheduled": 16,
-      "confText": "1-0-1",
+      "confText": "2-0-1",
       "exhibitions": 0
     },
     "games": [
@@ -1926,11 +1926,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Claremont, Ca., Pomona-Pitzer Soccer Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://www.flocollege.com/live/268413",
-          "live stats": "https://sagehens.com/sidearmstats/wsoc/",
+          "box score": "https://www.sagehens.com/sports/womens-soccer/stats/2026/claremont-mudd-scripps-colleges/boxscore/8366",
+          "recap": "https://www.sagehens.com/news/2026/9/23/womens-soccer-defeats-cms-1-0-win-the-sixth-street-rivalry-game.aspx",
           "history": "https://www.sagehens.com/sports/womens-soccer/opponent-history/claremont-mudd-scripps-colleges/112"
         }
       },
@@ -3285,13 +3285,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sagehens.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:06:05Z"
+      "asOf": "2026-09-24T16:07:01Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Defeats CMS 1-0, Win The Sixth Street Rivalry Game",
+        "url": "https://sagehens.com/news/2026/9/23/womens-soccer-defeats-cms-1-0-win-the-sixth-street-rivalry-game.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Edges Occidental 2-1",
         "url": "https://sagehens.com/news/2026/9/19/womens-soccer-edges-occidental-2-1.aspx",
@@ -3356,7 +3362,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.sagehens.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:10Z"
+      "asOf": "2026-09-24T16:07:05Z"
     }
   },
   "camps": {
@@ -3370,7 +3376,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "These clinics",
@@ -3400,14 +3406,14 @@
       {
         "source": "camps",
         "url": "https://www.sagehens.com/sports/2023/8/11/pomona-pitzer-womens-soccer-clinics.aspx",
-        "asOf": "2026-09-23T19:06:15Z"
+        "asOf": "2026-09-24T16:07:11Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3421,10 +3427,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:01Z"
+      }
+    ]
   }
 }

@@ -326,7 +326,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gomessiah.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:39Z"
+        "asOf": "2026-09-24T16:05:06Z"
       }
     }
   },
@@ -334,12 +334,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
+      "record": "3-2-2",
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Scott Frey"
     },
     {
@@ -955,7 +955,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gomessiah.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:39Z"
+      "asOf": "2026-09-24T16:05:06Z"
     }
   },
   "rosterHistory": {
@@ -1630,10 +1630,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1757,11 +1757,11 @@
         "opponentRank": 6,
         "opponentSeed": null,
         "location": "Grantham, PA, Shoemaker Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://gomacsports.tv/messiahfalcons/?B=4157426",
-          "live stats": "https://gomessiah.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.gomessiah.com/sports/womens-soccer/stats/2026/no-6-rowan-university/boxscore/12865",
+          "recap": "https://www.gomessiah.com/news/2026/9/23/womens-soccer-no-8-womens-soccer-drops-top-10-battle-to-no-6-rowan.aspx",
           "history": "https://www.gomessiah.com/sports/womens-soccer/opponent-history/rowan-university/27"
         }
       },
@@ -3376,7 +3376,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gomessiah.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:39Z"
+      "asOf": "2026-09-24T16:05:06Z"
     }
   },
   "commitments": [],
@@ -3396,6 +3396,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "No. 8 Women’s Soccer Drops Top 10 Battle to No. 6 Rowan",
+        "url": "https://gomessiah.com/news/2026/9/23/womens-soccer-no-8-womens-soccer-drops-top-10-battle-to-no-6-rowan.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Williams’ Game-Winner, Strong Defense Leads No. 9 Women’s Soccer Past Cougars",
         "url": "https://gomessiah.com/news/2026/9/19/womens-soccer-williams-game-winner-strong-defense-leads-no-9-womens-soccer-past-cougars.aspx",
@@ -3466,7 +3472,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gomessiah.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:49Z"
+      "asOf": "2026-09-24T16:05:20Z"
     }
   },
   "camps": {
@@ -3480,7 +3486,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Winter ID Clinic",
@@ -3602,14 +3608,14 @@
       {
         "source": "camps",
         "url": "https://womenssoccer.gomessiahcamps.com/",
-        "asOf": "2026-09-23T19:12:51Z"
+        "asOf": "2026-09-24T16:05:22Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3623,10 +3629,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:06Z"
+      }
+    ]
   }
 }

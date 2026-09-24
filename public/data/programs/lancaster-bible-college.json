@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.lbcchargers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:29Z"
+        "asOf": "2026-09-24T16:03:55Z"
       }
     }
   },
@@ -304,12 +304,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-0",
-      "wins": 1,
+      "record": "2-4-0",
+      "wins": 2,
       "losses": 4,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Seth Lehman"
     },
     {
@@ -906,7 +906,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lbcchargers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:29Z"
+      "asOf": "2026-09-24T16:03:55Z"
     }
   },
   "rosterHistory": {
@@ -1516,11 +1516,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 4,
       "ties": 0,
-      "text": "1-4-0",
-      "played": 5,
+      "text": "2-4-0",
+      "played": 6,
       "scheduled": 16,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1642,11 +1642,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Baltimore, Md.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-0",
         "links": {
-          "watch": "https://go.flocollege.com/teams/landmark-goucher?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=goucher",
-          "live stats": "https://athletics.goucher.edu/sports/wsoc/2026-27/boxscores/20260923_wjfl.xml",
+          "box score": "https://www.lbcchargers.com/sports/womens-soccer/stats/2026/goucher/boxscore/9147",
+          "recap": "https://www.lbcchargers.com/news/2026/9/23/womens-soccer-chargers-score-four-in-shutout-win-at-goucher.aspx",
           "history": "https://www.lbcchargers.com/sports/womens-soccer/opponent-history/goucher-college/7"
         }
       },
@@ -2785,13 +2785,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lbcchargers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:29Z"
+      "asOf": "2026-09-24T16:03:55Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Chargers Score Four in Shutout Win at Goucher",
+        "url": "https://lbcchargers.com/news/2026/9/23/womens-soccer-chargers-score-four-in-shutout-win-at-goucher.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Secures First Win at Homecoming",
         "url": "https://lbcchargers.com/news/2026/9/19/womens-soccer-womens-soccer-secures-first-win-at-homecoming.aspx",
@@ -2856,7 +2862,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.lbcchargers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:34Z"
+      "asOf": "2026-09-24T16:04:04Z"
     }
   },
   "camps": {
@@ -2870,20 +2876,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.lbcchargers.com/sports/2022/3/23/womens-soccer-camps-clinics",
-        "asOf": "2026-09-23T18:57:38Z"
+        "asOf": "2026-09-24T16:04:12Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2897,10 +2903,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:55Z"
+      }
+    ]
   }
 }

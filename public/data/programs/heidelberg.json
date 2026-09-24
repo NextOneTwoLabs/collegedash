@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://bergathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:15:41Z"
+        "asOf": "2026-09-24T16:02:49Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
-      "wins": 2,
+      "record": "3-4-0",
+      "wins": 3,
       "losses": 4,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Madalynn McLaughlin"
     },
     {
@@ -1029,7 +1029,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:15:41Z"
+      "asOf": "2026-09-24T16:02:49Z"
     }
   },
   "rosterHistory": {
@@ -1793,11 +1793,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 4,
       "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "text": "3-4-0",
+      "played": 7,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 0
@@ -1921,11 +1921,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": null,
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://jcusports.com/sports/2025/8/27/live.aspx",
-          "live stats": "https://jcusports.com/sidearmstats/wsoc/summary",
+          "recap": "https://bergathletics.com/news/2026/9/23/womens-soccer-springer-protects-the-net-at-john-carroll.aspx",
+          "box score": "https://bergathletics.com/sports/womens-soccer/stats/2026/john-carroll/boxscore/9329",
           "history": "https://bergathletics.com/sports/womens-soccer/opponent-history/john-carroll-university/20"
         }
       },
@@ -3081,7 +3081,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:15:41Z"
+      "asOf": "2026-09-24T16:02:49Z"
     }
   },
   "commitments": [],
@@ -3095,6 +3095,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Springer Protects the Net at John Carroll",
+        "url": "https://bergathletics.com/news/2026/9/23/womens-soccer-springer-protects-the-net-at-john-carroll.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Berg falls to the Battling Bishops",
         "url": "https://bergathletics.com/news/2026/9/19/womens-soccer-berg-falls-to-the-fighting-bishops.aspx",
@@ -3159,7 +3165,7 @@
     "_meta": {
       "source": "news",
       "url": "https://bergathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:15:44Z"
+      "asOf": "2026-09-24T16:02:58Z"
     }
   },
   "camps": {
@@ -3173,7 +3179,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "ID Camp",
@@ -3203,14 +3209,14 @@
       {
         "source": "camps",
         "url": "https://www.huwscamps.com/elite-id-camp.cfm",
-        "asOf": "2026-09-23T19:15:50Z"
+        "asOf": "2026-09-24T16:03:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3224,10 +3230,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:49Z"
+      }
+    ]
   }
 }

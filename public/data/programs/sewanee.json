@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://sewaneetigers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:04Z"
+        "asOf": "2026-09-24T16:08:05Z"
       }
     }
   },
@@ -1007,7 +1007,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://sewaneetigers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:04Z"
+      "asOf": "2026-09-24T16:08:05Z"
     }
   },
   "rosterHistory": {
@@ -3167,7 +3167,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://sewaneetigers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:04Z"
+      "asOf": "2026-09-24T16:08:05Z"
     }
   },
   "commitments": [],
@@ -3244,7 +3244,7 @@
     "_meta": {
       "source": "news",
       "url": "https://sewaneetigers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:08Z"
+      "asOf": "2026-09-24T16:08:19Z"
     }
   },
   "camps": {
@@ -3288,14 +3288,14 @@
       {
         "source": "camps",
         "url": "https://www.sewaneewomenssoccercamps.com/index.cfm#DDF0699E-6B54-4EF5-842B-5E7CA0B52BA1",
-        "asOf": "2026-09-23T19:16:12Z"
+        "asOf": "2026-09-24T16:08:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3309,10 +3309,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:05Z"
+      }
+    ]
   }
 }

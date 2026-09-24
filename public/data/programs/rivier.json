@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.rivierathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:27Z"
+        "asOf": "2026-09-24T16:07:25Z"
       }
     }
   },
@@ -1138,7 +1138,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rivierathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:27Z"
+      "asOf": "2026-09-24T16:07:25Z"
     }
   },
   "rosterHistory": {
@@ -3507,7 +3507,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rivierathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:27Z"
+      "asOf": "2026-09-24T16:07:25Z"
     }
   },
   "commitments": [],
@@ -3578,7 +3578,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.rivierathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:35Z"
+      "asOf": "2026-09-24T16:07:37Z"
     }
   },
   "camps": {
@@ -3645,14 +3645,14 @@
       {
         "source": "camps",
         "url": "https://www.rivierathletics.com/sports/2025/4/1/sport-camps.aspx",
-        "asOf": "2026-09-23T18:44:36Z"
+        "asOf": "2026-09-24T16:07:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3666,10 +3666,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:25Z"
+      }
+    ]
   }
 }

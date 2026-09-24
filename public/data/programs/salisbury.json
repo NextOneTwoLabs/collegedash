@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.suseagulls.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:42Z"
+        "asOf": "2026-09-24T16:07:54Z"
       }
     }
   },
@@ -320,12 +320,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-6-1",
+      "record": "0-7-1",
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Kwame Lloyd"
     },
     {
@@ -1107,7 +1107,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.suseagulls.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:42Z"
+      "asOf": "2026-09-24T16:07:54Z"
     }
   },
   "rosterHistory": {
@@ -1942,10 +1942,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
-      "text": "0-6-1",
-      "played": 7,
+      "text": "0-7-1",
+      "played": 8,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -2087,11 +2087,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "York, PA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://gomacsports.tv/ycpspartans/",
-          "live stats": "https://ycpspartans.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.suseagulls.com/sports/womens-soccer/stats/2026/york-pa-/boxscore/12018",
+          "recap": "https://www.suseagulls.com/news/2026/9/23/womens-soccer-womens-soccer-tumbles-in-road-battle-with-york-pa.aspx",
           "history": "https://www.suseagulls.com/sports/womens-soccer/opponent-history/york-college-of-pennsylvania/72"
         }
       },
@@ -3376,13 +3376,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.suseagulls.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:42Z"
+      "asOf": "2026-09-24T16:07:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer tumbles in road battle with York (Pa.)",
+        "url": "https://suseagulls.com/news/2026/9/23/womens-soccer-womens-soccer-tumbles-in-road-battle-with-york-pa.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer falters against Bridgewater (Va.)",
         "url": "https://suseagulls.com/news/2026/9/19/womens-soccer-womens-soccer-falters-against-bridgewater-va.aspx",
@@ -3447,7 +3453,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.suseagulls.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:46Z"
+      "asOf": "2026-09-24T16:08:07Z"
     }
   },
   "camps": {
@@ -3461,20 +3467,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 403 for https://www.salisburysoccercamp.com/content/2025-camps/fall-id-camp",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.salisburysoccercamp.com/content/2025-camps/fall-id-camp",
-        "asOf": "2026-09-23T18:45:54Z"
+        "asOf": "2026-09-24T16:08:13Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3488,10 +3494,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:54Z"
+      }
+    ]
   }
 }

@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.keukaathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:23Z"
+        "asOf": "2026-09-24T16:03:31Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-0",
-      "wins": 3,
+      "record": "4-3-0",
+      "wins": 4,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "0-2-0",
       "headCoach": "Jeremy Loncao"
     },
@@ -924,7 +924,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keukaathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:58:23Z"
+      "asOf": "2026-09-24T16:03:31Z"
     }
   },
   "rosterHistory": {
@@ -1526,11 +1526,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 0,
-      "text": "3-3-0",
-      "played": 6,
+      "text": "4-3-0",
+      "played": 7,
       "scheduled": 16,
       "confText": "0-2-0",
       "exhibitions": 0
@@ -1654,10 +1654,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Hamburg, NY",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-2",
         "links": {
-          "live stats": "https://hilberthawks.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.keukaathletics.com/sports/womens-soccer/stats/2026/hilbert-college/boxscore/5175",
+          "recap": "https://www.keukaathletics.com/news/2026/9/23/womens-soccer-bates-brace-lifts-wolves-past-hawks.aspx",
           "history": "https://www.keukaathletics.com/sports/womens-soccer/opponent-history/hilbert-college/102"
         }
       },
@@ -2680,13 +2681,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keukaathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:58:23Z"
+      "asOf": "2026-09-24T16:03:31Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Bates Brace Lifts Wolves Past Hawks",
+        "url": "https://keukaathletics.com/news/2026/9/23/womens-soccer-bates-brace-lifts-wolves-past-hawks.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Second-Half Goal Lifts Elmira College Past Keuka College",
         "url": "https://keukaathletics.com/news/2026/9/19/womens-soccer-second-half-goal-lifts-elmira-college-past-keuka-college.aspx",
@@ -2751,7 +2758,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.keukaathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:58:32Z"
+      "asOf": "2026-09-24T16:03:42Z"
     }
   },
   "camps": {
@@ -2765,20 +2772,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://overnightsportscamps.com/summer-camp-locations/new-york/",
-        "asOf": "2026-09-23T18:58:45Z"
+        "asOf": "2026-09-24T16:03:56Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2792,10 +2799,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:31Z"
+      }
+    ]
   }
 }

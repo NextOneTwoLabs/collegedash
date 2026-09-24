@@ -308,7 +308,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:53Z"
+        "asOf": "2026-09-24T16:03:28Z"
       }
     }
   },
@@ -316,13 +316,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-0",
-      "wins": 4,
+      "record": "5-3-0",
+      "wins": 5,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "2-0-0",
+      "gamesPlayed": 8,
+      "confRecord": "3-0-0",
       "headCoach": "Roshane Ellison"
     },
     {
@@ -1059,7 +1059,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:53Z"
+      "asOf": "2026-09-24T16:03:28Z"
     }
   },
   "rosterHistory": {
@@ -1941,13 +1941,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 3,
       "ties": 0,
-      "text": "4-3-0",
-      "played": 7,
+      "text": "5-3-0",
+      "played": 8,
       "scheduled": 23,
-      "confText": "2-0-0",
+      "confText": "3-0-0",
       "exhibitions": 2
     },
     "games": [
@@ -2119,11 +2119,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Chicago, IL, Stuart Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "6-0",
         "links": {
-          "watch": "https://www.youtube.com/@illinoistechscarlethawks9213",
-          "live stats": "https://illinoistechathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.illinoistechathletics.com/sports/womens-soccer/stats/2026/concordia-university-chicago/boxscore/6010",
+          "recap": "https://www.illinoistechathletics.com/news/2026/9/23/5-goal-second-half-leads-womens-soccer-to-victory-over-cuc.aspx",
           "history": "https://www.illinoistechathletics.com/sports/womens-soccer/opponent-history/concordia-university-chicago/77"
         }
       },
@@ -3766,13 +3766,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:53Z"
+      "asOf": "2026-09-24T16:03:28Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "5 Goal Second Half Leads Women's Soccer to Victory Over CUC",
+        "url": "https://illinoistechathletics.com/news/2026/9/23/5-goal-second-half-leads-womens-soccer-to-victory-over-cuc.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Rodriguez, Narvarte Earn Scarlet Hawk Of The Week Honors",
         "url": "https://illinoistechathletics.com/news/2026/9/22/general-rodriguez-narvarte-earn-scarlet-hawk-of-the-week-honors.aspx",
@@ -3837,7 +3843,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:59Z"
+      "asOf": "2026-09-24T16:03:32Z"
     }
   },
   "camps": {
@@ -3851,7 +3857,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Women's Soccer Elite Prospect ID Camp",
@@ -3887,19 +3893,19 @@
       {
         "source": "camps",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:10Z"
+        "asOf": "2026-09-24T16:03:37Z"
       },
       {
         "source": "news",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-23T18:44:59Z"
+        "asOf": "2026-09-24T16:03:32Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3913,10 +3919,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:28Z"
+      }
+    ]
   }
 }

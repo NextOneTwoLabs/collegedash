@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.bethel.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:31Z"
+        "asOf": "2026-09-24T15:59:53Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-0",
+      "record": "1-5-0",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "confRecord": "0-2-0",
       "headCoach": "Sheila McGill"
     },
@@ -954,7 +954,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:31Z"
+      "asOf": "2026-09-24T15:59:53Z"
     }
   },
   "rosterHistory": {
@@ -1557,10 +1557,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "1-4-0",
-      "played": 5,
+      "text": "1-5-0",
+      "played": 6,
       "scheduled": 17,
       "confText": "0-2-0",
       "exhibitions": 2
@@ -1714,11 +1714,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Waverly, Iowa",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://rollriversnetwork.com/wartburg/",
-          "live stats": "https://go-knights.net/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.bethel.edu/sports/womens-soccer/stats/2026/wartburg-college/boxscore/19274",
           "history": "https://athletics.bethel.edu/sports/womens-soccer/opponent-history/wartburg-college/66"
         }
       },
@@ -2936,13 +2935,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:31Z"
+      "asOf": "2026-09-24T15:59:53Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Second-Half Push Comes Up Short at Wartburg",
+        "url": "https://athletics.bethel.edu/news/2026/9/23/womens-soccer-second-half-push-comes-up-short-at-wartburg.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Royals Come Up Short Against Concordia on Senior Day",
         "url": "https://athletics.bethel.edu/news/2026/9/19/womens-soccer-royals-come-up-short-against-concordia-on-senior-day.aspx",
@@ -3007,7 +3012,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:34Z"
+      "asOf": "2026-09-24T16:00:03Z"
     }
   },
   "camps": {
@@ -3021,20 +3026,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bethel.edu/events/2024/athletics/wsocid24",
-        "asOf": "2026-09-23T19:01:49Z"
+        "asOf": "2026-09-24T16:00:16Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3048,10 +3053,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:53Z"
+      }
+    ]
   }
 }

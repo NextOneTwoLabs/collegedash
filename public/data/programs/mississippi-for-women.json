@@ -271,7 +271,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.owlsathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:06Z"
+        "asOf": "2026-09-24T16:05:15Z"
       }
     }
   },
@@ -279,12 +279,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-4-0",
+      "record": "0-5-0",
       "wins": 0,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "headCoach": "Valerie Greer"
     },
     {
@@ -781,7 +781,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:06Z"
+      "asOf": "2026-09-24T16:05:15Z"
     }
   },
   "rosterHistory": {
@@ -1248,10 +1248,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "0-4-0",
-      "played": 4,
+      "text": "0-5-0",
+      "played": 5,
       "scheduled": 15,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -1372,11 +1372,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Columbus, Roger Short Soccer Complex",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://fan.hudl.com/usa/ms/columbus/organization/173761/muw/video",
-          "live stats": "https://owlsathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.owlsathletics.com/sports/womens-soccer/stats/2026/united-states-sports-university/boxscore/3819",
+          "recap": "https://www.owlsathletics.com/news/2026/9/23/womens-soccer-owls-womens-soccer-pushes-2-ussu-to-the-brink-in-2-1-loss.aspx",
           "history": "https://www.owlsathletics.com/sports/womens-soccer/opponent-history/united-states-sports-university/263"
         }
       },
@@ -2622,13 +2622,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:06Z"
+      "asOf": "2026-09-24T16:05:15Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Owls’ women’s soccer pushes #2 USSU to the brink in 2-1 loss",
+        "url": "https://owlsathletics.com/news/2026/9/23/womens-soccer-owls-womens-soccer-pushes-2-ussu-to-the-brink-in-2-1-loss.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s soccer battles Millsaps strong in 1-0 loss",
         "url": "https://owlsathletics.com/news/2026/9/17/womens-soccer-womens-soccer-battles-millsaps-strong-in-1-0-loss.aspx",
@@ -2693,7 +2699,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:10Z"
+      "asOf": "2026-09-24T16:05:29Z"
     }
   },
   "camps": {
@@ -2707,20 +2713,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.owlsathletics.com/sb_output.aspx?form=13",
-        "asOf": "2026-09-23T19:16:14Z"
+        "asOf": "2026-09-24T16:05:30Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2734,10 +2740,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:15Z"
+      }
+    ]
   }
 }

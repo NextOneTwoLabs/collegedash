@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://hartfordhawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:59Z"
+        "asOf": "2026-09-24T16:02:37Z"
       }
     }
   },
@@ -319,12 +319,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-1",
-      "wins": 4,
+      "record": "5-0-1",
+      "wins": 5,
       "losses": 0,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "John Natale"
     },
     {
@@ -957,7 +957,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hartfordhawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:59Z"
+      "asOf": "2026-09-24T16:02:37Z"
     }
   },
   "rosterHistory": {
@@ -1529,12 +1529,12 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 0,
       "ties": 1,
-      "text": "4-0-1",
-      "played": 5,
-      "scheduled": 17,
+      "text": "5-0-1",
+      "played": 6,
+      "scheduled": 16,
       "confText": null,
       "exhibitions": 0
     },
@@ -1655,30 +1655,12 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Wellesley, MA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-3",
         "links": {
-          "watch": "https://www.flocollege.com/schools/6469952-wellesley-college",
-          "live stats": "https://hartfordhawks.com/sidearmstats/wsoc/summary",
+          "recap": "https://hartfordhawks.com/news/2026/9/23/freimuths-hat-trick-powers-19-hartford-womens-soccer-over-wellesley-college.aspx",
+          "box score": "https://hartfordhawks.com/sports/womens-soccer/stats/2026/wellesley-college/boxscore/8940",
           "history": "https://hartfordhawks.com/sports/womens-soccer/opponent-history/wellesley-college/389"
-        }
-      },
-      {
-        "date": "2026-09-26",
-        "datetime": null,
-        "exhibition": false,
-        "conferenceGame": false,
-        "homeAway": "A",
-        "opponent": "Suffolk University",
-        "opponentRank": null,
-        "opponentSeed": null,
-        "location": "Boston, MA",
-        "result": null,
-        "score": null,
-        "links": {
-          "watch": "https://www.cnesportsnet.com/surams/",
-          "live stats": "https://hartfordhawks.com/sidearmstats/wsoc/summary",
-          "history": "https://hartfordhawks.com/sports/womens-soccer/opponent-history/suffolk-university/296"
         }
       },
       {
@@ -2926,13 +2908,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hartfordhawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:59Z"
+      "asOf": "2026-09-24T16:02:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Freimuth's Hat Trick Powers #19 Hartford Women's Soccer Over Wellesley College",
+        "url": "https://hartfordhawks.com/news/2026/9/23/freimuths-hat-trick-powers-19-hartford-womens-soccer-over-wellesley-college.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Two Reserve Goals Help #19 Hartford Women's Soccer Defeat University of New England 2-1",
         "url": "https://hartfordhawks.com/news/2026/9/19/two-reserve-goals-help-19-hartford-womens-soccer-defeat-university-of-new-england-2-1.aspx",
@@ -2998,18 +2986,12 @@
         "url": "https://hartfordhawks.com/news/2024/10/31/general-unmissable-experiences-sports-entertainment-guide-for-hawks-fans.aspx",
         "date": "2024-10-31",
         "recruiting": false
-      },
-      {
-        "title": "Clear Bag Policy",
-        "url": "https://hartfordhawks.com/news/2023/11/9/general-athletics-enacts-clear-bag-policy.aspx",
-        "date": "2023-11-09",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://hartfordhawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:07Z"
+      "asOf": "2026-09-24T16:02:44Z"
     }
   },
   "camps": {
@@ -3023,20 +3005,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 13,
+    "newsScanned": 14,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://hartfordhawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:07Z"
+        "asOf": "2026-09-24T16:02:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3050,10 +3032,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:37Z"
+      }
+    ]
   }
 }

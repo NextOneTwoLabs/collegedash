@@ -293,7 +293,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.oxyathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:59Z"
+        "asOf": "2026-09-24T16:06:26Z"
       }
     }
   },
@@ -301,13 +301,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-0",
-      "wins": 1,
+      "record": "2-4-0",
+      "wins": 2,
       "losses": 4,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
-      "confRecord": "1-1-0",
+      "gamesPlayed": 6,
+      "confRecord": "2-1-0",
       "headCoach": "Lydia Mitchell"
     },
     {
@@ -943,7 +943,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.oxyathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:59Z"
+      "asOf": "2026-09-24T16:06:26Z"
     }
   },
   "rosterHistory": {
@@ -1677,13 +1677,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 4,
       "ties": 0,
-      "text": "1-4-0",
-      "played": 5,
+      "text": "2-4-0",
+      "played": 6,
       "scheduled": 17,
-      "confText": "1-1-0",
+      "confText": "2-1-0",
       "exhibitions": 2
     },
     "games": [
@@ -1817,11 +1817,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Whittier, CA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://flosports.link/3TVJcyQ",
-          "live stats": "https://wcpoets.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.oxyathletics.com/news/2026/9/23/womens-soccer-sacchis-first-half-goal-lifts-womens-soccer-to-victory-over-whittier.aspx",
+          "box score": "https://www.oxyathletics.com/sports/womens-soccer/stats/2026/whittier-college/boxscore/8935",
           "history": "https://www.oxyathletics.com/sports/womens-soccer/opponent-history/whittier-college/9"
         }
       },
@@ -2930,13 +2930,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.oxyathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:59Z"
+      "asOf": "2026-09-24T16:06:26Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Sacchi's first half goal lifts women's soccer to victory over Whittier",
+        "url": "https://oxyathletics.com/news/2026/9/23/womens-soccer-sacchis-first-half-goal-lifts-womens-soccer-to-victory-over-whittier.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Steadman scores in loss to No. 11 Sagehens",
         "url": "https://oxyathletics.com/news/2026/9/19/womens-soccer-steadman-scores-in-loss-to-no-11-sagehens.aspx",
@@ -3001,7 +3007,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.oxyathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:04Z"
+      "asOf": "2026-09-24T16:06:36Z"
     }
   },
   "camps": {
@@ -3015,20 +3021,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://oxyathletics.com/documents/2025/5/2/womenssocceridcamp.docx",
-        "asOf": "2026-09-23T19:06:08Z"
+        "asOf": "2026-09-24T16:06:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3042,10 +3048,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:26Z"
+      }
+    ]
   }
 }

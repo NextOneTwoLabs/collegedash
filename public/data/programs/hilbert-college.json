@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hilberthawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:19:22Z"
+        "asOf": "2026-09-24T16:02:55Z"
       }
     }
   },
@@ -296,12 +296,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-0",
+      "record": "1-5-0",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Hannah Callaghan"
     },
     {
@@ -756,7 +756,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:19:22Z"
+      "asOf": "2026-09-24T16:02:55Z"
     }
   },
   "rosterHistory": {
@@ -1312,10 +1312,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "1-4-0",
-      "played": 5,
+      "text": "1-5-0",
+      "played": 6,
       "scheduled": 15,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1421,11 +1421,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Hamburg, NY, Hawk Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "2-3",
         "links": {
-          "watch": "https://go.flocollege.com/teams/hillbert-college?sp=conf-partner-k7p1&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=hillbert-college",
-          "live stats": "https://hilberthawks.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.hilberthawks.com/sports/womens-soccer/stats/2026/keuka-college/boxscore/5537",
+          "recap": "https://www.hilberthawks.com/news/2026/9/23/womens-soccer-takes-on-keuka-in-home-opener.aspx",
           "history": "https://www.hilberthawks.com/sports/womens-soccer/opponent-history/keuka-college/22"
         }
       },
@@ -2492,7 +2492,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:19:22Z"
+      "asOf": "2026-09-24T16:02:55Z"
     }
   },
   "commitments": [],
@@ -2506,6 +2506,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Women's Soccer Takes on Keuka in Home Opener",
+        "url": "https://hilberthawks.com/news/2026/9/23/womens-soccer-takes-on-keuka-in-home-opener.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Schlenker Scores as Hawks Fall to Thiel",
         "url": "https://hilberthawks.com/news/2026/9/12/womens-soccer-schlenker-scores-as-hawks-fall-to-thiel.aspx",
@@ -2570,7 +2576,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:19:29Z"
+      "asOf": "2026-09-24T16:03:02Z"
     }
   },
   "camps": {
@@ -2584,20 +2590,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hilbert.edu/summer-camps",
-        "asOf": "2026-09-23T19:19:51Z"
+        "asOf": "2026-09-24T16:03:24Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2611,10 +2617,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:55Z"
+      }
+    ]
   }
 }

@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.washingtoncollegesports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:57Z"
+        "asOf": "2026-09-24T16:09:27Z"
       }
     }
   },
@@ -294,12 +294,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-1",
+      "record": "4-3-1",
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
+      "confRecord": "0-1-0",
       "headCoach": "Tom Reilly"
     },
     {
@@ -1160,7 +1161,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.washingtoncollegesports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:57Z"
+      "asOf": "2026-09-24T16:09:27Z"
     }
   },
   "rosterHistory": {
@@ -1818,12 +1819,12 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "4-2-1",
-      "played": 7,
+      "text": "4-3-1",
+      "played": 8,
       "scheduled": 18,
-      "confText": "0-0-0",
+      "confText": "0-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -1963,11 +1964,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Lancaster, PA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.centennialconference.tv/godiplomats/?B=4012444",
-          "live stats": "https://godiplomats.com/sidearmstats/wsoc/",
+          "box score": "https://www.washingtoncollegesports.com/sports/womens-soccer/stats/2026/franklin-marshall/boxscore/14071",
+          "recap": "https://www.washingtoncollegesports.com/news/2026/9/23/womens-soccer-shorewomen-fall-in-centennial-opener-at-diplomats.aspx",
           "history": "https://www.washingtoncollegesports.com/sports/womens-soccer/opponent-history/franklin-and-marshall-college/2"
         }
       },
@@ -3125,13 +3126,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.washingtoncollegesports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:57Z"
+      "asOf": "2026-09-24T16:09:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Shorewomen Fall in Centennial Opener at Diplomats",
+        "url": "https://washcollsports.com/news/2026/9/23/womens-soccer-shorewomen-fall-in-centennial-opener-at-diplomats.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Shorewomen Soccer Sweep Albright 3-0",
         "url": "https://washcollsports.com/news/2026/9/19/womens-soccer-shorewomen-soccer-sweep-albright-3-0.aspx",
@@ -3196,7 +3203,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.washingtoncollegesports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:08Z"
+      "asOf": "2026-09-24T16:09:37Z"
     }
   },
   "camps": {
@@ -3210,20 +3217,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 404 for https://www.washcoll.edu/visitors/summer-camps.php?path=fansvisitors",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.washcoll.edu/visitors/summer-camps.php?path=fansvisitors",
-        "asOf": "2026-09-23T19:05:10Z"
+        "asOf": "2026-09-24T16:09:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3237,10 +3244,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:27Z"
+      }
+    ]
   }
 }

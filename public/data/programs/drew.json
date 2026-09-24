@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.drewrangers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:17Z"
+        "asOf": "2026-09-24T16:01:21Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-1-3",
-      "wins": 1,
+      "record": "2-1-3",
+      "wins": 2,
       "losses": 1,
       "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "headCoach": "Ray Goon"
     },
     {
@@ -1025,7 +1025,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drewrangers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:17Z"
+      "asOf": "2026-09-24T16:01:21Z"
     }
   },
   "rosterHistory": {
@@ -1822,11 +1822,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 1,
       "ties": 3,
-      "text": "1-1-3",
-      "played": 5,
+      "text": "2-1-3",
+      "played": 6,
       "scheduled": 22,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1976,11 +1976,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Madison, NJ",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://flosports.link/3TMF1p9",
-          "live stats": "https://drewrangers.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.drewrangers.com/sports/womens-soccer/stats/2026/fdu-florham/boxscore/16125",
+          "recap": "https://www.drewrangers.com/news/2026/9/23/womens-soccer-first-half-goals-lift-field-hockey-over-fdu-florham.aspx",
           "history": "https://www.drewrangers.com/sports/womens-soccer/opponent-history/fdu-florham/44"
         }
       },
@@ -3371,13 +3371,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drewrangers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:17Z"
+      "asOf": "2026-09-24T16:01:21Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "First-Half Goals Vault Women's Soccer Over FDU-Florham",
+        "url": "https://drewrangers.com/news/2026/9/23/womens-soccer-first-half-goals-lift-field-hockey-over-fdu-florham.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Crowley Chosen as Landmark Defensive AOW",
         "url": "https://drewrangers.com/news/2026/9/21/womens-soccer-crowley-chosen-as-landmark-defensive-aow.aspx",
@@ -3442,7 +3448,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.drewrangers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:25Z"
+      "asOf": "2026-09-24T16:01:31Z"
     }
   },
   "camps": {
@@ -3456,20 +3462,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://drewrangers.com/sb_output.aspx?form=52",
-        "asOf": "2026-09-23T19:09:29Z"
+        "asOf": "2026-09-24T16:01:35Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3483,10 +3489,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:21Z"
+      }
+    ]
   }
 }

@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.trinitytigers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:22Z"
+        "asOf": "2026-09-24T16:09:13Z"
       }
     }
   },
@@ -1143,7 +1143,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:22Z"
+      "asOf": "2026-09-24T16:09:13Z"
     }
   },
   "rosterHistory": {
@@ -3390,7 +3390,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:22Z"
+      "asOf": "2026-09-24T16:09:13Z"
     }
   },
   "commitments": [],
@@ -3461,7 +3461,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:25Z"
+      "asOf": "2026-09-24T16:09:22Z"
     }
   },
   "camps": {
@@ -3481,14 +3481,14 @@
       {
         "source": "camps",
         "url": "https://trinityuniversitysoccercamps.totalcamps.com/About%20Us",
-        "asOf": "2026-09-23T19:16:27Z"
+        "asOf": "2026-09-24T16:09:24Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3502,10 +3502,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:13Z"
+      }
+    ]
   }
 }

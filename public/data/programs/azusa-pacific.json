@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.apu.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:37Z"
+        "asOf": "2026-09-24T15:59:23Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-2",
-      "wins": 4,
+      "record": "5-0-2",
+      "wins": 5,
       "losses": 0,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Brooke Lincoln"
     },
     {
@@ -932,7 +932,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.apu.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:37Z"
+      "asOf": "2026-09-24T15:59:23Z"
     }
   },
   "rosterHistory": {
@@ -1676,11 +1676,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 0,
       "ties": 2,
-      "text": "4-0-2",
-      "played": 6,
+      "text": "5-0-2",
+      "played": 7,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 0
@@ -1804,11 +1804,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Azusa, Calif., Cougar Soccer Complex",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "8-0",
         "links": {
-          "watch": "https://flosports.link/3TONurD",
-          "live stats": "https://athletics.apu.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.apu.edu/sports/womens-soccer/stats/2026/caltech/boxscore/21423",
+          "recap": "https://athletics.apu.edu/news/2026/9/23/womens-soccer-eight-of-a-kind.aspx",
           "history": "https://athletics.apu.edu/sports/womens-soccer/opponent-history/caltech/209"
         }
       },
@@ -3021,13 +3021,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.apu.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:37Z"
+      "asOf": "2026-09-24T15:59:23Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Eight of a Kind",
+        "url": "https://athletics.apu.edu/news/2026/9/23/womens-soccer-eight-of-a-kind.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Blank Verse",
         "url": "https://athletics.apu.edu/news/2026/9/19/womens-soccer-blank-verse.aspx",
@@ -3098,7 +3104,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.apu.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:42Z"
+      "asOf": "2026-09-24T15:59:29Z"
     }
   },
   "camps": {
@@ -3112,20 +3118,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gocougarsoccercamp.com/",
-        "asOf": "2026-09-23T19:05:44Z"
+        "asOf": "2026-09-24T15:59:31Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3139,10 +3145,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:23Z"
+      }
+    ]
   }
 }

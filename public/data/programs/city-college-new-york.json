@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ccnyathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:03Z"
+        "asOf": "2026-09-24T16:00:37Z"
       }
     }
   },
@@ -846,7 +846,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ccnyathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:06:03Z"
+      "asOf": "2026-09-24T16:00:37Z"
     }
   },
   "rosterHistory": {
@@ -2669,7 +2669,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ccnyathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:06:03Z"
+      "asOf": "2026-09-24T16:00:37Z"
     }
   },
   "commitments": [],
@@ -2740,7 +2740,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ccnyathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:07Z"
+      "asOf": "2026-09-24T16:00:42Z"
     }
   },
   "camps": {
@@ -2760,14 +2760,14 @@
       {
         "source": "camps",
         "url": "https://www.ccnyathletics.com/sports/2019/4/17/coming-soon-camps-and-clinics.aspx",
-        "asOf": "2026-09-23T19:06:13Z"
+        "asOf": "2026-09-24T16:00:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2781,10 +2781,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:37Z"
+      }
+    ]
   }
 }

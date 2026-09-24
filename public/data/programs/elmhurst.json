@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://elmhurstbluejays.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:13:16Z"
+        "asOf": "2026-09-24T16:01:54Z"
       }
     }
   },
@@ -312,12 +312,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-2-0",
-      "wins": 6,
+      "record": "7-2-0",
+      "wins": 7,
       "losses": 2,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
+      "confRecord": "1-0-0",
       "headCoach": "Susie McCreery Foster"
     },
     {
@@ -1173,7 +1174,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://elmhurstbluejays.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:13:16Z"
+      "asOf": "2026-09-24T16:01:54Z"
     }
   },
   "rosterHistory": {
@@ -1978,13 +1979,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 6,
+      "wins": 7,
       "losses": 2,
       "ties": 0,
-      "text": "6-2-0",
-      "played": 8,
+      "text": "7-2-0",
+      "played": 9,
       "scheduled": 21,
-      "confText": "0-0-0",
+      "confText": "1-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2142,11 +2143,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Elmhurst, Ill., Langhorst Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://www.cciwnetwork.com/elmhurst/",
-          "live stats": "https://elmhurstbluejays.com/sidearmstats/wsoc/summary",
+          "box score": "https://elmhurstbluejays.com/sports/womens-soccer/stats/2026/augustana-college/boxscore/7962",
+          "recap": "https://elmhurstbluejays.com/news/2026/9/23/womens-soccer-bluejays-blank-augustana-behind-nevins-second-half-surge.aspx",
           "history": "https://elmhurstbluejays.com/sports/womens-soccer/opponent-history/augustana-college-il-/8"
         }
       },
@@ -3434,13 +3435,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://elmhurstbluejays.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:13:16Z"
+      "asOf": "2026-09-24T16:01:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Bluejays Blank Augustana Behind Nevins’ Second-half Surge",
+        "url": "https://elmhurstbluejays.com/news/2026/9/23/womens-soccer-bluejays-blank-augustana-behind-nevins-second-half-surge.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Bluejays Fall to Alma on a Late Goal",
         "url": "https://elmhurstbluejays.com/news/2026/9/21/womens-soccer-bluejays-fall-to-alma-on-a-late-goal.aspx",
@@ -3505,7 +3512,7 @@
     "_meta": {
       "source": "news",
       "url": "https://elmhurstbluejays.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:20Z"
+      "asOf": "2026-09-24T16:02:02Z"
     }
   },
   "camps": {
@@ -3519,20 +3526,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://elmhurstwomenssoccercamps.totalcamps.com/",
-        "asOf": "2026-09-23T19:13:24Z"
+        "asOf": "2026-09-24T16:02:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3546,10 +3553,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:54Z"
+      }
+    ]
   }
 }

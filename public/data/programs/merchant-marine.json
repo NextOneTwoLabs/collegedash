@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://usmmasports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:18Z"
+        "asOf": "2026-09-24T16:09:18Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-0-4",
-      "wins": 0,
+      "record": "1-0-4",
+      "wins": 1,
       "losses": 0,
       "ties": 4,
       "inProgress": true,
-      "gamesPlayed": 4,
-      "confRecord": "0-0-2",
+      "gamesPlayed": 5,
+      "confRecord": "1-0-2",
       "headCoach": "Carlos Mendes"
     },
     {
@@ -872,7 +872,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://usmmasports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:18Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "rosterHistory": {
@@ -1581,13 +1581,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 0,
+      "wins": 1,
       "losses": 0,
       "ties": 4,
-      "text": "0-0-4",
-      "played": 4,
+      "text": "1-0-4",
+      "played": 5,
       "scheduled": 16,
-      "confText": "0-0-2",
+      "confText": "1-0-2",
       "exhibitions": 2
     },
     "games": [
@@ -1697,11 +1697,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Kings Point, N.Y. (Bartoszek Field)",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://usmmasports.com/sports/2024/9/16/usmma-video-streaming.aspx",
-          "live stats": "https://usmmasports.com/sidearmstats/wsoc/summary"
+          "box score": "https://usmmasports.com/sports/womens-soccer/stats/2026/st-josephs-long-island/boxscore/6673",
+          "recap": "https://usmmasports.com/news/2026/9/23/womens-soccer-vs-sjli-recap-2026.aspx"
         }
       },
       {
@@ -2880,13 +2880,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://usmmasports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:18Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Picks Up First Win With 2-0 Shutout Of Defending Skyline Champion St. Joseph’s-L.I.",
+        "url": "https://usmmasports.com/news/2026/9/23/womens-soccer-vs-sjli-recap-2026.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Mariners Plays To Fourth-Straight Draw With 1-1 Tie At Sarah Lawrence",
         "url": "https://usmmasports.com/news/2026/9/19/womens-soccer-at-slc-recap-2026.aspx",
@@ -2951,7 +2957,7 @@
     "_meta": {
       "source": "news",
       "url": "https://usmmasports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:23Z"
+      "asOf": "2026-09-24T16:09:23Z"
     }
   },
   "camps": {
@@ -2965,20 +2971,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://usmmasports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:24Z"
+        "asOf": "2026-09-24T16:09:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2992,10 +2998,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:18Z"
+      }
+    ]
   }
 }

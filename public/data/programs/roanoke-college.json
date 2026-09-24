@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://maroons.roanoke.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:15Z"
+        "asOf": "2026-09-24T16:07:29Z"
       }
     }
   },
@@ -319,12 +319,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-2",
+      "record": "3-2-3",
       "wins": 3,
       "losses": 2,
-      "ties": 2,
+      "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
+      "confRecord": "0-0-1",
       "headCoach": "Phil Benne"
     },
     {
@@ -1239,7 +1240,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://maroons.roanoke.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:15Z"
+      "asOf": "2026-09-24T16:07:29Z"
     }
   },
   "rosterHistory": {
@@ -2050,11 +2051,11 @@
     "record": {
       "wins": 3,
       "losses": 2,
-      "ties": 2,
-      "text": "3-2-2",
-      "played": 7,
+      "ties": 3,
+      "text": "3-2-3",
+      "played": 8,
       "scheduled": 21,
-      "confText": "0-0-0",
+      "confText": "0-0-1",
       "exhibitions": 2
     },
     "games": [
@@ -2226,11 +2227,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Salem, VA, Donald J. Kerr Stadium",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://flosports.link/44P9MLJ",
-          "live stats": "https://maroons.roanoke.edu/sidearmstats/wsoc/summary",
+          "box score": "https://maroons.roanoke.edu/sports/womens-soccer/stats/2026/bridgewater-college/boxscore/10047",
+          "recap": "https://maroons.roanoke.edu/news/2026/9/23/womens-soccer-roanoke-defense-holds-bridgewater-scoreless-in-0-0-tie.aspx",
           "history": "https://maroons.roanoke.edu/sports/womens-soccer/opponent-history/bridgewater-college/30"
         }
       },
@@ -3543,13 +3544,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://maroons.roanoke.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:15Z"
+      "asOf": "2026-09-24T16:07:29Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Roanoke defense holds Bridgewater scoreless in 0-0 tie",
+        "url": "https://roanokemaroons.com/news/2026/9/23/womens-soccer-roanoke-defense-holds-bridgewater-scoreless-in-0-0-tie.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "RC Women’s Soccer falls at Centre College",
         "url": "https://roanokemaroons.com/news/2026/9/20/womens-soccer-rc-womens-soccer-falls-at-centre-college.aspx",
@@ -3614,7 +3621,7 @@
     "_meta": {
       "source": "news",
       "url": "https://maroons.roanoke.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:20Z"
+      "asOf": "2026-09-24T16:07:41Z"
     }
   },
   "camps": {
@@ -3628,20 +3635,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://maroons.roanoke.edu/sports/2025/4/24/sports-camps.aspx",
-        "asOf": "2026-09-23T18:45:24Z"
+        "asOf": "2026-09-24T16:07:45Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3655,10 +3662,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:29Z"
+      }
+    ]
   }
 }

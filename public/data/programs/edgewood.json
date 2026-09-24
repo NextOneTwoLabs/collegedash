@@ -318,7 +318,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.edgewoodeagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:41Z"
+        "asOf": "2026-09-24T16:01:36Z"
       }
     }
   },
@@ -326,13 +326,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-1",
+      "record": "2-4-2",
       "wins": 2,
       "losses": 4,
-      "ties": 1,
+      "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "2-0-0",
+      "gamesPlayed": 8,
+      "confRecord": "2-0-1",
       "headCoach": "Jon Gulrajani"
     },
     {
@@ -947,7 +947,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.edgewoodeagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:41Z"
+      "asOf": "2026-09-24T16:01:36Z"
     }
   },
   "rosterHistory": {
@@ -1703,11 +1703,11 @@
     "record": {
       "wins": 2,
       "losses": 4,
-      "ties": 1,
-      "text": "2-4-1",
-      "played": 7,
+      "ties": 2,
+      "text": "2-4-2",
+      "played": 8,
       "scheduled": 22,
-      "confText": "2-0-0",
+      "confText": "2-0-1",
       "exhibitions": 0
     },
     "games": [
@@ -1840,11 +1840,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Verona, WI, Edgewood University Field at Reddan Park",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://edgewoodeagles.com/LiveVideo",
-          "live stats": "https://edgewoodeagles.com/sidearmstats/wsoc/summary"
+          "box score": "https://www.edgewoodeagles.com/sports/womens-soccer/stats/2026/msoe/boxscore/9244",
+          "recap": "https://www.edgewoodeagles.com/news/2026/9/23/womens-soccer-eagles-raiders-battle-to-scoreless-draw.aspx"
         }
       },
       {
@@ -3134,13 +3134,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.edgewoodeagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:41Z"
+      "asOf": "2026-09-24T16:01:36Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Eagles, Raiders battle to scoreless draw",
+        "url": "https://edgewoodcollegeeagles.com/news/2026/9/23/womens-soccer-eagles-raiders-battle-to-scoreless-draw.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Brown collects NACC Defensive Weekly Honor",
         "url": "https://edgewoodcollegeeagles.com/news/2026/9/22/womens-soccer-brown-collects-nacc-defensive-weekly-honor.aspx",
@@ -3205,7 +3211,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.edgewoodeagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:48Z"
+      "asOf": "2026-09-24T16:01:50Z"
     }
   },
   "camps": {
@@ -3219,20 +3225,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.edgewoodeagles.com/sports/2025/5/29/womens-soccer-id-camp.aspx",
-        "asOf": "2026-09-23T18:44:50Z"
+        "asOf": "2026-09-24T16:01:53Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3246,10 +3252,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:36Z"
+      }
+    ]
   }
 }

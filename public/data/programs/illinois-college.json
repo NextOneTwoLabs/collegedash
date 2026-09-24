@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:45Z"
+        "asOf": "2026-09-24T16:03:07Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-6-0",
+      "record": "2-7-0",
       "wins": 2,
-      "losses": 6,
+      "losses": 7,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "confRecord": "0-1-0",
       "headCoach": "Hunter Gray"
     },
@@ -918,7 +918,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:03:07Z"
     }
   },
   "rosterHistory": {
@@ -1561,10 +1561,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 6,
+      "losses": 7,
       "ties": 0,
-      "text": "2-6-0",
-      "played": 8,
+      "text": "2-7-0",
+      "played": 9,
       "scheduled": 19,
       "confText": "0-1-0",
       "exhibitions": 1
@@ -1740,11 +1740,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Jacksonville, IL, England Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://watchmidwestsports.com/illinoiscollege/?B=4313873",
-          "live stats": "https://illinoiscollegeathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/stats/2026/webster-university/boxscore/6632",
+          "recap": "https://www.illinoiscollegeathletics.com/news/2026/9/23/womens-soccer-webster-sneaks-past-ic.aspx",
           "history": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/opponent-history/webster-university/41"
         }
       },
@@ -3020,13 +3020,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:45Z"
+      "asOf": "2026-09-24T16:03:07Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Webster Sneaks Past IC",
+        "url": "https://illinoiscollegeathletics.com/news/2026/9/23/womens-soccer-webster-sneaks-past-ic.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Millikin Stops IC",
         "url": "https://illinoiscollegeathletics.com/news/2026/9/20/womens-soccer-millikin-stops-ic.aspx",
@@ -3091,7 +3097,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.illinoiscollegeathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:49Z"
+      "asOf": "2026-09-24T16:03:14Z"
     }
   },
   "camps": {
@@ -3105,20 +3111,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.ladybluessoccercamps.com/",
-        "asOf": "2026-09-23T19:08:50Z"
+        "asOf": "2026-09-24T16:03:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3132,10 +3138,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:07Z"
+      }
+    ]
   }
 }

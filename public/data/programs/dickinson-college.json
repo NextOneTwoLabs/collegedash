@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.dickinsonathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:43Z"
+        "asOf": "2026-09-24T16:01:32Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-2",
-      "wins": 4,
+      "record": "5-1-2",
+      "wins": 5,
       "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Ted Zingman"
     },
     {
@@ -1249,7 +1249,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.dickinsonathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:43Z"
+      "asOf": "2026-09-24T16:01:32Z"
     }
   },
   "rosterHistory": {
@@ -2054,11 +2054,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 2,
-      "text": "4-1-2",
-      "played": 7,
+      "text": "5-1-2",
+      "played": 8,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -2200,11 +2200,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Gettysburg, PA (Clark Field)",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://www.centennialconference.tv/dickinsonathletics/",
-          "live stats": "https://gettysburgsports.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.dickinsonathletics.com/news/2026/9/23/womens-soccer-devils-hold-off-bullets-in-defensive-cc-clash-at-the-battlefield.aspx",
+          "box score": "https://www.dickinsonathletics.com/sports/womens-soccer/stats/2026/gettysburg-college/boxscore/7581",
           "history": "https://www.dickinsonathletics.com/sports/womens-soccer/opponent-history/gettysburg-college/14"
         }
       },
@@ -3452,13 +3452,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.dickinsonathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:43Z"
+      "asOf": "2026-09-24T16:01:32Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Devils Hold Off Bullets in Defensive CC Clash at the Battlefield",
+        "url": "https://dickinsonathletics.com/news/2026/9/23/womens-soccer-devils-hold-off-bullets-in-defensive-cc-clash-at-the-battlefield.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Devils Score Early and Often in Rout of Bears in CC Lid-Lifter",
         "url": "https://dickinsonathletics.com/news/2026/9/20/womens-soccer-devils-score-early-and-often-in-rout-of-bears-in-cc-lid-lifter.aspx",
@@ -3523,7 +3529,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.dickinsonathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:04:47Z"
+      "asOf": "2026-09-24T16:01:40Z"
     }
   },
   "camps": {
@@ -3537,20 +3543,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.dickinsonathletics.com/sports/2022/7/25/womens-soccer-camps-clinics.aspx",
-        "asOf": "2026-09-23T19:04:51Z"
+        "asOf": "2026-09-24T16:01:42Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3564,10 +3570,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:33Z"
+      }
+    ]
   }
 }

@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.clarksonathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:22Z"
+        "asOf": "2026-09-24T16:00:42Z"
       }
     }
   },
@@ -906,7 +906,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.clarksonathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:22Z"
+      "asOf": "2026-09-24T16:00:42Z"
     }
   },
   "rosterHistory": {
@@ -1667,6 +1667,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://unionathletics.com/sports/2018/8/29/wsoc-video.aspx",
+          "live stats": "https://unionathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.clarksonathletics.com/sports/womens-soccer/opponent-history/union-college/13"
         }
       },
@@ -2711,13 +2713,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.clarksonathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:22Z"
+      "asOf": "2026-09-24T16:00:42Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "CU Women's Soccer Preview - at Union College (9/26)",
+        "url": "https://clarksonathletics.com/news/2026/9/24/cu-womens-soccer-preview-at-union-college-9-26.aspx",
+        "date": "2026-09-24",
+        "recruiting": false
+      },
       {
         "title": "Knights Gain Edge in Local Rivalry with 3-0 Win Over SUNY Potsdam",
         "url": "https://clarksonathletics.com/news/2026/9/22/womens-soccer-knights-gain-edge-in-local-rivalry-with-3-0-win-over-suny-potsdam.aspx",
@@ -2782,7 +2790,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.clarksonathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:26Z"
+      "asOf": "2026-09-24T16:00:51Z"
     }
   },
   "camps": {
@@ -2796,20 +2804,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://vivenu.com/seller/clarkson-university-bk4b",
-        "asOf": "2026-09-23T19:08:33Z"
+        "asOf": "2026-09-24T16:00:57Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2823,10 +2831,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:42Z"
+      }
+    ]
   }
 }

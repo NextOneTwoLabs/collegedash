@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.pct.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:41Z"
+        "asOf": "2026-09-24T16:06:34Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-0",
+      "record": "4-2-1",
       "wins": 4,
       "losses": 2,
-      "ties": 0,
+      "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Ian Scheller"
     },
     {
@@ -968,7 +968,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.pct.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:41Z"
+      "asOf": "2026-09-24T16:06:34Z"
     }
   },
   "rosterHistory": {
@@ -1688,9 +1688,9 @@
     "record": {
       "wins": 4,
       "losses": 2,
-      "ties": 0,
-      "text": "4-2-0",
-      "played": 6,
+      "ties": 1,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1830,11 +1830,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Mahwah, N.J.",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://fan.hudl.com/usa/nj/mahwah/organization/125546/ramapo-college",
-          "live stats": "http://www.sidearmstats.com/ramapo/wsoc",
+          "box score": "https://athletics.pct.edu/sports/womens-soccer/stats/2026/ramapo-college/boxscore/5078",
+          "recap": "https://athletics.pct.edu/news/2026/9/23/womens-soccer-wildcats-and-roadrunners-battle-in-scoreless-draw.aspx",
           "history": "https://athletics.pct.edu/sports/womens-soccer/opponent-history/ramapo-college/341"
         }
       },
@@ -3166,13 +3166,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.pct.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:41Z"
+      "asOf": "2026-09-24T16:06:34Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Wildcats and Roadrunners Battle in Scoreless Draw",
+        "url": "https://pctwildcats.com/news/2026/9/23/womens-soccer-wildcats-and-roadrunners-battle-in-scoreless-draw.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Lobb Scores in Women's Soccer Setback to Moravian",
         "url": "https://pctwildcats.com/news/2026/9/19/lobb-scores-in-womens-soccer-setback-to-moravian.aspx",
@@ -3237,7 +3243,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.pct.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:44Z"
+      "asOf": "2026-09-24T16:06:49Z"
     }
   },
   "camps": {
@@ -3251,20 +3257,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.pct.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:44Z"
+        "asOf": "2026-09-24T16:06:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3278,10 +3284,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:34Z"
+      }
+    ]
   }
 }

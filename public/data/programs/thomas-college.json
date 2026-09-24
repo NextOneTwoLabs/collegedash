@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.thomasathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:24Z"
+        "asOf": "2026-09-24T16:09:02Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
+      "record": "3-3-1",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "1-0-0",
       "headCoach": "Lacey Campbell"
     },
@@ -844,7 +844,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:24Z"
+      "asOf": "2026-09-24T16:09:02Z"
     }
   },
   "rosterHistory": {
@@ -1460,10 +1460,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "3-3-1",
+      "played": 7,
       "scheduled": 19,
       "confText": "1-0-0",
       "exhibitions": 2
@@ -1619,11 +1619,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Waterville, ME, Smith Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://www.whou.live/thomas-college",
-          "live stats": "https://athletics.thomas.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.thomasathletics.com/sports/womens-soccer/stats/2026/maine-maritime-academy/boxscore/9028",
+          "recap": "https://www.thomasathletics.com/news/2026/9/23/womens-soccer-unable-to-push-past-maine-maritime-academy.aspx",
           "history": "https://www.thomasathletics.com/sports/womens-soccer/opponent-history/maine-maritime-academy/173"
         }
       },
@@ -2897,13 +2897,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:24Z"
+      "asOf": "2026-09-24T16:09:02Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Emily Rock Earns 400th Career Save in Maine Maritime Loss",
+        "url": "https://athletics.thomas.edu/news/2026/9/23/womens-soccer-unable-to-push-past-maine-maritime-academy.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Pena and Fortin Earn Spots on NAC Honor Roll for Week of 9/18/26",
         "url": "https://athletics.thomas.edu/news/2026/9/21/womens-soccer-pena-and-fortin-earn-spots-on-nac-honor-roll-for-week-of-9-18-26.aspx",
@@ -2968,7 +2974,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:28Z"
+      "asOf": "2026-09-24T16:09:09Z"
     }
   },
   "camps": {
@@ -2982,20 +2988,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.thomasathletics.com/sports/2020/5/21/camps-camps-clinics",
-        "asOf": "2026-09-23T20:47:31Z"
+        "asOf": "2026-09-24T16:09:13Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3009,10 +3015,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:02Z"
+      }
+    ]
   }
 }

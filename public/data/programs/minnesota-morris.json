@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.morriscougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:36Z"
+        "asOf": "2026-09-24T16:05:14Z"
       }
     }
   },
@@ -890,7 +890,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.morriscougars.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:36Z"
+      "asOf": "2026-09-24T16:05:14Z"
     }
   },
   "rosterHistory": {
@@ -2809,7 +2809,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.morriscougars.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:36Z"
+      "asOf": "2026-09-24T16:05:14Z"
     }
   },
   "commitments": [],
@@ -2880,7 +2880,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.morriscougars.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:41Z"
+      "asOf": "2026-09-24T16:05:25Z"
     }
   },
   "camps": {
@@ -2900,14 +2900,14 @@
       {
         "source": "camps",
         "url": "https://www.morriscougarscamps.com/?path=general",
-        "asOf": "2026-09-23T20:47:44Z"
+        "asOf": "2026-09-24T16:05:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2921,10 +2921,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:14Z"
+      }
+    ]
   }
 }

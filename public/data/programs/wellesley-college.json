@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.wellesleyblue.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:07Z"
+        "asOf": "2026-09-24T16:09:52Z"
       }
     }
   },
@@ -294,12 +294,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-2",
+      "record": "3-3-2",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "0-0-1",
       "headCoach": "Greg Margolis"
     },
@@ -949,7 +949,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wellesleyblue.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:07Z"
+      "asOf": "2026-09-24T16:09:52Z"
     }
   },
   "rosterHistory": {
@@ -1677,10 +1677,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
-      "text": "3-2-2",
-      "played": 7,
+      "text": "3-3-2",
+      "played": 8,
       "scheduled": 18,
       "confText": "0-0-1",
       "exhibitions": 0
@@ -1822,11 +1822,11 @@
         "opponentRank": 19,
         "opponentSeed": null,
         "location": "Wellesley, MA, Soccer Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "3-5",
         "links": {
-          "watch": "https://flosports.link/4grEyBr",
-          "live stats": "https://wellesleyblue.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.wellesleyblue.com/sports/womens-soccer/stats/2026/university-of-hartford/boxscore/7876",
+          "recap": "https://www.wellesleyblue.com/news/2026/9/23/fraser-tallies-twice-in-soccers-high-scoring-5-3-setback-to-no-19-hartford.aspx",
           "history": "https://www.wellesleyblue.com/sports/womens-soccer/opponent-history/university-of-hartford/321"
         }
       },
@@ -2999,13 +2999,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wellesleyblue.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:07Z"
+      "asOf": "2026-09-24T16:09:52Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Fraser Tallies Twice in Soccer's High-Scoring 5-3 Setback to No. 19 Hartford",
+        "url": "https://wellesleyblue.com/news/2026/9/23/fraser-tallies-twice-in-soccers-high-scoring-5-3-setback-to-no-19-hartford.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Soccer Controls Tempo in Scoreless Draw with Coast Guard",
         "url": "https://wellesleyblue.com/news/2026/9/19/soccer-controls-tempo-in-scoreless-draw-with-coast-guard.aspx",
@@ -3070,7 +3076,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.wellesleyblue.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:10Z"
+      "asOf": "2026-09-24T16:10:02Z"
     }
   },
   "camps": {
@@ -3084,20 +3090,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics-wellesley.nbsstore.net/",
-        "asOf": "2026-09-23T19:02:12Z"
+        "asOf": "2026-09-24T16:10:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3111,10 +3117,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:52Z"
+      }
+    ]
   }
 }

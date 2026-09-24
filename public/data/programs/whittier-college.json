@@ -309,7 +309,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.wcpoets.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:50Z"
+        "asOf": "2026-09-24T16:09:55Z"
       }
     }
   },
@@ -1100,7 +1100,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wcpoets.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:50Z"
+      "asOf": "2026-09-24T16:09:55Z"
     }
   },
   "rosterHistory": {
@@ -3322,7 +3322,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.wcpoets.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:50Z"
+      "asOf": "2026-09-24T16:09:55Z"
     }
   },
   "commitments": [],
@@ -3393,7 +3393,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.wcpoets.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:54Z"
+      "asOf": "2026-09-24T16:10:04Z"
     }
   },
   "camps": {
@@ -3413,14 +3413,14 @@
       {
         "source": "camps",
         "url": "https://wcpoets.com/sports/2025/3/13/sports-camp-online-application.aspx",
-        "asOf": "2026-09-23T19:05:57Z"
+        "asOf": "2026-09-24T16:10:07Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3434,10 +3434,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:55Z"
+      }
+    ]
   }
 }

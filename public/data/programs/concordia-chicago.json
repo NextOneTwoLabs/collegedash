@@ -328,7 +328,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.cucougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:32Z"
+        "asOf": "2026-09-24T16:00:57Z"
       }
     }
   },
@@ -336,12 +336,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-1",
+      "record": "2-6-1",
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "headCoach": null
     },
     {
@@ -1134,7 +1134,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cucougars.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:32Z"
+      "asOf": "2026-09-24T16:00:57Z"
     }
   },
   "rosterHistory": {
@@ -1940,10 +1940,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 1,
-      "text": "2-5-1",
-      "played": 8,
+      "text": "2-6-1",
+      "played": 9,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -2103,11 +2103,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Chicago, Ill., Stuart Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "6-0",
         "links": {
-          "watch": "https://www.youtube.com/@illinoistechscarlethawks9213",
-          "live stats": "https://illinoistechathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.cucougars.com/news/2026/9/23/womens-soccer-scarlet-hawks-pull-away-in-the-second-half-to-take-the-game-from-the-cougars.aspx",
+          "box score": "https://www.cucougars.com/sports/womens-soccer/stats/2026/illinois-tech/boxscore/11401",
           "history": "https://www.cucougars.com/sports/womens-soccer/opponent-history/illinois-tech/35"
         }
       },
@@ -3396,13 +3396,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cucougars.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:32Z"
+      "asOf": "2026-09-24T16:00:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Scarlet Hawks Pull Away in the Second Half to Take the Game from the Cougars",
+        "url": "https://cucougars.com/news/2026/9/23/womens-soccer-scarlet-hawks-pull-away-in-the-second-half-to-take-the-game-from-the-cougars.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Cougars Hold Raiders to Scoreless Draw",
         "url": "https://cucougars.com/news/2026/9/19/womens-soccer-cougars-hold-raiders-to-scoreless-draw.aspx",
@@ -3467,7 +3473,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.cucougars.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:35Z"
+      "asOf": "2026-09-24T16:01:06Z"
     }
   },
   "camps": {
@@ -3481,20 +3487,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://4agc.com/commerce_pages/4891d05d-04b0-46fd-84ee-50d197a90abf",
-        "asOf": "2026-09-23T18:44:42Z"
+        "asOf": "2026-09-24T16:01:11Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.67,
     "sections": {
       "school": true,
@@ -3508,10 +3514,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:57Z"
+      }
+    ]
   }
 }

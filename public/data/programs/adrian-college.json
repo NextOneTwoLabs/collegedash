@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.adrianbulldogs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:19Z"
+        "asOf": "2026-09-24T15:58:41Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-2",
+      "record": "3-3-2",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Nathan Kronewetter"
     },
     {
@@ -927,7 +927,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.adrianbulldogs.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:19Z"
+      "asOf": "2026-09-24T15:58:41Z"
     }
   },
   "rosterHistory": {
@@ -1633,10 +1633,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
-      "text": "3-2-2",
-      "played": 7,
+      "text": "3-3-2",
+      "played": 8,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -1810,13 +1810,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Adrian, Mich., Docking Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://www.youtube.com/@AdrianCollegeTV",
-          "listen": "https://www.965thecave.com/",
-          "live stats": "https://adrianbulldogs.com/sidearmstats/wsoc/summary",
-          "tickets": "https://events.hometownticketing.com/boxoffice/adriancollege/L2VtYmVkL2V2ZW50LzgyNg%3D%3D",
+          "box score": "https://www.adrianbulldogs.com/sports/womens-soccer/stats/2026/marietta-college/boxscore/23999",
+          "recap": "https://www.adrianbulldogs.com/news/2026/9/23/early-goals-make-the-difference-as-womens-soccer-falls-to-marietta.aspx",
           "history": "https://www.adrianbulldogs.com/sports/womens-soccer/opponent-history/marietta-college/460"
         }
       },
@@ -3041,13 +3039,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.adrianbulldogs.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:19Z"
+      "asOf": "2026-09-24T15:58:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Early Goals Make the Difference as Women's Soccer Falls to Marietta",
+        "url": "https://adrianbulldogs.com/news/2026/9/23/early-goals-make-the-difference-as-womens-soccer-falls-to-marietta.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Clean Sheet Helps Women’s Soccer Earn Scoreless Draw with Kenyon",
         "url": "https://adrianbulldogs.com/news/2026/9/19/womens-soccer-clean-sheet-helps-womens-soccer-earn-scoreless-draw-with-kenyon.aspx",
@@ -3112,7 +3116,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.adrianbulldogs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:24Z"
+      "asOf": "2026-09-24T15:58:50Z"
     }
   },
   "camps": {
@@ -3126,20 +3130,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bulldogwomenssocceridcamp.com/",
-        "asOf": "2026-09-23T19:12:30Z"
+        "asOf": "2026-09-24T15:58:56Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:48Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3153,10 +3157,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:58:41Z"
+      }
+    ]
   }
 }

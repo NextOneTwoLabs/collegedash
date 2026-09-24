@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.jcusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:19:30Z"
+        "asOf": "2026-09-24T16:03:16Z"
       }
     }
   },
@@ -304,12 +304,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-3-2",
+      "record": "2-4-2",
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Michael Marich"
     },
     {
@@ -1223,7 +1223,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.jcusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:19:30Z"
+      "asOf": "2026-09-24T16:03:16Z"
     }
   },
   "rosterHistory": {
@@ -2108,10 +2108,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
-      "text": "2-3-2",
-      "played": 7,
+      "text": "2-4-2",
+      "played": 8,
       "scheduled": 19,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2253,11 +2253,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "University Heights, OH, Don Shula Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://jcusports.com/sports/2025/8/27/live.aspx",
-          "live stats": "https://jcusports.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.jcusports.com/sports/womens-soccer/stats/2026/heidelberg-university/boxscore/16098",
+          "recap": "https://www.jcusports.com/news/2026/9/23/womens-soccer-stumbles-at-home-to-heidelberg.aspx",
           "history": "https://www.jcusports.com/sports/womens-soccer/opponent-history/heidelberg-university/22"
         }
       },
@@ -3598,13 +3598,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.jcusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:19:30Z"
+      "asOf": "2026-09-24T16:03:16Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Stumbles at Home to Heidelberg",
+        "url": "https://jcusports.com/news/2026/9/23/womens-soccer-stumbles-at-home-to-heidelberg.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Drops to #15 Penn State Behrend on Senior Day",
         "url": "https://jcusports.com/news/2026/9/19/womens-soccer-drops-to-15-penn-state-behrend-on-senior-day.aspx",
@@ -3675,7 +3681,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.jcusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:19:34Z"
+      "asOf": "2026-09-24T16:03:21Z"
     }
   },
   "camps": {
@@ -3689,20 +3695,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://johncarrollwomenssoccer.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-23T19:19:36Z"
+        "asOf": "2026-09-24T16:03:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3716,10 +3722,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:16Z"
+      }
+    ]
   }
 }

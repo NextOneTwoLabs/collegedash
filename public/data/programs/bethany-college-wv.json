@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://bethanybison.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:08Z"
+        "asOf": "2026-09-24T15:59:29Z"
       }
     }
   },
@@ -760,7 +760,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bethanybison.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:08Z"
+      "asOf": "2026-09-24T15:59:29Z"
     }
   },
   "rosterHistory": {
@@ -1581,7 +1581,7 @@
         "conferenceGame": true,
         "homeAway": "A",
         "opponent": "Grove City",
-        "opponentRank": null,
+        "opponentRank": 20,
         "opponentSeed": null,
         "location": "Grove City, PA / Don Lyle Field",
         "result": "L",
@@ -2828,7 +2828,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bethanybison.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:08Z"
+      "asOf": "2026-09-24T15:59:29Z"
     }
   },
   "commitments": [],
@@ -2855,7 +2855,7 @@
         "recruiting": false
       },
       {
-        "title": "Women's Soccer Opens PAC Slate at Grove City",
+        "title": "Women's Soccer Opens PAC Slate at No. 20 Grove City",
         "url": "https://bethanybison.com/news/2026/9/16/wsocgrovecity26.aspx",
         "date": "2026-09-16",
         "recruiting": false
@@ -2906,7 +2906,7 @@
     "_meta": {
       "source": "news",
       "url": "https://bethanybison.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:14Z"
+      "asOf": "2026-09-24T15:59:36Z"
     }
   },
   "camps": {
@@ -2926,14 +2926,14 @@
       {
         "source": "camps",
         "url": "https://bethanybison.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:14Z"
+        "asOf": "2026-09-24T15:59:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2947,10 +2947,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:29Z"
+      }
+    ]
   }
 }

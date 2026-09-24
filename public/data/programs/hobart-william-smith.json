@@ -336,7 +336,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hwsathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:38Z"
+        "asOf": "2026-09-24T16:02:56Z"
       }
     }
   },
@@ -344,12 +344,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-0",
+      "record": "4-3-0",
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Laura Burnett-Kurie '08"
     },
     {
@@ -1046,7 +1046,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hwsathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:08:38Z"
+      "asOf": "2026-09-24T16:02:56Z"
     }
   },
   "rosterHistory": {
@@ -1835,10 +1835,10 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "text": "4-2-0",
-      "played": 6,
+      "text": "4-3-0",
+      "played": 7,
       "scheduled": 19,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1962,10 +1962,11 @@
         "opponentRank": 22,
         "opponentSeed": null,
         "location": "Rochester, NY",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "live stats": "https://uofrathletics.com/sidearmstats/wsoc/",
+          "box score": "https://www.hwsathletics.com/sports/womens-soccer/stats/2026/university-of-rochester/boxscore/32261",
+          "recap": "https://www.hwsathletics.com/news/2026/9/23/william-smith-soccer-22-rochester-clips-17-william-smith-1-0.aspx",
           "history": "https://www.hwsathletics.com/sports/womens-soccer/opponent-history/university-of-rochester/9"
         }
       },
@@ -3346,13 +3347,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hwsathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:08:38Z"
+      "asOf": "2026-09-24T16:02:56Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "#22 Rochester clips #17 William Smith 1-0",
+        "url": "https://hwsathletics.com/news/2026/9/23/william-smith-soccer-22-rochester-clips-17-william-smith-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "#17 Herons continue road trip in Flower City",
         "url": "https://hwsathletics.com/news/2026/9/22/william-smith-soccer-17-herons-continue-road-trip-in-flower-city.aspx",
@@ -3417,7 +3424,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hwsathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:08:42Z"
+      "asOf": "2026-09-24T16:03:04Z"
     }
   },
   "camps": {
@@ -3431,20 +3438,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hwsathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:08:42Z"
+        "asOf": "2026-09-24T16:03:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3458,10 +3465,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:56Z"
+      }
+    ]
   }
 }

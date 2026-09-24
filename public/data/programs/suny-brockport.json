@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gobrockport.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:58:04Z"
+        "asOf": "2026-09-24T15:59:46Z"
       }
     }
   },
@@ -311,12 +311,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-1",
+      "record": "5-1-2",
       "wins": 5,
       "losses": 1,
-      "ties": 1,
+      "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Jessica Christenson"
     },
     {
@@ -1030,7 +1030,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobrockport.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:58:04Z"
+      "asOf": "2026-09-24T15:59:46Z"
     }
   },
   "rosterHistory": {
@@ -1827,9 +1827,9 @@
     "record": {
       "wins": 5,
       "losses": 1,
-      "ties": 1,
-      "text": "5-1-1",
-      "played": 7,
+      "ties": 2,
+      "text": "5-1-2",
+      "played": 8,
       "scheduled": 22,
       "confText": null,
       "exhibitions": 0
@@ -1971,11 +1971,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Geneseo, NY",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "2-2",
         "links": {
-          "watch": "https://www.empire8network.com/geneseo/",
-          "live stats": "https://geneseoknights.com/sidearmstats/wsoc/summary",
+          "recap": "https://gobrockport.com/news/2026/9/23/womens-soccer-battles-geneseo-to-2-2-draw.aspx",
+          "box score": "https://gobrockport.com/sports/womens-soccer/stats/2026/suny-geneseo/boxscore/12793",
           "history": "https://gobrockport.com/sports/womens-soccer/opponent-history/suny-geneseo/13"
         }
       },
@@ -3306,13 +3306,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gobrockport.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:58:04Z"
+      "asOf": "2026-09-24T15:59:46Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Battles Geneseo to 2-2 Draw",
+        "url": "https://gobrockport.com/news/2026/9/23/womens-soccer-battles-geneseo-to-2-2-draw.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Opens Empire 8 Play with 2-0 Win at SUNY Poly",
         "url": "https://gobrockport.com/news/2026/9/19/womens-soccer-opens-empire-8-play-with-2-0-win-at-suny-poly.aspx",
@@ -3377,7 +3383,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gobrockport.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:58:06Z"
+      "asOf": "2026-09-24T15:59:53Z"
     }
   },
   "camps": {
@@ -3391,7 +3397,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Fall ID Clinic",
@@ -3421,14 +3427,14 @@
       {
         "source": "camps",
         "url": "http://www.brockportwsoccercamps.com/",
-        "asOf": "2026-09-23T18:58:12Z"
+        "asOf": "2026-09-24T15:59:59Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3442,10 +3448,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:46Z"
+      }
+    ]
   }
 }

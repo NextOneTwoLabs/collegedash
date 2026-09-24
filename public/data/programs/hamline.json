@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hamlineathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:31Z"
+        "asOf": "2026-09-24T16:02:36Z"
       }
     }
   },
@@ -327,12 +327,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-1",
+      "record": "4-3-1",
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "0-1-1",
       "headCoach": "Michael Prunty"
     },
@@ -1289,7 +1289,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:31Z"
+      "asOf": "2026-09-24T16:02:36Z"
     }
   },
   "rosterHistory": {
@@ -2197,10 +2197,10 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "4-2-1",
-      "played": 7,
+      "text": "4-3-1",
+      "played": 8,
       "scheduled": 18,
       "confText": "0-1-1",
       "exhibitions": 3
@@ -2390,11 +2390,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "River Falls, Wis.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.wiacnetwork.com/riverfalls/",
-          "live stats": "https://uwrfsports.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.hamlineathletics.com/sports/womens-soccer/stats/2026/university-of-wisconsin-river-falls/boxscore/9087",
+          "recap": "https://www.hamlineathletics.com/news/2026/9/23/womens-soccer-hamline-narrowly-falls-to-uw-river-falls-1-0.aspx",
           "history": "https://www.hamlineathletics.com/sports/womens-soccer/opponent-history/university-of-wisconsin-river-falls/18"
         }
       },
@@ -3605,13 +3605,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:31Z"
+      "asOf": "2026-09-24T16:02:36Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Hamline Narrowly Falls to UW-River Falls 1-0",
+        "url": "https://hamlineathletics.com/news/2026/9/23/womens-soccer-hamline-narrowly-falls-to-uw-river-falls-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Hamline Battles Augsburg to 2-2 Draw",
         "url": "https://hamlineathletics.com/news/2026/9/19/womens-soccer-hamline-battles-augsburg-to-2-2-draw.aspx",
@@ -3676,7 +3682,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:36Z"
+      "asOf": "2026-09-24T16:02:42Z"
     }
   },
   "camps": {
@@ -3690,20 +3696,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://womenssoccer.hamlinesportscamps.com/index.cfm#sl-scrolldownindicator",
-        "asOf": "2026-09-23T19:01:39Z"
+        "asOf": "2026-09-24T16:02:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3717,10 +3723,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:36Z"
+      }
+    ]
   }
 }

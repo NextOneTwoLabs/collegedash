@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gocaltech.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:37Z"
+        "asOf": "2026-09-24T16:00:04Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-4-0",
+      "record": "0-5-0",
       "wins": 0,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "confRecord": "0-2-0",
       "headCoach": "Scott Wilson"
     },
@@ -768,7 +768,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gocaltech.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:37Z"
+      "asOf": "2026-09-24T16:00:04Z"
     }
   },
   "rosterHistory": {
@@ -1368,10 +1368,10 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "0-4-0",
-      "played": 4,
+      "text": "0-5-0",
+      "played": 5,
       "scheduled": 15,
       "confText": "0-2-0",
       "exhibitions": 0
@@ -1456,11 +1456,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Azusa, CA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-8",
         "links": {
-          "watch": "https://flosports.link/3TONuI9",
-          "live stats": "https://athletics.apu.edu/sidearmstats/wsoc/",
+          "box score": "https://www.gocaltech.com/sports/womens-soccer/stats/2026/azusa-pacific/boxscore/6276",
           "history": "https://www.gocaltech.com/sports/womens-soccer/opponent-history/azusa-pacific-university/192"
         }
       },
@@ -2546,7 +2545,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gocaltech.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:37Z"
+      "asOf": "2026-09-24T16:00:04Z"
     }
   },
   "commitments": [],
@@ -2623,7 +2622,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gocaltech.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:44Z"
+      "asOf": "2026-09-24T16:00:14Z"
     }
   },
   "camps": {
@@ -2667,14 +2666,14 @@
       {
         "source": "camps",
         "url": "https://sites.google.com/view/beaver-womens-soccer-camp-2026/home",
-        "asOf": "2026-09-23T19:05:46Z"
+        "asOf": "2026-09-24T16:00:16Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2688,10 +2687,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:04Z"
+      }
+    ]
   }
 }

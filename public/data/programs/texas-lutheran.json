@@ -309,7 +309,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://tlubulldogs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:15:22Z"
+        "asOf": "2026-09-24T16:08:57Z"
       }
     }
   },
@@ -317,12 +317,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-0-0",
+      "record": "6-1-0",
       "wins": 6,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Kerwin Johnson"
     },
     {
@@ -918,7 +918,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://tlubulldogs.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:15:22Z"
+      "asOf": "2026-09-24T16:08:57Z"
     }
   },
   "rosterHistory": {
@@ -1594,10 +1594,10 @@
     "season": 2026,
     "record": {
       "wins": 6,
-      "losses": 0,
+      "losses": 1,
       "ties": 0,
-      "text": "6-0-0",
-      "played": 6,
+      "text": "6-1-0",
+      "played": 7,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 1
@@ -1737,11 +1737,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Gustafson Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-5",
         "links": {
-          "watch": "https://flosports.link/4w4YMp2",
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=661920",
+          "box score": "https://tlubulldogs.com/sports/womens-soccer/stats/2026/hardin-simmons/boxscore/4043",
+          "recap": "https://tlubulldogs.com/news/2026/9/23/womens-soccer-tlu-falls-to-hardin-simmons.aspx",
           "history": "https://tlubulldogs.com/sports/womens-soccer/opponent-history/hardin-simmons-university/64"
         }
       },
@@ -3179,13 +3179,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://tlubulldogs.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:15:22Z"
+      "asOf": "2026-09-24T16:08:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "TLU Falls to Hardin-Simmons",
+        "url": "https://tlubulldogs.com/news/2026/9/23/womens-soccer-tlu-falls-to-hardin-simmons.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Cortez Selected as SCAC Offensive Player of the Week",
         "url": "https://tlubulldogs.com/news/2026/9/21/womens-soccer-cortez-selected-as-scac-offensive-player-of-the-week.aspx",
@@ -3250,7 +3256,7 @@
     "_meta": {
       "source": "news",
       "url": "https://tlubulldogs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:15:32Z"
+      "asOf": "2026-09-24T16:09:05Z"
     }
   },
   "camps": {
@@ -3264,7 +3270,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "TLU Acrobatics and Tumbling Day Clinics",
@@ -3294,14 +3300,14 @@
       {
         "source": "camps",
         "url": "https://tlubulldogs.com/sports/2025/5/27/information-Sports-Camps-Information.aspx",
-        "asOf": "2026-09-23T19:15:36Z"
+        "asOf": "2026-09-24T16:09:07Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3315,10 +3321,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:57Z"
+      }
+    ]
   }
 }

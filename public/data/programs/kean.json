@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.keanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:06Z"
+        "asOf": "2026-09-24T16:03:27Z"
       }
     }
   },
@@ -310,12 +310,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-1",
-      "wins": 4,
+      "record": "5-3-1",
+      "wins": 5,
       "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "headCoach": "Brian Doherty"
     },
     {
@@ -1233,7 +1233,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:06Z"
+      "asOf": "2026-09-24T16:03:27Z"
     }
   },
   "rosterHistory": {
@@ -1940,11 +1940,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 3,
       "ties": 1,
-      "text": "4-3-1",
-      "played": 8,
+      "text": "5-3-1",
+      "played": 9,
       "scheduled": 19,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2104,11 +2104,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Union, NJ, Alumni Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://keanathletics.com/watch/",
-          "live stats": "https://keanathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.keanathletics.com/sports/womens-soccer/stats/2026/kings-college-pa-/boxscore/15537",
+          "recap": "https://www.keanathletics.com/news/2026/9/23/womens-soccer-petrosh-nets-two-in-shutout-victory-over-kings-pa.aspx",
           "history": "https://www.keanathletics.com/sports/womens-soccer/opponent-history/kings-college-pa-/180"
         }
       },
@@ -3264,13 +3264,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:06Z"
+      "asOf": "2026-09-24T16:03:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Petrosh Nets Two in Shutout Victory over King’s (Pa.)",
+        "url": "https://keanathletics.com/news/2026/9/23/womens-soccer-petrosh-nets-two-in-shutout-victory-over-kings-pa.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Ginsberg Makes Nine Saves in Draw with Sarah Lawrence",
         "url": "https://keanathletics.com/news/2026/9/22/womens-soccer-ginsberg-makes-nine-saves-in-draw-with-sarah-lawrence.aspx",
@@ -3335,7 +3341,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.keanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:09Z"
+      "asOf": "2026-09-24T16:03:31Z"
     }
   },
   "camps": {
@@ -3349,20 +3355,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.keanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:10Z"
+        "asOf": "2026-09-24T16:03:31Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3376,10 +3382,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:27Z"
+      }
+    ]
   }
 }

@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.rowanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:24Z"
+        "asOf": "2026-09-24T16:07:40Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-0",
-      "wins": 4,
+      "record": "5-0-0",
+      "wins": 5,
       "losses": 0,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "headCoach": "Scott Leacott"
     },
     {
@@ -1046,7 +1046,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rowanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:24Z"
+      "asOf": "2026-09-24T16:07:40Z"
     }
   },
   "rosterHistory": {
@@ -1806,11 +1806,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 0,
       "ties": 0,
-      "text": "4-0-0",
-      "played": 4,
+      "text": "5-0-0",
+      "played": 5,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1898,11 +1898,11 @@
         "opponentRank": 8,
         "opponentSeed": null,
         "location": "Grantham, PA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://gomacsports.tv/messiahfalcons/?B=4157426",
-          "live stats": "https://gomessiah.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.rowanathletics.com/sports/womens-soccer/stats/2026/messiah/boxscore/13043",
+          "recap": "https://www.rowanathletics.com/news/2026/9/23/-6-womens-soccer-notches-road-win-at-8-messiah-1-0-wiedeman-nets-goal-in-victory.aspx",
           "history": "https://www.rowanathletics.com/sports/womens-soccer/opponent-history/messiah-university/35"
         }
       },
@@ -3201,13 +3201,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rowanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:24Z"
+      "asOf": "2026-09-24T16:07:40Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "#6 Women's Soccer Notches Road Win at #8 Messiah, 1-0; Wiedeman Nets Goal in Victory",
+        "url": "https://rowanathletics.com/news/2026/9/23/-6-womens-soccer-notches-road-win-at-8-messiah-1-0-wiedeman-nets-goal-in-victory.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Wiedeman, Moore Tally Goals as #7 Women’s Soccer Beats St. Mary’s, 2-0",
         "url": "https://rowanathletics.com/news/2026/9/19/womens-soccer-wiedeman-moore-tally-goals-as-7-womens-soccer-beats-st-marys-2-0.aspx",
@@ -3272,7 +3278,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.rowanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:27Z"
+      "asOf": "2026-09-24T16:07:52Z"
     }
   },
   "camps": {
@@ -3286,20 +3292,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.rowanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:27Z"
+        "asOf": "2026-09-24T16:07:52Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3313,10 +3319,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:40Z"
+      }
+    ]
   }
 }

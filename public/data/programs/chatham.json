@@ -310,7 +310,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:13Z"
+        "asOf": "2026-09-24T16:00:41Z"
       }
     }
   },
@@ -318,12 +318,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
+      "record": "1-5-1",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Betsy Warren"
     },
     {
@@ -915,7 +915,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:13Z"
+      "asOf": "2026-09-24T16:00:41Z"
     }
   },
   "rosterHistory": {
@@ -1578,10 +1578,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "text": "1-5-1",
+      "played": 7,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 2
@@ -1737,11 +1737,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Steubenville, OH",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://pacdigitalnetwork.com/franciscanu/",
-          "live stats": "https://franciscanathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.gochathamcougars.com/news/2026/9/23/womens-soccer-the-cougars-are-defeated-by-franciscan.aspx",
+          "box score": "https://www.gochathamcougars.com/sports/womens-soccer/stats/2026/franciscan/boxscore/6983",
           "history": "https://www.gochathamcougars.com/sports/womens-soccer/opponent-history/franciscan-university/25"
         }
       },
@@ -2948,13 +2948,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:13Z"
+      "asOf": "2026-09-24T16:00:41Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "The Cougars are Defeated by Franciscan",
+        "url": "https://gochathamcougars.com/news/2026/9/23/womens-soccer-the-cougars-are-defeated-by-franciscan.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Drops Match to Saint Francis",
         "url": "https://gochathamcougars.com/news/2026/9/19/womens-soccer-drops-match-to-saint-francis.aspx",
@@ -3025,7 +3031,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:17Z"
+      "asOf": "2026-09-24T16:00:50Z"
     }
   },
   "camps": {
@@ -3039,20 +3045,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:17Z"
+        "asOf": "2026-09-24T16:00:50Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3066,10 +3072,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:41Z"
+      }
+    ]
   }
 }

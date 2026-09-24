@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://whitmanblues.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:21:45Z"
+        "asOf": "2026-09-24T16:10:00Z"
       }
     }
   },
@@ -287,13 +287,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
-      "wins": 3,
+      "record": "4-1-2",
+      "wins": 4,
       "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "2-0-0",
+      "gamesPlayed": 7,
+      "confRecord": "3-0-0",
       "headCoach": "Michelle Voiland"
     },
     {
@@ -1090,7 +1090,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://whitmanblues.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:21:45Z"
+      "asOf": "2026-09-24T16:10:00Z"
     }
   },
   "rosterHistory": {
@@ -1852,13 +1852,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 1,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "4-1-2",
+      "played": 7,
       "scheduled": 23,
-      "confText": "2-0-0",
+      "confText": "3-0-0",
       "exhibitions": 2
     },
     "games": [
@@ -2059,10 +2059,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Spokane, WA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://go.flocollege.com/teams/whitman-college?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=whitman-college",
+          "box score": "https://whitmanblues.com/sports/womens-soccer/stats/2026/whitworth-university/boxscore/8441",
+          "recap": "https://whitmanblues.com/news/2026/9/23/womens-soccer-drops-bucs-remains-perfect-in-nwc.aspx",
           "history": "https://whitmanblues.com/sports/womens-soccer/opponent-history/whitworth-university/4"
         }
       },
@@ -3489,7 +3490,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://whitmanblues.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:21:45Z"
+      "asOf": "2026-09-24T16:10:00Z"
     }
   },
   "commitments": [],
@@ -3509,6 +3510,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Women's Soccer Drops Bucs, Remains Perfect In NWC",
+        "url": "https://athletics.whitman.edu/news/2026/9/23/womens-soccer-drops-bucs-remains-perfect-in-nwc.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Blanks Lewis & Clark, Finishes Perfect NWC Weekend",
         "url": "https://athletics.whitman.edu/news/2026/9/20/womens-soccer-blanks-lewis-clark-finishes-perfect-nwc-weekend.aspx",
@@ -3574,18 +3581,12 @@
         "url": "https://whitmanblues.com/news/2025/11/15/general-flex-pass-and-blue-seats.aspx",
         "date": "2025-11-15",
         "recruiting": false
-      },
-      {
-        "title": "Incoming Student-Athlete Information",
-        "url": "https://whitmanblues.com/news/2025/8/4/general-incoming-student-athlete-information.aspx",
-        "date": "2025-08-04",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://whitmanblues.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:21:51Z"
+      "asOf": "2026-09-24T16:10:08Z"
     }
   },
   "camps": {
@@ -3599,20 +3600,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 18,
+    "newsScanned": 19,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.whitmansoccercamps.com/",
-        "asOf": "2026-09-23T21:21:56Z"
+        "asOf": "2026-09-24T16:10:14Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3626,10 +3627,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:00Z"
+      }
+    ]
   }
 }

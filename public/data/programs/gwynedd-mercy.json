@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:58Z"
+        "asOf": "2026-09-24T16:02:48Z"
       }
     }
   },
@@ -328,12 +328,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-5-0",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Michael Nelms"
     },
     {
@@ -868,7 +868,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:58Z"
+      "asOf": "2026-09-24T16:02:48Z"
     }
   },
   "rosterHistory": {
@@ -1467,10 +1467,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "text": "2-5-0",
+      "played": 7,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1594,11 +1594,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Langhorne, PA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-3",
         "links": {
-          "watch": "https://www.cairnhighlanders.com/sports/2016/8/29/cairn-highlanders-tv-womens-soccer.aspx",
-          "live stats": "https://gwyneddathletics.com/sidearmstats.com/cairn/wsoc/",
+          "box score": "https://gwyneddathletics.com/sports/womens-soccer/stats/2026/cairn-university/boxscore/10959",
+          "recap": "https://gwyneddathletics.com/news/2026/9/23/womens-soccer-gordon-gives-griffins-early-lead-in-road-battle-at-cairn.aspx",
           "history": "https://gwyneddathletics.com/sports/womens-soccer/opponent-history/cairn-university/21"
         }
       },
@@ -2891,13 +2891,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:58Z"
+      "asOf": "2026-09-24T16:02:48Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Gordon Gives Griffins Early Lead in Road Battle at Cairn",
+        "url": "https://gwyneddathletics.com/news/2026/9/23/womens-soccer-gordon-gives-griffins-early-lead-in-road-battle-at-cairn.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Griffins’ First-Half Stand Highlights Home Contest Against Bobcats",
         "url": "https://gwyneddathletics.com/news/2026/9/19/womens-soccer-griffins-first-half-stand-highlights-home-contest-against-bobcats.aspx",
@@ -2962,7 +2968,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:48:08Z"
+      "asOf": "2026-09-24T16:02:52Z"
     }
   },
   "camps": {
@@ -2976,20 +2982,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:48:08Z"
+        "asOf": "2026-09-24T16:02:53Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3003,10 +3009,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:48Z"
+      }
+    ]
   }
 }

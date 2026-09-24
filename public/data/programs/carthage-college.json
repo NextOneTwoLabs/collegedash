@@ -351,7 +351,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.carthage.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:13:21Z"
+        "asOf": "2026-09-24T16:00:24Z"
       }
     }
   },
@@ -359,12 +359,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-3",
+      "record": "2-2-4",
       "wins": 2,
       "losses": 2,
-      "ties": 3,
+      "ties": 4,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Chelsea Davis"
     },
     {
@@ -1138,7 +1138,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.carthage.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:13:21Z"
+      "asOf": "2026-09-24T16:00:24Z"
     }
   },
   "rosterHistory": {
@@ -1922,9 +1922,9 @@
     "record": {
       "wins": 2,
       "losses": 2,
-      "ties": 3,
-      "text": "2-2-3",
-      "played": 7,
+      "ties": 4,
+      "text": "2-2-4",
+      "played": 8,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -2066,13 +2066,12 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Oshkosh, Wis.",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://www.wiacnetwork.com/uwoshkosh/?B=4180266",
-          "live stats": "https://uwoshkoshtitans.com/sidearmstats/wsoc/summary",
-          "history": "https://athletics.carthage.edu/sports/womens-soccer/opponent-history/university-of-wisconsin-oshkosh/45",
-          "tickets": "https://eventmanager.vbotickets.com/tickets.asp?Page=Event&eid=203655&_ga=2.106298115.1214742058.1790002391-650511030.1790002391"
+          "recap": "https://athletics.carthage.edu/news/2026/9/23/womens-soccer-firebirds-draw-with-uw-oshkosh-1-1.aspx",
+          "box score": "https://athletics.carthage.edu/sports/womens-soccer/stats/2026/university-of-wisconsin-oshkosh/boxscore/12266",
+          "history": "https://athletics.carthage.edu/sports/womens-soccer/opponent-history/university-of-wisconsin-oshkosh/45"
         }
       },
       {
@@ -3313,13 +3312,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.carthage.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:13:21Z"
+      "asOf": "2026-09-24T16:00:24Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Firebirds Draw with UW-Oshkosh 1-1",
+        "url": "https://athletics.carthage.edu/news/2026/9/23/womens-soccer-firebirds-draw-with-uw-oshkosh-1-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Carthage Women's Soccer Fall to Loras",
         "url": "https://athletics.carthage.edu/news/2026/9/19/carthage-womens-soccer-fall-to-loras.aspx",
@@ -3384,7 +3389,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.carthage.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:13:25Z"
+      "asOf": "2026-09-24T16:00:35Z"
     }
   },
   "camps": {
@@ -3398,20 +3403,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 404 for https://athletics.carthage.edu/sports/2010/12/7/General_1207103356",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.carthage.edu/sports/2010/12/7/General_1207103356",
-        "asOf": "2026-09-23T19:13:29Z"
+        "asOf": "2026-09-24T16:00:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3425,10 +3430,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:24Z"
+      }
+    ]
   }
 }

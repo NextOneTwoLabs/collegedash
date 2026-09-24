@@ -327,7 +327,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://guilfordquakers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:20:59Z"
+        "asOf": "2026-09-24T16:02:31Z"
       }
     }
   },
@@ -335,12 +335,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-2-2",
+      "record": "1-3-2",
       "wins": 1,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
+      "confRecord": "0-1-0",
       "headCoach": "Dakota Rock '15"
     },
     {
@@ -856,7 +857,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://guilfordquakers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:20:59Z"
+      "asOf": "2026-09-24T16:02:31Z"
     }
   },
   "rosterHistory": {
@@ -1555,12 +1556,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
-      "text": "1-2-2",
-      "played": 5,
+      "text": "1-3-2",
+      "played": 6,
       "scheduled": 16,
-      "confText": "0-0-0",
+      "confText": "0-1-0",
       "exhibitions": 2
     },
     "games": [
@@ -1713,11 +1714,11 @@
         "opponentRank": 2,
         "opponentSeed": null,
         "location": "Lexington, Va.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.flocollege.com/schools/6469684-guilford-college",
-          "live stats": "https://generalssports.com/sidearmstats/wsoc/",
+          "box score": "https://guilfordquakers.com/sports/womens-soccer/stats/2026/washington-and-lee-university/boxscore/9416",
+          "recap": "https://guilfordquakers.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-no-2-washington-lee-1-0.aspx",
           "history": "https://guilfordquakers.com/sports/womens-soccer/opponent-history/washington-and-lee-university/184"
         }
       },
@@ -2989,13 +2990,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://guilfordquakers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:20:59Z"
+      "asOf": "2026-09-24T16:02:31Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Falls to No. 2 Washington & Lee in ODAC Opener",
+        "url": "https://guilfordquakers.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-no-2-washington-lee-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Motto Receives ODAC Defensive Player of the Week With Shutout Week For Women’s Soccer",
         "url": "https://guilfordquakers.com/news/2026/9/21/womens-soccer-motto-receives-odac-defensive-player-of-the-week-with-shutout-week-for-womens-soccer.aspx",
@@ -3060,7 +3067,7 @@
     "_meta": {
       "source": "news",
       "url": "https://guilfordquakers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:21:04Z"
+      "asOf": "2026-09-24T16:02:39Z"
     }
   },
   "camps": {
@@ -3074,20 +3081,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.guilfordwomenssoccercamps.com/?path=wsoc",
-        "asOf": "2026-09-23T21:21:06Z"
+        "asOf": "2026-09-24T16:02:41Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3101,10 +3108,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:31Z"
+      }
+    ]
   }
 }

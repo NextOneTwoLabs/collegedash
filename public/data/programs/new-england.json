@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.une.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:19Z"
+        "asOf": "2026-09-24T16:06:03Z"
       }
     }
   },
@@ -320,12 +320,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-0",
-      "wins": 4,
+      "record": "5-3-0",
+      "wins": 5,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "0-2-0",
       "headCoach": "AJ Stueck"
     },
@@ -1041,7 +1041,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.une.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:19Z"
+      "asOf": "2026-09-24T16:06:03Z"
     }
   },
   "rosterHistory": {
@@ -1749,11 +1749,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 3,
       "ties": 0,
-      "text": "4-3-0",
-      "played": 7,
+      "text": "5-3-0",
+      "played": 8,
       "scheduled": 22,
       "confText": "0-2-0",
       "exhibitions": 0
@@ -1895,11 +1895,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Biddeford, Maine, Barbara J. Hazard Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "12-0",
         "links": {
-          "watch": "http://athletics.une.edu/wsoc_watch",
-          "live stats": "https://athletics.une.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.une.edu/sports/womens-soccer/stats/2026/umaine-farmington/boxscore/8496",
+          "recap": "https://athletics.une.edu/news/2026/9/23/w-soccer-une-sets-program-record-in-12-0-win-over-umf.aspx",
           "history": "https://athletics.une.edu/sports/womens-soccer/opponent-history/umaine-farmington/29"
         }
       },
@@ -3203,13 +3203,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.une.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:19Z"
+      "asOf": "2026-09-24T16:06:03Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "UNE sets program record in 12-0 win over UMF",
+        "url": "https://athletics.une.edu/news/2026/9/23/w-soccer-une-sets-program-record-in-12-0-win-over-umf.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "#19 Hartford answers in 2-1 win over UNE",
         "url": "https://athletics.une.edu/news/2026/9/19/w-soccer-hartford-answers-in-2-1-win-over-une.aspx",
@@ -3274,7 +3280,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.une.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:23Z"
+      "asOf": "2026-09-24T16:06:10Z"
     }
   },
   "camps": {
@@ -3288,7 +3294,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Girls Got Game Camp",
@@ -3442,7 +3448,7 @@
         "sourceUrl": "https://athletics.une.edu/sports/2016/2/11/gen_camps_clinics.aspx",
         "confidence": "heuristic",
         "kind": "camp",
-        "campType": "id",
+        "campType": "unknown",
         "sources": [
           {
             "kind": "camp",
@@ -3502,14 +3508,14 @@
       {
         "source": "camps",
         "url": "https://athletics.une.edu/camps",
-        "asOf": "2026-09-23T19:05:31Z"
+        "asOf": "2026-09-24T16:06:14Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3523,10 +3529,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:03Z"
+      }
+    ]
   }
 }

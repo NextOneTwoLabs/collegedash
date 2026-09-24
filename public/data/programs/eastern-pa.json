@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goeasterneagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:32Z"
+        "asOf": "2026-09-24T16:01:33Z"
       }
     }
   },
@@ -327,12 +327,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-3-1",
-      "wins": 2,
+      "record": "3-3-1",
+      "wins": 3,
       "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Jess Shanahan"
     },
     {
@@ -1029,7 +1029,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goeasterneagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:32Z"
+      "asOf": "2026-09-24T16:01:33Z"
     }
   },
   "rosterHistory": {
@@ -1793,11 +1793,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 3,
       "ties": 1,
-      "text": "2-3-1",
-      "played": 6,
+      "text": "3-3-1",
+      "played": 7,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1921,11 +1921,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Harrisburg, Pa.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://psucampusathletics.com/psuharrisburg/",
-          "live stats": "https://psuharrisburgsports.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.goeasterneagles.com/sports/womens-soccer/stats/2026/penn-state-harrisburg/boxscore/19752",
+          "recap": "https://www.goeasterneagles.com/news/2026/9/23/womens-soccer-wins-at-harrisburg.aspx",
           "history": "https://www.goeasterneagles.com/sports/womens-soccer/opponent-history/penn-state-harrisburg/121"
         }
       },
@@ -1942,7 +1942,7 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.gomacsports.tv/goeasterneagles/",
+          "watch": "https://www.gomacsports.tv/goeasterneagles/?B=4079935",
           "live stats": "https://goeasterneagles.com/sidearmstats/wsoc/summary",
           "history": "https://www.goeasterneagles.com/sports/womens-soccer/opponent-history/gwynedd-mercy-university/60"
         }
@@ -3174,13 +3174,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goeasterneagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:32Z"
+      "asOf": "2026-09-24T16:01:33Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Wins at Harrisburg",
+        "url": "https://goeasterneagles.com/news/2026/9/23/womens-soccer-wins-at-harrisburg.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Draws at Rutgers-Newark",
         "url": "https://goeasterneagles.com/news/2026/9/19/womens-soccer-draws-at-rutgers-newark.aspx",
@@ -3251,7 +3257,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goeasterneagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:43Z"
+      "asOf": "2026-09-24T16:01:45Z"
     }
   },
   "camps": {
@@ -3265,20 +3271,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.goeasterneagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:43Z"
+        "asOf": "2026-09-24T16:01:45Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3292,10 +3298,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:33Z"
+      }
+    ]
   }
 }

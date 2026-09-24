@@ -270,7 +270,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.aurora.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:46Z"
+        "asOf": "2026-09-24T15:59:07Z"
       }
     }
   },
@@ -278,13 +278,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-0",
+      "record": "1-6-0",
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "0-2-0",
+      "gamesPlayed": 7,
+      "confRecord": "0-3-0",
       "headCoach": "Courtney Naber"
     },
     {
@@ -920,7 +920,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.aurora.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:46Z"
+      "asOf": "2026-09-24T15:59:07Z"
     }
   },
   "rosterHistory": {
@@ -1487,12 +1487,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "1-5-0",
-      "played": 6,
+      "text": "1-6-0",
+      "played": 7,
       "scheduled": 21,
-      "confText": "0-2-0",
+      "confText": "0-3-0",
       "exhibitions": 0
     },
     "games": [
@@ -1636,11 +1636,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Montgomery, Ill., Spartan Athletic Park",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "3-1",
         "links": {
-          "watch": "https://athletics.aurora.edu/gameday",
-          "live stats": "https://athletics.aurora.edu/sidearmstats/wsoc/summary"
+          "box score": "https://athletics.aurora.edu/sports/womens-soccer/stats/2026/concordia-university-wisconsin/boxscore/14388",
+          "recap": "https://athletics.aurora.edu/news/2026/9/23/womens-soccer-spartans-fall-to-the-falcons-at-home.aspx"
         }
       },
       {
@@ -2844,13 +2844,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.aurora.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:46Z"
+      "asOf": "2026-09-24T15:59:07Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Spartans Fall to the Falcons at home",
+        "url": "https://athletics.aurora.edu/news/2026/9/23/womens-soccer-spartans-fall-to-the-falcons-at-home.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Spartan women fall in one goal game",
         "url": "https://athletics.aurora.edu/news/2026/9/20/womens-soccer-spartan-women-fall-in-one-goal-game.aspx",
@@ -2915,7 +2921,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.aurora.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:44:50Z"
+      "asOf": "2026-09-24T15:59:14Z"
     }
   },
   "camps": {
@@ -2929,20 +2935,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.aurora.edu/sports/2019/3/12/sport-camp-liability-form-waiver.aspx",
-        "asOf": "2026-09-23T18:44:59Z"
+        "asOf": "2026-09-24T15:59:18Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:48Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2956,10 +2962,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:07Z"
+      }
+    ]
   }
 }

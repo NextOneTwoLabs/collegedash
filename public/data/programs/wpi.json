@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.wpi.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:07Z"
+        "asOf": "2026-09-24T16:10:45Z"
       }
     }
   },
@@ -349,7 +349,7 @@
   ],
   "roster": {
     "season": 2026,
-    "count": 28,
+    "count": 27,
     "players": [
       {
         "number": "0",
@@ -832,26 +832,6 @@
         "clubInfo": null
       },
       {
-        "number": "26",
-        "name": "Savannah Jones",
-        "pos": "",
-        "posLabel": "B",
-        "height": "5-0",
-        "heightIn": 60,
-        "classLabel": "Fr.",
-        "classCode": "FR",
-        "hometown": "Linwood, NJ",
-        "highSchool": "Mainland Regional",
-        "previousSchool": "",
-        "major": "",
-        "club": "",
-        "bioUrl": "https://athletics.wpi.edu/sports/womens-soccer/roster/savannah-jones/12155",
-        "social": {},
-        "bio": {},
-        "clubSource": null,
-        "clubInfo": null
-      },
-      {
         "number": "27",
         "name": "Emily Ploscowe",
         "pos": "",
@@ -961,7 +941,7 @@
     "byClass": {
       "JR": 8,
       "SR": 7,
-      "FR": 5,
+      "FR": 4,
       "SO": 8
     },
     "graduatingByPos": {
@@ -972,7 +952,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:07Z"
+      "asOf": "2026-09-24T16:10:45Z"
     }
   },
   "rosterHistory": {
@@ -1451,7 +1431,7 @@
       "departed": null
     },
     "2023": {
-      "count": 28,
+      "count": 27,
       "players": [
         {
           "number": "0",
@@ -1644,14 +1624,6 @@
           "classCode": "SR",
           "hometown": "Cheshire, CT",
           "highSchool": "Cheshire"
-        },
-        {
-          "number": "26",
-          "name": "Savannah Jones",
-          "pos": "",
-          "classCode": "FR",
-          "hometown": "Linwood, NJ",
-          "highSchool": "Mainland Regional"
         },
         {
           "number": "27",
@@ -3153,7 +3125,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:07Z"
+      "asOf": "2026-09-24T16:10:45Z"
     }
   },
   "commitments": [],
@@ -3224,7 +3196,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:12Z"
+      "asOf": "2026-09-24T16:10:50Z"
     }
   },
   "camps": {
@@ -3244,14 +3216,14 @@
       {
         "source": "camps",
         "url": "https://wpiwomenssoccercampsandclinics.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-23T19:02:14Z"
+        "asOf": "2026-09-24T16:10:52Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3265,10 +3237,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:45Z"
+      }
+    ]
   }
 }

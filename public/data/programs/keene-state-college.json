@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.keeneowls.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:19Z"
+        "asOf": "2026-09-24T16:03:30Z"
       }
     }
   },
@@ -1020,7 +1020,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keeneowls.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:19Z"
+      "asOf": "2026-09-24T16:03:30Z"
     }
   },
   "rosterHistory": {
@@ -1922,7 +1922,7 @@
         "opponent": "UMass-Boston",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Keene, N.H., Dr. Ron Butcher Field",
+        "location": "Keene, N.H., Owl Athletic Complex",
         "result": null,
         "score": null,
         "links": {
@@ -1974,7 +1974,7 @@
         "opponent": "Plymouth State",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Keene, N.H., Dr. Ron Butcher Field",
+        "location": "Keene, N.H., Owl Athletic Complex",
         "result": null,
         "score": null,
         "links": {
@@ -1992,7 +1992,7 @@
         "opponent": "Rhode Island College",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Keene, N.H., Dr. Ron Butcher Field",
+        "location": "Keene, N.H., Owl Athletic Complex",
         "result": null,
         "score": null,
         "links": {
@@ -2046,7 +2046,7 @@
         "opponent": "Framingham State",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Keene, N.H., Dr. Ron Butcher Field",
+        "location": "Keene, N.H., Owl Athletic Complex",
         "result": null,
         "score": null,
         "links": {
@@ -2081,7 +2081,7 @@
         "opponent": "Vermont State Castleton",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Keene, N.H., Dr. Ron Butcher Field",
+        "location": "Keene, N.H., Owl Athletic Complex",
         "result": null,
         "score": null,
         "links": {
@@ -3291,7 +3291,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.keeneowls.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:19Z"
+      "asOf": "2026-09-24T16:03:30Z"
     }
   },
   "commitments": [],
@@ -3368,7 +3368,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.keeneowls.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:22Z"
+      "asOf": "2026-09-24T16:03:38Z"
     }
   },
   "camps": {
@@ -3388,14 +3388,14 @@
       {
         "source": "camps",
         "url": "https://keeneowls.com/sports/2020/4/28/camps-Soccer-Soccer-Camp-Front-Page.aspx?id=67",
-        "asOf": "2026-09-23T19:16:27Z"
+        "asOf": "2026-09-24T16:03:43Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3409,10 +3409,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:30Z"
+      }
+    ]
   }
 }

@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.alverno.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:17Z"
+        "asOf": "2026-09-24T15:58:55Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-6-0",
-      "wins": 0,
+      "record": "1-6-0",
+      "wins": 1,
       "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Sendi Jimenez Garcia"
     },
     {
@@ -683,7 +683,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.alverno.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:17Z"
+      "asOf": "2026-09-24T15:58:55Z"
     }
   },
   "rosterHistory": {
@@ -900,11 +900,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 0,
+      "wins": 1,
       "losses": 6,
       "ties": 0,
-      "text": "0-6-0",
-      "played": 6,
+      "text": "1-6-0",
+      "played": 7,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 2
@@ -1060,11 +1060,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Milwaukee, Wis., Alverno Soccer Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://athletics.alverno.edu/sports/2026/7/31/alverno-athletics-broadcasts-on-hudl-tv.aspx",
-          "live stats": "https://athletics.alverno.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.alverno.edu/sports/womens-soccer/stats/2026/andrews/boxscore/3642",
+          "recap": "https://athletics.alverno.edu/news/2026/9/23/inferno-makes-history-with-first-soccer-win-since-2021.aspx",
           "history": "https://athletics.alverno.edu/sports/womens-soccer/opponent-history/andrews-university/286"
         }
       },
@@ -1836,13 +1836,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.alverno.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:17Z"
+      "asOf": "2026-09-24T15:58:55Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Inferno Makes History with First Soccer Win since 2021",
+        "url": "https://athletics.alverno.edu/news/2026/9/23/inferno-makes-history-with-first-soccer-win-since-2021.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Hernandez Alvarez Goal Highlights Trip to UHSP",
         "url": "https://athletics.alverno.edu/news/2026/9/20/soccer-hernandez-alvarez-goal-highlights-trip-to-uhsp.aspx",
@@ -1907,7 +1913,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.alverno.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:21Z"
+      "asOf": "2026-09-24T15:59:04Z"
     }
   },
   "camps": {
@@ -1921,20 +1927,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.alverno.edu/sports/2019/10/16/camps-and-clinics.aspx",
-        "asOf": "2026-09-23T18:45:23Z"
+        "asOf": "2026-09-24T15:59:07Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:48Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -1948,10 +1954,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:58:55Z"
+      }
+    ]
   }
 }

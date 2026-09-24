@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.psuberksathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:57:49Z"
+        "asOf": "2026-09-24T16:06:43Z"
       }
     }
   },
@@ -746,7 +746,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:57:49Z"
+      "asOf": "2026-09-24T16:06:43Z"
     }
   },
   "rosterHistory": {
@@ -1422,6 +1422,7 @@
         "score": "6-0",
         "links": {
           "box score": "https://www.psuberksathletics.com/sports/womens-soccer/stats/2026/carlow-university-pa-/boxscore/7181",
+          "recap": "https://www.psuberksathletics.com/news/2026/9/23/womens-soccer-cruises-to-6-0-win-over-carlow.aspx",
           "history": "https://www.psuberksathletics.com/sports/womens-soccer/opponent-history/carlow-university-pa-/277"
         }
       },
@@ -2658,13 +2659,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:57:49Z"
+      "asOf": "2026-09-24T16:06:43Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Cruises to 6-0 Win Over Carlow",
+        "url": "https://psuberksathletics.com/news/2026/9/23/womens-soccer-cruises-to-6-0-win-over-carlow.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Drops Match to FDU-Florham",
         "url": "https://psuberksathletics.com/news/2026/9/21/womens-soccer-drops-match-to-fdu-florham.aspx",
@@ -2729,7 +2736,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:57:54Z"
+      "asOf": "2026-09-24T16:06:56Z"
     }
   },
   "camps": {
@@ -2743,20 +2750,20 @@
     "robotsBlocked": true,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://app.campdoc.com/!/dn/login?r=psu%20berksgirlssoccerclinic11826",
-        "asOf": "2026-09-23T18:57:55Z"
+        "asOf": "2026-09-24T16:06:57Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2770,10 +2777,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:06:43Z"
+      }
+    ]
   }
 }

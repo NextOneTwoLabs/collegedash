@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.govaliants.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:15Z"
+        "asOf": "2026-09-24T16:04:26Z"
       }
     }
   },
@@ -294,13 +294,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-3-0",
-      "wins": 1,
+      "record": "2-3-0",
+      "wins": 2,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 4,
-      "confRecord": "0-1-0",
+      "gamesPlayed": 5,
+      "confRecord": "1-1-0",
       "headCoach": "Peter Coughlan"
     },
     {
@@ -898,7 +898,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.govaliants.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:15Z"
+      "asOf": "2026-09-24T16:04:26Z"
     }
   },
   "rosterHistory": {
@@ -1554,13 +1554,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 3,
       "ties": 0,
-      "text": "1-3-0",
-      "played": 4,
+      "text": "2-3-0",
+      "played": 5,
       "scheduled": 20,
-      "confText": "0-1-0",
+      "confText": "1-1-0",
       "exhibitions": 2
     },
     "games": [
@@ -1695,11 +1695,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Old Westbury, NY",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://fan.hudl.com/usa/ny/old-westbury/organization/51594/suny-college-at-old",
-          "live stats": "https://www.oldwestburypanthers.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.govaliants.com/sports/womens-soccer/stats/2026/the-college-at-old-westbury/boxscore/16132",
+          "recap": "https://www.govaliants.com/news/2026/9/23/vega-moraglia-strike-for-womens-soccer-in-win-at-old-westbury.aspx",
           "history": "https://www.govaliants.com/sports/womens-soccer/opponent-history/the-college-at-old-westbury/141"
         }
       },
@@ -2998,7 +2998,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.govaliants.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:15Z"
+      "asOf": "2026-09-24T16:04:26Z"
     }
   },
   "commitments": [],
@@ -3012,6 +3012,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Vega & Moraglia Strike For Women's Soccer in Win at Old Westbury",
+        "url": "https://govaliants.com/news/2026/9/23/vega-moraglia-strike-for-womens-soccer-in-win-at-old-westbury.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Defeats Penn State Brandywine for First Win of Season",
         "url": "https://govaliants.com/news/2026/9/15/womens-soccer-defeats-penn-state-brandywine-for-first-win-of-season.aspx",
@@ -3076,7 +3082,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.govaliants.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:19Z"
+      "asOf": "2026-09-24T16:04:31Z"
     }
   },
   "camps": {
@@ -3090,20 +3096,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://facilityrentalrequest.totalcamps.com/About%20Us",
-        "asOf": "2026-09-23T19:02:23Z"
+        "asOf": "2026-09-24T16:04:37Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3117,10 +3123,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:26Z"
+      }
+    ]
   }
 }

@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.scranton.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:09:24Z"
+        "asOf": "2026-09-24T16:08:04Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
-      "wins": 3,
+      "record": "4-1-2",
+      "wins": 4,
       "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Colleen Pivirotto"
     },
     {
@@ -1108,7 +1108,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:09:24Z"
+      "asOf": "2026-09-24T16:08:04Z"
     }
   },
   "rosterHistory": {
@@ -1991,11 +1991,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 1,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "4-1-2",
+      "played": 7,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2119,11 +2119,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Scranton, PA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-1",
         "links": {
-          "watch": "https://flosports.link/4wqQ1Gc",
-          "live stats": "https://athletics.scranton.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.scranton.edu/sports/womens-soccer/stats/2026/misericordia-university/boxscore/6694",
+          "recap": "https://athletics.scranton.edu/news/2026/9/23/scranton-womens-soccer-scores-early-holds-off-misericordia-3-1.aspx",
           "history": "https://athletics.scranton.edu/sports/womens-soccer/opponent-history/misericordia-university/12"
         }
       },
@@ -3524,13 +3524,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:09:24Z"
+      "asOf": "2026-09-24T16:08:04Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Scranton Women's Soccer Scores Early, Holds Off Misericordia 3-1",
+        "url": "https://athletics.scranton.edu/news/2026/9/23/scranton-womens-soccer-scores-early-holds-off-misericordia-3-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Parente of Women's Soccer Named Peggy's Scranton Athlete of the Week",
         "url": "https://athletics.scranton.edu/news/2026/9/21/parente-of-womens-soccer-named-peggys-scranton-athlete-of-the-week.aspx",
@@ -3595,7 +3601,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:09:31Z"
+      "asOf": "2026-09-24T16:08:17Z"
     }
   },
   "camps": {
@@ -3609,7 +3615,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Winter ID Camp",
@@ -3645,19 +3651,19 @@
       {
         "source": "camps",
         "url": "https://athletics.scranton.edu/registrations/#!/camps/",
-        "asOf": "2026-09-23T19:09:38Z"
+        "asOf": "2026-09-24T16:08:21Z"
       },
       {
         "source": "news",
         "url": "https://athletics.scranton.edu/sports/womens-soccer/archives",
-        "asOf": "2026-09-23T19:09:31Z"
+        "asOf": "2026-09-24T16:08:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3671,10 +3677,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:04Z"
+      }
+    ]
   }
 }

@@ -305,7 +305,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://cnusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:38Z"
+        "asOf": "2026-09-24T16:00:44Z"
       }
     }
   },
@@ -313,12 +313,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-2",
+      "record": "4-1-3",
       "wins": 4,
       "losses": 1,
-      "ties": 2,
+      "ties": 3,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Jamie Gunderson"
     },
     {
@@ -972,7 +972,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://cnusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:38Z"
+      "asOf": "2026-09-24T16:00:44Z"
     }
   },
   "rosterHistory": {
@@ -1773,9 +1773,9 @@
     "record": {
       "wins": 4,
       "losses": 1,
-      "ties": 2,
-      "text": "4-1-2",
-      "played": 7,
+      "ties": 3,
+      "text": "4-1-3",
+      "played": 8,
       "scheduled": 24,
       "confText": null,
       "exhibitions": 2
@@ -1949,11 +1949,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Newport News, Va., Captains Turf Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://fan.hudl.com/usa/va/newport-news/organization/23838/christopher-newport/video?shared=true",
-          "live stats": "https://www.cnusports.com/sidearmstats/wsoc/summary",
+          "box score": "https://cnusports.com/sports/womens-soccer/stats/2026/marymount-university/boxscore/17509",
+          "recap": "https://cnusports.com/news/2026/9/23/amy-sidaway-adds-to-historic-ledger-in-scoreless-draw-against-marymount-as-cnu-womens-soccer-ties-the-saints.aspx",
           "history": "https://cnusports.com/sports/womens-soccer/opponent-history/marymount-university/63"
         }
       },
@@ -3543,13 +3543,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://cnusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:38Z"
+      "asOf": "2026-09-24T16:00:44Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Amy Sidaway Adds to Historic Ledger in Scoreless Draw Against Marymount as CNU Women's Soccer Ties the Saints",
+        "url": "https://cnusports.com/news/2026/9/23/amy-sidaway-adds-to-historic-ledger-in-scoreless-draw-against-marymount-as-cnu-womens-soccer-ties-the-saints.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "CNU Women's Soccer Set to Host Marymount on Wednesday Evening",
         "url": "https://cnusports.com/news/2026/9/22/cnu-womens-soccer-set-to-host-marymount-on-wednesday-evening.aspx",
@@ -3614,7 +3620,7 @@
     "_meta": {
       "source": "news",
       "url": "https://cnusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:42Z"
+      "asOf": "2026-09-24T16:00:54Z"
     }
   },
   "camps": {
@@ -3628,20 +3634,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://cnusports.com/sports/2007/9/24/camps.aspx",
-        "asOf": "2026-09-23T18:45:46Z"
+        "asOf": "2026-09-24T16:00:55Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3655,10 +3661,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:44Z"
+      }
+    ]
   }
 }

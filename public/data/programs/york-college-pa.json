@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ycpspartans.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:12:46Z"
+        "asOf": "2026-09-24T16:10:34Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-2",
-      "wins": 4,
+      "record": "5-1-2",
+      "wins": 5,
       "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Kelly Wakeman"
     },
     {
@@ -1125,7 +1125,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ycpspartans.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:12:46Z"
+      "asOf": "2026-09-24T16:10:34Z"
     }
   },
   "rosterHistory": {
@@ -2019,11 +2019,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 2,
-      "text": "4-1-2",
-      "played": 7,
+      "text": "5-1-2",
+      "played": 8,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2165,11 +2165,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "York, PA, Graham Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://gomacsports.tv/ycpspartans",
-          "live stats": "https://ycpspartans.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.ycpspartans.com/sports/womens-soccer/stats/2026/salisbury/boxscore/10898",
+          "recap": "https://www.ycpspartans.com/news/2026/9/23/womens-soccer-spartans-roll-to-2-0-win-over-salisbury.aspx",
           "history": "https://www.ycpspartans.com/sports/womens-soccer/opponent-history/salisbury-university/21"
         }
       },
@@ -3519,13 +3519,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ycpspartans.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:12:46Z"
+      "asOf": "2026-09-24T16:10:34Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Spartans Roll to 2-0 Win Over Salisbury",
+        "url": "https://ycpspartans.com/news/2026/9/23/womens-soccer-spartans-roll-to-2-0-win-over-salisbury.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Kalthof Earns Third-Straight Commonwealth Offensive Player of the Week Honor",
         "url": "https://ycpspartans.com/news/2026/9/22/womens-soccer-kalthof-earns-third-straight-commonwealth-offensive-player-of-the-week-honor.aspx",
@@ -3596,7 +3602,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ycpspartans.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:12:57Z"
+      "asOf": "2026-09-24T16:10:41Z"
     }
   },
   "camps": {
@@ -3610,20 +3616,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.ycpspartans.com/sports/2021/7/13/information-spartan-camps.aspx",
-        "asOf": "2026-09-23T19:12:59Z"
+        "asOf": "2026-09-24T16:10:42Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:52Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3637,10 +3643,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:10:34Z"
+      }
+    ]
   }
 }

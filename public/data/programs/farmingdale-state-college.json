@@ -310,7 +310,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.farmingdalesports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:02:10Z"
+        "asOf": "2026-09-24T16:01:53Z"
       }
     }
   },
@@ -318,13 +318,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-1",
-      "wins": 4,
+      "record": "5-2-1",
+      "wins": 5,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 8,
+      "confRecord": "2-0-0",
       "headCoach": "Chris Roche"
     },
     {
@@ -1199,7 +1199,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.farmingdalesports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:02:10Z"
+      "asOf": "2026-09-24T16:01:53Z"
     }
   },
   "rosterHistory": {
@@ -2055,13 +2055,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 2,
       "ties": 1,
-      "text": "4-2-1",
-      "played": 7,
+      "text": "5-2-1",
+      "played": 8,
       "scheduled": 25,
-      "confText": "1-0-0",
+      "confText": "2-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2249,11 +2249,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Farmingdale, NY",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "12-1",
         "links": {
-          "watch": "https://farmingdalesports.com/sports/2023/7/24/womens-soccer-boxcast.aspx",
-          "live stats": "https://farmingdalesports.com/sidearmstats/wsoc",
+          "box score": "https://www.farmingdalesports.com/sports/womens-soccer/stats/2026/maritime/boxscore/9436",
+          "recap": "https://www.farmingdalesports.com/news/2026/9/23/womens-soccer-cruises-to-win-over-maritime.aspx",
           "history": "https://www.farmingdalesports.com/sports/womens-soccer/opponent-history/maritime/136"
         }
       },
@@ -3723,13 +3723,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.farmingdalesports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:02:10Z"
+      "asOf": "2026-09-24T16:01:53Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Cruises to Win Over Maritime",
+        "url": "https://farmingdalesports.com/news/2026/9/23/womens-soccer-cruises-to-win-over-maritime.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Match Versus Maritime Rescheduled for Wednesday at 6 p.m.",
         "url": "https://farmingdalesports.com/news/2026/9/22/womens-soccer-match-versus-maritime-rescheduled-for-wednesday-at-6-pm.aspx",
@@ -3794,7 +3800,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.farmingdalesports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:02:17Z"
+      "asOf": "2026-09-24T16:02:01Z"
     }
   },
   "camps": {
@@ -3808,20 +3814,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.fscamps.com/locations/Farmingdale_State_College.html",
-        "asOf": "2026-09-23T19:02:22Z"
+        "asOf": "2026-09-24T16:02:05Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3835,10 +3841,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:53Z"
+      }
+    ]
   }
 }

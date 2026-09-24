@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.go-knights.net/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:19:06Z"
+        "asOf": "2026-09-24T16:09:30Z"
       }
     }
   },
@@ -294,12 +294,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-1",
-      "wins": 3,
+      "record": "4-3-1",
+      "wins": 4,
       "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "Emily Ryan"
     },
     {
@@ -972,7 +972,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.go-knights.net/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:19:06Z"
+      "asOf": "2026-09-24T16:09:30Z"
     }
   },
   "rosterHistory": {
@@ -1665,11 +1665,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 1,
-      "text": "3-3-1",
-      "played": 7,
+      "text": "4-3-1",
+      "played": 8,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 2
@@ -1843,11 +1843,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Waverly, Iowa, Salzwedel Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://rollriversnetwork.com/wartburg/",
-          "live stats": "https://go-knights.net/sidearmstats/wsoc",
+          "recap": "https://www.go-knights.net/news/2026/9/23/womens-soccer-defeats-bethel-2-1-for-third-straight-win.aspx",
+          "box score": "https://www.go-knights.net/sports/womens-soccer/stats/2026/bethel-university/boxscore/17462",
           "history": "https://www.go-knights.net/sports/womens-soccer/opponent-history/bethel-university/74"
         }
       },
@@ -3218,13 +3218,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.go-knights.net/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:19:06Z"
+      "asOf": "2026-09-24T16:09:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Defeat Bethel 2-1 to Notch Third-Straight Win",
+        "url": "https://go-knights.net/news/2026/9/23/womens-soccer-defeats-bethel-2-1-for-third-straight-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Overmann's Second-Half Goal Lifts Knights Past Luther",
         "url": "https://go-knights.net/news/2026/9/20/womens-soccer-overmanns-second-half-goal-lifts-knights-past-luther.aspx",
@@ -3289,7 +3295,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.go-knights.net/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:19:10Z"
+      "asOf": "2026-09-24T16:09:40Z"
     }
   },
   "camps": {
@@ -3303,7 +3309,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Wartburg Soccer Preview Day Camp",
@@ -3333,14 +3339,14 @@
       {
         "source": "camps",
         "url": "https://knights.wartburg.edu/register/?id=92af9580-2988-4c39-bcd5-bf72cbe78ad7",
-        "asOf": "2026-09-23T19:19:13Z"
+        "asOf": "2026-09-24T16:09:43Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:48Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3354,10 +3360,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:30Z"
+      }
+    ]
   }
 }

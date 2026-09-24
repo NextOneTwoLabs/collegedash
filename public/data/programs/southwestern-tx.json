@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.southwesternpirates.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:16:02Z"
+        "asOf": "2026-09-24T16:08:15Z"
       }
     }
   },
@@ -1105,7 +1105,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:16:02Z"
+      "asOf": "2026-09-24T16:08:15Z"
     }
   },
   "rosterHistory": {
@@ -3454,7 +3454,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:16:02Z"
+      "asOf": "2026-09-24T16:08:15Z"
     }
   },
   "commitments": [],
@@ -3525,7 +3525,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:16:09Z"
+      "asOf": "2026-09-24T16:08:26Z"
     }
   },
   "camps": {
@@ -3545,14 +3545,14 @@
       {
         "source": "camps",
         "url": "https://register.ryzer.com/camp.cfm?sport=7&id=322427",
-        "asOf": "2026-09-23T19:16:11Z"
+        "asOf": "2026-09-24T16:08:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3566,10 +3566,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:08:15Z"
+      }
+    ]
   }
 }

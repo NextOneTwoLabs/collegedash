@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hussoneagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:06Z"
+        "asOf": "2026-09-24T16:02:58Z"
       }
     }
   },
@@ -935,7 +935,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:06Z"
+      "asOf": "2026-09-24T16:02:58Z"
     }
   },
   "rosterHistory": {
@@ -3122,7 +3122,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:06Z"
+      "asOf": "2026-09-24T16:02:58Z"
     }
   },
   "commitments": [],
@@ -3193,7 +3193,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:10Z"
+      "asOf": "2026-09-24T16:03:06Z"
     }
   },
   "camps": {
@@ -3213,14 +3213,14 @@
       {
         "source": "camps",
         "url": "http://hussoneaglessoccercamp.com",
-        "asOf": "2026-09-23T20:47:12Z"
+        "asOf": "2026-09-24T16:03:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3234,10 +3234,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:58Z"
+      }
+    ]
   }
 }

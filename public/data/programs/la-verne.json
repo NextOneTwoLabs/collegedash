@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.leopardathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:50Z"
+        "asOf": "2026-09-24T16:03:45Z"
       }
     }
   },
@@ -304,13 +304,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-5-1",
-      "wins": 0,
+      "record": "1-5-1",
+      "wins": 1,
       "losses": 5,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "0-2-0",
+      "gamesPlayed": 7,
+      "confRecord": "1-2-0",
       "headCoach": "Jeffrey Joyner"
     },
     {
@@ -947,7 +947,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.leopardathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:50Z"
+      "asOf": "2026-09-24T16:03:45Z"
     }
   },
   "rosterHistory": {
@@ -1596,13 +1596,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 0,
+      "wins": 1,
       "losses": 5,
       "ties": 1,
-      "text": "0-5-1",
-      "played": 6,
+      "text": "1-5-1",
+      "played": 7,
       "scheduled": 21,
-      "confText": "0-2-0",
+      "confText": "1-2-0",
       "exhibitions": 2
     },
     "games": [
@@ -1772,11 +1772,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "La Verne, CA, Ortmayer Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://flosports.link/4fIT5ab",
-          "live stats": "https://leopardathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.leopardathletics.com/sports/womens-soccer/stats/2026-27/university-of-redlands/boxscore/7925",
+          "recap": "https://www.leopardathletics.com/news/2026/9/23/womens-soccer-second-half-goals-lead-leopards-past-redlands-joyner-earns-first-win.aspx",
           "history": "https://www.leopardathletics.com/sports/womens-soccer/opponent-history/university-of-redlands/86"
         }
       },
@@ -1787,7 +1787,7 @@
         "conferenceGame": true,
         "homeAway": "H",
         "opponent": "California Lutheran University",
-        "opponentRank": 14,
+        "opponentRank": null,
         "opponentSeed": null,
         "location": "La Verne, CA, Ortmayer Stadium",
         "result": null,
@@ -3098,13 +3098,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.leopardathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:50Z"
+      "asOf": "2026-09-24T16:03:45Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Second Half Goals Lead Leopards Past Redlands, Joyner Earns First Win",
+        "url": "https://leopardathletics.com/news/2026/9/23/womens-soccer-second-half-goals-lead-leopards-past-redlands-joyner-earns-first-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Kooba Scores Beauty Against Oxy",
         "url": "https://leopardathletics.com/news/2026/9/16/womens-soccer-kooba-scores-beauty-against-oxy.aspx",
@@ -3175,7 +3181,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.leopardathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:56Z"
+      "asOf": "2026-09-24T16:03:58Z"
     }
   },
   "camps": {
@@ -3189,20 +3195,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://info.abcsportscamps.com/ulvwsoccer",
-        "asOf": "2026-09-23T19:06:01Z"
+        "asOf": "2026-09-24T16:04:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3216,10 +3222,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:45Z"
+      }
+    ]
   }
 }

@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.marinersports.org/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T20:47:10Z"
+        "asOf": "2026-09-24T16:04:22Z"
       }
     }
   },
@@ -304,12 +304,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-3-0",
-      "wins": 3,
+      "record": "4-3-0",
+      "wins": 4,
       "losses": 3,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "1-0-0",
       "headCoach": "Levi Evans"
     },
@@ -928,7 +928,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.marinersports.org/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T20:47:10Z"
+      "asOf": "2026-09-24T16:04:22Z"
     }
   },
   "rosterHistory": {
@@ -1496,11 +1496,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 3,
       "ties": 0,
-      "text": "3-3-0",
-      "played": 6,
+      "text": "4-3-0",
+      "played": 7,
       "scheduled": 20,
       "confText": "1-0-0",
       "exhibitions": 2
@@ -1656,11 +1656,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Waterville, Maine",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://www.whou.live/thomas-college",
-          "live stats": "https://athletics.thomas.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.marinersports.org/sports/womens-soccer/stats/2026/thomas-college/boxscore/6208",
+          "recap": "https://www.marinersports.org/news/2026/9/23/womens-soccer-thesing-breaks-all-time-shutouts-record-scolaro-scores-twice-in-womens-soccer-road-win-over-thomas.aspx",
           "history": "https://www.marinersports.org/sports/womens-soccer/opponent-history/thomas-college/100"
         }
       },
@@ -2970,13 +2970,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.marinersports.org/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T20:47:10Z"
+      "asOf": "2026-09-24T16:04:22Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Thesing breaks all-time shutouts record, Scolaro scores twice in women’s soccer road win over Thomas",
+        "url": "https://marinersports.org/news/2026/9/23/womens-soccer-thesing-breaks-all-time-shutouts-record-scolaro-scores-twice-in-womens-soccer-road-win-over-thomas.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Stoddard, Thesing earn NAC women's soccer weekly awards",
         "url": "https://marinersports.org/news/2026/9/21/womens-soccer-stoddard-thesing-earn-nac-womens-soccer-weekly-awards.aspx",
@@ -3041,7 +3047,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.marinersports.org/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T20:47:13Z"
+      "asOf": "2026-09-24T16:04:25Z"
     }
   },
   "camps": {
@@ -3055,20 +3061,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.marinersportscamps.org/",
-        "asOf": "2026-09-23T20:47:16Z"
+        "asOf": "2026-09-24T16:04:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3082,10 +3088,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:22Z"
+      }
+    ]
   }
 }

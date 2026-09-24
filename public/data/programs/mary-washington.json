@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.umweagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:45:53Z"
+        "asOf": "2026-09-24T16:04:48Z"
       }
     }
   },
@@ -295,12 +295,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-1",
-      "wins": 4,
+      "record": "5-1-1",
+      "wins": 5,
       "losses": 1,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Scott Gerseny"
     },
     {
@@ -1084,7 +1084,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.umweagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:45:53Z"
+      "asOf": "2026-09-24T16:04:48Z"
     }
   },
   "rosterHistory": {
@@ -1830,11 +1830,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 1,
-      "text": "4-1-1",
-      "played": 6,
+      "text": "5-1-1",
+      "played": 7,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 0
@@ -1957,10 +1957,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Fredericksburg, VA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "live stats": "https://umweagles.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.umweagles.com/sports/womens-soccer/stats/2026/hood-college/boxscore/14981",
+          "recap": "https://www.umweagles.com/news/2026/9/23/landels-late-goal-lifts-umw-womens-soccer-over-hood-2-1.aspx",
           "history": "https://www.umweagles.com/sports/womens-soccer/opponent-history/hood-college/42"
         }
       },
@@ -3310,7 +3311,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.umweagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:45:53Z"
+      "asOf": "2026-09-24T16:04:48Z"
     }
   },
   "commitments": [
@@ -3334,7 +3335,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/becca-blunt/",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-23",
+          "lastSeen": "2026-09-24",
           "missingSince": null,
           "profileCreated": "2025-06-06"
         }
@@ -3365,6 +3366,12 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Landel's Late Goal Lifts UMW Women's Soccer Over Hood, 2-1",
+        "url": "https://umweagles.com/news/2026/9/23/landels-late-goal-lifts-umw-womens-soccer-over-hood-2-1.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "UMW's Knight Named C2C Women's Soccer Player of the Week",
         "url": "https://umweagles.com/news/2026/9/22/umws-knight-named-c2c-womens-soccer-player-of-the-week.aspx",
@@ -3435,7 +3442,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.umweagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:56Z"
+      "asOf": "2026-09-24T16:04:56Z"
     }
   },
   "camps": {
@@ -3449,7 +3456,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "UPCOMING CAMPS AND CLINICS",
@@ -3479,7 +3486,7 @@
       {
         "source": "camps",
         "url": "https://www.umweagles.com/sports/2024/12/3/camps-and-clinics-at-umw.aspx",
-        "asOf": "2026-09-23T18:45:58Z"
+        "asOf": "2026-09-24T16:05:02Z"
       }
     ]
   },
@@ -3488,7 +3495,7 @@
     "2026": 1
   },
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.89,
     "sections": {
       "school": true,
@@ -3502,10 +3509,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:04:48Z"
+      }
+    ]
   }
 }

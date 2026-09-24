@@ -28,7 +28,7 @@
     "roster": "https://www.nwusports.com/sports/womens-soccer/roster",
     "schedule": "https://www.nwusports.com/sports/womens-soccer/schedule",
     "news": "https://www.nwusports.com/sports/womens-soccer/news",
-    "camps": "https://nwusports.com/sports/2013/10/2/Camps.aspx",
+    "camps": "https://www.nebrwesleyan.edu/student-life/athletics/camps/track-and-field-winter-clinic",
     "tds": null,
     "wikipedia": null,
     "x": null,
@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.nwusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:19:18Z"
+        "asOf": "2026-09-24T16:05:56Z"
       }
     }
   },
@@ -981,7 +981,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.nwusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:19:18Z"
+      "asOf": "2026-09-24T16:05:56Z"
     }
   },
   "rosterHistory": {
@@ -2802,7 +2802,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.nwusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:19:18Z"
+      "asOf": "2026-09-24T16:05:56Z"
     }
   },
   "commitments": [],
@@ -2873,16 +2873,16 @@
     "_meta": {
       "source": "news",
       "url": "https://www.nwusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:19:21Z"
+      "asOf": "2026-09-24T16:05:59Z"
     }
   },
   "camps": {
-    "url": "https://www.nwusports.com/sports/2013/10/2/Camps.aspx",
-    "hubUrl": null,
-    "finalUrl": "https://nwusports.com/sports/2013/10/2/Camps.aspx",
-    "host": "nwusports.com",
-    "vendor": "athletics",
-    "pageTitle": "Sports Camps - Nebraska Wesleyan University Athletics",
+    "url": "https://www.nebrwesleyan.edu/student-life/athletics/camps/track-and-field-winter-clinic",
+    "hubUrl": "https://www.nwusports.com/sports/2013/10/2/Camps.aspx",
+    "finalUrl": "https://www.nebrwesleyan.edu/student-life/athletics/camps/track-and-field-winter-clinic",
+    "host": "www.nebrwesleyan.edu",
+    "vendor": "external",
+    "pageTitle": "Track and Field Winter Clinic | NWU",
     "discoveredVia": "anchor",
     "robotsBlocked": false,
     "fetchError": null,
@@ -2892,15 +2892,15 @@
     "_meta": [
       {
         "source": "camps",
-        "url": "https://www.nwusports.com/sports/2013/10/2/Camps.aspx",
-        "asOf": "2026-09-23T19:19:27Z"
+        "url": "https://www.nebrwesleyan.edu/student-life/athletics/camps/track-and-field-winter-clinic",
+        "asOf": "2026-09-24T16:06:07Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2914,10 +2914,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:56Z"
+      }
+    ]
   }
 }

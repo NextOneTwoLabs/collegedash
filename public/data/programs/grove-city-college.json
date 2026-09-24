@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.gcc.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:01:20Z"
+        "asOf": "2026-09-24T16:02:30Z"
       }
     }
   },
@@ -294,12 +294,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-0-2",
+      "record": "5-1-2",
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "confRecord": "2-0-1",
       "headCoach": "Melissa Lamie"
     },
@@ -977,7 +977,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.gcc.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:01:20Z"
+      "asOf": "2026-09-24T16:02:30Z"
     }
   },
   "rosterHistory": {
@@ -1774,10 +1774,10 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 0,
+      "losses": 1,
       "ties": 2,
-      "text": "5-0-2",
-      "played": 7,
+      "text": "5-1-2",
+      "played": 8,
       "scheduled": 19,
       "confText": "2-0-1",
       "exhibitions": 0
@@ -1926,11 +1926,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Grove City, Pa., Don Lyle Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "5-1",
         "links": {
-          "watch": "https://vimeo.com/showcase/12381258",
-          "live stats": "https://athletics.gcc.edu/sidearmstats/wsoc/summary"
+          "box score": "https://athletics.gcc.edu/sports/womens-soccer/stats/2026/carnegie-mellon/boxscore/11861",
+          "recap": "https://athletics.gcc.edu/news/2026/9/23/womens-soccer-cmu-tops-grove-city-in-completion-of-suspended-match.aspx"
         }
       },
       {
@@ -3117,13 +3117,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.gcc.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:01:20Z"
+      "asOf": "2026-09-24T16:02:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "CMU tops Grove City in completion of suspended match",
+        "url": "https://athletics.gcc.edu/news/2026/9/23/womens-soccer-cmu-tops-grove-city-in-completion-of-suspended-match.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Grove City blanks Thiel",
         "url": "https://athletics.gcc.edu/news/2026/9/22/womens-soccer-grove-city-blanks-thiel.aspx",
@@ -3188,7 +3194,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.gcc.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:01:27Z"
+      "asOf": "2026-09-24T16:02:37Z"
     }
   },
   "camps": {
@@ -3202,20 +3208,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.gcc.edu/documents/2026/5/7/Summer_ID_camps_flyer.pdf",
-        "asOf": "2026-09-23T19:01:30Z"
+        "asOf": "2026-09-24T16:02:39Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3229,10 +3235,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:30Z"
+      }
+    ]
   }
 }

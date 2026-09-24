@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.averettcougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T18:44:57Z"
+        "asOf": "2026-09-24T15:59:17Z"
       }
     }
   },
@@ -312,12 +312,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-3-0",
+      "record": "0-4-0",
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 3,
+      "gamesPlayed": 4,
+      "confRecord": "0-1-0",
       "headCoach": "Colton Dutchess"
     },
     {
@@ -694,7 +695,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.averettcougars.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T18:44:57Z"
+      "asOf": "2026-09-24T15:59:17Z"
     }
   },
   "rosterHistory": {
@@ -1241,12 +1242,12 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "text": "0-3-0",
-      "played": 3,
+      "text": "0-4-0",
+      "played": 4,
       "scheduled": 17,
-      "confText": "0-0-0",
+      "confText": "0-1-0",
       "exhibitions": 1
     },
     "games": [
@@ -1346,11 +1347,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Danville, Va., Daly Field at Frank R. Campbell Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-5",
         "links": {
-          "watch": "https://checkpoint.url-protection.com/v1/r01/url?o=https%3A//flosports.link/3RJ1cvt&g=MmI2NjYwYTEwYWQ0ODZjNw==&h=MzllZWYwZmY1MDc0ZjNiNmIyODQzYjlkMWU1ZjJjZjFkZmQ1Yjg1ODYxYTkzMDlmZDU0Nzg3NGI2YTdlNTA5Ng==&p=YzJ1OmF2ZXJldHR1bml2ZXJzaXR5OmM6bzpmOWFkNGMxYzYzMjg3Mzg1YjVmM2UzZDA4NmJjMzk3NTo3Omg6VA==",
-          "live stats": "https://averettcougars.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.averettcougars.com/sports/womens-soccer/stats/2026/randolph-college/boxscore/11318",
+          "recap": "https://www.averettcougars.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-first-odac-opponent-of-the-season-randolph-college.aspx",
           "history": "https://www.averettcougars.com/sports/womens-soccer/opponent-history/randolph-college/5"
         }
       },
@@ -2536,13 +2537,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.averettcougars.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T18:44:57Z"
+      "asOf": "2026-09-24T15:59:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s soccer falls to Randolph in conference opener",
+        "url": "https://averettcougars.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-first-odac-opponent-of-the-season-randolph-college.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
+      {
+        "title": "FOLLOW LIVE: Women's soccer takes on Randolph at 7 p.m. Wednesday",
+        "url": "https://averettcougars.com/news/2026/9/23/womens-soccer-follow-live-womens-soccer-takes-on-randolph-college-at-7-pm.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women’s soccer discloses changes to schedule",
         "url": "https://averettcougars.com/news/2026/9/15/womens-soccer-womens-soccer-discloses-changes-to-schedule.aspx",
@@ -2607,7 +2620,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.averettcougars.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T18:45:06Z"
+      "asOf": "2026-09-24T15:59:20Z"
     }
   },
   "camps": {
@@ -2621,20 +2634,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.averettcougars.com/sports/2020/6/19/camps-clinics-canceled-until-further-notice-due-to-covid-19.aspx",
-        "asOf": "2026-09-23T18:45:11Z"
+        "asOf": "2026-09-24T15:59:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2648,10 +2661,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T15:59:17Z"
+      }
+    ]
   }
 }

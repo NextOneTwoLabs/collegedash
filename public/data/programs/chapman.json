@@ -292,7 +292,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:39Z"
+        "asOf": "2026-09-24T16:00:31Z"
       }
     }
   },
@@ -300,13 +300,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-1",
+      "record": "2-3-1",
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 5,
-      "confRecord": "2-0-0",
+      "gamesPlayed": 6,
+      "confRecord": "2-1-0",
       "headCoach": "TJ Perez"
     },
     {
@@ -1183,7 +1183,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:05:39Z"
+      "asOf": "2026-09-24T16:00:31Z"
     }
   },
   "rosterHistory": {
@@ -2038,12 +2038,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "2-2-1",
-      "played": 5,
+      "text": "2-3-1",
+      "played": 6,
       "scheduled": 16,
-      "confText": "2-0-0",
+      "confText": "2-1-0",
       "exhibitions": 3
     },
     "games": [
@@ -2194,11 +2194,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Thousand Oaks, CA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://flosports.link/4fTHFC5",
-          "live stats": "https://clusports.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.chapmanathletics.com/sports/womens-soccer/stats/2026/california-lutheran-university/boxscore/6923",
           "history": "https://www.chapmanathletics.com/sports/womens-soccer/opponent-history/california-lutheran-university/28"
         }
       },
@@ -3457,7 +3456,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:05:39Z"
+      "asOf": "2026-09-24T16:00:31Z"
     }
   },
   "commitments": [],
@@ -3534,7 +3533,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:05:46Z"
+      "asOf": "2026-09-24T16:00:36Z"
     }
   },
   "camps": {
@@ -3554,14 +3553,14 @@
       {
         "source": "camps",
         "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:05:46Z"
+        "asOf": "2026-09-24T16:00:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:45Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3575,10 +3574,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:00:31Z"
+      }
+    ]
   }
 }

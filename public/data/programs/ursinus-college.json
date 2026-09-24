@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ursinusathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:48Z"
+        "asOf": "2026-09-24T16:09:18Z"
       }
     }
   },
@@ -303,13 +303,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
-      "wins": 3,
+      "record": "4-2-1",
+      "wins": 4,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "0-1-0",
+      "gamesPlayed": 7,
+      "confRecord": "1-1-0",
       "headCoach": "Jeannine Calhoun"
     },
     {
@@ -1046,7 +1046,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ursinusathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:48Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "rosterHistory": {
@@ -1783,13 +1783,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 17,
-      "confText": "0-1-0",
+      "confText": "1-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -1911,11 +1911,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Collegeville, PA, Patterson Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://www.centennialconference.tv/ursinuscollege/",
-          "live stats": "https://ursinusathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.ursinusathletics.com/sports/womens-soccer/stats/2026/haverford-college/boxscore/12263",
+          "recap": "https://www.ursinusathletics.com/news/2026/9/23/womens-soccer-shuts-down-haverford-1-0.aspx",
           "history": "https://www.ursinusathletics.com/sports/womens-soccer/opponent-history/haverford-college/75"
         }
       },
@@ -1950,6 +1950,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://atlanticeastnetwork.com/immaculata/?B=4105225",
+          "live stats": "https://gomightymacs.com/sidearmstats/wsoc/summary",
           "history": "https://www.ursinusathletics.com/sports/womens-soccer/opponent-history/immaculata-university/80"
         }
       },
@@ -1966,6 +1968,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.centennialconference.tv/muhlenbergcollege/",
+          "live stats": "https://muhlenbergsports.com/sidearmstats/wsoc/summary",
           "history": "https://www.ursinusathletics.com/sports/womens-soccer/opponent-history/muhlenberg-college/9"
         }
       },
@@ -3045,13 +3049,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ursinusathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:48Z"
+      "asOf": "2026-09-24T16:09:18Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Shuts Down Haverford, 1-0",
+        "url": "https://ursinusathletics.com/news/2026/9/23/womens-soccer-shuts-down-haverford-1-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Falls at Dickinson",
         "url": "https://ursinusathletics.com/news/2026/9/19/womens-soccer-falls-at-dickinson.aspx",
@@ -3116,7 +3126,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ursinusathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:04:53Z"
+      "asOf": "2026-09-24T16:09:25Z"
     }
   },
   "camps": {
@@ -3130,20 +3140,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.ursinusathletics.com/sports/2026/2/16/ursinus-camps.aspx",
-        "asOf": "2026-09-23T19:04:56Z"
+        "asOf": "2026-09-24T16:09:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3157,10 +3167,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:09:19Z"
+      }
+    ]
   }
 }

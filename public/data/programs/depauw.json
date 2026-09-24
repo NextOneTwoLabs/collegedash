@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://depauwtigers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:19:20Z"
+        "asOf": "2026-09-24T16:01:17Z"
       }
     }
   },
@@ -303,12 +303,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-4-0",
+      "record": "4-5-0",
       "wins": 4,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "headCoach": "Cristin Allen"
     },
     {
@@ -1044,7 +1044,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://depauwtigers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:19:20Z"
+      "asOf": "2026-09-24T16:01:17Z"
     }
   },
   "rosterHistory": {
@@ -1794,10 +1794,10 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "4-4-0",
-      "played": 8,
+      "text": "4-5-0",
+      "played": 9,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 1
@@ -1977,11 +1977,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Terre Haute, Ind.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://www.indianasrn.org/Games_RHIT.php",
-          "live stats": "https://athletics.rose-hulman.edu/sidearmstats/wsoc/summary"
+          "box score": "https://depauwtigers.com/sports/womens-soccer/stats/2026/rose-hulman/boxscore/19572",
+          "recap": "https://depauwtigers.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-rose-hulman-2-0.aspx"
         }
       },
       {
@@ -3234,13 +3234,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://depauwtigers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:19:20Z"
+      "asOf": "2026-09-24T16:01:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Falls to Rose-Hulman 2-0",
+        "url": "https://depauwtigers.com/news/2026/9/23/womens-soccer-womens-soccer-falls-to-rose-hulman-2-0.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "DePauw Falls to UC Santa Cruz 0-1",
         "url": "https://depauwtigers.com/news/2026/9/20/womens-soccer-depauw-falls-to-uc-santa-cruz-0-1.aspx",
@@ -3305,7 +3311,7 @@
     "_meta": {
       "source": "news",
       "url": "https://depauwtigers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:19:27Z"
+      "asOf": "2026-09-24T16:01:28Z"
     }
   },
   "camps": {
@@ -3319,20 +3325,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.dpucamps.com/",
-        "asOf": "2026-09-23T19:19:29Z"
+        "asOf": "2026-09-24T16:01:30Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3346,10 +3352,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:01:17Z"
+      }
+    ]
   }
 }

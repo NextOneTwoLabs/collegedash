@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goredlands.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:06:03Z"
+        "asOf": "2026-09-24T16:07:19Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-5-0",
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 6,
-      "confRecord": "1-0-0",
+      "gamesPlayed": 7,
+      "confRecord": "1-1-0",
       "headCoach": "Suzette Soboti"
     },
     {
@@ -933,7 +933,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goredlands.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:06:03Z"
+      "asOf": "2026-09-24T16:07:19Z"
     }
   },
   "rosterHistory": {
@@ -1730,12 +1730,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "text": "2-5-0",
+      "played": 7,
       "scheduled": 21,
-      "confText": "1-0-0",
+      "confText": "1-1-0",
       "exhibitions": 3
     },
     "games": [
@@ -1905,11 +1905,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "La Verne, Calif.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://www.flocollege.com/events/16118680-2026-redlands-vs-la-verne-womens",
-          "live stats": "https://leopardathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.goredlands.com/sports/womens-soccer/stats/2026/university-of-la-verne/boxscore/9543",
+          "recap": "https://www.goredlands.com/news/2026/9/23/tidquist-scores-second-goal-in-as-many-games-but-bulldog-womens-soccer-falls-at-la-verne.aspx",
           "history": "https://www.goredlands.com/sports/womens-soccer/opponent-history/university-of-la-verne/59"
         }
       },
@@ -3353,13 +3353,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goredlands.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:06:03Z"
+      "asOf": "2026-09-24T16:07:19Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Tidquist scores second goal in as many games but Bulldog Women's Soccer falls at La Verne",
+        "url": "https://goredlands.com/news/2026/9/23/tidquist-scores-second-goal-in-as-many-games-but-bulldog-womens-soccer-falls-at-la-verne.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Three first half goals propel Bulldog Women's Soccer past Caltech",
         "url": "https://goredlands.com/news/2026/9/19/three-goal-first-half-propels-bulldog-womens-soccer-past-caltech.aspx",
@@ -3424,7 +3430,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goredlands.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:06:09Z"
+      "asOf": "2026-09-24T16:07:26Z"
     }
   },
   "camps": {
@@ -3438,20 +3444,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.goredlands.com/sports/2023/7/24/Fan-Central-Camps-Clinics-general.aspx",
-        "asOf": "2026-09-23T19:06:12Z"
+        "asOf": "2026-09-24T16:07:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:51Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3465,10 +3471,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:07:19Z"
+      }
+    ]
   }
 }

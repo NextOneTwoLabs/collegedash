@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gettysburgsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:53Z"
+        "asOf": "2026-09-24T16:02:15Z"
       }
     }
   },
@@ -320,12 +320,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-2",
+      "record": "2-3-2",
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "headCoach": "Rebecca Quimby"
     },
     {
@@ -1285,7 +1285,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gettysburgsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:53Z"
+      "asOf": "2026-09-24T16:02:15Z"
     }
   },
   "rosterHistory": {
@@ -2296,10 +2296,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 2,
-      "text": "2-2-2",
-      "played": 6,
+      "text": "2-3-2",
+      "played": 7,
       "scheduled": 18,
       "confText": null,
       "exhibitions": 0
@@ -2439,11 +2439,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Gettysburg, PA, Clark Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.centennialconference.tv/gettysburgbullets/?B=4112880",
-          "live stats": "https://gettysburgsports.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.gettysburgsports.com/news/2026/9/23/womens-soccer-dickinson-escapes-gettysburg-with-1-0-win.aspx",
+          "box score": "https://www.gettysburgsports.com/sports/womens-soccer/stats/2026/dickinson/boxscore/19333",
           "history": "https://www.gettysburgsports.com/sports/womens-soccer/opponent-history/dickinson-college/141"
         }
       },
@@ -3618,13 +3618,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gettysburgsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:53Z"
+      "asOf": "2026-09-24T16:02:15Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Dickinson escapes Gettysburg with 1-0 win",
+        "url": "https://gettysburgsports.com/news/2026/9/23/womens-soccer-dickinson-escapes-gettysburg-with-1-0-win.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Gameday: Dickinson at Gettysburg",
         "url": "https://gettysburgsports.com/news/2026/9/22/womens-soccer-gameday-dickinson-at-gettysburg.aspx",
@@ -3689,7 +3695,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gettysburgsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:04:59Z"
+      "asOf": "2026-09-24T16:02:22Z"
     }
   },
   "camps": {
@@ -3703,7 +3709,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Fall Spring ID Clinic - ; 9:30-4:00",
@@ -3733,14 +3739,14 @@
       {
         "source": "camps",
         "url": "https://gettysburgsports.com/sports/2018/7/16/gettysburg-college-womens-soccer-prospect-clinic.aspx?id=1545",
-        "asOf": "2026-09-23T19:05:07Z"
+        "asOf": "2026-09-24T16:02:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:49Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3754,10 +3760,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:02:15Z"
+      }
+    ]
   }
 }

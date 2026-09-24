@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.muhlenbergsports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T19:04:45Z"
+        "asOf": "2026-09-24T16:05:37Z"
       }
     }
   },
@@ -286,12 +286,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
-      "wins": 3,
+      "record": "4-2-1",
+      "wins": 4,
       "losses": 2,
       "ties": 1,
       "inProgress": true,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "confRecord": "0-1-0",
       "headCoach": "Kathy Prescott"
     },
@@ -968,7 +968,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.muhlenbergsports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T19:04:45Z"
+      "asOf": "2026-09-24T16:05:37Z"
     }
   },
   "rosterHistory": {
@@ -1705,11 +1705,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 18,
       "confText": "0-1-0",
       "exhibitions": 0
@@ -1841,10 +1841,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Elizabethtown Area High School",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "live stats": "https://etownbluejays.com/sidearmstats/wsoc/summary"
+          "box score": "https://www.muhlenbergsports.com/sports/womens-soccer/stats/2026/elizabethtown/boxscore/6646",
+          "recap": "https://www.muhlenbergsports.com/news/2026/9/23/womens-soccer-notches-road-shutout.aspx"
         }
       },
       {
@@ -2926,13 +2927,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.muhlenbergsports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T19:04:45Z"
+      "asOf": "2026-09-24T16:05:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Notches Road Shutout",
+        "url": "https://muhlenbergsports.com/news/2026/9/23/womens-soccer-notches-road-shutout.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Plays of the Week September 22, 2026",
         "url": "https://muhlenbergsports.com/news/2026/9/22/plays-of-the-week-september-22-2026.aspx",
@@ -2997,7 +3004,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.muhlenbergsports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T19:04:48Z"
+      "asOf": "2026-09-24T16:05:47Z"
     }
   },
   "camps": {
@@ -3011,20 +3018,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://mulesmenssoccer.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-23T19:04:52Z"
+        "asOf": "2026-09-24T16:05:51Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:47Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3038,10 +3045,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:05:37Z"
+      }
+    ]
   }
 }

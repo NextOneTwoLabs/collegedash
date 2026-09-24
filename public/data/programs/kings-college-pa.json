@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://kingscollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-23T21:21:02Z"
+        "asOf": "2026-09-24T16:03:34Z"
       }
     }
   },
@@ -302,12 +302,12 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-0",
+      "record": "2-6-0",
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
       "inProgress": true,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "headCoach": "JESSICA LINGENFELTER"
     },
     {
@@ -1082,7 +1082,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-23T21:21:02Z"
+      "asOf": "2026-09-24T16:03:34Z"
     }
   },
   "rosterHistory": {
@@ -1885,10 +1885,10 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "2-5-0",
-      "played": 7,
+      "text": "2-6-0",
+      "played": 8,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2030,11 +2030,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Union, NJ, Kean Alumni Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://keanathletics.com/watch/?Live=1737&type=Live",
-          "live stats": "https://keanathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://kingscollegeathletics.com/sports/womens-soccer/stats/2026/kean-university/boxscore/11996",
+          "recap": "https://kingscollegeathletics.com/news/2026/9/23/womens-soccer-suffers-2-0-road-loss-at-kean.aspx",
           "history": "https://kingscollegeathletics.com/sports/womens-soccer/opponent-history/kean-university/217"
         }
       },
@@ -3242,13 +3242,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-23T21:21:02Z"
+      "asOf": "2026-09-24T16:03:34Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Suffers 2-0 Road Loss At Kean",
+        "url": "https://kingscollegeathletics.com/news/2026/9/23/womens-soccer-suffers-2-0-road-loss-at-kean.aspx",
+        "date": "2026-09-23",
+        "recruiting": false
+      },
       {
         "title": "Monarchs Battle to 1-0 Setback at Lancaster Bible",
         "url": "https://kingscollegeathletics.com/news/2026/9/19/womens-soccer-monarchs-battle-to-1-0-setback-at-lancaster-bible.aspx",
@@ -3313,7 +3319,7 @@
     "_meta": {
       "source": "news",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-23T21:21:06Z"
+      "asOf": "2026-09-24T16:03:44Z"
     }
   },
   "camps": {
@@ -3327,7 +3333,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "King's Women's Soccer ID Clinic",
@@ -3392,19 +3398,19 @@
       {
         "source": "camps",
         "url": "http://www.kings.edu/girlsbballcamp",
-        "asOf": "2026-09-23T21:21:23Z"
+        "asOf": "2026-09-24T16:03:58Z"
       },
       {
         "source": "news",
         "url": "https://kingscollegeathletics.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-23T21:21:06Z"
+        "asOf": "2026-09-24T16:03:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-24T03:48:50Z",
+    "builtAt": "2026-09-24T16:11:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3418,10 +3424,15 @@
       "news": true
     },
     "stale": [
-      "tds: never collected",
       "wikipedia: never collected"
     ],
     "failed": [],
-    "skipped": []
+    "skipped": [
+      {
+        "collector": "tds",
+        "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
+        "at": "2026-09-24T16:03:34Z"
+      }
+    ]
   }
 }
