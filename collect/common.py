@@ -97,7 +97,14 @@ _last_request_at: dict[str, float] = {}
 
 
 class FetchError(RuntimeError):
-    pass
+    """A fetch that failed. `status` is the HTTP status that ended it (None for a network error or an
+    offline miss) and `final_url` the URL that answered after redirects, so a caller can stop a host
+    at its first 403/429 (issue #276) without parsing the message."""
+
+    def __init__(self, msg: str = "", *, status: int | None = None, final_url: str | None = None):
+        super().__init__(msg)
+        self.status = status
+        self.final_url = final_url
 
 
 class SkipCollector(RuntimeError):
@@ -703,15 +710,17 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
             write_json(meta_path, meta)
             return resp.content, meta
         if resp.status_code in RETRY_STATUSES:
-            last_err = FetchError(f"HTTP {resp.status_code} for {redact(url)}")
+            last_err = FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code,
+                                  final_url=resp.url)
             # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
             # gate already holds the host that answered for this long; this thread pauses with it.
             _retry.attempt = attempt + 1
             time.sleep(_backoff_seconds(resp.status_code))
             _retry.attempt = 1
             continue
-        raise FetchError(f"HTTP {resp.status_code} for {redact(url)}")
-    raise FetchError(f"giving up after {retries} attempts: {redact(last_err)}")  # last_err names the URL
+        raise FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code, final_url=resp.url)
+    raise FetchError(f"giving up after {retries} attempts: {redact(last_err)}",  # last_err names the URL
+                     status=getattr(last_err, "status", None), final_url=getattr(last_err, "final_url", None))
 
 
 def fetch_text(url: str, **kw) -> tuple[str, dict]:

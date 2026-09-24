@@ -945,6 +945,16 @@ def test_independent_label_guard() -> None:
 
 # ---------- the committed registry ----------
 
+COLORS_SOURCES = {"athletics-site"}  # issue #276: registry-only; absent means pre-#276 (Wikipedia or hand-set)
+
+
+def colors_source_problems(programs: list[dict]) -> list:
+    """Entries whose colorsSource is set but not an allowed value, or set without 1-2 '#RRGGBB' colours."""
+    return [(p.get("slug"), p.get("colorsSource"), p.get("colors")) for p in programs if "colorsSource" in p and not (
+        p["colorsSource"] in COLORS_SOURCES and isinstance(p.get("colors"), list) and 1 <= len(p["colors"]) <= 2
+        and all(isinstance(h, str) and re.fullmatch(r"#[0-9A-F]{6}", h) for h in p["colors"]))]
+
+
 def test_committed() -> None:
     print("committed: public/data/registry.json")
     reg = common.load_registry()
@@ -958,6 +968,18 @@ def test_committed() -> None:
     ok("heldPrograms is a list", isinstance(held, list))
     held = held or []
     everything = programs + held
+    # issue #276: colorsSource is registry-only and has one value. Fails if a program carries another value
+    # (e.g. a "wikipedia" back-fill, which the TPM ruled out), or the field without 1-2 upper-case colours.
+    ok("#276: the colorsSource check rejects a bad value, lower-case colours and missing colours",
+       [s for s, _, _ in colors_source_problems([
+           {"slug": "ok", "colorsSource": "athletics-site", "colors": ["#0C2340", "#C99700"]},
+           {"slug": "absent", "colors": ["#0C2340"]},
+           {"slug": "wiki", "colorsSource": "wikipedia", "colors": ["#0C2340"]},
+           {"slug": "lower", "colorsSource": "athletics-site", "colors": ["#0c2340"]},
+           {"slug": "none", "colorsSource": "athletics-site", "colors": None},
+           {"slug": "three", "colorsSource": "athletics-site", "colors": ["#0C2340"] * 3}])] == ["wiki", "lower", "none", "three"])
+    ok("#276: every colorsSource is athletics-site with one or two #RRGGBB colours",
+       not colors_source_problems(everything), str(colors_source_problems(everything)[:5]))
     slugs = [p["slug"] for p in everything]
     ok("slugs are unique across published and held", len(slugs) == len(set(slugs)))
     orgs = [p["ids"].get("ncaaOrgId") for p in everything if p["ids"].get("ncaaOrgId") is not None]

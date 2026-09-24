@@ -696,6 +696,14 @@ def cmd_registry(args):
     if args.what == "fix-wiki":
         registry_builder.fix_wiki(reg, apply=args.apply, slugs=args.slug.split(",") if args.slug else None)
         return 0
+    if args.what == "colors" and args.source == "site":  # issue #276: the program's own athletics site
+        from collect import site_colors
+        slugs = args.slug.split(",") if args.slug else None
+        if args.apply:
+            site_colors.apply_report(slugs=slugs)
+        else:
+            site_colors.run(reg, slugs=slugs)
+        return 0
     if args.what == "colors":
         registry_builder.fill_colors(reg, apply=args.apply, slugs=args.slug.split(",") if args.slug else None)
         return 0
@@ -762,7 +770,11 @@ def main(argv=None):
     p = sub.add_parser("sweep"); p.add_argument("source", nargs="?", default="all", choices=["tds", "soccerwire", "all"]); p.add_argument("--years"); p.set_defaults(fn=cmd_sweep)
     p = sub.add_parser("rpi"); p.add_argument("what", nargs="?", default="all", choices=["history", "current", "all"]); p.add_argument("--force", action="store_true"); p.set_defaults(fn=cmd_rpi)
     p = sub.add_parser("registry"); p.add_argument("what", nargs="?", default="build", choices=["build", "tidy", "fix-wiki", "colors"]); p.add_argument("--limit", type=int)
-    p.add_argument("--apply", action="store_true", help="fix-wiki/colors: write the results to the registry"); p.add_argument("--slug"); p.set_defaults(fn=cmd_registry)
+    p.add_argument("--apply", action="store_true", help="fix-wiki/colors: write the results to the registry"); p.add_argument("--slug")
+    p.add_argument("--source", choices=["wikipedia", "site"], default="wikipedia",
+                   help="colors: Wikipedia's colour table (default) or each program's athletics site (#276; dry run "
+                        "writes data/colors-site-report.json, --apply writes that reviewed report's colours)")
+    p.set_defaults(fn=cmd_registry)
     p = sub.add_parser("build"); p.set_defaults(fn=cmd_build)
     p = sub.add_parser("validate"); p.set_defaults(fn=cmd_validate)
     p = sub.add_parser("serve"); p.add_argument("--port", type=int, default=8000); p.set_defaults(fn=cmd_serve)
