@@ -1096,7 +1096,29 @@ function campsAbsence(p) { // the skipped or failed camps collection behind a mi
 }
 
 /* ---------- favourites and compare ---------- */
-function toggleFav(slug) { S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar(); }
+// The Shortlist view is built from S.favorites, so on #/shortlist it is redrawn too: syncToggles only
+// flips stars in place, which left an unsaved card, the "N saved programs" count and the Compare link
+// on screen until a reload, and never showed the empty state after the last one (issue #203).
+// `from` is the clicked star or sidebar ✕. When the redraw removes it (a Shortlist card, a sidebar row), focus
+// would drop to <body>, so it moves to the same control on the next row, else the previous one, else to the
+// region's empty state (PR #294 review).
+function favHeir(from) {
+  const list = from && from.closest ? from.closest('.grid.cards, .side-list') : null; if (!list) return null;
+  const b = [...list.querySelectorAll('[data-fav]')], i = b.indexOf(from), h = i < 0 ? null : b[i + 1] || b[i - 1];
+  return { region: from.closest('#app') ? '#app' : '#sidebar', slug: h ? h.dataset.fav : null };
+}
+function refocusFav(from, heir) {
+  if (!heir || from.isConnected) return;
+  const root = $(heir.region);
+  const t = [...root.querySelectorAll('[data-fav]')].find(b => heir.slug && b.dataset.fav === heir.slug) || root.querySelector('.shortlist-empty, .side-empty');
+  if (t) t.focus();
+}
+function toggleFav(slug, from) {
+  const heir = favHeir(from);
+  S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar();
+  if (currentView() === 'shortlist') renderShortlist().then(() => refocusFav(from, heir)).catch(e => console.error(e));
+  else refocusFav(from, heir);
+}
 function toggleCompare(slug) {
   const i = S.compare.indexOf(slug);
   if (i >= 0) S.compare.splice(i, 1);
@@ -1108,7 +1130,7 @@ const starBtn = (slug, wide) => { const on = S.favorites.has(slug); return `<but
 const cmpBtn = (slug, wide) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}" title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${on ? 'Comparing' : 'Compare'}</button>`; };
 // delegated: works for cards, table rows, glance panel and sidebar lists
 document.addEventListener('click', e => {
-  const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav); syncToggles(); return; }
+  const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav, f); syncToggles(); return; }
   const c = e.target.closest('[data-cmp]'); if (c) { e.stopPropagation(); e.preventDefault(); toggleCompare(c.dataset.cmp); syncToggles(); return; }
 });
 function syncToggles() { // refresh every star / compare control in place without re-rendering the view
@@ -1229,7 +1251,7 @@ function renderSidebar() {
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
       ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${appliesTo('rpi', p) ? rpiCell(p) : ''}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
-      : `<div class="side-empty">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
+      : `<div class="side-empty" tabindex="-1">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
   } else {
     const rows = S.compare.map(programBySlug).filter(Boolean);
     body = `<div class="sidebar-section-title">Comparing</div>` + (rows.length
@@ -1754,7 +1776,7 @@ async function renderShortlist() {
   const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort(sortCmp('rpi'));
   const right = rows.length >= 2 ? `<a class="open-external" href="#/compare/${rows.slice(0, 4).map(p => esc(p.slug)).join(',')}">⇄ Compare ${Math.min(rows.length, 4)}</a>` : '';
   $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
-    + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
+    + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card shortlist-empty" tabindex="-1"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
   $('#app').querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
 }
 
