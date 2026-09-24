@@ -292,7 +292,11 @@ def test_build() -> None:
         reg2["stagedDivisions"] = [*(reg2.get("stagedDivisions") or []), "D3"]
     # a real reclassification of a long-standing program is a reviewed edit to build.REVIEWED_UNPUBLISHED (R1);
     # the scenario makes that edit for its duration
-    build.REVIEWED_UNPUBLISHED = {**build.REVIEWED_UNPUBLISHED, moved: "test: reclassified to D3"}
+    # the same goes for a long-standing program already in D3 (saint-francis, published as D3 since #94): staging
+    # D3 again for the scenario unpublishes it too
+    long_standing = {q["slug"] for q in json.load(open(build.LONG_STANDING_PATH, encoding="utf-8"))["programs"]}
+    build.REVIEWED_UNPUBLISHED = {**build.REVIEWED_UNPUBLISHED, moved: "test: reclassified to D3",
+                                  **{s: "test: D3 staged again for the scenario" for s in (d3_slugs & long_standing) - {moved}}}
     # With D3 staged the moved program is one more staged D3 entry, collected but still not published, so the
     # scenario sets the D3 count anchor to the staged entries it made, moved one included, for its duration;
     # otherwise validate fails on the count

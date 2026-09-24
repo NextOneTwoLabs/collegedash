@@ -762,7 +762,6 @@ D2_COLLECTION_HOLDS = {
 D3_MAIN_SITE_ATHLETICS_REVIEWED = {
     "beloit-college": "www.beloit.edu 403 (d3-b5)", "colby-college": "www.colby.edu 403 (d3-b2)",
     "delaware-valley": "delval.edu 403 (d3-b6)",
-    "mount-holyoke-college": "athletics.mtholyoke.edu 403 on the #253 search",
 }
 
 
@@ -992,6 +991,11 @@ def test_committed() -> None:
     ok("every collectionHold is well formed and on an uncollected entry", not bad_holds, str(bad_holds[:5]))
     ok("no heldPrograms entry carries a collectionHold (a hold already says why it is not published)",
        not any("collectionHold" in p for p in held), str([p["slug"] for p in held if "collectionHold" in p]))
+    # fails if an entry held from collection still has collected sources on disk (#94: the 5 held D3 campuses'
+    # sources were removed, as D2's holds never had any) -- data nobody refreshes, for a page nobody publishes
+    held_with_sources = [p["slug"] for p in programs if "collectionHold" in p
+                         and os.path.isdir(os.path.join(ROOT, "programs", p["slug"], "sources"))]
+    ok("no entry under a collectionHold has collected sources", not held_with_sources, str(held_with_sources[:5]))
     # fails if staging leaks into the published set: this is the check that says the D2 work publishes nothing
     ok("no staged program is published", not (set(staged_divs) & {p["division"] for p in published}),
        str(sorted({p["division"] for p in published})))
@@ -1024,7 +1028,7 @@ def test_committed() -> None:
     sf, mvsu, uwf = by.get("saint-francis"), by.get("mississippi-val"), by.get("west-florida")
     # held while D3 is not onboarded; published (and hold-free) once it is. D3 was published first, without it
     # (#94, the owner's minimal switch): saint-francis follows in its own PR, which sets this to False.
-    SAINT_FRANCIS_FOLLOWS_D3 = True
+    SAINT_FRANCIS_FOLLOWS_D3 = False
     d3_on = "D3" in (reg.get("onboardedDivisions") or [])
     sf_published = d3_on and not SAINT_FRANCIS_FOLLOWS_D3
     ok("Saint Francis is D3, held until it follows D3 into publication", bool(sf) and sf["division"] == "D3"
@@ -1195,7 +1199,7 @@ def test_committed() -> None:
     if "D3" in staged_divs or d3_on:
         d3 = [p for p in programs if p["division"] == "D3"]
         # fails if the D3 list is short or long: the 2026-27 Directory list is 416 programs, one of them
-        # saint-francis, which stays in heldPrograms until D3 is onboarded
+        # saint-francis, held until it followed D3 into publication (#94)
         ok("all 416 D3 programs are in the registry: 415 in programs, saint-francis the 416th",
            len(d3) == (416 if sf_published else 415) and bool(sf), str(len(d3)))
         by_org = {p["ids"].get("ncaaOrgId"): p for p in everything}
@@ -1215,7 +1219,11 @@ def test_committed() -> None:
         ok("399 of the 415 join a Scorecard row by website domain (393 exact, 6 on the registrable domain)",
            kinds["exact"] == 393 and kinds["registrable"] == 6 and len(joined3) == 399,
            f"report exact {kinds['exact']}, registrable {kinds['registrable']}, with an id in the registry {len(joined3)}")
-        hand3 = [p for p in d3 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in builder3]
+        # a long-standing entry (saint-francis, published in D1 before #100) keeps the Scorecard id the pre-#100
+        # registry gave it, which the check above already pins; only an id beyond both must name its source
+        pre_unit = {q["slug"]: q["scorecardUnitId"] for q in pre}
+        hand3 = [p for p in d3 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in builder3
+                 and pre_unit.get(p["slug"]) != p["ids"]["scorecardUnitId"]]
         unsourced3 = [p["slug"] for p in hand3
                       if f"College Scorecard row {p['ids']['scorecardUnitId']}" not in (p["location"].get("note") or "")
                       or "data/scorecard-bulk.json" not in (p["location"].get("note") or "")]
@@ -1252,6 +1260,15 @@ def test_committed() -> None:
         penn3 = [p for p in d3 if p["slug"].startswith("penn-state-")]
         ok("#94: the 6 Penn State campuses have no shortName (TPM ruling)", len(penn3) == 6 and not any(p.get("shortName") for p in penn3),
            str([(p["slug"], p.get("shortName")) for p in penn3]))
+        # owner's decision on #265: claremont-mudd-scripps is one team for three colleges, so it has no single
+        # Scorecard row and publishes without school facts or climate, marked as such. Fails if the marker is
+        # missing or malformed on it, or appears on any other entry (a missing Scorecard row alone is not it).
+        marked = {p["slug"]: p["schoolFactsUnavailable"] for p in everything if "schoolFactsUnavailable" in p}
+        cms_mark = marked.get("claremont-mudd-scripps") or {}
+        ok("#265: claremont-mudd-scripps, and only it, carries schoolFactsUnavailable {reason, evidence, since}",
+           set(marked) == {"claremont-mudd-scripps"} and set(cms_mark) == {"reason", "evidence", "since"}
+           and cms_mark["reason"] == "three-college-team" and "#265" in cms_mark["evidence"]
+           and re.fullmatch(r"\d{4}-\d{2}-\d{2}", cms_mark["since"] or "") is not None, str(marked))
 
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing

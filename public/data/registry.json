@@ -27355,7 +27355,12 @@
         "timezone": null
       },
       "onboardedAt": "2026-09-23",
-      "namesNote": "nickname \"Stags and Athenas\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Claremont McKenna College, Harvey Mudd College, and Scripps College\", checked 2026-09-23 (#94). A reviewed match (#94): the registry name is \"Claremont McKenna-Harvey Mudd-Scripps Colleges\", checked against the row's state. The two-part nickname is kept as written (TPM ruling on #94). No shortName: the confirmed name has an at/in/comma campus qualifier; nothing invented (see #94)."
+      "namesNote": "nickname \"Stags and Athenas\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Claremont McKenna College, Harvey Mudd College, and Scripps College\", checked 2026-09-23 (#94). A reviewed match (#94): the registry name is \"Claremont McKenna-Harvey Mudd-Scripps Colleges\", checked against the row's state. The two-part nickname is kept as written (TPM ruling on #94). No shortName: the confirmed name has an at/in/comma campus qualifier; nothing invented (see #94).",
+      "schoolFactsUnavailable": {
+        "reason": "three-college-team",
+        "evidence": "Owner decision on #265 (2026-09-23): published without school facts or climate, marked not available for a three-college team. The team (NCAA orgId 142) represents Claremont McKenna, Harvey Mudd and Scripps Colleges, each its own College Scorecard row (112260, 115409, 123165 in data/scorecard-bulk.json), so no single row describes it and ids.scorecardUnitId stays null.",
+        "since": "2026-09-23"
+      }
     },
     {
       "slug": "clark-ma",
@@ -33525,9 +33530,9 @@
       "colors": null,
       "athletics": {
         "platform": "auto",
-        "baseUrl": "https://www.mtholyoke.edu",
+        "baseUrl": "https://athletics.mtholyoke.edu",
         "sportPath": "/sports/womens-soccer",
-        "skipReason": "registry athletics URL returns 404: HTTP 404 for https://www.mtholyoke.edu/sports/womens-soccer/roster in onboard batch d3-b3 (2026-09-23, data/onboard-batches/d3-b3.md); correct athletics site not recorded yet, #94"
+        "skipReason": "athletics host refuses the collector: the college site www.mtholyoke.edu links its athletics site as https://athletics.mtholyoke.edu (checked 2026-09-24, #94), and that host answers HTTP 403 to the CollegeDashBot user agent, so no roster was collected and the women's soccer path there is not verified; the previous registry URL www.mtholyoke.edu/sports/womens-soccer/roster returned 404 in onboard batch d3-b3 (2026-09-23, data/onboard-batches/d3-b3.md)"
       },
       "ids": {
         "ncaaOrgId": 449,
@@ -40544,6 +40549,47 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Cardinals\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"York College, City University of New York\", checked 2026-09-23 (#94). A reviewed match (#94): the registry name is \"York College (New York)\", checked against the row's state. No shortName: the mechanical rule misfires on this combined name; nothing invented (see #94)."
+    },
+    {
+      "slug": "saint-francis",
+      "onboarded": true,
+      "name": "Saint Francis",
+      "shortName": "Saint Francis",
+      "nickname": "Red Wolves",
+      "division": "D3",
+      "conference": "Presidents' Athletic Conference",
+      "colors": [
+        "#BD1F25",
+        "#000000"
+      ],
+      "athletics": {
+        "platform": "sidearm",
+        "baseUrl": "https://sfuathletics.com",
+        "sportPath": "/sports/womens-soccer"
+      },
+      "ids": {
+        "scorecardUnitId": 215743,
+        "tdsClgId": null,
+        "tdsSlug": null,
+        "wikipedia": null,
+        "ncaaName": "Saint Francis",
+        "ncaaSlug": null,
+        "rpiHistoryName": "StFrancis",
+        "ncaaOrgId": 600
+      },
+      "social": {
+        "x": null,
+        "instagram": null
+      },
+      "location": {
+        "city": "Loretto",
+        "state": "PA",
+        "lat": 40.506734,
+        "lon": -78.63904,
+        "timezone": "America/New_York"
+      },
+      "onboardedAt": "2026-09-07",
+      "namesNote": "nickname \"Red Wolves\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Saint Francis University\", checked 2026-09-23 (#94). A reviewed match (#94): the registry name is \"Saint Francis\", checked against the row's state. shortName \"Saint Francis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention (#217); not independently sourced beyond the confirmed name."
     }
   ],
   "heldPrograms": [
@@ -40592,53 +40638,6 @@
         "evidence": "2026-27 lists D1 349, D2 261, D3 416: no row for mvsu.edu or mvsusports.com, and no Mississippi Valley State under any name",
         "since": "2026-09-15"
       }
-    },
-    {
-      "slug": "saint-francis",
-      "onboarded": true,
-      "name": "Saint Francis",
-      "shortName": "Saint Francis",
-      "nickname": "Red Wolves",
-      "division": "D3",
-      "conference": "Presidents' Athletic Conference",
-      "colors": [
-        "#BD1F25",
-        "#000000"
-      ],
-      "athletics": {
-        "platform": "sidearm",
-        "baseUrl": "https://sfuathletics.com",
-        "sportPath": "/sports/womens-soccer"
-      },
-      "ids": {
-        "scorecardUnitId": 215743,
-        "tdsClgId": null,
-        "tdsSlug": null,
-        "wikipedia": null,
-        "ncaaName": "Saint Francis",
-        "ncaaSlug": null,
-        "rpiHistoryName": "StFrancis",
-        "ncaaOrgId": 600
-      },
-      "social": {
-        "x": null,
-        "instagram": null
-      },
-      "location": {
-        "city": "Loretto",
-        "state": "PA",
-        "lat": 40.506734,
-        "lon": -78.63904,
-        "timezone": "America/New_York"
-      },
-      "onboardedAt": "2026-09-07",
-      "hold": {
-        "reason": "division-not-onboarded",
-        "division": "D3",
-        "orgId": 600,
-        "since": "2026-09-15"
-      },
-      "namesNote": "nickname \"Red Wolves\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Saint Francis University\", checked 2026-09-23 (#94). A reviewed match (#94): the registry name is \"Saint Francis\", checked against the row's state. shortName \"Saint Francis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention (#217); not independently sourced beyond the confirmed name."
     }
   ]
 }

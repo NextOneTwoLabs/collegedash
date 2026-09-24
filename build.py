@@ -190,10 +190,9 @@ def prune_profiles(plan: dict[str, str], published: set[str], out_dir: str) -> l
 # live programs look explained (onboarded: false, a move to heldPrograms) would delete their pages with build and
 # validate passing. validate therefore requires the unpublished long-standing programs to be exactly this list.
 # A real reclassification or removal is a one-line edit here, in its own reviewed PR; so is a program returning
-# (Saint Francis leaves this list the day D3 is onboarded).
+# (Saint Francis left this list when it followed D3 into publication, #94).
 LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", "pre-100-programs.json")
 REVIEWED_UNPUBLISHED = {
-    "saint-francis": "issue #100: the NCAA Directory lists it in D3 for 2026-27; held until D3 is onboarded",
     "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
 }
 
@@ -303,7 +302,7 @@ def check_publish_gate(registry: dict, *, has_athletics=None, reviewed: dict | N
 # every check that exists. check_staged_registry() fails that case too, on purpose.
 #
 # D2 left this dict when it was published (#197), and D3 when it was published (#94): nothing is staged.
-# saint-francis, the 416th D3 program, stays in heldPrograms for now and follows in its own PR.
+# saint-francis, the 416th D3 program, followed D3 into publication in its own PR (#94).
 STAGED_DIVISION_COUNTS: dict[str, int] = {}
 
 # A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
