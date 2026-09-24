@@ -182,7 +182,11 @@ def current(registry: dict) -> dict:
         raise common.FetchError(f"rpi current: only {len(parsed['teams'])} rows parsed from {url}")
     through = parsed["throughGames"]
     season = int(through[:4]) if through else dt.date.today().year
-    data = {"kind": "weekly", "season": season, "throughGames": through, "sourceUrl": url,
+    # "final" is informational only (issue #249): build.py decides from the through-date and the
+    # registry's finalRpiThrough, never from this label, so a date corrected later still applies to
+    # snapshots already written. Nothing else reads it either (worker.js, api/, the page).
+    kind = "final" if common.is_final_rpi(registry, season, through) else "weekly"
+    data = {"kind": kind, "season": season, "throughGames": through, "sourceUrl": url,
             "fetchedAt": meta.get("fetchedAt") or common.now_iso(), "teams": parsed["teams"]}
     common.write_json(os.path.join(common.RPI_OUT_DIR, "current.json"), data)
     if through:

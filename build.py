@@ -465,7 +465,59 @@ def load_rpi_current() -> dict | None:
     return common.read_json(os.path.join(common.RPI_OUT_DIR, "current.json"))
 
 
-def load_rpi_finals(cur_season: int) -> dict[int, dict]:
+def rpi_final_state(registry: dict) -> dict | None:
+    """{"season": S, "through": date} once the season being played (S = registry.season.current) is
+    final, else None. Issue #249: S is final when its newest weekly snapshot - 100+ teams, as the
+    collector enforces - is dated on or after registry.season.finalRpiThrough[S], the College Cup
+    final. Decided from the through-date, not from the snapshot's `kind` label, because snapshots are
+    write-once: a date corrected in the registry later still applies to the snapshots already stored.
+    With no date entered the season is never final - the safe default; rpi_final_warnings says so.
+    Raises (via common.final_rpi_dates) on a malformed or out-of-range date."""
+    cur = registry["season"]["current"]
+    date = common.final_rpi_dates(registry).get(cur)
+    season_dir = os.path.join(common.RPI_OUT_DIR, "weekly", str(cur))
+    if not date or not os.path.isdir(season_dir):
+        return None
+    files = sorted(f for f in os.listdir(season_dir) if f.endswith(".json"))
+    doc = common.read_json(os.path.join(season_dir, files[-1])) if files else None
+    through = (doc or {}).get("throughGames")
+    if len((doc or {}).get("teams") or []) < 100 or not common.is_final_rpi(registry, cur, through):
+        return None
+    return {"season": cur, "through": through}
+
+
+def _weekly_throughs(season: int) -> list[str]:
+    d = os.path.join(common.RPI_OUT_DIR, "weekly", str(season))
+    return sorted(f[:-5] for f in os.listdir(d) if f.endswith(".json")) if os.path.isdir(d) else []
+
+
+def rpi_final_warnings(registry: dict, today: dt.date | None = None) -> list[str]:
+    """What a person has to act on so the season can end (issue #249). Warnings, never failures: the
+    safe default - the season stays in progress - is already in force, and the refresh must not stop
+    over a date that is weeks away. The steps for each are in README, "Refresh runs and failures"."""
+    today = today or dt.date.today()
+    cur = registry["season"]["current"]
+    dates = common.final_rpi_dates(registry)
+    out = []
+    if today >= dt.date(cur, 10, 1) and cur not in dates:
+        out.append(f"registry season.finalRpiThrough has no {cur} date, so the final {cur} RPI cannot be "
+                   f"detected and {cur} will stay in progress; enter the {cur} College Cup final's date "
+                   f"from an NCAA page that names it")
+    if today >= dt.date(cur + 1, 1, 15) and not rpi_final_state(registry):
+        newest = (_weekly_throughs(cur) or ["(none)"])[-1]
+        out.append(f"no final {cur} RPI seen; newest snapshot through {newest}; check ncaa.com; if the NCAA's "
+                   f"last table is earlier than finalRpiThrough ({dates.get(cur, 'unset')}), set "
+                   f"finalRpiThrough to its date")
+    prev, prev_date = cur - 1, dates.get(cur - 1)
+    prev_last = (_weekly_throughs(prev) or [None])[-1]
+    if prev_date and prev_last and prev_last < prev_date:
+        out.append(f"the registry moved on to {cur}, but {prev}'s last snapshot is through {prev_last}, before "
+                   f"its finalRpiThrough {prev_date}: {prev} is published from a table that may not "
+                   f"include the College Cup final")
+    return out
+
+
+def load_rpi_finals(cur_season: int, final: dict | None = None) -> dict[int, dict]:
     """season -> the NCAA RPI table that stands for that season, for every finished season a weekly
     snapshot covers.
 
@@ -503,21 +555,29 @@ def load_rpi_finals(cur_season: int) -> dict[int, dict]:
         archived = {int(f[:4]) for f in os.listdir(common.RPI_OUT_DIR) if re.fullmatch(r"\d{4}\.json", f)}
     weekly_dir = os.path.join(common.RPI_OUT_DIR, "weekly")
     out: dict[int, dict] = {}
+    # Issue #249: current.json is the season being played only while it holds that season and the
+    # season is not final. Once it is final its table is its last snapshot, and the day the NCAA
+    # posts the next season's first table (current.json -> 2027 while the registry still says 2026)
+    # the season being played still resolves from its snapshots instead of silently going blank.
+    cur = load_rpi_current()
+    live = cur if (cur and cur.get("teams") and cur.get("season") == cur_season
+                   and not (final and final.get("season") == cur_season)) else None
     if os.path.isdir(weekly_dir):
         for name in sorted(os.listdir(weekly_dir)):
             season_dir = os.path.join(weekly_dir, name)
             if not re.fullmatch(r"\d{4}", name) or not os.path.isdir(season_dir):
                 continue
             season = int(name)
-            if season == cur_season:
+            if season > cur_season:
+                continue  # a season the registry has not reached yet is not published
+            if season == cur_season and live:
                 continue  # the season being played comes from current.json, below
             files = sorted(f for f in os.listdir(season_dir) if f.endswith(".json"))
             doc = common.read_json(os.path.join(season_dir, files[-1])) if files else None
             if doc and doc.get("teams"):
                 out[season] = doc
-    cur = load_rpi_current()
-    if cur and cur.get("teams") and cur.get("season") == cur_season:
-        out[cur_season] = cur
+    if live:
+        out[cur_season] = live
     # Every finished season after the archive's last year must resolve to a table. Checking the gap
     # rather than merely "did anything load" is what makes this a guard: once the NCAA posts the
     # first table of a new season, a lost weekly/ would otherwise leave the previous season silently
@@ -820,7 +880,7 @@ def _record_from_games(games: list[dict]) -> dict:
             "confText": f"{cw}-{cl}-{ct}" if conf else None, "exhibitions": len(games) - len(real)}
 
 
-def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry) -> list[dict]:
+def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final: dict | None = None) -> list[dict]:
     """Every season this program has a record of, newest first.
 
     The RPI tables create rows, they do not only decorate them: 173 of 350 programs have no
@@ -880,14 +940,25 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry) -> list[di
         s = seasons.setdefault(y, {"year": y, "label": str(y)})
         if y not in from_archive:
             s["rpiRank"] = row["rank"]
+            final = bool(rpi_final and rpi_final.get("season") == y)
             s["rpi"] = {"rank": row["rank"], "record": row.get("record"), "through": doc.get("throughGames"),
-                        "prevRank": row.get("prevRank"), "source": "NCAA.com weekly RPI",
+                        "prevRank": row.get("prevRank"),
+                        "source": "NCAA.com final RPI" if final else "NCAA.com weekly RPI",
                         "weekly": rpi_weekly_for(ncaa_name, y)}
         # not setdefault: a Wikipedia row can carry the key with a null in it (miami-fl 2023-2025).
         if not s.get("record"):
             s["record"] = row.get("record")
-        if y == cur_season:
-            s.setdefault("inProgress", True)  # a real schedule, where there is one, has the last word
+    # Issue #249: the season being played ends for every program, in every division, on one site-wide
+    # switch - the NCAA's table through the College Cup final (rpi_final_state) - and never on its own
+    # schedule. A complete schedule is not a finished season: a team out of its conference tournament
+    # looks complete until an NCAA tournament game is added, and "complete" flip-flopped with it; a
+    # program that finished before the final RPI would otherwise leave the finished season on its own.
+    cur = seasons.get(cur_season)
+    if cur is not None:
+        if rpi_final and rpi_final.get("season") == cur_season:
+            cur.pop("inProgress", None)
+        else:
+            cur["inProgress"] = True
     return [seasons[y] for y in sorted(seasons, reverse=True)]
 
 
@@ -1453,7 +1524,7 @@ def load_academic_ranks(registry: dict) -> dict[str, dict]:
 
 def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: dict | None = None,
                   ranks: dict[str, dict] | None = None, club_table=None, club_recorder=None,
-                  school_table=None, school_recorder=None) -> dict:
+                  school_table=None, school_recorder=None, rpi_final: dict | None = None) -> dict:
     slug = program["slug"]
     if ranks is None:
         ranks = load_academic_ranks(registry)
@@ -1493,7 +1564,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
         "academicRank": ranks[slug],
         "climate": ({**climate["data"], "_meta": _meta(climate)} if climate else None),
         "program": build_program_section(program, wiki, ath),
-        "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry),
+        "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final),
         "roster": roster,
         "rosterHistory": roster_hist,
         "schedule": build_schedule(ath),
@@ -1651,6 +1722,19 @@ def summary_row(p: dict) -> dict:
     }
 
 
+def index_season(registry: dict, rpi_hist: dict, rpi_finals: dict, rpi_final: dict | None) -> dict:
+    """index.json's `season`: the registry's, plus what the page reads instead of working it out
+    (issue #249). `finished` is the season "Record" and the last-season figures mean: the season being
+    played once its final RPI is out, else the newest season before it that has a table. `rpiFinal`
+    is {"season", "through"} from rpi_final_state, or null while the season is in progress."""
+    cur = registry["season"]["current"]
+    if rpi_final and rpi_final.get("season") == cur:
+        finished = cur
+    else:
+        finished = max((y for y in set(rpi_hist) | set(rpi_finals) if y < cur), default=cur - 1)
+    return {**registry["season"], "finished": finished, "rpiFinal": rpi_final}
+
+
 def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset()) -> list[dict]:
     # The prune plan is decided before the first write, so a refused prune leaves the published tree untouched.
     published = [p for p in published_programs(registry)]
@@ -1658,7 +1742,10 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                             allow_unexplained=frozenset(allow_unexplained_prune))
     rpi_hist = load_rpi_history()
     # raises if no season table resolves, rather than blanking the latest season for all 350
-    rpi_finals = load_rpi_finals(registry["season"]["current"])
+    rpi_final = rpi_final_state(registry)  # raises on an out-of-range finalRpiThrough (issue #249)
+    rpi_finals = load_rpi_finals(registry["season"]["current"], rpi_final)
+    for msg in rpi_final_warnings(registry):
+        common.annotate(f"::warning title=build: final RPI::{msg}")
     state = common.load_refresh_state()
     ranks = load_academic_ranks(registry)  # read once; raises if the committed asset is missing
     club_table = clubs.load_table(reload=True)  # reviewed data; a contradictory edit raises here
@@ -1670,7 +1757,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder,
-                                school_table, school_recorder)
+                                school_table, school_recorder, rpi_final)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         trends_recorder.observe(profile, program)
         rows.append(summary_row(profile))
@@ -1688,7 +1775,8 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                    f"({len(profile['commitments'])} commits, {len(profile['seasons'])} seasons)"
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
     common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "season": registry["season"], "programs": rows})
+                      {"updated": common.now_iso(), "season": index_season(registry, rpi_hist, rpi_finals, rpi_final),
+                       "programs": rows})
     prune_profiles(prune_plan, {r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
@@ -1935,7 +2023,7 @@ def check_seasons(registry: dict) -> bool:
     """
     try:
         rpi_hist = load_rpi_history()
-        finals = load_rpi_finals(registry["season"]["current"])
+        finals = load_rpi_finals(registry["season"]["current"], rpi_final_state(registry))
     except Exception as e:  # noqa: BLE001 - report the failure, do not become it
         print(f"SEASONS: cannot read the RPI tables to check against: {type(e).__name__}: {e}")
         return False

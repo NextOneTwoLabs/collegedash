@@ -774,6 +774,39 @@ def load_registry() -> dict:
     return reg
 
 
+def final_rpi_dates(registry: dict) -> dict[int, str]:
+    """season -> registry.season.finalRpiThrough[season]: the through-date of the NCAA table that
+    includes the D1 College Cup final, entered by a person once a year (issue #249). A season is
+    final - for every division, one site-wide switch - once a weekly snapshot of it is dated on or
+    after this date.
+
+    Raises on a malformed or out-of-range date (outside Nov 15 of the season to Jan 31 of the next)
+    rather than ignoring it: one typo here would finish, or never finish, 1,011 programs at once."""
+    raw = ((registry or {}).get("season") or {}).get("finalRpiThrough") or {}
+    if not isinstance(raw, dict):
+        raise ValueError(f"registry season.finalRpiThrough must be an object of season -> date, got {raw!r:.60}")
+    out = {}
+    for key, val in raw.items():
+        if str(key).startswith("_"):
+            continue
+        try:
+            season, day = int(key), _dt.date.fromisoformat(str(val))
+        except ValueError:
+            raise ValueError(f"registry season.finalRpiThrough[{key!r}] = {val!r} is not a season -> YYYY-MM-DD date") from None
+        lo, hi = _dt.date(season, 11, 15), _dt.date(season + 1, 1, 31)
+        if not lo <= day <= hi:
+            raise ValueError(f"registry season.finalRpiThrough[{key!r}] = {val} is outside {lo} .. {hi}; "
+                             f"the {season} College Cup final cannot fall there, so this is a typo")
+        out[season] = day.isoformat()
+    return out
+
+
+def is_final_rpi(registry: dict, season: int, through: str | None) -> bool:
+    """True when an NCAA table of `season` dated `through` includes the College Cup final."""
+    date = final_rpi_dates(registry).get(season)
+    return bool(date and through and str(through)[:10] >= date)
+
+
 def save_registry(reg: dict) -> None:
     reg["updated"] = today()
     write_json(REGISTRY_PATH, reg)

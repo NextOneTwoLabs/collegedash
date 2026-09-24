@@ -71,6 +71,27 @@ from collect import common  # noqa: E402
 FINISHED = 2025
 SNAPSHOT = os.path.join(common.RPI_OUT_DIR, "weekly", str(FINISHED), f"{FINISHED}-12-08.json")
 
+
+def final_on_disk(registry: dict) -> tuple[int, str | None]:
+    """(the finished season, the final table's through-date or None), worked out from the files alone and
+    never from the build under test (issue #249, Huatuo's review): the season being played is finished
+    exactly when the registry's raw finalRpiThrough date for it is set and some weekly/<season>/*.json
+    snapshot's own throughGames is on or after it. Otherwise the finished season is the one before."""
+    cur = registry["season"]["current"]
+    date = ((registry["season"].get("finalRpiThrough") or {}).get(str(cur)))
+    d = os.path.join(common.RPI_OUT_DIR, "weekly", str(cur))
+    throughs = sorted(json.load(open(os.path.join(d, f), encoding="utf-8")).get("throughGames") or ""
+                      for f in (os.listdir(d) if os.path.isdir(d) else []) if f.endswith(".json"))
+    if date and any(t >= date for t in throughs):
+        return cur, throughs[-1]
+    return cur - 1, None
+
+
+# The finished season the entitlement checks measure against: FINISHED (2025) until the 2026 final RPI
+# is on disk, then 2026 - so the day the season ends does not turn main red. Set in main().
+LAST_DONE = FINISHED
+FINAL_THROUGH: str | None = None
+
 # Long-standing D1 programs and the RPI seasons each published before issue #110 (PR #112 review, M1).
 PRE_100 = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-100-programs.json")
 RPI_ANCHOR = os.path.join(ROOT, "tests", "fixtures", "registry", "pre-110-rpi-seasons.json")
@@ -201,8 +222,8 @@ def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
 
       rpiYears        seasons with a row under the program's own ids: an archive sheet keyed by
                       ids.rpiHistoryName, or an NCAA table keyed by ids.ncaaName (exact, as the build joins)
-      finishedRecord  some source carries a record for FINISHED: its NCAA table row, a FINISHED schedule
-                      history, the live schedule if it is FINISHED's, or a Wikipedia FINISHED record
+      finishedRecord  some source carries a record for LAST_DONE: its NCAA table row, a LAST_DONE schedule
+                      history, the live schedule if it is LAST_DONE's, or a Wikipedia LAST_DONE record
       anySeason       any source that creates a season row at all
     """
     ctx = swapped(RPI_OUT_DIR=rpi_dir) if rpi_dir else contextlib.nullcontext()
@@ -222,10 +243,10 @@ def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
         wseasons = wiki.get("seasons") or []
         sched = ath.get("schedule") or {}
         history = ath.get("scheduleHistory") or {}
-        record = (bool((finals_rows.get(FINISHED) or {}).get("record"))
-                  or bool(history.get(str(FINISHED)))
-                  or bool(sched.get("games") and (sched.get("season") or registry["season"]["current"]) == FINISHED)
-                  or any(w.get("year") == FINISHED and w.get("record") for w in wseasons))
+        record = (bool((finals_rows.get(LAST_DONE) or {}).get("record"))
+                  or bool(history.get(str(LAST_DONE)))
+                  or bool(sched.get("games") and (sched.get("season") or registry["season"]["current"]) == LAST_DONE)
+                  or any(w.get("year") == LAST_DONE and w.get("record") for w in wseasons))
         out[p["slug"]] = {"rpiYears": years, "finishedRecord": record,
                           "anySeason": bool(years or wseasons or sched.get("games") or history)}
     return out
@@ -263,10 +284,12 @@ def check_anchor(registry: dict, rows: dict[str, dict], label: str) -> None:
     lost_years = {k: v for k, v in lost_years.items() if v}
     ok(f"{label}: every long-standing D1 program still publishes every RPI season it published before", not lost_years,
        f"{len(lost_years)}: {dict(list(lost_years.items())[:4])}")
+    # a floor, not an equality (issue #249): once the 2026 final RPI is out lastSeason moves on to 2026, and the
+    # fixture measured for 2025 still says what must never be lost - a lastSeason at least that recent, with a record
     lost_last = [p["slug"] for p in progs if anchor.get(p["slug"], {}).get("lastSeasonRecord")
-                 and not (((rows.get(p["slug"]) or {}).get("lastSeason") or {}).get("year") == FINISHED
+                 and not ((((rows.get(p["slug"]) or {}).get("lastSeason") or {}).get("year") or 0) >= FINISHED
                           and rows[p["slug"]]["lastSeason"].get("record"))]
-    ok(f"{label}: every long-standing D1 program still publishes a {FINISHED} lastSeason with a record", not lost_last,
+    ok(f"{label}: every long-standing D1 program still publishes a lastSeason of {FINISHED} or later, with a record", not lost_last,
        f"{len(lost_last)}: {lost_last[:6]}")
 
 
@@ -274,21 +297,21 @@ def check_published_against(ent: dict[str, dict], rows: dict[str, dict], built: 
     """The published index (and profiles, when `built` is given) against the entitlements, both ways."""
     ok(f"{label}: some program is entitled to an RPI rank, so the rank checks below test something",
        any(e["rpiYears"] for e in ent.values()), "no program has a row in any table")
-    ok(f"{label}: some program is entitled to a {FINISHED} record", any(e["finishedRecord"] for e in ent.values()))
+    ok(f"{label}: some program is entitled to a {LAST_DONE} record", any(e["finishedRecord"] for e in ent.values()))
     ok(f"{label}: the index holds exactly the programs the entitlements were computed for",
        sorted(rows) == sorted(ent), f"{len(rows)} rows, {len(ent)} programs")
-    lacking = [s for s, e in ent.items() if e["finishedRecord"] and _last(rows, s).get("year") != FINISHED]
-    ok(f"{label}: every program with a {FINISHED} record has lastSeason {FINISHED}", not lacking,
+    lacking = [s for s, e in ent.items() if e["finishedRecord"] and _last(rows, s).get("year") != LAST_DONE]
+    ok(f"{label}: every program with a {LAST_DONE} record has lastSeason {LAST_DONE}", not lacking,
        f"{len(lacking)}: {lacking[:5]}")
     dashes = [s for s, e in ent.items() if e["finishedRecord"] and not _last(rows, s).get("record")]
     ok(f"{label}: and every one carries a record, so the Record column has no dashes", not dashes,
        f"{len(dashes)}: {dashes[:5]}")
-    unearned = [s for s, e in ent.items() if not e["finishedRecord"] and _last(rows, s).get("year") == FINISHED]
-    ok(f"{label}: no program without a {FINISHED} record publishes one", not unearned, str(unearned[:5]))
-    wrong_rank = [s for s, e in ent.items() if _last(rows, s).get("year") == FINISHED
-                  and bool(_last(rows, s).get("rpiRank")) != (FINISHED in e["rpiYears"])]
-    ok(f"{label}: lastSeason carries a rank exactly when the program has a {FINISHED} row, and none otherwise",
-       not wrong_rank, str([(s, _last(rows, s).get("rpiRank"), FINISHED in ent[s]["rpiYears"]) for s in wrong_rank[:5]]))
+    unearned = [s for s, e in ent.items() if not e["finishedRecord"] and _last(rows, s).get("year") == LAST_DONE]
+    ok(f"{label}: no program without a {LAST_DONE} record publishes one", not unearned, str(unearned[:5]))
+    wrong_rank = [s for s, e in ent.items() if _last(rows, s).get("year") == LAST_DONE
+                  and bool(_last(rows, s).get("rpiRank")) != (LAST_DONE in e["rpiYears"])]
+    ok(f"{label}: lastSeason carries a rank exactly when the program has a {LAST_DONE} row, and none otherwise",
+       not wrong_rank, str([(s, _last(rows, s).get("rpiRank"), LAST_DONE in ent[s]["rpiYears"]) for s in wrong_rank[:5]]))
     hist_wrong = [s for s, e in ent.items()
                   if {h["year"] for h in (rows.get(s) or {}).get("rpiHistory") or []} != e["rpiYears"]]
     ok(f"{label}: rpiHistory lists exactly the seasons with a row, and is empty for a program with none",
@@ -316,6 +339,16 @@ def check_in_progress(registry: dict, rows: dict[str, dict], built: str, label: 
     last finished season until that season's final table is the one read (its last weekly snapshot, once the
     registry moves on). Every check here fails if the live season were counted as finished."""
     cur_season = registry["season"]["current"]
+    if LAST_DONE == cur_season:
+        # issue #249: the final RPI is on disk (final_on_disk), so the season being played is over everywhere
+        rows_cur = {slug: season_of(profile(built, slug)["seasons"], cur_season) for slug in rows}
+        still = [slug for slug, s in rows_cur.items() if s.get("inProgress")]
+        ok(f"{label}: after the final RPI, no {cur_season} row is in progress", not still, f"{len(still)}: {still[:6]}")
+        not_last = [slug for slug, s in rows_cur.items() if s.get("record")
+                    and (rows[slug].get("lastSeason") or {}).get("year") != cur_season]
+        ok(f"{label}: and lastSeason is {cur_season} wherever {cur_season} has a record", not not_last,
+           f"{len(not_last)}: {not_last[:6]}")
+        return
     live = {}  # slug -> the rank its profile publishes for the season being played
     for slug in rows:
         s = season_of(profile(built, slug)["seasons"], cur_season)
@@ -509,6 +542,15 @@ def test_build(registry: dict, built: str, log: str) -> None:
     check_anchor(registry, rows, "build")
 
     check_in_progress(registry, rows, built, "build")
+    # Issue #249, cross-checked against the files and not against the build's own say-so: the build
+    # declares the season finished exactly when a stored snapshot is dated on or after the registry's date.
+    season = index.get("season") or {}
+    ok(f"index.season.finished is {LAST_DONE}, as the registry date and the stored snapshots say",
+       season.get("finished") == LAST_DONE, f"index {season.get('finished')}, on disk {LAST_DONE}")
+    ok("index.season.rpiFinal is set exactly when the final table is on disk, and names its through-date",
+       (season.get("rpiFinal") or {}).get("through") == FINAL_THROUGH
+       and (season.get("rpiFinal") is None) == (FINAL_THROUGH is None), str(season.get("rpiFinal")))
+    final = FINAL_THROUGH is not None
 
     # Issue #3's own examples, and the coverage each one is expected to have. Since issue #62 the live
     # season is published with its rank but is not a finished ranked season, so these count finished
@@ -518,18 +560,18 @@ def test_build(registry: dict, built: str, log: str) -> None:
     ent = entitlements(registry)
     for slug, ranked in (("alcorn-state", 17), ("utrgv", 10), ("new-haven", 1), ("vanderbilt", 18)):
         got = [s for s in profile(built, slug)["seasons"] if s.get("rpiRank")]
-        done = [s["year"] for s in got if not s.get("inProgress")]
+        done = [s["year"] for s in got if not s.get("inProgress") and s["year"] <= FINISHED]
         live = [s["year"] for s in got if s.get("inProgress")]
-        ok(f"{slug} publishes {ranked} finished ranked seasons", len(done) == ranked, str(sorted(done)))
+        ok(f"{slug} publishes {ranked} finished ranked seasons up to {FINISHED}", len(done) == ranked, str(sorted(done)))
         ok(f"{slug}'s only in-progress ranked season is the one being played, where its table has a row",
-           live == ([cur_season] if cur_season in ent[slug]["rpiYears"] else []), f"in progress {live}")
+           live == ([cur_season] if cur_season in ent[slug]["rpiYears"] and not final else []), f"in progress {live}")
     # fails if new-haven's D1 rank leaks onto a season it played before joining D1 (issue #153).
     # Not "the season list is exactly [2025]": once schedule collection runs, the list correctly
     # carries New Haven's real D2-era results too (2023, 2024) - that is data, not a defect. The
     # only thing that must stay true is that no year before 2025 carries an RPI claim.
     nh_seasons = profile(built, "new-haven")["seasons"]
     ok("new-haven, a 2025 D1 newcomer, has exactly one finished ranked season and it is 2025",
-       [s["year"] for s in nh_seasons if s.get("rpiRank") and not s.get("inProgress")] == [FINISHED],
+       [s["year"] for s in nh_seasons if s.get("rpiRank") and not s.get("inProgress") and s["year"] <= FINISHED] == [FINISHED],
        str([(s["year"], bool(s.get("inProgress"))) for s in nh_seasons if s.get("rpiRank")]))
     ok("and no season before 2025 carries an rpiRank or an rpi block",
        not early_rpi_claims(nh_seasons, FINISHED), str(early_rpi_claims(nh_seasons, FINISHED)))
@@ -539,16 +581,17 @@ def test_build(registry: dict, built: str, log: str) -> None:
     ok("utrgv's 2014 season stays unclaimed, being filed under TexasPanAmerican",
        2014 not in [s["year"] for s in profile(built, "utrgv")["seasons"] if s.get("rpiRank")])
 
-    v = rows["vanderbilt"]["lastSeason"]
-    ok(f"vanderbilt's list row is {FINISHED}, #8, 18-4-2",
-       (v["year"], v["rpiRank"], v["record"]) == (FINISHED, 8, "18-4-2"), str(v))
-    m = rows["miami-fl"]["lastSeason"]
-    ok(f"miami-fl's list row is {FINISHED}, #76, 7-8-3", (m["rpiRank"], m["record"]) == (76, "7-8-3"), str(m))
+    if not final:  # once 2026 is final these list rows are 2026's; the profiles' 2025 rows are checked above and below
+        v = rows["vanderbilt"]["lastSeason"]
+        ok(f"vanderbilt's list row is {FINISHED}, #8, 18-4-2",
+           (v["year"], v["rpiRank"], v["record"]) == (FINISHED, 8, "18-4-2"), str(v))
+        m = rows["miami-fl"]["lastSeason"]
+        ok(f"miami-fl's list row is {FINISHED}, #76, 7-8-3", (m["rpiRank"], m["record"]) == (76, "7-8-3"), str(m))
     st = profile(built, "stanford")
     ok("stanford, which already had a full history, keeps its 43 seasons", len(st["seasons"]) == 43,
        str(len(st["seasons"])))
-    ok("and its live season is still the one being played, from the schedule",
-       season_of(st["seasons"], registry["season"]["current"]).get("inProgress") is True,
+    ok("and its season being played is in progress exactly until the final RPI (issue #249)",
+       bool(season_of(st["seasons"], registry["season"]["current"]).get("inProgress")) is (not final),
        str(season_of(st["seasons"], registry["season"]["current"])))
 
 
@@ -568,15 +611,24 @@ def test_flip(registry: dict) -> None:
         # entitlements are read from the relabelled tables, the same ones the rebuild read
         check_published_against(entitlements(registry, os.path.join(tmp, "rpi")), rows, None, "flip")
         check_anchor(registry, rows, "flip")
-        ok(f"no lastSeason is the newly labelled {cur_season}",
-           not [r for r in rows.values() if (r.get("lastSeason") or {}).get("year") == cur_season])
+        as_cur = [slug for slug, r in rows.items() if (r.get("lastSeason") or {}).get("year") == cur_season]
+        if LAST_DONE == cur_season:
+            # issue #249: once the final RPI is on disk the newly labelled season is the finished one
+            ok(f"the newly labelled {cur_season} is lastSeason now its final RPI is on disk, vanderbilt's too",
+               bool(as_cur) and "vanderbilt" in as_cur, f"{len(as_cur)} programs")
+        else:
+            ok(f"no lastSeason is the newly labelled {cur_season}", not as_cur, f"{len(as_cur)}: {as_cur[:6]}")
         check_in_progress(registry, rows, built, "flip", os.path.join(tmp, "rpi"))
         s = season_of(vandy["seasons"], FINISHED)
         ok(f"vanderbilt {FINISHED} survives as #8, 18-4-2, not in progress",
            (s.get("rpiRank"), s.get("record"), s.get("inProgress")) == (8, "18-4-2", None), str(s))
         nxt = season_of(vandy["seasons"], cur_season)
-        ok(f"and the newly labelled {cur_season} is the in-progress season",
-           nxt.get("inProgress") is True, str(nxt))
+        if LAST_DONE == cur_season:
+            ok(f"and the newly labelled {cur_season} is ranked and no longer in progress (final RPI on disk)",
+               bool(nxt.get("rpiRank")) and not nxt.get("inProgress"), str(nxt))
+        else:
+            ok(f"and the newly labelled {cur_season} is the in-progress season",
+               nxt.get("inProgress") is True, str(nxt))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -613,9 +665,14 @@ def test_archive_extended(registry: dict) -> None:
            v.get("rpiRank") not in (None, 8)
            and v.get("rpi", {}).get("source") == "end-of-season (Chris Thomas archive)", str(v))
         ok("while its record still comes from the snapshot", v.get("record") == "18-4-2", str(v.get("record")))
-        ok("and the list row agrees with the profile",
-           (rows["vanderbilt"]["lastSeason"]["rpiRank"], rows["vanderbilt"]["lastSeason"]["record"])
-           == (v["rpiRank"], "18-4-2"), str(rows["vanderbilt"]["lastSeason"]))
+        # The list row is lastSeason: FINISHED's archive-ranked row until the final RPI is on disk,
+        # then LAST_DONE's (issue #249). Either way it must be the profile's row for that season.
+        lr = rows["vanderbilt"]["lastSeason"]
+        want = v if LAST_DONE == FINISHED else season_of(profile(built, "vanderbilt")["seasons"], LAST_DONE)
+        ok(f"and the list row agrees with the profile's {LAST_DONE} row",
+           (lr.get("year"), lr.get("rpiRank"), lr.get("record"))
+           == (LAST_DONE, want.get("rpiRank"), "18-4-2" if LAST_DONE == FINISHED else want.get("record"))
+           and bool(want.get("rpiRank")) and bool(want.get("record")), f"{lr} vs {want}")
         ok("a program with no Wikipedia history keeps the season it only has from RPI",
            season_of(profile(built, "utrgv")["seasons"], FINISHED).get("record"),
            str(season_of(profile(built, "utrgv")["seasons"], FINISHED)))
@@ -722,6 +779,9 @@ def main(argv=None) -> int:
     VERBOSE = args.verbose
 
     registry = common.load_registry()
+    global LAST_DONE, FINAL_THROUGH
+    LAST_DONE, FINAL_THROUGH = final_on_disk(registry)
+    print(f"finished season on disk: {LAST_DONE}" + (f" (final RPI through {FINAL_THROUGH})" if FINAL_THROUGH else ""))
     test_loader(registry)
     test_join(registry)
     tmp = tempfile.mkdtemp(prefix="seasons-build-")

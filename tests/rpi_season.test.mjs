@@ -95,12 +95,17 @@ const CALENDAR = {
   // after the registry moves to 2027: 2026's final snapshot stands, and nothing is in progress
   final: { current: 2027, a: { cur: null, hist: [[2026, 4], [2025, 8]] }, b: { cur: null, hist: [[2026, 41], [2025, 2]] },
     expect: { season: 2026, inProgress: false, finished: 2026, label: 'RPI 2026' } },
+  // issue #249: the NCAA's table through the College Cup final is out while the registry is still on 2026 -
+  // the build publishes season.finished and season.rpiFinal, and 2026 is over on the page the same day
+  rpiFinal: { current: 2026, extra: { finished: 2026, rpiFinal: { season: 2026, through: '2026-12-14' } },
+    a: { cur: null, hist: [[2026, 4], [2025, 8]] }, b: { cur: null, hist: [[2026, 41], [2025, 2]] },
+    expect: { season: 2026, inProgress: false, finished: 2026, label: 'RPI 2026' } },
 };
 function filesFor(stage) {
   const c = CALENDAR[stage];
   const lastOf = ranks => { const s = seasonsOf(ranks, 'D1').find(x => !x.inProgress); return { year: s.year, record: s.record, rpiRank: s.rpiRank, ncaaResult: null }; };
   const rows = [row('alpha', 'D1', c.a, lastOf(c.a)), row('beta', 'D1', c.b, lastOf(c.b)), row('gamma', 'D2', c.a, lastOf(c.a))];
-  const files = { 'api/v1/programs': { updated: '2026-09-23T00:00:00Z', season: { current: c.current }, programs: rows } };
+  const files = { 'api/v1/programs': { updated: '2026-09-23T00:00:00Z', season: { current: c.current, ...c.extra }, programs: rows } };
   for (const [r, ranks] of [[rows[0], c.a], [rows[1], c.b], [rows[2], c.a]]) files[`api/v1/programs/${r.slug}`] = profileOf(r, ranks);
   return files;
 }
@@ -160,7 +165,7 @@ test('wherever the live rank is shown, it says "in progress"', async () => {
 });
 
 test('a finished season carries no "in progress" label anywhere', async () => {
-  for (const stage of ['before', 'final']) {
+  for (const stage of ['before', 'final', 'rpiFinal']) {
     const { sb, app } = await ready(stage);
     const y = CALENDAR[stage].expect.season;
     const alpha = sb.S.index.programs[0];
