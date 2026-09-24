@@ -456,6 +456,8 @@ a.pill { text-decoration: none; }
   .trend-table .team-sub .pl-rest, .trend-table th .th-sub { display: none; }
   .trend-table td, .trend-table th { padding-left: 6px; padding-right: 6px; }
   .trend-table th { white-space: normal; font-size: 11px; }
+  /* "Not collected" (D2/D3 commits, #315) fits the narrow Commits column on two lines at 400px */
+  .trend-table .tr-nc { display: inline-block; font-size: 10px; line-height: 1.25; }
 }
 /* Phones: every tap target in the picker is at least 44px (#310). */
 @media (max-width: 480px) {
