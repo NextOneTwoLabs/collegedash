@@ -75,6 +75,18 @@
    "file": "hub/utah-state.html",
    "pageUrl": "https://utahstateaggies.com/sports/2018/6/12/camps-ust-camps-html.aspx",
    "expect": null
+  },
+  {
+   "file": "hub/synth-throwers-only.html",
+   "pageUrl": "https://www.example-athletics.test/camps",
+   "expect": null,
+   "_note": "#293, fails on main: a throwers camp for 'Boys & Girls' counted as female and main hopped to it (the Gustavus Throwers article). 'throwers' is now another sport, so there is no hop."
+  },
+  {
+   "file": "hub/synth-throwers.html",
+   "pageUrl": "https://www.example-athletics.test/camps",
+   "expect": "https://www.example-athletics.test/wsoc/id-camp",
+   "_note": "#293 GUARD, passes on main too: _pick already prefers the women's soccer link (score 8 over 5). Kept so a later scoring change cannot send the hop to the throwers link."
   }
  ],
  "extract": [
@@ -741,6 +753,190 @@
      "startDate": "2026-06-05"
     }
    ]
+  },
+  {
+   "file": "extract/synth-allsport-table.html",
+   "pageUrl": "https://www.example-athletics.test/sports-camps",
+   "title": "Example Sports Camps",
+   "pageSoccer": false,
+   "_note": "#293, fails on main (4 rows): an all-sport Ryzer-style table. The rows' own names name no sport, so main never read their Sport cell. Only the row whose cells say soccer stays.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "Elite ID Camp",
+     "startDate": "2027-06-26"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Elite Prospect Camp"
+    },
+    {
+     "name": "Fall ID Clinic"
+    },
+    {
+     "name": "Fall Clinic and Visit Day"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-allsport-chrome.html",
+   "pageUrl": "https://www.example-athletics.test/sport-camps",
+   "title": "Sport Camps and Clinics",
+   "pageSoccer": false,
+   "_note": "#293, fails on main (2 rows): page-named rows on an all-sport page, with no sport named in their own window. No soccer signal, so dropped.",
+   "count": 0
+  },
+  {
+   "file": "extract/synth-soccer-page-table.html",
+   "pageUrl": "https://www.example-athletics.test/womens-soccer-camps",
+   "title": "Women's Soccer Camps",
+   "pageSoccer": true,
+   "_note": "#293 GUARD, passes on main too: the team's own soccer page. None of its rows says soccer and the page names other sports, so this fails if the all-sport row rule is ever applied to a soccer page.",
+   "count": 3,
+   "expect": [
+    {
+     "name": "Goalkeeper Camp"
+    },
+    {
+     "name": "ID Clinic"
+    },
+    {
+     "name": "Fall Prospect Camp"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-coach-site.html",
+   "pageUrl": "https://www.lionselitecamps.test/",
+   "title": "Lions Elite Camps",
+   "pageSoccer": false,
+   "_note": "#293 (Huatuo's change 1): title and URL do not say soccer, but the page names no other sport, so it is not all-sport and keeps today's behaviour. Fails against the plan as first written (False alone meant all-sport) and against OTHER_SPORT_RE as the page test ('running', 'team spirit', 'track record').",
+   "count": 2,
+   "expect": [
+    {
+     "startDate": "2027-06-12"
+    },
+    {
+     "startDate": "2027-10-03"
+    }
+   ]
+  },
+  {
+   "file": "extract/cross-promo-soccer-page.html",
+   "pageUrl": "https://example.edu/sports/wsoc/camps",
+   "title": "Camps",
+   "pageSoccer": true,
+   "_note": "#293 (Huatuo's change 2), fails on main: the same /sports/wsoc/camps page titled only 'Camps'. Its three cross-promoted sports make it look like a hub; the URL says it is the soccer page, so page_soccer must switch hub detection off.",
+   "count": 2,
+   "expect": [
+    {
+     "name": "Elite ID Camp",
+     "startDate": "2026-06-13"
+    },
+    {
+     "name": "Junior Academy Camp",
+     "startDate": "2026-07-10"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-montana.html",
+   "pageUrl": "http://gogriz.com/sports/2015/3/3/GEN_201401012",
+   "title": "Camp Information",
+   "pageSoccer": false,
+   "_note": "#293 GUARD: the same hub as an all-sport page (pageSoccer false). The section signal must keep the soccer-section rows exactly as without the flag.",
+   "count": 0,
+   "reject": [
+    {
+     "name": "Griz Big Man Camp"
+    },
+    {
+     "name": "Advanced Skills Camp (Grades 5-12)"
+    },
+    {
+     "name": "Team Camp"
+    },
+    {
+     "name": "Specialist Camp (kickers, punters, and long snappers)"
+    },
+    {
+     "startDate": "2026-06-13"
+    },
+    {
+     "startDate": "2026-08-22"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-ut-chattanooga.html",
+   "pageUrl": "https://gomocs.com/sports/2015/4/22/camps",
+   "title": "2025-26 UTC CAMP SCHEDULE",
+   "pageSoccer": false,
+   "_note": "#293 GUARD: the same hub as an all-sport page (pageSoccer false). The section signal must keep the soccer-section rows exactly as without the flag.",
+   "count": 0,
+   "reject": [
+    {
+     "name": "Prospect Camp"
+    },
+    {
+     "name": "Spirit Camps"
+    },
+    {
+     "name": "Father Daughter Camp"
+    },
+    {
+     "name": "Team Camp 1"
+    },
+    {
+     "name": "2025-26 UTC CAMP SCHEDULE"
+    }
+   ]
+  },
+  {
+   "file": "extract/hub-wofford.html",
+   "pageUrl": "https://athletics.wofford.edu/sports/2008/5/5/summer camp.aspx",
+   "title": "Summer Camps @ Wofford",
+   "pageSoccer": false,
+   "_note": "#293 GUARD: the same hub as an all-sport page (pageSoccer false). The section signal must keep the soccer-section rows exactly as without the flag.",
+   "count": 1,
+   "expect": [
+    {
+     "name": "ID Camp",
+     "startDate": "2026-11-22",
+     "endDate": "2026-11-22",
+     "registerUrl": null
+    }
+   ],
+   "reject": [
+    {
+     "startDate": "2026-08-01"
+    },
+    {
+     "startDate": "2027-03-21"
+    },
+    {
+     "startDate": "2027-05-22"
+    },
+    {
+     "name": "Rod Ray Tennis Camp"
+    },
+    {
+     "name": "7on7 Tournament and Big Man Camp"
+    },
+    {
+     "name": "Kids Camp 1"
+    },
+    {
+     "name": "Summer Camps @ Wofford"
+    },
+    {
+     "startDate": "2026-06-21"
+    },
+    {
+     "registerUrl": "https://kevingiltnerbasketballcamps.totalcamps.com/About"
+    }
+   ]
   }
  ],
  "robots": [
@@ -1352,6 +1548,51 @@
     "Summer ID Camp",
     "womens-soccer",
     true
+   ],
+   [
+    "Southern Minnesota Throwers Camp",
+    null,
+    false
+   ],
+   [
+    "Field Pole Vault Clinics",
+    null,
+    false
+   ],
+   [
+    "Tumbling Skills Clinics",
+    null,
+    false
+   ],
+   [
+    "Individual Big Man Camp",
+    null,
+    false
+   ],
+   [
+    "Women's Rugby Prospect Clinic",
+    null,
+    false
+   ],
+   [
+    "Powerlifting Clinic",
+    null,
+    false
+   ],
+   [
+    "Goalkeeper Camp",
+    null,
+    true
+   ],
+   [
+    "Throw-In & Set Piece Clinic",
+    null,
+    true
+   ],
+   [
+    "Dribbling & Finishing Clinic",
+    null,
+    true
    ]
   ],
   "notHub": [
@@ -1714,6 +1955,73 @@
     "expect": "The Hoya Winter Soccer ID Clinic",
     "why": "a soccer page name with no gender word is fine"
    }
+  ]
+ },
+ "pageSoccerFlag": {
+  "_note": "#293: page_soccer_flag(short title, finalUrl, campsUrl). True = the team's own soccer page (title or URL names soccer, not a men's URL). Example hosts only.",
+  "cases": [
+   [
+    "Camps",
+    [
+     "https://example.edu/sports/2014/7/11/GEN_0711.aspx"
+    ],
+    false
+   ],
+   [
+    "Camps",
+    [
+     "https://example.edu/sports/wsoc/camps"
+    ],
+    true
+   ],
+   [
+    "Camps",
+    [
+     "https://example.edu/sports/msoc/camps"
+    ],
+    false
+   ],
+   [
+    "Camps",
+    [
+     "https://example.edu/sports/mens-soccer/camps"
+    ],
+    false
+   ],
+   [
+    "Camps",
+    [
+     "https://example.edu/sports/womens-soccer/camps"
+    ],
+    true
+   ],
+   [
+    "Camps",
+    [
+     null,
+     "https://www.examplesoccercamps.test/"
+    ],
+    true
+   ],
+   [
+    "Women's Soccer Camps",
+    [
+     "https://example.edu/camps"
+    ],
+    true
+   ],
+   [
+    "Men's Soccer Camps",
+    [
+     "https://example.edu/camps"
+    ],
+    false
+   ],
+   [
+    "Sport Camps",
+    [],
+    false
+   ]
   ]
  }
 }

@@ -289,20 +289,28 @@ def fixtures(args) -> int:
     print("extract: extract_camps")
     for fx in spec["extract"]:
         camps.STATS.clear()
-        entries = camps.extract_camps(_read(fx["file"]), fx["pageUrl"], published=fx.get("published"), title=fx.get("title"),
-                                      body_only=bool(fx.get("bodyOnly")))
+        # #293: `pageSoccer` is what collect() passes from page_soccer_flag. Only fixtures that name it
+        # pass it, so every older fixture calls extract_camps exactly as before.
+        kw = {"page_soccer": fx["pageSoccer"]} if "pageSoccer" in fx else {}
+        label = fx["file"] + (f" [pageSoccer={fx['pageSoccer']}, title={fx.get('title')!r}]" if kw else "")
+        try:
+            entries = camps.extract_camps(_read(fx["file"]), fx["pageUrl"], published=fx.get("published"),
+                                          title=fx.get("title"), body_only=bool(fx.get("bodyOnly")), **kw)
+        except TypeError as e:  # a parser whose extract_camps has no page_soccer parameter
+            ok(f"{label} runs", False, f"extract_camps does not take page_soccer: {e}")
+            continue
         for key, want_n in (fx.get("stats") or {}).items():
             # which path fired, not only what came out: synth-alternating would stay at 2 rows through
             # _dedupe even if the generic step lent 'Youth Camp' to June 5, so the firing is pinned too
-            ok(f"{fx['file']} {key} fired {want_n}x", camps.STATS[key] == want_n, f"got {camps.STATS[key]}")
+            ok(f"{label} {key} fired {want_n}x", camps.STATS[key] == want_n, f"got {camps.STATS[key]}")
         if "count" in fx:
-            ok(f"{fx['file']} count", len(entries) == fx["count"], f"got {len(entries)}: {[e['name'] + ' ' + str(e['startDate']) for e in entries]}")
+            ok(f"{label} count", len(entries) == fx["count"], f"got {len(entries)}: {[e['name'] + ' ' + str(e['startDate']) for e in entries]}")
         for exp in fx.get("expect") or []:
             match = [e for e in entries if all(e.get(k) == v for k, v in exp.items())]
-            ok(f"{fx['file']} has {exp}", bool(match), f"entries: {[{k: e.get(k) for k in exp} for e in entries]}")
+            ok(f"{label} has {exp}", bool(match), f"entries: {[{k: e.get(k) for k in exp} for e in entries]}")
         for exp in fx.get("reject") or []:
             match = [e for e in entries if all(e.get(k) == v for k, v in exp.items())]
-            ok(f"{fx['file']} lacks {exp}", not match)
+            ok(f"{label} lacks {exp}", not match)
     print("robots: fetch_checked")
     real_cache = common.CACHE_DIR
     for fx in spec["robots"]:
@@ -463,6 +471,16 @@ def fixtures(args) -> int:
         ok(f"{t!r} does not suppress section gating", _page_is_soccer is not None and got is False,
            missing("_page_is_soccer") if _page_is_soccer is None else f"got {got}")
 
+    # #293: page_soccer_flag, what collect() passes to extract_camps as page_soccer. True = the team's
+    # own soccer page (title or URL names soccer, not a men's URL); False = extract_camps then checks
+    # whether the page's own text names another sport.
+    print("pageSoccerFlag: page_soccer_flag")
+    page_soccer_flag = helper("page_soccer_flag")
+    for title, urls, want in (spec.get("pageSoccerFlag") or {}).get("cases") or []:
+        got = page_soccer_flag(title, *urls) if page_soccer_flag else None
+        ok(f"{title!r} at {urls} -> {want}", page_soccer_flag is not None and got is want,
+           missing("page_soccer_flag") if page_soccer_flag is None else f"got {got}")
+
     print("names: _is_chrome_name / _clean_name")
     _is_chrome_name, _clean_name = helper("_is_chrome_name"), helper("_clean_name")
     names = spec.get("names") or {}
@@ -521,6 +539,8 @@ SNAPSHOT = os.path.join(FIXTURES, "extract-snapshot.json")
 def extract_snapshot(spec: dict) -> dict:
     out = {}
     for fx in spec["extract"]:
+        if "pageSoccer" in fx:
+            continue  # a #293 re-run of a file under a page flag, never part of the recorded snapshot
         entries = camps.extract_camps(_read(fx["file"]), fx["pageUrl"], published=fx.get("published"),
                                       title=fx.get("title"), body_only=bool(fx.get("bodyOnly")))
         out[fx["file"]] = [{**e, "campType": camps.classify_camp(e.get("name"))} for e in entries]
