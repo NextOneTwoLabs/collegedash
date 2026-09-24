@@ -165,6 +165,29 @@ def _result_columns(rows, data_rows, grid) -> tuple[int | None, int | None]:
     return ncaa, finish
 
 
+def _is_record_cell(c: str) -> bool:
+    return bool(RECORD_RE.search(c)) and not re.search(r"[A-Za-z]{4,}", c)
+
+
+def _record_columns(labels: list[str], laid_out_rows) -> tuple[int, int] | None:
+    """Issue #303: (overall column, conference column) for a table whose header puts the conference record
+    FIRST, as florida's ('Conference record' ... 'Regular season record') and san-diego-state's ('Record:
+    Conference | Overall') do; None for every other table, which keeps reading the first record cell as the
+    overall one. The first two columns that hold a record in any season row (tournament columns aside) are compared by their headers: the
+    first must name the conference and not 'overall', the second must name 'overall' or not the conference. A
+    conference name in a header row above the whole table ('Western Athletic Conference') is in every label, so
+    'overall' decides there."""
+    cols = sorted({i for row in laid_out_rows for i, c in enumerate(row) if i > 0 and _is_record_cell(c)})
+    # a tournament's own record ('Conference tournament results': florida's '1–1') is neither
+    cols = [i for i in cols if i < len(labels) and not re.search(r"tourn|postseason|ncaa|playoff", labels[i])]
+    if len(cols) < 2:
+        return None
+    first, second = labels[cols[0]], labels[cols[1]]
+    if "conf" in first and "overall" not in first and ("overall" in second or "conf" not in second):
+        return cols[1], cols[0]
+    return None
+
+
 def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     """Year-by-year results. Wikipedia articles use several layouts:
       Stanford: Year | Head coach | Overall | Conference | Conference Standing | NCAA Tournament
@@ -210,6 +233,7 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     # has them. Before, a table that splits wins, losses and ties took the NCAA result from the last text cell in
     # the row: clemson's 'Top points' players (2004, 2021) or its conference finish (2009, 'NCAA 11th').
     ncaa_col, finish_col = _result_columns(rows, data_rows, laid_out_rows)
+    rec_cols = None if split_wlt else _record_columns(_column_labels(rows, data_rows), [grid.get(id(r)) or [] for r in data_rows])
     seasons, coach_last, legacy_last = [], None, None
     for tr in data_rows:
         cells = [common.clean(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
@@ -244,9 +268,21 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
             if len(nums) >= 6:
                 crec = {"w": nums[3], "l": nums[4], "t": nums[5], "text": f"{nums[3]}-{nums[4]}-{nums[5]}"}
         else:
-            recs = [c for c in rest if RECORD_RE.search(c) and not re.search(r"[A-Za-z]{4,}", c)]
-            rec = _record(recs[0]) if recs else None
-            crec = _record(recs[1]) if len(recs) > 1 else None
+            recs = [c for c in rest if _is_record_cell(c)]
+            if rec_cols and len(recs) >= 2:
+                # #303: the header puts the conference record first and the overall record after it. Read in cell
+                # order, not by column (florida's rows leave cells out, so a column number does not hold across its
+                # rows): the first record is the conference one, the last the overall one, and a conference
+                # tournament's own record between them ('1–1') is neither.
+                rec, crec = _record(recs[-1]), _record(recs[0])
+            elif rec_cols and len(recs) == 1:
+                # one record: its own column says which it is (san-diego-state 1989 has an overall record only)
+                laid = grid.get(id(tr)) or []
+                col = next((i for i, c in enumerate(laid) if i > 0 and c == recs[0]), None)
+                rec, crec = (None, _record(recs[0])) if col == rec_cols[1] else (_record(recs[0]), None)
+            else:
+                rec = _record(recs[0]) if recs else None
+                crec = _record(recs[1]) if len(recs) > 1 else None
         ncaa = None
         laid_out = grid.get(id(tr)) or []
         if ncaa_col is not None:
@@ -289,11 +325,18 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
     return seasons
 
 
+MENS_TITLE_RE = re.compile(r"(?<!wo)men's[ _]soccer", re.I)
+
+
 def collect(program: dict, registry: dict) -> dict:
     title = program["ids"].get("wikipedia")
     if not title:
         raise common.SkipCollector("wikipedia: no team article in the registry (most mid-majors have none; "
                                    "try `registry fix-wiki`)")
+    if MENS_TITLE_RE.search(title):
+        # #303: old-dominion, east-tennessee-state, manhattan and campbell were registered to the men's team's
+        # article, and their men's season records were published as the women's
+        raise common.SkipCollector(f"wikipedia: {title!r} is the men's team's article, not this program's")
     url = registry["sources"]["wikipedia"]["htmlApi"].format(title=urllib.parse.quote(title, safe=""))
     html, meta = common.fetch_text(url, max_age_hours=24 * 7)
     soup = BeautifulSoup(html, "html.parser")
