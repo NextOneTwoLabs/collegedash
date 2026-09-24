@@ -10,8 +10,8 @@
 // syncToggles. Expected slugs and counts come from S.favorites and the shipped index, never from the page's
 // render helpers.
 //
-// What it CANNOT prove, and a human must check in a browser: layout at desktop and ~400 px, focus after the
-// clicked card disappears, and real pointer/keyboard events. The DOM is a stub that records innerHTML.
+// What it CANNOT prove, and a human must check in a browser: layout at desktop and ~400 px, the focus ring
+// where focus lands, and real pointer/keyboard events. The DOM is a stub that records innerHTML.
 //
 // SHORTLIST_TEST_HTML (optional) points the suite at another copy of index.html, so the page from before
 // this change can be run through these same checks to show them failing.
@@ -26,7 +26,24 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const HTML = process.env.SHORTLIST_TEST_HTML || path.join(PUBLIC, 'index.html');
 
+// focus() on any stub records it here, so the tests can ask where keyboard focus went.
+let focused = null;
+// The controls a region's innerHTML currently holds, as stubs: one per data-fav button.
+const favStubs = (region, html) => [...html.matchAll(/data-fav="([^"]+)"/g)]
+  .map(m => ({ region, dataset: { fav: m[1] }, focus() { focused = { region, fav: m[1] }; } }));
+const EMPTY = { '#app': 'shortlist-empty', '#sidebar': 'side-empty' };
+
 function makeElement(name) {
+  if (name === '#app' || name === '#sidebar') {
+    const el = makeElement('region');
+    el.querySelectorAll = sel => (sel === '[data-fav]' ? favStubs(name, el.innerHTML) : []);
+    // The empty state counts as focusable only if it is drawn with tabindex="-1".
+    el.querySelector = sel => (sel === '.shortlist-empty, .side-empty'
+      ? (new RegExp(`class="[^"]*\\b${EMPTY[name]}\\b[^"]*" tabindex="-1"`).test(el.innerHTML)
+        ? { focus() { focused = { region: name, empty: true }; } } : null)
+      : makeElement('child'));
+    return el;
+  }
   return {
     _name: name, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0,
     dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
@@ -137,5 +154,62 @@ test('saving or unsaving on another view does not draw the shortlist over it', a
   assert.ok(S.favorites.has(A));
   assert.equal(app(), 'LIST VIEW', 'the shortlist was rendered into #app while the list view was showing');
   await clickStar(A);
+  assert.equal(app(), 'LIST VIEW');
+});
+
+// Review of PR #294: the redraw removes the clicked star (or sidebar ✕), so focus must be handed on rather
+// than dropping to <body>: the next row's control, else the previous row's, else the region's empty state.
+// The clicked control is the stub a browser would give: it sits in the list it was drawn in, and after the
+// redraw it is detached (isConnected false), as innerHTML replacement leaves it. Row order is read from the
+// rendered markup, i.e. what the reader sees.
+async function clickIn(region, slug) {
+  const el = sandbox.document.querySelector(region);
+  const star = { dataset: { fav: slug }, isConnected: false };
+  const list = { querySelectorAll: () => favStubs(region, el.innerHTML).map(b => (b.dataset.fav === slug ? star : b)) };
+  star.closest = sel => (sel === '[data-fav]' ? star : sel === '.grid.cards, .side-list' ? list : sel === '#app' && region === '#app' ? el : null);
+  assert.ok(favStubs(region, el.innerHTML).some(b => b.dataset.fav === slug), `${slug} has no control in ${region}`);
+  const ev = { target: star, stopPropagation() { }, preventDefault() { } };
+  focused = null;
+  listeners.filter(l => l.type === 'click').forEach(l => l.fn(ev));
+  await settle(); await settle();
+  return focused;
+}
+const favOrder = region => favStubs(region, sandbox.document.querySelector(region).innerHTML).map(b => b.dataset.fav);
+
+async function threeSaved() {
+  const idx = await sandbox.loadIndex();
+  S.favorites.clear(); idx.programs.slice(0, 3).forEach(p => S.favorites.add(p.slug));
+  sandbox.location.hash = '#/shortlist';
+  S.sidebarTab = 'shortlist';
+  sandbox.renderSidebar();
+  await sandbox.renderShortlist();
+}
+
+test('focus: unsaving a card star on #/shortlist moves focus to the next card, then the previous, then the empty state', async () => {
+  await threeSaved();
+  const [x, y, z] = favOrder('#app');
+  assert.ok(x && y && z, 'three cards did not render');
+  assert.deepEqual(await clickIn('#app', y), { region: '#app', fav: z }, 'middle card: focus should go to the next card star');
+  assert.deepEqual(favOrder('#app'), [x, z]);
+  assert.deepEqual(await clickIn('#app', z), { region: '#app', fav: x }, 'last card: focus should go to the previous card star');
+  assert.deepEqual(await clickIn('#app', x), { region: '#app', empty: true }, 'no cards left: focus should go to the empty-state card');
+});
+
+test('focus: removing with the sidebar ✕ moves focus to the next ✕, then the previous, then the sidebar empty state', async () => {
+  await threeSaved();
+  const [x, y, z] = favOrder('#sidebar');
+  assert.ok(x && y && z, 'three sidebar rows did not render');
+  assert.deepEqual(await clickIn('#sidebar', y), { region: '#sidebar', fav: z }, 'middle row: focus should go to the next ✕');
+  assert.deepEqual(await clickIn('#sidebar', z), { region: '#sidebar', fav: x }, 'last row: focus should go to the previous ✕');
+  assert.deepEqual(await clickIn('#sidebar', x), { region: '#sidebar', empty: true }, 'no rows left: focus should go to the sidebar empty state');
+  assert.deepEqual(cardSlugs(app()), [], 'the shortlist page did not follow the sidebar removal');
+});
+
+test('focus: the sidebar ✕ hands focus on from other views too, where the page itself is not redrawn', async () => {
+  await threeSaved();
+  sandbox.location.hash = '#/';
+  sandbox.document.querySelector('#app').innerHTML = 'LIST VIEW';
+  const [x, y] = favOrder('#sidebar');
+  assert.deepEqual(await clickIn('#sidebar', x), { region: '#sidebar', fav: y });
   assert.equal(app(), 'LIST VIEW');
 });
