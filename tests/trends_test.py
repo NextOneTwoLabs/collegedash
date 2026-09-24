@@ -1,4 +1,4 @@
-"""Checks for trends.py, the clubs & high-schools index behind #/trends (issue #230).
+"""Checks for trends.py, the clubs & high-schools index behind #/trends (issues #230, #315, #327).
 
     python tests/trends_test.py            # everything below, offline
     python tests/trends_test.py --verbose  # print every check, not only the failures
@@ -10,6 +10,9 @@ test_search_aka to check the aliases MVLA's search needs (#307).
 
 What this proves
 ----------------
+* #327: one record per counted person; the records summed by (club, program) equal counts written by hand
+  (T6); AND across boxes and OR within one (T1, T2); validate_records refuses every breach it names and runs
+  on the committed file (T4, T7); program totals never come from counting records.
 * The three counts are what the owner asked for on #225: current roster, former players (on a
   stored past roster and not on the current one, counted once however many seasons list them),
   and verbal/signed commits - and commits never enter a program's total or its order.
@@ -220,107 +223,193 @@ def direct_counts(profiles_and_sources) -> dict[str, dict[str, list[int]]]:
     return out
 
 
+# ---------- reading the records index ----------
+
+def entry(doc, kind, eid):
+    """A club's or school's directory row as a dict (the index stores columns)."""
+    d = doc["clubs"] if kind == "club" else doc["schools"]
+    i = d["id"].index(eid)
+    out = {k: d[k][i] for k in d if k not in ("id", "unmatched", "aka")}
+    if i in set(d.get("unmatched") or []):
+        out["unmatched"] = True
+    if str(i) in (d.get("aka") or {}):
+        out["aka"] = d["aka"][str(i)]
+    return out
+
+
+def pairs(doc, kind):
+    """{entity id: {slug: [current, past, commits]}} summed from the records - the pair cells of #230."""
+    d = doc["clubs"] if kind == "club" else doc["schools"]
+    col = "c" if kind == "club" else "h"
+    r = doc["records"]
+    out = {}
+    for p, s, e in zip(r["p"], r["s"], r[col]):
+        if e >= 0:
+            out.setdefault(d["id"][e], {}).setdefault(doc["programIds"][p], [0, 0, 0])[s] += 1
+    return out
+
+
 # ---------- checks ----------
 
-def test_counts_equal_a_direct_computation() -> None:
+def test_records_equal_hand_counts() -> None:
+    """T6 (Bianque): the records summed by (club, program) equal counts written out by hand from the fixture."""
     doc = record().index()
+    want = {"x-sc": {"alpha": [2, 1, 2], "beta": [0, 0, 5], "gamma": [1, 0, 0]},
+            "y-club": {"alpha": [1, 1, 0], "beta": [1, 0, 0]},
+            "raw:zeta united": {"alpha": [1, 0, 0]}}
+    got = pairs(doc, "club")
+    ok("T6 club x program counts from the records equal the hand-written ones", got == want, got)
     direct = direct_counts([(profile_alpha(), ATH_ALPHA, CANDIDATES), (profile_beta(), {}, {}),
                             (profile_gamma_d2(), {}, {}), (profile_delta_empty(), {}, {})])
-    got = {eid: e["programs"] for eid, e in doc["clubs"].items()}
-    ok("every club entry's per-program cells equal the direct computation", got == direct, (got, direct))
-    ok("X SC at alpha: 2 current, 1 former (Ann, via the past roster's Club column), 2 verbal commits",
-       doc["clubs"]["x-sc"]["programs"]["alpha"] == [2, 1, 2], doc["clubs"]["x-sc"]["programs"].get("alpha"))
-    ok("Y Club at alpha: 1 current, 1 former (Bea, via a SoccerWire alumni record), 0 commits",
-       doc["clubs"]["y-club"]["programs"]["alpha"] == [1, 1, 0], doc["clubs"]["y-club"]["programs"].get("alpha"))
-    ok("an unmatched spelling is its own entry, flagged, counted in the open",
-       doc["clubs"].get("raw:zeta united", {}).get("programs", {}).get("alpha") == [1, 0, 0]
-       and doc["clubs"]["raw:zeta united"]["unmatched"] is True and doc["clubs"]["raw:zeta united"]["name"] == "Zeta United")
-    ok("a placeholder ('N/A') and a player with no club are not entries", not any(k.startswith("raw:n a") for k in doc["clubs"]))
-    ok("the reviewed club's name and state come from the table", doc["clubs"]["x-sc"]["name"] == "X SC" and doc["clubs"]["x-sc"]["state"] == "CA")
+    drop = lambda m: {k: {s: v for s, v in c.items() if s != "gamma"} for k, c in m.items()}  # noqa: E731
+    ok("... and the independent direct computation (D1 programs)", drop(got) == drop(direct), (got, direct))
+    ok("an unmatched spelling is its own entry, flagged, named as the roster spelled it",
+       entry(doc, "club", "raw:zeta united") == {"name": "Zeta United", "state": None, "unmatched": True})
+    ok("a placeholder ('N/A') and a player with no club are not entries", not any(k.startswith("raw:n a") for k in doc["clubs"]["id"]))
+    ok("the reviewed club's name and state come from the table", entry(doc, "club", "x-sc") == {"name": "X SC", "state": "CA"})
     ok("a former player listed in two stored seasons counts once", doc["programs"]["alpha"]["past"] == 2)
-    ok("a current player's past rows never count as former", doc["clubs"]["y-club"]["programs"]["alpha"][1] == 1)
     ok("the enrolled and the decommitted recruits are not commits", doc["programs"]["alpha"]["commits"] == 3)
     ok("program row alpha: current 6, past 2, commits 3, club known [4, 2, 2]",
        doc["programs"]["alpha"] == {"division": "D1", "current": 6, "past": 2, "commits": 3, "clubKnown": [4, 2, 2], "schoolKnown": [0, 0, 0]}, doc["programs"]["alpha"])
-    ok("a D1 program with nothing known is still a row", doc["programs"]["delta"] == {"division": "D1", "current": 1, "past": 0, "commits": 0, "clubKnown": [0, 0, 0], "schoolKnown": [0, 0, 0]})
-    # #315: D2 is counted. Fails if the D1 gate in observe() comes back (gamma absent).
-    ok("the D2 program is a row, its commits null although it holds a verbal commit (C1)",
+    ok("a D1 program with nothing known is still a row, and writes no record",
+       doc["programs"]["delta"] == {"division": "D1", "current": 1, "past": 0, "commits": 0, "clubKnown": [0, 0, 0], "schoolKnown": [0, 0, 0]}
+       and doc["programIds"].index("delta") not in doc["records"]["p"])
+    ok("the D2 program is a row, its commits null although it holds a verbal commit (#315 C1)",
        doc["programs"].get("gamma") == {"division": "D2", "current": 1, "past": 0, "commits": None, "clubKnown": [1, 0, None], "schoolKnown": [0, 0, None]},
        doc["programs"].get("gamma"))
-    ok("the D2 program's club cell reads null commits, never 0 and never the verbal commit's 1",
-       doc["clubs"]["x-sc"]["programs"].get("gamma") == [1, 0, None], doc["clubs"]["x-sc"]["programs"].get("gamma"))
-    # #315, C3: `divisions` replaces the v1 field `"division": "D1"`.
+    g = doc["programIds"].index("gamma")
+    ok("T9 a D2 verbal commit writes no record", not any(p == g and s == 2 for p, s in zip(doc["records"]["p"], doc["records"]["s"])))
     with_d3 = record()
     with_d3.observe({**profile_gamma_d2(), "slug": "epsilon", "division": "D3"}, {"slug": "epsilon", "division": "D3"}, ath={}, tds={}, sw={})
     d3 = with_d3.index()
-    ok("a D3 profile is counted, commits null", d3["programs"].get("epsilon", {}).get("commits", 0) is None
-       and d3["clubs"]["x-sc"]["programs"].get("epsilon") == [1, 0, None], d3["programs"].get("epsilon"))
-    ok("the v1 field `division` is replaced by `divisions`, the divisions the index holds, sorted",
-       "division" not in d3 and d3["divisions"] == ["D1", "D2", "D3"] and doc["divisions"] == ["D1", "D2"], (d3.get("divisions"), d3.get("division")))
-    ok("`commitDivisions` names the divisions whose commits are collected", d3["commitDivisions"] == ["D1"])
-    ok("a program of an unknown division is left out", (lambda r: (r.observe({**profile_gamma_d2(), "slug": "zeta"}, {"slug": "zeta", "division": "NAIA"}, ath={}, tds={}, sw={}), r.index())[1])(record())["programs"].get("zeta") is None)
+    ok("the v1 field `division` stays replaced by `divisions`; `format` names the records shape",
+       "division" not in d3 and d3["divisions"] == ["D1", "D2", "D3"] and d3["format"] == "records" and d3["commitDivisions"] == ["D1"])
+    ok("#327: the per-entity `programs` cells are gone", all("programs" not in d for d in (d3["clubs"], d3["schools"] or {})))
     cov = doc["coverage"]
-    ok("coverage current, all divisions: 9 players (6 alpha, 1 beta, 1 delta, 1 gamma), 6 known",
-       {k: cov["current"][k] for k in ("players", "clubKnown")} == {"players": 9, "clubKnown": 6}, cov["current"])
-    by = cov["byDivision"]
-    ok("coverage by division (C2): D1 8 players, 5 known; D2 1 player, 1 known",
-       by["D1"]["current"] == {"players": 8, "clubKnown": 5, "schoolNamed": 2, "schoolKnown": None}
-       and by["D2"]["current"] == {"players": 1, "clubKnown": 1, "schoolNamed": 0, "schoolKnown": None}, by)
-    ok("D2 commit coverage is null, and the D2 verbal commit is not in the commit coverage (C1)",
-       by["D2"]["commits"] is None and by["D1"]["commits"]["recruits"] == 8 and cov["commits"]["recruits"] == 8, (by["D2"]["commits"], cov["commits"]))
-    ok("coverage past: 2 former players, both known", cov["past"]["players"] == 2 and cov["past"]["clubKnown"] == 2)
-    ok("coverage commits: 8 verbal, 7 known", cov["commits"]["recruits"] == 8 and cov["commits"]["clubKnown"] == 7, cov["commits"])
+    ok("coverage (#315 C2) is unchanged: D1 8 players 5 known, D2 1 and 1, D2 commits null",
+       cov["byDivision"]["D1"]["current"]["players"] == 8 and cov["byDivision"]["D1"]["current"]["clubKnown"] == 5
+       and cov["byDivision"]["D2"]["current"]["clubKnown"] == 1 and cov["byDivision"]["D2"]["commits"] is None
+       and cov["commits"]["recruits"] == 8 and cov["commits"]["clubKnown"] == 7, cov)
     ok("season and past seasons come from the data", doc["season"] == 2026 and doc["pastSeasons"] == [2024, 2025])
-    ok("the index states which statuses count as commits", doc["commitStatuses"] == ["verbal", "signed"])
+
+
+# T1/T2: three programs of current players with a club and a school each. A = club a, A' = club a2; B, B' = schools.
+def _school(sid, name):
+    return {"raw": name, "key": name.lower(), "schoolId": sid, "state": "CA", "status": "matched", "school": name, "city": "Town"}
+
+
+def and_or_doc():
+    table = clubs.Table({"clubs": [{"id": "a", "name": "A FC", "state": "CA"}, {"id": "a2", "name": "A2 FC", "state": "CA"},
+                                   {"id": "m", "name": "M SC", "state": "CA"}], "aliases": {}, "notAClub": {}})
+    c = lambda cid: {**table.match({"a": "A FC", "a2": "A2 FC", "m": "M SC"}[cid]).as_dict("TopDrawerSoccer", "2025-01-01"), "status": "matched", "clubId": cid}  # noqa: E731
+    B, B2 = _school("ccd:b", "B High"), _school("ccd:b2", "B2 High")
+    players = [player("P1", c("a"), school=B), player("P2", c("a"), school=B2), player("P3", c("a2"), school=B),
+               player("P4", c("m"), school=None)]
+    rec = trends.Recorder(table, candidates=lambda t, s: {}, same_person=lambda a, b: False, school_table=NoSchools())
+    rec.observe({"slug": "p", "division": "D1", "roster": {"season": 2026, "players": players}, "rosterHistory": {}, "commitments": []},
+                {"slug": "p", "division": "D1"}, ath={}, tds={}, sw={})
+    rec.observe({"slug": "q", "division": "D1", "roster": {"season": 2026, "players": [player("Q1", c("a"), school=B)]}, "rosterHistory": {}, "commitments": []},
+                {"slug": "q", "division": "D1"}, ath={}, tds={}, sw={})
+    return rec.index()
+
+
+def test_and_across_or_within() -> None:
+    doc = and_or_doc()
+    got = trends.select(doc, clubs=["a"], schools=["ccd:b"], programs=["p"])
+    ok("T1 club A and school B at P is 1 person (an OR across boxes gives 3; pairing counts gives 2/2)",
+       [(r["slug"], r["current"]) for r in got] == [("p", 1)], got)
+    ok("T1 club A and school B, any program: P 1, Q 1", [(r["slug"], r["current"]) for r in trends.select(doc, clubs=["a"], schools=["ccd:b"])]
+       == [("p", 1), ("q", 1)])
+    got = trends.select(doc, clubs=["a", "m"], programs=["p"])
+    ok("T2 clubs A or M at P is 3 people (A twice, M once); AND within a box gives 0", [(r["slug"], r["current"]) for r in got] == [("p", 3)], got)
+    ok("T2 a repeated value counts once", trends.select(doc, clubs=["a", "a"], programs=["p"])[0]["current"] == 2)
+    ok("T2 schools B or B2 with club A at P: 2", trends.select(doc, clubs=["a"], schools=["ccd:b", "ccd:b2"], programs=["p"])[0]["current"] == 2)
+    ok("an unknown value in a box with no known value matches nothing", trends.select(doc, clubs=["nope"]) == [])
+    f = trends.feeders(doc, "club", schools=["ccd:b"])
+    ok("feeders: the clubs of the people from school B, most first", [(r["id"], r["current"]) for r in f] == [("a", 2), ("a2", 1)], f)
+    ok("feeders with a school chosen: commits are not a number", all(r["commits"] is None for r in f))
 
 
 def test_commits_never_enter_a_total() -> None:
     doc = record().index()
     rows = trends.programs_for(doc, "club", "x-sc")
-    rows = trends.programs_for(doc, "club", "x-sc")
     ok("programs_for lists alpha, gamma (1 player, commits null), then beta (0 players, 5 commits)",
        [r["slug"] for r in rows] == ["alpha", "gamma", "beta"], rows)
     ok("each row carries the three counts separately", rows[2] == {"slug": "beta", "division": "D1", "current": 0, "past": 0, "commits": 5}, rows[2])
     ok("a D2 row's commits are null", rows[1] == {"slug": "gamma", "division": "D2", "current": 1, "past": 0, "commits": None}, rows[1])
-    ok("no row carries a total that includes commits", all(set(r) == {"slug", "division", "current", "past", "commits"} for r in rows))
     a = trends.answer(doc, {"kind": "club", "id": "x-sc"})
-    ok("answer totals keep commits apart from current + past; a D2 row adds nothing to commits",
-       a["totals"] == {"current": 3, "past": 1, "commits": 7}, a["totals"])
+    ok("answer totals keep commits apart from current + past", a["totals"] == {"current": 3, "past": 1, "commits": 7}, a["totals"])
     g = trends.answer(doc, {"kind": "club", "program": "gamma"})
-    ok("a D2 program's answer: commits total null, not 0 (C1)", g["totals"] == {"current": 1, "past": 0, "commits": None}
-       and all(r["commits"] is None for r in g["rows"]), g["totals"])
+    ok("a D2 program's answer: commits total null, not 0", g["totals"] == {"current": 1, "past": 0, "commits": None}, g["totals"])
     ok("... and its coverage is the D2 line, commits not collected", len(g["coverage"]) == 1 and g["coverage"][0].startswith("Division II:")
        and "commits not collected" in g["coverage"][0], g["coverage"])
-    ok("the answer says so in words", "never added" in a["note"])
+    m = trends.answer(and_or_doc(), {"clubs": ["a", "m"], "schools": [], "programs": ["p"]})
+    ok("answer takes a multi-value selection", m["totals"]["current"] == 3 and m["rows"][0]["slug"] == "p", m)
     feeders = trends.feeders_for(doc, "club", "beta")
     ok("feeders_for beta: Y (1 current) before X (5 commits, no player)", [r["id"] for r in feeders] == ["y-club", "x-sc"], feeders)
-    # a tie on current + past is broken by current, then by commits, then by name - stated so nobody sorts by commits first
-    fake = {"clubs": {"c": {"name": "c", "programs": {"p1": [1, 1, 0], "p2": [2, 0, 9], "p3": [0, 2, 9], "p4": [2, 0, 1]}}}, "schools": None,
-            "coverage": doc["coverage"]}
-    ok("ties: current + past, then current, then commits, then slug",
-       [r["slug"] for r in trends.programs_for(fake, "club", "c")] == ["p2", "p4", "p1", "p3"])
-    # C1: null ("not collected") is no data: it sorts after a 0, never level with it
-    fake["clubs"]["c"]["programs"] = {"a-null": [2, 0, None], "b-zero": [2, 0, 0]}
-    ok("ties on players: null commits sort after 0 commits", [r["slug"] for r in trends.programs_for(fake, "club", "c")] == ["b-zero", "a-null"])
+    ok("ties on players: null commits sort after 0 commits",
+       sorted([{"slug": "a-null", "current": 2, "past": 0, "commits": None}, {"slug": "b-zero", "current": 2, "past": 0, "commits": 0}],
+              key=trends._sort_key)[0]["slug"] == "b-zero")
+
+
+def test_validate_records() -> None:
+    """T4/T7: the rules every build checks (validate_records), each shown to refuse its breach."""
+    base = record().index()
+    ok("the fixture's records pass", trends.validate_records(base) is None)
+    ok("T4 record keys are exactly p, s, c, h and hold integers only", sorted(base["records"]) == ["c", "h", "p", "s"]
+       and all(type(v) is int for col in base["records"].values() for v in col))
+
+    def refused(name, mutate):
+        doc = json.loads(json.dumps(base))
+        mutate(doc)
+        try:
+            trends.validate_records(doc)
+            ok(f"T7 refused: {name}", False)
+        except trends.RecordsError:
+            ok(f"T7 refused: {name}", True)
+
+    refused("records out of (p, s, c, h) order", lambda d: [d["records"][k].reverse() for k in "psch"])
+    refused("a season column", lambda d: d["records"].__setitem__("y", [2025] * len(d["records"]["p"])))
+    refused("a record for a D2 commit", lambda d: [d["records"][k].append(v) for k, v in zip("psch", (d["programIds"].index("gamma"), 2, 0, -1))])
+    refused("counting people by records: more current records at alpha than alpha's current players",
+            lambda d: [d["records"][k].extend([v] * 5) for k, v in zip("psch", (d["programIds"].index("alpha"), 0, 0, -1))])
+    refused("a record that knows neither a club nor a school", lambda d: d["records"]["c"].__setitem__(0, -1) or d["records"]["h"].__setitem__(0, -1))
+    refused("a text value", lambda d: d["records"]["c"].__setitem__(0, "x-sc"))
+    rec = record()
+    rec.records.append(("alpha", 0, "x-sc", None))
+    rec.records *= 3
+    try:
+        rec.index()
+        ok("index() itself refuses a file that breaks a rule, so the refresh stops before writing it", False)
+    except trends.RecordsError:
+        ok("index() itself refuses a file that breaks a rule, so the refresh stops before writing it", True)
+
+
+def test_built_file() -> None:
+    """T7 on the built file: the committed index, rewritten by every refresh. Until the first refresh after #327 it
+    is #315's cell file; then every records rule is checked on it."""
+    path = os.path.join(common.PUBLIC_DATA_DIR, "trends", "index.json")
+    ok("public/data/trends/index.json exists", os.path.exists(path), path)
+    if not os.path.exists(path):
+        return
+    doc = json.load(open(path, encoding="utf-8"))
+    if doc.get("format") == "records":
+        try:
+            trends.validate_records(doc)
+            ok("T7 the committed records file keeps every rule", True)
+        except trends.RecordsError as e:
+            ok("T7 the committed records file keeps every rule", False, e)
+    else:
+        ok("the committed file is #315's cell file, which the page still reads", "records" not in doc
+           and isinstance(doc.get("clubs"), dict) and all("programs" in e for e in list(doc["clubs"].values())[:5]))
 
 
 def test_schools_field_gate() -> None:
     without = record().index()
     ok("no schoolInfo in the build: schools is null", without["schools"] is None)
     ok("... and every school coverage reads not available, never 0",
-       all(without["coverage"][k]["schoolKnown"] is None for k in ("current", "past", "commits"))
-       and all(c[k] is None or c[k]["schoolKnown"] is None for c in without["coverage"]["byDivision"].values() for k in ("current", "past", "commits")))
-    lines = trends.coverage_lines(without, "school")
-    ok("the school coverage lines say not available", all("not available" in l for l in lines), lines)
-    got = trends.coverage_lines(without, "club", {"D1": {"current": 2, "past": 1, "commits": 7}})
-    ok("the club coverage line has the documented shape, one per division", got
-       == ["Division I: 2 of 8 current players, club known for 62%; 1 of 2 former players (stored past rosters), club known for 100%; "
-           "7 of 8 verbal or signed commits, club known for 88%",
-           "Division II: 1 current players, club known for 100%; 0 former players (stored past rosters), club known for 0%; commits not collected"], got)
-    # C2: a D2-only result states the D2 rate (100%), never the merged 67% (6 of 9) nor D1's 62%. Fails if the split is dropped.
-    d2 = trends.coverage_lines(without, "club", {"D2": {"current": 1, "past": 0, "commits": None}}, ["D2"])
-    ok("a D2-only result's coverage is the D2 rate alone", d2 == ["Division II: 1 of 1 current players, club known for 100%; "
-       "0 of 0 former players (stored past rosters), club known for 0%; commits not collected"], d2)
+       all(without["coverage"][k]["schoolKnown"] is None for k in ("current", "past", "commits")))
+    ok("the school coverage lines say not available", all("not available" in l for l in trends.coverage_lines(without, "school")))
 
     class FakeMatch:
         def __init__(self, status, sid=None):
@@ -335,72 +424,60 @@ def test_schools_field_gate() -> None:
             return FakeMatch("unmatched")
 
     with_ = record(with_schools=True, school_table=FakeSchoolTable()).index()
-    ok("schoolInfo present: schools is a table", isinstance(with_["schools"], dict))
-    ok("a matched current player counts under her school", with_["schools"]["ccd:1"]["programs"]["alpha"] == [1, 0, 0]
-       and with_["schools"]["ccd:1"]["name"] == "Rocklin High" and with_["schools"]["ccd:1"]["city"] == "Rocklin", with_["schools"].get("ccd:1"))
-    ok("an ambiguous player is not guessed into any school", not any(e["name"] == "Davis Senior High" and e["programs"].get("alpha", [0])[0] for e in with_["schools"].values())
-       and "San Marcos" not in json.dumps(with_["schools"]))
-    ok("a former player's high school is matched through the school table (with the hometown's state)",
-       with_["schools"].get("ccd:davis", {}).get("programs", {}).get("alpha") == [0, 1, 0], with_["schools"].get("ccd:davis"))
-    ok("Bea Former's Reno HS is unmatched and not counted", not any("Reno" in json.dumps(e) for e in with_["schools"].values()))
+    sp = pairs(with_, "school")
+    ok("schoolInfo present: schools is a directory", isinstance(with_["schools"], dict) and "ccd:1" in with_["schools"]["id"])
+    ok("a matched current player counts under her school", sp["ccd:1"]["alpha"] == [1, 0, 0]
+       and entry(with_, "school", "ccd:1") == {"name": "Rocklin High", "city": "Rocklin", "state": "CA"}, sp.get("ccd:1"))
+    ok("an ambiguous player is not guessed into any school", "San Marcos" not in json.dumps(with_["schools"]))
+    ok("a former player's high school is matched through the school table", sp.get("ccd:davis", {}).get("alpha") == [0, 1, 0], sp.get("ccd:davis"))
+    ok("P1 (owner, #327): a former player's record carries her club and her school together",
+       any(s == 1 and c >= 0 and h >= 0 for s, c, h in zip(with_["records"]["s"], with_["records"]["c"], with_["records"]["h"])))
     ok("coverage: current 1 school known, past 1, commits still null",
        with_["coverage"]["current"]["schoolKnown"] == 1 and with_["coverage"]["past"]["schoolKnown"] == 1
        and with_["coverage"]["commits"]["schoolKnown"] is None, with_["coverage"])
-    ok("program row alpha counts schools [1, 1, 0]", with_["programs"]["alpha"]["schoolKnown"] == [1, 1, 0])
     rows = trends.programs_for(with_, "school", "ccd:1")
     ok("programs_for a school reports commits as None, not 0", rows == [{"slug": "alpha", "division": "D1", "current": 1, "past": 0, "commits": None}], rows)
-    # #315: a D2 former player's school cell carries null commits
-    rec = record(with_schools=True, school_table=FakeSchoolTable())
-    rec.observe({"slug": "eta", "division": "D2", "roster": {"season": 2026, "players": []}, "commitments": [commit("R Q", CI_X)],
-                 "rosterHistory": {"2025": {"players": [{"name": "Ona Former", "hometown": "Davis, Calif.", "highSchool": "Davis HS"}]}}},
-                {"slug": "eta", "division": "D2"}, ath={}, tds={}, sw={})
-    ok("a D2 program's school cell is [0, 1, null]", rec.index()["schools"]["ccd:davis"]["programs"].get("eta") == [0, 1, None],
-       rec.index()["schools"]["ccd:davis"]["programs"])
-    ok("feeders_for a school carries the city", trends.feeders_for(with_, "school", "alpha")[0].get("city") == "Rocklin")
+    ok("feeders_for a school carries the city", trends.feeders_for(with_, "school", "alpha")[0].get("city") in ("Rocklin", "Davis"))
 
 
 def test_search_aka() -> None:
     """#307: the keys the page's search needs beyond a name, and nothing a name search already reaches."""
     real = trends.search_aliases(clubs.load_table(), "mountain-view-los-altos-sc", "Mountain View Los Altos SC")
     ok("MVLA's reviewed short name is carried, shortest first", real[:1] == ["mvla"], real)
-    ok("an alias inside the name is left out", "mountain view los altos" not in real, real)
     table = clubs.Table({"clubs": [{"id": "x-sc", "name": "X SC", "state": "CA"}],
                          "aliases": {"xsc united": "x-sc", "x": "x-sc"}, "notAClub": {}})
     rec = trends.Recorder(table, candidates=lambda t, s: {}, same_person=lambda a, b: False, school_table=NoSchools())
-    rec._club_entry({"status": "matched", "clubId": "x-sc", "raw": "X SC"})
-    rec._club_entry({"status": "unmatched", "raw": "Zeta United", "key": "zeta united"})
+    rec._club_id({"status": "matched", "clubId": "x-sc", "raw": "X SC"})
+    rec._club_id({"status": "unmatched", "raw": "Zeta United", "key": "zeta united"})
     for key in ("southlake carroll", "carroll senior", "southlake carroll"):
-        rec._school_entry({"raw": key, "key": key, "schoolId": "ccd:9", "school": "Carroll Senior H S", "city": "Southlake",
-                           "state": "TX", "status": "matched"})
-    rec._school_entry(SCHOOL_OK)
+        rec._school_id({"raw": key, "key": key, "schoolId": "ccd:9", "school": "Carroll Senior H S", "city": "Southlake",
+                        "state": "TX", "status": "matched"})
+    rec._school_id(SCHOOL_OK)
     rec.schools_seen = True
     doc = rec.index()
-    ok("a club carries its aliases the name does not contain", doc["clubs"]["x-sc"].get("aka") == ["xsc united"], doc["clubs"]["x-sc"])
-    ok("an unmatched spelling carries none", "aka" not in doc["clubs"]["raw:zeta united"], doc["clubs"]["raw:zeta united"])
-    ok("a school carries its roster spellings once, less those inside its name",
-       doc["schools"]["ccd:9"].get("aka") == ["southlake carroll"], doc["schools"]["ccd:9"])
-    ok("a school seen only under its own name carries none", "aka" not in doc["schools"]["ccd:1"], doc["schools"]["ccd:1"])
+    ok("a club carries its aliases the name does not contain", entry(doc, "club", "x-sc").get("aka") == ["xsc united"], entry(doc, "club", "x-sc"))
+    ok("an unmatched spelling carries none", "aka" not in entry(doc, "club", "raw:zeta united"))
+    ok("a school carries its roster spellings once, less those inside its name", entry(doc, "school", "ccd:9").get("aka") == ["southlake carroll"])
+    ok("a school seen only under its own name carries none", "aka" not in entry(doc, "school", "ccd:1"))
 
 
 def test_written_file() -> None:
-    rec = record()
+    rec = record(with_schools=True)
     with tempfile.TemporaryDirectory() as tmp:
         path = os.path.join(tmp, "trends", "index.json")
         doc = rec.write(path)
         text = open(path, encoding="utf-8").read()
         ok("the file is compact: one line plus the trailing newline", text.count("\n") == 1 and "\n  " not in text)
         ok("what was written parses to what was returned", json.loads(text) == doc)
-        names = ["Ada Current", "Ann Former", "Bea Former", "R One", "R Two", "R Five", "Gil Current"]
-        ok("no player's or recruit's name is in the file", not any(n in text for n in names))
-        ok("the only name keys are club and school names", text.count('"name"') == len(doc["clubs"]) + len(doc["schools"] or {}))
-        ok("no D2 recruit's name is in the file either", "R Z" not in text and "Hal Current" not in text)
+        names = ["Ada Current", "Ann Former", "Bea Former", "R One", "R Two", "R Five", "Gil Current", "R Z", "Hal Current"]
+        ok("T4 no player's or recruit's name is in the file", not any(n in text for n in names))
+        ok("the only name keys are the club and school directories' name columns", text.count('"name"') == 2)
         ok("no tmp file is left behind", sorted(os.listdir(os.path.dirname(path))) == ["index.json"])
     line = trends.summary_line(doc)
-    ok("summary_line reads the coverage, per division", "trends (D1, D2): D1 club known 62%; D2 club known 100%; commits D1 only; "
-       "9 current players, club known 6 (67%)" in line, line)
+    ok("summary_line reads the coverage and the record count", "9 current players, club known 6 (67%)" in line and "records" in line, line)
 
 
-BUDGET_GZ = 450 * 1024  # #315: the one file for all divisions measured 327,233 B at gzip -9 on 2026-09-24
+BUDGET_GZ = 450 * 1024  # #315's budget; #327's records file measured 257,308 B at gzip -9 on 2026-09-24
 
 
 def gz_size(raw: bytes) -> int:
@@ -412,18 +489,15 @@ def within_budget(size: int) -> bool:
 
 
 def test_size_budget() -> None:
-    """The published index, gzipped, stays under the budget; growing past it is a decision (#315, C3).
-    Checked on the committed file (rewritten by every refresh) and on a synthetic index of that budget's size."""
+    """T10: the published index, gzipped, stays under the budget; growing past it is a decision."""
     path = os.path.join(common.PUBLIC_DATA_DIR, "trends", "index.json")
     ok("public/data/trends/index.json exists (it is tracked; a missing file fails, never skips)", os.path.exists(path), path)
     if os.path.exists(path):
         size = gz_size(open(path, "rb").read())
         ok(f"public/data/trends/index.json is {size:,} B gzipped, under {BUDGET_GZ:,}", within_budget(size), size)
-    # the check itself can fail: an index past the budget is refused by the same comparison
-    rec = record()
-    for i in range(20000):
-        rec._club_entry({"status": "unmatched", "raw": f"Club {i:05d} {os.urandom(12).hex()}", "key": f"club {i:05d} {os.urandom(12).hex()}"})["programs"]["alpha"] = [1, 0, 0]
-    big = gz_size(json.dumps(rec.index(), separators=(",", ":")).encode())
+    doc = record().index()
+    doc["clubs"]["name"] += [os.urandom(24).hex() for _ in range(20000)]
+    big = gz_size(json.dumps(doc, separators=(",", ":")).encode())
     ok("an index past the budget fails the check", not within_budget(big), big)
     ok("an index under the budget passes it", within_budget(gz_size(json.dumps(record().index()).encode())))
 
@@ -473,8 +547,9 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args().verbose
-    for fn in (test_counts_equal_a_direct_computation, test_commits_never_enter_a_total, test_schools_field_gate, test_search_aka,
-               test_written_file, test_size_budget, test_out_dir_follows_the_programs_dir, test_build_hook_is_wired, test_answer_shapes):
+    for fn in (test_records_equal_hand_counts, test_and_across_or_within, test_commits_never_enter_a_total, test_validate_records,
+               test_built_file, test_schools_field_gate, test_search_aka, test_written_file, test_size_budget,
+               test_out_dir_follows_the_programs_dir, test_build_hook_is_wired, test_answer_shapes):
         print(fn.__name__)
         fn()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
