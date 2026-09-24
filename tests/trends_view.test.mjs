@@ -128,7 +128,7 @@ function loadPage(overrides = {}) {
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'public/index.html: could not find the inline <script>');
   const src = lines.slice(a + 1, b).join('\n')
-    + '\n;Object.assign(globalThis, { S, route, renderTrends, renderProfile, renderList, loadIndex, trendsProgramsFor, trendsFeedersFor, trendsCoverageLines, trendsRosterNames, listTabs });\n';
+    + '\n;Object.assign(globalThis, { S, route, renderTrends, renderProfile, renderList, loadIndex, trendsProgramsFor, trendsFeedersFor, trendsCoverageLines, trendsRosterNames, listTabs, trendsKeyStep });\n';
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return { sandbox, app: () => bySelector('#app').innerHTML, tab: () => bySelector('#tab').innerHTML };
@@ -174,8 +174,8 @@ test('#/trends: the picker, the how-to card and the coverage', async () => {
   await new Promise(r => setTimeout(r, 20));
   const html = page.app();
   assert.ok(html.includes('class="view-tab active" role="tab" aria-selected="true">Clubs &amp; schools</a>'), 'the Clubs & schools tab is active');
-  assert.ok(html.includes('id="trendsQ"') && html.includes('id="trendsProgram"'), 'the picker has a name search and a program select');
-  assert.ok(html.includes(`<option value="${A.slug}">`) && !html.includes('value="gamma"'), 'the select lists the indexed programs');
+  assert.ok(html.includes('id="trendsQ"') && html.includes('id="trendsProgram"'), 'the picker has a name search and a program search');
+  assert.ok(html.includes(`class="pill trend-hit" href="#/trends/program/${A.slug}"`) && !html.includes('program/gamma'), 'the program box offers the indexed programs');
   assert.ok(html.includes('href="#/trends/club/mvla"') && html.includes('Mountain View Los Altos SC'), 'the top clubs are offered as pills');
   assert.ok(!html.includes('href="#/trends/club/raw%3Azeta%20united"'), 'an unmatched spelling is not in the default top list');
   assert.ok(html.includes('100 current players; club known for 31%'), 'the coverage is stated up front');
@@ -240,7 +240,7 @@ test('#/trends/program/<slug>: the clubs feeding a program, and high schools onl
   assert.ok(html.includes('unmatched spelling'), 'the unmatched entry is badged');
   assert.ok(html.includes('27 current players; club known for 19 (70%)') && html.includes('29 former players; club known for 1 (3%)') && html.includes('11 verbal or signed commits; club known for 11 (100%)'), 'per-program coverage');
   assert.ok(html.includes('High-school results are not available yet'), 'schools absent: said so');
-  assert.ok(html.includes(`<option value="${A.slug}" selected>`), 'the select shows the chosen program');
+  assert.ok(html.includes(`class="pill trend-hit active" href="#/trends/program/${A.slug}"`), 'the program box marks the chosen program');
   page = withIndex(fixture({ schools: true }));
   page.sandbox.location.hash = `#/trends/program/${A.slug}`;
   await page.sandbox.route();
@@ -296,4 +296,80 @@ test('the list view offers the tab; the roster tab links a reviewed club to tren
   await p3.sandbox.route();
   await new Promise(r => setTimeout(r, 30));
   assert.ok(!p3.tab().includes('#/trends/'), 'a D2 roster carries no trends link');
+});
+
+/* ---------- #307: type-ahead search by alias, program search, and a header that agrees with the search ---------- */
+// The aka list is what trends.search_aliases writes for MVLA from data/clubs.json (tests/trends_test.py checks that side).
+const D2 = INDEX.programs.find(p => p.division === 'D2' && p.shortName);
+function searchFixture() {
+  const doc = fixture({ schools: true });
+  doc.clubs.mvla.aka = ['mvla', 'mtn view los altos sc', 'mountain view los altos sc mvla'];
+  doc.schools['ccd:2'] = { name: 'Carroll Senior H S', city: 'Southlake', state: 'TX', aka: ['southlake carroll'], programs: { [A.slug]: [1, 0, 0] } };
+  doc.schools['ccd:3'] = { name: 'Decatur High School', city: 'Decatur', state: 'AL', programs: { [A.slug]: [1, 0, 0] } };
+  doc.schools['ccd:4'] = { name: 'Decatur High School', city: 'Decatur', state: 'GA', programs: { [B.slug]: [1, 0, 0] } };
+  for (const s of ['stanford', 'north-carolina', 'unc-wilmington', 'louisville', D2.slug]) doc.programs[s] = { current: 3, past: 1, commits: 0, clubKnown: [1, 0, 0], schoolKnown: [0, 0, 0] };
+  doc.programs.louisville.current = 9; // more players than Stanford: only the exact nickname can put Stanford first for "cardinal"
+  return doc;
+}
+async function typeInto(hash, box, hits, text) {
+  const page = withIndex(searchFixture());
+  page.sandbox.location.hash = hash;
+  await page.sandbox.route();
+  await new Promise(r => setTimeout(r, 20));
+  const input = page.sandbox.document.querySelector(box);
+  input.value = text; input.oninput();
+  return { hits: page.sandbox.document.querySelector(hits).innerHTML, header: page.app().split('class="content-body"')[0] };
+}
+const clubHits = text => typeInto('#/trends', '#trendsQ', '#trendsHits', text).then(r => r.hits);
+const progHits = text => typeInto('#/trends', '#trendsProgram', '#trendsProgHits', text).then(r => r.hits);
+
+test('#307 club search: "mvla", "MVLA" and "mountain view" all find Mountain View Los Altos SC; a school by its name; unknown says no match', async () => {
+  for (const q of ['mvla', 'MVLA', 'mountain view', 'Mtn View']) {
+    const h = await clubHits(q);
+    assert.ok(h.includes('href="#/trends/club/mvla"') && h.includes('>Mountain View Los Altos SC<'), `"${q}" finds the canonical club`);
+    assert.ok(!h.includes('San Diego Surf'), `"${q}" finds only that club`);
+  }
+  assert.ok((await clubHits('MVLA')).includes('also known as MVLA'), 'an alias hit says which alias it matched, a short name in capitals');
+  assert.ok(!(await clubHits('mountain view')).includes('also known as'), 'a hit on the name itself carries no alias line');
+  const hs = await clubHits('rocklin');
+  assert.ok(hs.includes('href="#/trends/school/ccd%3A1"') && hs.includes('Rocklin High'), 'a high school is found by its name');
+  const carroll = await clubHits('Southlake Carroll');
+  assert.ok(carroll.includes('href="#/trends/school/ccd%3A2"') && carroll.includes('>Carroll Senior H S<') && carroll.includes('also known as Southlake Carroll'),
+    'a roster spelling finds the school under its NCES name, saying which spelling matched');
+  const dec = await clubHits('decatur high');
+  assert.ok(dec.includes('Decatur, AL') && dec.includes('Decatur, GA') && dec.includes('ccd%3A3') && dec.includes('ccd%3A4'), 'two same-name schools are both listed, told apart by city and state');
+  const none = await clubHits('zzqx united');
+  assert.ok(none.includes('No club or high school in the index matches “zzqx united”.') && !none.includes('trend-hit'), 'an unknown string shows the no-match message');
+});
+
+test('#307 header: a search that finds nothing names the selection the header and the card still show', async () => {
+  const r = await typeInto('#/trends/club/surf', '#trendsQ', '#trendsHits', 'zzqx');
+  assert.ok(r.header.includes('San Diego Surf ·'), 'the header names the selected club');
+  assert.ok(r.hits.includes('No club or high school in the index matches “zzqx”. Still showing San Diego Surf below'), 'the no-match line names the same selection, so the two agree');
+  const none = await typeInto('#/trends', '#trendsQ', '#trendsHits', 'zzqx');
+  assert.ok(!none.hits.includes('Still showing'), 'with nothing selected, no selection is claimed');
+  const p = await typeInto('#/trends/program/stanford', '#trendsProgram', '#trendsProgHits', 'zzqx');
+  assert.ok(p.header.includes('Stanford ·') && p.hits.includes('No program in the index matches “zzqx”. Still showing Stanford below'), 'the program box names the selected program too');
+});
+
+test('#307 program search: name, nickname, short name, division line; arrow keys and Enter', async () => {
+  assert.ok((await progHits('stanford')).startsWith('<a class="pill trend-hit" href="#/trends/program/stanford">Stanford<'), '"stanford" finds Stanford first');
+  const card = await progHits('cardinal');
+  assert.ok(card.startsWith('<a class="pill trend-hit" href="#/trends/program/stanford">') && card.includes('· Cardinal</span>'), '"cardinal" finds Stanford first, by its exact nickname, and says so');
+  assert.ok(card.includes('href="#/trends/program/louisville"') && !card.includes('program/north-carolina'), 'and only nickname matches');
+  assert.ok((await progHits('UNC Wil')).startsWith('<a class="pill trend-hit" href="#/trends/program/unc-wilmington">'), '"UNC Wil" finds UNC Wilmington by its short name');
+  assert.ok((await progHits('north carolina')).includes('href="#/trends/program/north-carolina"'), '"north carolina" finds North Carolina');
+  const d2 = await progHits(D2.shortName);
+  assert.ok(d2.includes(`href="#/trends/program/${D2.slug}"`) && d2.includes('<span class="div-tag" title="Division II">D2</span>'), 'a D2 program shows its division in the results');
+  assert.ok((await progHits('zzqx')).includes('No program in the index matches “zzqx”.'), 'an unknown program says no match');
+  // keyboard: the step function the keydown handler runs (the handler itself is read in the PR; see the PR body)
+  const sb = withIndex(searchFixture()).sandbox;
+  const k = (at, key, n) => plain(sb.trendsKeyStep(at, key, n));
+  assert.deepEqual(k(-1, 'ArrowDown', 3), { at: 0 }, 'ArrowDown from the box marks the first hit');
+  assert.deepEqual(k(2, 'ArrowDown', 3), { at: 0 }, 'ArrowDown wraps');
+  assert.deepEqual(k(-1, 'ArrowUp', 3), { at: 2 }, 'ArrowUp from the box marks the last hit');
+  assert.deepEqual(k(1, 'Enter', 3), { at: 1, go: 1 }, 'Enter opens the marked hit');
+  assert.deepEqual(k(-1, 'Enter', 3), { at: -1, go: 0 }, 'Enter with none marked opens the first');
+  assert.deepEqual(k(-1, 'Enter', 0), { at: -1 }, 'Enter with no hits does nothing');
+  assert.deepEqual(k(1, 'a', 3), { at: 1 }, 'other keys leave the mark alone');
 });
