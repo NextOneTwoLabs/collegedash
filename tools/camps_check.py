@@ -548,6 +548,14 @@ def extract_snapshot(spec: dict) -> dict:
 
 
 def main(argv=None) -> int:
+    # Issue #326: fixture names carry characters a cp1252 Windows console cannot encode ('�' in
+    # a stored camp name); without PYTHONIOENCODING=utf-8 the first such print killed the run.
+    # Escape instead, as .github/scripts/run_suite.py does for its own output.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="backslashreplace")
+        except (AttributeError, ValueError, OSError):
+            pass
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--slug", help="comma-separated slugs (default: every onboarded program)")
     ap.add_argument("--min-found", type=int, default=0, help="sweep: exit 1 when fewer programs get a camps link")

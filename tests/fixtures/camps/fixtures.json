@@ -794,6 +794,26 @@
    "count": 0
   },
   {
+   "file": "extract/synth-allsport-mens-section.html",
+   "pageUrl": "https://www.example-athletics.test/summer-camps",
+   "title": "Example Summer Camps",
+   "pageSoccer": false,
+   "_note": "#326 item 2, GUARD: the rows name no sport or gender; only the section heading does. A women's soccer section is a row soccer signal, a men's soccer section is not. Fails (2 rows) if _row_names_soccer counts a men's soccer section.",
+   "count": 1,
+   "expect": [{"name": "Summer Prospect Camp", "startDate": "2027-06-05"}],
+   "reject": [{"name": "Summer Showcase Camp"}]
+  },
+  {
+   "file": "extract/synth-allsport-register-url.html",
+   "pageUrl": "https://www.example-athletics.test/sports-camps",
+   "title": "Example Sports Camps",
+   "pageSoccer": false,
+   "_note": "#326 item 2, GUARD: session blocks whose only soccer signal is their own register URL (/womens-soccer/). Fails (0 rows) if _row_names_soccer ignores registerUrl.",
+   "count": 1,
+   "expect": [{"name": "Summer Elite Camp", "startDate": "2027-07-10"}],
+   "reject": [{"name": "Summer Skills Camp"}]
+  },
+  {
    "file": "extract/synth-soccer-page-table.html",
    "pageUrl": "https://www.example-athletics.test/womens-soccer-camps",
    "title": "Women's Soccer Camps",
