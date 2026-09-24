@@ -192,8 +192,9 @@ def test_summary_goes_to_the_step_summary():
         old = os.environ.get("GITHUB_STEP_SUMMARY")
         os.environ["GITHUB_STEP_SUMMARY"] = path
         try:
-            collegedash.write_allsport_shadow(["camps all-sport shadow (#326 ...): counts", "example-01 | golf | +1 rows | X 2027-07-10"])
-            collegedash.write_allsport_shadow(None)
+            wrote = collegedash.write_allsport_shadow(
+                lambda: ["camps all-sport shadow (#326 ...): counts", "example-01 | golf | +1 rows | X 2027-07-10"])
+            quiet = collegedash.write_allsport_shadow(lambda: None)
         finally:
             if old is None:
                 os.environ.pop("GITHUB_STEP_SUMMARY", None)
@@ -201,7 +202,44 @@ def test_summary_goes_to_the_step_summary():
                 os.environ["GITHUB_STEP_SUMMARY"] = old
         text = open(path, encoding="utf-8").read()
     ok("step Summary gets its own block with the counts and the page lines",
-       text.startswith("## Camps all-sport shadow (#326)") and "counts" in text and "example-01 | golf" in text, text[:200])
+       wrote and quiet and text.startswith("## Camps all-sport shadow (#326)") and "counts" in text
+       and "example-01 | golf" in text, text[:200])
+
+
+def test_report_write_never_crashes_the_refresh():
+    # Bianque, PR #340: building or writing the report runs before build() and report_refresh(); an
+    # error there must be logged and counted, never raised (a raise marks the whole refresh crashed)
+    import tempfile
+    import collegedash
+    before = collegedash.SHADOW_REPORT_FAILURES
+
+    def bad_summary():
+        raise ValueError("summary boom")
+    raised = []
+    with tempfile.TemporaryDirectory() as d:
+        old = os.environ.get("GITHUB_STEP_SUMMARY")
+        os.environ["GITHUB_STEP_SUMMARY"] = d  # a directory: open(..., "a") raises OSError
+        try:
+            for fn in (bad_summary, lambda: ["camps all-sport shadow (#326 ...): counts"]):
+                try:
+                    got = collegedash.write_allsport_shadow(fn)
+                    raised.append(("ok", got))
+                except Exception as e:  # noqa: BLE001
+                    raised.append(("raised", type(e).__name__))
+        finally:
+            if old is None:
+                os.environ.pop("GITHUB_STEP_SUMMARY", None)
+            else:
+                os.environ["GITHUB_STEP_SUMMARY"] = old
+    ok("a failing summary and an unwritable step Summary are both swallowed, returning False",
+       raised == [("ok", False), ("ok", False)], raised)
+    ok("both failures are counted", collegedash.SHADOW_REPORT_FAILURES - before == 2,
+       collegedash.SHADOW_REPORT_FAILURES - before)
+    with open(os.path.join(ROOT, "collegedash.py"), encoding="utf-8") as f:
+        src = f.read()
+    ok("the refresh passes the summary builder itself, so building it is inside the guard",
+       "write_allsport_shadow(camps.allsport_shadow_summary)" in src
+       and "write_allsport_shadow(camps.allsport_shadow_summary())" not in src)
 
 
 def main(argv=None) -> int:
@@ -211,7 +249,8 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_live_rule_unchanged, test_one_other_sport_keeps_rows_at_2, test_two_sports_still_gate,
                  test_canonical_sports, test_shadow_records_without_changing_rows_or_stats,
-                 test_shadow_failure_is_counted, test_summary_format, test_summary_goes_to_the_step_summary):
+                 test_shadow_failure_is_counted, test_summary_format, test_summary_goes_to_the_step_summary,
+                 test_report_write_never_crashes_the_refresh):
         try:
             case()
         except Exception as e:  # noqa: BLE001 - a crash is that case failing, not the run
