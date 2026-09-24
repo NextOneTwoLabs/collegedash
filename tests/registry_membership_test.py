@@ -762,7 +762,6 @@ D2_COLLECTION_HOLDS = {
 D3_MAIN_SITE_ATHLETICS_REVIEWED = {
     "beloit-college": "www.beloit.edu 403 (d3-b5)", "colby-college": "www.colby.edu 403 (d3-b2)",
     "delaware-valley": "delval.edu 403 (d3-b6)",
-    "mount-holyoke-college": "athletics.mtholyoke.edu 403 on the #253 search",
 }
 
 
@@ -992,6 +991,11 @@ def test_committed() -> None:
     ok("every collectionHold is well formed and on an uncollected entry", not bad_holds, str(bad_holds[:5]))
     ok("no heldPrograms entry carries a collectionHold (a hold already says why it is not published)",
        not any("collectionHold" in p for p in held), str([p["slug"] for p in held if "collectionHold" in p]))
+    # fails if an entry held from collection still has collected sources on disk (#94: the 5 held D3 campuses'
+    # sources were removed, as D2's holds never had any) -- data nobody refreshes, for a page nobody publishes
+    held_with_sources = [p["slug"] for p in programs if "collectionHold" in p
+                         and os.path.isdir(os.path.join(ROOT, "programs", p["slug"], "sources"))]
+    ok("no entry under a collectionHold has collected sources", not held_with_sources, str(held_with_sources[:5]))
     # fails if staging leaks into the published set: this is the check that says the D2 work publishes nothing
     ok("no staged program is published", not (set(staged_divs) & {p["division"] for p in published}),
        str(sorted({p["division"] for p in published})))
@@ -1252,6 +1256,15 @@ def test_committed() -> None:
         penn3 = [p for p in d3 if p["slug"].startswith("penn-state-")]
         ok("#94: the 6 Penn State campuses have no shortName (TPM ruling)", len(penn3) == 6 and not any(p.get("shortName") for p in penn3),
            str([(p["slug"], p.get("shortName")) for p in penn3]))
+        # owner's decision on #265: claremont-mudd-scripps is one team for three colleges, so it has no single
+        # Scorecard row and publishes without school facts or climate, marked as such. Fails if the marker is
+        # missing or malformed on it, or appears on any other entry (a missing Scorecard row alone is not it).
+        marked = {p["slug"]: p["schoolFactsUnavailable"] for p in everything if "schoolFactsUnavailable" in p}
+        cms_mark = marked.get("claremont-mudd-scripps") or {}
+        ok("#265: claremont-mudd-scripps, and only it, carries schoolFactsUnavailable {reason, evidence, since}",
+           set(marked) == {"claremont-mudd-scripps"} and set(cms_mark) == {"reason", "evidence", "since"}
+           and cms_mark["reason"] == "three-college-team" and "#265" in cms_mark["evidence"]
+           and re.fullmatch(r"\d{4}-\d{2}-\d{2}", cms_mark["since"] or "") is not None, str(marked))
 
     # PR #112 review R1: fails if a registry mistake unpublishes a long-standing D1 program (onboarded: false, a move
     # to heldPrograms), which pruning would then delete with build and validate otherwise passing
