@@ -1207,7 +1207,7 @@ def build_camps(camps, news, curated) -> dict | None:
             kept["sources"].append(camp_source(it))
             continue
         seen.add(key)
-        entry = {**it, "campType": classify_camp(it.get("name")), "sources": [camp_source(it)]}
+        entry = {**it, "campType": classify_camp(it.get("name"), it.get("ages")), "sources": [camp_source(it)]}
         merged.append(entry)
         if rkey and rkey not in by_registration:  # the FIRST entry with this date and link is the one a later source merges into
             by_registration[rkey] = entry

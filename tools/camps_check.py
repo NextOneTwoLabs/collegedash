@@ -288,8 +288,13 @@ def fixtures(args) -> int:
         ok(fx["file"], got == fx["expect"], f"got {got!r}, expected {fx['expect']!r}")
     print("extract: extract_camps")
     for fx in spec["extract"]:
+        camps.STATS.clear()
         entries = camps.extract_camps(_read(fx["file"]), fx["pageUrl"], published=fx.get("published"), title=fx.get("title"),
                                       body_only=bool(fx.get("bodyOnly")))
+        for key, want_n in (fx.get("stats") or {}).items():
+            # which path fired, not only what came out: synth-alternating would stay at 2 rows through
+            # _dedupe even if the generic step lent 'Youth Camp' to June 5, so the firing is pinned too
+            ok(f"{fx['file']} {key} fired {want_n}x", camps.STATS[key] == want_n, f"got {camps.STATS[key]}")
         if "count" in fx:
             ok(f"{fx['file']} count", len(entries) == fx["count"], f"got {len(entries)}: {[e['name'] + ' ' + str(e['startDate']) for e in entries]}")
         for exp in fx.get("expect") or []:
@@ -482,6 +487,19 @@ def fixtures(args) -> int:
                      "https://example.edu")["price"] if _entry else None
         ok(f"price {raw!r} -> {want!r}", _entry is not None and got == want,
            missing("_entry") if _entry is None else f"got {got!r}")
+
+    print("session contact: a dated block's contact data never reaches a stored field (#292)")
+    probe = ('<html><head><title>Girls Soccer Camp</title></head><body><div class="session">'
+             '<span class="dates">Oct. 11 - Oct. 11, 2026</span><span class="label">Girls Soccer ID Camp</span>'
+             '<span class="note">Camp Location: please call 555-555-0100</span>'
+             '<span itemprop="telephone">555-555-0101</span><a href="tel:5555550102">Call</a>'
+             '<a href="mailto:redacted@example.com">redacted@example.com</a></div></body></html>')
+    got = camps.extract_camps(probe, "https://example.edu/camps", title="Girls Soccer Camp")
+    ok("the session row is still read", len(got) == 1 and got[0]["name"] == "Girls Soccer ID Camp", str(got)[:200])
+    flat = json.dumps(got)
+    ok("a location that is a phone number is dropped, not stored", bool(got) and got[0]["location"] is None,
+       str(got and got[0]["location"]))
+    ok("no telephone number or email in any field of the row", not re.search(r"555|@|tel:|mailto:", flat), flat[:300])
 
     print("snapshot: extract_camps output on every pre-#292 extract fixture is byte-identical")
     want = json.load(open(SNAPSHOT, encoding="utf-8"))

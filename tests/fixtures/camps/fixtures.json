@@ -596,6 +596,106 @@
      "startDate": "2027-07-18"
     }
    ]
+  },
+  {
+   "file": "extract/session-cal.html",
+   "pageUrl": "https://www.calsportscamps.com/soccer/camps/soccer-day-camps-girls",
+   "title": "Cal Girls Soccer Camp - Cal Sports Camps (en-US)",
+   "count": 1,
+   "stats": {
+    "session_rows": 1,
+    "generic_named": 0
+   },
+   "expect": [
+    {
+     "name": "Cal Girls Soccer College ID Camp - Fall",
+     "startDate": "2026-10-11",
+     "endDate": "2026-10-11",
+     "ages": "Age Group 13 - 18",
+     "price": "$289.00",
+     "location": "Goldman field"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Cal Girls Soccer Camp"
+    },
+    {
+     "location": "Golden Field (Edwards Stadium)"
+    },
+    {
+     "price": "$279.00"
+    }
+   ]
+  },
+  {
+   "file": "extract/session-two.html",
+   "pageUrl": "https://www.calsportscamps.com/soccer/camps/soccer-day-camps-girls",
+   "title": "Cal Girls Soccer Camp - Cal Sports Camps (en-US)",
+   "count": 2,
+   "stats": {
+    "session_rows": 2
+   },
+   "expect": [
+    {
+     "name": "Cal Girls Soccer College ID Camp - Fall",
+     "startDate": "2026-10-11",
+     "price": "$289.00"
+    },
+    {
+     "name": "Cal Girls Soccer Winter Skills Camp",
+     "startDate": "2026-11-08",
+     "ages": "Age Group 8 - 12",
+     "price": "$199.00"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Cal Girls Soccer Spring ID Camp"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-alternating.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "Women's Soccer Camps",
+   "count": 2,
+   "stats": {
+    "generic_named": 0
+   },
+   "expect": [
+    {
+     "name": "Elite ID Camp",
+     "startDate": "2026-06-05"
+    },
+    {
+     "name": "Youth Camp",
+     "startDate": "2026-06-12"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Youth Camp",
+     "startDate": "2026-06-05"
+    }
+   ]
+  },
+  {
+   "file": "extract/synth-date-then-name.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "Girls Soccer Camps",
+   "count": 1,
+   "stats": {
+    "generic_named": 1,
+    "session_rows": 0
+   },
+   "expect": [
+    {
+     "name": "Girls Soccer College ID Camp - Fall",
+     "startDate": "2026-10-11",
+     "price": "$289.00"
+    }
+   ]
   }
  ],
  "robots": [

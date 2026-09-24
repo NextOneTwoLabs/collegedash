@@ -776,11 +776,12 @@ def parse_camp_dates(text: str, published: str | None = None, *, default_year: i
 
 # ---------- extraction ----------
 BLOCK_TAGS = ["p", "li", "td", "th", "h1", "h2", "h3", "h4", "h5", "h6", "dd", "dt", "div", "section", "article", "blockquote", "figcaption"]
-GRADES_RE = re.compile(r"(?:grades?\s+\d{1,2}\s*(?:-|–|to|through)\s*\d{1,2}|\d{1,2}(?:st|nd|rd|th)?\s*(?:-|–|to|through)\s*\d{1,2}(?:st|nd|rd|th)?\s+grade(?:rs|s)?|"
+GRADES_RE = re.compile(r"(?:age\s+group:?\s*\d{1,2}\s*(?:-|–|to|through)\s*\d{1,2}|grades?\s+\d{1,2}\s*(?:-|–|to|through)\s*\d{1,2}|\d{1,2}(?:st|nd|rd|th)?\s*(?:-|–|to|through)\s*\d{1,2}(?:st|nd|rd|th)?\s+grade(?:rs|s)?|"
                        r"ages?\s+\d{1,2}\s*(?:-|–|to|through)\s*\d{1,2}|\d{1,2}\s*(?:-|–|to)\s*\d{1,2}\s+years?\s+old|"
                        r"(?:rising\s+)?(?:\d{1,2}(?:st|nd|rd|th)|freshm[ae]n|sophomores?|juniors?|seniors?)(?:\s*(?:-|–|,|and|through)\s*(?:\d{1,2}(?:st|nd|rd|th)|freshm[ae]n|sophomores?|juniors?|seniors?))*\s+grade(?:rs|s)?|"
                        r"high school (?:girls|players|athletes|prospects)|u\d{1,2}(?:\s*-\s*u\d{1,2})?)", re.I)
 PRICE_RE = re.compile(r"\$\s?\d{1,3}(?:,\d{3})*(?:\.\d{2})?")
+USD_PRICE_RE = re.compile(r"\b(\d{1,3}(?:,\d{3})*\.\d{2})\s*USD\b")  # '289.00 USD' (#292): no $ sign
 LOCATION_RE = re.compile(r"\b(?:at|held at|location:|where:|site:)\s*(?:the\s+)?([A-Z][\w.'&-]*(?:\s+[A-Z][\w.'&-]*){0,6}?\s*(?:Fields?|Stadium|Complex|Center|Centre|Park|Campus|Pitch|Turf|Arena|Facility|Dome|Bubble))\b")
 REGISTER_HREF_RE = re.compile(r"regist|campdoc|totalcamps|campnetwork|active\.com|forms\.gle|docs\.google\.com/forms|ryzer|signup|sign-up|enroll|checkout|/shop/", re.I)
 REGISTER_TEXT_RE = re.compile(r"regist|sign[- ]?up|enroll|book|reserve", re.I)
@@ -1152,10 +1153,11 @@ def _details(window: list[str]) -> dict:
     text = " | ".join(window)
     ages = GRADES_RE.search(text)
     price = PRICE_RE.search(text)
+    usd = None if price else USD_PRICE_RE.search(text)
     loc = LOCATION_RE.search(text)
     return {"location": common.clean(loc.group(1)) if loc else None,
             "ages": common.clean(ages.group(0)) if ages else None,
-            "price": price.group(0).replace(" ", "") if price else None}
+            "price": price.group(0).replace(" ", "") if price else f"${usd.group(1)}" if usd else None}
 
 
 def _entry(name, d, details, register, page_url):
@@ -1262,6 +1264,31 @@ def _widen(d: dict, texts: list[str]) -> dict:
     return d
 
 
+def _dated_line_name(lines, i: int, published: str | None, section) -> str | None:
+    """The entry's own title when a date-only line at `i` is followed by it (date, then title: the
+    #292 layout seen without its session markup), else None and the row keeps the page's name.
+
+    Weak by construction: the caller keeps the row `_weak` and `_named="page"`, so _dedupe still drops
+    it against any real row on that date and the gate still reads its evidence, not this name. It
+    looks at most 2 lines ahead, never past another dated line, and refuses a title that has a date
+    of its own within the next 3 lines - in 'Elite ID Camp / June 5, 2026 / Youth Camp / June 12,
+    2026' the 'Youth Camp' line heads the June 12 row and must not be lent to June 5."""
+    for j in range(i + 1, min(i + 3, len(lines))):
+        t = lines[j][0]
+        if parse_camp_dates(t, published):
+            return None
+        if not CAMP_RE.search(NOT_CAMP_RE.sub(" ", t)) or len(t) >= 90:
+            continue
+        if any(parse_camp_dates(lines[k][0], published) for k in range(j + 1, min(j + 4, len(lines)))):
+            return None
+        cand = _clean_name(_camp_phrase(t, None))
+        if cand and cand != "Camp" and len(cand.split()) >= 2 and not _is_chrome_name(cand) \
+                and _row_allowed(cand, section):
+            return cand
+        return None
+    return None
+
+
 def _prose_entries(lines, page_url: str, published: str | None, page_name: str | None,
                    title: str | None, sports: set | None = None) -> list[dict]:
     """`page_name` is the name a row falls back to when it has none of its own; `title` still
@@ -1292,7 +1319,10 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
                 if ds:
                     window = [t for t, _e, _a in lines[i + 1:i + 6] if not CAMP_RE.search(t) or len(t) >= 90]
                     near = [a for _t, _e, aa in lines[i:i + 6] for a in aa]
-                    out.append({**_entry(page_name, ds[0], _details(window),
+                    own = _dated_line_name(lines, i, published, section)
+                    if own:
+                        STATS["generic_named"] += 1
+                    out.append({**_entry(own or page_name, ds[0], _details(window),
                                          _register_url(near, page_url, [e for _t, e, _a in lines[i:i + 6]]), page_url),
                                 "_weak": True, "_section": section,
                                 # named after the page, never after the row: gated on its evidence
@@ -1419,6 +1449,86 @@ def _merge_overlaps(entries: list[dict]) -> list[dict]:
     return out
 
 
+# Issue #292. One vendor layout (calsportscamps.com today) gives each dated entry its own
+# <div class="session">: `span.dates` holds the dates, `span.label` the entry's own title, and labelled
+# details follow ('Age Group:', 'Camp Location:', a pricing option reading '289.00 USD'). The prose
+# path saw the date as a bare date-only line and named the row after the page <title>, so Cal's
+# 'Cal Girls Soccer College ID Camp - Fall' was published as 'Cal Girls Soccer Camp' with no ages or
+# price, and #78's classifier had nothing to go on.
+#
+# The block also carries hidden analytics twins (`gtm-*`: a location that disagrees with the visible
+# note, a tuition-only price) and the vendor's contact block (itemprop telephone/address). Neither is
+# read: a missing value beats a tracking field, and contact data is never stored.
+SESSION_AGE_LABEL_RE = re.compile(r"^(age\s*group|ages?|grades?)\s*:?$", re.I)
+SESSION_LOCATION_RE = re.compile(r"^(?:camp\s+)?location\s*:\s*(.+)$", re.I)
+CONTACT_RE = re.compile(r"@|\(?\b\d{3}\)?[-. ]?\d{3}[-.]\d{4}\b|\bcall\b|\bphone\b|\bemail\b", re.I)
+STATS: collections.Counter = collections.Counter()  # firings per path, read by the #292 re-collect report
+
+
+def _session_blocks(root, published: str | None) -> list[tuple[object, list[dict]]]:
+    """(block, parsed dates) for each `div.session` that has a `span.label` and a `span.dates` that
+    actually parses. The class names are generic, so a block without a parseable date is not one."""
+    out = []
+    for block in root.select("div.session"):
+        dates, label = block.select_one("span.dates"), block.select_one("span.label")
+        if dates is None or label is None:
+            continue
+        ds = parse_camp_dates(common.clean(dates.get_text(" ")), published)
+        if ds:
+            out.append((block, ds))
+    return out
+
+
+def _session_value(block, label_re) -> tuple[str, str] | None:
+    """(label, value) for the first <strong>Label:</strong> value pair in the block whose label matches."""
+    for strong in block.find_all("strong"):
+        lab = common.clean(strong.get_text(" "))
+        m = label_re.match(lab)
+        if not m:
+            continue
+        parent = strong.parent
+        val = common.clean(parent.get_text(" ").replace(strong.get_text(" "), "", 1)) if parent else ""
+        if val:
+            return m.group(1), val
+    return None
+
+
+def _session_entries(blocks, page_url: str) -> list[dict]:
+    out = []
+    for block, ds in blocks:
+        name = _clean_name(common.clean(block.select_one("span.label").get_text(" ")))
+        if not name:
+            continue
+        age = _session_value(block, SESSION_AGE_LABEL_RE)
+        ages = None
+        if age:
+            unit = "Age Group" if age[0].lower().startswith("age") else "Grades"
+            ages = f"{unit} {age[1]}" if re.fullmatch(r"\d{1,2}\s*(?:-|–|to)\s*\d{1,2}", age[1]) else age[1]
+        location = None
+        for note in block.select("span.note"):
+            m = SESSION_LOCATION_RE.match(common.clean(note.get_text(" ")))
+            if m:
+                location = common.clean(m.group(1))[:80]
+                break
+        if location and CONTACT_RE.search(location):
+            location = None  # 'please call ...' is contact data, not a place
+        price = None
+        for opt in block.select(".session--pricing-option"):
+            t = common.clean(opt.get_text(" "))
+            m = USD_PRICE_RE.search(t)
+            if m:
+                price = f"${m.group(1)}"
+                break
+        anchors = [a for a in block.find_all("a", href=True)
+                   if not re.match(r"(?:tel|mailto):", a.get("href", ""), re.I)]
+        STATS["session_rows"] += 1
+        out.append({**_entry(name, ds[0], {"location": location, "ages": ages, "price": price},
+                             _register_url(anchors, page_url), page_url),
+                    "_weak": False, "_section": None, "_named": "row",
+                    "_evidence": " | ".join(x for x in (name, ages, location) if x)})
+    return out
+
+
 def extract_camps(html: str, page_url: str, *, published: str | None = None, title: str | None = None,
                   body_only: bool = False) -> list[dict]:
     """Heuristic camp entries from a server-rendered page: table rows (header names a date and a
@@ -1428,6 +1538,15 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     soup = BeautifulSoup(_prepare(html), "html.parser")
     for t in soup(["script", "style", "noscript", "svg", "template"]):
         t.decompose()
+    # #292: a dated-entry block is read as one row, and then removed so the prose path cannot read it
+    # again - a `span.label` camp line would otherwise look ahead into the NEXT block's date. Read
+    # before _content, which strips the block's `session--header` (it looks like page chrome). With
+    # no such block the tree is untouched and everything below runs exactly as before.
+    session_rows = [] if body_only else _session_entries(_session_blocks(soup, published), page_url)
+    if session_rows:
+        STATS["session_pages"] += 1
+        for block, _ds in _session_blocks(soup, published):
+            block.decompose()
     root = soup
     if body_only:
         root = _article_body(soup) or _content(soup)
@@ -1441,7 +1560,7 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     page_name = _clean_name(title) if title and not _is_chrome_name(title) else None
     if page_name is None and title:
         page_name = _page_camp_name(lines) or _clean_name(title)
-    entries = _table_entries(root, page_url, published, sports) \
+    entries = session_rows + _table_entries(root, page_url, published, sports) \
         + _prose_entries(lines, page_url, published, page_name, title, sports)
     day_months = {e["startDate"][:7] for e in entries if e["precision"] == "day"}
     entries = [e for e in entries if not (e["precision"] == "month" and e["startDate"] in day_months)]
@@ -1523,8 +1642,11 @@ CAMP_AGE_RE = re.compile(
 CAMP_DAY_RE = re.compile(r"\bday camps?\b", re.I)  # adjacent, so '2 Day ID Camp' is not one
 
 
-def classify_camp(name: str | None) -> str:
-    """'id', 'youth' or 'unknown' for a camp name.
+def classify_camp(name: str | None, ages: str | None = None) -> str:
+    """'id', 'youth' or 'unknown' for a camp name, with its stored `ages` as a tie-breaker.
+
+    #292: the name rules below decide first and are unchanged. Only when the name says nothing
+    ('unknown') is `ages` read, by _ages_class - so no row the name already labels can move.
 
     'unknown' is a real answer, not a failure: "Cal Girls Soccer Camp" and "2026 Women's Soccer
     Camps" are genuine women's soccer camps whose names say nothing about who they are for. The view
@@ -1561,7 +1683,53 @@ def classify_camp(name: str | None) -> str:
         return "youth"
     if CAMP_ID_RE.search(t):
         return "id"
-    return "youth" if CAMP_DAY_RE.search(t) else "unknown"
+    if CAMP_DAY_RE.search(t):
+        return "youth"
+    if TEAM_CAMP_RE.search(t):
+        return "unknown"  # a team camp is not an ID event at any age (owner ruling, #292 review)
+    return _ages_class(ages)
+
+
+TEAM_CAMP_RE = re.compile(r"\bteam\s+camps?\b", re.I)
+_GRADE_WORDS = {"k": 0, "freshman": 9, "freshmen": 9, "sophomore": 10, "sophomores": 10,
+                "junior": 11, "juniors": 11, "senior": 12, "seniors": 12}
+_AGE_NUM = r"(\d{1,2}|k|freshm[ae]n|sophomores?|juniors?|seniors?)(?:st|nd|rd|th)?"
+AGE_RANGE_RE = re.compile(rf"\b{_AGE_NUM}\s*(?:-|–|—|to|through)\s*{_AGE_NUM}\b", re.I)
+GRADE_UNIT_RE = re.compile(r"grade|\d(?:st|nd|rd|th)\b|freshm|sophomore|junior|senior|\bk\s*-", re.I)
+AGE_UNIT_RE = re.compile(r"\bages?\b|age\s*group|years?\s+old|\byrs?\b", re.I)
+
+
+def _ages_class(ages: str | None) -> str:
+    """'id', 'youth' or 'unknown' from a stored ages/grades RANGE.
+
+    A single value is 'unknown': "7th Grade" is what GRADES_RE keeps of "7th Grade - 12th Grade", so
+    one number is too often half a range. A range reads as ages (13+ -> id, all <= 12 -> youth) or as
+    grades (grade g ~ age g + 5, so grade 8+ -> id, which is louisiana-tech's 8th-grade ruling, and
+    grade <= 7 -> youth). A range that straddles 12/13 stays 'unknown'. A range with no unit
+    ("9-12") is classified only when the age reading and the grade reading agree."""
+    t = common.clean(ages or "")
+    m = AGE_RANGE_RE.search(t)
+    if not m:
+        return "unknown"
+
+    def num(x: str) -> int:
+        x = x.lower()
+        return _GRADE_WORDS[x] if x in _GRADE_WORDS else int(x)
+
+    lo, hi = sorted((num(m.group(1)), num(m.group(2))))
+    if hi > 25:
+        return "unknown"
+
+    def by_age(a: int, b: int) -> str:
+        return "id" if a >= 13 else "youth" if b <= 12 else "unknown"
+
+    as_grade = by_age(lo + 5, hi + 5)
+    if GRADE_UNIT_RE.search(t) or not m.group(1).isdigit() or not m.group(2).isdigit():
+        return as_grade
+    if AGE_UNIT_RE.search(t):
+        return by_age(lo, hi)
+    as_age = by_age(lo, hi)
+    return as_age if as_age == as_grade else "unknown"
 
 
 # ---------- news mining ----------
