@@ -2,6 +2,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.tmp
+# collect/common.py's file lock writes <file>.lock beside the file it guards; a run killed while holding
+# one leaves it behind, and the refresh's `git add -A` would commit it (issue #321). Nothing tracked is
+# named *.lock (the repo has no package-manager lock files); tests/refresh_commit_step_test.py checks it.
+*.lock
 .DS_Store
 Thumbs.db
 

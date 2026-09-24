@@ -56,6 +56,9 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   build-gate              (#82) build fails after the rebase: collection on a branch, data as main has it.
   fifth-output            (#82) build writes a fifth output and validate fails: the fifth-output assertion
                           stops the step, nothing is pushed anywhere.
+  stray-locks             (#321) a killed run left <file>.lock files beside sources, profiles and data/. With
+                          the repository's real .gitignore seeded on main, none reaches main or a sources
+                          branch; a control run without it shows `git add -A` would have published them.
 """
 
 from __future__ import annotations
@@ -239,7 +242,8 @@ def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
     return files
 
 
-def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None, run_files=None):
+def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None, run_files=None,
+             seed_files=None):
     """Returns (exit code, output, origin path, main-before sha, upstream sha, run clone path)."""
     root = os.path.join(tmp, name)
     origin = os.path.join(root, "origin.git")
@@ -247,7 +251,7 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
     os.makedirs(root)
     subprocess.run(["git", "init", "-q", "--bare", origin], check=True, env={**os.environ, **GIT_ENV})
     git(origin, "symbolic-ref", "HEAD", "refs/heads/main")
-    c0_files = base_files()
+    c0_files = {**base_files(), **(seed_files or {})}  # seed_files: extra files main has before the run starts
     c0 = commit_files(origin, c0_files, None, "seed")
     git(origin, "update-ref", "refs/heads/main", c0)
     subprocess.run(["git", "-c", "core.autocrlf=false", "clone", "-q", origin, work], check=True, capture_output=True, env={**os.environ, **GIT_ENV})
@@ -647,6 +651,55 @@ def test_review_reports(tmp):
        and b'"builtAt": "built-' in files.get("data/schools-review.json", b""), sorted(files))
 
 
+# Where collect/common.py's _locked() would leave a lock behind if the run holding it were killed: beside a
+# collected source, a published profile, and a collected file outside public/data.
+STRAY_LOCKS = ("programs/alpha/sources/athletics.json.lock", "public/data/programs/alpha.json.lock",
+               "data/camps-refused-hosts.json.lock")
+
+
+def test_stray_locks(tmp):
+    print("stray-locks (#321): a killed run left <file>.lock files in the tree")
+    gitignore = open(os.path.join(ROOT, ".gitignore"), "rb").read()
+    tracked = [p for p in git(ROOT, "ls-files").splitlines() if p.endswith(".lock")]
+    ok("nothing tracked in this repository is named *.lock, so ignoring *.lock hides nothing real", tracked == [], tracked)
+
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    locks = {p: b"" for p in STRAY_LOCKS}
+    # control: without the repository's .gitignore, the step's `git add -A` publishes the locks. This is the
+    # bug, and it shows the checks below can fail
+    code, out, origin, c1, _ = run_case(tmp, "stray-locks-control", upstream=readme, run_files=locks)
+    main_files = tree_files(origin, "refs/heads/main")
+    ok("control: the step succeeds", code == 0, out[-1500:])
+    ok("control: without .gitignore the locks reach main", all(p in main_files for p in STRAY_LOCKS),
+       [p for p in STRAY_LOCKS if p not in main_files])
+
+    # published: main carries the repository's real .gitignore
+    code, out, origin, c1, work = run_case(tmp, "stray-locks-published", upstream=readme, run_files=locks,
+                                           seed_files={".gitignore": gitignore})
+    main_files = tree_files(origin, "refs/heads/main")
+    ok("published: the step succeeds", code == 0, out[-1500:])
+    ok("published: the run is published", git(origin, "rev-parse", "refs/heads/main~1") == c1
+       and main_files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
+    ok("FIX published: no stray lock reaches main", not any(p.endswith(".lock") for p in main_files),
+       [p for p in main_files if p.endswith(".lock")])
+    ok("published: the locks were really there when the step ran", all(os.path.exists(os.path.join(work, *p.split("/")))
+       for p in STRAY_LOCKS))
+
+    # gated: validate fails and the collection goes to a sources branch, which must not carry them either
+    code, out, origin, c1, _ = run_case(tmp, "stray-locks-gated", upstream=readme, run_files=locks,
+                                        run_markers=("VALIDATE_FAILS",), seed_files={".gitignore": gitignore})
+    ok("gated: the step fails", code != 0, out[-800:])
+    bs = branches(origin)
+    ok("gated: one sources branch", len(bs) == 1, bs)
+    if len(bs) == 1:
+        files = tree_files(origin, bs[0])
+        ok("FIX gated: no stray lock is on the sources branch", not any(p.endswith(".lock") for p in files),
+           [p for p in files if p.endswith(".lock")])
+        ok("gated: the branch still carries the collection", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
+
+
 def test_fifth_output(tmp):
     print("fifth-output (#82): build writes an output the gate does not restore, and validate fails")
     def readme(files):
@@ -672,7 +725,7 @@ def main(argv=None) -> int:
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
              test_build_gate, test_fifth_output, test_review_reports,
-             test_refused_hosts_file]
+             test_refused_hosts_file, test_stray_locks]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
