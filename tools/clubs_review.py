@@ -9,6 +9,12 @@ data/clubs.json, and for checking an edit to that table:
     python tools/clubs_review.py --top 20     # also print the most common unmatched names
 
 Reads only the stored sources; it makes no requests and never changes data/clubs.json.
+
+Do not commit the rewritten data/clubs-review.json in a pull request (issue #235): main's copy is
+published by the daily refresh only, and CI's "Generated reports not in PR" check fails a PR that
+changes it. Paste the --dry-run summary into the PR description instead. If you rebuild locally and
+stage with `git add -A`, `git update-index --skip-worktree data/clubs-review.json data/schools-review.json`
+keeps both reports out of your commits (`--no-skip-worktree` undoes it).
 """
 from __future__ import annotations
 
