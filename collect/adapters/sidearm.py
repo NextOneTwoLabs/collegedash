@@ -596,6 +596,66 @@ def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
     return players
 
 
+def _list_view_position(li) -> str:
+    """The position label a legacy list-view item shows, without the height the same block carries:
+    <div class="sidearm-roster-player-position"><span class="text-bold">Goalkeeper</span>
+    <span class="sidearm-roster-player-height">5'9"</span></div> -> 'Goalkeeper'. A trailing
+    parenthetical is pronouns and is dropped, as in _parse_list_view."""
+    el = li.select_one(".sidearm-roster-player-position")
+    if el is None:
+        return ""
+    bold = el.select_one(".text-bold")
+    if bold is not None:
+        txt = bold.get_text(" ")
+    else:
+        parts = [s for s in el.find_all(string=True)
+                 if not any("sidearm-roster-player-height" in (p.get("class") or []) for p in s.parents if p is not el)]
+        txt = " ".join(parts)
+    return re.sub(r"\s*\([^)]*\)\s*$", "", common.clean(txt))
+
+
+def _is_position_label(label: str) -> bool:
+    """True when a list-view label is a playing position. The list-view block also holds 'Manager',
+    'Student Intern' or a club name for non-players listed in the player table, and norm_pos's
+    one-letter prefixes would read 'Manager' as M. So every part must be a POS_MAP key exactly or
+    start with one of its words (3+ letters: 'Midfield', 'Defender'), not merely with 'd'/'m'/'f'."""
+    ok = False
+    for part in re.split(r"[/,]", label.lower()):
+        part = part.strip()
+        if not part:
+            continue
+        if part in common.POS_MAP or any(len(k) >= 3 and part.startswith(k) for k in common.POS_MAP):
+            ok = True
+        else:
+            return False
+    return ok
+
+
+def _fill_blank_positions_from_list_view(players: list[dict], soup: BeautifulSoup, base_url: str) -> None:
+    """Issue #263. Legacy Sidearm pages serve the roster twice, as a table and as the list view
+    (li.sidearm-roster-player). On some sites the table's Pos. cell is empty for every player
+    (<td class="rp_position_short"></td>: the site filled in only the long position) while the list
+    item beside it shows 'Goalkeeper' / 'Defender' - wheaton-college-il, spalding and mercy parsed to
+    all-blank positions this way. For a table player whose position label is EMPTY, take the label
+    from the list item with the same bio URL. Nothing else changes: a non-empty table label (even one
+    norm_pos cannot map) is kept, a label that is not a playing position ('Manager') is not taken,
+    and a player is matched only by bio URL, never by row order (the ordering trap of issue #183).
+    Rows with no player link (mercy's table) are left as they are."""
+    if not any(not p["posLabel"] for p in players):
+        return
+    by_url: dict[str, str] = {}
+    for li in soup.select("li.sidearm-roster-player"):
+        link = li.select_one(".sidearm-roster-player-name a[href]")
+        href = link["href"] if link else li.get("data-player-url")
+        if href:
+            by_url.setdefault(urljoin(base_url, href), _list_view_position(li))
+    for p in players:
+        label = by_url.get(p["bioUrl"], "") if p["bioUrl"] and not p["posLabel"] else ""
+        if label and _is_position_label(label):
+            p["posLabel"] = label
+            p["pos"] = common.norm_pos(label)
+
+
 def looks_client_rendered(html: str) -> bool:
     """True when the roster page is a template filled in by the browser (legacy Sidearm Knockout /
     Vue sites, or the current theme's skeleton loader): the served HTML never contains players."""
@@ -621,6 +681,8 @@ def parse_roster(html: str, base_url: str) -> dict:
             social_by_url[urljoin(base_url, a["href"])] = soc
 
     players, staff = parse_roster_tables(soup, base_url, social_by_url)
+    if players:
+        _fill_blank_positions_from_list_view(players, soup, base_url)
     if not players:
         players = _parse_person_cards(soup, base_url, social_by_url)
     if not players:
