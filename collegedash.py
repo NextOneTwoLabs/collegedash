@@ -555,6 +555,7 @@ def cmd_refresh(args):
         line = camps.refused_summary()  # this run's refused-camp-host counts (issue #284)
         if line:
             common.log(line)
+        write_allsport_shadow(camps.allsport_shadow_summary())
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
 
@@ -613,6 +614,21 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
     with ThreadPoolExecutor(max_workers=min(workers, len(plan)), thread_name_prefix="collect") as pool:
         # map() yields in submission order; `one` raises no Exception, so no program is cancelled
         return [r for rs in pool.map(worker, plan) for r in rs]
+
+
+def write_allsport_shadow(lines: list[str] | None) -> None:
+    """#326 PR A: the camps all-sport shadow report goes to the run log and, on GitHub Actions, to the
+    step Summary as its own block. Never to a committed file (#235)."""
+    if not lines:
+        return
+    for ln in lines:
+        common.log(ln)
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary_path:
+        with open(summary_path, "a", encoding="utf-8") as f:
+            f.write("## Camps all-sport shadow (#326)\n\n" + lines[0] + "\n\n")
+            if len(lines) > 1:
+                f.write("```\n" + "\n".join(lines[1:]) + "\n```\n\n")
 
 
 def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:

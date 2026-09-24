@@ -105,6 +105,25 @@ ALLSPORT_PAGE_RE = re.compile(
     r"\b(?:baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim(?:ming)?|cross[ -]country|"
     r"wrestling|gymnastics|hockey|rowing|cheer(?:leading)?|fencing|squash|water[ -]polo|bowling|equestrian|"
     r"sailing|esports|throwers?|pole[ -]vault|tumbling|acrobatics|powerlifting|rugby|pickleball|triathlon)\b", re.I)
+# #326: how many DISTINCT other sports a page (page_soccer False) must name to count as all-sport.
+# The live rule is 1 (today's). PR A records, in a report-only shadow, what 2 would change; PR B flips
+# this to 2 only after a Reviewer has checked the rows the shadow says would come back.
+ALLSPORT_MIN_SPORTS = 1
+# canonical sport per ALLSPORT_PAGE_RE match, after spaces and hyphens fold to one space: so
+# 'swim' + 'swimming' is one sport, not two
+_ALLSPORT_CANON = {"swim": "swimming", "cheerleading": "cheer", "thrower": "throwers"}
+
+
+def allsport_sports(text: str | None) -> set[str]:
+    """#326: the distinct other sports ALLSPORT_PAGE_RE finds in `text`, each by its canonical name
+    ('cross-country' and 'cross country' are one; 'swim' and 'swimming' are one)."""
+    out = set()
+    for m in ALLSPORT_PAGE_RE.finditer(text or ""):
+        w = re.sub(r"[\s-]+", " ", m.group(0).lower())
+        out.add(_ALLSPORT_CANON.get(w, w))
+    return out
+
+
 ID_RE = re.compile(r"\bID\b")
 SKIP_HREF_RE = re.compile(r"^(?:#|javascript:|mailto:|tel:|sms:)|^$", re.I)
 HTTP_URL_RE = re.compile(r"^https?://", re.I)
@@ -1496,7 +1515,21 @@ def _merge_overlaps(entries: list[dict]) -> list[dict]:
 SESSION_AGE_LABEL_RE = re.compile(r"^(age\s*group|ages?|grades?)\s*:?$", re.I)
 SESSION_LOCATION_RE = re.compile(r"^(?:camp\s+)?location\s*:\s*(.+)$", re.I)
 CONTACT_RE = re.compile(r"@|\(?\b\d{3}\)?[-. ]?\d{3}[-.]\d{4}\b|\bcall\b|\bphone\b|\bemail\b", re.I)
-STATS: collections.Counter = collections.Counter()  # firings per path, read by the #292 re-collect report
+_SHADOW = threading.local()  # .active: this thread is running the #326 all-sport shadow extraction
+
+
+class _PathStats(collections.Counter):
+    """STATS that ignores writes made while this thread runs a shadow extraction (#326). Programs are
+    collected by many workers at once, so the shadow never snapshots or restores the shared counter:
+    its own `STATS[k] += 1` simply does not land, and every other thread's counts are untouched."""
+
+    def __setitem__(self, key, value):
+        if getattr(_SHADOW, "active", False):
+            return
+        super().__setitem__(key, value)
+
+
+STATS: collections.Counter = _PathStats()  # firings per path, read by the #292 re-collect report
 
 
 def _session_blocks(root, published: str | None) -> list[tuple[object, list[dict]]]:
@@ -1564,7 +1597,8 @@ def _session_entries(blocks, page_url: str) -> list[dict]:
 
 
 def extract_camps(html: str, page_url: str, *, published: str | None = None, title: str | None = None,
-                  body_only: bool = False, page_soccer: bool | None = None) -> list[dict]:
+                  body_only: bool = False, page_soccer: bool | None = None, min_sports: int | None = None,
+                  info: dict | None = None) -> list[dict]:
     """Heuristic camp entries from a server-rendered page: table rows (header names a date and a
     camp/clinic/event column) and text lines naming a camp with a date. Camp pages need a year in
     the text (or a table caption year); news releases pass `published` so a year-less date is
@@ -1576,7 +1610,12 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     (_row_names_soccer): a Ryzer table's 'Elite Prospect Camp' with 'Softball' in its Sport cell was
     kept, because a row with a name of its own was never checked against its evidence. A False page
     naming no other sport (a coach's 'Lions Elite Camps' site) and None (news articles, and every
-    caller that passes nothing) keep today's behaviour exactly."""
+    caller that passes nothing) keep today's behaviour exactly.
+
+    #326: "names another sport" means at least `min_sports` distinct sports (allsport_sports), default
+    ALLSPORT_MIN_SPORTS. The shadow passes 2 so it decides on exactly the text this rule reads. When
+    `info` is a dict, the page's other sports are written to info["allsportSports"] (sorted), for a
+    page_soccer False page only."""
     soup = BeautifulSoup(_prepare(html), "html.parser")
     for t in soup(["script", "style", "noscript", "svg", "template"]):
         t.decompose()
@@ -1610,8 +1649,12 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     # a runaway parse; ahead of a quality filter it would spend all 20 slots on whatever the page
     # lists earliest, so on a hub that put soccer last the real camps would be the rows cut. montana
     # yields 28 rows and loses 8 to the cap. Gate, then cap.
-    if page_soccer is False and not ALLSPORT_PAGE_RE.search(f"{title or ''} {root.get_text(' ')}"):
-        page_soccer = None  # not positively all-sport: today's behaviour
+    if page_soccer is False:
+        others = allsport_sports(f"{title or ''} {root.get_text(' ')}")
+        if info is not None:
+            info["allsportSports"] = sorted(others)
+        if len(others) < (ALLSPORT_MIN_SPORTS if min_sports is None else min_sports):
+            page_soccer = None  # not positively all-sport: today's behaviour
     page_is_soccer = _page_is_soccer(title) or page_soccer is True
     is_hub = len(sports) >= HUB_SPORT_COUNT and not page_is_soccer
     # Gate BEFORE the repair, and on `_named`/`_evidence` rather than on the displayed name: the
@@ -1851,6 +1894,81 @@ def _news_camps(slug: str, base_host: str) -> tuple[list[dict], int]:
     return out, len(items)
 
 
+# ---------- #326 all-sport shadow (report only; removed by PR B) ----------
+# For a page_soccer False page whose text names exactly ONE other sport, the live rule (1+) calls it
+# all-sport and the proposed rule (2+) would not. The shadow re-runs extract_camps with min_sports=2,
+# so it decides on exactly the text the live rule read, and records what the page would gain. The
+# result is never assigned to the program's data: published output is byte-identical. The report is
+# logged and written to the refresh Summary by collegedash.py, never committed.
+SHADOW_MAX_LINES = 40
+_SHADOW_LOCK = threading.Lock()
+_SHADOW_REPORT: dict = {}
+
+
+def _shadow_reset() -> None:
+    with _SHADOW_LOCK:
+        _SHADOW_REPORT.clear()
+        _SHADOW_REPORT.update(evaluated=0, oneSport=0, failures=0, removed=0, pages=[])
+
+
+_shadow_reset()
+
+
+def allsport_shadow(slug: str, html: str, page_url: str, title: str | None, live_rows: list[dict],
+                    info: dict) -> None:
+    """Record, never apply, what ALLSPORT_MIN_SPORTS = 2 would add on this page. Any error is counted
+    and swallowed: the shadow can never cost a collection."""
+    sports = info.get("allsportSports") or []
+    with _SHADOW_LOCK:
+        _SHADOW_REPORT["evaluated"] += 1
+        if len(sports) == 1:
+            _SHADOW_REPORT["oneSport"] += 1
+    if len(sports) != 1:
+        return
+    try:
+        _SHADOW.active = True  # this thread's STATS writes are dropped, nobody else's
+        try:
+            rows = extract_camps(html, page_url, title=title, page_soccer=False, min_sports=2)
+        finally:
+            _SHADOW.active = False
+        live = {(e["name"], e["startDate"]) for e in live_rows}
+        shadow = {(e["name"], e["startDate"]) for e in rows}
+        added = sorted(shadow - live, key=lambda k: (k[1], k[0]))
+        removed = len(live - shadow)  # the rule only relaxes, so this should stay 0
+    except Exception:  # noqa: BLE001 - report-only code must never fail a collection
+        with _SHADOW_LOCK:
+            _SHADOW_REPORT["failures"] += 1
+        return
+    with _SHADOW_LOCK:
+        _SHADOW_REPORT["removed"] += removed
+        if added:
+            _SHADOW_REPORT["pages"].append({"slug": slug, "sport": sports[0], "added": added})
+
+
+def allsport_shadow_summary(today: str | None = None) -> list[str] | None:
+    """Counts first, then at most SHADOW_MAX_LINES lines of `slug | sport | +N rows | name startDate; ...`.
+    No URLs and no contact data: slugs, the sport word, camp names and dates only. None when no
+    page_soccer False page was evaluated this run."""
+    today = today or common.today()
+    with _SHADOW_LOCK:
+        rep = json.loads(json.dumps(_SHADOW_REPORT))
+    if not rep["evaluated"]:
+        return None
+    pages = sorted(rep["pages"], key=lambda p: (-len(p["added"]), p["slug"]))
+    added = sum(len(p["added"]) for p in pages)
+    upcoming = sum(1 for p in pages for _n, d in p["added"] if d and d >= today)
+    lines = [f"camps all-sport shadow (#326, rule 2+ sports vs today's 1+): {rep['evaluated']} pages evaluated "
+             f"(page_soccer False); {rep['oneSport']} would flip (exactly one other sport); {len(pages)} of them "
+             f"gain rows; +{added} rows ({upcoming} upcoming); {rep['removed']} rows lost; "
+             f"{rep['failures']} shadow failures"]
+    for p in pages[:SHADOW_MAX_LINES]:
+        rows = "; ".join(f"{n} {d}" for n, d in p["added"])
+        lines.append(f"{p['slug']} | {p['sport']} | +{len(p['added'])} rows | {rows}"[:300])
+    if len(pages) > SHADOW_MAX_LINES:
+        lines.append(f"... {len(pages) - SHADOW_MAX_LINES} more pages not listed")
+    return lines
+
+
 # ---------- collector ----------
 
 def collect(program: dict, registry: dict) -> dict:
@@ -1931,8 +2049,11 @@ def collect(program: dict, registry: dict) -> dict:
             soup = BeautifulSoup(r["html"][:20000], "html.parser")
             data["pageTitle"] = common.clean(soup.title.get_text())[:120] if soup.title else None
             short_title = re.split(r"\s+[-|–]\s+", data["pageTitle"] or "")[0] or None
-            data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title,
-                                          page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]))
+            flag = page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"])
+            info: dict = {}
+            data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title, page_soccer=flag, info=info)
+            if flag is False:
+                allsport_shadow(slug, r["html"], data["finalUrl"], short_title, data["camps"], info)
         common.log(f"camps: {data['campsUrl']} via {data['discoveredVia']}"
                    + (f" -> {data['finalUrl']}" if data["finalUrl"] != data["campsUrl"] else "")
                    + (" [robots: link only]" if data["robotsBlocked"] else "")
