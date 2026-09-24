@@ -1851,12 +1851,13 @@ def _build_meta(profile: dict, envs: dict, outcomes: tuple[list, list] = ([], []
             "sections": checks, "stale": stale, "failed": failed, "skipped": skipped}
 
 
-def search_names(p: dict) -> list[str]:
+def search_names(p: dict, aliases=()) -> list[str]:
     """Names people might type for this school, for the dashboard search: short name, full name,
     NCAA and RPI-archive names ('ULM', 'CalStateFullerton' -> 'Cal State Fullerton'), initials of a
     3+ word short name ('UC Santa Barbara' -> 'UCSB'), initials of the full name when it is just the
     short name plus a dropped 'University'/'College' ('Grand Valley State University' -> 'GVSU', even
-    though shortName's own initials are 'GVS'), and St./Saint swaps. De-duplicated, in order."""
+    though shortName's own initials are 'GVS'), `aliases`: the registry entry's cited searchAliases ('UNC',
+    'Mizzou': issue #309, each sourced in its searchAliasesNote), added verbatim, and St./Saint swaps. De-duplicated, in order."""
     ids = p.get("ids") or {}
     raw = [p.get("shortName"), p.get("name"), ids.get("ncaaName"), ids.get("rpiHistoryName")]
     out: list[str] = []
@@ -1872,6 +1873,8 @@ def search_names(p: dict) -> list[str]:
             continue
         if " " not in s and re.search(r"[a-z][A-Z]", s):  # CamelCase archive names
             s = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", s)
+        add(s)
+    for s in aliases or ():  # verbatim: a cited 'WashU' is not a CamelCase archive name to split
         add(s)
     short = p.get("shortName") or ""
     words = short.split()
@@ -1898,7 +1901,7 @@ def search_names(p: dict) -> list[str]:
     return out
 
 
-def summary_row(p: dict) -> dict:
+def summary_row(p: dict, search_aliases=()) -> dict:
     school = p.get("school") or {}
     rank = p.get("academicRank") or {}
     seasons = p.get("seasons") or []
@@ -1906,7 +1909,7 @@ def summary_row(p: dict) -> dict:
     last_final = next((s for s in seasons if not s.get("inProgress") and s.get("record")), None)
     return {
         "slug": p["slug"], "name": p["name"], "shortName": p.get("shortName"), "nickname": p.get("nickname"),
-        "searchNames": search_names(p),
+        "searchNames": search_names(p, search_aliases),
         "conference": p.get("conference"), "division": p.get("division"), "colors": p.get("colors"),
         "city": school.get("city"), "state": school.get("state"), "region": school.get("region"),
         "ownership": school.get("ownership"), "undergradEnrollment": school.get("undergradEnrollment"),
@@ -1968,7 +1971,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                                 school_table, school_recorder, rpi_final)
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         trends_recorder.observe(profile, program)
-        rows.append(summary_row(profile))
+        rows.append(summary_row(profile, program.get("searchAliases") or ()))
         for c in profile["commitments"]:
             # clubInfo is per-profile detail; the cross-program index carries only the canonical id,
             # so it stays small enough to serve to every visitor.

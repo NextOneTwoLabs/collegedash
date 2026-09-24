@@ -127,6 +127,17 @@ def test_still_ordered_and_deduped() -> None:
     ok("CONTROL search_names is pure", build.search_names(prog("Ferris State", "Ferris State University")) == sn2)
 
 
+def test_registry_aliases() -> None:
+    print("#309: the registry's cited searchAliases are published verbatim, after the derived names")
+    sn = build.search_names(prog("North Carolina", "University of North Carolina at Chapel Hill"), ["UNC"])
+    ok("FIX 'UNC' is a search name for North Carolina", "UNC" in sn, str(sn))
+    ok("CONTROL no alias argument, no alias", build.search_names(prog("North Carolina", "University of North Carolina at Chapel Hill")) == sn[:-1], str(sn))
+    sn2 = build.search_names({"shortName": None, "name": "Washington University in St. Louis", "ids": {"rpiHistoryName": "WashU"}}, ["WashU"])
+    ok("FIX an alias is not CamelCase-split like an archive name ('WashU' stays 'WashU')", "WashU" in sn2 and "Wash U" in sn2, str(sn2))
+    ok("CONTROL an alias equal to an existing name (any case) is not duplicated",
+       build.search_names(prog("Cal Poly", "Cal Poly"), ["cal poly"]) == ["Cal Poly"])
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -134,7 +145,7 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     if CODE_ROOT != ROOT:
         print(f"code under test imported from {CODE_ROOT}")
-    for case in (test_restored_initials, test_gated_against_noise, test_still_ordered_and_deduped):
+    for case in (test_restored_initials, test_gated_against_noise, test_still_ordered_and_deduped, test_registry_aliases):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
