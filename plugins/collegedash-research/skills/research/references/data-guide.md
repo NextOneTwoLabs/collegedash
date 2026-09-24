@@ -40,7 +40,7 @@ Read the file's `format`, `divisions`, `commitDivisions`, `season`, `pastSeasons
 - `current`: people on that program's current roster. `past`: distinct people in stored past rosters who are not on that program's current roster. `commits`: qualifying commitments, separate from roster populations; never add them to roster counts.
 - Commits are collected for `commitDivisions` only; elsewhere a program's `commits` is null and it has no commit records: report "not collected", never 0. High-school commitment counts are not supported: report not available.
 - Counts across programs are program-person relationships, not necessarily distinct people across the whole sport (transfers can appear at more than one program).
-- Report known-club/known-school coverage with denominators, per division. Missing feeder identity is not evidence of no relationship. Rank roster relationships by current plus past, using current as a tie-breaker; keep commits separate. The site shows past and commit counts of 1 or 2 as "1-2" in combined results; the file is exact.
+- Report known-club/known-school coverage with denominators, per division. Missing feeder identity is not evidence of no relationship. Rank roster relationships by current plus past, using current as a tie-breaker; keep commits separate. The site shows past and commit counts of 1 or 2 as "1-2" when two or more of club, high school and program are chosen, and exact counts for one; the file is exact.
 
 ```python
 trends = load("public/data/trends/index.json")

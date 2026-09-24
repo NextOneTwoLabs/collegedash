@@ -35,8 +35,9 @@ by (p, s, c, h). `format: "records"` names the shape for anything reading /api/v
 coverage stay in `programs` and `coverage`: people are counted there, never by counting records (people with
 neither a club nor a school write no record). validate_records states the rules and every build checks them.
 
-The owner's decision on #327 (P1): a former player's record carries both her club and her high school. The page
-shows past and commit counts of 1 or 2 as "1-2" in every result; the file itself is exact.
+The owner's decisions on #327: a former player's record carries both her club and her high school (P1), and the
+page shows past and commit counts of 1 or 2 as "1-2" only when two or more boxes have values (option a); the file
+itself is exact.
 
 `divisions` (issue #315) replaces the v1 field `"division": "D1"`: the divisions whose programs the index
 holds, sorted. `commitDivisions` are the divisions whose commits are collected. Commits in any other division

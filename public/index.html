@@ -2041,8 +2041,8 @@ async function renderCamps() {
    commits are collected for doc.commitDivisions (D1) only and read "Not collected" (null, never 0) elsewhere.
 
    #327: each box takes up to ten values. Values in one box are combined with OR, the three boxes with AND,
-   answered exactly from the index's records (one per counted person). Past and commit counts of 1 or 2 read
-   "1–2" in every result (the owner's decision); current counts are exact. trendsQuery and trendsFeeders mirror
+   answered exactly from the index's records (one per counted person). With two or more boxes chosen, past and
+   commit counts of 1 or 2 read "1–2" (the owner's decision, option a); one box shows exact counts; current is exact. trendsQuery and trendsFeeders mirror
    trends.py's select and feeders: the same answers the Worker could give the ask feature (#165). */
 // null commits ("Not collected") are no data: in the last tie-break they sort after 0, never level with it
 const trendsCm = r => r.commits == null ? -1 : r.commits;
@@ -2142,9 +2142,10 @@ function trendsCoverageLines(doc, kind, totals, divs, fmt = {}) {
     return `${n != null ? `${fmt[col] ? fmt[col](n) : fmtNum(n)} of ` : ''}${fmtNum(denom)} ${noun}, ${what} known for ${trendsPct(known, denom)}%`;
   }).join('; '));
 }
-/* The owner's rule on #327: a past or commit count of 1 or 2 reads "1–2" in every result (the file is exact; this is
-   how the page shows it, not a protection). Current is always exact. Players (current + past) then reads as the
-   range it covers, so the exact past cannot be read back from it. */
+/* The owner's rule on #327 (option a): with two or more boxes chosen, a past or commit count of 1 or 2 reads "1–2"
+   (the file is exact; this is how the page shows it, not a protection). One box, however many values, shows exact
+   counts. Current is always exact. Players (current + past) then reads as the range it covers, so the exact past
+   cannot be read back from it. */
 const trendsSmall = n => n === 1 || n === 2 ? '1–2' : fmtNum(n);
 const trendsPlayersShown = (c, p) => p === 1 || p === 2 ? `${fmtNum(c + 1)}–${fmtNum(c + 2)}` : fmtNum(c + p);
 // Rows are ordered by what they show: 1 and 2 are one bucket, then by name (#327, so the order gives nothing away).
@@ -2365,7 +2366,9 @@ function trendsOptions(kind, q) {
   const { doc, sel } = TR, lim = trendsHitLimit(q), nq = trendsKey(q), picked = new Set(trendsVals(sel[kind]));
   if (picked.size >= TR_MAX) return [];
   const others = trendsOthers(sel, kind), following = Object.keys(others).length > 0;
-  const shown = (c, p) => `${trendsPlayersShown(c, p)} player${c + p === 1 ? '' : 's'}`;
+  // "1–2" only when two or more boxes have values (#327, option a), as in the results
+  const small = TR_KINDS.filter(k => trendsKnownVals(sel, k).length).length >= 2, order = small ? trendsShownCmp : trendsSortCmp;
+  const shown = (c, p) => `${small ? trendsPlayersShown(c, p) : fmtNum(c + p)} player${c + p === 1 ? '' : 's'}`;
   if (kind === 'program') {
     const players = p => doc.programs[p.slug].current + doc.programs[p.slug].past;
     // Each suggestion names its division first, in the Table's form (#306).
@@ -2376,7 +2379,7 @@ function trendsOptions(kind, q) {
       list = TR.progs.map(p => ({ p, m: matchScore(p, n2) })).filter(x => x.m)
         .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || players(b.p) - players(a.p)).map(x => ({ p: x.p, sub: `${line(x.p)}${x.m.why ? ` · ${esc(x.m.why)}` : ''}` }));
     } else if (following) {
-      list = trendsQuery(doc, others).filter(r => TR.progSet.has(r.slug)).map(r => ({ ...r, label: displayName(TR.byProgram.get(r.slug)) })).sort(trendsShownCmp)
+      list = trendsQuery(doc, others).filter(r => TR.progSet.has(r.slug)).map(r => ({ ...r, label: displayName(TR.byProgram.get(r.slug)) })).sort(order)
         .map(r => { const p = TR.byProgram.get(r.slug); return { p, sub: `${line(p)} · ${shown(r.current, r.past)}` }; });
     } else {
       list = TR.progs.slice().sort((a, b) => players(b) - players(a) || displayName(a).localeCompare(displayName(b))).map(p => ({ p, sub: line(p) }));
@@ -2389,7 +2392,7 @@ function trendsOptions(kind, q) {
     list = trendsFind(TR.ents[kind], q).sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm))
       .map(({ e, aka }) => ({ e, sub: [aka ? `also known as ${trendsAkaLabel(aka)}` : '', ...where(e), trendsPlayers(e.total)] }));
   } else if (following) {
-    list = trendsFeeders(doc, kind, others).sort(trendsShownCmp).map(r => ({ e: TR.entById[kind].get(r.id), sub: [...where(r), shown(r.current, r.past)] }));
+    list = trendsFeeders(doc, kind, others).sort(order).map(r => ({ e: TR.entById[kind].get(r.id), sub: [...where(r), shown(r.current, r.past)] }));
   } else {
     list = TR.ents[kind].filter(e => !e.unmatched).sort((a, b) => b.total - a.total || a.norm.localeCompare(b.norm)).map(e => ({ e, sub: [...where(e), trendsPlayers(e.total)] }));
   }
@@ -2489,6 +2492,12 @@ function trendsView(sel) {
   const q = { ...(C.length ? { club: C } : {}), ...(H.length ? { school: H } : {}), ...(P.length ? { program: P } : {}) };
   TR.selNow = q;
   const boxes = [C, H, P].filter(v => v.length).length;
+  // The owner's decision on #327 (option a): past and commit counts of 1 or 2 read "1–2", and Players the range it
+  // covers, only when two or more boxes have values; one box (however many values it holds) shows exact counts.
+  // Rows sort by what they show. Current is always exact.
+  const small = boxes >= 2;
+  const sm = n => small ? trendsSmall(n) : fmtNum(n), pl = (c, p) => small ? trendsPlayersShown(c, p) : fmtNum(c + p);
+  const cmp = small ? trendsShownCmp : trendsSortCmp;
   const link = (patch, text, cls = '') => {
     const k = Object.keys(patch)[0], to = { ...sel, [k]: patch[k] ? [patch[k]] : [] };
     return `<a${cls ? ` class="${cls}"` : ''} href="${esc(trendsUrl(to))}" data-tr-kind="${k}" data-tr-id="${esc(patch[k] || '')}">${text}</a>`;
@@ -2531,25 +2540,25 @@ function trendsView(sel) {
 
   const uncollected = doc.divisions.filter(d => !doc.commitDivisions.includes(d));
   const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.${uncollected.length ? ` They are collected for ${doc.commitDivisions.map(divisionName).join(', ')} only; ${uncollected.map(divisionName).join(' and ')} programs read “Not collected”.` : ''}`;
-  const smallNote = 'Past and commit counts of 1 or 2 read “1–2”.';
+  const smallNote = small ? 'With two or more boxes chosen, past and commit counts of 1 or 2 read “1–2”.' : '';
   const progCell = p => `<div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(p.slug)}/roster" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${programLine(p)}</span></span></div>`;
   const head = (first, sch) => `<thead><tr><th>${first}</th><th class="num">Players<span class="th-sub">current + past</span></th><th class="num">Current roster</th><th class="num">Past rosters<span class="th-sub">${esc(pastLabel)}</span></th><th class="num trend-sep">Commits<span class="th-sub">${sch ? 'not available' : 'not in total'}</span></th></tr></thead>`;
   const dash = '<span class="muted" title="No recruit carries a matched high school yet">—</span>';
   const notCollected = `<span class="muted tr-nc" title="Commits are collected for ${esc(doc.commitDivisions.join(', '))} programs only">Not collected</span>`;
-  const commitCell = (r, sch) => r.commits != null ? trendsSmall(r.commits) : sch ? dash : notCollected;
-  const cells = (r, sch) => `<td class="num"><span class="num-strong">${trendsPlayersShown(r.current, r.past)}</span></td><td class="num">${fmtNum(r.current)}</td><td class="num">${trendsSmall(r.past)}</td><td class="num trend-sep">${commitCell(r, sch)}</td>`;
+  const commitCell = (r, sch) => r.commits != null ? sm(r.commits) : sch ? dash : notCollected;
+  const cells = (r, sch) => `<td class="num"><span class="num-strong">${pl(r.current, r.past)}</span></td><td class="num">${fmtNum(r.current)}</td><td class="num">${sm(r.past)}</td><td class="num trend-sep">${commitCell(r, sch)}</td>`;
   const where = e => [e.city, e.state].filter(Boolean).join(', ');
   const filtered = rows => { const shown = rows.filter(r => byProgram.has(r.slug) && (P.includes(r.slug) || matchesFilters(byProgram.get(r.slug), null))); return { shown, hidden: rows.length - shown.length }; };
   const hiddenLine = (n, what) => n ? `${n} program${n === 1 ? '' : 's'} with ${what} ${n === 1 ? 'is' : 'are'} hidden by your sidebar filters. ` : '';
   const sch = H.length > 0, kindCov = C.length ? 'club' : 'school';
   const totalsOf = rows => { const known = rows.filter(r => r.commits != null); return { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: known.length ? known.reduce((a, r) => a + r.commits, 0) : null }; };
   // Totals combine the chosen boxes, so with 2+ boxes they follow the same "1–2" rule as the rows.
-  const tf = boxes >= 2 ? trendsSmall : fmtNum;
+  const tf = sm;
   const totalsText = t => `${fmtNum(t.current)} current, ${tf(t.past)} former, ${t.commits == null ? (sch ? 'commits not available' : 'commits not collected') : `${tf(t.commits)} commit${t.commits === 1 ? '' : 's'}`}`;
-  const covFmt = boxes >= 2 ? { past: trendsSmall, commits: trendsSmall } : {};
+  const covFmt = small ? { past: trendsSmall, commits: trendsSmall } : {};
   const covList = (rows, kind) => { const by = trendsDivisionTotals(rows), divs = doc.divisions.filter(d => by[d]); return `<ul class="trend-cov">${trendsCoverageLines(doc, kind, by, divs.length ? divs : null, covFmt).map(l => `<li>${esc(l)}</li>`).join('')}</ul>`; };
   const expander = (slug, cur) => cur ? `<details class="trend-players" data-slug="${esc(slug)}"><summary>current players</summary><div class="trend-names small muted">Loading…</div></details>` : '';
-  const programRows = rows => rows.map(r => ({ ...r, label: displayName(byProgram.get(r.slug)) })).sort(trendsShownCmp);
+  const programRows = rows => rows.map(r => ({ ...r, label: displayName(byProgram.get(r.slug)) })).sort(cmp);
 
   // A program with clubs and/or schools: a summary card, per-program rows when several programs are chosen.
   if (P.length && (C.length || H.length)) {
@@ -2558,17 +2567,17 @@ function trendsView(sel) {
     const back = [C.length && link({ club: null }, `All clubs feeding ${esc(orText('program', P))}`, 'btn'), H.length && link({ school: null }, `All high schools feeding ${esc(orText('program', P))}`, 'btn'),
       link({ program: null }, `All programs for ${C.length && H.length ? 'these clubs and schools' : C.length ? `this club${C.length > 1 ? ' or these' : ''}` : `this high school${H.length > 1 ? ' or these' : ''}`}`, 'btn')].filter(Boolean).join('');
     const stat = (n, label, k) => `<span class="tr-stat${k === 'commits' ? ' trend-sep' : ''}" data-stat="${k}"><b>${n}</b>${label}</span>`;
-    const commitsStat = t.commits != null ? trendsSmall(t.commits) : sch ? '—' : 'Not collected';
+    const commitsStat = t.commits != null ? sm(t.commits) : sch ? '—' : 'Not collected';
     const empty = !rows.length
       ? `<p class="small">No players in the index are from ${esc([C.length && orText('club', C), H.length && orText('school', H)].filter(Boolean).join(' and '))} at ${esc(orText('program', P))}. A club or a high school is known for only some players, so this is a lower bound, not a true zero:</p>${covList(P.map(s => ({ slug: s, division: doc.programs[s].division, current: 0, past: 0, commits: null })), kindCov)}` : '';
     const table = P.length > 1 && rows.length ? `<div class="tscroll"><table class="trend-table">${head('Program', sch)}<tbody>${rows.map(r => `<tr class="team-row"><td>${progCell(byProgram.get(r.slug))}${expander(r.slug, r.current)}</td>${cells(r, sch)}</tr>`).join('')}</tbody></table></div>` : '';
     const html = `${noteHtml}<div class="card"><h3>${title}</h3>${P.length === 1 ? `<div class="small muted">${programLine(byProgram.get(P[0]))}</div>` : ''}
-      <div class="tr-stats">${stat(trendsPlayersShown(t.current, t.past), 'Players', 'players')}${stat(fmtNum(t.current), 'Current', 'current')}${stat(tf(t.past), 'Past', 'past')}${stat(commitsStat, 'Commits', 'commits')}</div>
+      <div class="tr-stats">${stat(pl(t.current, t.past), 'Players', 'players')}${stat(fmtNum(t.current), 'Current', 'current')}${stat(tf(t.past), 'Past', 'past')}${stat(commitsStat, 'Commits', 'commits')}</div>
       ${P.length === 1 && t.current ? '<div class="trend-names small" id="trNames">Loading current players…</div>' : ''}${table}${empty}
       ${rows.length ? `<div class="table-footnote"><b>Coverage</b> — counts are lower bounds:${covList(rows, kindCov)}</div>` : ''}
       <p class="small muted">Players = current + past. ${C.length && H.length ? 'A player counts when her club is one of the chosen clubs and her high school one of the chosen schools. ' : ''}Past players and commits are counted, never named. ${smallNote} ${sch ? 'Commits are not available for high schools yet.' : commitsNote}</p><div class="tr-actions">${back}</div></div>`;
     return { html, sub, names: P.length === 1 && t.current ? { slug: P[0], cur: t.current } : null,
-      say: rows.length ? `${trendsPlayersShown(t.current, t.past)} players.` : 'No players in the index match.' };
+      say: rows.length ? `${pl(t.current, t.past)} players.` : 'No players in the index match.' };
   }
   // Clubs and/or schools, no program: the programs their players went to (a true AND when both are chosen).
   if (C.length || H.length) {
@@ -2593,7 +2602,7 @@ function trendsView(sel) {
       [0, 1, 2].forEach(i => { a.club[i] += pr.clubKnown[i] || 0; a.school[i] += pr.schoolKnown[i] || 0; }); return a; }, { current: 0, past: 0, commits: null, club: [0, 0, 0], school: [0, 0, 0] });
     const covLine = (known, label) => [[sum.current, known[0], 'current players'], [sum.past, known[1], 'former players'], [sum.commits, known[2], 'verbal or signed commits']]
       .map(([n, k, noun]) => n == null ? 'commits not collected' : k == null ? `${n} ${noun}; ${label} not available yet` : `${n} ${noun}; ${label} known for ${k} (${trendsPct(k, n)}%)`).join(' · ');
-    const clubs = trendsFeeders(doc, 'club', q).sort(trendsShownCmp), schools = TR.hasSchools ? trendsFeeders(doc, 'school', q).sort(trendsShownCmp) : null;
+    const clubs = trendsFeeders(doc, 'club', q).sort(cmp), schools = TR.hasSchools ? trendsFeeders(doc, 'school', q).sort(cmp) : null;
     const pn = esc(orText('program', P));
     const html = `${noteHtml}<div class="card section"><h3>Clubs feeding ${pn}</h3><p class="small muted">Most players first${across}. ${commitsNote} ${smallNote}</p>${table(clubs, 'club')}
         <div class="table-footnote"><b>Coverage</b> — ${esc(covLine(sum.club, 'club'))}. Counts are lower bounds; an unmatched spelling is counted on its own.${P.length === 1 ? ` <a href="#/p/${esc(P[0])}/roster">Roster →</a>` : ''}</div></div>
@@ -2604,7 +2613,7 @@ function trendsView(sel) {
   }
   // Nothing selected.
   const html = `${noteHtml}<div class="card"><h3>How to read this</h3>
-    <p class="small ink2">Pick one or more clubs${TR.hasSchools ? ', high schools' : ''} or programs, in any of the boxes. Values in one box are combined with <b>or</b>; the boxes are combined with <b>and</b>: “MVLA or Mustang SC” and “UCLA” means players from either club at UCLA. Clubs${TR.hasSchools ? ' or high schools' : ''} alone show the programs their players went to; programs alone show where their players came from. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote} ${smallNote}</p>
+    <p class="small ink2">Pick one or more clubs${TR.hasSchools ? ', high schools' : ''} or programs, in any of the boxes. Values in one box are combined with <b>or</b>; the boxes are combined with <b>and</b>: “MVLA or Mustang SC” and “UCLA” means players from either club at UCLA. Clubs${TR.hasSchools ? ' or high schools' : ''} alone show the programs their players went to; programs alone show where their players came from. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote} With two or more boxes chosen, past and commit counts of 1 or 2 read “1–2”.</p>
     <p class="small ink2" style="margin-top:8px"><b>Coverage today</b> — ${trendsCoverageLines(doc, 'club').map(esc).join(' · ')}. A club is known mostly from recruiting records and from roster pages that carry a Club column, so every count is a lower bound: a program showing one player from a club may well have more whose club no public source states.${TR.hasSchools ? ` High schools: ${trendsCoverageLines(doc, 'school').map(esc).join(' · ')}.` : ' High-school results are not published yet.'}</p></div>`;
   return { html, sub, say: 'Nothing selected.' };
 }

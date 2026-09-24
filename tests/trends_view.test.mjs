@@ -300,7 +300,7 @@ test('division everywhere: program chips, suggestions and result lines carry D1/
 test('#315 C1 + C2 kept: D2 commits "Not collected" (never 0) in rows, totals, cards and coverage; coverage names the D2 rate', async () => {
   let page = await open('#/trends?club=lone');
   const html = page.results();
-  assert.deepEqual(cellsOf(html).map(r => r.nums), [['2–3', '1', '1–2', 'Not collected']], 'the D2 row: commits Not collected, past 1 reads 1–2');
+  assert.deepEqual(cellsOf(html).map(r => r.nums), [['2', '1', '1', 'Not collected']], 'the D2 row: commits Not collected; one box, so past 1 reads 1');
   assert.ok(html.includes('1 current, 1 former, commits not collected at 1 program'), 'one box: the totals line is exact');
   assert.ok(html.includes('Division II: 1 of 50 current players, club known for 6%') && !html.includes('Division I:'), 'the D2 rate alone');
   page = await open(`#/trends?program=${D2.slug}`);
@@ -311,27 +311,37 @@ test('#315 C1 + C2 kept: D2 commits "Not collected" (never 0) in rows, totals, c
 });
 
 /* ---------- 1–2 (owner, #327) ---------- */
-test('T3 past and commit counts of 1 or 2 read "1–2" in every result; current stays exact; an OR sum is bucketed once', async () => {
+test('T3 one box shows exact counts, however many values it holds (owner, option a)', async () => {
   let page = await open('#/trends?club=mvla');
   assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums]),
-    [[disp(B), '3–4', '2', '1–2', '1–2'], [disp(A), '3', '3', '0', '0'], [disp(C), '0', '0', '0', '5']], 'B: past 2 and commit 1 read 1–2; current 2 exact; Players 3–4, sorted as shown (above A, 3)');
+    [[disp(B), '4', '2', '2', '1'], [disp(A), '3', '3', '0', '0'], [disp(C), '0', '0', '0', '5']], 'B: past 2 and commit 1 exact; Players 4, no range');
+  page = await open('#/trends?club=mvla,mx');
+  assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums])[0], [disp(B), '5', '2', '3', '1'], 'two values in one box: still exact (commit 1 reads 1)');
+  page = await open(`#/trends?program=${B.slug}`);
+  assert.ok(page.results().includes('<td class="num">1</td>') && !page.results().includes('1–2'), 'a program alone: MX\'s past 1 reads 1');
+  assert.ok(!page.results().includes('read “1–2”'), 'and the page does not claim a 1–2 rule it is not applying');
+});
+
+test('T3 two or more boxes: past and commit counts of 1 or 2 read "1–2"; current stays exact; an OR sum is bucketed once', async () => {
+  let page = await open(`#/trends?club=mvla&program=${A.slug},${B.slug}`);
+  assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums]),
+    [[disp(B), '3–4', '2', '1–2', '1–2'], [disp(A), '3', '3', '0', '0']], 'B: past 2 and commit 1 read 1–2; current 2 exact; Players 3–4, sorted as shown (above A, 3)');
   page = await open(`#/trends?club=mvla,mx&program=${B.slug}`);
   assert.deepEqual(stats(page.results()), { players: '5', current: '2', past: '3', commits: '1–2' }, 'past 2 + 1 = 3 is shown as 3, never "1–2" per part');
   page = await open(`#/trends?club=mx&program=${B.slug}`);
   assert.deepEqual(stats(page.results()), { players: '1–2', current: '0', past: '1–2', commits: '0' });
   page = await open(`#/trends?club=mvla,mx&school=ccd%3A1`, fixture({ schools: true }));
   assert.deepEqual(cellsOf(page.results()).map(r => r.nums[1]), ['1', '1'], 'current 1 in a combination stays 1');
-  // ties: B's MX (past 1) and MVLA (past 2) at B both read 1–2; they sort by name, not by the hidden value
-  page = await open(`#/trends?program=${B.slug}`);
-  const rows = [...page.results().matchAll(/data-tr-kind="club" data-tr-id="([^"]+)"/g)].map(m => m[1]);
-  assert.deepEqual(rows, ['mvla', 'mx'], 'MVLA (2 current + 1–2 past) then MX (1–2 past)');
 });
 
-test('T3 the order follows what is shown: past 1 and past 2 are one "1–2" bucket, then by name (the order must not give the value away)', async () => {
+test('T3 the order follows what is shown: with 2+ boxes past 1 and past 2 are one "1–2" bucket, then by name; one box sorts exactly', async () => {
   const [lo, hi] = [B, C].sort((x, y) => disp(x).localeCompare(disp(y)));
-  const page = await open('#/trends?club=surf', fixture({ extra: [[hi.slug, 1, 'surf', null], [hi.slug, 1, 'surf', null], [lo.slug, 1, 'surf', null]] }));
+  const doc = fixture({ extra: [[hi.slug, 1, 'surf', null], [hi.slug, 1, 'surf', null], [lo.slug, 1, 'surf', null]] });
+  let page = await open(`#/trends?club=surf&program=${A.slug},${B.slug},${C.slug}`, doc);
   assert.deepEqual(cellsOf(page.results()).map(r => [r.name, r.nums[2]]), [[disp(lo), '1–2'], [disp(hi), '1–2'], [disp(A), '0']],
     `${disp(hi)} (past 2) does not sort above ${disp(lo)} (past 1)`);
+  page = await open('#/trends?club=surf', doc);
+  assert.deepEqual(cellsOf(page.results()).map(r => [r.name, r.nums[2]]), [[disp(hi), '2'], [disp(A), '0'], [disp(lo), '1']], 'one box: exact values, exact order');
 });
 
 /* ---------- the states ---------- */
@@ -348,7 +358,7 @@ test('nothing selected: three boxes, the how-to card and the coverage; the live 
 test('clubs only: the programs their players went to', async () => {
   const page = await open('#/trends?club=mvla,surf');
   assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums]),
-    [[disp(A), '4', '4', '0', '3'], [disp(B), '3–4', '2', '1–2', '1–2'], [disp(C), '0', '0', '0', '5']], 'A: MVLA 3 + Surf 1 current; Surf commits 3');
+    [[disp(A), '4', '4', '0', '3'], [disp(B), '4', '2', '2', '1'], [disp(C), '0', '0', '0', '5']], 'A: MVLA 3 + Surf 1 current; Surf commits 3; one box: exact');
   assert.ok(page.sub().startsWith('Mountain View Los Altos SC or San Diego Surf · D1, D2'), page.sub());
   assert.ok(page.results().includes(`href="#/trends?club=mvla,surf&amp;program=${B.slug}"`), 'a row opens the card at that program, the clubs kept');
 });
@@ -363,7 +373,7 @@ test('club AND high school, no program: a true AND (#312\'s "not necessarily the
 test('programs only: clubs and high schools feeding them, summed across the programs', async () => {
   const page = await open(`#/trends?program=${A.slug},${B.slug}`, fixture({ schools: true }));
   const clubs = [...page.results().matchAll(/data-tr-kind="club" data-tr-id="([^"]+)"/g)].map(m => m[1]);
-  assert.deepEqual(clubs, ['mvla', 'mx', 'surf', 'raw:zeta united'], 'MVLA: 5 current + 1–2 past across A and B; MX 1–2 past sorts above 1 current');
+  assert.deepEqual(clubs, ['mvla', 'surf', 'raw:zeta united', 'mx'], 'MVLA: 5 current + 2 past across A and B; one box, so exact order: MX (past 1, no current) last');
   assert.ok(page.results().includes('across 2 programs'));
 });
 
@@ -384,7 +394,7 @@ test('program + clubs + school: one card; names come only from the public roster
 test('an index built before #327 (per-club cells) still reads: one box exact, club and school together wait for the refresh', async () => {
   let page = await open('#/trends?club=mvla', cellFixture());
   assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums]),
-    [[disp(B), '3–4', '2', '1–2', '1–2'], [disp(A), '3', '3', '0', '0'], [disp(C), '0', '0', '0', '5']], 'the same answer as the records file');
+    [[disp(B), '4', '2', '2', '1'], [disp(A), '3', '3', '0', '0'], [disp(C), '0', '0', '0', '5']], 'the same answer as the records file');
   page = await open('#/trends?club=mvla&school=ccd%3A1', cellFixture());
   assert.ok(page.results().includes('answered after the next data refresh'), 'says so rather than showing a wrong AND');
   const old = fixture();
