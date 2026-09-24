@@ -1024,7 +1024,7 @@ def test_committed() -> None:
     sf, mvsu, uwf = by.get("saint-francis"), by.get("mississippi-val"), by.get("west-florida")
     # held while D3 is not onboarded; published (and hold-free) once it is. D3 was published first, without it
     # (#94, the owner's minimal switch): saint-francis follows in its own PR, which sets this to False.
-    SAINT_FRANCIS_FOLLOWS_D3 = True
+    SAINT_FRANCIS_FOLLOWS_D3 = False
     d3_on = "D3" in (reg.get("onboardedDivisions") or [])
     sf_published = d3_on and not SAINT_FRANCIS_FOLLOWS_D3
     ok("Saint Francis is D3, held until it follows D3 into publication", bool(sf) and sf["division"] == "D3"
