@@ -1,6 +1,6 @@
 {
   "_comment": "Program registry for CollegeDash. Single source of truth for which programs exist, where their data comes from (athletics site platform, TopDrawerSoccer ids, College Scorecard unit id, Wikipedia title, social handles) and the URL templates every collector uses. Read by collect/*, build.py and public/index.html. Add a program by appending to `programs` and running: python collegedash.py onboard <slug>. Optional per-program athletics.campsUrl points the camps collector straight at the program's camp page (skips the nav search and any skipReason); athletics.campsNote is free text for humans. Membership comes from the NCAA Directory (collect/registry_builder.py): onboardedDivisions is the set of divisions the site publishes, and turning a division on is adding it there. A program whose Directory division is not onboarded, or that no Directory list carries, is moved whole to heldPrograms with a `hold` block; refresh, onboard and build read `programs` only, so it is neither collected nor published, and it returns unchanged with the same slug. stagedDivisions is the set of divisions whose programs are in `programs` with onboarded: false, built ahead of onboarding so the list, the slugs and the joins can be reviewed before any collector runs; nothing staged is published or collected, and onboarding a division moves it from stagedDivisions to onboardedDivisions.",
-  "updated": "2026-09-23",
+  "updated": "2026-09-24",
   "onboardedDivisions": [
     "D1",
     "D2",
@@ -217,7 +217,11 @@
         "lon": -78.503428,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UVA"
+      ],
+      "searchAliasesNote": "\"UVA\" is the short form given in the opening paragraph of Wikipedia's article \"University of Virginia\" (https://en.wikipedia.org/wiki/University_of_Virginia), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "notre-dame",
@@ -653,7 +657,11 @@
         "lon": -79.050969,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UNC"
+      ],
+      "searchAliasesNote": "\"UNC\" is the short form given in the opening paragraph of Wikipedia's article \"University of North Carolina at Chapel Hill\" (https://en.wikipedia.org/wiki/University_of_North_Carolina_at_Chapel_Hill), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "baylor",
@@ -1609,7 +1617,11 @@
         "lon": -88.229114,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UIUC"
+      ],
+      "searchAliasesNote": "\"UIUC\" is the short form given in the opening paragraph of Wikipedia's article \"University of Illinois Urbana-Champaign\" (https://en.wikipedia.org/wiki/University_of_Illinois_Urbana-Champaign), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "mississippi-state",
@@ -1849,7 +1861,11 @@
         "lon": -83.374039,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UGA"
+      ],
+      "searchAliasesNote": "\"UGA\" is the short form given in the opening paragraph of Wikipedia's article \"University of Georgia\" (https://en.wikipedia.org/wiki/University_of_Georgia), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "california",
@@ -1889,7 +1905,11 @@
         "lon": -122.260463,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "Cal"
+      ],
+      "searchAliasesNote": "\"Cal\" is the short form given in the opening paragraph of Wikipedia's article \"University of California, Berkeley\" (https://en.wikipedia.org/wiki/University_of_California,_Berkeley), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "lipscomb",
@@ -2049,7 +2069,11 @@
         "lon": -71.527356,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "URI"
+      ],
+      "searchAliasesNote": "\"URI\" is the short form given in the opening paragraph of Wikipedia's article \"University of Rhode Island\" (https://en.wikipedia.org/wiki/University_of_Rhode_Island), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "kentucky",
@@ -2089,7 +2113,11 @@
         "lon": -84.504747,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UK"
+      ],
+      "searchAliasesNote": "\"UK\" is the short form given in the opening paragraph of Wikipedia's article \"University of Kentucky\" (https://en.wikipedia.org/wiki/University_of_Kentucky), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "charlotte",
@@ -2289,7 +2317,11 @@
         "lon": -117.885446,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "CSUF"
+      ],
+      "searchAliasesNote": "\"CSUF\" is the short form given in the opening paragraph of Wikipedia's article \"California State University, Fullerton\" (https://en.wikipedia.org/wiki/California_State_University,_Fullerton), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "south-alabama",
@@ -2813,7 +2845,11 @@
         "lon": -79.953254,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "Pitt"
+      ],
+      "searchAliasesNote": "\"Pitt\" is the short form given in the opening paragraph of Wikipedia's article \"University of Pittsburgh\" (https://en.wikipedia.org/wiki/University_of_Pittsburgh), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "buffalo",
@@ -4410,7 +4446,11 @@
         "lon": -83.73481,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UMich"
+      ],
+      "searchAliasesNote": "\"UMich\" is the short form given in the opening paragraph of Wikipedia's article \"University of Michigan\" (https://en.wikipedia.org/wiki/University_of_Michigan), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "binghamton",
@@ -4490,7 +4530,11 @@
         "lon": -85.300247,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UTC"
+      ],
+      "searchAliasesNote": "\"UTC\" is the short form given in the opening paragraph of Wikipedia's article \"University of Tennessee at Chattanooga\" (https://en.wikipedia.org/wiki/University_of_Tennessee_at_Chattanooga), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "marshall",
@@ -4890,7 +4934,11 @@
         "lon": -86.360618,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "MTSU"
+      ],
+      "searchAliasesNote": "\"MTSU\" is the short form given in the opening paragraph of Wikipedia's article \"Middle Tennessee State University\" (https://en.wikipedia.org/wiki/Middle_Tennessee_State_University), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "fordham",
@@ -5130,7 +5178,11 @@
         "lon": -92.328843,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "Mizzou"
+      ],
+      "searchAliasesNote": "\"Mizzou\" is the short form given in the opening paragraph of Wikipedia's article \"University of Missouri\" (https://en.wikipedia.org/wiki/University_of_Missouri), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "quinnipiac",
@@ -6132,7 +6184,11 @@
         "lon": -73.196646,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-06"
+      "onboardedAt": "2026-09-06",
+      "searchAliases": [
+        "UVM"
+      ],
+      "searchAliasesNote": "\"UVM\" is the short form given in the opening paragraph of Wikipedia's article \"University of Vermont\" (https://en.wikipedia.org/wiki/University_of_Vermont), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "ball-state",
@@ -7295,7 +7351,11 @@
         "lon": -106.620155,
         "timezone": "America/Denver"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "UNM"
+      ],
+      "searchAliasesNote": "\"UNM\" is the short form given in the opening paragraph of Wikipedia's article \"University of New Mexico\" (https://en.wikipedia.org/wiki/University_of_New_Mexico), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "purdue",
@@ -8135,7 +8195,11 @@
         "lon": -97.148422,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "UNT"
+      ],
+      "searchAliasesNote": "\"UNT\" is the short form given in the opening paragraph of Wikipedia's article \"University of North Texas\" (https://en.wikipedia.org/wiki/University_of_North_Texas), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "north-florida",
@@ -8175,7 +8239,11 @@
         "lon": -81.509144,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "UNF"
+      ],
+      "searchAliasesNote": "\"UNF\" is the short form given in the opening paragraph of Wikipedia's article \"University of North Florida\" (https://en.wikipedia.org/wiki/University_of_North_Florida), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "massachusetts-lowell",
@@ -8695,7 +8763,11 @@
         "lon": -75.19391,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "UPenn"
+      ],
+      "searchAliasesNote": "\"UPenn\" is the short form given in the opening paragraph of Wikipedia's article \"University of Pennsylvania\" (https://en.wikipedia.org/wiki/University_of_Pennsylvania), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "idaho",
@@ -9819,7 +9891,11 @@
         "lon": -77.048363,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "GW"
+      ],
+      "searchAliasesNote": "\"GW\" is the short form given in the opening paragraph of Wikipedia's article \"George Washington University\" (https://en.wikipedia.org/wiki/George_Washington_University), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "long-beach-state",
@@ -9859,7 +9935,11 @@
         "lon": -118.11204,
         "timezone": "America/Los_Angeles"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "CSULB"
+      ],
+      "searchAliasesNote": "\"CSULB\" is the short form given in the opening paragraph of Wikipedia's article \"California State University, Long Beach\" (https://en.wikipedia.org/wiki/California_State_University,_Long_Beach), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "niagara",
@@ -10099,7 +10179,11 @@
         "lon": -70.932465,
         "timezone": "America/New_York"
       },
-      "onboardedAt": "2026-09-07"
+      "onboardedAt": "2026-09-07",
+      "searchAliases": [
+        "UNH"
+      ],
+      "searchAliasesNote": "\"UNH\" is the short form given in the opening paragraph of Wikipedia's article \"University of New Hampshire\" (https://en.wikipedia.org/wiki/University_of_New_Hampshire), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "hawaii",
@@ -14067,7 +14151,11 @@
         "lon": -87.218511,
         "timezone": "America/Chicago"
       },
-      "onboardedAt": "2026-09-15"
+      "onboardedAt": "2026-09-15",
+      "searchAliases": [
+        "UWF"
+      ],
+      "searchAliasesNote": "\"UWF\" is the short form given in the opening paragraph of Wikipedia's article \"University of West Florida\" (https://en.wikipedia.org/wiki/University_of_West_Florida), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "adams-state",
@@ -14190,7 +14278,11 @@
       },
       "onboardedAt": "2026-09-15",
       "namesNote": "nickname \"Chargers\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Alabama in Huntsville\", checked 2026-09-16 (#200). No shortName: University of X pattern but X has a further qualifier: 'Alabama in Huntsville'; nothing invented (see #200).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "UAH"
+      ],
+      "searchAliasesNote": "\"UAH\" is the short form given in the opening paragraph of Wikipedia's article \"University of Alabama in Huntsville\" (https://en.wikipedia.org/wiki/University_of_Alabama_in_Huntsville), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "allen",
@@ -16131,7 +16223,11 @@
         "timezone": "America/Denver"
       },
       "onboardedAt": "2026-09-16",
-      "namesNote": "nickname \"Mountain Lions\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Colorado Colorado Springs\", checked 2026-09-16 (#200). shortName \"Colorado Colorado Springs\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name."
+      "namesNote": "nickname \"Mountain Lions\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Colorado Colorado Springs\", checked 2026-09-16 (#200). shortName \"Colorado Colorado Springs\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name.",
+      "searchAliases": [
+        "UCCS"
+      ],
+      "searchAliasesNote": "\"UCCS\" is the short form given in the opening paragraph of Wikipedia's article \"University of Colorado Colorado Springs\" (https://en.wikipedia.org/wiki/University_of_Colorado_Colorado_Springs), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "colorado-mesa",
@@ -18444,7 +18540,11 @@
         "timezone": "America/Indiana/Indianapolis"
       },
       "onboardedAt": "2026-09-16",
-      "namesNote": "nickname \"Greyhounds\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Indianapolis\", checked 2026-09-16 (#200). shortName \"Indianapolis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name."
+      "namesNote": "nickname \"Greyhounds\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Indianapolis\", checked 2026-09-16 (#200). shortName \"Indianapolis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name.",
+      "searchAliases": [
+        "UIndy"
+      ],
+      "searchAliasesNote": "\"UIndy\" is the short form given in the opening paragraph of Wikipedia's article \"University of Indianapolis\" (https://en.wikipedia.org/wiki/University_of_Indianapolis), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "jamestown",
@@ -20090,7 +20190,11 @@
         "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-16",
-      "namesNote": "nickname \"Tritons\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Missouri-St. Louis\", checked 2026-09-16 (#200). shortName \"Missouri-St. Louis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name."
+      "namesNote": "nickname \"Tritons\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Missouri-St. Louis\", checked 2026-09-16 (#200). shortName \"Missouri-St. Louis\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention; not independently sourced beyond the confirmed name.",
+      "searchAliases": [
+        "UMSL"
+      ],
+      "searchAliasesNote": "\"UMSL\" is the short form given in the opening paragraph of Wikipedia's article \"University of Missouri–St. Louis\" (https://en.wikipedia.org/wiki/University_of_Missouri–St._Louis), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "molloy",
@@ -20297,7 +20401,11 @@
       },
       "onboardedAt": "2026-09-16",
       "namesNote": "nickname \"Lopers\" from Wikipedia's List of NCAA Division II institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_II_institutions), row \"University of Nebraska at Kearney\", checked 2026-09-16 (#200). No shortName: University of X pattern but X has a further qualifier: 'Nebraska at Kearney'; nothing invented (see #200).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "UNK"
+      ],
+      "searchAliasesNote": "\"UNK\" is the short form given in the opening paragraph of Wikipedia's article \"University of Nebraska at Kearney\" (https://en.wikipedia.org/wiki/University_of_Nebraska_at_Kearney), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "new-mexico-highlands",
@@ -26814,7 +26922,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Banana Slugs\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"University of California, Santa Cruz\", checked 2026-09-23 (#94). No shortName: the confirmed name has an at/in/comma campus qualifier; nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "UCSC"
+      ],
+      "searchAliasesNote": "\"UCSC\" is the short form given in the opening paragraph of Wikipedia's article \"University of California, Santa Cruz\" (https://en.wikipedia.org/wiki/University_of_California,_Santa_Cruz), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "caltech",
@@ -26855,7 +26967,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Beavers\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"California Institute of Technology\", checked 2026-09-23 (#94). No shortName: the confirmed name does not fit any stated mechanical pattern (an Institute, Academy or similar); nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "Caltech"
+      ],
+      "searchAliasesNote": "\"Caltech\" is the short form given in the opening paragraph of Wikipedia's article \"California Institute of Technology\" (https://en.wikipedia.org/wiki/California_Institute_of_Technology), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "calvin",
@@ -27582,7 +27698,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Maroons\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"University of Chicago\", checked 2026-09-23 (#94). shortName \"Chicago\" is that confirmed official name with a generic \"University\"/\"College\" (or \"University of\") removed, following the D1 shortName convention (#217); not independently sourced beyond the confirmed name.",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "UChicago"
+      ],
+      "searchAliasesNote": "\"UChicago\" is the short form given in the opening paragraph of Wikipedia's article \"University of Chicago\" (https://en.wikipedia.org/wiki/University_of_Chicago), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "christopher-newport",
@@ -33420,7 +33540,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Engineers\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Massachusetts Institute of Technology\", checked 2026-09-23 (#94). No shortName: the confirmed name does not fit any stated mechanical pattern (an Institute, Academy or similar); nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "MIT"
+      ],
+      "searchAliasesNote": "\"MIT\" is the short form given in the opening paragraph of Wikipedia's article \"Massachusetts Institute of Technology\" (https://en.wikipedia.org/wiki/Massachusetts_Institute_of_Technology), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "massachusetts-maritime-academy",
@@ -34851,7 +34975,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Lions\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"The College of New Jersey\", checked 2026-09-23 (#94). No shortName: the confirmed name does not fit any stated mechanical pattern (an Institute, Academy or similar); nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "TCNJ"
+      ],
+      "searchAliasesNote": "\"TCNJ\" is the short form given in the opening paragraph of Wikipedia's article \"The College of New Jersey\" (https://en.wikipedia.org/wiki/The_College_of_New_Jersey), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "suny-new-paltz",
@@ -37129,7 +37257,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Tigers\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Rochester Institute of Technology\", checked 2026-09-23 (#94). No shortName: the confirmed name does not fit any stated mechanical pattern (an Institute, Academy or similar); nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "RIT"
+      ],
+      "searchAliasesNote": "\"RIT\" is the short form given in the opening paragraph of Wikipedia's article \"Rochester Institute of Technology\" (https://en.wikipedia.org/wiki/Rochester_Institute_of_Technology), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "rockford",
@@ -40172,7 +40304,11 @@
       },
       "onboardedAt": "2026-09-23",
       "namesNote": "nickname \"Bears\" from Wikipedia's List of NCAA Division III institutions (https://en.wikipedia.org/wiki/List_of_NCAA_Division_III_institutions), row \"Washington University in St. Louis\", checked 2026-09-23 (#94). No shortName: the confirmed name has an at/in/comma campus qualifier; nothing invented (see #94).",
-      "colorsSource": "athletics-site"
+      "colorsSource": "athletics-site",
+      "searchAliases": [
+        "WashU"
+      ],
+      "searchAliasesNote": "\"WashU\" is the short form given in the opening paragraph of Wikipedia's article \"Washington University in St. Louis\" (https://en.wikipedia.org/wiki/Washington_University_in_St._Louis), checked 2026-09-24 (#309), following the Wikipedia-cited names convention (#217). Search only; not displayed."
     },
     {
       "slug": "waynesburg",

@@ -637,7 +637,10 @@ function matchScore(p, q) {
   for (const n of s.names) {
     if (n.text === s.short) continue;
     let sc = 0;
-    if (n.text === q || n.text.startsWith(q)) sc = 70;
+    // #309: an exact search name ('UNC', 'Pitt') outranks another program's short-name prefix (90: 'UNC Wilmington'),
+    // so North Carolina comes first and the other UNC schools still follow; only the short name itself (100) beats it
+    if (n.text === q) sc = 95;
+    else if (n.text.startsWith(q)) sc = 70;
     else if (tokensPrefixWords(toks, n.words)) sc = 60;
     else if (joined.length >= 3 && n.joined.startsWith(joined)) sc = 50;
     if (sc > (best?.score || 0)) best = { score: sc, why: n.label };
