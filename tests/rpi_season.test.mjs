@@ -188,3 +188,25 @@ test('Division II still shows RPI as not applicable while the live season is in 
   const m = app().match(/<tr><th>RPI 2026 \(in progress\)<\/th><td>[^<]*<\/td><td>([\s\S]*?)<\/td><\/tr>/);
   assert.equal(m?.[1], '<span class="muted small">not applicable to Division II</span>');
 });
+
+// Issue #287 (owner decision): a record taken from the NCAA RPI table (recordSource 'ncaa-rpi-d1') counts only games
+// against Division I opponents, so wherever a season record shows - the Table's Record cell, History's season by
+// season, Compare's record rows - it carries a muted "(D1 games)" note whose title says why. Other sources do not.
+test('a record from the NCAA table is labelled D1 games in the Table, History and Compare', async () => {
+  const files = filesFor('before');
+  const D1 = /<span class="muted small" title="[^"]*only games against Division I opponents[^"]*"> \(D1 games\)<\/span>/;
+  files['api/v1/programs'].programs[0].lastSeason.recordSource = 'ncaa-rpi-d1';
+  files['api/v1/programs/alpha'].seasons.find(s => s.year === 2025).recordSource = 'ncaa-rpi-d1';
+  files['api/v1/programs/alpha'].seasons.find(s => s.year === 2024).recordSource = 'schedule';
+  const pg = loadPage(files); await pg.sb.loadIndex();
+  const { sb, app } = pg;
+  const [alpha, beta] = ['alpha', 'beta'].map(slug => sb.S.index.programs.find(p => p.slug === slug));
+  assert.match(sb.tableHtml([alpha]), new RegExp(`18-4-2</span>${D1.source}`), 'Table: the Record cell has no D1 note');
+  assert.doesNotMatch(sb.tableHtml([beta]), /D1 games/, 'Table: a record from another source is labelled D1');
+  await sb.renderProfile('alpha', 'history');
+  const rows = sb.document.querySelector('#tab').innerHTML.split('<tr>');
+  assert.match(rows.find(r => r.startsWith('<td>2025')) || '', new RegExp(`<b>18-4-2</b>${D1.source}`), 'History: 2025 has no D1 note');
+  assert.doesNotMatch(rows.find(r => r.startsWith('<td>2024')) || '<td>2024 missing', /D1 games|missing/, 'History: the schedule record is labelled D1');
+  sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();
+  assert.match(app(), new RegExp(`<tr><th>2025 record</th><td>18-4-2${D1.source}</td><td>18-4-2</td>`), 'Compare: the D1 note is missing or on the wrong program');
+});

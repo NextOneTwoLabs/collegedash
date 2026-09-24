@@ -157,6 +157,11 @@ def test_ncaa_last():
     s = rows.get(2025, {})
     ok("with no other source the NCAA record is published as ncaa-rpi-d1",
        (s.get("record"), s.get("recordSource"), s.get("gamesPlayed")) == ("9-7-2", "ncaa-rpi-d1", 18), str(s))
+    # the Table's Record cell reads lastSeason from the index, so it needs the source to say "(D1 games)"
+    p = {"slug": "fixture", "name": "Fixture", "seasons": sorted(rows.values(), key=lambda r: -r["year"]),
+         "program": {"headCoach": {}}, "_build": {"completeness": 1, "stale": [], "builtAt": "x"}}
+    last = (build.summary_row(p) or {}).get("lastSeason") or {}
+    ok("the index's lastSeason carries recordSource ncaa-rpi-d1", last.get("recordSource") == "ncaa-rpi-d1", str(last))
 
 
 def test_preseason():

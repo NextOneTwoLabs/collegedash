@@ -1918,7 +1918,7 @@ def summary_row(p: dict) -> dict:
         "collegeCups": len(p["program"].get("collegeCups") or []),
         "currentSeason": ({"year": cur["year"], "record": cur.get("record"), "rpiRank": cur.get("rpiRank")} if cur else None),
         "lastSeason": ({"year": last_final["year"], "record": last_final.get("record"), "gamesPlayed": last_final.get("gamesPlayed"),
-                        "rpiRank": last_final.get("rpiRank"),
+                        "recordSource": last_final.get("recordSource"), "rpiRank": last_final.get("rpiRank"),
                         "ncaaResult": last_final.get("ncaaResult")} if last_final else None),
         "rpiHistory": [{"year": s["year"], "rank": s.get("rpiRank")} for s in seasons if s.get("rpiRank")],
         "rosterSize": (p.get("roster") or {}).get("count"),
