@@ -116,8 +116,9 @@ def test_tables() -> None:
     # fails if a year is invented or a played year dropped: the D3 tournament starts in 1986 and 2020 was cancelled
     ok("the D3 table is 1986-2025 with 2020 absent, 39 years",
        set(d3) == set(range(1986, 2026)) - {2020} and len(d3) == 39, f"{len(d3)} years, missing {sorted(set(range(1986, 2026)) - set(d3))}")
-    ok("no D3 year is blank or a record in parentheses", all(isinstance(v, str) and v.strip() and "-0-" not in v for v in d3.values()),
-       [v for v in d3.values() if not (isinstance(v, str) and v.strip() and "-0-" not in v)])
+    # fails if a name is copied with NCAA.com's season record, "Messiah (22-1-3)": no champion name has a digit
+    ok("no D3 year is blank or carries a record", all(isinstance(v, str) and v.strip() and not any(c.isdigit() for c in v) for v in d3.values()),
+       [v for v in d3.values() if not (isinstance(v, str) and v.strip() and not any(c.isdigit() for c in v))])
     ok("the D3 table is the one CHAMPION_TABLES reads for D3", build.CHAMPION_TABLES.get("D3") is d3)
     ok("both D3 sources are cited in build.py", "ncaa.com/history/soccer-women/d3" in src
        and "NCAA Division III women's soccer tournament" in src, "citation missing")
