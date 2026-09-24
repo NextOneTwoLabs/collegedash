@@ -41,6 +41,7 @@ import collections
 import copy
 import json
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1094,13 +1095,18 @@ def test_committed() -> None:
            holds == D2_COLLECTION_HOLDS, str(sorted(set(holds.items()) ^ set(D2_COLLECTION_HOLDS.items()), key=str)))
         # fails if a value no source gave is written for a new program (the spike's gogusties.com case).
         # shortName and nickname are handled separately below (issue #200: a D2 program may carry them
-        # from a cited source); everything else here still comes from nothing on D2.
-        ok("nothing a source did not give is filled in", all(p["colors"] is None
-                                                             and p["ids"]["wikipedia"] is None and p["ids"]["tdsClgId"] is None
+        # from a cited source), and so are colors (issue #274: `registry colors` fills them from Wikipedia's
+        # Module:College color/data); everything else here still comes from nothing on D2.
+        ok("nothing a source did not give is filled in", all(p["ids"]["wikipedia"] is None and p["ids"]["tdsClgId"] is None
                                                              and p["ids"]["ncaaName"] is None and p["ids"]["rpiHistoryName"] is None
                                                              for p in d2),
-           str([p["slug"] for p in d2 if p["colors"] or p["ids"]["wikipedia"] or p["ids"]["tdsClgId"]
+           str([p["slug"] for p in d2 if p["ids"]["wikipedia"] or p["ids"]["tdsClgId"]
                 or p["ids"]["ncaaName"] or p["ids"]["rpiHistoryName"]][:5]))
+        # fails if a D2 colour is anything but the colour table's [primary, secondary] '#RRGGBB' form
+        bad_colors = [(p["slug"], p["colors"]) for p in d2 if not (
+            p["colors"] is None or (isinstance(p["colors"], list) and 1 <= len(p["colors"]) <= 2
+                                    and all(isinstance(h, str) and re.fullmatch(r"#[0-9A-F]{6}", h) for h in p["colors"])))]
+        ok("D2 colors are empty or one or two #RRGGBB values from the colour table", not bad_colors, str(bad_colors[:5]))
         # issue #200: a filled shortName or nickname must cite its source in namesNote, following #173's
         # location.note pattern ("every Scorecard id beyond the builder's joins names its source"). Fails
         # if either field is set with no note, or with a note that names no source, or if a note exists
