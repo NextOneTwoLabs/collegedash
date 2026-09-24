@@ -76,6 +76,40 @@ def _social(card) -> dict:
     return out
 
 
+def _unlabeled_fields(groups) -> dict:
+    """Two WMT themes print a player's fields as unlabelled groups (#263): wsucougars.com's
+    li.roster-list-item > .roster-list-item__fields-item and odusports.com's .roster-card-item >
+    .roster-card-component__profile-box. The first group opens with the position in a <strong>, then
+    the height and/or the class; the second opens with the class in a <strong> (wsucougars) or goes
+    straight to the hometown. Each field is read by its place and its look, never guessed: a height by
+    HEIGHT_RE, a hometown only with a comma ("City, ST"). The spans after the hometown are schools
+    with no label, which cannot be told apart from a previous college, so they are left out."""
+    out = {}
+    if not groups:
+        return out
+    kids = [[c for c in g.find_all(True, recursive=False)] for g in groups]
+    first = kids[0]
+    if first and first[0].name == "strong":
+        t = common.clean(first[0].get_text(" "))
+        if t and not HEIGHT_RE.search(t) and not class_code(t):
+            out["position"] = t
+    for c in first[1:]:
+        t = common.clean(c.get_text(" "))
+        if HEIGHT_RE.search(t):
+            out.setdefault("height", t)
+        elif t:
+            out.setdefault("class-level", t)
+    if len(kids) > 1:
+        rest = kids[1]
+        if rest and rest[0].name == "strong":
+            out.setdefault("class-level", common.clean(rest[0].get_text(" ")))
+            rest = rest[1:]
+        t = common.clean(rest[0].get_text(" ")) if rest else ""
+        if "," in t:
+            out["hometown"] = t
+    return out
+
+
 def _list_fields(item) -> dict:
     """UCLA-style list view: fields carry a class suffix instead of a label."""
     out = {}
@@ -93,11 +127,13 @@ def parse_roster(html: str, base_url: str) -> dict:
     for item in soup.select("li.roster-list-item"):
         link = item.select_one("a[href*='/roster/'][href*='/player/']")
         staff_link = item.select_one("a[href*='/staff/']")
-        title_el = item.select_one(".roster-list-item__title")
+        # wsucougars.com's theme names it .rosters-list-item__title-link (#263): the h3 around it also holds
+        # the jersey number and a pronunciation widget, so the link is read, not the heading
+        title_el = item.select_one(".roster-list-item__title, .rosters-list-item__title-link")
         name = common.clean(title_el.get_text(" ")) if title_el else ""
         if link and not staff_link:
-            f = _list_fields(item)
-            num_el = item.select_one(".roster-list-item__jersey-number")
+            f = _list_fields(item) or _unlabeled_fields(item.select(".roster-list-item__fields-item"))
+            num_el = item.select_one(".roster-list-item__jersey-number, .rosters-list-item__number")
             pos_label = f.get("position", "")
             height = f.get("height", "")
             players.append({
@@ -138,7 +174,11 @@ def parse_roster(html: str, base_url: str) -> dict:
             basic = fields.get("_basic", [])
             height = next((b for b in basic if HEIGHT_RE.search(b)), "")
             class_label = next((b for b in basic if class_code(b)), "")
-            num_el = card.select_one(".roster-card-item__jersey-number")
+            if not (pos_label or fields):  # odusports.com's unlabelled profile boxes (#263)
+                u = _unlabeled_fields(card.select(".roster-card-component__profile-box"))
+                pos_label, height, class_label = u.get("position", ""), u.get("height", ""), u.get("class-level", "")
+                fields["hometown"] = u.get("hometown", "")
+            num_el = card.select_one(".roster-card-item__jersey-number, .roster-card-item__number")
             players.append({
                 "number": common.clean(num_el.get_text()) if num_el else "",
                 "name": name,
