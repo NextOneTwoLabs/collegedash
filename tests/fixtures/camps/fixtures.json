@@ -696,6 +696,26 @@
      "price": "$289.00"
     }
    ]
+  },
+  {
+   "file": "extract/synth-date-then-label.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "Womens Soccer Camps",
+   "count": 1,
+   "stats": {
+    "generic_named": 0
+   },
+   "expect": [
+    {
+     "name": "Womens Soccer Camps",
+     "startDate": "2026-08-13"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Camp Time: 12:00pm - 6:00pm"
+    }
+   ]
   }
  ],
  "robots": [

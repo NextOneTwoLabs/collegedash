@@ -1279,6 +1279,8 @@ def _dated_line_name(lines, i: int, published: str | None, section) -> str | Non
             return None
         if not CAMP_RE.search(NOT_CAMP_RE.sub(" ", t)) or len(t) >= 90:
             continue
+        if ":" in t or ROW_LABEL_RE.match(t):
+            return None  # a labelled detail line ('Camp Time: 12:00pm - 6:00pm', sacred-heart), not a title
         if any(parse_camp_dates(lines[k][0], published) for k in range(j + 1, min(j + 4, len(lines)))):
             return None
         cand = _clean_name(_camp_phrase(t, None))
