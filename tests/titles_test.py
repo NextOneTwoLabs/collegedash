@@ -152,7 +152,21 @@ def test_matching() -> None:
         ok("and pins only the slug it names", not build.title_matches(entry("other", "D2", "Other"), "Point Loma", "D2"))
     finally:
         build.D2_TITLE_SLUGS = saved
-    ok("the pin table is empty while no D2 program is published", build.D2_TITLE_SLUGS == {})
+    # The committed D2 pins (#271): each names a D2 program in the registry, and joins a name the table has.
+    reg_d2 = {p["slug"] for p in common.load_registry()["programs"] if p.get("division") == "D2"}
+    ok("every D2 pin names a D2 program in the registry", set(build.D2_TITLE_SLUGS.values()) <= reg_d2,
+       sorted(set(build.D2_TITLE_SLUGS.values()) - reg_d2))
+    ok("every D2 pin is a name the D2 table uses", set(build.D2_TITLE_SLUGS) <= set(build.NCAA_D2_WOMENS_CHAMPIONS.values()),
+       sorted(set(build.D2_TITLE_SLUGS) - set(build.NCAA_D2_WOMENS_CHAMPIONS.values())))
+    # each fails if its pin is dropped or re-pointed: the registry name cannot reach the NCAA.com name
+    for slug, name, years in (("metropolitan-state-denver", "Metropolitan State University of Denver", [2004, 2006]),
+                              ("point-loma-nazarene", "Point Loma Nazarene University", [2023]),
+                              ("california-state-polytechnic-pomona", "California State Polytechnic University, Pomona", [2024]),
+                              ("florida-institute-technology", "Florida Institute of Technology", [2025]),
+                              ("california-state-east-bay", "California State University, East Bay", [1988]),
+                              ("california-state-dominguez-hills", "California State University, Dominguez Hills", [1991])):
+        got = build.national_titles(entry(slug, "D2", name, None), [])[0]
+        ok(f"{slug} gets its D2 titles {years} through its pin", got == years, str(got))
     # fails if a division starts inheriting another division's table: a D3 school named like a D2 champion
     ok("a D3 program is not given a D2 table's title", build.national_titles(
         entry("some-d3", "D3", "Grand Valley State University", "Grand Valley State"), [])[0] == [])
@@ -340,7 +354,7 @@ def test_committed() -> None:
     ok("every D1 champion year is published by its champion", d1 == build.NCAA_D1_WOMENS_CHAMPIONS,
        str(sorted(set(d1.items()) ^ set(build.NCAA_D1_WOMENS_CHAMPIONS.items()))[:4]))
     # Every other division's published years are years its own table has, published by the program that table's
-    # champion joins to. Today no D2 program is published and this holds vacuously; with D2 published it is checked.
+    # champion joins to.
     by_slug = {p["slug"]: p for p in programs}
     wrong = sorted((d, y, s, (build.CHAMPION_TABLES.get(d) or {}).get(y)) for (d, y), s in published.items()
                    if d != "D1" and not (y in (build.CHAMPION_TABLES.get(d) or {})
@@ -357,6 +371,18 @@ def test_committed() -> None:
     ok("no published program is in a division with no champions table",
        all(p.get("division") in build.CHAMPION_TABLES for p in programs),
        sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES)))
+    # fails if a D2 champion year that should reach a published program does not (#271): 30 of the 37 played
+    # years join a published D2 program; the other 7 are champions now in D1 or closed (see D2_TITLE_SLUGS)
+    d2pub = [p for p in programs if p.get("division") == "D2"]
+    joins2 = {y: [p["slug"] for p in d2pub if build.title_matches(p, c, "D2")] for y, c in build.NCAA_D2_WOMENS_CHAMPIONS.items()}
+    ok("30 D2 champion years join exactly one published D2 program; the 7 unjoined are the D1-bound and closed ones",
+       sum(1 for v in joins2.values() if len(v) == 1) == 30 and not any(len(v) > 1 for v in joins2.values())
+       and sorted(y for y, v in joins2.items() if not v) == [1990, 2000, 2001, 2003, 2005, 2011, 2012],
+       str({y: v for y, v in joins2.items() if len(v) != 1}))
+    ok("and those 30 are published in the D2 champions' profiles",
+       {y: s for (d, y), s in published.items() if d == "D2"} == {y: v[0] for y, v in joins2.items() if len(v) == 1},
+       str(sorted(set({y: s for (d, y), s in published.items() if d == "D2"}.items())
+                  ^ set({y: v[0] for y, v in joins2.items() if len(v) == 1}.items()))[:4]))
     # fails if a D3 champion year that should reach a published program does not: 34 of the 39 played years
     # join a published D3 program; the other 5 are UC San Diego's, now the D1 program uc-san-diego (#94)
     d3pub = [p for p in programs if p.get("division") == "D3"]
