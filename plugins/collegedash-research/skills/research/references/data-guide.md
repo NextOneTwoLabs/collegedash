@@ -10,7 +10,7 @@ All paths below are relative to the selected checkout. Read JSON using `encoding
 | `public/data/programs/<slug>.json` | One profile; select named sections/fields and `_build` metadata. |
 | `public/data/commitments/index.json` | Object with `updated` and `commitments` list; use for discovery and counts. Aggregate records omit detailed `sources` and `clubInfo`; retrieve the matching profile commitment for source citations. |
 | `public/data/camps/index.json` | Object with `updated`, `window`, `counts`, and `camps` list; inspect dates and precision before claiming availability. |
-| `public/data/trends/index.json` | Precomputed feeder data for D1, D2 and D3 (#315): `updated`, `divisions`, `commitDivisions` (D2/D3 commits are null: not collected), `season`, `pastSeasons`, `commitStatuses`, `columns`, `coverage` (with `byDivision`), `programs` (each with `division`), `clubs`, `schools`. |
+| `public/data/trends/index.json` | Precomputed feeder data for D1, D2 and D3 (#315, #327): `updated`, `format` (`"records"`), `divisions`, `commitDivisions` (D2/D3 commits are null: not collected), `season`, `pastSeasons`, `commitStatuses`, `columns`, `coverage` (with `byDivision`), `programs` (each with `division`), `programIds`, `clubs`, `schools`, `records`. See Feeder counts. |
 
 The program index supplies `slug`, `name`, `shortName`, `nickname`, `searchNames`, `division`, `conference`, `city`, `state`, `region`, `ownership`, `undergradEnrollment`, `admissionRate`, `sat25`, `sat75`, `academicRank`, `academicRankTied`, `tuitionInState`, `tuitionOutOfState`, `headCoach`, `coachSince`, `nationalTitles`, `collegeCups`, `currentSeason`, `lastSeason`, `rpiHistory`, `rosterSize`, `commitmentsByYear`, `fallClimate`, `completeness`, `stale`, `builtAt`, and `failed`. Select only fields needed for the question; omit `tags`.
 
@@ -31,14 +31,29 @@ Profile research sections include `school`, `academicRank`, `climate`, `program`
 
 ## Feeder counts
 
-Read the file's `division`, `season`, `pastSeasons`, `commitStatuses`, `columns`, and `coverage` first. Current data covers D1 only. A club/school entry has identifying fields and `programs`, a map of program slug to a three-element count array ordered by `columns` (`current`, `past`, `commits`). Never guess an array's meaning without checking `columns`.
+Read the file's `format`, `divisions`, `commitDivisions`, `season`, `pastSeasons`, `columns` and `coverage` first. If `format` is not `"records"`, the file is an older shape; say so rather than guessing.
 
-- `current`: people on that program's current roster.
-- `past`: distinct people in stored past rosters who are not on that program's current roster.
-- `commits`: qualifying commitments, separate from roster populations; never add them to roster counts.
-- High-school commitment counts are not supported: display not available, even if an array contains zero in that position.
+- **Totals and coverage** come from `programs` (per program: `division`, `current`, `past`, `commits`, `clubKnown`, `schoolKnown`, each array ordered by `columns`) and `coverage` (all divisions together, and per division in `coverage.byDivision`). Never count people by counting records: a person with neither a known club nor a matched school has no record, so records undercount every total.
+- **Directories:** `programIds` is a list of slugs; `clubs` and `schools` hold parallel lists (`id`, `name`, `state`, and for schools `city`), plus `unmatched` (club positions whose spelling is not a reviewed club) and `aka` (position → extra search keys). `schools` is null when high schools are not matched in the build.
+- **Records** are four parallel integer lists, `records.p`, `.s`, `.c`, `.h`: one record per counted person who has a known club or a matched high school. `p` is a position in `programIds`; `s` is the status (0 `current`, 1 `past`, 2 `commits`); `c` a position in `clubs.id` and `h` in `schools.id`, -1 where unknown. Records are sorted by (p, s, c, h); their order carries no meaning.
+- **Adding them up:** filter records, then count by status. Several clubs (or schools, or programs) are combined with OR within their list and AND across the lists: "players from club A or B who went to high school X, at program P" counts the records with `c` in {A, B}, `h` = X and `p` = P. A former player's record carries both her club and her high school; report what the question needs, not the linked pair for a named person.
+- `current`: people on that program's current roster. `past`: distinct people in stored past rosters who are not on that program's current roster. `commits`: qualifying commitments, separate from roster populations; never add them to roster counts.
+- Commits are collected for `commitDivisions` only; elsewhere a program's `commits` is null and it has no commit records: report "not collected", never 0. High-school commitment counts are not supported: report not available.
 - Counts across programs are program-person relationships, not necessarily distinct people across the whole sport (transfers can appear at more than one program).
-- Report known-club/known-school coverage with denominators. Missing feeder identity is not evidence of no relationship. Rank roster relationships by current plus past, using current as a tie-breaker; keep commits separate.
+- Report known-club/known-school coverage with denominators, per division. Missing feeder identity is not evidence of no relationship. Rank roster relationships by current plus past, using current as a tie-breaker; keep commits separate. The site shows past and commit counts of 1 or 2 as "1-2" when two or more of club, high school and program are chosen, and exact counts for one; the file is exact.
+
+```python
+trends = load("public/data/trends/index.json")
+assert trends.get("format") == "records"
+r, clubs = trends["records"], trends["clubs"]["id"]
+want = {clubs.index(c) for c in ("mountain-view-los-altos-sc",) if c in clubs}  # club ids chosen from trends["clubs"]
+by_program = {}
+for p, s, c in zip(r["p"], r["s"], r["c"]):
+    if c in want:
+        row = by_program.setdefault(trends["programIds"][p], [0, 0, 0])
+        row[s] += 1
+ranked = sorted(by_program.items(), key=lambda kv: (-(kv[1][0] + kv[1][1]), -kv[1][0], kv[0]))
+```
 
 ## Reproducible projections
 

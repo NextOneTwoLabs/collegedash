@@ -1,4 +1,4 @@
-"""Trends between college programs (D1, D2 and D3), clubs and high schools (issues #230, #315).
+"""Trends between college programs (D1, D2 and D3), clubs and high schools (issues #230, #315, #327).
 
 Answers "which programs have the most players from club X?" and the reverse, "which clubs feed
 program Y?", from what the build already knows about every player and recruit. The owner's
@@ -20,9 +20,24 @@ gzipped for all three divisions, held under a 450 KB budget by tests/trends_test
         "byDivision": {"D1": {"current", "past", "commits"}, "D2": {"current", "past", "commits": null}, ...}
       },
       "programs": {slug: {"division", "current", "past", "commits", "clubKnown": [c, p, m], "schoolKnown": [c, p, m]}},
-      "clubs":    {clubId | "raw:<key>": {"name", "state", "unmatched"?, "aka"?, "programs": {slug: [c, p, m]}}},
-      "schools":  {schoolId: {"name", "city", "state", "aka"?, "programs": {slug: [c, p, m]}}} | null
+      "format": "records",
+      "programIds": [slug, ...],
+      "clubs":    {"id": [clubId | "raw:<key>", ...], "name": [...], "state": [...], "unmatched": [i, ...], "aka": {"i": [...]}},
+      "schools":  {"id": [schoolId, ...], "name": [...], "city": [...], "state": [...], "aka": {"i": [...]}} | null,
+      "records":  {"p": [...], "s": [...], "c": [...], "h": [...]}
     }
+
+Records (#327, replacing #230's per-club and per-school `programs` cells): one per counted person who has a
+known club or a matched high school, as four integer columns of one length - `p` an index into `programIds`,
+`s` the status (0 current, 1 former, 2 commit), `c` an index into `clubs.id` and `h` into `schools.id`, -1 where
+unknown. They answer "club A or B, and school X, at program P" exactly, which two pair tables could not. Sorted
+by (p, s, c, h). `format: "records"` names the shape for anything reading /api/v1/trends. Program totals and
+coverage stay in `programs` and `coverage`: people are counted there, never by counting records (people with
+neither a club nor a school write no record). validate_records states the rules and every build checks them.
+
+The owner's decisions on #327: a former player's record carries both her club and her high school (P1), and the
+page shows past and commit counts of 1 or 2 as "1-2" only when two or more boxes have values (option a); the file
+itself is exact.
 
 `divisions` (issue #315) replaces the v1 field `"division": "D1"`: the divisions whose programs the index
 holds, sorted. `commitDivisions` are the divisions whose commits are collected. Commits in any other division
@@ -70,9 +85,9 @@ keyed "raw:<cleaned key>" and flagged `unmatched`, so it is counted in the open 
 dropped. "School known" counts only a match to exactly one NCES school; "school named" counts any
 high-school string, so the page can say both.
 
-`programs_for`, `feeders_for` and `answer` at the bottom are pure functions over the index - the
-hook the AI ask feature (#165) can call from the Worker later, with no build or DOM in the way.
-public/index.html carries the same functions in JS (trendsProgramsFor, trendsFeedersFor).
+`select`, `feeders`, `programs_for`, `feeders_for` and `answer` at the bottom are pure functions over the
+index - the hook the AI ask feature (#165) can call from the Worker later, with no build or DOM in the way.
+public/index.html carries the same query in JS (trendsQuery, trendsFeeders).
 
 Output directory: beside the programs directory, wherever that is. `common.PROGRAMS_OUT_DIR` is
 what decides whether a build is publishing (build.publishing_run) and what every scratch build
@@ -98,6 +113,7 @@ DIVISIONS = ("D1", "D2", "D3")
 COMMIT_DIVISIONS = ("D1",)  # the owner's decision on #315: D2/D3 commits read "Not collected"
 COLUMNS = ("current", "past", "commits")
 KNOWN_CLUB = ("matched", "unmatched")
+FORMAT = "records"  # #327: the shape of /api/v1/trends
 
 
 def out_dir() -> str:
@@ -126,7 +142,7 @@ def _pct(n: int, d: int) -> int | None:
 
 
 def _empty_row(commits: bool = True) -> list:
-    """A [current, past, commits] cell; commits is null, never 0, where commits are not collected."""
+    """A program's [current, past, commits] row; commits is null, never 0, where commits are not collected."""
     return [0, 0, 0 if commits else None]
 
 
@@ -136,8 +152,13 @@ def _new_cov(commits: bool) -> dict:
             "commits": {"recruits": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": None} if commits else None}
 
 
+class RecordsError(ValueError):
+    """The records break a rule the published file must keep (see validate_records)."""
+
+
 class Recorder:
-    """Counts every D1, D2 and D3 profile the build produces into the trends index."""
+    """Counts every D1, D2 and D3 profile the build produces into the trends index, one record per
+    counted person (#327)."""
 
     def __init__(self, club_table=None, *, candidates=None, same_person=None, school_table=None):
         """`candidates(tds, sw)` -> {normalised name: [club candidate rows]} and `same_person(a, b)`
@@ -154,6 +175,7 @@ class Recorder:
         self.clubs: dict[str, dict] = {}
         self.schools: dict[str, dict] = {}
         self._school_keys: dict[str, set[str]] = {}
+        self.records: list[tuple] = []  # (slug, status, club id | None, school id | None), one per counted person
 
     # ----- the school table, only when the module exists ---------------------------------------
     def school_table(self):
@@ -161,9 +183,9 @@ class Recorder:
             self._school_table = _schools.load_table()
         return self._school_table
 
-    # ----- one entry per club or school ----------------------------------------------------------
-    def _club_entry(self, info: dict) -> dict | None:
-        """The index entry a `clubInfo` counts into, or None when there is no club to count."""
+    # ----- one directory entry per club or school -------------------------------------------------
+    def _club_id(self, info: dict | None) -> str | None:
+        """The directory id a `clubInfo` counts under, or None when there is no club to count."""
         if not info or info.get("status") not in KNOWN_CLUB:
             return None
         if info.get("status") == "matched" and info.get("clubId"):
@@ -171,40 +193,46 @@ class Recorder:
             if cid not in self.clubs:
                 club = self.table.clubs.get(cid) or {}
                 name = club.get("name") or info.get("club") or info.get("raw")
-                self.clubs[cid] = {"name": name, "state": club.get("state"), "programs": {}}
+                self.clubs[cid] = {"name": name, "state": club.get("state")}
                 aka = search_aliases(self.table, cid, name)
                 if aka:
                     self.clubs[cid]["aka"] = aka
-            return self.clubs[cid]
+            return cid
         key = info.get("key") or clubs.clean_key(info.get("raw"))
         if not key:
             return None
         rid = f"raw:{key}"
         if rid not in self.clubs:
-            self.clubs[rid] = {"name": info.get("raw") or key, "state": None, "unmatched": True, "programs": {}}
-        return self.clubs[rid]
+            self.clubs[rid] = {"name": info.get("raw") or key, "state": None, "unmatched": True}
+        return rid
 
-    def _school_entry(self, info: dict | None) -> dict | None:
+    def _school_id(self, info: dict | None) -> str | None:
         if not info or info.get("status") != "matched" or not info.get("schoolId"):
             return None
         sid = info["schoolId"]
         if sid not in self.schools:
             self.schools[sid] = {"name": info.get("school") or info.get("raw"), "city": info.get("city"),
-                                 "state": info.get("state"), "programs": {}}
+                                 "state": info.get("state")}
         if info.get("key"):
             self._school_keys.setdefault(sid, set()).add(info["key"])
-        return self.schools[sid]
+        return sid
 
-    def _bump(self, entry: dict | None, slug: str, col: int) -> bool:
-        if entry is None:
-            return False
-        entry["programs"].setdefault(slug, _empty_row(self.programs[slug]["commits"] is not None))[col] += 1
-        return True
+    def _person(self, slug: str, status: int, row: dict, cov: dict, cid: str | None, sid: str | None) -> None:
+        """One counted person: the known-club and known-school tallies, and a record when either is known."""
+        col = COLUMNS[status]
+        if cid:
+            row["clubKnown"][status] += 1
+            cov[col]["clubKnown"] += 1
+        if sid:
+            row["schoolKnown"][status] += 1
+            cov[col]["schoolKnown"] += 1
+        if cid or sid:
+            self.records.append((slug, status, cid, sid))
 
     # ----- observing one profile -----------------------------------------------------------------
     def observe(self, profile: dict, program: dict, *, ath=None, tds=None, sw=None) -> None:
-        """Count one published profile of any division (#315; D1 only before it). Commits are counted
-        only in COMMIT_DIVISIONS: elsewhere they are null, and a D2/D3 commitment record is not read.
+        """Count one published profile of any division (#315). Commits are counted only in
+        COMMIT_DIVISIONS: elsewhere they are null, and a D2/D3 commitment record is not read.
 
         `ath`, `tds` and `sw` are the program's stored sources; loaded here when not given, because
         a past player's club is not in the profile and has to be resolved from them."""
@@ -227,16 +255,11 @@ class Recorder:
             cur_names.add(common.norm_name(q.get("name") or ""))
             row["current"] += 1
             cov["current"]["players"] += 1
-            if self._bump(self._club_entry(q.get("clubInfo")), slug, 0):
-                row["clubKnown"][0] += 1
-                cov["current"]["clubKnown"] += 1
             if "schoolInfo" in q:
                 self.schools_seen = True
             if (q.get("highSchool") or "").strip():
                 cov["current"]["schoolNamed"] += 1
-            if self._bump(self._school_entry(q.get("schoolInfo")), slug, 0):
-                row["schoolKnown"][0] += 1
-                cov["current"]["schoolKnown"] += 1
+            self._person(slug, 0, row, cov, self._club_id(q.get("clubInfo")), self._school_id(q.get("schoolInfo")))
 
         # past rosters: former players only, one count per person however many stored seasons list her
         hist = profile.get("rosterHistory") or {}
@@ -255,22 +278,17 @@ class Recorder:
                 continue
             row["commits"] += 1
             cov["commits"]["recruits"] += 1
-            if self._bump(self._club_entry(c.get("clubInfo")), slug, 2):
-                row["clubKnown"][2] += 1
-                cov["commits"]["clubKnown"] += 1
             if (c.get("highSchool") or "").strip():
                 cov["commits"]["schoolNamed"] += 1
-            if "schoolInfo" in c:  # not published today; counted the day it is
-                if cov["commits"]["schoolKnown"] is None:
-                    cov["commits"]["schoolKnown"] = 0
-                if self._bump(self._school_entry(c.get("schoolInfo")), slug, 2):
-                    row["schoolKnown"][2] += 1
-                    cov["commits"]["schoolKnown"] += 1
+            if "schoolInfo" in c and cov["commits"]["schoolKnown"] is None:  # not published today; counted the day it is
+                cov["commits"]["schoolKnown"] = 0
+            self._person(slug, 2, row, cov, self._club_id(c.get("clubInfo")), self._school_id(c.get("schoolInfo")))
 
     def _observe_past(self, slug, row, cov, hist, cur_names, ath, tds, sw) -> None:
         source_hist = (((ath or {}).get("data") or {}).get("rosterHistory") or {})
         cands = self.candidates(tds, sw) if self.candidates else {}
         seen: set[str] = set()
+        table = self.school_table()
         # season order newest first, so the most recent stored row is the one that speaks for a person
         for y in sorted(hist, key=lambda s: -int(s)):
             self.past_seasons.add(int(y))
@@ -290,18 +308,14 @@ class Recorder:
                     rows.append({"raw": column[n], "source": "roster page", "updated": clubs.season_date(int(y))})
                 chosen = clubs.resolve(rows, self.table) if rows else None
                 info = self.table.match(chosen["raw"]).as_dict() if chosen else None
-                if self._bump(self._club_entry(info), slug, 1):
-                    row["clubKnown"][1] += 1
-                    cov["past"]["clubKnown"] += 1
-                if (q.get("highSchool") or "").strip():
+                hs = (q.get("highSchool") or "").strip()
+                if hs:
                     cov["past"]["schoolNamed"] += 1
-                table = self.school_table()
-                if table is not None and (q.get("highSchool") or "").strip():
+                sinfo = None
+                if table is not None and hs:
                     m = table.match(q.get("highSchool"), q.get("hometown"))
                     sinfo = m.as_dict() if getattr(m, "status", None) != "none" else None
-                    if self._bump(self._school_entry(sinfo), slug, 1):
-                        row["schoolKnown"][1] += 1
-                        cov["past"]["schoolKnown"] += 1
+                self._person(slug, 1, row, cov, self._club_id(info), self._school_id(sinfo))
 
     # ----- the index -----------------------------------------------------------------------------
     def _coverage(self) -> dict:
@@ -322,26 +336,44 @@ class Recorder:
         return {**total, "byDivision": by}
 
     def index(self) -> dict:
-        return {
-            "updated": common.now_iso(), "divisions": sorted(self.cov), "commitDivisions": list(COMMIT_DIVISIONS),
-            "season": self.season,
+        program_ids = sorted(self.programs)
+        club_ids = sorted(self.clubs)
+        school_ids = sorted(self.schools) if self.schools_seen else []
+        pi = {s: i for i, s in enumerate(program_ids)}
+        ci = {c: i for i, c in enumerate(club_ids)}
+        hi = {h: i for i, h in enumerate(school_ids)}
+        rows = sorted((pi[slug], status, ci[cid] if cid else -1, hi.get(sid, -1) if sid else -1)
+                      for slug, status, cid, sid in self.records)
+        rows = [r for r in rows if r[2] >= 0 or r[3] >= 0]  # a school-only record of a build without schools is no record
+        clubs_dir = {"id": club_ids, "name": [self.clubs[c]["name"] for c in club_ids],
+                     "state": [self.clubs[c]["state"] for c in club_ids],
+                     "unmatched": [i for i, c in enumerate(club_ids) if self.clubs[c].get("unmatched")],
+                     "aka": {str(i): self.clubs[c]["aka"] for i, c in enumerate(club_ids) if self.clubs[c].get("aka")}}
+        schools_dir = None
+        if self.schools_seen:
+            akas = {h: _aka(self._school_keys.get(h) or (), self.schools[h].get("name")) for h in school_ids}
+            schools_dir = {"id": school_ids, "name": [self.schools[h]["name"] for h in school_ids],
+                           "city": [self.schools[h]["city"] for h in school_ids],
+                           "state": [self.schools[h]["state"] for h in school_ids],
+                           "aka": {str(i): akas[h] for i, h in enumerate(school_ids) if akas[h]}}
+        doc = {
+            "updated": common.now_iso(), "format": FORMAT, "divisions": sorted(self.cov),
+            "commitDivisions": list(COMMIT_DIVISIONS), "season": self.season,
             "pastSeasons": sorted(self.past_seasons), "commitStatuses": list(COMMIT_STATUSES),
             "columns": list(COLUMNS), "coverage": self._coverage(),
-            "programs": {s: self.programs[s] for s in sorted(self.programs)},
-            "clubs": {k: self.clubs[k] for k in sorted(self.clubs)},
-            "schools": {k: self._with_aka(self.schools[k], self._school_keys.get(k)) for k in sorted(self.schools)}
-                       if self.schools_seen else None,
+            "programs": {s: self.programs[s] for s in program_ids},
+            "programIds": program_ids,
+            "clubs": clubs_dir,
+            "schools": schools_dir,
+            "records": {"p": [r[0] for r in rows], "s": [r[1] for r in rows], "c": [r[2] for r in rows], "h": [r[3] for r in rows]},
         }
-
-    @staticmethod
-    def _with_aka(entry: dict, keys) -> dict:
-        aka = _aka(keys or (), entry.get("name"))
-        return {**{k: v for k, v in entry.items() if k != "programs"}, **({"aka": aka} if aka else {}), "programs": entry["programs"]}
+        validate_records(doc)  # the weekly refresh stops here rather than publish a file that breaks a rule
+        return doc
 
     def write(self, path: str | None = None) -> dict:
-        """Compact JSON, not common.write_json's indented form: the index is thousands of three-number
-        cells, and indenting each number onto its own line makes the file four times the size a
-        visitor's browser has to fetch. Same atomic replace as write_json."""
+        """Compact JSON, not common.write_json's indented form: the index is tens of thousands of small
+        integers, and indenting each onto its own line makes the file four times the size a visitor's
+        browser has to fetch. Same atomic replace as write_json."""
         doc = self.index()
         path = path or out_path()
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -358,6 +390,44 @@ class Recorder:
         return doc
 
 
+def validate_records(doc: dict) -> None:
+    """The rules a published records file keeps (#327, Bianque's plan review), checked on every build and
+    by tests/trends_test.py on the committed file:
+      * the four columns are integer lists of one length, with keys exactly p, s, c, h (no season);
+      * records are sorted by (p, s, c, h), so the file's order says nothing beyond its values;
+      * every record points into the directories and knows a club or a school;
+      * no record for a commit of a division whose commits are not collected (#315 C1);
+      * people are counted by `programs`, never by records: a program's records of one status never
+        exceed that program's count of that status."""
+    r = doc.get("records") or {}
+    if sorted(r) != ["c", "h", "p", "s"]:
+        raise RecordsError(f"record keys are {sorted(r)}, not c, h, p, s")
+    cols = [r["p"], r["s"], r["c"], r["h"]]
+    n = len(cols[0])
+    if any(len(c) != n for c in cols) or any(type(v) is not int for c in cols for v in c):
+        raise RecordsError("record columns must be integer lists of one length")
+    rows = list(zip(*cols))
+    if rows != sorted(rows):
+        raise RecordsError("records are not sorted by (p, s, c, h)")
+    progs = doc["programIds"]
+    nclubs = len(doc["clubs"]["id"])
+    nschools = len((doc.get("schools") or {}).get("id") or [])
+    per: dict[tuple, int] = {}
+    for p, s, c, h in rows:
+        if not (0 <= p < len(progs)) or s not in (0, 1, 2) or not (-1 <= c < nclubs) or not (-1 <= h < nschools):
+            raise RecordsError(f"record {(p, s, c, h)} points outside the directories")
+        if c < 0 and h < 0:
+            raise RecordsError(f"record {(p, s, c, h)} knows neither a club nor a school")
+        per[(p, s)] = per.get((p, s), 0) + 1
+    for (p, s), k in per.items():
+        prog = doc["programs"][progs[p]]
+        total = prog[COLUMNS[s]]
+        if total is None:
+            raise RecordsError(f"{progs[p]}: {k} {COLUMNS[s]} records where {COLUMNS[s]} are not collected")
+        if k > total:
+            raise RecordsError(f"{progs[p]}: {k} {COLUMNS[s]} records but {total} {COLUMNS[s]} counted")
+
+
 def summary_line(doc: dict) -> str:
     c = doc["coverage"]
     cur, past, com = c["current"], c["past"], c["commits"]
@@ -370,15 +440,77 @@ def summary_line(doc: dict) -> str:
             f"({_pct(cur['clubKnown'], cur['players'])}%){sk}; {past['players']} former players, club known "
             f"{past['clubKnown']} ({_pct(past['clubKnown'], past['players'])}%); {com['recruits']} commits, "
             f"club known {com['clubKnown']} ({_pct(com['clubKnown'], com['recruits'])}%); "
-            f"{len(doc['clubs'])} clubs, {len(doc['schools'] or {})} schools")
+            f"{len(doc['clubs']['id'])} clubs, {len((doc['schools'] or {}).get('id') or [])} schools, "
+            f"{len(doc['records']['p'])} records")
 
 
 # ---------- pure functions over the index: the #165 hook ----------------------------------------
+# One question, AND across the three boxes and OR within each (#327): which records have a club in
+# `clubs` (when any is given) and a school in `schools` (when any) at a program in `programs` (when any).
 
-def _entities(doc: dict, kind: str) -> dict:
+def _ids(doc: dict, kind: str) -> list:
     if kind not in ("club", "school"):
         raise ValueError(f"kind must be club or school, not {kind!r}")
-    return doc.get("clubs" if kind == "club" else "schools") or {}
+    return ((doc.get("clubs") if kind == "club" else doc.get("schools")) or {}).get("id") or []
+
+
+def _matching(doc: dict, clubs_=(), schools_=(), programs=()):
+    """The records (p, s, c, h) that match the selection, as index tuples."""
+    cix = {c: i for i, c in enumerate(_ids(doc, "club"))}
+    hix = {h: i for i, h in enumerate(_ids(doc, "school"))}
+    pix = {s: i for i, s in enumerate(doc["programIds"])}
+    cs = {cix[c] for c in clubs_ if c in cix}
+    hs = {hix[h] for h in schools_ if h in hix}
+    ps = {pix[p] for p in programs if p in pix}
+    if (clubs_ and not cs) or (schools_ and not hs) or (programs and not ps):
+        return []
+    r = doc["records"]
+    return [t for t in zip(r["p"], r["s"], r["c"], r["h"])
+            if (not cs or t[2] in cs) and (not hs or t[3] in hs) and (not ps or t[0] in ps)]
+
+
+def _commits_shown(doc: dict, slug: str, schools_) -> bool:
+    """Commits are a number for a program whose division collects them, and not when a school is chosen
+    (no recruit carries a matched high school)."""
+    return (doc["programs"].get(slug) or {}).get("commits") is not None and not schools_
+
+
+def select(doc: dict, clubs=(), schools=(), programs=()) -> list[dict]:
+    """Per program: {slug, division, current, past, commits} of the people matching the selection, most
+    players first. commits is None where it is not a number (see _commits_shown)."""
+    out: dict[str, list] = {}
+    ids = doc["programIds"]
+    for p, s, _c, _h in _matching(doc, clubs, schools, programs):
+        out.setdefault(ids[p], [0, 0, 0])[s] += 1
+    rows = [{"slug": slug, "division": doc["programs"][slug].get("division"), "current": c, "past": pa,
+             "commits": m if _commits_shown(doc, slug, schools) else None}
+            for slug, (c, pa, m) in out.items()]
+    return sorted(rows, key=_sort_key)
+
+
+def feeders(doc: dict, kind: str, clubs=(), schools=(), programs=()) -> list[dict]:
+    """The clubs (or schools) of the people matching the selection, most players first.
+    Each row: {id, name, state, city?, unmatched?, current, past, commits}."""
+    ids = _ids(doc, kind)
+    d = doc["clubs"] if kind == "club" else doc["schools"]
+    col = 2 if kind == "club" else 3
+    counts: dict[int, list] = {}
+    for t in _matching(doc, clubs, schools, programs):
+        if t[col] >= 0:
+            counts.setdefault(t[col], [0, 0, 0])[t[1]] += 1
+    commits_known = kind == "club" and not schools and any(
+        (doc["programs"].get(s) or {}).get("commits") is not None for s in (programs or doc["programIds"]))
+    unmatched = set((d or {}).get("unmatched") or [])
+    rows = []
+    for i, (c, pa, m) in counts.items():
+        r = {"id": ids[i], "name": d["name"][i], "state": d["state"][i], "current": c, "past": pa,
+             "commits": m if commits_known else None}
+        if i in unmatched:
+            r["unmatched"] = True
+        if kind == "school" and d["city"][i]:
+            r["city"] = d["city"][i]
+        rows.append(r)
+    return sorted(rows, key=_sort_key)
 
 
 def _sort_key(r: dict):
@@ -388,36 +520,15 @@ def _sort_key(r: dict):
 
 
 def programs_for(doc: dict, kind: str, entity_id: str) -> list[dict]:
-    """The programs a club (or school) sent players to, most players first: current + past decides
-    the order, commits never do. Each row: {slug, division, current, past, commits}; commits is None for a
-    school (no recruit carries a matched school today) and for a program whose commits are not collected."""
-    entry = _entities(doc, kind).get(entity_id)
-    if not entry:
-        return []
-    school = kind == "school"
-    progs = doc.get("programs") or {}
-    rows = [{"slug": slug, "division": (progs.get(slug) or {}).get("division"), "current": c, "past": p,
-             "commits": None if school else m}
-            for slug, (c, p, m) in entry["programs"].items()]
-    return sorted(rows, key=_sort_key)
+    """The programs one club (or school) sent players to: select() with one value in one box."""
+    _ids(doc, kind)
+    return select(doc, clubs=[entity_id] if kind == "club" else (), schools=[entity_id] if kind == "school" else ())
 
 
 def feeders_for(doc: dict, kind: str, slug: str) -> list[dict]:
-    """The clubs (or schools) a program's players came from, most players first.
-    Each row: {id, name, state, unmatched?, current, past, commits}."""
-    rows = []
-    for eid, entry in _entities(doc, kind).items():
-        cell = entry["programs"].get(slug)
-        if not cell:
-            continue
-        r = {"id": eid, "name": entry.get("name"), "state": entry.get("state"),
-             "current": cell[0], "past": cell[1], "commits": None if kind == "school" else cell[2]}
-        if entry.get("unmatched"):
-            r["unmatched"] = True
-        if kind == "school" and entry.get("city"):
-            r["city"] = entry["city"]
-        rows.append(r)
-    return sorted(rows, key=_sort_key)
+    """The clubs (or schools) one program's players came from."""
+    return feeders(doc, kind, programs=[slug])
+
 
 
 DIVISION_NAMES = {"D1": "Division I", "D2": "Division II", "D3": "Division III"}
@@ -467,21 +578,28 @@ def coverage_lines(doc: dict, kind: str, totals: dict | None = None, divisions=N
 
 def answer(doc: dict, question: dict) -> dict:
     """The JSON shape the ask feature (#165) can return, from one structured question:
-        {"kind": "club" | "school", "id": <entity id>}   -> programs it feeds
-        {"kind": "club" | "school", "program": <slug>}    -> the clubs or schools feeding a program
+        {"clubs": [...], "schools": [...], "programs": [...]}  -> per program, AND across keys, OR within one
+        {"kind": "club" | "school", "id": <entity id>}        -> the programs it feeds
+        {"kind": "club" | "school", "program": <slug>}         -> the clubs or schools feeding a program
     Counts only; `note` restates the rules a reader must know."""
     kind = question.get("kind") or "club"
-    if question.get("program"):
+    if question.get("program") and not any(question.get(k) for k in ("clubs", "schools", "programs")):
         rows = feeders_for(doc, kind, question["program"])
         division = ((doc.get("programs") or {}).get(question["program"]) or {}).get("division")
         by = division_totals([{**r, "division": division} for r in rows])
         divisions = [division] if division else []
         subject = {"program": question["program"]}
     else:
-        rows = programs_for(doc, kind, question.get("id") or "")
+        if any(question.get(k) for k in ("clubs", "schools", "programs")):
+            sel = {k: list(question.get(k) or []) for k in ("clubs", "schools", "programs")}
+            kind = "school" if sel["schools"] and not sel["clubs"] else "club"
+        else:
+            sel = {"clubs": [question.get("id") or ""] if kind == "club" else [],
+                   "schools": [question.get("id") or ""] if kind == "school" else [], "programs": []}
+        rows = select(doc, sel["clubs"], sel["schools"], sel["programs"])
         by = division_totals(rows)
         divisions = [d for d in (doc.get("divisions") or []) if d in by]
-        subject = {kind: question.get("id")}
+        subject = {kind: question.get("id")} if question.get("id") else sel
     known = [r["commits"] for r in rows if r["commits"] is not None]
     totals = {"current": sum(r["current"] for r in rows), "past": sum(r["past"] for r in rows),
               "commits": sum(known) if known else None}
