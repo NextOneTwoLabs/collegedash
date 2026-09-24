@@ -15,7 +15,8 @@
 //   - every data column sorts both ways, and a row showing '—' (or nothing, where the measure does not apply to
 //     the division) sorts last in BOTH directions;
 //   - Record sorts by win percentage (ties count half a win), Tuition by the out-of-state figure (the in-state
-//     one when that is all a school publishes), Titles grouped by division within each run;
+//     one when that is all a school publishes), Titles grouped by division within each run. The Record column is
+//     gone from the Stats view (#342); a stored record sort still orders the rows;
 //   - the '#' column is labelled with the RPI season, each sortable header is a button, the active one carries
 //     aria-sort and a direction class, the others carry none;
 //   - the Program line shows the division first for D1, D2 and D3;
@@ -151,7 +152,7 @@ for (const [key, [natural, asc, desc]] of Object.entries(EXPECTED)) {
 test('every data column header sorts; the active one has aria-sort and its direction, the rest none', async () => {
   const html = await table({ sort: 'admit', sortDir: 'desc', moreStats: true });
   const keys = [...html.matchAll(/<th [^>]*data-sort="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(keys, ['rpi', 'name', 'record', 'admit', 'academicRank', 'undergrads', 'tuition', 'commits', 'titles', 'cups', 'region', 'type']);
+  assert.deepEqual(keys, ['rpi', 'name', 'admit', 'academicRank', 'undergrads', 'tuition', 'commits', 'titles', 'cups', 'region', 'type']);
   for (const k of keys) assert.match(th(html, k), /<button type="button" class="th-sort"[^>]*>[^<]+<\/button><\/th>$/, `${k}: the header is not a button`);
   assert.match(th(html, 'admit'), /class="[^"]*sort-active sort-desc"[^>]*aria-sort="descending"/);
   assert.equal([...html.matchAll(/aria-sort=/g)].length, 1, 'more than one header carries aria-sort');
@@ -170,7 +171,7 @@ test("the '#' column is labelled with the RPI season, and the footnote no longer
 
 // Issue #287 (owner decision): a finished season of fewer than 10 games sorts after the full ones in both
 // directions, ahead of the rows with no record, and says how many games it had; a full season says nothing.
-test('Record: a season under 10 games sorts after the full ones and says how many', async () => {
+test('Record: a season under 10 games sorts after the full ones', async () => {
   const pg = await page();
   const fox = (await pg.sb.loadIndex()).programs.find((p) => p.slug === F);
   const saved = fox.lastSeason;
@@ -178,18 +179,30 @@ test('Record: a season under 10 games sorts after the full ones and says how man
     fox.lastSeason = { year: 2025, record: '5-0-0', gamesPlayed: 5 };
     assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'desc', moreStats: true })), [A, B, C, D, F, E, G], 'descending');
     assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'asc', moreStats: true })), [D, B, C, A, F, E, G], 'ascending');
-    assert.match(await table({ sort: 'record', sortDir: 'desc', moreStats: true }), /5-0-0<\/span><span class="muted small"> \(5 games\)<\/span>/);
     fox.lastSeason = { year: 2025, record: '15-1-0', gamesPlayed: 16 };
     const full = await table({ sort: 'record', sortDir: 'desc', moreStats: true });
     assert.deepEqual(rowSlugs(full), EXPECTED.record[2]);
-    assert.doesNotMatch(full, /games\)/);
   } finally { fox.lastSeason = saved; }
 });
 
-test('the tuition and record headers say what they sort by', async () => {
+test('the tuition header says what it sorts by', async () => {
   const html = await table({});
   assert.match(th(html, 'tuition'), /title="Sorts by out-of-state tuition"/);
-  assert.match(th(html, 'record'), /title="Sorts by win percentage, a tie counting half a win"/);
+});
+
+// Issue #342 (owner): the Stats view shows no Record column in either mode, not even while record is the sort.
+// The record stays on cards, the profile and Compare.
+test('#342: no Record column under Fewer or More statistics, sorted by record or not', async () => {
+  for (const moreStats of [false, true]) {
+    for (const sort of ['name', 'record']) {
+      // the table only: a stored record sort still names itself in the page subtitle ("sorted by Record 2025")
+      const html = (await table({ sort, moreStats })).split('<table class="standings-table">')[1] || '';
+      assert.ok(html.includes('data-sort="name"'), 'the table is not there');
+      assert.equal(th(html, 'record'), '', `moreStats ${moreStats}, sort ${sort}: a record header`);
+      assert.doesNotMatch(html, /Record 20\d\d/, `moreStats ${moreStats}, sort ${sort}: a Record label`);
+      assert.doesNotMatch(html, /(?:10-2-0|9-3-0|8-2-2|12-4-4|15-1-0)</, `moreStats ${moreStats}, sort ${sort}: a record cell`);
+    }
+  }
 });
 
 // ---------- the Program line ----------
@@ -215,19 +228,20 @@ test('the table header, the sidebar select and the sidebar direction button stay
       rows: rowSlugs(pg.app()),
     };
   };
-  // a header-only sort (record): the select lists it while it is active and shows it selected
-  pg.sb.setSort('record');
+  // a header-only sort (commits; record was the example until #342 removed its column): the select lists it while
+  // it is active and shows it selected
+  pg.sb.setSort('commits');
   let s = await state();
-  assert.equal(s.selected, 'record'); assert.ok(s.options.includes('record'));
-  assert.equal(s.button, 'descending'); assert.equal(s.aria, 'record descending'); assert.deepEqual(s.rows, EXPECTED.record[2]);
+  assert.equal(s.selected, 'commits'); assert.ok(s.options.includes('commits'));
+  assert.equal(s.button, 'descending'); assert.equal(s.aria, 'commits descending'); assert.deepEqual(s.rows, EXPECTED.commits[2]);
   // a second header click flips it everywhere
-  pg.sb.setSort('record');
+  pg.sb.setSort('commits');
   s = await state();
-  assert.equal(s.button, 'ascending'); assert.equal(s.aria, 'record ascending'); assert.deepEqual(s.rows, EXPECTED.record[1]);
+  assert.equal(s.button, 'ascending'); assert.equal(s.aria, 'commits ascending'); assert.deepEqual(s.rows, EXPECTED.commits[1]);
   // choosing another sort in the select starts it in its natural direction, and the header follows
   pg.sb.setSort('undergrads');
   s = await state();
-  assert.equal(s.selected, 'undergrads'); assert.ok(!s.options.includes('record'), 'a header-only sort stayed in the select after it stopped being active');
+  assert.equal(s.selected, 'undergrads'); assert.ok(!s.options.includes('commits'), 'a header-only sort stayed in the select after it stopped being active');
   assert.equal(s.button, 'descending'); assert.equal(s.aria, 'undergrads descending'); assert.deepEqual(s.rows, EXPECTED.undergrads[2]);
   // the direction button is the same flip
   pg.sb.setSort(pg.sb.S.filters.sort);

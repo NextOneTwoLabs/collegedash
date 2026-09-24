@@ -349,7 +349,8 @@ test('table columns: a data column is left out only when no row on screen has da
   // a sortable header carries its label in a button (#285)
   const heads = html => [...html.matchAll(/<th class="[^"]*"[^>]*>(?:<button[^>]*>)?([^<]*)(?:<\/button>)?<\/th>/g)].map(m => m[1]);
   const all = heads(page.sandbox.tableHtml(REAL_INDEX.programs));
-  assert.deepEqual(all, [RPI.label, '', 'Program', `Record ${RPI.finished}`, 'Admit', 'US rank (THE)', 'Undergrads', 'Tuition / yr', 'Commits', 'Titles', 'College Cups', 'Region', 'Type', ''],
+  // no Record column since #342: the record stays on cards, the profile and Compare
+  assert.deepEqual(all, [RPI.label, '', 'Program', 'Admit', 'US rank (THE)', 'Undergrads', 'Tuition / yr', 'Commits', 'Titles', 'College Cups', 'Region', 'Type', ''],
     'the full D1 table lost a column');
   const d2 = heads(page.sandbox.tableHtml([rowOf(bare.slug), rowOf(committed.slug)]));
   assert.deepEqual(d2, ['', 'Program', 'Undergrads', 'Tuition / yr', 'Commits', 'Region', 'Type', ''], 'the synthetic D2 table columns');

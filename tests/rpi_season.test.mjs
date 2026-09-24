@@ -127,15 +127,16 @@ test('the season is read from the index at each point of the RPI calendar, not h
   assert.doesNotMatch(fs.readFileSync(HTML, 'utf8'), /const RPI_SEASON\s*=/, 'the hardcoded season is back');
 });
 
-test('an in-progress season is never the finished season: Record and last-season figures stay on 2025', async () => {
+test('an in-progress season is never the finished season: last-season figures stay on 2025', async () => {
   const { sb, app } = await ready('live');
   assert.ok(sb.rpiInProgress() && sb.finishedSeason() < sb.rpiSeason(), 'the live season counted as finished');
   const alpha = sb.S.index.programs.find(p => p.slug === 'alpha');
   const table = sb.tableHtml(sb.S.index.programs);
-  assert.match(table, /<th[^>]*>(?:<button[^>]*>)?Record 2025(?:<\/button>)?<\/th>/, 'the Record column is not the finished season');
-  assert.doesNotMatch(table, /Record 2026/);
-  assert.match(sb.tableHtml([alpha]), /<span class="num-strong">18-4-2<\/span>/, 'the Record cell is not the finished season\'s record');
-  assert.match(table, /RPI is the 2026 season, in progress[^<]*· Record is the 2025 season/, 'the footnote does not say which is which');
+  // #342: the Stats view has no Record column, so its footnote no longer names the record's season
+  assert.doesNotMatch(table, /Record 20\d\d|18-4-2/, 'the Stats view shows a record');
+  assert.match(table, /RPI is the 2026 season, in progress: the NCAA's latest weekly table ·/, 'the footnote does not say the RPI season');
+  assert.doesNotMatch(table, /Record is the/, 'the footnote names a column that is gone');
+  assert.equal(sb.sortLabel('record'), 'Record 2025', 'a stored record sort is not labelled with the finished season');
   await sb.renderProfile('alpha');
   // Compare's finished-season row is 2025's record, and the in-progress record is only under "Current record"
   sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();
@@ -170,7 +171,7 @@ test('a finished season carries no "in progress" label anywhere', async () => {
     const y = CALENDAR[stage].expect.season;
     const alpha = sb.S.index.programs[0];
     assert.ok(byLabel(sb.cardHtml(alpha), `RPI ${y}`), `${stage}: card`);
-    assert.match(sb.tableHtml(sb.S.index.programs), new RegExp(`RPI and record are the ${y} season`), `${stage}: footnote`);
+    assert.match(sb.tableHtml(sb.S.index.programs), new RegExp(`RPI is the ${y} season as published by the NCAA`), `${stage}: footnote`);
     await sb.renderProfile('alpha');
     assert.doesNotMatch(app(), /in progress/, `${stage}: profile`);
     sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();
@@ -192,7 +193,7 @@ test('Division II still shows RPI as not applicable while the live season is in 
 // Issue #287 (owner decision): a record taken from the NCAA RPI table (recordSource 'ncaa-rpi-d1') counts only games
 // against Division I opponents, so wherever a season record shows - the Table's Record cell, History's season by
 // season, Compare's record rows - it carries a muted "(D1 games)" note whose title says why. Other sources do not.
-test('a record from the NCAA table is labelled D1 games in the Table, History and Compare', async () => {
+test('a record from the NCAA table is labelled D1 games in History and Compare (the Stats view has no Record column, #342)', async () => {
   const files = filesFor('before');
   const D1 = /<span class="muted small" title="[^"]*only games against Division I opponents[^"]*"> \(D1 games\)<\/span>/;
   files['api/v1/programs'].programs[0].lastSeason.recordSource = 'ncaa-rpi-d1';
@@ -201,8 +202,7 @@ test('a record from the NCAA table is labelled D1 games in the Table, History an
   const pg = loadPage(files); await pg.sb.loadIndex();
   const { sb, app } = pg;
   const [alpha, beta] = ['alpha', 'beta'].map(slug => sb.S.index.programs.find(p => p.slug === slug));
-  assert.match(sb.tableHtml([alpha]), new RegExp(`18-4-2</span>${D1.source}`), 'Table: the Record cell has no D1 note');
-  assert.doesNotMatch(sb.tableHtml([beta]), /D1 games/, 'Table: a record from another source is labelled D1');
+  assert.doesNotMatch(sb.tableHtml([alpha, beta]), /18-4-2|D1 games/, 'Stats: a record is in the table (#342)');
   await sb.renderProfile('alpha', 'history');
   const rows = sb.document.querySelector('#tab').innerHTML.split('<tr>');
   assert.match(rows.find(r => r.startsWith('<td>2025')) || '', new RegExp(`<b>18-4-2</b>${D1.source}`), 'History: 2025 has no D1 note');

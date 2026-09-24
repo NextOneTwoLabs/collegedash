@@ -1106,7 +1106,6 @@ const HONOR_LISTS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaA
 const has = {
   // index rows: cards and table
   rowRpi: r => appliesTo('rpi', r) && rpiOf(r) != null,
-  rowRecord: r => r.lastSeason?.year === finishedSeason() && !!r.lastSeason.record,
   rowAcademicRank: r => r.academicRank != null,
   rowCommits: r => Object.keys(r.commitmentsByYear || {}).length > 0,
   rowRoster: r => r.rosterSize != null,
@@ -1322,7 +1321,7 @@ function renderSidebar() {
   }
   sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
     ${body}
-    <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / table</span>'}</div>`;
+    <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
   sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
@@ -1788,7 +1787,7 @@ async function renderList() {
 // A data column is left out when no row on screen has data for it (issue #115); rows without data still show
 // a dash in a column that stays. Columns not listed here (star, program name, compare) always show.
 const TABLE_COL_HAS = {
-  rank: p => has.rowRpi(p), usrank: p => p.academicRank != null, record: p => has.rowRecord(p), admit: p => p.admissionRate != null,
+  rank: p => has.rowRpi(p), usrank: p => p.academicRank != null, admit: p => p.admissionRate != null,
   ug: p => p.undergradEnrollment != null, tuition: p => p.tuitionInState != null || p.tuitionOutOfState != null,
   commits: (p, cy) => commitsFor(p, cy) > 0, titles: p => has.rowTitles(p), cups: p => has.rowCups(p),
   region: p => !!p.region, type: p => !!p.ownership,
@@ -1823,7 +1822,6 @@ function tableHtml(rows) {
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
     ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${programLine(p)}</span></span></div>`, 'name'],
-    ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>${p.lastSeason.record ? recordNote(p.lastSeason) : ''}` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
@@ -1836,7 +1834,7 @@ function tableHtml(rows) {
     ['cmp', '', '', p => cmpBtn(p.slug)],
   ].filter(([k]) => !rows.length || !TABLE_COL_HAS[k] || rows.some(p => TABLE_COL_HAS[k](p, cy)));
   const dir = sortDir(), shown = (cls, sortKey) => sortKey && sortKey === f.sort ? cls.replace('col-extra', '').trim() : cls;
-  const SORT_NOTE = { tuition: 'Sorts by out-of-state tuition', record: 'Sorts by win percentage, a tie counting half a win' };
+  const SORT_NOTE = { tuition: 'Sorts by out-of-state tuition' };
   const head = cols.map(([k, label, cls, , sortKey]) => { const on = sortKey && f.sort === sortKey;
     return `<th class="${shown(cls, sortKey)}${sortKey ? ' sortable' : ''}${on ? ` sort-active sort-${dir}` : ''}"${sortKey ? ` data-sort="${sortKey}"` : ''}${on ? ` aria-sort="${dir === 'asc' ? 'ascending' : 'descending'}"` : ''}>${sortKey ? `<button type="button" class="th-sort"${SORT_NOTE[sortKey] ? ` title="${SORT_NOTE[sortKey]}"` : ''}>${esc(label)}</button>` : esc(label)}</th>`; }).join('');
   const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn, sortKey]) => `<td class="${shown(cls, sortKey)}">${fn(p)}</td>`).join('')}</tr>`).join('');
@@ -1844,7 +1842,7 @@ function tableHtml(rows) {
     <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
-    <div class="table-footnote">${rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table · Record is the ${finishedSeason()} season` : `RPI and record are the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
+    <div class="table-footnote">${rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table` : `RPI is the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
   </div>`;
 }
 
@@ -1916,7 +1914,7 @@ function campTally(doc) {
 function listTabs(active) {
   const btn = (k, l) => `<button class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}" data-view="${k}">${l}</button>`;
   const link = (k, href, l) => `<a href="${href}" class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}">${l}</a>`;
-  return btn('cards', 'Cards') + btn('table', 'Table') + link('camps', '#/camps', 'ID Camps') + link('trends', '#/trends', 'Pipelines');
+  return btn('cards', 'Cards') + btn('table', 'Stats') + link('camps', '#/camps', 'ID Camps') + link('trends', '#/trends', 'Pipelines');
 }
 function campRowHtml(c, p) {
   const details = [c.location, c.ages, c.price].filter(Boolean).join(' · ');
