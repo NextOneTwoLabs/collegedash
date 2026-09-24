@@ -123,7 +123,9 @@ const expectRow = r => ({
 const expectProfile = p => {
   const pr = p.program || {}, sch = p.school || {};
   const seasons = p.seasons || [];
-  const rpiSeasons = seasons.filter(s => s.rpiRank);
+  // RPI is not applicable to D2 or D3 (#246, the page's NOT_APPLICABLE.rpi), so a D3 program's RPI data - saint-francis
+  // carries its D1-era ranks (#94) - is expected hidden, not shown
+  const rpiSeasons = ['D2', 'D3'].includes(p.division) ? [] : seasons.filter(s => s.rpiRank);
   const scheduleData = !!p.schedule && (nonEmpty(p.schedule.games) || nonEmpty(p.schedule.history));
   const titles = nonEmpty(pr.nationalTitles) || p.division === 'D1';
   const cups = nonEmpty(pr.collegeCups) || !!pr._meta?.wikipedia;
@@ -154,7 +156,7 @@ const expectProfile = p => {
       'Roster snapshot': rosterData,
     },
     glance: {
-      'RPI stat': !!seasons.find(s => s.year === RPI_SEASON)?.rpiRank,
+      'RPI stat': !!rpiSeasons.find(s => s.year === RPI_SEASON)?.rpiRank,
       'Admit stat': sch.admissionRate != null,
       'Undergrads stat': sch.undergradEnrollment != null,
       'Next match': scheduleData,
