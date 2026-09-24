@@ -191,10 +191,10 @@ def test_trends_past_and_search():
     ath = {"data": {"rosterHistory": {"2025": [{"name": "Past VA", "club": "Shore FC ECNL"},
                                                {"name": "Past None", "club": "Shore FC ECNL"}]}}}
     r.observe(profile, {"division": "D3"}, ath=ath, tds={}, sw={})
-    ok("trends: the VA past player counts under the VA club",
-       (r.clubs.get("shore-fc-va") or {}).get("programs", {}).get("example-u", [0, 0, 0])[1] == 1, r.clubs.keys())
-    ok("trends: the unresolved past player stays under raw:shore fc ecnl",
-       (r.clubs.get("raw:shore fc ecnl") or {}).get("programs", {}).get("example-u", [0, 0, 0])[1] == 1, r.clubs.keys())
+    # records format (#327): one (slug, status, club id, school id) per counted person; status 1 = former player
+    past = sorted(c for slug, s, c, _h in r.records if slug == "example-u" and s == 1)
+    ok("trends: the VA past player counts under the VA club, the unresolved one under raw:shore fc ecnl",
+       past == ["raw:shore fc ecnl", "shore-fc-va"], past)
     for cid in ("shore-fc-va", "shore-fc-ca"):
         aka = trends.search_aliases(T, cid, T.clubs[cid]["name"])
         ok(f"search: 'shore fc ecnl' is searchable under {cid}", "shore fc ecnl" in aka, aka)
