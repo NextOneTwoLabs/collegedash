@@ -302,10 +302,9 @@ def check_publish_gate(registry: dict, *, has_athletics=None, reviewed: dict | N
 # below and no count anchor, silently - staging D3 without writing its count down here would pass
 # every check that exists. check_staged_registry() fails that case too, on purpose.
 #
-# D2 left this dict when it was published (#197). D3 is staged by #190: the 2026-27 Directory lists 416
-# D3 programs, and 415 of them are staged entries in `programs`. The 416th is saint-francis, published
-# in D1 before #100, which stays in heldPrograms until D3 is onboarded.
-STAGED_DIVISION_COUNTS: dict[str, int] = {"D3": 415}
+# D2 left this dict when it was published (#197), and D3 when it was published (#94): nothing is staged.
+# saint-francis, the 416th D3 program, stays in heldPrograms for now and follows in its own PR.
+STAGED_DIVISION_COUNTS: dict[str, int] = {}
 
 # A slug is lowercase words separated by single hyphens, with no leading, trailing or doubled
 # hyphen - the shape every slug in the registry already has (collect/registry_builder.py's

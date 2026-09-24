@@ -327,9 +327,14 @@ def test_committed() -> None:
                      if (d, y) not in published and any(q.get("division") == d and build.title_matches(q, champion, d) for q in programs))
     # fails if a published D2 champion stops publishing one of its title years
     ok("every non-D1 champion year whose champion is published is published", not missing, str(missing[:4]))
-    ok("no published program is in a division with no champions table",
-       all(p.get("division") in build.CHAMPION_TABLES for p in programs),
-       sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES)))
+    # D3 is published ahead of its champions table (#94, the owner's minimal switch); the table follows in
+    # its own PR, which removes D3 from this set. The second check fails the day that table lands without it.
+    pending = {"D3"}
+    ok("no published program is in a division with no champions table, D3 excepted until its table lands (#94)",
+       all(p.get("division") in build.CHAMPION_TABLES or p.get("division") in pending for p in programs),
+       sorted({p.get("division") for p in programs} - set(build.CHAMPION_TABLES) - pending))
+    ok("the D3 exception is still needed: D3 has no champions table yet", not (pending & set(build.CHAMPION_TABLES)),
+       sorted(pending & set(build.CHAMPION_TABLES)))
 
 
 def main(argv=None) -> int:

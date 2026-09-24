@@ -3,11 +3,10 @@
   "updated": "2026-09-23",
   "onboardedDivisions": [
     "D1",
-    "D2"
-  ],
-  "stagedDivisions": [
+    "D2",
     "D3"
   ],
+  "stagedDivisions": [],
   "season": {
     "_comment": "current = the fall season being played; gradYears = high-school classes tracked for commitments",
     "current": 2026,
@@ -32671,7 +32670,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://www.mtholyoke.edu",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "registry athletics URL returns 404: HTTP 404 for https://www.mtholyoke.edu/sports/womens-soccer/roster in onboard batch d3-b3 (2026-09-23, data/onboard-batches/d3-b3.md); correct athletics site not recorded yet, #94"
       },
       "ids": {
         "ncaaOrgId": 449,
@@ -37584,7 +37584,8 @@
       "athletics": {
         "platform": "auto",
         "baseUrl": "https://uvfpatriots.com",
-        "sportPath": "/sports/womens-soccer"
+        "sportPath": "/sports/womens-soccer",
+        "skipReason": "athletics host unreachable: the athletics and camps collectors both gave up after 3 attempts with no response from uvfpatriots.com (port 443, max retries exceeded) in onboard batch d3-b2 (2026-09-23, data/onboard-batches/d3-b2.md); no working athletics URL recorded yet, #94"
       },
       "ids": {
         "ncaaOrgId": 30166,
