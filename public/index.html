@@ -411,13 +411,34 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 .faq table td, .faq table th { vertical-align: top; }
 .faq .lead { color: var(--text-primary); font-size: 15px; }
 /* trends: where players come from (#/trends, issue #230) */
-.trend-picker { display: grid; gap: 10px; margin-bottom: 14px; }
-.trend-picker-row { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: center; }
+/* Three boxes in a row (club, high school, program; #310), one column on phones. A picked box shows a chip:
+   the name (a button that reopens the box) and a clear button. */
+.trend-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; margin-bottom: 14px; }
+.tr-box { display: grid; gap: 6px; min-width: 0; align-content: start; }
 .trend-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
 .trend-input { width: 100%; height: 38px; padding: 8px 10px; font-size: 13px; font-family: var(--font); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); background: var(--bg-body); }
 .trend-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
-.trend-hits { display: flex; flex-wrap: wrap; gap: 6px; }
+.tr-chip { display: flex; align-items: stretch; min-width: 0; height: 38px; border: 1px solid var(--accent); border-radius: var(--radius-sm); background: var(--bg-surface); }
+.tr-chip.missing { border-style: dashed; border-color: var(--border); }
+.tr-chip-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; border: 0; background: none; padding: 0 10px; font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--text-primary); cursor: text; }
+.tr-chip.missing .tr-chip-name { font-weight: 500; color: var(--text-secondary); }
+.tr-chip-x { flex: none; width: 38px; border: 0; border-left: 1px solid var(--border); background: none; color: var(--text-secondary); font-size: 14px; cursor: pointer; }
+.tr-chip-x:hover { color: var(--danger-text); }
+.tr-chip-name:focus-visible, .tr-chip-x:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.tr-chip[hidden], .tr-list[hidden], .trend-input[hidden] { display: none; }
+.tr-field { position: relative; min-width: 0; }
+/* the suggestions drop down over the page below, one per line, and scroll when long */
+.tr-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; gap: 2px; padding: 6px; max-height: 380px; overflow-y: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14); }
+.tr-list .trend-hit { border-radius: var(--radius-sm); border-color: transparent; text-align: left; white-space: normal; }
+.tr-list .trend-hit:hover { background: var(--bg-surface-alt); }
+.tr-msg:empty { display: none; }
 .trend-hit.kbd { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.tr-note { margin: 0 0 10px; }
+.tr-stats { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 10px 0; }
+.tr-stat { font-size: 12px; color: var(--text-secondary); }
+.tr-stat b { display: block; font-size: 20px; color: var(--text-primary); }
+.tr-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tr-go { font-size: 11px; white-space: nowrap; }
 a.pill { text-decoration: none; }
 .trend-table th .th-sub { display: block; font-weight: 500; font-size: 10px; }
 .trend-table td.trend-sep, .trend-table th.trend-sep { border-left: 1px solid var(--border); }
@@ -427,7 +448,7 @@ a.pill { text-decoration: none; }
 /* Phones: the four number columns must stay on screen beside the program, so the program cell gives up its
    conference line and the header its sub-labels; .tscroll still catches anything wider. */
 @media (max-width: 768px) {
-  .trend-picker-row { grid-template-columns: 1fr; }
+  .trend-picker { grid-template-columns: 1fr; }
   .trend-table { table-layout: fixed; }
   .trend-table th:first-child { width: 40%; }
   .trend-table .team-name { max-width: 100px; }
@@ -435,6 +456,14 @@ a.pill { text-decoration: none; }
   .trend-table .team-sub .pl-rest, .trend-table th .th-sub { display: none; }
   .trend-table td, .trend-table th { padding-left: 6px; padding-right: 6px; }
   .trend-table th { white-space: normal; font-size: 11px; }
+}
+/* Phones: every tap target in the picker is at least 44px (#310). */
+@media (max-width: 480px) {
+  .trend-input { height: 44px; }
+  .tr-chip { height: 46px; } /* 44px buttons inside its 1px border */
+  .tr-chip-x { width: 44px; }
+  .tr-list .trend-hit { min-height: 44px; display: inline-flex; align-items: center; }
+  .tr-go { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
 /* Feedback panel — in the footer, so it is on every view */
@@ -1331,7 +1360,7 @@ function wireConditions(sb) {
   $('#condValue').oninput = e => { st.text = e.target.value; };
 }
 function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
-function currentView() { return location.hash.replace(/^#\/?/, '').split('/')[0] || 'list'; }
+function currentView() { return location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0] || 'list'; }
 // Views that the sidebar's pills narrow but its sort select and recruiting-class pills cannot: the camp
 // list (issue #65) and the clubs & schools view (#230), where a sort of programs has no row to sort.
 const filterOnlyView = v => v === 'camps' || v === 'trends';
@@ -1447,10 +1476,13 @@ function wireAskBanner() { const u = $('#askUndo'); if (u && S.askResult) u.oncl
 
 /* ---------- router ---------- */
 function route() {
-  const h = location.hash.replace(/^#\/?/, '');
+  const h = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
   const parts = h.split('/').filter(Boolean);
   const view = parts[0] || 'list';
   const app = $('#app');
+  if (view !== 'trends') TR = null;
+  // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
+  else if (!parts[1] && trendsInPlace()) return;
   const go = p => p.catch(e => { app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e); });
   $('#main').scrollTop = 0;
   syncSidebarForView(view);
@@ -1470,13 +1502,19 @@ function route() {
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
   // camps once should not be dropped back into them on their next visit.
   if (view === 'camps') return go(renderCamps());
-  // #/trends, #/trends/club/<id>, #/trends/school/<id>, #/trends/program/<slug> (issue #230)
-  if (view === 'trends') return go(renderTrends(parts[1] || '', parts[2] || ''));
+  // #/trends?club=<id>&school=<id>&program=<slug> (#310). The old one-selection path form (trends/club/<id>,
+  // trends/school/<id>, trends/program/<slug>) is rewritten to it with replaceState, so Back does not bounce.
+  if (view === 'trends') {
+    if (TR_KINDS.includes(parts[1])) { let v = ''; try { v = decodeURIComponent(parts[2] || ''); } catch { } history.replaceState(null, '', trendsUrl(v ? { [parts[1]]: v } : {})); }
+    return go(renderTrends());
+  }
   if (view === 'faq') return go(renderFaq());
   if (view === 'list') return go(renderList());
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
 }
 window.addEventListener('hashchange', route);
+// Back or forward onto an entry a trends pick pushed; trendsInPlace ignores the one hashchange also reports.
+window.addEventListener('popstate', () => { if (currentView() === 'trends') trendsInPlace(); });
 
 /* ---------- page header (breadcrumb › title › subtitle, right-side facts, view tabs) ---------- */
 function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', tabs = '' }) {
@@ -1987,19 +2025,6 @@ function trendsKeyStep(at, key, count) {
   if (key === 'Enter') return { at, go: Math.max(at, 0) };
   return { at };
 }
-function trendsWireTypeahead(input, box, render) {
-  let at = -1;
-  input.oninput = () => { at = -1; box.innerHTML = render(input.value); };
-  input.onkeydown = e => {
-    const list = [...box.querySelectorAll('a.trend-hit')], step = trendsKeyStep(at, e.key, list.length);
-    if (step.at === at && step.go == null) return;
-    e.preventDefault();
-    at = step.at;
-    list.forEach((a, i) => { a.classList.toggle('kbd', i === at); a.setAttribute('aria-selected', i === at ? 'true' : 'false'); });
-    if (step.go != null) location.hash = list[step.go].getAttribute('href');
-    else list[at]?.scrollIntoView?.({ block: 'nearest' });
-  };
-}
 function trendsProgramsFor(doc, kind, id) {
   const entry = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
   if (!entry) return [];
@@ -2013,6 +2038,14 @@ function trendsFeedersFor(doc, kind, slug) {
   }
   return rows.sort(trendsSortCmp);
 }
+// Club + high school (#310, the owner's option A): the programs that drew players from both, each count on its
+// own. The index holds club × program and school × program cells only, so the two counts are not necessarily
+// the same players.
+function trendsBothFor(doc, clubId, schoolId) {
+  const c = doc.clubs?.[clubId]?.programs || {}, s = doc.schools?.[schoolId]?.programs || {};
+  return Object.keys(c).filter(slug => s[slug]).map(slug => ({ slug, club: c[slug][0] + c[slug][1], school: s[slug][0] + s[slug][1] }))
+    .sort((a, b) => (b.club + b.school) - (a.club + a.school) || b.club - a.club || a.slug.localeCompare(b.slug));
+}
 const trendsPct = (n, d) => d ? Math.round(100 * n / d) : 0;
 // One honest sentence per column. `totals` are the counts on screen; without them the line states the denominators alone.
 function trendsCoverageLines(doc, kind, totals) {
@@ -2024,25 +2057,55 @@ function trendsCoverageLines(doc, kind, totals) {
     return `${n != null ? `${fmtNum(n)} of ` : ''}${fmtNum(denom)} ${noun}; ${what} known for ${trendsPct(known, denom)}%`;
   });
 }
-// The current-roster players of one program from one club or school, read off the profile the page already
-// serves (public rosters). Never called for commits.
-function trendsRosterNames(profile, kind, id) {
-  return ((profile.roster || {}).players || []).filter(pl => {
-    if (kind === 'school') return pl.schoolInfo?.schoolId === id;
-    const ci = pl.clubInfo; if (!ci) return false;
-    return ci.status === 'matched' ? ci.clubId === id : ci.status === 'unmatched' && `raw:${ci.key}` === id;
-  }).map(pl => `${pl.name}${pl.pos || pl.classCode ? ` (${[pl.pos, pl.classCode].filter(Boolean).join(', ')})` : ''}`);
+// The current-roster players of one program from one club or school (and, with `schoolId`, from that club and
+// that school both), read off the profile the page already serves (public rosters). Never called for commits.
+const trendsHasClub = (pl, id) => { const ci = pl.clubInfo; if (!ci) return false; return ci.status === 'matched' ? ci.clubId === id : ci.status === 'unmatched' && `raw:${ci.key}` === id; };
+function trendsRosterNames(profile, kind, id, schoolId) {
+  return ((profile.roster || {}).players || []).filter(pl => (kind === 'school' ? pl.schoolInfo?.schoolId === id : trendsHasClub(pl, id))
+    && (schoolId == null || pl.schoolInfo?.schoolId === schoolId))
+    .map(pl => `${pl.name}${pl.pos || pl.classCode ? ` (${[pl.pos, pl.classCode].filter(Boolean).join(', ')})` : ''}`);
+}
+
+/* The #/trends URL (#310): #/trends?club=<id>&school=<id>&program=<slug>. Any subset, always in that order,
+   values URI-encoded (a club id may be "raw:<spelling>"). */
+const TR_KINDS = ['club', 'school', 'program'];
+const TR_WHAT = { club: 'club', school: 'high school', program: 'program' };
+function trendsParse(hash) {
+  const q = String(hash || '').split('?')[1] || '', sel = {};
+  for (const part of q.split('&')) {
+    const i = part.indexOf('='), k = part.slice(0, i);
+    if (i < 0 || !TR_KINDS.includes(k)) continue;
+    try { const v = decodeURIComponent(part.slice(i + 1)); if (v) sel[k] = v; } catch { }
+  }
+  return sel;
+}
+function trendsUrl(sel) {
+  const q = TR_KINDS.filter(k => sel[k]).map(k => `${k}=${encodeURIComponent(sel[k])}`).join('&');
+  return `#/trends${q ? `?${q}` : ''}`;
+}
+// A "raw:<key>" id names a spelling no reviewed club claimed when the index was built. Once a Monday refresh
+// reviews that spelling into a club, the key becomes one of the club's `aka` keys (or its name), so an old
+// shared link is resolved to the club instead of reading "not in the index".
+function trendsResolveClub(doc, id) {
+  if (!id || doc.clubs[id] || !id.startsWith('raw:')) return id;
+  const key = trendsKey(id.slice(4));
+  const hit = key && Object.entries(doc.clubs).find(([, e]) => !e.unmatched && (trendsKey(e.name) === key || (e.aka || []).some(k => trendsKey(k) === key)));
+  return hit ? hit[0] : id;
 }
 // The roster tab's club cell: a reviewed club links to its trends page (D1 only, where the index reaches).
 function trendsClubCell(p, pl) {
   const ci = pl.clubInfo;
-  if (p.division === 'D1' && pl.club && ci?.status === 'matched' && ci.clubId) return `<a href="#/trends/club/${esc(encodeURIComponent(ci.clubId))}" title="Which programs have players from ${esc(pl.club)}">${esc(pl.club)}</a>`;
+  if (p.division === 'D1' && pl.club && ci?.status === 'matched' && ci.clubId) return `<a href="${esc(trendsUrl({ club: ci.clubId }))}" title="Which programs have players from ${esc(pl.club)}">${esc(pl.club)}</a>`;
   return esc(pl.club || '');
 }
-const trendsHref = (kind, id) => `#/trends/${kind}/${esc(encodeURIComponent(id))}`;
 const unmatchedBadge = '<span class="badge warn" title="This spelling is not in the reviewed club table yet, so it is counted on its own and may be the same club as another entry">unmatched spelling</span>';
-function renderTrendsRoute() { const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean); return renderTrends(parts[1] || '', parts[2] || ''); }
-async function renderTrends(kind, rawId) {
+
+/* The page state while #/trends is on screen: the index, the three boxes' search data and the selection. A pick
+   or a clear pushes one history entry and updates the page in place (trendsApply); typing changes nothing but
+   the suggestions under the box. null on every other view. */
+let TR = null;
+function renderTrendsRoute() { return TR ? trendsApply(TR.sel) : renderTrends(); }
+async function renderTrends() {
   const idx = await loadIndex();
   const f = S.filters, app = $('#app');
   const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Clubs & high schools' }];
@@ -2050,124 +2113,341 @@ async function renderTrends(kind, rawId) {
   const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
   let doc;
   try { doc = await loadTrends(); } catch {
+    TR = null;
     app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: 'Clubs and high schools behind Division I rosters', tabs })
       + `<div class="content-body"><div class="card"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><a class="btn primary" href="#/">All programs</a></p></div></div>`;
     wireTabs(); return;
   }
-  const id = rawId ? decodeURIComponent(rawId) : '';
-  const cov = doc.coverage, hasSchools = !!doc.schools;
-  const byProgram = new Map(idx.programs.map(p => [p.slug, p]));
-  const seasons = doc.pastSeasons || [];
-  const pastLabel = seasons.length ? `${seasons[0]}–${seasons[seasons.length - 1]} rosters` : 'stored past rosters';
+  const hasSchools = !!doc.schools;
   const total = e => Object.values(e.programs).reduce((a, [c, p]) => a + c + p, 0);
-  const entities = Object.entries(doc.clubs).map(([eid, e]) => ({ kind: 'club', id: eid, name: e.name, state: e.state, unmatched: !!e.unmatched, total: total(e) }))
-    .concat(hasSchools ? Object.entries(doc.schools).map(([eid, e]) => ({ kind: 'school', id: eid, name: e.name, state: e.state, city: e.city, total: total(e) })) : []);
-  entities.forEach(e => { e.norm = trendsKey(e.name); e.aka = ((e.kind === 'club' ? doc.clubs : doc.schools)[e.id].aka || []).map(trendsKey); });
+  const ents = kind => Object.entries((kind === 'school' ? doc.schools : doc.clubs) || {}).map(([id, e]) => ({ kind, id, name: e.name, state: e.state, city: e.city,
+    unmatched: !!e.unmatched, total: total(e), norm: trendsKey(e.name), aka: (e.aka || []).map(trendsKey) }));
+  const seasons = doc.pastSeasons || [];
+  // The Program box and the URL reach only the programs the index carries, and the index is Division I only.
+  const progs = idx.programs.filter(p => p.division === 'D1' && doc.programs[p.slug]);
+  TR = { doc, idx, hasSchools, progs, progSet: new Set(progs.map(p => p.slug)), byProgram: new Map(idx.programs.map(p => [p.slug, p])),
+    ents: { club: ents('club'), school: hasSchools ? ents('school') : [] },
+    pastLabel: seasons.length ? `${seasons[0]}–${seasons[seasons.length - 1]} rosters` : 'stored past rosters',
+    sel: {}, hash: '', editing: {}, opts: {}, at: {}, said: '', tok: 0 };
+  app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: '<span id="trSub"></span>', tabs })
+    + `<div class="content-body">${askBanner()}<div class="card trend-picker" role="group" aria-label="Choose a club, a high school and a program">${TR_KINDS.map(trendsBoxHtml).join('')}</div>
+      <div class="sr-only" id="trLive" aria-live="polite"></div><div id="trResults"></div></div>`;
+  wireAskBanner(); wireTabs();
+  TR_KINDS.forEach(trendsWireBox);
+  $('#trResults').onclick = e => {
+    const a = e.target?.closest?.('a[data-tr-kind]');
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button) return;
+    e.preventDefault(); trendsSelect(a.dataset.trKind, a.dataset.trId || null);
+  };
+  trendsApply(trendsResolve(trendsParse(location.hash)));
+}
+// raw: ids resolved through the alias table; the URL is rewritten in place when one resolves.
+function trendsResolve(sel) {
+  const club = trendsResolveClub(TR.doc, sel.club);
+  if (club === sel.club) return sel;
+  const out = { ...sel, club };
+  history.replaceState(null, '', trendsUrl(out));
+  return out;
+}
+// Back or forward: re-read the selection from the URL. false when the trends page is not on screen.
+function trendsInPlace() {
+  if (!TR || !$('#trResults')) return false;
+  if (location.hash !== TR.hash) { TR_KINDS.forEach(k => { TR.editing[k] = false; }); trendsApply(trendsResolve(trendsParse(location.hash))); }
+  return true;
+}
+function trendsSelect(kind, id) {
+  const sel = { ...TR.sel };
+  if (id) sel[kind] = id; else delete sel[kind];
+  TR.editing[kind] = false;
+  const input = $(`#trIn-${kind}`); if (input) input.value = '';
+  trendsCloseList(kind);
+  history.pushState(null, '', trendsUrl(sel));
+  trendsApply(sel, { focus: kind });
+}
 
-  // The picker: a name search over every club (and school) in the index, and a program select.
-  const hit = ({ e, aka }) => `<a class="pill trend-hit${e.kind === kind && e.id === id ? ' active' : ''}" href="${trendsHref(e.kind, e.id)}">${esc(e.name)}<span class="pill-sub">${[aka ? `also known as ${esc(trendsAkaLabel(aka))}` : '', e.kind === 'school' ? 'HS' : '', [e.city, e.state].filter(Boolean).join(', '), `${e.total} player${e.total === 1 ? '' : 's'}`].filter(Boolean).join(' · ')}${e.unmatched ? ' · unmatched' : ''}</span></a>`;
-  // What the page below is showing, named in a search's no-match line so the header, the card and the search
-  // never disagree about the selection (#307: the header kept "MENLO SCHOOL" beside a bare "no match").
-  const selProg = kind === 'program' && id && doc.programs[id] ? idx.programs.find(p => p.slug === id) : null;
-  const selected = (kind === 'club' || kind === 'school') && id ? (kind === 'school' ? doc.schools : doc.clubs)?.[id]?.name
-    : selProg ? displayName(selProg) : '';
-  const noMatch = (what, q) => `<span class="small muted">No ${what} in the index matches “${esc(q)}”.${selected ? ` Still showing ${esc(selected)} below; pick another to change it.` : ''}</span>`;
-  // The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
-  const hitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
-  const hitsHtml = q => {
-    const found = trendsKey(q) ? trendsFind(entities, q) : entities.filter(e => e.kind === 'club' && !e.unmatched).map(e => ({ e }));
-    const list = found.sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm)).slice(0, hitLimit(q));
-    return list.map(hit).join('') || noMatch(`club${hasSchools ? ' or high school' : ''}`, q);
-  };
-  // The program box: the site's own program search (matchScore: name, short name, other names, nickname) over the
-  // programs the index carries; empty, it offers the programs with the most players.
-  const progs = idx.programs.filter(p => doc.programs[p.slug]);
-  const progPlayers = p => doc.programs[p.slug].current + doc.programs[p.slug].past;
-  // Stand-in for #308's shared programLine() (division first); switched to programLine() once #308 is on main.
-  const progLine = p => [divisionTag(p.division), esc(p.conference || '')].filter(Boolean).join(' · ');
-  const progHit = ({ p, why }) => `<a class="pill trend-hit${kind === 'program' && id === p.slug ? ' active' : ''}" href="#/trends/program/${esc(p.slug)}">${esc(displayName(p))}<span class="pill-sub">${progLine(p)}${why ? ` · ${esc(why)}` : ''}</span></a>`;
-  const progHitsHtml = q => {
-    const nq = normText(q), exact = x => normText(x.m.why) === nq; // "cardinal": the Cardinal before the Cardinals
-    const list = nq ? progs.map(p => ({ p, m: matchScore(p, nq) })).filter(x => x.m)
-      .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || progPlayers(b.p) - progPlayers(a.p)).map(x => ({ p: x.p, why: x.m.why }))
-      : progs.slice().sort((a, b) => progPlayers(b) - progPlayers(a) || displayName(a).localeCompare(displayName(b))).map(p => ({ p }));
-    return list.slice(0, hitLimit(q)).map(progHit).join('') || noMatch('program', q);
-  };
-  const picker = `<div class="card trend-picker">
-      <div class="trend-picker-row"><label class="trend-label" for="trendsQ">Club${hasSchools ? ' or high school' : ''}</label><input class="trend-input" id="trendsQ" type="search" placeholder="Type a club name, e.g. MVLA" autocomplete="off" aria-controls="trendsHits"></div>
-      <div class="trend-hits" id="trendsHits" aria-live="polite">${hitsHtml('')}</div>
-      <div class="trend-picker-row"><label class="trend-label" for="trendsProgram">Or a program</label><input class="trend-input" id="trendsProgram" type="search" placeholder="Type a program, e.g. Stanford or Cardinal" autocomplete="off" aria-controls="trendsProgHits"></div>
-      <div class="trend-hits" id="trendsProgHits" aria-live="polite">${progHitsHtml('')}</div>
+/* ---------- the three boxes: ARIA 1.2 combobox, suggestions in one listbox ---------- */
+function trendsBoxHtml(kind) {
+  if (kind === 'school' && !TR.hasSchools) return `<div class="tr-box"><span class="trend-label">High school</span><p class="small muted">High-school results are not published yet.</p></div>`;
+  const label = { club: 'Club', school: 'High school', program: 'Program' }[kind];
+  const ph = { club: 'Type a club, e.g. MVLA', school: 'Type a high school', program: 'Type a D1 program, e.g. Stanford' }[kind];
+  return `<div class="tr-box" id="trBox-${kind}">
+      <label class="trend-label" id="trLbl-${kind}" for="trIn-${kind}">${label}</label>
+      <div class="tr-field"><div class="tr-chip" id="trChip-${kind}" hidden><button type="button" class="tr-chip-name" id="trChg-${kind}"></button><button type="button" class="tr-chip-x" id="trClr-${kind}">✕</button></div>
+      <input class="trend-input" id="trIn-${kind}" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="trList-${kind}" autocomplete="off" spellcheck="false" placeholder="${ph}">
+      <div class="tr-list" id="trList-${kind}" role="listbox" aria-labelledby="trLbl-${kind}" hidden></div></div>
+      <div class="tr-msg small muted" id="trMsg-${kind}"></div>
     </div>`;
-
-  const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.`;
-  const progCell = p => `<div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(p.slug)}/roster" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${programLine(p)}</span></span></div>`;
-  const head = (first, school) => `<thead><tr><th>${first}</th><th class="num">Players<span class="th-sub">current + past</span></th><th class="num">Current roster</th><th class="num">Past rosters<span class="th-sub">${esc(pastLabel)}</span></th><th class="num trend-sep">Commits<span class="th-sub">${school ? 'not available' : 'not in total'}</span></th></tr></thead>`;
-  const cells = r => `<td class="num"><span class="num-strong">${r.current + r.past}</span></td><td class="num">${r.current}</td><td class="num">${r.past}</td><td class="num trend-sep">${r.commits == null ? '<span class="muted" title="No recruit carries a matched high school yet">—</span>' : r.commits}</td>`;
-  let body, subtitle;
-  if ((kind === 'club' || kind === 'school') && id) {
-    const entry = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
-    if (!entry) {
-      body = picker + `<div class="card"><h3>Not in the index</h3><p class="muted">There is no ${kind === 'school' ? 'high school' : 'club'} with the id <code>${esc(id)}</code> in the clubs and schools index. Pick one above.</p></div>`;
-      subtitle = 'Clubs and high schools behind Division I rosters';
-    } else {
-      const rows = trendsProgramsFor(doc, kind, id);
-      const totals = { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: rows.reduce((a, r) => a + (r.commits || 0), 0) };
-      const shown = rows.filter(r => byProgram.has(r.slug) && matchesFilters(byProgram.get(r.slug), null));
-      const hidden = rows.length - shown.length;
-      const trs = shown.map(r => { const p = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(p)}${r.current ? `<details class="trend-players" data-slug="${esc(p.slug)}" data-kind="${kind}" data-id="${esc(id)}"><summary>current players</summary><div class="trend-names small muted">Loading…</div></details>` : ''}</td>${cells(r)}</tr>`; }).join('');
-      const where = [entry.city, entry.state].filter(Boolean).join(', ');
-      body = picker + `<div class="card"><h3>${esc(entry.name)}${where ? ` <span class="muted" style="font-weight:400">· ${esc(where)}</span>` : ''} ${entry.unmatched ? unmatchedBadge : ''}</h3>
-        <p class="small muted">Division I programs with players from this ${kind === 'school' ? 'high school' : 'club'}, most players first. ${commitsNote}</p>
-        <div class="tscroll"><table class="trend-table">${head('Program', kind === 'school')}<tbody>${trs || `<tr><td colspan="5"><div class="empty">${rows.length ? 'Every program with these players is hidden by your filters.' : 'No program carries this entry.'}</div></td></tr>`}</tbody></table></div>
-        <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:<ul class="trend-cov">${trendsCoverageLines(doc, kind, totals).map(l => `<li>${esc(l)}</li>`).join('')}</ul>${hidden ? `${hidden} program${hidden === 1 ? '' : 's'} with these players ${hidden === 1 ? 'is' : 'are'} hidden by your filters. ` : ''}${kind === 'school' ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
-      subtitle = `${esc(entry.name)} · ${totals.current} current, ${totals.past} former, ${totals.commits} commit${totals.commits === 1 ? '' : 's'} at ${rows.length} program${rows.length === 1 ? '' : 's'}`;
-    }
-  } else if (kind === 'program' && id) {
-    const p = byProgram.get(id), pr = doc.programs[id];
-    if (!p || !pr) {
-      body = picker + `<div class="card"><h3>Not in the index</h3><p class="muted">${p ? `${esc(displayName(p))} is not a Division I program, and the clubs and schools index covers Division I only for now.` : `There is no program at <code>${esc(id)}</code>.`}</p></div>`;
-      subtitle = 'Clubs and high schools behind Division I rosters';
-    } else {
-      const covLine = (known, label) => [[pr.current, known[0], 'current players'], [pr.past, known[1], 'former players'], [pr.commits, known[2], 'verbal or signed commits']]
-        .map(([n, k, noun]) => k == null ? `${n} ${noun}; ${label} not available yet` : `${n} ${noun}; ${label} known for ${k} (${trendsPct(k, n)}%)`).join(' · ');
-      const table = (rows, kindOf) => rows.length ? `<div class="tscroll"><table class="trend-table">${head(kindOf === 'school' ? 'High school' : 'Club', kindOf === 'school')}<tbody>${rows.map(r => `<tr><td><a href="${trendsHref(kindOf, r.id)}">${esc(r.name)}</a>${r.city || r.state ? ` <span class="muted small">${esc([r.city, r.state].filter(Boolean).join(', '))}</span>` : ''}${r.unmatched ? ` ${unmatchedBadge}` : ''}</td>${cells(r)}</tr>`).join('')}</tbody></table></div>`
-        : `<div class="empty">No ${kindOf === 'school' ? 'high school' : 'club'} is known for any of this program's players yet.</div>`;
-      const clubs = trendsFeedersFor(doc, 'club', id);
-      const schools = hasSchools ? trendsFeedersFor(doc, 'school', id) : null;
-      body = picker + `<div class="card section"><h3>Clubs feeding ${esc(displayName(p))}</h3><p class="small muted">Most players first. ${commitsNote}</p>${table(clubs, 'club')}
-          <div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.clubKnown, 'club'))}. Counts are lower bounds; an unmatched spelling is counted on its own. <a href="#/p/${esc(p.slug)}/roster">Roster →</a></div></div>
-        <div class="card"><h3>High schools feeding ${esc(displayName(p))}</h3>${hasSchools
-          ? `<p class="small muted">Most players first. A high school counts only when its name and state pin down exactly one school; commits are not available for high schools yet.</p>${table(schools, 'school')}<div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.schoolKnown, 'high school'))}.</div>`
-          : `<p class="muted">High-school results are not available yet: players' high schools are not matched to a school list in this build. They will appear here once that data is published.</p>`}</div>`;
-      // #306: the program names its division here, in the Table's form; the two card headings below stay short.
-      subtitle = `${esc(displayName(p))} · ${programLine(p)} · ${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`;
-    }
-  } else {
-    body = picker + `<div class="card"><h3>How to read this</h3>
-      <p class="small ink2">Pick a club${hasSchools ? ' or high school' : ''} to see the Division I programs its players went to, or a program to see where its players came from. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote}</p>
-      <p class="small ink2" style="margin-top:8px"><b>Coverage today</b> — ${trendsCoverageLines(doc, 'club').map(esc).join(' · ')}. A club is known mostly from recruiting records and from roster pages that carry a Club column, so every count is a lower bound: a program showing one player from a club may well have more whose club no public source states.${hasSchools ? ` High schools: ${trendsCoverageLines(doc, 'school').map(esc).join(' · ')}.` : ' High-school results are not published yet.'}</p></div>`;
-    subtitle = 'Clubs and high schools behind Division I rosters';
+}
+// What a chip reads: the name, or the id and "not in the index" (a D2 or D3 program names its division).
+function trendsLabel(kind, id) {
+  const { doc } = TR;
+  if (kind === 'program') {
+    const p = TR.byProgram.get(id);
+    if (TR.progSet.has(id)) return { text: displayName(p) };
+    return { text: `${p ? `${displayName(p)} (${p.division})` : id} — not in the index`, missing: true };
   }
-  const bits = ['Division I', `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} commits`];
-  if (kind === 'club' || kind === 'school') {
+  const e = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
+  return e ? { text: e.name } : { text: `${id} — not in the index`, missing: true };
+}
+const trendsKnown = (kind, id) => !!id && !trendsLabel(kind, id).missing;
+function trendsBoxSync(kind) {
+  const chip = $(`#trChip-${kind}`), input = $(`#trIn-${kind}`), id = TR.sel[kind];
+  if (!chip || !input) return;
+  const showChip = !!id && !TR.editing[kind];
+  chip.hidden = !showChip; input.hidden = showChip;
+  if (!id) return;
+  const { text, missing } = trendsLabel(kind, id), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
+  chip.classList.toggle('missing', !!missing);
+  chg.textContent = text; chg.title = text;
+  chg.setAttribute('aria-label', `Change ${TR_WHAT[kind]}: ${text}`);
+  clr.setAttribute('aria-label', `Clear ${TR_WHAT[kind]}: ${text}`); clr.title = `Clear ${TR_WHAT[kind]}`;
+}
+// The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
+const trendsHitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
+const trendsPlayers = n => `${n} player${n === 1 ? '' : 's'}`;
+// A box's options for what is typed in it. A typed query searches everything of that kind; an empty box follows
+// the other selections: clubs or schools feeding the selected program, programs the selected club or school feeds.
+function trendsOptions(kind, q) {
+  const { doc, sel } = TR, lim = trendsHitLimit(q), nq = trendsKey(q);
+  if (kind === 'program') {
+    const players = p => doc.programs[p.slug].current + doc.programs[p.slug].past;
+    // Each suggestion names its division first, in the Table's form (#306).
+    const line = p => programLine(p);
+    let list;
+    if (nq) {
+      const n2 = normText(q), exact = x => normText(x.m.why) === n2; // "cardinal": the Cardinal before the Cardinals
+      list = TR.progs.map(p => ({ p, m: matchScore(p, n2) })).filter(x => x.m)
+        .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || players(b.p) - players(a.p)).map(x => ({ p: x.p, sub: `${line(x.p)}${x.m.why ? ` · ${esc(x.m.why)}` : ''}` }));
+    } else {
+      const from = trendsKnown('club', sel.club) ? ['club', sel.club] : trendsKnown('school', sel.school) ? ['school', sel.school] : null;
+      list = from ? trendsProgramsFor(doc, from[0], from[1]).filter(r => TR.progSet.has(r.slug)).map(r => { const p = TR.byProgram.get(r.slug); return { p, sub: `${line(p)} · ${trendsPlayers(r.current + r.past)}` }; })
+        : TR.progs.slice().sort((a, b) => players(b) - players(a) || displayName(a).localeCompare(displayName(b))).map(p => ({ p, sub: line(p) }));
+    }
+    return list.slice(0, lim).map(({ p, sub }) => ({ id: p.slug, label: displayName(p), sub }));
+  }
+  const where = e => [kind === 'school' ? [e.city, e.state].filter(Boolean).join(', ') : e.state || ''];
+  let list;
+  if (nq) {
+    list = trendsFind(TR.ents[kind], q).sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm))
+      .map(({ e, aka }) => ({ e, sub: [aka ? `also known as ${trendsAkaLabel(aka)}` : '', ...where(e), trendsPlayers(e.total)] }));
+  } else if (trendsKnown('program', sel.program)) {
+    const byId = new Map(TR.ents[kind].map(e => [e.id, e])), pn = displayName(TR.byProgram.get(sel.program));
+    list = trendsFeedersFor(doc, kind, sel.program).map(r => ({ e: byId.get(r.id), sub: [...where(r), `${trendsPlayers(r.current + r.past)} at ${pn}`] }));
+  } else {
+    list = TR.ents[kind].filter(e => !e.unmatched).sort((a, b) => b.total - a.total || a.norm.localeCompare(b.norm)).map(e => ({ e, sub: [...where(e), trendsPlayers(e.total)] }));
+  }
+  return list.slice(0, lim).map(({ e, sub }) => ({ id: e.id, label: e.name, sub: `${sub.filter(Boolean).map(esc).join(' · ')}${e.unmatched ? ' · unmatched' : ''}` }));
+}
+function trendsFillList(kind) {
+  const input = $(`#trIn-${kind}`), list = $(`#trList-${kind}`), msg = $(`#trMsg-${kind}`);
+  const q = input.value, opts = TR.opts[kind] = trendsOptions(kind, q);
+  list.innerHTML = opts.map((o, i) => `<div class="pill trend-hit${o.id === TR.sel[kind] ? ' active' : ''}" role="option" id="trOpt-${kind}-${i}" aria-selected="false" data-i="${i}">${esc(o.label)}<span class="pill-sub">${o.sub}</span></div>`).join('');
+  TR.at[kind] = -1; input.removeAttribute('aria-activedescendant');
+  list.hidden = !opts.length; input.setAttribute('aria-expanded', opts.length ? 'true' : 'false');
+  // No match: only this line changes; the chip, the results and the URL stay as they were.
+  const selName = TR.sel[kind] && !trendsLabel(kind, TR.sel[kind]).missing ? trendsLabel(kind, TR.sel[kind]).text : '';
+  const none = !opts.length && trendsKey(q) ? `No ${TR_WHAT[kind]} matches “${q.trim()}”.${selName ? ` Still showing ${selName}; pick another to change it.` : ''}` : '';
+  msg.textContent = none;
+  if (none) trendsSay(none);
+}
+function trendsCloseList(kind) {
+  const input = $(`#trIn-${kind}`), list = $(`#trList-${kind}`);
+  if (!input || !list) return;
+  list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); TR.at[kind] = -1;
+}
+function trendsMark(kind, at) {
+  const input = $(`#trIn-${kind}`), prev = TR.at[kind];
+  if (prev >= 0) { const o = $(`#trOpt-${kind}-${prev}`); if (o) { o.classList.remove('kbd'); o.setAttribute('aria-selected', 'false'); } }
+  TR.at[kind] = at;
+  const o = at >= 0 ? $(`#trOpt-${kind}-${at}`) : null;
+  if (o) { o.classList.add('kbd'); o.setAttribute('aria-selected', 'true'); o.scrollIntoView?.({ block: 'nearest' }); input.setAttribute('aria-activedescendant', `trOpt-${kind}-${at}`); }
+  else input.removeAttribute('aria-activedescendant');
+}
+// Escape closes the list; while re-editing a picked box it also puts the chip back and focuses it.
+function trendsEscape(kind) {
+  trendsCloseList(kind);
+  if (!TR.sel[kind] || !TR.editing[kind]) return;
+  TR.editing[kind] = false; $(`#trIn-${kind}`).value = ''; $(`#trMsg-${kind}`).textContent = '';
+  trendsBoxSync(kind); $(`#trChg-${kind}`).focus();
+}
+function trendsWireBox(kind) {
+  const input = $(`#trIn-${kind}`), list = $(`#trList-${kind}`), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
+  if (!input || !list || (kind === 'school' && !TR.hasSchools)) return;
+  input.onfocus = () => trendsFillList(kind);
+  input.oninput = () => trendsFillList(kind);
+  input.onkeydown = e => {
+    if (e.key === 'Escape') { e.preventDefault(); trendsEscape(kind); return; }
+    if (list.hidden) { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); trendsFillList(kind); } return; }
+    const opts = TR.opts[kind] || [], step = trendsKeyStep(TR.at[kind], e.key, opts.length);
+    if (step.at === TR.at[kind] && step.go == null) return; // Tab and typing pass through: Tab leaves without picking
+    e.preventDefault();
+    trendsMark(kind, step.at);
+    if (step.go != null) trendsSelect(kind, opts[step.go].id);
+  };
+  // Leaving the box (Tab, a click elsewhere) closes the list and puts back the chip of a box being re-edited.
+  input.onblur = () => setTimeout(() => {
+    if (!TR || document.activeElement === input) return;
+    trendsCloseList(kind);
+    if (TR.editing[kind]) { TR.editing[kind] = false; input.value = ''; $(`#trMsg-${kind}`).textContent = ''; trendsBoxSync(kind); }
+  }, 150);
+  list.onmousedown = e => e.preventDefault(); // a click on an option keeps the focus in the box until the pick
+  list.onclick = e => { const o = e.target?.closest?.('[role="option"]'); if (o) { const opt = (TR.opts[kind] || [])[+o.dataset.i]; if (opt) trendsSelect(kind, opt.id); } };
+  if (chg) chg.onclick = () => { TR.editing[kind] = true; input.value = ''; trendsBoxSync(kind); input.focus(); trendsFillList(kind); };
+  if (clr) clr.onclick = () => trendsSelect(kind, null);
+}
+function trendsSay(text) {
+  const live = $('#trLive'); if (!live) return;
+  // the same sentence twice is not re-announced by screen readers; a trailing no-break space makes it new
+  TR.said = TR.said === text ? `${text} ` : text;
+  live.textContent = TR.said;
+}
+
+/* ---------- the results below the boxes, one of the eight states of the #310 plan ---------- */
+function trendsApply(sel, { focus } = {}) {
+  TR.sel = sel; TR.hash = location.hash;
+  TR_KINDS.forEach(trendsBoxSync);
+  const v = trendsView(sel);
+  $('#trSub').innerHTML = v.sub;
+  const res = $('#trResults'); res.innerHTML = v.html;
+  // Current players of a program, loaded from its profile only when the visitor opens the row (public roster names only).
+  res.querySelectorAll('details.trend-players').forEach(d => d.addEventListener('toggle', async () => {
+    if (!d.open || d.dataset.loaded) return; d.dataset.loaded = '1';
+    const box = d.querySelector('.trend-names');
+    try { const names = trendsRosterNames(await loadProfile(d.dataset.slug), d.dataset.kind, d.dataset.id); box.innerHTML = names.length ? esc(names.join(', ')) : 'Not listed on the current roster.'; }
+    catch { box.textContent = 'The roster could not be loaded.'; }
+  }));
+  const done = v.names ? trendsLoadNames(v.names) : Promise.resolve();
+  trendsSay(v.say);
+  if (focus) (sel[focus] ? $(`#trChg-${focus}`) : $(`#trIn-${focus}`))?.focus();
+  return done;
+}
+// The pair card's names: the current-roster players with that club (and that school), from the public roster.
+// Picking the pair is the on-demand act; past players and commits are never named.
+async function trendsLoadNames({ slug, club, school, cur }) {
+  const tok = ++TR.tok, box = () => TR && TR.tok === tok ? $('#trNames') : null;
+  let names;
+  try {
+    const prof = await loadProfile(slug);
+    names = club ? trendsRosterNames(prof, 'club', club, school || null) : trendsRosterNames(prof, 'school', school);
+  } catch { const b = box(); if (b) b.textContent = 'The roster could not be loaded.'; return; }
+  const b = box(); if (!b) return;
+  const n = names.length;
+  if (cur == null) { const c = $('#trCurBoth'); if (c) c.textContent = String(n); }
+  const differs = cur != null && n !== cur
+    ? ` The public roster names ${n} of the ${cur} current player${cur === 1 ? '' : 's'} the index counted (the index was built on ${String(TR.doc.updated || '').slice(0, 10)}).` : '';
+  b.innerHTML = `<b>Current players (${n}):</b> ${n ? esc(names.join(', ')) : 'none on the current roster.'}${differs ? `<span class="muted">${esc(differs)}</span>` : ''}`;
+}
+function trendsView(sel) {
+  const { doc, byProgram, pastLabel } = TR, f = S.filters;
+  const club = trendsKnown('club', sel.club) ? sel.club : null, school = trendsKnown('school', sel.school) ? sel.school : null;
+  const slug = trendsKnown('program', sel.program) ? sel.program : null, p = slug ? byProgram.get(slug) : null;
+  const clubE = club && doc.clubs[club], schoolE = school && doc.schools[school];
+  const link = (patch, text, cls = '') => {
+    const k = Object.keys(patch)[0], to = { ...sel, ...patch }; if (!patch[k]) delete to[k];
+    return `<a${cls ? ` class="${cls}"` : ''} href="${esc(trendsUrl(to))}" data-tr-kind="${k}" data-tr-id="${esc(patch[k] || '')}">${text}</a>`;
+  };
+  // Header: every selection by name, in box order, rebuilt only on a pick or a clear.
+  // A picked program names its division in the Table's form (#306): "Stanford · D1 · ACC · Stanford, CA".
+  const named = TR_KINDS.filter(k => sel[k]).map(k => k === 'program' && slug ? `${esc(displayName(p))} · ${programLine(p)}` : esc(trendsLabel(k, sel[k]).text));
+  const cov = doc.coverage, pr = slug && doc.programs[slug];
+  // A program alone: its own counts, as #308 wrote the program page's subtitle; otherwise the index's.
+  const bits = pr && !club && !school ? [`${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`]
+    : ['Division I', `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} commits`];
+  if ((club || school) && !slug) {
     if (f.conf.length) bits.push(esc(f.conf.join(', ')));
     if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
     if (f.division.length) bits.push(esc(f.division.map(divisionName).join(', ')));
     if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
     if (S.q) bits.push(`programs matching “${esc(S.qRaw)}”`);
   }
-  app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: `${subtitle} · ${bits.join(' · ')}`, tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
-  wireAskBanner(); wireTabs();
-  const q = $('#trendsQ'), qh = $('#trendsHits'); if (q && qh) trendsWireTypeahead(q, qh, hitsHtml);
-  const pq = $('#trendsProgram'), ph = $('#trendsProgHits'); if (pq && ph) trendsWireTypeahead(pq, ph, progHitsHtml);
-  // Current players of a program, loaded from its profile only when the visitor opens the row (public roster names only).
-  app.querySelectorAll('details.trend-players').forEach(d => d.addEventListener('toggle', async () => {
-    if (!d.open || d.dataset.loaded) return; d.dataset.loaded = '1';
-    const box = d.querySelector('.trend-names');
-    try { const names = trendsRosterNames(await loadProfile(d.dataset.slug), d.dataset.kind, d.dataset.id); box.innerHTML = names.length ? esc(names.join(', ')) : 'Not listed on the current roster.'; }
-    catch { box.textContent = 'The roster could not be loaded.'; }
-  }));
+  const sub = `${named.length ? named.join(' × ') : 'Clubs and high schools behind Division I rosters'} · ${bits.join(' · ')}`;
+
+  // Notes above the results: a selection the index does not carry, and a picked program outside the sidebar filters.
+  const notes = TR_KINDS.filter(k => sel[k] && !trendsKnown(k, sel[k])).map(k => {
+    const q = byProgram.get(sel[k]);
+    return k === 'program' && q ? `${esc(displayName(q))} is a ${esc(divisionName(q.division))} program, and the clubs and schools index covers Division I only for now; the results below leave it out.`
+      : `There is no ${TR_WHAT[k]} “${esc(sel[k])}” in the clubs and schools index; the results below leave it out.`;
+  });
+  if (p && !matchesFilters(p, null)) notes.push(`${esc(displayName(p))} is outside your sidebar filters; it is shown because you picked it.`);
+  const noteHtml = notes.map(n => `<p class="small muted tr-note">${n}</p>`).join('');
+
+  const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.`;
+  const progCell = q => `<div class="team-cell">${swatchesHtml(q)}<span><a href="#/p/${esc(q.slug)}/roster" class="team-name">${esc(displayName(q))}</a><br><span class="team-sub">${programLine(q)}</span></span></div>`;
+  const head = (first, sch) => `<thead><tr><th>${first}</th><th class="num">Players<span class="th-sub">current + past</span></th><th class="num">Current roster</th><th class="num">Past rosters<span class="th-sub">${esc(pastLabel)}</span></th><th class="num trend-sep">Commits<span class="th-sub">${sch ? 'not available' : 'not in total'}</span></th></tr></thead>`;
+  const dash = '<span class="muted" title="No recruit carries a matched high school yet">—</span>';
+  const cells = r => `<td class="num"><span class="num-strong">${r.current + r.past}</span></td><td class="num">${r.current}</td><td class="num">${r.past}</td><td class="num trend-sep">${r.commits == null ? dash : r.commits}</td>`;
+  const where = e => [e.city, e.state].filter(Boolean).join(', ');
+  const filtered = rows => { const shown = rows.filter(r => byProgram.has(r.slug) && matchesFilters(byProgram.get(r.slug), null)); return { shown, hidden: rows.length - shown.length }; };
+  const hiddenLine = (n, what) => n ? `${n} program${n === 1 ? '' : 's'} with ${what} ${n === 1 ? 'is' : 'are'} hidden by your sidebar filters. ` : '';
+
+  // 5, 6, 8: a program with a club, a school, or both: one card.
+  if (slug && (clubE || schoolE)) {
+    const pr = doc.programs[slug], title = [clubE?.name, schoolE?.name, displayName(p)].filter(Boolean).map(esc).join(' × ');
+    const back = [clubE && link({ club: null }, `All clubs feeding ${esc(displayName(p))}`, 'btn'), schoolE && link({ school: null }, `All high schools feeding ${esc(displayName(p))}`, 'btn'),
+      link({ program: null }, clubE && schoolE ? 'Programs drawing from both' : `All programs for this ${clubE ? 'club' : 'high school'}`, 'btn')].filter(Boolean).join('');
+    const stat = (n, label, k) => `<span class="tr-stat${k === 'commits' ? ' trend-sep' : ''}" data-stat="${k}"><b${k === 'both' ? ' id="trCurBoth"' : ''}>${n}</b>${label}</span>`;
+    if (clubE && schoolE) {
+      const c = clubE.programs[slug], s = schoolE.programs[slug];
+      const html = `${noteHtml}<div class="card"><h3>${title}</h3><div class="small muted">${programLine(p)}</div>
+        <div class="tr-stats">${stat('…', 'Current, with both', 'both')}${stat('—', 'Past', 'past')}${stat('—', 'Commits', 'commits')}</div>
+        <p class="small muted">From this club: ${trendsPlayers(c ? c[0] + c[1] : 0)} at ${esc(displayName(p))}. From this high school: ${trendsPlayers(s ? s[0] + s[1] : 0)}. The index counts a club's players and a school's players separately, so past players and commits cannot be paired and read “—”; current players with both are read off the public roster.</p>
+        <div class="trend-names small" id="trNames">Loading current players…</div>
+        <p class="small muted">Past players and commits are counted, never named.</p><div class="tr-actions">${back}</div></div>`;
+      return { html, sub, names: { slug, club, school, cur: null }, say: `${clubE.name} × ${schoolE.name} × ${displayName(p)}: current players with both are listed below.` };
+    }
+    const kind = clubE ? 'club' : 'school', e = clubE || schoolE, [c, pa, m] = e.programs[slug] || [0, 0, 0], commits = kind === 'school' ? null : m;
+    const html = `${noteHtml}<div class="card"><h3>${title}</h3><div class="small muted">${programLine(p)}${where(e) ? ` · ${esc(e.name)}: ${esc(where(e))}` : ''} ${e.unmatched ? unmatchedBadge : ''}</div>
+      <div class="tr-stats">${stat(c + pa, 'Players', 'players')}${stat(c, 'Current', 'current')}${stat(pa, 'Past', 'past')}${stat(commits == null ? '—' : commits, 'Commits', 'commits')}</div>
+      ${c ? '<div class="trend-names small" id="trNames">Loading current players…</div>' : ''}
+      ${e.programs[slug] ? '' : `<p class="small">No player from ${esc(e.name)} is known at ${esc(displayName(p))}. ${esc(displayName(p))} has ${pr.current} current players; a ${TR_WHAT[kind]} is known for ${kind === 'club' ? pr.clubKnown[0] : pr.schoolKnown[0]} of them, so this is a lower bound, not a true zero.</p>`}
+      <p class="small muted">Players = current + past. Past players and commits are counted, never named. ${kind === 'school' ? 'Commits are not available for high schools yet.' : commitsNote}</p><div class="tr-actions">${back}</div></div>`;
+    return { html, sub, names: c ? { slug, club: kind === 'club' ? club : null, school: kind === 'school' ? school : null, cur: c } : null,
+      say: `${displayName(p)}: ${trendsPlayers(c + pa)} from ${e.name}.` };
+  }
+  // 7: club + high school: the programs that drew from both, each count on its own.
+  if (clubE && schoolE) {
+    const { shown, hidden } = filtered(trendsBothFor(doc, club, school));
+    const trs = shown.map(r => `<tr class="team-row"><td>${progCell(byProgram.get(r.slug))}${link({ program: r.slug }, 'both at this program →', 'tr-go')}</td><td class="num"><span class="num-strong">${r.club}</span></td><td class="num">${r.school}</td></tr>`).join('');
+    const html = `${noteHtml}<div class="card"><h3>${esc(clubE.name)} and ${esc(schoolE.name)}</h3>
+      <p class="small"><b>Not necessarily the same players.</b> These are the Division I programs with players from this club and players from this high school. The index counts the two separately, so a program with 2 from each may have 2 players or 4.</p>
+      <div class="tscroll"><table class="trend-table"><thead><tr><th>Program</th><th class="num">From this club<span class="th-sub">current + past</span></th><th class="num">From this school<span class="th-sub">current + past</span></th></tr></thead>
+      <tbody>${trs || `<tr><td colspan="3"><div class="empty">${hidden ? 'Every program with players from both is hidden by your filters.' : 'No program has players from both.'}</div></td></tr>`}</tbody></table></div>
+      <div class="table-footnote">${hiddenLine(hidden, 'players from both')}Counts are lower bounds: a club or a high school is known for only some players.</div></div>`;
+    return { html, sub, say: `${shown.length} program${shown.length === 1 ? '' : 's'} with players from both ${clubE.name} and ${schoolE.name}.` };
+  }
+  // 2, 3: a club or a high school: the programs it feeds.
+  if (clubE || schoolE) {
+    const kind = clubE ? 'club' : 'school', id = club || school, e = clubE || schoolE;
+    const rows = trendsProgramsFor(doc, kind, id);
+    const totals = { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: rows.reduce((a, r) => a + (r.commits || 0), 0) };
+    const { shown, hidden } = filtered(rows);
+    const trs = shown.map(r => { const q = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(q)}${link({ program: q.slug }, `with this ${kind === 'school' ? 'school' : 'club'} →`, 'tr-go')}${r.current ? `<details class="trend-players" data-slug="${esc(q.slug)}" data-kind="${kind}" data-id="${esc(id)}"><summary>current players</summary><div class="trend-names small muted">Loading…</div></details>` : ''}</td>${cells(r)}</tr>`; }).join('');
+    const html = `${noteHtml}<div class="card"><h3>${esc(e.name)}${where(e) ? ` <span class="muted" style="font-weight:400">· ${esc(where(e))}</span>` : ''} ${e.unmatched ? unmatchedBadge : ''}</h3>
+      <p class="small muted">Division I programs with players from this ${TR_WHAT[kind]}, most players first: ${totals.current} current, ${totals.past} former, ${totals.commits} commit${totals.commits === 1 ? '' : 's'} at ${rows.length} program${rows.length === 1 ? '' : 's'}. ${commitsNote}</p>
+      <div class="tscroll"><table class="trend-table">${head('Program', kind === 'school')}<tbody>${trs || `<tr><td colspan="5"><div class="empty">${rows.length ? 'Every program with these players is hidden by your filters.' : 'No program carries this entry.'}</div></td></tr>`}</tbody></table></div>
+      <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:<ul class="trend-cov">${trendsCoverageLines(doc, kind, totals).map(l => `<li>${esc(l)}</li>`).join('')}</ul>${hiddenLine(hidden, 'these players')}${kind === 'school' ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
+    return { html, sub, say: `${e.name}: ${rows.length} program${rows.length === 1 ? '' : 's'} with players from this ${TR_WHAT[kind]}.` };
+  }
+  // 4: a program: the clubs and the high schools feeding it.
+  if (slug) {
+    const pr = doc.programs[slug];
+    const covLine = (known, label) => [[pr.current, known[0], 'current players'], [pr.past, known[1], 'former players'], [pr.commits, known[2], 'verbal or signed commits']]
+      .map(([n, k, noun]) => k == null ? `${n} ${noun}; ${label} not available yet` : `${n} ${noun}; ${label} known for ${k} (${trendsPct(k, n)}%)`).join(' · ');
+    const table = (rows, k) => rows.length ? `<div class="tscroll"><table class="trend-table">${head(k === 'school' ? 'High school' : 'Club', k === 'school')}<tbody>${rows.map(r => `<tr><td>${link({ [k]: r.id }, esc(r.name))}${where(r) ? ` <span class="muted small">${esc(where(r))}</span>` : ''}${r.unmatched ? ` ${unmatchedBadge}` : ''}</td>${cells(r)}</tr>`).join('')}</tbody></table></div>`
+      : `<div class="empty">No ${TR_WHAT[k]} is known for any of this program's players yet.</div>`;
+    const clubs = trendsFeedersFor(doc, 'club', slug), schools = TR.hasSchools ? trendsFeedersFor(doc, 'school', slug) : null;
+    const html = `${noteHtml}<div class="card section"><h3>Clubs feeding ${esc(displayName(p))}</h3><p class="small muted">Most players first. ${commitsNote}</p>${table(clubs, 'club')}
+        <div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.clubKnown, 'club'))}. Counts are lower bounds; an unmatched spelling is counted on its own. <a href="#/p/${esc(slug)}/roster">Roster →</a></div></div>
+      <div class="card"><h3>High schools feeding ${esc(displayName(p))}</h3>${schools
+        ? `<p class="small muted">Most players first. A high school counts only when its name and state pin down exactly one school; commits are not available for high schools yet.</p>${table(schools, 'school')}<div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.schoolKnown, 'high school'))}.</div>`
+        : `<p class="muted">High-school results are not available yet: players' high schools are not matched to a school list in this build. They will appear here once that data is published.</p>`}</div>`;
+    return { html, sub, say: `${displayName(p)}: ${clubs.length} club${clubs.length === 1 ? '' : 's'}${schools ? ` and ${schools.length} high school${schools.length === 1 ? '' : 's'}` : ''} feeding.` };
+  }
+  // 1: nothing selected.
+  const html = `${noteHtml}<div class="card"><h3>How to read this</h3>
+    <p class="small ink2">Pick a club${TR.hasSchools ? ', a high school' : ''} or a program, or any two or three of them. A club${TR.hasSchools ? ' or a high school' : ''} alone shows the Division I programs its players went to; a program alone shows where its players came from; a pair shows the players they share. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote}</p>
+    <p class="small ink2" style="margin-top:8px"><b>Coverage today</b> — ${trendsCoverageLines(doc, 'club').map(esc).join(' · ')}. A club is known mostly from recruiting records and from roster pages that carry a Club column, so every count is a lower bound: a program showing one player from a club may well have more whose club no public source states.${TR.hasSchools ? ` High schools: ${trendsCoverageLines(doc, 'school').map(esc).join(' · ')}.` : ' High-school results are not published yet.'}</p></div>`;
+  return { html, sub, say: 'Nothing selected. Pick a club, a high school or a program.' };
 }
 
 /* ---------- profile ---------- */
@@ -2432,7 +2712,7 @@ async function tabRoster(p) {
     <div class="card"><h3>${r.season} roster · ${r.count} players</h3><div class="tscroll"><table>
       <tr><th class="num">#</th><th>Name</th><th>Pos</th><th>Class</th><th>Ht</th><th>Hometown</th><th>High school</th><th>Club</th><th>Major</th></tr>${rows}</table></div>
       ${prov(r._meta, 'Club comes from TopDrawerSoccer / SoccerWire commitment records where available; "bio text" means a best-effort read of the official bio.'
-        + (p.division === 'D1' ? ` <a href="#/trends/program/${esc(p.slug)}">Where ${esc(displayName(p))}'s players come from →</a>` : ''))}</div>`;
+        + (p.division === 'D1' ? ` <a href="${esc(trendsUrl({ program: p.slug }))}">Where ${esc(displayName(p))}'s players come from →</a>` : ''))}</div>`;
 }
 
 async function tabCommitments(p) {
