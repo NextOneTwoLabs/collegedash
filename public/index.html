@@ -2079,7 +2079,8 @@ async function renderTrends(kind, rawId) {
         <div class="card"><h3>High schools feeding ${esc(displayName(p))}</h3>${hasSchools
           ? `<p class="small muted">Most players first. A high school counts only when its name and state pin down exactly one school; commits are not available for high schools yet.</p>${table(schools, 'school')}<div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.schoolKnown, 'high school'))}.</div>`
           : `<p class="muted">High-school results are not available yet: players' high schools are not matched to a school list in this build. They will appear here once that data is published.</p>`}</div>`;
-      subtitle = `${esc(displayName(p))} · ${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`;
+      // #306: the program names its division here, in the Table's form; the two card headings below stay short.
+      subtitle = `${esc(displayName(p))} · ${programLine(p)} · ${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`;
     }
   } else {
     body = picker + `<div class="card"><h3>How to read this</h3>

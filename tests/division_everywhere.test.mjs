@@ -9,7 +9,8 @@
 // name and the next program's name (or 700 characters, whichever is sooner) must carry that program's division tag.
 //
 // Views rendered: Table, Cards, Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Clubs & schools
-// (a club's programs), Compare column headers, Compare "Add a school" results, program profile (subtitle and
+// (a club's programs), Clubs & schools (one program's page: its subtitle carries the line; the "Clubs feeding X" /
+// "High schools feeding X" headings stay short), Compare column headers, Compare "Add a school" results, program profile (subtitle and
 // glance panel), not-found "Did you mean". The Clubs & schools program picker (a native <select>, which cannot
 // hold markup) is checked separately: each option sits in an <optgroup> named for its division.
 //
@@ -116,6 +117,7 @@ async function renderAll(transform) {
   sb.S.sidebarTab = 'compare'; sb.renderSidebar(); out.push(['Sidebar compare', $('#sidebar').innerHTML, short, PROGS]);
   await sb.renderCamps(); out.push(['ID Camps', app(), short, PROGS]);
   await sb.renderTrends('club', 'fxc'); out.push(['Clubs & schools (a club\'s programs)', app(), short, PROGS]);
+  for (const p of PROGS) { await sb.renderTrends('program', p.slug); out.push([`Clubs & schools (${p.division} program page)`, app(), short, [p]]); }
   sb.S.profiles = sb.S.profiles || {};
   await sb.renderCompare(); await settle();
   const cmp = app();
@@ -134,9 +136,10 @@ function checkView([view, html, nameOf, progs]) {
   const names = PROGS.map(nameOf);
   let seen = 0;
   for (const p of progs) {
-    let i = -1;
     const at = new Set();
-    while ((i = html.indexOf(`>${nameOf(p)}<`, i + 1)) !== -1) {
+    // The name as its own element (">Name<"), or leading a subtitle (">Name · …", the Clubs & schools program page).
+    const shown = [`>${nameOf(p)}<`, `>${nameOf(p)} · `].flatMap(s => [...html.matchAll(new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))].map(m => m.index));
+    for (const i of shown) {
       if (html.startsWith('<option', html.lastIndexOf('<', i))) continue; // the picker's options: checked by their optgroup below
       seen++; at.add(p.slug);
       let end = Math.min(html.length, i + 700);
@@ -153,7 +156,7 @@ test('every program-listing view shows each program with its division (D1, D2, D
   REAL = await renderAll();
   for (const v of REAL) checkView(v);
   const names = REAL.map(v => v[0]);
-  for (const need of ['Table', 'ID Camps', 'Clubs & schools (a club\'s programs)', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
+  for (const need of ['Table', 'ID Camps', 'Clubs & schools (a club\'s programs)', 'Clubs & schools (D1 program page)', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
 });
 
 test('the program line reads "D1 · Conference · City, ST", the Table\'s form', async () => {
