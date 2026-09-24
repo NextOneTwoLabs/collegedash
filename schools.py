@@ -9,7 +9,10 @@ Issue #229, phase 2b of #225. The owner's decisions are on #225 and #229:
   * a player whose hometown is outside the US is marked `outside-us`, not matched. Their school is
     not in the NCES directory anyway;
   * matching is EXACT: the cleaned school name plus the state. If more than one school in that
-    state cleans to the same key, the player is `ambiguous` and stays unmatched. Nothing guesses;
+    state cleans to the same key, the player is `ambiguous` and stays unmatched. Nothing guesses.
+    One narrow extension (#325): when no school in the state has the key and the key starts with a
+    city name, the rest is looked up among that city's schools in that state only - "Southlake
+    Carroll" is CARROLL H S in Southlake, TX - and matches when exactly one school remains;
   * the candidate list is `data/schools.json`, derived from two public-domain federal files by
     tools/schools_nces.py: the Common Core of Data (public schools) and the Private School Survey
     (private schools). Only the fields a match needs are kept: id, name, city, state, public or
@@ -121,6 +124,12 @@ def school_key(s: str | None) -> str:
     return " ".join(words)
 
 
+def city_key(s: str | None) -> str:
+    """A city name cleaned the way `school_key` cleans the words of a school name, without dropping
+    anything: "Southlake" -> "southlake", "St. Louis" -> "saint louis", "Ft. Worth" -> "fort worth"."""
+    return " ".join(_WRITTEN_OUT.get(w, w) for w in clubs.clean_key(s).split())
+
+
 def is_placeholder(s: str | None) -> bool:
     """"null", "N/A", "TBD", "Homeschool": a cell that names no school."""
     return clubs.clean_key(s) in _PLACEHOLDERS
@@ -181,6 +190,8 @@ class Table:
         self.sources = doc.get("sources") or {}
         self.schools: dict[str, dict] = {}
         self.by_key: dict[tuple[str, str], list[dict]] = {}
+        # (state, city key, school key) -> schools, for a spelling that puts the city first (#325)
+        self.by_city: dict[tuple[str, str, str], list[dict]] = {}
         for row in doc.get("rows") or []:
             if len(row) != len(COLUMNS):
                 raise TableError(f"data/schools.json: row {row!r} does not have {len(COLUMNS)} columns")
@@ -191,6 +202,23 @@ class Table:
                 raise TableError(f"data/schools.json: {school['id']!r} has state {school['state']!r}")
             self.schools[school["id"]] = school
             self.by_key.setdefault((school["state"], school_key(school["name"])), []).append(school)
+            city = city_key(school["city"])
+            if city:
+                self.by_city.setdefault((school["state"], city, school_key(school["name"])), []).append(school)
+
+    def city_prefixed(self, key: str, state: str | None) -> list[dict]:
+        """Schools a key names when it starts with a city: "southlake carroll" in TX -> the schools in
+        Southlake, TX whose key is "carroll". Every word-boundary split of the key is tried (a city
+        can be "fort worth" or "saint louis"), and only schools in that city and `state` count, so a
+        city prefix never reaches a school elsewhere. Empty without a state (issue #325)."""
+        words = key.split()
+        if not state or len(words) < 2:
+            return []
+        found: dict[str, dict] = {}
+        for i in range(1, len(words)):
+            for s in self.by_city.get((state, " ".join(words[:i]), " ".join(words[i:])), []):
+                found[s["id"]] = s
+        return list(found.values())
 
     def candidates(self, name: str | None, state: str | None) -> list[dict]:
         """Every school in `state` whose name cleans to the same key as `name`. Empty without a state."""
@@ -201,7 +229,8 @@ class Table:
 
     def match(self, raw: str | None, hometown: str | None) -> Match:
         """One player's high-school string and hometown -> a Match. Never guesses: exact key and
-        state, one candidate, or nothing."""
+        state, one candidate - or, when no school has the key, a leading city name plus one school
+        in that city and state (#325) - or nothing."""
         key = school_key(raw)
         if not key or is_placeholder(raw):
             return Match(raw, key, None, "none")
@@ -225,6 +254,12 @@ class Table:
             return Match(raw, key, state, "matched", found[0], 1)
         if len(found) > 1:
             return Match(raw, key, state, "ambiguous", None, len(found))
+        # No school in the state carries the key; if it starts with a city name and the rest is the
+        # name of exactly one school in that city and state, that is the school ("Southlake Carroll"
+        # -> CARROLL H S, Southlake TX). Zero or several: unmatched, never guessed (#325).
+        by_city = self.city_prefixed(key, state)
+        if len(by_city) == 1:
+            return Match(raw, key, state, "matched", by_city[0], 1)
         return Match(raw, key, state, "unmatched")
 
 
@@ -262,7 +297,8 @@ HOW_TO_USE = [
     "player's hometown gave.",
     "`ambiguous`: two or more schools in that state clean to the same name, listed under "
     "`candidates`. The player is left unmatched rather than guessed.",
-    "`unmatched` with a state: no school in that state cleans to this name. `nearby` lists up to "
+    "`unmatched` with a state: no school in that state cleans to this name, and the name is not a "
+    "city in that state followed by the name of exactly one school in that city. `nearby` lists up to "
     "five schools in the state whose cleaned name contains, or is contained in, this one - a "
     "reading aid only, never applied.",
     "`unmatched` with no state: the hometown names no US state, so nothing can be matched.",

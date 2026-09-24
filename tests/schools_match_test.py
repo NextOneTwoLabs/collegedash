@@ -30,6 +30,11 @@ committed list, by name:
                 from Vancouver, Wash. it is the Washington school
   not split     a hometown still carrying "/ <school>" (collected before #227's fix) is not
                 matched on its stored highSchool value, which is the Previous School column there
+  city prefix   (#325) a spelling that starts with its city - "Southlake Carroll" - matches the one
+                school with the rest of the name in that city and state (CARROLL H S, Southlake,
+                TX, ccd:481302009392), though "Carroll" alone is ambiguous in Texas. Two schools
+                left in the city stay unmatched; the same spelling from another state, from no
+                state, or naming a school in a different city does not match
   empty         an empty or placeholder high school ("null", "N/A") gets no schoolInfo
   table         a file that is not what tools/schools_nces.py writes fails to load
   build         annotate_roster_schools writes schoolInfo on a D1 roster and leaves a D2 roster
@@ -162,6 +167,41 @@ def test_rules_on_a_synthetic_table() -> None:
     check("candidates() is empty without a state", t.candidates("Mountain View", None) == [])
 
 
+def test_city_prefix() -> None:
+    """#325 on a synthetic table. The first two checks fail on the code before #325; the rest are
+    guards (the code before #325 also leaves them unmatched) that keep the new rule narrow."""
+    rows = [
+        ["pss:10", "ST FRANCIS HIGH SCHOOL", "Mountain View", "CA", "private", "2023-24"],
+        ["pss:11", "ST FRANCIS HIGH SCHOOL", "Sacramento", "CA", "private", "2023-24"],
+        ["ccd:12", "Los Altos High", "Los Altos", "CA", "public", "2023-24"],
+        ["ccd:13", "CENTRAL H S", "Keller", "TX", "public", "2023-24"],
+        ["ccd:14", "Central High School", "Keller", "TX", "public", "2023-24"],
+        ["ccd:15", "Polytechnic High", "Long Beach", "CA", "public", "2023-24"],
+    ]
+    t = schools.Table({"columns": list(schools.COLUMNS), "rows": rows})
+    m = t.match("Mountain View St. Francis", "Palo Alto, Calif.")
+    check("city prefix: 'Mountain View St. Francis' in CA -> the one St. Francis in Mountain View",
+          m.status == "matched" and m.schoolId == "pss:10", m.as_dict())
+    m = t.match("Long Beach Polytechnic HS", "Long Beach, Calif.")
+    check("city prefix: a two-word city ('Long Beach') is tried", m.status == "matched" and m.schoolId == "ccd:15",
+          m.as_dict())
+    m = t.match("Keller Central", "Keller, Texas")
+    check("guard: city prefix with two schools left in the city stays unmatched",
+          m.status == "unmatched" and m.schoolId is None, m.as_dict())
+    m = t.match("Mountain View St. Francis", "Portland, Ore.")
+    check("guard: city prefix in the wrong state does not match", m.status == "unmatched" and m.schoolId is None,
+          m.as_dict())
+    m = t.match("Mountain View St. Francis", "Layton")
+    check("guard: city prefix without a state does not match", m.status == "unmatched" and m.schoolId is None,
+          m.as_dict())
+    m = t.match("Mountain View Los Altos", "Mountain View, Calif.")
+    check("guard: the rest of the name must be a school in THAT city (Los Altos High is in Los Altos)",
+          m.status == "unmatched" and m.schoolId is None, m.as_dict())
+    m = t.match("St. Francis", "Mountain View, Calif.")
+    check("guard: a bare name ambiguous in the state stays ambiguous (the hometown city is not used)",
+          m.status == "ambiguous", m.as_dict())
+
+
 def test_table_validation() -> None:
     bad = [
         ("wrong columns", {"columns": ["id", "name"], "rows": []}),
@@ -195,6 +235,15 @@ def test_committed_list(t: schools.Table) -> None:
     check("guard: the list has two St. Francis in California", len(t.candidates("St. Francis", "CA")) == 2,
           str(t.candidates("St. Francis", "CA")))
     check("guard: the list has exactly one Mountain View in Washington", len(t.candidates("Mountain View", "WA")) == 1)
+    # #325: "Carroll" alone is ambiguous in Texas; the city in front of it picks the Southlake one
+    check("guard: the list has more than one Carroll in Texas", len(t.candidates("Carroll", "TX")) > 1,
+          str(t.candidates("Carroll", "TX")))
+    for raw in ("Southlake Carroll", "Southlake Carroll HS", "Southlake Carroll H.S.", "Southlake Carroll High School"):
+        m = t.match(raw, "Southlake, Texas")
+        check(f"city prefix: {raw!r} from Texas -> CARROLL H S, Southlake (ccd:481302009392)",
+              m.status == "matched" and m.schoolId == "ccd:481302009392", m.as_dict())
+    m = t.match("Southlake Carroll", "Tulsa, Okla.")
+    check("guard: 'Southlake Carroll' from Oklahoma does not match", m.status != "matched", m.as_dict())
     check("guard: the list carries public and private schools",
           any(s["type"] == "public" for s in t.schools.values()) and any(s["type"] == "private" for s in t.schools.values()))
     check("guard: the list carries both survey years", {s["year"] for s in t.schools.values()} >= {"2023-24", "2021-22"})
@@ -333,6 +382,7 @@ def main(argv=None) -> int:
     test_key()
     test_hometown_state()
     test_rules_on_a_synthetic_table()
+    test_city_prefix()
     test_table_validation()
     table = schools.load_table(reload=True)
     test_committed_list(table)
