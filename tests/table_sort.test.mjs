@@ -196,7 +196,7 @@ test('the tuition and record headers say what they sort by', async () => {
 test('the Program line shows the division first, for D1, D2 and D3', async () => {
   const html = await table({});
   for (const [slug, d, name] of [[A, 'D1', 'Division I'], [D, 'D2', 'Division II'], [E, 'D3', 'Division III']]) {
-    assert.equal(teamSub(html, slug), `<span class="div-tag" title="${name}">${d}</span> · Test ${d} Conference · Testville, CA`, `${slug}: the Program line`);
+    assert.equal(teamSub(html, slug), `<span class="div-tag" title="${name}">${d}</span><span class="pl-rest"> · Test ${d} Conference · Testville, CA</span>`, `${slug}: the Program line`);
   }
 });
 

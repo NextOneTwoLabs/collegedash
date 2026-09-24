@@ -169,6 +169,9 @@ tr:hover td { background: var(--row-hover); }
 .side-item:hover { background: var(--bg-surface-alt); }
 .side-item .name { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .side-item .meta { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+.prog-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.prog-stack > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmp-table th .team-sub { display: block; margin-top: 2px; }
 .side-item .rm { border: none; background: none; color: var(--text-secondary); font-size: 14px; padding: 2px 4px; border-radius: 999px; }
 .side-item .rm:hover { color: var(--danger-text); background: var(--bg-surface-alt); }
 .side-actions { display: flex; gap: 8px; padding: 6px 16px 12px; flex-wrap: wrap; }
@@ -428,7 +431,7 @@ a.pill { text-decoration: none; }
   .trend-table th:first-child { width: 40%; }
   .trend-table .team-name { max-width: 100px; }
   .trend-players summary { font-size: 11px; }
-  .trend-table .team-sub, .trend-table th .th-sub { display: none; }
+  .trend-table .team-sub .pl-rest, .trend-table th .th-sub { display: none; }
   .trend-table td, .trend-table th { padding-left: 6px; padding-right: 6px; }
   .trend-table th { white-space: normal; font-size: 11px; }
 }
@@ -1148,6 +1151,14 @@ const DIVISION_NAMES = { D1: 'Division I', D2: 'Division II', D3: 'Division III'
 const divisionName = d => DIVISION_NAMES[d] || d;
 // The division as the sidebar's Division pills label it (D1 / D2 / D3), spelled out on hover (#278).
 const divisionTag = d => d ? `<span class="div-tag" title="${esc(divisionName(d))}">${esc(d)}</span>` : '';
+/* The program line under a program's name, the Table's form (#286): "D1 · Big Ten · Columbus, OH". Every view that
+   lists a program routes through this one helper so none can drop the division (#306). Index rows carry city/state
+   on the row; profiles pass p.school's. The part after the division sits in .pl-rest so a narrow table can hide it
+   and still show the division. */
+function programLine(p, city = p.city, state = p.state) {
+  const rest = [p.conference, [city, state].filter(Boolean).join(', ')].filter(Boolean).map(esc).join(' · ');
+  return divisionTag(p.division) + (rest ? `<span class="pl-rest">${p.division ? ' · ' : ''}${rest}</span>` : '');
+}
 // The divisions on screen: the selection when there is one, otherwise everything the data carries.
 function shownDivisions() {
   const all = S.index?.divisions || [];
@@ -1249,13 +1260,13 @@ function renderSidebar() {
   } else if (tab === 'shortlist') {
     const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => rpiSortKey(a) - rpiSortKey(b));
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
-      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${appliesTo('rpi', p) ? rpiCell(p) : ''}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="prog-stack"><span class="name">${esc(displayName(p))}</span><span class="team-sub">${programLine(p)}</span></span><span class="meta">${appliesTo('rpi', p) ? rpiCell(p) : ''}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
       : `<div class="side-empty" tabindex="-1">Save programs with the ☆ on any card or program page; they collect here and in the Shortlist view.</div>`);
   } else {
     const rows = S.compare.map(programBySlug).filter(Boolean);
     body = `<div class="sidebar-section-title">Comparing</div>` + (rows.length
-      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="name">${esc(displayName(p))}</span><span class="meta">${esc(p.conference || '')}</span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
+      ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="prog-stack"><span class="name">${esc(displayName(p))}</span><span class="team-sub">${programLine(p)}</span></span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn primary" href="#/compare/${S.compare.map(esc).join(',')}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
       : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
   }
@@ -1481,7 +1492,7 @@ function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', 
 
 /* ---------- not found (unknown program slug or route): message, up to three "did you mean" links, keeps the URL ---------- */
 function renderNotFound({ title, message, suggestions = [] }) {
-  const did = suggestions.length ? `<p>Did you mean ${suggestions.map(p => `<a href="#/p/${esc(p.slug)}">${esc(p.name)}</a>`).join(', ')}?</p>` : '';
+  const did = suggestions.length ? `<p>Did you mean ${suggestions.map(p => `<a href="#/p/${esc(p.slug)}">${esc(p.name)}</a> <span class="team-sub">(${programLine(p)})</span>`).join(', ')}?</p>` : '';
   $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Not found' }], title: esc(title) })
     + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
 }
@@ -1731,7 +1742,7 @@ function cardHtml(p) {
     p.undergradEnrollment != null ? fact('Undergrads', fmtNum(p.undergradEnrollment)) : '',
     p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
   const foot = [has.rowCommits(p) ? `Commits ${commits}` : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
-  const meta = [divisionTag(p.division), ...[p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc)].filter(Boolean).join(' · ');
+  const meta = [programLine(p), esc((p.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))].filter(Boolean).join(' · ');
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
     <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
       ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
@@ -1752,7 +1763,7 @@ function tableHtml(rows) {
   const cols = [
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
-    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${[divisionTag(p.division), esc(p.conference || ''), p.city ? `${esc(p.city)}, ${esc(p.state || '')}` : ''].filter(Boolean).join(' · ')}</span></span></div>`, 'name'],
+    ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${programLine(p)}</span></span></div>`, 'name'],
     ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>${p.lastSeason.record ? recordNote(p.lastSeason) : ''}` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
@@ -1854,7 +1865,7 @@ function campRowHtml(c, p) {
   return `<tr class="team-row" data-slug="${esc(c.slug)}">
     <td>${campWhen(c)}</td>
     <td><b>${esc(c.name)}</b> ${campBadges(c, false)}</td>
-    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span>${starBtn(c.slug)}</div></td>
+    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${programLine(p)}</span></span>${starBtn(c.slug)}</div></td>
     <td class="small">${esc(details) || '<span class="muted">—</span>'}</td>
     <td class="small">${links || '<span class="muted">—</span>'}</td></tr>`;
 }
@@ -2025,11 +2036,11 @@ async function renderTrends(kind, rawId) {
   const picker = `<div class="card trend-picker">
       <div class="trend-picker-row"><label class="trend-label" for="trendsQ">Club${hasSchools ? ' or high school' : ''}</label><input class="trend-input" id="trendsQ" type="search" placeholder="Type a club name, e.g. MVLA" autocomplete="off" aria-controls="trendsHits"></div>
       <div class="trend-hits" id="trendsHits" aria-live="polite">${hitsHtml('')}</div>
-      <div class="trend-picker-row"><label class="trend-label" for="trendsProgram">Or a program</label><select class="season-select" id="trendsProgram"><option value="">Choose a program…</option>${d1.map(p => `<option value="${esc(p.slug)}"${kind === 'program' && id === p.slug ? ' selected' : ''}>${esc(displayName(p))}</option>`).join('')}</select></div>
+      <div class="trend-picker-row"><label class="trend-label" for="trendsProgram">Or a program</label><select class="season-select" id="trendsProgram"><option value="">Choose a program…</option>${[...new Set(d1.map(p => p.division))].map(d => `<optgroup label="${esc(divisionName(d))}">${d1.filter(p => p.division === d).map(p => `<option value="${esc(p.slug)}"${kind === 'program' && id === p.slug ? ' selected' : ''}>${esc(displayName(p))}</option>`).join('')}</optgroup>`).join('')}</select></div>
     </div>`;
 
   const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.`;
-  const progCell = p => `<div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(p.slug)}/roster" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${esc(p.conference || '')}${p.city ? ` · ${esc(p.city)}, ${esc(p.state || '')}` : ''}</span></span></div>`;
+  const progCell = p => `<div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(p.slug)}/roster" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${programLine(p)}</span></span></div>`;
   const head = (first, school) => `<thead><tr><th>${first}</th><th class="num">Players<span class="th-sub">current + past</span></th><th class="num">Current roster</th><th class="num">Past rosters<span class="th-sub">${esc(pastLabel)}</span></th><th class="num trend-sep">Commits<span class="th-sub">${school ? 'not available' : 'not in total'}</span></th></tr></thead>`;
   const cells = r => `<td class="num"><span class="num-strong">${r.current + r.past}</span></td><td class="num">${r.current}</td><td class="num">${r.past}</td><td class="num trend-sep">${r.commits == null ? '<span class="muted" title="No recruit carries a matched high school yet">—</span>' : r.commits}</td>`;
   let body, subtitle;
@@ -2068,7 +2079,8 @@ async function renderTrends(kind, rawId) {
         <div class="card"><h3>High schools feeding ${esc(displayName(p))}</h3>${hasSchools
           ? `<p class="small muted">Most players first. A high school counts only when its name and state pin down exactly one school; commits are not available for high schools yet.</p>${table(schools, 'school')}<div class="table-footnote"><b>Coverage</b> — ${esc(covLine(pr.schoolKnown, 'high school'))}.</div>`
           : `<p class="muted">High-school results are not available yet: players' high schools are not matched to a school list in this build. They will appear here once that data is published.</p>`}</div>`;
-      subtitle = `${esc(displayName(p))} · ${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`;
+      // #306: the program names its division here, in the Table's form; the two card headings below stay short.
+      subtitle = `${esc(displayName(p))} · ${programLine(p)} · ${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`;
     }
   } else {
     body = picker + `<div class="card"><h3>How to read this</h3>
@@ -2143,7 +2155,7 @@ function glanceHtml(p, row) {
   return `<div class="glance-head">
       <div class="glance-eyebrow">Program at a glance</div>
       <div class="glance-name">${swatchesHtml(row || p, true)}<span title="${esc(p.name)}">${esc(displayName(p))}</span></div>
-      <div class="glance-meta">${p.division ? `${divisionTag(p.division)} · ` : ''}${esc(p.conference || '')}${sch.city ? ` · ${esc(sch.city)}, ${esc(sch.state || '')}` : ''}</div>
+      <div class="glance-meta">${programLine(p, sch.city, sch.state)}</div>
       <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
     </div>
     <div class="glance-stats">
@@ -2190,7 +2202,7 @@ async function renderProfile(slug, tab) {
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
-  const subtitle = [divisionTag(p.division), esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
+  const subtitle = [programLine(p, p.school?.city, p.school?.state), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
@@ -2531,7 +2543,7 @@ async function renderCompare() {
   const bar = `<div class="cmp-bar">${chips}
       ${picked.length < 4 ? `<div class="cmp-add"><input type="search" class="search-input" id="cmpAdd" placeholder="Add a school…" aria-label="Add a school to compare" autocomplete="off"><div class="cmp-results" id="cmpResults" hidden></div></div>` : ''}
       <label class="small muted">I live in <select class="season-select" id="residency" style="flex:none;width:auto"><option value="">(not set)</option>${US_STATES.map(s => `<option ${home === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label></div>`;
-  const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(displayName(p))}</a></th>`).join('')}</tr>
+  const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(displayName(p))}</a><span class="team-sub">${programLine(p, p.school?.city, p.school?.state)}</span></th>`).join('')}</tr>
       ${groups.map(([g, rowsDef]) => `<tr><th class="group" colspan="${profiles.length + 1}">${g}</th></tr>` + rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')).join('')}</table></div></div>`
     : '<div class="card"><p class="muted">Add up to four programs with ⇄ Compare on any card or program page, or type a school name above.</p></div>';
   app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
@@ -2541,7 +2553,7 @@ async function renderCompare() {
     add.addEventListener('input', () => {
       const hits = searchMatches(normText(add.value), 8).filter(h => !S.compare.includes(h.p.slug));
       res.hidden = !add.value || !hits.length;
-      res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span>${esc(displayName(h.p))}</span><span class="meta">${esc(h.p.conference || '')}</span></button>`).join('');
+      res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span class="prog-stack"><span>${esc(displayName(h.p))}</span><span class="team-sub">${programLine(h.p)}</span></span></button>`).join('');
       res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = `#/compare/${S.compare.join(',')}`; });
     });
     add.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = res.querySelector('[data-add]'); if (first) first.click(); } });
