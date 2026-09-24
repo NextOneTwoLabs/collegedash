@@ -1219,7 +1219,11 @@ def test_committed() -> None:
         ok("399 of the 415 join a Scorecard row by website domain (393 exact, 6 on the registrable domain)",
            kinds["exact"] == 393 and kinds["registrable"] == 6 and len(joined3) == 399,
            f"report exact {kinds['exact']}, registrable {kinds['registrable']}, with an id in the registry {len(joined3)}")
-        hand3 = [p for p in d3 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in builder3]
+        # a long-standing entry (saint-francis, published in D1 before #100) keeps the Scorecard id the pre-#100
+        # registry gave it, which the check above already pins; only an id beyond both must name its source
+        pre_unit = {q["slug"]: q["scorecardUnitId"] for q in pre}
+        hand3 = [p for p in d3 if p["ids"]["scorecardUnitId"] is not None and p["slug"] not in builder3
+                 and pre_unit.get(p["slug"]) != p["ids"]["scorecardUnitId"]]
         unsourced3 = [p["slug"] for p in hand3
                       if f"College Scorecard row {p['ids']['scorecardUnitId']}" not in (p["location"].get("note") or "")
                       or "data/scorecard-bulk.json" not in (p["location"].get("note") or "")]
