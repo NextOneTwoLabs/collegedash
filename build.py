@@ -873,31 +873,62 @@ def build_program_section(program, wiki, ath) -> dict:
 # of the 2013 row). Stanford's own 2014 schedule settles it: quarterfinal win over Florida, then a College Cup
 # semifinal loss to Florida State. The honors are the finish these lists vouch for, highest first; each is
 # checked separately (national titles also against the champions table, see national_titles).
-HONOR_FINISHES = (("nationalTitles", 3, "NCAA Champions"), ("nationalRunnerUp", 2, "NCAA Runner-up"),
-                  ("collegeCups", 1, "NCAA College Cup"))
-_FINISH_LEVELS = (
-    (3, re.compile(r"champion(?!ship)|\b1st\b", re.I)),
+# How far an NCAA season went, lowest first. Round names are kept as written: before 2001 a "third round" could be
+# a quarterfinal (it depended on the field size), but every round below the quarterfinal is below the College
+# Cup either way, and that is the only line reconcile_ncaa_results draws.
+NCAA_FINISHES = ("first round", "second round", "third round", "round of 16", "quarterfinal", "College Cup",
+                 "runner-up", "champion")
+FIRST_ROUND, SECOND_ROUND, THIRD_ROUND, ROUND_OF_16, QUARTERFINAL, COLLEGE_CUP, RUNNER_UP, CHAMPION = range(1, 9)
+HONOR_FINISHES = (("nationalTitles", CHAMPION, "NCAA Champions"), ("nationalRunnerUp", RUNNER_UP, "NCAA Runner-up"),
+                  ("collegeCups", COLLEGE_CUP, "NCAA College Cup"))
+# Highest first, so "NCAA College Cup Champion" is a title and "NCAA Champions (2nd title)" is not a runner-up.
+# An ordinal counts as a round only with "round" after it ("NCAA 1st Round" is a first round, not a title).
+_FINISH_PATTERNS = (
+    (CHAMPION, re.compile(r"\bchampions?\b", re.I)),              # not 'Championship'
     # 'Final' and 'Finals' reached the final; 'Semifinal', 'Quarterfinal' and 'Final Four' did not
-    (2, re.compile(r"runner|(?<![a-z-])finals?\b(?!\s*(?:4|four))|\b2nd\b", re.I)),
-    (1, re.compile(r"college cup|semi-?finals?|final\s*(?:4|four)|\bt-?3rd\b", re.I)),
+    (RUNNER_UP, re.compile(r"\brunner[\s-]*up\b|(?<![a-z-])finals?\b(?!\s*(?:4|four))", re.I)),
+    (COLLEGE_CUP, re.compile(r"college cup|\bsemi-?final|\bfinal\s*(?:4|four)\b", re.I)),
+    (QUARTERFINAL, re.compile(r"\bquarter-?final|\belite\s*(?:8|eight)\b", re.I)),
+    (ROUND_OF_16, re.compile(r"\bround of 16\b|\bsweet\s*(?:16|sixteen)\b", re.I)),
+    (THIRD_ROUND, re.compile(r"\b(?:third|3rd)\s+round\b", re.I)),
+    (SECOND_ROUND, re.compile(r"\b(?:second|2nd)\s+round\b|\bround of 32\b", re.I)),
+    (FIRST_ROUND, re.compile(r"\b(?:first|1st)\s+round\b|\bround of 64\b", re.I)),
 )
+# A placing is the whole value after "NCAA": 'NCAA 2nd' (UCLA 2017, the final), 'NCAA T-3rd', 'NCAA T-17th'.
+_PLACING = re.compile(r"^\s*ncaa\s+(?:t-?)?(\d+)(?:st|nd|rd|th)\s*$", re.I)
+_PLACING_FINISH = ((1, CHAMPION), (2, RUNNER_UP), (4, COLLEGE_CUP), (8, QUARTERFINAL), (16, ROUND_OF_16),
+                   (32, SECOND_ROUND), (64, FIRST_ROUND))
 
 
 def ncaa_finish_level(result: str | None) -> int | None:
-    """How far a season-table NCAA result says the team went, on HONOR_FINISHES' scale: 3 champion, 2 final,
-    1 College Cup, 0 any earlier round or an unplaced mention; None when the row records no result."""
+    """How far a season-table NCAA result says the team went: an index into NCAA_FINISHES plus one (FIRST_ROUND
+    1 .. CHAMPION 8), 0 for a mention with no finish ('NCAA', 'NCAA DI tournament appearance'), None when the
+    row records no result."""
     if not result:
         return None
-    return next((level for level, pattern in _FINISH_LEVELS if pattern.search(result)), 0)
+    placing = _PLACING.match(result)
+    if placing:
+        place = int(placing.group(1))
+        return next((level for worst, level in _PLACING_FINISH if place <= worst), 0)
+    return next((level for level, pattern in _FINISH_PATTERNS if pattern.search(result)), 0)
 
 
-def reconcile_ncaa_results(seasons: list[dict], program: dict) -> list[int]:
-    """Make each season's NCAA result agree with the Honors lists published beside it, and return the years
-    it changed. A season an Honors list places at the College Cup or beyond, whose row records a lesser finish
-    or none, takes the finish the list vouches for; ncaaResultFrom says so and keeps the row's own text. A row
-    at or beyond its list's finish is left as written ('NCAA College Cup Semifinals' stays)."""
+def season_table_years(wiki: dict | None) -> set[int]:
+    """The years the Wikipedia year-by-year table has a row for."""
+    return {s["year"] for s in ((wiki or {}).get("data", {}).get("seasons") or []) if s.get("year") is not None}
+
+
+def reconcile_ncaa_results(seasons: list[dict], program: dict, table_years: set[int]) -> list[int]:
+    """Make each season-table row's NCAA result agree with the Honors lists published beside it, and return the
+    years it changed. A row an Honors list places at the College Cup or beyond, whose NCAA result is a lesser
+    finish or blank, takes the finish the list vouches for; ncaaResultFrom says so and keeps the row's own text.
+    A row at or beyond its list's finish is left as written ('NCAA College Cup Semifinals' stays). Only years in
+    table_years are read: a season built from the RPI archive or a schedule alone has no table row to correct,
+    and giving it a finish would publish one the season table never stated."""
     changed = []
     for s in seasons:
+        if s.get("year") not in table_years:
+            continue
         want = next(((level, label) for key, level, label in HONOR_FINISHES
                       if s.get("year") in (program.get(key) or [])), None)
         if not want:
@@ -1625,7 +1656,7 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
     # after the overrides, so the season table agrees with the Honors the page actually shows (issue #202).
     # D1 only: the College Cup is Division I's final four, and the page shows no College Cups for D2 or D3.
     if profile["division"] == "D1":
-        reconcile_ncaa_results(profile["seasons"], profile["program"])
+        reconcile_ncaa_results(profile["seasons"], profile["program"], season_table_years(wiki))
 
     commits_by_year = defaultdict(int)
     for c in profile["commitments"]:
