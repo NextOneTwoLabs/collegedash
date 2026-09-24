@@ -255,7 +255,9 @@ test('the hidden count is on the page, names every class, and adds up', () => {
 
 test('the tab strip is on the list and the camp view, and not on the shortlist', async () => {
   const camps = app();
-  assert.ok(camps.includes('>Cards</button>') && camps.includes('>Table</button>') && camps.includes('>ID Camps</a>'));
+  assert.ok(camps.includes('>Cards</button>') && camps.includes('>Stats</button>') && camps.includes('>ID Camps</a>'));
+  // #342: the tab reads Stats and keeps the view key `table`, so stored choices and old links still open it
+  assert.ok(camps.includes('data-view="table">Stats</button>') && !camps.includes('>Table</button>'), 'the tab is not "Stats" on view key table');
   assert.ok(camps.includes('class="view-tab active" role="tab" aria-selected="true">ID Camps</a>'));
   sandbox.location.hash = '#/';
   await sandbox.renderList();
@@ -270,7 +272,7 @@ test('the sidebar drops sort and recruiting class in the camp view and hands the
   const onCamps = sidebar();
   assert.ok(!onCamps.includes('id="sortSelect"'), 'the sort select is still there');
   assert.ok(!onCamps.includes('Recruiting class'), 'the recruiting-class pills are still there');
-  assert.ok(!onCamps.includes('cards / table'), 'the c shortcut hint, inert here, is still there');
+  assert.ok(!onCamps.includes('cards / stats'), 'the c shortcut hint, inert here, is still there');
   assert.ok(onCamps.includes('aria-label="Region"') && onCamps.includes('aria-label="Conference"'),
     'region or conference went missing');
 
@@ -279,7 +281,7 @@ test('the sidebar drops sort and recruiting class in the camp view and hands the
   const onList = sidebar();
   assert.ok(onList.includes('id="sortSelect"'), 'the sort select did not come back');
   assert.ok(onList.includes('Recruiting class'), 'the recruiting-class pills did not come back');
-  assert.ok(onList.includes('cards / table'), 'the c shortcut hint did not come back');
+  assert.ok(onList.includes('cards / stats'), 'the c shortcut hint did not come back');
   assert.equal(S.filters.sort, 'rpi', 'f.sort was written while the camp view was open');
   assert.deepEqual(S.filters.classYear, ['2027'], 'f.classYear was written while the camp view was open');
 
