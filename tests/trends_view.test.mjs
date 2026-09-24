@@ -249,7 +249,10 @@ test('#315 a D2 program is in the Program box with its division line; picking it
   const opt = p2.el('#trList-program').innerHTML;
   assert.ok(opt.includes('<span class="div-tag" title="Division II">D2</span>'), 'its suggestion carries the division line');
   const p3 = await open(`#/trends?program=${D2.slug}`);
-  assert.equal(p3.el('#trChg-program').textContent, disp(D2));
+  // the division-everywhere rule: the picked program's chip carries its division, with the shared divisionTag
+  assert.equal(p3.el('#trChg-program').innerHTML, `${disp(D2)} <span class="div-tag" title="Division II">D2</span>`);
+  assert.equal(p3.el('#trChg-program').getAttribute('aria-label'), `Change program: ${disp(D2)}, Division II`);
+  assert.equal(p3.el('#trClr-program').getAttribute('aria-label'), `Clear program: ${disp(D2)}, Division II`);
   assert.ok(!p3.results().includes('not in the clubs and schools index'));
 });
 
@@ -267,6 +270,11 @@ test('#315 C1 + C2: D2 commits read "Not collected" (never 0) in rows, totals, c
   assert.ok(page.sub().includes('20 current players, 15 former, commits not collected'), page.sub());
   page = await open(`#/trends?club=lone&program=${D2.slug}`);
   assert.deepEqual(stats(page.results()), { players: '2', current: '1', past: '1', commits: 'Not collected' });
+  // Huatuo R1: a club with no player at the D2 program falls back to the program's own commits, null, never 0
+  page = await open(`#/trends?club=mvla&program=${D2.slug}`);
+  assert.deepEqual(stats(page.results()), { players: '0', current: '0', past: '0', commits: 'Not collected' });
+  page = await open(`#/trends?club=lone&program=${A.slug}`);
+  assert.deepEqual(stats(page.results()), { players: '0', current: '0', past: '0', commits: '0' }, 'a D1 program with no player from the club still reads 0 commits');
   page = await open('#/trends?club=mvla');
   assert.ok(page.results().includes('Division I: 5 of 100 current players') && !page.results().includes('Division II:'), 'a D1-only result names D1 alone');
 });
@@ -298,6 +306,22 @@ test('#315 phone first load: a visible Loading state; a failed load leaves S.tre
   click(page.el('#trRetry')); await tick(40);
   assert.ok(calls >= 1, 'the first load was attempted');
   assert.ok(page.results().includes('How to read this'), 'Try again fetched and rendered the index');
+  // leaving and re-entering during the first load shares the one download
+  const p4 = loadPage({ 'data/trends/index.json': fixture() });
+  const real4 = p4.sandbox.fetch;
+  let release4, calls4 = 0;
+  const gate4 = new Promise(r => { release4 = r; }); // one gate for every call, so a second download fails the count rather than hanging
+  p4.sandbox.fetch = async url => {
+    if (String(url) !== '/api/v1/trends') return real4(url);
+    calls4++; await gate4;
+    return real4(url);
+  };
+  p4.sandbox.location.hash = '#/trends'; const first = p4.sandbox.route(); await tick();
+  p4.sandbox.location.hash = '#/'; await p4.sandbox.route(); await tick();
+  p4.sandbox.location.hash = '#/trends'; const again = p4.sandbox.route(); await tick();
+  release4(); await first; await again; await tick();
+  assert.equal(calls4, 1, 'one download, not two');
+  assert.ok(p4.results().includes('How to read this'));
   const missing = await open('#/trends', null);
   assert.ok(missing.app().includes('Not built yet') && missing.app().includes('id="trRetry"'), 'a 404 still reads "Not built yet"');
 });

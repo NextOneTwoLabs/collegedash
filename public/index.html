@@ -1013,8 +1013,11 @@ async function loadCamps() {
    coverage: { ..., byDivision }, programs, clubs, schools | null, ... }. A failed fetch (a 404 before the first
    refresh, or a dropped connection on a phone) is left to the caller and leaves S.trends unset, so the next
    entry to the view fetches again. */
+let trendsInFlight = null; // the first load, shared: leaving and re-entering #/trends mid-download does not fetch twice
 async function loadTrends() {
-  if (!S.trends) S.trends = trendsNormalize(await getJSON('/api/v1/trends'));
+  if (S.trends) return S.trends;
+  trendsInFlight ||= getJSON('/api/v1/trends').then(trendsNormalize).finally(() => { trendsInFlight = null; });
+  S.trends = await trendsInFlight;
   return S.trends;
 }
 // An index built before #315 (Division I only, `division: "D1"`, one coverage object) reads as a one-division index.
@@ -2229,7 +2232,8 @@ function trendsLabel(kind, id) {
   const { doc } = TR;
   if (kind === 'program') {
     const p = TR.byProgram.get(id);
-    if (TR.progSet.has(id)) return { text: displayName(p) };
+    // A picked program names its division (#315, the division-everywhere rule) with the shared divisionTag, as programLine does.
+    if (TR.progSet.has(id)) return { text: displayName(p), html: `${esc(displayName(p))} ${divisionTag(p.division)}`, spoken: `${displayName(p)}, ${divisionName(p.division)}` };
     return { text: `${p ? `${displayName(p)} (${p.division})` : id} — not in the index`, missing: true };
   }
   const e = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
@@ -2242,11 +2246,12 @@ function trendsBoxSync(kind) {
   const showChip = !!id && !TR.editing[kind];
   chip.hidden = !showChip; input.hidden = showChip;
   if (!id) return;
-  const { text, missing } = trendsLabel(kind, id), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
+  const { text, html, spoken = text, missing } = trendsLabel(kind, id), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
   chip.classList.toggle('missing', !!missing);
-  chg.textContent = text; chg.title = text;
-  chg.setAttribute('aria-label', `Change ${TR_WHAT[kind]}: ${text}`);
-  clr.setAttribute('aria-label', `Clear ${TR_WHAT[kind]}: ${text}`); clr.title = `Clear ${TR_WHAT[kind]}`;
+  if (html) chg.innerHTML = html; else chg.textContent = text;
+  chg.title = spoken;
+  chg.setAttribute('aria-label', `Change ${TR_WHAT[kind]}: ${spoken}`);
+  clr.setAttribute('aria-label', `Clear ${TR_WHAT[kind]}: ${spoken}`); clr.title = `Clear ${TR_WHAT[kind]}`;
 }
 // The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
 const trendsHitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
@@ -2444,7 +2449,7 @@ function trendsView(sel) {
         <p class="small muted">Past players and commits are counted, never named.</p><div class="tr-actions">${back}</div></div>`;
       return { html, sub, names: { slug, club, school, cur: null }, say: `${clubE.name} × ${schoolE.name} × ${displayName(p)}: current players with both are listed below.` };
     }
-    const kind = clubE ? 'club' : 'school', e = clubE || schoolE, [c, pa, m] = e.programs[slug] || [0, 0, 0], commits = kind === 'school' ? null : m;
+    const kind = clubE ? 'club' : 'school', e = clubE || schoolE, [c, pa, m] = e.programs[slug] || [0, 0, pr.commits == null ? null : 0], commits = kind === 'school' ? null : m;
     const html = `${noteHtml}<div class="card"><h3>${title}</h3><div class="small muted">${programLine(p)}${where(e) ? ` · ${esc(e.name)}: ${esc(where(e))}` : ''} ${e.unmatched ? unmatchedBadge : ''}</div>
       <div class="tr-stats">${stat(c + pa, 'Players', 'players')}${stat(c, 'Current', 'current')}${stat(pa, 'Past', 'past')}${stat(commits != null ? commits : kind === 'school' ? '—' : 'Not collected', 'Commits', 'commits')}</div>
       ${c ? '<div class="trend-names small" id="trNames">Loading current players…</div>' : ''}

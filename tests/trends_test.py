@@ -403,20 +403,29 @@ def test_written_file() -> None:
 BUDGET_GZ = 450 * 1024  # #315: the one file for all divisions measured 327,233 B at gzip -9 on 2026-09-24
 
 
+def gz_size(raw: bytes) -> int:
+    return len(gzip.compress(raw, 9))
+
+
+def within_budget(size: int) -> bool:
+    return size <= BUDGET_GZ
+
+
 def test_size_budget() -> None:
     """The published index, gzipped, stays under the budget; growing past it is a decision (#315, C3).
     Checked on the committed file (rewritten by every refresh) and on a synthetic index of that budget's size."""
     path = os.path.join(common.PUBLIC_DATA_DIR, "trends", "index.json")
+    ok("public/data/trends/index.json exists (it is tracked; a missing file fails, never skips)", os.path.exists(path), path)
     if os.path.exists(path):
-        raw = open(path, "rb").read()
-        size = len(gzip.compress(raw, 9))
-        ok(f"public/data/trends/index.json is {size:,} B gzipped, under {BUDGET_GZ:,}", size <= BUDGET_GZ, size)
-    # the check itself can fail: an index past the budget is refused
+        size = gz_size(open(path, "rb").read())
+        ok(f"public/data/trends/index.json is {size:,} B gzipped, under {BUDGET_GZ:,}", within_budget(size), size)
+    # the check itself can fail: an index past the budget is refused by the same comparison
     rec = record()
     for i in range(20000):
         rec._club_entry({"status": "unmatched", "raw": f"Club {i:05d} {os.urandom(12).hex()}", "key": f"club {i:05d} {os.urandom(12).hex()}"})["programs"]["alpha"] = [1, 0, 0]
-    big = len(gzip.compress(json.dumps(rec.index(), separators=(",", ":")).encode(), 9))
-    ok("an index past the budget would fail the check", big > BUDGET_GZ, big)
+    big = gz_size(json.dumps(rec.index(), separators=(",", ":")).encode())
+    ok("an index past the budget fails the check", not within_budget(big), big)
+    ok("an index under the budget passes it", within_budget(gz_size(json.dumps(record().index()).encode())))
 
 
 def test_out_dir_follows_the_programs_dir() -> None:
