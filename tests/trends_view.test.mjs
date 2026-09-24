@@ -308,6 +308,7 @@ function searchFixture() {
   doc.schools['ccd:3'] = { name: 'Decatur High School', city: 'Decatur', state: 'AL', programs: { [A.slug]: [1, 0, 0] } };
   doc.schools['ccd:4'] = { name: 'Decatur High School', city: 'Decatur', state: 'GA', programs: { [B.slug]: [1, 0, 0] } };
   for (const s of ['stanford', 'north-carolina', 'unc-wilmington', 'louisville', D2.slug]) doc.programs[s] = { current: 3, past: 1, commits: 0, clubKnown: [1, 0, 0], schoolKnown: [0, 0, 0] };
+  for (let i = 1; i <= 9; i++) doc.clubs[`c${i}`] = { name: `Club ${i}`, state: 'CA', programs: { [A.slug]: [1, 0, 0] } };
   doc.programs.louisville.current = 9; // more players than Stanford: only the exact nickname can put Stanford first for "cardinal"
   return doc;
 }
@@ -342,7 +343,29 @@ test('#307 club search: "mvla", "MVLA" and "mountain view" all find Mountain Vie
   assert.ok(none.includes('No club or high school in the index matches “zzqx united”.') && !none.includes('trend-hit'), 'an unknown string shows the no-match message');
 });
 
-test('#307 header: a search that finds nothing names the selection the header and the card still show', async () => {
+test('#307 phones: an empty box suggests 6 buttons at ≤480px and 12 on desktop; a typed query is not cut to 6', async () => {
+  const count = html => (html.match(/class="pill trend-hit/g) || []).length;
+  const render = async phone => {
+    const page = withIndex(searchFixture());
+    page.sandbox.matchMedia = q => ({ matches: phone && q === '(max-width: 480px)', addEventListener() { }, addListener() { } });
+    page.sandbox.location.hash = '#/trends';
+    await page.sandbox.route();
+    await new Promise(r => setTimeout(r, 20));
+    const d = page.sandbox.document, q = d.querySelector('#trendsQ'), pq = d.querySelector('#trendsProgram');
+    q.value = ''; q.oninput(); pq.value = ''; pq.oninput(); // the empty boxes, rendered through the same handler as typing
+    const first = { clubs: count(d.querySelector('#trendsHits').innerHTML), progs: count(d.querySelector('#trendsProgHits').innerHTML) };
+    q.value = 'club'; q.oninput();
+    return { ...first, typed: count(d.querySelector('#trendsHits').innerHTML) };
+  };
+  const desk = await render(false), phone = await render(true);
+  const progsIn = Object.keys(searchFixture().programs).filter(s => INDEX.programs.some(p => p.slug === s)).length;
+  assert.ok(progsIn > 6 && progsIn <= 12, 'the fixture has between 7 and 12 programs');
+  assert.deepEqual([desk.clubs, desk.progs], [11, progsIn], 'desktop: every suggestion up to 12 (11 clubs and every program in the fixture)');
+  assert.deepEqual([phone.clubs, phone.progs], [6, 6], 'phone: 6 suggestions in each empty box');
+  assert.equal(phone.typed, 9, 'phone: a typed query still lists its matches beyond 6');
+});
+
+test('#307 header:a search that finds nothing names the selection the header and the card still show', async () => {
   const r = await typeInto('#/trends/club/surf', '#trendsQ', '#trendsHits', 'zzqx');
   assert.ok(r.header.includes('San Diego Surf ·'), 'the header names the selected club');
   assert.ok(r.hits.includes('No club or high school in the index matches “zzqx”. Still showing San Diego Surf below'), 'the no-match line names the same selection, so the two agree');

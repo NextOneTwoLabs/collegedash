@@ -2061,9 +2061,11 @@ async function renderTrends(kind, rawId) {
   const selected = (kind === 'club' || kind === 'school') && id ? (kind === 'school' ? doc.schools : doc.clubs)?.[id]?.name
     : selProg ? displayName(selProg) : '';
   const noMatch = (what, q) => `<span class="small muted">No ${what} in the index matches “${esc(q)}”.${selected ? ` Still showing ${esc(selected)} below; pick another to change it.` : ''}</span>`;
+  // The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
+  const hitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
   const hitsHtml = q => {
     const found = trendsKey(q) ? trendsFind(entities, q) : entities.filter(e => e.kind === 'club' && !e.unmatched).map(e => ({ e }));
-    const list = found.sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm)).slice(0, 12);
+    const list = found.sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm)).slice(0, hitLimit(q));
     return list.map(hit).join('') || noMatch(`club${hasSchools ? ' or high school' : ''}`, q);
   };
   // The program box: the site's own program search (matchScore: name, short name, other names, nickname) over the
@@ -2078,7 +2080,7 @@ async function renderTrends(kind, rawId) {
     const list = nq ? progs.map(p => ({ p, m: matchScore(p, nq) })).filter(x => x.m)
       .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || progPlayers(b.p) - progPlayers(a.p)).map(x => ({ p: x.p, why: x.m.why }))
       : progs.slice().sort((a, b) => progPlayers(b) - progPlayers(a) || displayName(a).localeCompare(displayName(b))).map(p => ({ p }));
-    return list.slice(0, 12).map(progHit).join('') || noMatch('program', q);
+    return list.slice(0, hitLimit(q)).map(progHit).join('') || noMatch('program', q);
   };
   const picker = `<div class="card trend-picker">
       <div class="trend-picker-row"><label class="trend-label" for="trendsQ">Club${hasSchools ? ' or high school' : ''}</label><input class="trend-input" id="trendsQ" type="search" placeholder="Type a club name, e.g. MVLA" autocomplete="off" aria-controls="trendsHits"></div>
