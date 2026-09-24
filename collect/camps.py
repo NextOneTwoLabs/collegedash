@@ -90,10 +90,21 @@ SOCCER_RE = re.compile(r"soccer|wsoc|futbol", re.I)
 OTHER_SPORT_RE = re.compile(
     r"\b(?:baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim(?:ming)?|dive|diving|track|"
     r"cross[ -]country|wrestling|gymnastics|hockey|rowing|crew|cheer(?:leading)?|dance|fencing|squash|water[ -]polo|"
-    r"bowling|rifle|ski(?:ing)?|equestrian|sailing|running|spirit|esports|fantasy)\b", re.I)
+    r"bowling|rifle|ski(?:ing)?|equestrian|sailing|running|spirit|esports|fantasy|"
+    # #293: sports seen in stored row names on all-sport pages. 'throwers?', never 'throw', so a
+    # soccer 'Throw-In Clinic' survives; 'field hockey' is already covered by 'hockey'.
+    r"throwers?|pole[ -]vault|tumbling|acrobatics|stunt|powerlifting|rugby|big[ -]man|pickleball|triathlon)\b", re.I)
 OTHER_SPORT_LOOSE_RE = re.compile(
     r"baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim|wrestling|gymnastics|hockey|rowing|"
-    r"cheer|fencing|water-?polo|bowling|rifle|equestrian|esports|runningcamp", re.I)
+    r"cheer|fencing|water-?polo|bowling|rifle|equestrian|esports|runningcamp|throwers|tumbling|rugby", re.I)
+# #293: does a page's own text name another sport, making it an all-sport page? OTHER_SPORT_RE minus
+# its everyday words ('running', 'team spirit', 'track record', 'crew', 'dance', 'dive', 'stunt',
+# 'fantasy', 'rifle', 'big man', 'ski'): a coach's soccer-only site uses those in prose, and calling
+# it all-sport would silently drop its rows. Leaving a word out keeps today's behaviour on that page.
+ALLSPORT_PAGE_RE = re.compile(
+    r"\b(?:baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim(?:ming)?|cross[ -]country|"
+    r"wrestling|gymnastics|hockey|rowing|cheer(?:leading)?|fencing|squash|water[ -]polo|bowling|equestrian|"
+    r"sailing|esports|throwers?|pole[ -]vault|tumbling|acrobatics|powerlifting|rugby|pickleball|triathlon)\b", re.I)
 ID_RE = re.compile(r"\bID\b")
 SKIP_HREF_RE = re.compile(r"^(?:#|javascript:|mailto:|tel:|sms:)|^$", re.I)
 HTTP_URL_RE = re.compile(r"^https?://", re.I)
@@ -848,6 +859,30 @@ def _page_is_soccer(title: str | None) -> bool:
     return not (MALE_RE.search(t) and not FEMALE_RE.search(t))
 
 
+def page_soccer_flag(title: str | None, *urls: str | None) -> bool:
+    """#293: is this the team's own soccer page? True when the title names soccer (_page_is_soccer)
+    or a page URL does and is not a men's URL (/sports/wsoc/camps, girlssoccercamps.com; not
+    /sports/msoc/camps, /mens-soccer/). False otherwise; extract_camps then treats the page as
+    all-sport only if its own text also names another sport (ALLSPORT_PAGE_RE). The discovery
+    link text is deliberately not read: a stored-link run does not have it, and Monday and
+    non-Monday runs would disagree."""
+    if _page_is_soccer(title):
+        return True
+    for u in urls:
+        if u and SOCCER_RE.search(u) and not (MALE_LOOSE_RE.search(u) and not FEMALE_LOOSE_RE.search(u)):
+            return True
+    return False
+
+
+def _row_names_soccer(e: dict) -> bool:
+    """#293: a row-level soccer signal - soccer in the row's name, its own window or table cells
+    (`_evidence`), its register URL, or a soccer section heading that is not men's."""
+    sec = e.get("_section")
+    if sec and sec["sport"] == "soccer" and not sec["male"]:
+        return True
+    return any(SOCCER_RE.search(x or "") for x in (e.get("name"), e.get("_evidence"), e.get("registerUrl")))
+
+
 def _sport_section(line: str) -> dict | None:
     """{"sport": "soccer"|"other", "male": bool, "token": str} when `line` is a sport-section
     heading, else None. None for an ambiguous heading naming both soccer and another sport:
@@ -1529,11 +1564,19 @@ def _session_entries(blocks, page_url: str) -> list[dict]:
 
 
 def extract_camps(html: str, page_url: str, *, published: str | None = None, title: str | None = None,
-                  body_only: bool = False) -> list[dict]:
+                  body_only: bool = False, page_soccer: bool | None = None) -> list[dict]:
     """Heuristic camp entries from a server-rendered page: table rows (header names a date and a
     camp/clinic/event column) and text lines naming a camp with a date. Camp pages need a year in
     the text (or a table caption year); news releases pass `published` so a year-less date is
-    inferred. Registration dates, deadlines and TBD are never entries. Deduped, at most MAX_CAMPS."""
+    inferred. Registration dates, deadlines and TBD are never entries. Deduped, at most MAX_CAMPS.
+
+    `page_soccer` (#293, from page_soccer_flag): True = the team's own soccer page, which also turns
+    off hub detection; False = title and URL do not name soccer. A False page whose own text names
+    another sport is all-sport, and there a row survives only with a row-level soccer signal
+    (_row_names_soccer): a Ryzer table's 'Elite Prospect Camp' with 'Softball' in its Sport cell was
+    kept, because a row with a name of its own was never checked against its evidence. A False page
+    naming no other sport (a coach's 'Lions Elite Camps' site) and None (news articles, and every
+    caller that passes nothing) keep today's behaviour exactly."""
     soup = BeautifulSoup(_prepare(html), "html.parser")
     for t in soup(["script", "style", "noscript", "svg", "template"]):
         t.decompose()
@@ -1567,14 +1610,17 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     # a runaway parse; ahead of a quality filter it would spend all 20 slots on whatever the page
     # lists earliest, so on a hub that put soccer last the real camps would be the rows cut. montana
     # yields 28 rows and loses 8 to the cap. Gate, then cap.
-    page_is_soccer = _page_is_soccer(title)
+    if page_soccer is False and not ALLSPORT_PAGE_RE.search(f"{title or ''} {root.get_text(' ')}"):
+        page_soccer = None  # not positively all-sport: today's behaviour
+    page_is_soccer = _page_is_soccer(title) or page_soccer is True
     is_hub = len(sports) >= HUB_SPORT_COUNT and not page_is_soccer
     # Gate BEFORE the repair, and on `_named`/`_evidence` rather than on the displayed name: the
     # repair below hands a row a clean name, and a gate reading that name would be reading the
     # repair's own output. That ordering is what issue #80 turns on.
     entries = [e for e in entries
                if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
-                               evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)]
+                               evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)
+               and (page_soccer is not False or _row_names_soccer(e))]
     if page_name and not _is_chrome_name(page_name):
         for e in entries:
             if _is_chrome_name(e["name"]):
@@ -1885,7 +1931,8 @@ def collect(program: dict, registry: dict) -> dict:
             soup = BeautifulSoup(r["html"][:20000], "html.parser")
             data["pageTitle"] = common.clean(soup.title.get_text())[:120] if soup.title else None
             short_title = re.split(r"\s+[-|–]\s+", data["pageTitle"] or "")[0] or None
-            data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title)
+            data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title,
+                                          page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]))
         common.log(f"camps: {data['campsUrl']} via {data['discoveredVia']}"
                    + (f" -> {data['finalUrl']}" if data["finalUrl"] != data["campsUrl"] else "")
                    + (" [robots: link only]" if data["robotsBlocked"] else "")
