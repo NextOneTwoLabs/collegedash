@@ -10,7 +10,7 @@ All paths below are relative to the selected checkout. Read JSON using `encoding
 | `public/data/programs/<slug>.json` | One profile; select named sections/fields and `_build` metadata. |
 | `public/data/commitments/index.json` | Object with `updated` and `commitments` list; use for discovery and counts. Aggregate records omit detailed `sources` and `clubInfo`; retrieve the matching profile commitment for source citations. |
 | `public/data/camps/index.json` | Object with `updated`, `window`, `counts`, and `camps` list; inspect dates and precision before claiming availability. |
-| `public/data/trends/index.json` | Precomputed feeder data: `updated`, `division`, `season`, `pastSeasons`, `commitStatuses`, `columns`, `coverage`, `programs`, `clubs`, `schools`. |
+| `public/data/trends/index.json` | Precomputed feeder data for D1, D2 and D3 (#315): `updated`, `divisions`, `commitDivisions` (D2/D3 commits are null: not collected), `season`, `pastSeasons`, `commitStatuses`, `columns`, `coverage` (with `byDivision`), `programs` (each with `division`), `clubs`, `schools`. |
 
 The program index supplies `slug`, `name`, `shortName`, `nickname`, `searchNames`, `division`, `conference`, `city`, `state`, `region`, `ownership`, `undergradEnrollment`, `admissionRate`, `sat25`, `sat75`, `academicRank`, `academicRankTied`, `tuitionInState`, `tuitionOutOfState`, `headCoach`, `coachSince`, `nationalTitles`, `collegeCups`, `currentSeason`, `lastSeason`, `rpiHistory`, `rosterSize`, `commitmentsByYear`, `fallClimate`, `completeness`, `stale`, `builtAt`, and `failed`. Select only fields needed for the question; omit `tags`.
 

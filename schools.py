@@ -285,7 +285,8 @@ class Recorder:
                        "ambiguous": 0, "outsideUS": 0, "noState": 0, "notSplit": 0}
         self.matched_ids: dict[str, int] = {}
 
-    def observe(self, player: dict, m: Match | None = None, *, slug: str | None = None) -> Match:
+    def observe(self, player: dict, m: Match | None = None, *, slug: str | None = None,
+                division: str = "D1") -> Match:
         self.counts["players"] += 1
         m = m or self.table.match(player.get("highSchool"), player.get("hometown"))
         if m.status == "none":
@@ -305,8 +306,9 @@ class Recorder:
             self.counts["noState"] += 1
         row = self.rows.setdefault((m.key, m.state), {
             "key": m.key, "state": m.state, "status": m.status, "occurrences": 0, "spellings": {},
-            "programs": set(), "reason": m.reason})
+            "programs": set(), "divisions": {}, "reason": m.reason})
         row["occurrences"] += 1
+        row["divisions"][division] = row["divisions"].get(division, 0) + 1
         raw = common.clean(m.raw)
         row["spellings"][raw] = row["spellings"].get(raw, 0) + 1
         if slug:
@@ -332,6 +334,7 @@ class Recorder:
                 "key": key, "state": state, "status": row["status"], "occurrences": row["occurrences"],
                 "spellings": dict(sorted(row["spellings"].items(), key=lambda kv: (-kv[1], kv[0]))),
                 "programs": len(row["programs"]),
+                "divisions": dict(sorted(row["divisions"].items())),
                 "firstSeen": (prev.get((key, state)) or {}).get("firstSeen") or today,
                 "new": (key, state) not in prev,
             }

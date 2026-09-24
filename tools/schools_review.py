@@ -27,7 +27,7 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="do not write data/schools-review.json")
     ap.add_argument("--top", type=int, default=0, metavar="N", help="print the N most common unmatched names")
     ap.add_argument("--samples", type=int, default=0, metavar="N", help="print N matched examples")
-    ap.add_argument("--division", default="D1", help="only this division (default D1, the owner's scope)")
+    ap.add_argument("--division", default="all", help="only this division (D1, D2 or D3); default all, as the build (#315)")
     args = ap.parse_args()
 
     registry = common.load_registry()
@@ -36,12 +36,12 @@ def main() -> int:
     programs = 0
     samples: list[str] = []
     for program in common.iter_programs(registry):
-        if program.get("division", "D1") != args.division:
+        if args.division != "all" and program.get("division", "D1") != args.division:
             continue
         programs += 1
         ath = common.load_source(program["slug"], "athletics")
         for p in ((((ath or {}).get("data") or {}).get("roster") or {}).get("players") or []):
-            m = recorder.observe(p, slug=program["slug"])
+            m = recorder.observe(p, slug=program["slug"], division=program.get("division", "D1"))
             if m.status == "matched" and len(samples) < args.samples:
                 samples.append(f"{m.raw!r} + {p.get('hometown')!r} -> {m.school['name']} ({m.school['city']}, "
                                f"{m.state}, {m.school['type']}) {m.schoolId}")

@@ -1,26 +1,37 @@
-"""Trends between Division I programs, clubs and high schools (issue #230).
+"""Trends between college programs (D1, D2 and D3), clubs and high schools (issues #230, #315).
 
-Answers "which D1 programs have the most players from club X?" and the reverse, "which clubs feed
+Answers "which programs have the most players from club X?" and the reverse, "which clubs feed
 program Y?", from what the build already knows about every player and recruit. The owner's
 decisions are on #225: three counts side by side - current roster, past rosters, commits - with
 commits shown separately and never added into a program's total; coverage shown with every
 result so a low count is never read as a true zero; commits as counts only, never a named list.
 
-What is written: `public/data/trends/index.json`, one small file the page loads on first entry to
+What is written: `public/data/trends/index.json`, one file (the owner's decision on #315: about 330 KB
+gzipped for all three divisions, held under a 450 KB budget by tests/trends_test.py) the page loads on first entry to
 #/trends and never before. It carries counts only - no player, no recruit, no name of a person:
 
     {
-      "updated", "division": "D1", "season", "pastSeasons": [2023, 2024, 2025],
+      "updated", "divisions": ["D1", "D2", "D3"], "commitDivisions": ["D1"], "season", "pastSeasons": [2023, 2024, 2025],
       "commitStatuses": ["verbal", "signed"],
       "coverage": {
-        "current": {"players", "clubKnown", "schoolNamed", "schoolKnown"},
+        "current": {"players", "clubKnown", "schoolNamed", "schoolKnown"},   # every division together
         "past":    {"players", "clubKnown", "schoolNamed", "schoolKnown"},
-        "commits": {"recruits", "clubKnown", "schoolNamed", "schoolKnown"}
+        "commits": {"recruits", "clubKnown", "schoolNamed", "schoolKnown"},  # commitDivisions only
+        "byDivision": {"D1": {"current", "past", "commits"}, "D2": {"current", "past", "commits": null}, ...}
       },
-      "programs": {slug: {"current", "past", "commits", "clubKnown": [c, p, m], "schoolKnown": [c, p, m]}},
+      "programs": {slug: {"division", "current", "past", "commits", "clubKnown": [c, p, m], "schoolKnown": [c, p, m]}},
       "clubs":    {clubId | "raw:<key>": {"name", "state", "unmatched"?, "aka"?, "programs": {slug: [c, p, m]}}},
       "schools":  {schoolId: {"name", "city", "state", "aka"?, "programs": {slug: [c, p, m]}}} | null
     }
+
+`divisions` (issue #315) replaces the v1 field `"division": "D1"`: the divisions whose programs the index
+holds, sorted. `commitDivisions` are the divisions whose commits are collected. Commits in any other division
+are not collected (the owner's decision on #315), so they are null, never 0, everywhere they would appear:
+the program's `commits`, the third number of its `clubKnown`/`schoolKnown` and of every club and school cell
+`[c, p, m]` of that program, and its division's `coverage.byDivision[d].commits`. The few D2/D3 commitment
+records the build holds are not counted anywhere. Coverage is per division as well, because club coverage
+differs by division (31% of D1 current players against 5% in D2): a result names the rate of each division in
+it, so a low D2 count reads as low coverage.
 
 `aka` (issue #307) is what the page's name search needs beyond the canonical name, as cleaned keys, minus
 every key already contained in the cleaned name (a search reaches those through the name), shortest first,
@@ -82,6 +93,8 @@ except ImportError:  # pragma: no cover - the data-before-#229 path
     _schools = None
 
 COMMIT_STATUSES = ("verbal", "signed")
+DIVISIONS = ("D1", "D2", "D3")
+COMMIT_DIVISIONS = ("D1",)  # the owner's decision on #315: D2/D3 commits read "Not collected"
 COLUMNS = ("current", "past", "commits")
 KNOWN_CLUB = ("matched", "unmatched")
 
@@ -111,12 +124,19 @@ def _pct(n: int, d: int) -> int | None:
     return None if not d else round(100 * n / d)
 
 
-def _empty_row() -> list[int]:
-    return [0, 0, 0]
+def _empty_row(commits: bool = True) -> list:
+    """A [current, past, commits] cell; commits is null, never 0, where commits are not collected."""
+    return [0, 0, 0 if commits else None]
+
+
+def _new_cov(commits: bool) -> dict:
+    return {"current": {"players": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": 0},
+            "past": {"players": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": 0},
+            "commits": {"recruits": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": None} if commits else None}
 
 
 class Recorder:
-    """Counts every D1 profile the build produces into the trends index."""
+    """Counts every D1, D2 and D3 profile the build produces into the trends index."""
 
     def __init__(self, club_table=None, *, candidates=None, same_person=None, school_table=None):
         """`candidates(tds, sw)` -> {normalised name: [club candidate rows]} and `same_person(a, b)`
@@ -128,11 +148,7 @@ class Recorder:
         self.schools_seen = False  # a current player carried `schoolInfo`: the field exists in this build
         self.season = None
         self.past_seasons: set[int] = set()
-        self.cov = {
-            "current": {"players": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": 0},
-            "past": {"players": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": 0},
-            "commits": {"recruits": 0, "clubKnown": 0, "schoolNamed": 0, "schoolKnown": None},
-        }
+        self.cov: dict[str, dict] = {}  # division -> the coverage of that division
         self.programs: dict[str, dict] = {}
         self.clubs: dict[str, dict] = {}
         self.schools: dict[str, dict] = {}
@@ -178,25 +194,27 @@ class Recorder:
             self._school_keys.setdefault(sid, set()).add(info["key"])
         return self.schools[sid]
 
-    @staticmethod
-    def _bump(entry: dict | None, slug: str, col: int) -> bool:
+    def _bump(self, entry: dict | None, slug: str, col: int) -> bool:
         if entry is None:
             return False
-        entry["programs"].setdefault(slug, _empty_row())[col] += 1
+        entry["programs"].setdefault(slug, _empty_row(self.programs[slug]["commits"] is not None))[col] += 1
         return True
 
     # ----- observing one profile -----------------------------------------------------------------
     def observe(self, profile: dict, program: dict, *, ath=None, tds=None, sw=None) -> None:
-        """Count one published profile. D1 only (the owner's decision 7 on #225): a D2 profile is
-        left out entirely, so nothing here changes what a D2 page shows.
+        """Count one published profile of any division (#315; D1 only before it). Commits are counted
+        only in COMMIT_DIVISIONS: elsewhere they are null, and a D2/D3 commitment record is not read.
 
         `ath`, `tds` and `sw` are the program's stored sources; loaded here when not given, because
         a past player's club is not in the profile and has to be resolved from them."""
-        if (program.get("division") or profile.get("division") or "D1") != "D1":
+        division = program.get("division") or profile.get("division") or "D1"
+        if division not in DIVISIONS:
             return
+        commits_on = division in COMMIT_DIVISIONS
         slug = profile["slug"]
-        row = self.programs.setdefault(slug, {"current": 0, "past": 0, "commits": 0,
-                                              "clubKnown": _empty_row(), "schoolKnown": _empty_row()})
+        cov = self.cov.setdefault(division, _new_cov(commits_on))
+        row = self.programs.setdefault(slug, {"division": division, "current": 0, "past": 0, "commits": 0 if commits_on else None,
+                                              "clubKnown": _empty_row(commits_on), "schoolKnown": _empty_row(commits_on)})
         roster = profile.get("roster") or {}
         players = roster.get("players") or []
         if roster.get("season"):
@@ -207,17 +225,17 @@ class Recorder:
         for q in players:
             cur_names.add(common.norm_name(q.get("name") or ""))
             row["current"] += 1
-            self.cov["current"]["players"] += 1
+            cov["current"]["players"] += 1
             if self._bump(self._club_entry(q.get("clubInfo")), slug, 0):
                 row["clubKnown"][0] += 1
-                self.cov["current"]["clubKnown"] += 1
+                cov["current"]["clubKnown"] += 1
             if "schoolInfo" in q:
                 self.schools_seen = True
             if (q.get("highSchool") or "").strip():
-                self.cov["current"]["schoolNamed"] += 1
+                cov["current"]["schoolNamed"] += 1
             if self._bump(self._school_entry(q.get("schoolInfo")), slug, 0):
                 row["schoolKnown"][0] += 1
-                self.cov["current"]["schoolKnown"] += 1
+                cov["current"]["schoolKnown"] += 1
 
         # past rosters: former players only, one count per person however many stored seasons list her
         hist = profile.get("rosterHistory") or {}
@@ -228,27 +246,27 @@ class Recorder:
                 tds = common.load_source(slug, "commitments.tds")
             if sw is None:
                 sw = common.load_source(slug, "commitments.soccerwire")
-            self._observe_past(slug, row, hist, cur_names, ath, tds, sw)
+            self._observe_past(slug, row, cov, hist, cur_names, ath, tds, sw)
 
-        # commits: counts only, never a name
-        for c in profile.get("commitments") or []:
+        # commits: counts only, never a name; not read at all where commits are not collected
+        for c in (profile.get("commitments") or []) if commits_on else ():
             if c.get("status") not in COMMIT_STATUSES:
                 continue
             row["commits"] += 1
-            self.cov["commits"]["recruits"] += 1
+            cov["commits"]["recruits"] += 1
             if self._bump(self._club_entry(c.get("clubInfo")), slug, 2):
                 row["clubKnown"][2] += 1
-                self.cov["commits"]["clubKnown"] += 1
+                cov["commits"]["clubKnown"] += 1
             if (c.get("highSchool") or "").strip():
-                self.cov["commits"]["schoolNamed"] += 1
+                cov["commits"]["schoolNamed"] += 1
             if "schoolInfo" in c:  # not published today; counted the day it is
-                if self.cov["commits"]["schoolKnown"] is None:
-                    self.cov["commits"]["schoolKnown"] = 0
+                if cov["commits"]["schoolKnown"] is None:
+                    cov["commits"]["schoolKnown"] = 0
                 if self._bump(self._school_entry(c.get("schoolInfo")), slug, 2):
                     row["schoolKnown"][2] += 1
-                    self.cov["commits"]["schoolKnown"] += 1
+                    cov["commits"]["schoolKnown"] += 1
 
-    def _observe_past(self, slug, row, hist, cur_names, ath, tds, sw) -> None:
+    def _observe_past(self, slug, row, cov, hist, cur_names, ath, tds, sw) -> None:
         source_hist = (((ath or {}).get("data") or {}).get("rosterHistory") or {})
         cands = self.candidates(tds, sw) if self.candidates else {}
         seen: set[str] = set()
@@ -263,7 +281,7 @@ class Recorder:
                     continue
                 seen.add(n)
                 row["past"] += 1
-                self.cov["past"]["players"] += 1
+                cov["past"]["players"] += 1
                 rows = list(cands.get(n) or [])
                 if not rows and self.same_person and cands:
                     rows = list(next((v for k, v in cands.items() if self.same_person(k, q["name"])), []))
@@ -273,28 +291,41 @@ class Recorder:
                 info = self.table.match(chosen["raw"]).as_dict() if chosen else None
                 if self._bump(self._club_entry(info), slug, 1):
                     row["clubKnown"][1] += 1
-                    self.cov["past"]["clubKnown"] += 1
+                    cov["past"]["clubKnown"] += 1
                 if (q.get("highSchool") or "").strip():
-                    self.cov["past"]["schoolNamed"] += 1
+                    cov["past"]["schoolNamed"] += 1
                 table = self.school_table()
                 if table is not None and (q.get("highSchool") or "").strip():
                     m = table.match(q.get("highSchool"), q.get("hometown"))
                     sinfo = m.as_dict() if getattr(m, "status", None) != "none" else None
                     if self._bump(self._school_entry(sinfo), slug, 1):
                         row["schoolKnown"][1] += 1
-                        self.cov["past"]["schoolKnown"] += 1
+                        cov["past"]["schoolKnown"] += 1
 
     # ----- the index -----------------------------------------------------------------------------
-    def index(self) -> dict:
-        cov = {k: dict(v) for k, v in self.cov.items()}
+    def _coverage(self) -> dict:
+        """Every division together (commits: COMMIT_DIVISIONS only), plus `byDivision`."""
+        by = {d: {k: (dict(v) if v is not None else None) for k, v in self.cov[d].items()} for d in sorted(self.cov)}
+        total = _new_cov(True)
+        for c in by.values():
+            for col in COLUMNS:
+                for k, v in (c[col] or {}).items():
+                    if v is not None:
+                        total[col][k] = (total[col][k] or 0) + v
         if not self.schools_seen:
             # the field does not exist in this build: "not available", never "0 known"
-            for k in cov:
-                cov[k]["schoolKnown"] = None
+            for c in (total, *by.values()):
+                for col in COLUMNS:
+                    if c[col] is not None:
+                        c[col]["schoolKnown"] = None
+        return {**total, "byDivision": by}
+
+    def index(self) -> dict:
         return {
-            "updated": common.now_iso(), "division": "D1", "season": self.season,
+            "updated": common.now_iso(), "divisions": sorted(self.cov), "commitDivisions": list(COMMIT_DIVISIONS),
+            "season": self.season,
             "pastSeasons": sorted(self.past_seasons), "commitStatuses": list(COMMIT_STATUSES),
-            "columns": list(COLUMNS), "coverage": cov,
+            "columns": list(COLUMNS), "coverage": self._coverage(),
             "programs": {s: self.programs[s] for s in sorted(self.programs)},
             "clubs": {k: self.clubs[k] for k in sorted(self.clubs)},
             "schools": {k: self._with_aka(self.schools[k], self._school_keys.get(k)) for k in sorted(self.schools)}
@@ -331,7 +362,10 @@ def summary_line(doc: dict) -> str:
     cur, past, com = c["current"], c["past"], c["commits"]
     sk = ("" if cur["schoolKnown"] is None
           else f", school known {cur['schoolKnown']} ({_pct(cur['schoolKnown'], cur['players'])}%)")
-    return (f"trends (D1): {cur['players']} current players, club known {cur['clubKnown']} "
+    by = "; ".join(f"{d} club known {_pct(v['current']['clubKnown'], v['current']['players'])}%"
+                   for d, v in (c.get("byDivision") or {}).items())
+    return (f"trends ({', '.join(doc.get('divisions') or [])}): {by}; commits {', '.join(doc.get('commitDivisions') or [])} only; "
+            f"{cur['players']} current players, club known {cur['clubKnown']} "
             f"({_pct(cur['clubKnown'], cur['players'])}%){sk}; {past['players']} former players, club known "
             f"{past['clubKnown']} ({_pct(past['clubKnown'], past['players'])}%); {com['recruits']} commits, "
             f"club known {com['clubKnown']} ({_pct(com['clubKnown'], com['recruits'])}%); "
@@ -347,18 +381,22 @@ def _entities(doc: dict, kind: str) -> dict:
 
 
 def _sort_key(r: dict):
-    return (-(r["current"] + r["past"]), -r["current"], -(r["commits"] or 0), r.get("slug") or r.get("name") or "")
+    # commits never decide the order; as the last tie-break, null ("not collected") is no data and sorts after 0
+    m = r["commits"]
+    return (-(r["current"] + r["past"]), -r["current"], -(m if m is not None else -1), r.get("slug") or r.get("name") or "")
 
 
 def programs_for(doc: dict, kind: str, entity_id: str) -> list[dict]:
     """The programs a club (or school) sent players to, most players first: current + past decides
-    the order, commits never do. Each row: {slug, current, past, commits}; commits is None for a
-    school (no recruit carries a matched school today)."""
+    the order, commits never do. Each row: {slug, division, current, past, commits}; commits is None for a
+    school (no recruit carries a matched school today) and for a program whose commits are not collected."""
     entry = _entities(doc, kind).get(entity_id)
     if not entry:
         return []
     school = kind == "school"
-    rows = [{"slug": slug, "current": c, "past": p, "commits": None if school else m}
+    progs = doc.get("programs") or {}
+    rows = [{"slug": slug, "division": (progs.get(slug) or {}).get("division"), "current": c, "past": p,
+             "commits": None if school else m}
             for slug, (c, p, m) in entry["programs"].items()]
     return sorted(rows, key=_sort_key)
 
@@ -381,25 +419,48 @@ def feeders_for(doc: dict, kind: str, slug: str) -> list[dict]:
     return sorted(rows, key=_sort_key)
 
 
-def coverage_lines(doc: dict, kind: str, totals: dict | None = None) -> list[str]:
-    """One honest sentence per column, e.g. "25 of 9,481 current players; club known for 31%".
-    `totals` ({current, past, commits}) are the counts on screen; without them the line states the
-    denominators alone."""
-    c = doc["coverage"]
+DIVISION_NAMES = {"D1": "Division I", "D2": "Division II", "D3": "Division III"}
+
+
+def division_totals(rows: list[dict]) -> dict:
+    """{division: {current, past, commits}} over result rows; commits null when no row has a count."""
+    out: dict[str, dict] = {}
+    for r in rows:
+        t = out.setdefault(r.get("division") or "D1", {"current": 0, "past": 0, "commits": None})
+        t["current"] += r["current"]
+        t["past"] += r["past"]
+        if r["commits"] is not None:
+            t["commits"] = (t["commits"] or 0) + r["commits"]
+    return out
+
+
+def coverage_lines(doc: dict, kind: str, totals: dict | None = None, divisions=None) -> list[str]:
+    """One honest sentence per division (#315: coverage differs by division, so it is never merged), e.g.
+    "Division I: 25 of 9,481 current players, club known for 31%; ...; commits not collected" for D2.
+    `divisions` are the divisions in the result (default: every division in the index); `totals`
+    ({division: {current, past, commits}}, see division_totals) are the counts on screen; without them
+    the line states the denominators alone."""
+    by = doc["coverage"]["byDivision"]
     what = "club" if kind == "club" else "high school"
     known_key = "clubKnown" if kind == "club" else "schoolKnown"
     out = []
-    for col, noun, denom_key in (("current", "current players", "players"),
-                                  ("past", "former players (stored past rosters)", "players"),
-                                  ("commits", "verbal or signed commits", "recruits")):
-        denom = c[col][denom_key]
-        known = c[col].get(known_key)
-        if known is None:
-            out.append(f"{noun.capitalize()}: {what} not available yet")
-            continue
-        n = (totals or {}).get(col)
-        head = f"{n:,} of {denom:,} {noun}" if n is not None else f"{denom:,} {noun}"
-        out.append(f"{head}; {what} known for {_pct(known, denom) or 0}%")
+    for d in [d for d in (divisions or doc.get("divisions") or sorted(by)) if d in by]:
+        parts = []
+        for col, noun, denom_key in (("current", "current players", "players"),
+                                      ("past", "former players (stored past rosters)", "players"),
+                                      ("commits", "verbal or signed commits", "recruits")):
+            c = by[d][col]
+            if c is None:
+                parts.append("commits not collected")
+                continue
+            denom, known = c[denom_key], c.get(known_key)
+            if known is None:
+                parts.append(f"{noun}: {what} not available yet")
+                continue
+            n = ((totals or {}).get(d) or {}).get(col)
+            head = f"{n:,} of {denom:,} {noun}" if n is not None else f"{denom:,} {noun}"
+            parts.append(f"{head}, {what} known for {_pct(known, denom) or 0}%")
+        out.append(f"{DIVISION_NAMES.get(d, d)}: " + "; ".join(parts))
     return out
 
 
@@ -411,15 +472,20 @@ def answer(doc: dict, question: dict) -> dict:
     kind = question.get("kind") or "club"
     if question.get("program"):
         rows = feeders_for(doc, kind, question["program"])
-        totals = {"current": sum(r["current"] for r in rows), "past": sum(r["past"] for r in rows),
-                  "commits": sum(r["commits"] or 0 for r in rows)}
+        division = ((doc.get("programs") or {}).get(question["program"]) or {}).get("division")
+        by = division_totals([{**r, "division": division} for r in rows])
+        divisions = [division] if division else []
         subject = {"program": question["program"]}
     else:
         rows = programs_for(doc, kind, question.get("id") or "")
-        totals = {"current": sum(r["current"] for r in rows), "past": sum(r["past"] for r in rows),
-                  "commits": sum(r["commits"] or 0 for r in rows)}
+        by = division_totals(rows)
+        divisions = [d for d in (doc.get("divisions") or []) if d in by]
         subject = {kind: question.get("id")}
-    return {"division": doc.get("division"), "season": doc.get("season"), "pastSeasons": doc.get("pastSeasons"),
-            **subject, "rows": rows, "totals": totals, "coverage": coverage_lines(doc, kind, totals),
+    known = [r["commits"] for r in rows if r["commits"] is not None]
+    totals = {"current": sum(r["current"] for r in rows), "past": sum(r["past"] for r in rows),
+              "commits": sum(known) if known else None}
+    return {"divisions": doc.get("divisions"), "season": doc.get("season"), "pastSeasons": doc.get("pastSeasons"),
+            **subject, "rows": rows, "totals": totals, "coverage": coverage_lines(doc, kind, by, divisions),
             "note": "Current and past are distinct people; commits are shown separately and never added to a "
-                    "program's total. Counts are lower bounds: see the coverage lines."}
+                    "program's total, and are collected for " + ", ".join(doc.get("commitDivisions") or []) +
+                    " only (null elsewhere). Counts are lower bounds: see the coverage lines."}

@@ -32,8 +32,8 @@ committed list, by name:
                 matched on its stored highSchool value, which is the Previous School column there
   empty         an empty or placeholder high school ("null", "N/A") gets no schoolInfo
   table         a file that is not what tools/schools_nces.py writes fails to load
-  build         annotate_roster_schools writes schoolInfo on a D1 roster and leaves a D2 roster
-                alone; a scratch build does not rewrite data/schools-review.json
+  build         annotate_roster_schools writes schoolInfo on a D1, D2 and D3 roster by one rule (#315; D1 only before);
+                a scratch build does not rewrite data/schools-review.json
 """
 
 from __future__ import annotations
@@ -290,9 +290,16 @@ def test_build_integration(t: schools.Table) -> None:
         {"name": "C", "pos": "F", "classCode": "JR", "highSchool": "St. Francis", "hometown": "Mountain View, Calif."},
     ]}
     d2 = copy.deepcopy(roster)
+    # #315: a D3 roster, the same name in two states and once with no state
+    d3 = {"season": 2026, "players": [
+        {"name": "D", "pos": "D", "classCode": "FR", "highSchool": "Mountain View HS", "hometown": "Meridian, Idaho"},
+        {"name": "E", "pos": "D", "classCode": "FR", "highSchool": "Mountain View HS", "hometown": "Orem, Utah"},
+        {"name": "F", "pos": "D", "classCode": "FR", "highSchool": "Mountain View HS", "hometown": ""},
+    ]}
     r = schools.Recorder(t)
     build.annotate_roster_schools(roster, division="D1", table=t, recorder=r)
     build.annotate_roster_schools(d2, division="D2", table=t, recorder=r)
+    build.annotate_roster_schools(d3, division="D3", table=t, recorder=r)
     p = roster["players"]
     check("build: D1 player gets a matched schoolInfo", (p[0].get("schoolInfo") or {}).get("status") == "matched"
           and p[0]["schoolInfo"]["state"] == "ID", str(p[0].get("schoolInfo")))
@@ -301,8 +308,19 @@ def test_build_integration(t: schools.Table) -> None:
           and p[2]["schoolInfo"]["schoolId"] is None and p[2]["schoolInfo"]["candidates"] == 2)
     check("build: raw string and key are kept", p[0]["schoolInfo"]["raw"] == "Mountain View HS"
           and p[0]["schoolInfo"]["key"] == "mountain view")
-    check("build: a D2 roster is left alone", all("schoolInfo" not in q for q in d2["players"]))
-    check("build: the recorder only saw the D1 roster", r.counts["players"] == 3, str(r.counts))
+    # #315: every division is annotated by the same rule. Fails if the D1 gate comes back.
+    check("build: a D2 roster is annotated as a D1 one", [q.get("schoolInfo") for q in d2["players"]] == [q.get("schoolInfo") for q in p],
+          str([q.get("schoolInfo") for q in d2["players"]]))
+    ids3 = [(q.get("schoolInfo") or {}).get("schoolId") for q in d3["players"]]
+    check("build: D3, the same name in two states resolves to two schools, and no state matches nothing",
+          ids3[0] == p[0]["schoolInfo"]["schoolId"] and ids3[1] and ids3[0] != ids3[1] and ids3[2] is None
+          and d3["players"][2]["schoolInfo"]["status"] == "unmatched", str(ids3))
+    check("build: the recorder saw every division's roster", r.counts["players"] == 9, str(r.counts))
+    rep = r.report()
+    amb = next((u for u in rep["unmatched"] if u["status"] == "ambiguous"), {})
+    nost = next((u for u in rep["unmatched"] if u["status"] == "unmatched" and not u["state"]), {})
+    check("report: an unmatched name tallies its divisions", amb.get("divisions") == {"D1": 1, "D2": 1} and nost.get("divisions") == {"D3": 1},
+          str([(u["key"], u.get("divisions")) for u in rep["unmatched"]]))
     check("build: no player was mutated beyond schoolInfo",
           {k for q in p for k in q} == {"name", "pos", "classCode", "highSchool", "hometown", "schoolInfo"})
 
@@ -319,7 +337,7 @@ def test_build_integration(t: schools.Table) -> None:
     with tempfile.TemporaryDirectory() as tmp:
         path = os.path.join(tmp, "schools-review.json")
         written = r.write(path)
-        check("Recorder.write writes where it is told", os.path.exists(path) and written["summary"]["matched"] == 1)
+        check("Recorder.write writes where it is told", os.path.exists(path) and written["summary"]["matched"] == 4)  # D1, D2 and two D3
     check("Recorder.write did not touch the repository's report timestamp",
           not os.path.exists(schools.REVIEW_PATH) or common.read_json(schools.REVIEW_PATH).get("updated") != written["updated"])
 

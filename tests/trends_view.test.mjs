@@ -30,22 +30,31 @@ assert.ok(D1.length >= 3, 'the committed index needs three D1 programs with prof
 const [A, B, C] = D1.slice(0, 3);
 const disp = p => p.shortName || p.name;
 const D2 = INDEX.programs.find(p => p.division === 'D2' && p.shortName);
+const D3 = INDEX.programs.find(p => p.division === 'D3' && p.shortName);
 
 /* ---------- the fixture index: counts only ----------
    mvla: A [3 cur, 0 past, 0 commits], B [2, 2, 1], C [0, 0, 5]  (C: commits only, so Players 0)
    surf: A [1, 0, 3]; raw:zeta united (unmatched): A [1, 0, 0]
-   ccd:1 Rocklin High (schools only): A [2, 1, -], B [1, 0, -] */
+   ccd:1 Rocklin High (schools only): A [2, 1, -], B [1, 0, -]
+   lone (#315): the D2 program only, [1, 1, null]: D2 commits are not collected, so null, never 0 */
 function fixture({ schools = false } = {}) {
+  const d1 = { current: { players: 100, clubKnown: 31, schoolNamed: 65, schoolKnown: schools ? 40 : null },
+               past: { players: 200, clubKnown: 30, schoolNamed: 120, schoolKnown: schools ? 50 : null },
+               commits: { recruits: 50, clubKnown: 49, schoolNamed: 10, schoolKnown: null } };
+  const d2 = { current: { players: 50, clubKnown: 3, schoolNamed: 40, schoolKnown: schools ? 20 : null },
+               past: { players: 60, clubKnown: 2, schoolNamed: 50, schoolKnown: schools ? 25 : null }, commits: null };
   return {
-    updated: '2026-09-17T00:00:00Z', division: 'D1', season: 2026, pastSeasons: [2023, 2024, 2025],
+    updated: '2026-09-17T00:00:00Z', divisions: ['D1', 'D2'], commitDivisions: ['D1'], season: 2026, pastSeasons: [2023, 2024, 2025],
     commitStatuses: ['verbal', 'signed'], columns: ['current', 'past', 'commits'],
-    coverage: { current: { players: 100, clubKnown: 31, schoolNamed: 65, schoolKnown: schools ? 40 : null },
-                past: { players: 200, clubKnown: 30, schoolNamed: 120, schoolKnown: schools ? 50 : null },
-                commits: { recruits: 50, clubKnown: 49, schoolNamed: 10, schoolKnown: null } },
-    programs: { [A.slug]: { current: 27, past: 29, commits: 11, clubKnown: [19, 1, 11], schoolKnown: schools ? [5, 2, 0] : [0, 0, 0] },
-                [B.slug]: { current: 25, past: 20, commits: 9, clubKnown: [10, 2, 9], schoolKnown: [0, 0, 0] },
-                [C.slug]: { current: 30, past: 10, commits: 2, clubKnown: [3, 0, 2], schoolKnown: [0, 0, 0] } },
+    coverage: { current: { players: 150, clubKnown: 34, schoolNamed: 105, schoolKnown: schools ? 60 : null },
+                past: { players: 260, clubKnown: 32, schoolNamed: 170, schoolKnown: schools ? 75 : null },
+                commits: d1.commits, byDivision: { D1: d1, D2: d2 } },
+    programs: { [A.slug]: { division: 'D1', current: 27, past: 29, commits: 11, clubKnown: [19, 1, 11], schoolKnown: schools ? [5, 2, 0] : [0, 0, 0] },
+                [B.slug]: { division: 'D1', current: 25, past: 20, commits: 9, clubKnown: [10, 2, 9], schoolKnown: [0, 0, 0] },
+                [C.slug]: { division: 'D1', current: 30, past: 10, commits: 2, clubKnown: [3, 0, 2], schoolKnown: [0, 0, 0] },
+                [D2.slug]: { division: 'D2', current: 20, past: 15, commits: null, clubKnown: [2, 1, null], schoolKnown: [0, 0, null] } },
     clubs: {
+      'lone': { name: 'Lone Star FC', state: 'TX', programs: { [D2.slug]: [1, 1, null] } },
       'mvla': { name: 'Mountain View Los Altos SC', state: 'CA', aka: ['mvla', 'mtn view los altos sc'], programs: { [A.slug]: [3, 0, 0], [B.slug]: [2, 2, 1], [C.slug]: [0, 0, 5] } },
       'surf': { name: 'San Diego Surf', state: 'CA', programs: { [A.slug]: [1, 0, 3] } },
       'raw:zeta united': { name: 'Zeta United', state: null, unmatched: true, programs: { [A.slug]: [1, 0, 0] } },
@@ -59,7 +68,7 @@ function searchFixture() {
   doc.schools['ccd:2'] = { name: 'Carroll Senior H S', city: 'Southlake', state: 'TX', aka: ['southlake carroll'], programs: { [A.slug]: [1, 0, 0] } };
   doc.schools['ccd:3'] = { name: 'Decatur High School', city: 'Decatur', state: 'AL', programs: { [A.slug]: [1, 0, 0] } };
   doc.schools['ccd:4'] = { name: 'Decatur High School', city: 'Decatur', state: 'GA', programs: { [B.slug]: [1, 0, 0] } };
-  for (const s of ['stanford', 'north-carolina', 'unc-wilmington', 'louisville', D2.slug]) doc.programs[s] = { current: 3, past: 1, commits: 0, clubKnown: [1, 0, 0], schoolKnown: [0, 0, 0] };
+  for (const s of ['stanford', 'north-carolina', 'unc-wilmington', 'louisville']) doc.programs[s] = { division: 'D1', current: 3, past: 1, commits: 0, clubKnown: [1, 0, 0], schoolKnown: [0, 0, 0] };
   for (let i = 1; i <= 9; i++) doc.clubs[`c${i}`] = { name: `Club ${i}`, state: 'CA', programs: { [A.slug]: [1, 0, 0] } };
   doc.programs.louisville.current = 9; // more players than Stanford: only the exact nickname can put Stanford first for "cardinal"
   return doc;
@@ -165,16 +174,24 @@ const nameOf = (pl) => `${pl.name}${pl.pos || pl.classCode ? ` (${[pl.pos, pl.cl
 test('pure functions: programs_for, feeders_for and both_for, by hand from the fixture; commits never enter the total or the order', async () => {
   const page = loadPage({}), doc = fixture({ schools: true });
   const rows = plain(page.sandbox.trendsProgramsFor(doc, 'club', 'mvla'));
-  assert.deepEqual(rows, [{ slug: B.slug, current: 2, past: 2, commits: 1 }, { slug: A.slug, current: 3, past: 0, commits: 0 }, { slug: C.slug, current: 0, past: 0, commits: 5 }],
+  assert.deepEqual(rows, [{ slug: B.slug, division: 'D1', current: 2, past: 2, commits: 1 }, { slug: A.slug, division: 'D1', current: 3, past: 0, commits: 0 }, { slug: C.slug, division: 'D1', current: 0, past: 0, commits: 5 }],
     'B (4 people) before A (3) before C (0 people, 5 commits)');
   const feeders = plain(page.sandbox.trendsFeedersFor(doc, 'club', A.slug));
   assert.deepEqual(feeders.map(f => [f.id, f.current, f.past, f.commits, f.unmatched]),
     [['mvla', 3, 0, 0, false], ['surf', 1, 0, 3, false], ['raw:zeta united', 1, 0, 0, true]], 'MVLA (3 people) before Surf (1 person, 3 commits)');
   assert.deepEqual(plain(page.sandbox.trendsBothFor(doc, 'mvla', 'ccd:1')), [{ slug: A.slug, club: 3, school: 3 }, { slug: B.slug, club: 4, school: 1 }],
     'club + school: only programs with both; club players = cur + past (commits left out)');
-  assert.deepEqual(plain(page.sandbox.trendsCoverageLines(doc, 'club', { current: 5, past: 2, commits: 6 })),
-    ['5 of 100 current players; club known for 31%', '2 of 200 former players (stored past rosters); club known for 15%', '6 of 50 verbal or signed commits; club known for 98%']);
-  assert.deepEqual(plain(page.sandbox.trendsProgramsFor(doc, 'school', 'ccd:1')), [{ slug: A.slug, current: 2, past: 1, commits: null }, { slug: B.slug, current: 1, past: 0, commits: null }], 'a school reports commits as null, never 0');
+  // #315 C2: one line per division in the result, each with its own rate; D2 commits "not collected"
+  assert.deepEqual(plain(page.sandbox.trendsCoverageLines(doc, 'club', { D1: { current: 5, past: 2, commits: 6 } }, ['D1'])),
+    ['Division I: 5 of 100 current players, club known for 31%; 2 of 200 former players (stored past rosters), club known for 15%; 6 of 50 verbal or signed commits, club known for 98%']);
+  assert.deepEqual(plain(page.sandbox.trendsCoverageLines(doc, 'club', { D2: { current: 1, past: 1, commits: null } }, ['D2'])),
+    ['Division II: 1 of 50 current players, club known for 6%; 1 of 60 former players (stored past rosters), club known for 3%; commits not collected'],
+    'a D2-only result states the D2 rate, never the merged or the D1 one');
+  assert.equal(plain(page.sandbox.trendsCoverageLines(doc, 'club')).length, 2, 'with no result, every division in the index');
+  assert.deepEqual(plain(page.sandbox.trendsProgramsFor(doc, 'school', 'ccd:1')), [{ slug: A.slug, division: 'D1', current: 2, past: 1, commits: null }, { slug: B.slug, division: 'D1', current: 1, past: 0, commits: null }], 'a school reports commits as null, never 0');
+  // #315 C1: null commits are no data: level on players, a null sorts after a 0
+  doc.clubs.tie = { name: 'Tie', programs: { [D2.slug]: [2, 0, null], [A.slug]: [2, 0, 0] } };
+  assert.deepEqual(plain(page.sandbox.trendsProgramsFor(doc, 'club', 'tie')).map(r => r.slug), [A.slug, D2.slug]);
 });
 
 /* ---------- URL ---------- */
@@ -217,15 +234,72 @@ test('#310 raw: ids: a spelling since reviewed into a club resolves through the 
   assert.ok(page.results().includes('There is no club “raw:qqq” in the clubs and schools index') && page.results().includes('How to read this'), 'results come from the other selections (none)');
 });
 
-test('#310 D2 program in the URL: a "not in the index" chip; the Program box only searches the index (D1)', async () => {
-  const page = await open(`#/trends?club=mvla&program=${D2.slug}`, searchFixture());
-  assert.equal(page.el('#trChg-program').textContent, `${disp(D2)} (D2) — not in the index`);
-  assert.equal(page.el('#trChg-program').getAttribute('aria-label'), `Change program: ${disp(D2)} (D2) — not in the index`);
-  assert.ok(page.results().includes('is a Division II program, and the clubs and schools index covers Division I only'));
+test('#310 a program the index lacks: a "not in the index" chip naming its division; results come from the rest', async () => {
+  const page = await open(`#/trends?club=mvla&program=${D3.slug}`, searchFixture());
+  assert.equal(page.el('#trChg-program').textContent, `${disp(D3)} (D3) — not in the index`);
+  assert.equal(page.el('#trChg-program').getAttribute('aria-label'), `Change program: ${disp(D3)} (D3) — not in the index`);
+  assert.ok(page.results().includes('(Division III) is not in the clubs and schools index yet'));
   assert.deepEqual(cellsOf(page.results()).map(r => r.name), [disp(B), disp(A), disp(C)], 'results come from the club alone');
+});
+
+test('#315 a D2 program is in the Program box with its division line; picking it is not "not in the index"', async () => {
   const p2 = await open('#/trends', searchFixture());
   type(p2, 'program', D2.shortName);
-  assert.equal(p2.el('#trMsg-program').textContent, `No program matches “${D2.shortName}”.`, 'a D2 program is not offered even though the fixture index carries it');
+  assert.ok(optIds(p2, 'program').includes(D2.slug), 'the D2 program is offered');
+  const opt = p2.el('#trList-program').innerHTML;
+  assert.ok(opt.includes('<span class="div-tag" title="Division II">D2</span>'), 'its suggestion carries the division line');
+  const p3 = await open(`#/trends?program=${D2.slug}`);
+  assert.equal(p3.el('#trChg-program').textContent, disp(D2));
+  assert.ok(!p3.results().includes('not in the clubs and schools index'));
+});
+
+test('#315 C1 + C2: D2 commits read "Not collected" (never 0) in rows, totals, cards and coverage; coverage names the D2 rate', async () => {
+  let page = await open('#/trends?club=lone');
+  const html = page.results();
+  assert.deepEqual(cellsOf(html).map(r => r.nums), [['2', '1', '1', 'Not collected']], 'the D2 row: commits Not collected, never 0');
+  assert.ok(html.includes('1 current, 1 former, commits not collected at 1 program'), 'the totals line');
+  assert.ok(html.includes('Division II: 1 of 50 current players, club known for 6%'), 'the D2 rate');
+  assert.ok(!html.includes('Division I:') && !html.includes('31%'), 'no D1 line, no merged rate, for a D2-only result');
+  assert.ok(html.includes('programs read “Not collected”'), 'the commits note says why');
+  page = await open(`#/trends?program=${D2.slug}`);
+  assert.deepEqual(cellsOf(page.results()), [], 'program page rows are not team rows');
+  assert.ok(page.results().includes('Not collected</span></td>') && page.results().includes('commits not collected'), 'feeder row and coverage');
+  assert.ok(page.sub().includes('20 current players, 15 former, commits not collected'), page.sub());
+  page = await open(`#/trends?club=lone&program=${D2.slug}`);
+  assert.deepEqual(stats(page.results()), { players: '2', current: '1', past: '1', commits: 'Not collected' });
+  page = await open('#/trends?club=mvla');
+  assert.ok(page.results().includes('Division I: 5 of 100 current players') && !page.results().includes('Division II:'), 'a D1-only result names D1 alone');
+});
+
+test('#315 an index built before #315 (division: "D1", one coverage object) still reads', async () => {
+  const old = fixture();
+  delete old.divisions; delete old.commitDivisions; old.division = 'D1';
+  old.coverage = { current: old.coverage.byDivision.D1.current, past: old.coverage.byDivision.D1.past, commits: old.coverage.byDivision.D1.commits };
+  const page = await open('#/trends?club=mvla', old);
+  assert.ok(page.results().includes('Division I: 5 of 100 current players, club known for 31%'));
+});
+
+test('#315 phone first load: a visible Loading state; a failed load leaves S.trends unset and Try again fetches again', async () => {
+  const page = loadPage({ 'data/trends/index.json': fixture() });
+  const real = page.sandbox.fetch;
+  let release, calls = 0;
+  page.sandbox.fetch = async url => {
+    if (String(url) !== '/api/v1/trends') return real(url);
+    calls++; await new Promise(r => { release = r; });
+    return { ok: false, status: 503, async json() { throw new Error('503'); } };
+  };
+  page.sandbox.location.hash = '#/trends';
+  const done = page.sandbox.route(); await tick();
+  assert.ok(page.app().includes('id="trLoading"') && page.app().includes('Loading…'), 'Loading is on screen while the index downloads');
+  release(); await done; await tick();
+  assert.ok(page.app().includes('Could not load') && page.app().includes('id="trRetry"'), 'a failed load says so and offers Try again');
+  assert.equal(page.sandbox.S.trends, null, 'S.trends stays unset');
+  page.sandbox.fetch = real;
+  click(page.el('#trRetry')); await tick(40);
+  assert.ok(calls >= 1, 'the first load was attempted');
+  assert.ok(page.results().includes('How to read this'), 'Try again fetched and rendered the index');
+  const missing = await open('#/trends', null);
+  assert.ok(missing.app().includes('Not built yet') && missing.app().includes('id="trRetry"'), 'a 404 still reads "Not built yet"');
 });
 
 /* ---------- the tab's name (#322) ---------- */
@@ -249,8 +323,10 @@ test('state 1, nothing selected: three boxes, the how-to card and the coverage',
   assert.ok(html.includes('class="view-tab active" role="tab" aria-selected="true">Pipelines</a>'), 'the Pipelines tab is active');
   for (const k of ['club', 'program']) assert.ok(html.includes(`<label class="trend-label" id="trLbl-${k}" for="trIn-${k}">`) && html.includes(`id="trIn-${k}" type="text" role="combobox"`), `${k}: a labelled combobox`);
   assert.ok(html.includes('High-school results are not published yet'), 'schools absent: the school box says so');
-  assert.ok(page.results().includes('100 current players; club known for 31%') && page.results().includes('never added into a program'));
-  assert.ok(page.sub().startsWith('Clubs and high schools behind Division I rosters · Division I'));
+  assert.ok(page.results().includes('Division I: 100 current players, club known for 31%') && page.results().includes('Division II: 50 current players, club known for 6%')
+    && page.results().includes('never added into a program'));
+  assert.ok(page.sub().startsWith('Clubs and high schools behind college rosters · D1, D2 · 150 current players · 260 former · 50 D1 commits'), page.sub());
+  assert.ok(!fs.readFileSync(HTML, 'utf8').includes('Division I programs with players'), '#315: no Division-I-only copy is left');
 });
 
 test('state 2, club only: programs it feeds, Players = current + past, commits beside and never in Players', async () => {
@@ -258,16 +334,16 @@ test('state 2, club only: programs it feeds, Players = current + past, commits b
   const html = page.results();
   assert.deepEqual(cellsOf(html).map(r => r.name), [disp(B), disp(A), disp(C)], 'most people first; commits do not lift C');
   assert.deepEqual(cellsOf(html).map(r => r.nums), [['4', '2', '2', '1'], ['3', '3', '0', '0'], ['0', '0', '0', '5']]);
-  assert.ok(html.includes('5 of 100 current players; club known for 31%') && html.includes('6 of 50 verbal or signed commits; club known for 98%'));
+  assert.ok(html.includes('5 of 100 current players, club known for 31%') && html.includes('6 of 50 verbal or signed commits, club known for 98%'));
   assert.ok(html.includes(`data-slug="${A.slug}" data-kind="club" data-id="mvla"`) && !html.includes(`data-slug="${C.slug}"`), 'the roster expander only where there are current players');
   assert.ok(html.includes(`href="#/trends?club=mvla&amp;program=${B.slug}" data-tr-kind="program"`), 'each row links to the club + program card');
-  assert.ok(page.sub().startsWith('Mountain View Los Altos SC · Division I'), 'the header names the club');
+  assert.ok(page.sub().startsWith('Mountain View Los Altos SC · D1, D2'), 'the header names the club');
 });
 
 test('state 3, high school only: commits read "—", never 0', async () => {
   const page = await open('#/trends?school=ccd%3A1', fixture({ schools: true }));
   assert.deepEqual(cellsOf(page.results()).map(r => r.nums), [['3', '2', '1', '—'], ['1', '1', '0', '—']]);
-  assert.ok(page.results().includes('3 of 100 current players; high school known for 40%'));
+  assert.ok(page.results().includes('Division I: 3 of 100 current players, high school known for 40%'));
 });
 
 test('state 4, program only: clubs and high schools feeding it; rows link to the pair cards', async () => {
@@ -385,14 +461,14 @@ test('#310 keyboard: one listbox of options (not tab stops), arrows, Enter, Esca
   assert.equal(page.el('#trIn-club').hidden, false, 'Change opens the box');
   assert.equal(page.sandbox.document.activeElement, page.el('#trIn-club'));
   const list = page.el('#trList-club').innerHTML;
-  assert.equal((list.match(/role="option"/g) || []).length, 11, '11 suggestions: MVLA, Surf and Club 1-9');
+  assert.equal((list.match(/role="option"/g) || []).length, 12, '12 suggestions: MVLA, Surf, Club 1-9 and Lone Star (D2)');
   assert.ok(!/<a |<button|tabindex/.test(list), 'options are not tab stops');
   assert.equal(page.el('#trIn-club').getAttribute('aria-expanded'), 'true');
   key(page, 'club', 'ArrowDown'); key(page, 'club', 'ArrowDown');
   assert.equal(page.el('#trIn-club').getAttribute('aria-activedescendant'), 'trOpt-club-1');
   assert.equal(page.el('#trOpt-club-1').getAttribute('aria-selected'), 'true');
   key(page, 'club', 'ArrowUp'); key(page, 'club', 'ArrowUp');
-  assert.equal(page.el('#trIn-club').getAttribute('aria-activedescendant'), `trOpt-club-10`, 'ArrowUp wraps to the last');
+  assert.equal(page.el('#trIn-club').getAttribute('aria-activedescendant'), `trOpt-club-11`, 'ArrowUp wraps to the last');
   assert.equal(key(page, 'club', 'Tab'), false, 'Tab is not swallowed');
   assert.equal(page.sandbox.location.hash, '#/trends?club=surf', 'Tab picks nothing');
   assert.ok(key(page, 'club', 'Escape'));
@@ -453,7 +529,7 @@ test('#310 suggestions follow the other selections; 6 in an empty box on phones,
     return [...empty, optIds(p, 'club').length];
   };
   assert.equal(new Set([A.slug, B.slug, C.slug, 'stanford', 'north-carolina', 'unc-wilmington', 'louisville']).size, 6, 'premise: the committed index makes B Stanford, so the fixture has 6 D1 programs');
-  assert.deepEqual(await count(false), [11, 6, 9], 'desktop: 11 clubs, the 6 D1 programs of the fixture; "club" finds 9');
+  assert.deepEqual(await count(false), [12, 7, 9], 'desktop: 12 clubs, the 6 D1 programs and the D2 one; "club" finds 9');
   assert.deepEqual(await count(true), [6, 6, 9], 'phone: 6 in each empty box; a typed query is not cut to 6');
 });
 
@@ -481,8 +557,9 @@ test('the list view offers the tab; the roster tab links a reviewed club and the
   assert.ok(!p2.tab().includes('club=raw'), 'an unmatched spelling does not');
   assert.ok(p2.tab().includes(`href="#/trends?program=${A.slug}"`), 'the roster tab links to where the program\'s players come from');
   assert.deepEqual(plain(p2.sandbox.trendsRosterNames({ roster: null, commitments: prof.commitments }, 'club', 'mvla')), [], 'commitments are never a source of names');
+  // #315: every division links (the D1 gate is gone)
   const d2 = JSON.parse(JSON.stringify(prof)); d2.division = 'D2';
   const p3 = await open(`#/p/${A.slug}/roster`, fixture(), { [`data/programs/${A.slug}.json`]: d2 });
   await tick(30);
-  assert.ok(!p3.tab().includes('#/trends'), 'a D2 roster carries no trends link');
+  assert.ok(p3.tab().includes('href="#/trends?club=mvla"') && p3.tab().includes(`href="#/trends?program=${A.slug}"`), 'a D2 roster links its club and its program');
 });
