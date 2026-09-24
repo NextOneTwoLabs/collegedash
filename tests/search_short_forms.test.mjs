@@ -7,7 +7,7 @@
 // The fix has two halves, both checked here over the REAL committed public/data (registry + index), with the
 // page's own matchScore/searchMatches loaded from public/index.html into a vm (as tests/d3_search_names.test.mjs
 // does), so this tests the shared matcher itself, not a copy:
-//   - registry: 33 programs carry `searchAliases` (one commonly used short form each), each cited in
+//   - registry: 34 programs carry `searchAliases` (one commonly used short form each), each cited in
 //     `searchAliasesNote` to the opening paragraph of the institution's own Wikipedia article (the #217
 //     Wikipedia-cited names convention); build.py publishes them in searchNames;
 //   - matcher: an exact search-name match scores 95, above any short-name prefix (90), below the program's own
@@ -98,11 +98,11 @@ test('every registry search alias is cited, published, and finds its program fir
   assert.deepEqual(failed, []);
 });
 
-test('named examples: Cal, Pitt, Mizzou, MIT and WashU find the right program first', async () => {
+test('named examples: Cal, Pitt, Mizzou, MIT, WashU, UNI and GW find the right program first', async () => {
   const sb = await loadPage();
   for (const [q, want] of [['Cal', 'california'], ['Pitt', 'pittsburgh'], ['Mizzou', 'missouri'], ['MIT', 'mit'],
-    ['WashU', 'washington-st-louis'], ['UNI', 'northern-iowa']]) assert.equal(slugs(sb, q)[0], want, `"${q}" -> ${slugs(sb, q).slice(0, 3)}`);
-  // MIT is not Mitchell College's prefix any more, but Mitchell College is still found
+    ['WashU', 'washington-st-louis'], ['UNI', 'northern-iowa'], ['GW', 'george-washington']]) assert.equal(slugs(sb, q)[0], want, `"${q}" -> ${slugs(sb, q).slice(0, 3)}`);
+  // MIT's exact alias (95) outranks Mitchell College's short-name prefix (90), which is still found
   assert.ok(slugs(sb, 'MIT').includes('mitchell-college'));
 });
 
