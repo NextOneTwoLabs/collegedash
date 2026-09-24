@@ -1009,30 +1009,55 @@ def clean(s: str | None) -> str:
     return _WS.sub(" ", s.replace("\xa0", " ")).strip()
 
 
-POS_MAP = {
-    "goalkeeper": "GK", "gk": "GK", "keeper": "GK",
-    "defender": "D", "d": "D", "def": "D", "back": "D",
-    "midfielder": "M", "m": "M", "mf": "M", "mid": "M", "midfield": "M",
-    "forward": "F", "f": "F", "fwd": "F", "striker": "F",
+# Position labels, in two dicts (#263). POS_EXACT keys match a whole label part only: every 1-2
+# letter abbreviation lives here, so 'Manager' is not M, 'Fullback' is not F and 'Student Intern'
+# is nothing. POS_MAP keys also match as a prefix ('Midfielders', 'Center Backs'), longest key
+# first, so 'Defensive Mid' is M rather than 'def' -> D and 'Wing Back' is D. Every POS_MAP key is
+# a whole position word or phrase of 3+ letters; sidearm._is_position_label (#311) accepts a part
+# that starts with one, so a short abbreviation ('att', 'cam') must go in POS_EXACT instead.
+POS_EXACT = {
+    "g": "GK", "gk": "GK",
+    "d": "D", "df": "D", "b": "D", "cb": "D", "ob": "D", "lb": "D", "rb": "D", "wb": "D", "fb": "D",
+    "sw": "D",
+    "m": "M", "mf": "M", "cm": "M", "cdm": "M", "cam": "M", "dm": "M", "am": "M", "acm": "M", "lm": "M",
+    "rm": "M",
+    "f": "F", "fw": "F", "cf": "F", "st": "F", "att": "F", "s": "F", "w": "F", "wing": "F",
+    # short forms the old one-letter prefixes happened to map; kept at their old value
+    "md": "M", "fd": "F", "fm": "F", "for": "F", "dlb": "D",
 }
+POS_MAP = {
+    "goalkeeper": "GK", "keeper": "GK", "goalie": "GK", "backup goalkeeper": "GK", "backup keeper": "GK",
+    "defender": "D", "def": "D", "back": "D", "center back": "D", "centre back": "D", "centerback": "D",
+    "outside back": "D", "full back": "D", "fullback": "D", "right back": "D", "left back": "D",
+    "wing back": "D", "wingback": "D", "sweeper": "D",
+    "midfielder": "M", "mid": "M", "midfield": "M", "center mid": "M", "centre mid": "M",
+    "central mid": "M", "attacking mid": "M", "defensive mid": "M",
+    "forward": "F", "foward": "F", "fwd": "F", "striker": "F", "attacker": "F", "winger": "F", "center forward": "F",
+    "centre forward": "F",
+}
+
+
+def pos_code(part: str) -> str:
+    """GK / D / M / F for one label part ('CB', 'Center Back', 'Midfielders'), '' when unknown."""
+    p = re.sub(r"[\s-]+", " ", part.lower()).strip(" .")
+    if p in POS_EXACT:
+        return POS_EXACT[p]
+    best = max((k for k in POS_MAP if p.startswith(k)), key=len, default=None)
+    return POS_MAP[best] if best else ""
 
 
 def norm_pos(s: str | None) -> str:
     """Map assorted position labels to GK / D / M / F (slash-combos kept, e.g. 'D/M')."""
     if not s:
         return ""
-    parts = re.split(r"[/,]", s.lower())
     out = []
-    for p in parts:
-        p = p.strip()
-        code = POS_MAP.get(p)
-        if code is None:
-            for k, v in POS_MAP.items():
-                if p.startswith(k):
-                    code = v
-                    break
-        if code and code not in out:
-            out.append(code)
+    for p in re.split(r"[/,]", s):
+        # 'F-M', 'D.MF': split on '-' or '.' only when the whole part is not a label ('Wing-Back')
+        whole = pos_code(p)
+        codes = [whole] if whole or not re.search(r"\w[-.]\w", p) else [pos_code(x) for x in re.split(r"[-.]", p)]
+        for code in codes:
+            if code and code not in out:
+                out.append(code)
     return "/".join(out)
 
 

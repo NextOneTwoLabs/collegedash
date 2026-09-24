@@ -590,7 +590,7 @@ def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
             number=first(li, "jersey-number"), name=name, pos_label=pos, height=first(li, "height"),
             class_label=first(li, "academic-year"), hometown=first(li, "hometown"), high_school=first(li, "highschool"),
             previous_school=first(li, "previous-school"), major=first(li, "major"), bio_url=bio_url, social=social)
-        if not record["pos"] and forms:  # "G" is not a label norm_pos knows; the long form beside it is
+        if not record["pos"] and forms:  # a short label norm_pos cannot map; the long form beside it may be
             record["pos"] = common.norm_pos(forms[0])
         players.append(record)
     return players
@@ -616,15 +616,14 @@ def _list_view_position(li) -> str:
 
 def _is_position_label(label: str) -> bool:
     """True when a list-view label is a playing position. The list-view block also holds 'Manager',
-    'Student Intern' or a club name for non-players listed in the player table, and norm_pos's
-    one-letter prefixes would read 'Manager' as M. So every part must be a POS_MAP key exactly or
-    start with one of its words (3+ letters: 'Midfield', 'Defender'), not merely with 'd'/'m'/'f'."""
+    'Student Intern' or a club name for non-players listed in the player table. So every part must
+    map through common.pos_code: a POS_EXACT key exactly ('D', 'CB') or a part starting with a
+    POS_MAP word or phrase, all of them 3+ letters ('Midfield', 'Center Back'), never merely 'm'."""
     ok = False
-    for part in re.split(r"[/,]", label.lower()):
-        part = part.strip()
-        if not part:
+    for part in re.split(r"[/,]", label):
+        if not part.strip():
             continue
-        if part in common.POS_MAP or any(len(k) >= 3 and part.startswith(k) for k in common.POS_MAP):
+        if common.pos_code(part):
             ok = True
         else:
             return False
