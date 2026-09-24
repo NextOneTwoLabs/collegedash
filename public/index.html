@@ -1368,7 +1368,7 @@ function wireConditions(sb) {
 function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
 function currentView() { return location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0] || 'list'; }
 // Views that the sidebar's pills narrow but its sort select and recruiting-class pills cannot: the camp
-// list (issue #65) and the clubs & schools view (#230), where a sort of programs has no row to sort.
+// list (issue #65) and the Pipelines view (#230, #322), where a sort of programs has no row to sort.
 const filterOnlyView = v => v === 'camps' || v === 'trends';
 /* The sidebar's shape differs in exactly one way between views - #/camps and #/trends drop the sort
    select and the recruiting-class pills - so it is rebuilt on the transition into or out of those
@@ -1897,12 +1897,12 @@ function campTally(doc) {
   t.unlabelled = Math.max(0, t.total - t.id - t.youth - t.unknown);
   return t;
 }
-// The list header strip. Cards and Table are f.view and switch in place; ID Camps and Clubs & schools are
+// The list header strip. Cards and Table are f.view and switch in place; ID Camps and Pipelines (#322) are
 // routes of their own.
 function listTabs(active) {
   const btn = (k, l) => `<button class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}" data-view="${k}">${l}</button>`;
   const link = (k, href, l) => `<a href="${href}" class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}">${l}</a>`;
-  return btn('cards', 'Cards') + btn('table', 'Table') + link('camps', '#/camps', 'ID Camps') + link('trends', '#/trends', 'Clubs &amp; schools');
+  return btn('cards', 'Cards') + btn('table', 'Table') + link('camps', '#/camps', 'ID Camps') + link('trends', '#/trends', 'Pipelines');
 }
 function campRowHtml(c, p) {
   const details = [c.location, c.ages, c.price].filter(Boolean).join(' · ');
@@ -2114,7 +2114,7 @@ function renderTrendsRoute() { return TR ? trendsApply(TR.sel) : renderTrends();
 async function renderTrends() {
   const idx = await loadIndex();
   const f = S.filters, app = $('#app');
-  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Clubs & high schools' }];
+  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Pipelines' }];
   const tabs = listTabs('trends');
   const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
   let doc;

@@ -228,11 +228,25 @@ test('#310 D2 program in the URL: a "not in the index" chip; the Program box onl
   assert.equal(p2.el('#trMsg-program').textContent, `No program matches “${D2.shortName}”.`, 'a D2 program is not offered even though the fixture index carries it');
 });
 
+/* ---------- the tab's name (#322) ---------- */
+test('the tab and the breadcrumb read "Pipelines"; the page title and the #/trends URL are unchanged', async () => {
+  const page = await open('#/trends');
+  const html = page.app();
+  const tabs = [...html.matchAll(/<a href="([^"]*)" class="view-tab[^"]*"[^>]*>([^<]*)<\/a>/g)];
+  const tab = tabs.find(m => m[1] === '#/trends');
+  assert.ok(tab, 'the tab still links to #/trends');
+  assert.equal(tab[2], 'Pipelines');
+  assert.ok(tab[0].includes('aria-selected="true"'), 'and is the selected tab');
+  assert.ok(!/Clubs &amp; schools|Clubs &amp; high schools|Clubs & high schools/.test(html), 'no old label left on the page');
+  assert.ok(/class="breadcrumb-current"[^>]*>Pipelines</.test(html), 'the breadcrumb reads Pipelines');
+  assert.ok(html.includes('Where players come from'), 'the page title is kept');
+});
+
 /* ---------- states ---------- */
 test('state 1, nothing selected: three boxes, the how-to card and the coverage', async () => {
   const page = await open('#/trends');
   const html = page.app();
-  assert.ok(html.includes('class="view-tab active" role="tab" aria-selected="true">Clubs &amp; schools</a>'), 'the Clubs & schools tab is active');
+  assert.ok(html.includes('class="view-tab active" role="tab" aria-selected="true">Pipelines</a>'), 'the Pipelines tab is active');
   for (const k of ['club', 'program']) assert.ok(html.includes(`<label class="trend-label" id="trLbl-${k}" for="trIn-${k}">`) && html.includes(`id="trIn-${k}" type="text" role="combobox"`), `${k}: a labelled combobox`);
   assert.ok(html.includes('High-school results are not published yet'), 'schools absent: the school box says so');
   assert.ok(page.results().includes('100 current players; club known for 31%') && page.results().includes('never added into a program'));
