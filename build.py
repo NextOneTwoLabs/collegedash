@@ -226,6 +226,68 @@ def check_no_stale_profiles(registry: dict) -> bool:
     return not stale
 
 
+# The publish gate's reviewed list (#94; Bianque's review of #252, plan revision 1 on #94): a published program
+# with no stored athletics source that is explained by neither athletics.skipReason nor
+# athletics.rosterRequiresBrowser. Each entry is slug -> {"reason": why it publishes anyway, "date": "YYYY-MM-DD"
+# it was reviewed}, added in a reviewed PR. It starts empty: the six D1 programs with no athletics source
+# (oklahoma, utah-state, wyoming, ohio-university, george-mason, st-thomas) all carry rosterRequiresBrowser.
+# check_publish_gate() fails on a stale entry, so the list cannot quietly grow.
+PUBLISH_GATE_REVIEWED: dict[str, dict] = {}
+_GATE_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def check_publish_gate(registry: dict, *, has_athletics=None, reviewed: dict | None = None) -> bool:
+    """Nothing is published silently empty (#94). Every published program has a stored athletics source
+    (programs/<slug>/sources/athletics.json), or says why not with one of three explicit reasons:
+      - athletics.skipReason (e.g. a host that refuses the collector, the D2 treatment);
+      - athletics.rosterRequiresBrowser (the no-Playwright rule; the collector skips on it);
+      - an entry of PUBLISH_GATE_REVIEWED, with a reason and a date.
+    It also fails on a reviewed entry that is stale (the program now has data, or is not published) or
+    malformed, and on rosterRequiresBrowser set on a program that has athletics data, which means the flag is
+    out of date and is stopping a collector that would work.
+
+    The build never hides a roster-less program by itself: that would make pages appear and vanish whenever
+    a site has a bad day. The gate only makes the reason a recorded, reviewed fact.
+
+    Scope is the published set. A staged division joins it when it is switched on (the D3 switch, #94 PR 4),
+    so every D3 program is checked by the PR that publishes it."""
+    if has_athletics is None:
+        def has_athletics(slug: str) -> bool:
+            return os.path.isfile(common.source_path(slug, "athletics"))
+    reviewed = PUBLISH_GATE_REVIEWED if reviewed is None else reviewed
+    published = {p["slug"]: p for p in published_programs(registry)}
+    ok = True
+    for slug, program in sorted(published.items()):
+        ath = program.get("athletics") or {}
+        data = has_athletics(slug)
+        browser = ath.get("rosterRequiresBrowser") is True
+        if data:
+            if browser:
+                print(f"GATE {slug}: athletics.rosterRequiresBrowser is set but the program has athletics data - "
+                      f"remove the flag so the collector runs again")
+                ok = False
+            continue
+        skip = ath.get("skipReason")
+        if (isinstance(skip, str) and skip.strip()) or browser or slug in reviewed:
+            continue
+        print(f"GATE {slug}: published with no athletics data and no recorded reason - give it athletics.skipReason "
+              f"or athletics.rosterRequiresBrowser, or add it to build.PUBLISH_GATE_REVIEWED with a reason and a date")
+        ok = False
+    for slug, entry in sorted(reviewed.items()):
+        reason = entry.get("reason") if isinstance(entry, dict) else None
+        date = entry.get("date") if isinstance(entry, dict) else None
+        if not (isinstance(reason, str) and reason.strip()) or not (isinstance(date, str) and _GATE_DATE.match(date)):
+            print(f"GATE {slug}: PUBLISH_GATE_REVIEWED entry needs a non-empty reason and a YYYY-MM-DD date, has {entry!r}")
+            ok = False
+        if slug not in published:
+            print(f"GATE {slug}: stale PUBLISH_GATE_REVIEWED entry - the program is not published; remove it")
+            ok = False
+        elif has_athletics(slug):
+            print(f"GATE {slug}: stale PUBLISH_GATE_REVIEWED entry - the program now has athletics data; remove it")
+            ok = False
+    return ok
+
+
 # A staged division this repository currently expects, and the exact entry count it must have
 # (issue #140). Like REVIEWED_UNPUBLISHED above, this is a reviewed anchor, not "whatever
 # stagedDivisions says today": a real change - D2 finally onboarded and dropped from
@@ -536,6 +598,12 @@ NCAA_D2_WOMENS_CHAMPIONS = {
 # Reviewed joins from a D2 champion name to a registry slug, for the ones normalisation cannot reach.
 # Empty while no D2 program is published; each entry is a reviewed line in the PR that adds it.
 D2_TITLE_SLUGS: dict[str, str] = {}
+# Division III (#94): the cited NCAA_D3_WOMENS_CHAMPIONS table is added in its own PR, keyed by champion name
+# as D2's is, together with its "D3" entry in CHAMPION_TABLES below and 'D3' in public/index.html's
+# TITLE_TABLE_DIVISIONS (the two must name the same divisions). Until then a D3 program matches nothing and
+# publishes no titles. The D3 join needs no other code: title_matches() reads a name-keyed table, and this
+# pin table, for every division but D1.
+D3_TITLE_SLUGS: dict[str, str] = {}
 CHAMPION_TABLES = {"D1": NCAA_D1_WOMENS_CHAMPIONS, "D2": NCAA_D2_WOMENS_CHAMPIONS}
 
 _TITLE_NAME_DROP = re.compile(r"\b(the|university|universities|college|of|at)\b")
@@ -551,15 +619,16 @@ def _title_name(s: str) -> str:
 
 def title_matches(program: dict, champion: str | None, division: str | None) -> bool:
     """Is this program the champion the table names? D1 names a slug, so the comparison is exact. D2
-    names a school, so it is an exact match on the normalised registry name or short name, or a pinned
-    entry in D2_TITLE_SLUGS. Nothing fuzzy: a near-match here publishes another school's title. A
+    and D3 name a school, so it is an exact match on the normalised registry name or short name, or a pinned
+    entry in that division's D2_TITLE_SLUGS / D3_TITLE_SLUGS. Nothing fuzzy: a near-match here publishes another school's title. A
     division with no champions table of its own matches nothing - it does not borrow another's."""
     if not champion or division not in CHAMPION_TABLES:
         return False
     if division == "D1":
         return champion == program.get("slug")
-    if D2_TITLE_SLUGS.get(champion):
-        return D2_TITLE_SLUGS[champion] == program.get("slug")
+    pins = {"D2": D2_TITLE_SLUGS, "D3": D3_TITLE_SLUGS}.get(division) or {}
+    if pins.get(champion):
+        return pins[champion] == program.get("slug")
     want = _title_name(champion)
     return bool(want) and want in {_title_name(program.get("name") or ""), _title_name(program.get("shortName") or "")}
 
@@ -1658,7 +1727,8 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     stale_ok = check_no_stale_profiles(registry)
     membership_ok = check_membership_anchor(registry)
     staged_ok = check_staged_registry(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok
+    gate_ok = check_publish_gate(registry)
+    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok and gate_ok
 
 
 def check_camps_index(registry: dict) -> bool:

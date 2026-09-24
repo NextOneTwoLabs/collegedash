@@ -680,14 +680,14 @@ const COND_UNITS = {
   score: { hint: 'A score, e.g. 1200', fmt: v => String(v), parse: t => parseDecimal(t) },
   fahrenheit: { hint: 'Degrees Fahrenheit, e.g. 75', fmt: v => `${trimNum(v, 1)}°F`, parse: t => parseDecimal(String(t ?? '').trim().replace(/\s*°?\s*F$/i, '').replace(/\s*°$/, '')) },
 };
-/* What does not apply to a division (owner's decision 3 on #197, issue #198). RPI and College Cups are
-   Division I measures on this site: no Division II RPI is collected, and the College Cup is Division I's
-   final four. For a program in a division listed here the measure is NOT APPLICABLE - not missing: its RPI
+/* What does not apply to a division (owner's decision 3 on #197, issue #198; Division III on #94 and #246).
+   RPI and College Cups are Division I measures on this site: no Division II or Division III RPI is collected,
+   and the College Cup is Division I's final four. For a program in a division listed here the measure is NOT APPLICABLE - not missing: its RPI
    and College Cup parts are left out of cards, the table, the profile and Compare; a condition on it
    excludes the program and says so by division rather than counting it as hidden for missing data; and the
    RPI sort puts it after every Division I program. A division not listed keeps today's rule (missing when
    empty), so with the Division I-only index none of this changes a byte. */
-const NOT_APPLICABLE = { rpi: ['D2'], collegeCups: ['D2'] };
+const NOT_APPLICABLE = { rpi: ['D2', 'D3'], collegeCups: ['D2', 'D3'] };
 const appliesTo = (measure, p) => !(NOT_APPLICABLE[measure] || []).includes(p?.division);
 /* National titles are counted per division, from that division's own NCAA champions table (build.py), so
    they are labelled by division (owner's decision 2 on #197): Division I keeps its wording, any other
@@ -696,13 +696,14 @@ const titlesPhrase = (n, division) => division === 'D1' || !division ? `${n} nat
 const titlesLabel = division => division === 'D1' || !division ? 'National titles' : `NCAA ${division} titles`;
 /* A College Cup count comes from the NCAA Division I lists, which vouch for a zero only for a Division I
    program - the same rule as has.titles (issue #115). For any other division a zero is "not collected", and a
-   condition must hide it rather than treat it as a known 0. (A division in NOT_APPLICABLE.collegeCups, D2, is
-   excluded as not applicable before this is read.) */
+   condition must hide it rather than treat it as a known 0. (A division in NOT_APPLICABLE.collegeCups, D2 or D3,
+   is excluded as not applicable before this is read.) */
 const d1Count = (p, v) => (p.division === 'D1' || v > 0) ? v : null;
 /* A national-title count is read from the program's OWN division's NCAA champions table (build.py
    CHAMPION_TABLES, issue #113), so a zero is a real zero in every division that has one: Division I and
-   Division II (issue #206). A division without a table keeps d1Count's rule: its zero is "not collected".
-   This list must name exactly the divisions CHAMPION_TABLES does. */
+   Division II (issue #206). A division without a table keeps d1Count's rule: its zero is "not collected", so
+   a Division III program shows no title count until build.py has a Division III table (#94), and then 'D3'
+   is added here in the same PR. This list must name exactly the divisions CHAMPION_TABLES does. */
 const TITLE_TABLE_DIVISIONS = ['D1', 'D2'];
 const titleCount = (p, v) => (TITLE_TABLE_DIVISIONS.includes(p.division) || v > 0) ? v : null;
 const COND_FIELDS = [
@@ -824,7 +825,7 @@ function condHiddenText(t, conds, unit = '') {
 }
 /* The not-applicable phrase (#198), beside the hidden-for-missing-data one and never folded into it:
      "205 excluded: RPI not applicable to Division II"
-     "43 camps excluded: RPI and College Cups not applicable to Division II"
+     "43 camps excluded: RPI and College Cups not applicable to Division II or Division III"
    '' when no condition excluded anything, which is always the case with a Division I-only index. */
 function condNaTally(items, conds, programOf = x => x) {
   const t = { na: 0, divisions: new Set(), fields: new Set() };
@@ -1029,7 +1030,7 @@ const rankTitle = p => p.academicRank == null ? `${THE_RANK_SOURCE} — this uni
    dash, or a "not collected" line is empty. Where a section has data it renders exactly as it did before;
    every change here is a section being left out. Measures that do not apply to a division (NOT_APPLICABLE,
    #198) are left out for every program in it. The one other division-shaped rule is national titles: the
-   count comes from the NCAA Division I champions list, which vouches for a zero only for a D1 program.
+   count comes from the program's own division's NCAA champions list (TITLE_TABLE_DIVISIONS).
    `r` is an index row (cards, table), `p` a full profile. */
 const HONOR_LISTS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaAppearances', 'confRegularSeasonTitles', 'confTournamentTitles'];
 const has = {
@@ -1051,7 +1052,7 @@ const has = {
   cups: p => appliesTo('collegeCups', p) && ((p.program?.collegeCups || []).length > 0 || !!p.program?._meta?.wikipedia),
   honors: p => !!p.program?._meta?.wikipedia || HONOR_LISTS.some(k => (p.program?.[k] || []).length > 0),
   /* The all-time record is build.py's sum over the Wikipedia seasons table (issue #221). A program with no such
-     table (every Division II program, and Division I pages without one) sums to 0-0-0 over 0 seasons, and a
+     table (every Division II and Division III program, and Division I pages without one) sums to 0-0-0 over 0 seasons, and a
      table whose rows carry no parsed results sums to 0-0-0 over N: neither is a record. The line shows only
      when games were actually counted. It is not recomputed from p.seasons, which covers a few recent years,
      not all time. */
@@ -2108,6 +2109,14 @@ async function tabOverview(p) {
     <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · failing: ${esc(p._build.failed.map(f => f.collector).join(', '))}` : ''}${p._build.skipped?.length ? ` · skipped: ${esc(p._build.skipped.map(s => `${s.collector} (${s.reason.replace(/^[a-z]+: /, '').slice(0, 60)})`).join('; '))}` : ''}</div>`;
 }
 
+/* The note under the Cost table. Division I and II wording is unchanged. Division III awards no athletic
+   scholarships, so "athletic scholarships are separate" would be wrong there (#94); its own sentence cites the
+   NCAA ("Division III schools do not offer athletics scholarships", read 2026-09-23). */
+const D3_AID_URL = 'https://www.ncaa.org/eligibility-center/initial-eligibility-requirements/division-iii';
+function netPriceNote(division) {
+  if (division === 'D3') return `Net price is the average paid by aid recipients. Division III schools award no athletic scholarships (<a href="${D3_AID_URL}" target="_blank" rel="noopener">NCAA</a>); aid is need- or merit-based, as for any student.`;
+  return `Net price is the average paid by aid recipients; athletic scholarships are separate${division === 'D1' ? " (D1 women's soccer allows up to 14 equivalencies, program-dependent)" : ''}.`;
+}
 async function tabSchool(p) {
   const s = p.school;
   if (!s) return '<div class="card empty">School facts not collected yet (College Scorecard).</div>';
@@ -2121,7 +2130,7 @@ async function tabSchool(p) {
     <div class="card"><h3>Cost</h3><table>
       ${kv('Type', esc(dash(s.ownership)))}${kv('Tuition (in-state)', fmtUsd(s.tuitionInState))}${kv('Tuition (out-of-state)', fmtUsd(s.tuitionOutOfState))}
       ${kv('Cost of attendance', fmtUsd(s.costOfAttendance))}${kv('Average net price (after aid)', fmtUsd(s.netPriceAverage))}</table>
-      <p class="small muted" style="margin-top:8px">Net price is the average paid by aid recipients; athletic scholarships are separate${p.division === 'D1' ? " (D1 women's soccer allows up to 14 equivalencies, program-dependent)" : ''}.</p></div>
+      <p class="small muted" style="margin-top:8px">${netPriceNote(p.division)}</p></div>
     <div class="card"><h3>Location</h3><table>
       ${kv('Campus', `${esc(s.city)}, ${esc(s.state)} ${esc(s.zip || '')}`)}${kv('Setting', esc(dash(s.locale)))}${kv('Region', esc(dash(s.region)))}
       ${kv('Website', s.website ? `<a href="https://${esc(s.website.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${esc(s.website)}</a>` : '—')}
@@ -2420,7 +2429,7 @@ async function renderFaq() {
 
     <div class="card"><h3>What should I double-check before acting on it?</h3>
       <ul>
-        <li><b>Tuition and net price.</b> Sticker prices change every year and what a family actually pays depends on financial aid and athletic scholarships. Ask the school.</li>
+        <li><b>Tuition and net price.</b> Sticker prices change every year and what a family actually pays depends on financial aid and, outside Division III, athletic scholarships. Ask the school.</li>
         <li><b>Admission rate and test scores.</b> Published for the whole university, not for recruited athletes, and they move year to year.</li>
         <li><b>Commitments.</b> Recruiting sites list verbal commitments. They are not binding, can be withdrawn, and a name disappearing from a list is only a hint that something changed.</li>
         <li><b>Rosters and coaches.</b> Staff changes and transfers happen mid-year; the official athletics site is the authority.</li>

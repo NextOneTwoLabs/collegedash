@@ -238,6 +238,12 @@ def test_counts_equal_a_direct_computation() -> None:
        doc["programs"]["alpha"] == {"current": 6, "past": 2, "commits": 3, "clubKnown": [4, 2, 2], "schoolKnown": [0, 0, 0]}, doc["programs"]["alpha"])
     ok("a D1 program with nothing known is still a row", doc["programs"]["delta"] == {"current": 1, "past": 0, "commits": 0, "clubKnown": [0, 0, 0], "schoolKnown": [0, 0, 0]})
     ok("the D2 profile is left out of programs and of every club", "gamma" not in doc["programs"] and not any("gamma" in e["programs"] for e in doc["clubs"].values()))
+    # #94: publishing D3 must leave the trends index as it is, apart from the `updated` stamp trends.py writes.
+    # Fails if observe() ever counts a division other than D1 (e.g. its filter becomes "!= 'D2'").
+    with_d3 = record()
+    with_d3.observe({**profile_gamma_d2(), "slug": "epsilon", "division": "D3"}, {"slug": "epsilon", "division": "D3"}, ath={}, tds={}, sw={})
+    masked = lambda d: {k: v for k, v in d.items() if k != "updated"}  # noqa: E731
+    ok("a D3 profile leaves the index unchanged apart from `updated`", masked(with_d3.index()) == masked(record().index()))
     cov = doc["coverage"]
     ok("coverage current: 8 players (6 alpha, 1 beta, 1 delta), 5 known (4 alpha, 1 beta)",
        cov["current"] == {"players": 8, "clubKnown": 5, "schoolNamed": 2, "schoolKnown": None}, cov["current"])
