@@ -1692,7 +1692,15 @@ def classify_camp(name: str | None, ages: str | None = None) -> str:
         return "id"
     if CAMP_DAY_RE.search(t):
         return "youth"
-    return _ages_class(ages)
+    by_ages = _ages_class(ages)
+    if by_ages == "id" and not SOCCER_RE.search(f"{t} {ages or ''}"):
+        # TPM ruling on #296 (Huatuo's gate): ages may raise a row to `id` only when the row ITSELF
+        # says soccer. The page saying soccer is not enough: shippensburg's 'December Indoor Day Clinic'
+        # (grades 9-12) is Field Hockey and wilmington's 'Fall Clinic and Visit Day' (9th-12th) is Boys
+        # Lacrosse, both on soccer-linked camp pages. The row's own detail window is not stored, so
+        # the stored name and ages are what is read - this can only under-promote, never over-promote.
+        return "unknown"
+    return by_ages
 
 
 TEAM_CAMP_RE = re.compile(r"\bteam\s+camps?\b", re.I)

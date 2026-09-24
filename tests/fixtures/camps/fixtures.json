@@ -716,6 +716,31 @@
      "name": "Camp Time: 12:00pm - 6:00pm"
     }
    ]
+  },
+  {
+   "file": "extract/synth-date-crossing.html",
+   "pageUrl": "https://example.edu/camps",
+   "title": "Women's Soccer Camps",
+   "count": 2,
+   "stats": {
+    "generic_named": 1
+   },
+   "expect": [
+    {
+     "name": "Women's Soccer Camps",
+     "startDate": "2026-06-05"
+    },
+    {
+     "name": "Youth Camp",
+     "startDate": "2026-06-12"
+    }
+   ],
+   "reject": [
+    {
+     "name": "Youth Camp",
+     "startDate": "2026-06-05"
+    }
+   ]
   }
  ],
  "robots": [

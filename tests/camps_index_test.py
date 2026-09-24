@@ -263,21 +263,27 @@ def test_classify() -> None:
         got = build.classify_camp(name)
         ok(f"{(name or '')[:52]!r} -> {want}", got == want, f"got {got!r}")
 
-    # #292: stored ages break a tie ONLY when the name says nothing. Cases 2-4 fail on the pre-#292
+    # #292: stored ages break a tie ONLY when the name says nothing, and (TPM ruling on #296) ages
+    # raise a row to 'id' only when the row itself says soccer. Cases 2-3 fail on the pre-#292
     # classifier (fail-first); Cal's fail-first is its extraction fixture (tools/camps_check.py
-    # --fixtures), since its new name alone already reads 'id'. The rest are regression guards.
+    # --fixtures), since its new name alone already reads 'id'. The shippensburg / wilmington shapes
+    # fail if the soccer requirement is removed. The rest are regression guards.
     age_cases = [
         ("Cal Girls Soccer College ID Camp - Fall", "Age Group 13 - 18", "id"),  # Cal, as now extracted
         ("Summer Soccer Camp", "Ages 6-12", "youth"),
-        ("Winter Clinic", "grades 9-12", "id"),
-        ("Fall Clinic and Visit Day", "9th - 12th Grade as of Fall 2026", "id"),  # wilmington-college-oh
+        ("Winter Soccer Clinic", "grades 9-12", "id"),
+        # the row does not say soccer: the page did, the row is Field Hockey / Boys Lacrosse (Huatuo)
+        ("2026 December Indoor Day Clinic", "grades 9-12", "unknown"),                    # shippensburg
+        ("Fall Clinic and Visit Day", "9th - 12th Grade as of Fall 2026", "unknown"),     # wilmington-college-oh
+        ("Goalkeeper Camp", "13 - 18 year old", "unknown"),                              # florida-state: no soccer word
+        ("Soccer Prospect Day", "grades 9-12", "id"),
         # a SINGLE value is unknown, never youth: "7th Grade" is what GRADES_RE keeps of
         # "7th Grade - 12th Grade". Fails if the single-value rule is removed (it would read youth).
         ("Winter Clinic", "7th Grade", "unknown"),
         ("Winter Clinic", "Age 12", "unknown"),
         # a unitless range classifies only when the age and grade readings agree
         ("Winter Clinic", "9-12", "unknown"),
-        ("Winter Clinic", "13 - 18", "id"),
+        ("Winter Soccer Clinic", "13 - 18", "id"),
         ("Goalkeeper Camp", "6th - 12th Grade", "unknown"),  # straddles
         ("Overnight Team Camp", "14 - 19", "unknown"),       # team camps stay out of id
         ("Team Camps", "grades 9-12", "unknown"),
