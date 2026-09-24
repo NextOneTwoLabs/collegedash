@@ -318,6 +318,37 @@ def test_scratch_build_leaves_the_report_alone() -> None:
     check("the swap is undone", build.publishing_run())
 
 
+def test_d2_d3_phase_2_315(table: clubs.Table) -> None:
+    """Issue #315 phase 2 (option A): D2/D3 names seen 5+ times, prepared by rule, pending a Reviewer.
+    Spellings of existing clubs point at them; new clubs take their spellings; the owner-list and
+    unclear names stay unmatched until someone decides them."""
+    to_existing = {"Sporting Iowa ECNL": "Sporting Iowa", "Dallas Texans ECNL": "Dallas Texans",
+                   "Connecticut Football Club": "Connecticut FC", "PDA White ECNL": "PDA",
+                   "Club: Baltimore Armour GA": "Baltimore Armour", "PA Classics Elite Blue": "PA Classics"}
+    for raw, name in to_existing.items():
+        m = table.match(raw)
+        check(f"#315 alias: {raw!r} -> {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
+    together = [("Wisconsin United FC", "Wisconsin United"), ("NJ Premier", "NJ Premier FC"),
+                ("Albany Alleycats", "Albany Alleycats ECRL"), ("Skyline Elite", "Skyline Elite GA")]
+    for a, b in together:
+        ma, mb = table.match(a), table.match(b)
+        check(f"#315 new club: {a!r} and {b!r} are one club", ma.status == mb.status == "matched"
+              and ma.clubId == mb.clubId, f"{ma.clubId} vs {mb.clubId}")
+    # kept apart by the rules: a longer name is its own club, never folded into its prefix
+    check("#315 near-miss: Rush Wisconsin West stays apart from Rush Wisconsin",
+          table.match("Rush Wisconsin West").clubId != table.match("Rush Wisconsin").clubId)
+    check("#315: 'She/Her' is not a club", table.match("She/Her").status == "not-a-club", table.match("She/Her").status)
+    held = ["Beach FC ECNL", "PDA Shore", "PDA SCP", "PDA North", "Cedar Stars", "Cedar Stars GA", "Hex/Keystone FC",
+            "Liverpool FC", "FSA FC", "Force FC"]
+    for raw in held:
+        check(f"#315 held for a decision: {raw!r} stays unmatched", table.match(raw).status == "unmatched",
+              f"{table.match(raw).status} {table.match(raw).name}")
+    with open(clubs.TABLE_PATH, encoding="utf-8") as f:
+        rows = [c for c in json.load(f)["clubs"] if c.get("prepared") == "2026-09-24"]
+    check("#315: every new row says it is prepared, pending a Reviewer",
+          len(rows) >= 60 and all("pending a Reviewer" in c.get("preparedBy", "") for c in rows), str(len(rows)))
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -336,6 +367,7 @@ def main() -> int:
     test_suggestions_are_only_suggestions(table)
     test_committed_table(table)
     test_owner_decisions_233(table)
+    test_d2_d3_phase_2_315(table)
     test_scratch_build_leaves_the_report_alone()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
     return 1 if FAILS else 0
