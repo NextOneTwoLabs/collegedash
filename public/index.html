@@ -2429,6 +2429,36 @@ async function tabCamps(p) {
 const US_STATES = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
 // A Compare cell for a measure that does not apply to the program's division (#198): said, not dashed.
 const notApplicableCell = p => `<span class="muted small">not applicable to ${esc(divisionName(p.division))}</span>`;
+/* Cost of attendance for the residency picked on Compare (#201). school.costOfAttendance is College Scorecard's
+   COSTT4_A, one figure, which for a public school is built on IN-STATE tuition and fees. Shown as-is to an
+   out-of-state family it can sit below out-of-state tuition alone (140 of 421 publics at the time of #201). So for a
+   public school the out-of-state figure is derived: published cost - in-state tuition + out-of-state tuition, and
+   labelled as an estimate. Private schools publish one tuition, so their figure is unchanged. No figure is shown
+   that is below the tuition it includes; where the parts to derive it are missing, '—' with the reason.
+   Returns { inS, outS } for "(not set)" (both shown, like the Tuition row), or { value, basis } for a set state. */
+function coaFor(s, home) {
+  s = s || {};
+  const coa = s.costOfAttendance, inT = s.tuitionInState, outT = s.tuitionOutOfState;
+  if (coa == null) return { value: null, basis: null };
+  if (s.ownership !== 'Public') return { value: coa, basis: null };
+  const okIn = inT == null || coa >= inT ? coa : null; // the published figure never below the in-state tuition it includes
+  const est = okIn != null && inT != null && outT != null ? coa - inT + outT : null;
+  if (!home) return { inS: okIn, outS: est };
+  return home === s.state ? { value: okIn, basis: 'in-state' } : { value: est, basis: 'out-of-state' };
+}
+const COA_SRC = 'College Scorecard cost of attendance (COSTT4_A), published on an in-state tuition basis for public schools';
+const COA_EST = 'Estimate: Scorecard cost of attendance minus in-state tuition plus out-of-state tuition. Scorecard publishes no out-of-state cost of attendance.';
+function coaCell(s, home) {
+  const r = coaFor(s, home);
+  if ('inS' in r) return r.inS == null && r.outS == null ? '—'
+    : `<span title="${esc(COA_SRC)}">${fmtUsd(r.inS)} in</span> / <span title="${esc(COA_EST)}">${r.outS == null ? '—' : fmtUsd(r.outS)} out <span class="muted small">(est.)</span></span>`;
+  if (r.value == null) return r.basis === 'out-of-state' && s?.costOfAttendance != null
+    ? `— <span class="muted small">out-of-state figure not available</span>` : '—';
+  if (!r.basis) return fmtUsd(r.value);
+  return r.basis === 'in-state'
+    ? `<b>${fmtUsd(r.value)}</b> <span class="muted" title="${esc(COA_SRC)}">in-state</span>`
+    : `<b>${fmtUsd(r.value)}</b> <span class="muted" title="${esc(COA_EST)}">out-of-state, est.</span>`;
+}
 async function renderCompare() {
   const idx = await loadIndex();
   const picked = S.compare.filter(s => idx.programs.some(p => p.slug === s)).slice(0, 4);
@@ -2459,7 +2489,7 @@ async function renderCompare() {
       ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
     ]],
     ['Cost', [
-      ['Tuition / yr', tuitionRow], ['Cost of attendance', p => fmtUsd(p.school?.costOfAttendance)],
+      ['Tuition / yr', tuitionRow], ['Cost of attendance', p => coaCell(p.school, home)],
       ['Avg net price after aid', p => `${fmtUsd(p.school?.netPriceAverage)} <span class="muted small">average, not a family estimate</span>`],
     ]],
     ['Campus life', [
