@@ -213,3 +213,73 @@ test('focus: the sidebar ✕ hands focus on from other views too, where the page
   assert.deepEqual(await clickIn('#sidebar', x), { region: '#sidebar', fav: y });
   assert.equal(app(), 'LIST VIEW');
 });
+
+// Issue #297: syncToggles() refreshes every [data-fav] / [data-cmp] control after a click, and used to rewrite the
+// sidebar's ✕ remove buttons (which carry data-fav / data-cmp too) into ★ / "⇄ Comparing". Here document.querySelectorAll
+// answers from the markup actually drawn in #app and #sidebar, honouring ':not(.cls)' clauses as a browser would, and
+// every button it hands out is kept so the test can read what the page wrote into it. A human still checks the
+// glyph in a browser at desktop and 400 px.
+function withButtonQuery(fn) {
+  const handed = [];
+  const query = sel => {
+    const m = /^\[data-(fav|cmp)\]((?::not\(\.[\w-]+\))*)$/.exec(sel);
+    if (!m) return [];
+    const excluded = [...m[2].matchAll(/\.([\w-]+)/g)].map(x => x[1]);
+    const out = [];
+    for (const region of ['#app', '#sidebar']) {
+      const html = sandbox.document.querySelector(region).innerHTML;
+      for (const b of html.matchAll(/<button class="([^"]*)"[^>]*?\bdata-(fav|cmp)="([^"]+)"[^>]*>([^<]*)<\/button>/g)) {
+        const cls = b[1].split(/\s+/);
+        if (b[2] !== m[1] || excluded.some(c => cls.includes(c))) continue;
+        out.push({ region, cls, dataset: { [b[2]]: b[3] }, textContent: b[4], setAttribute() { },
+          classList: { contains: c => cls.includes(c), toggle() { } },
+          matches: s => s.split(',').some(x => x.trim().startsWith('.') && cls.includes(x.trim().slice(1))) });
+      }
+    }
+    handed.push(...out);
+    return out;
+  };
+  const saved = sandbox.document.querySelectorAll;
+  sandbox.document.querySelectorAll = query;
+  return fn(handed).finally(() => { sandbox.document.querySelectorAll = saved; });
+}
+
+test('#297: after unsaving, the sidebar shortlist ✕ buttons stay ✕ while the stars elsewhere are refreshed', async () => {
+  await threeSaved();
+  sandbox.location.hash = '#/';
+  const [x, y] = favOrder('#sidebar');
+  sandbox.document.querySelector('#app').innerHTML = [x, y].map(s =>
+    `<button class="star-btn starred" data-fav="${s}" aria-pressed="true" title="Remove from shortlist">★</button>`).join('');
+  await withButtonQuery(async handed => {
+    await clickIn('#sidebar', x);
+    const rms = handed.filter(b => b.region === '#sidebar' && b.cls.includes('rm'));
+    const stars = handed.filter(b => b.region === '#app');
+    assert.ok(stars.length, 'syncToggles did not refresh the stars in #app at all');
+    assert.equal(stars.find(b => b.dataset.fav === x)?.textContent, '☆', 'the unsaved program\'s star was not refreshed');
+    assert.match(sandbox.document.querySelector('#sidebar').innerHTML, /class="rm" data-fav="[^"]+"[^>]*>✕</, 'no sidebar ✕ buttons were drawn to check');
+    assert.deepEqual(rms.map(b => b.textContent).filter(t => t !== '✕'), [], 'a sidebar ✕ remove button was rewritten');
+  });
+});
+
+test('#297: removing from the sidebar comparison list leaves its ✕ buttons as ✕', async () => {
+  const idx = await sandbox.loadIndex();
+  const [x, y, z] = idx.programs.slice(0, 3).map(p => p.slug);
+  S.compare.splice(0, S.compare.length, x, y, z);
+  sandbox.location.hash = '#/';
+  S.sidebarTab = 'compare';
+  sandbox.renderSidebar();
+  assert.match(sandbox.document.querySelector('#sidebar').innerHTML, new RegExp(`class="rm" data-cmp="${y}"`), 'compare list did not render');
+  sandbox.document.querySelector('#app').innerHTML = `<button class="cmp-btn on" data-cmp="${y}" aria-pressed="true">⇄ Comparing</button>`;
+  await withButtonQuery(async handed => {
+    const btn = { dataset: { cmp: x } };
+    const ev = { target: { closest: sel => (sel === '[data-cmp]' ? btn : null) }, stopPropagation() { }, preventDefault() { } };
+    listeners.filter(l => l.type === 'click').forEach(l => l.fn(ev));
+    await settle(); await settle();
+    assert.ok(!S.compare.includes(x), 'the click did not remove the program from comparison');
+    assert.equal(handed.find(b => b.region === '#app')?.textContent, '⇄ Comparing', 'syncToggles did not refresh the compare button in #app');
+    const rms = handed.filter(b => b.region === '#sidebar' && b.cls.includes('rm'));
+    assert.match(sandbox.document.querySelector('#sidebar').innerHTML, /class="rm" data-cmp="[^"]+"[^>]*>✕</, 'no sidebar ✕ buttons were drawn to check');
+    assert.deepEqual(rms.map(b => b.textContent).filter(t => t !== '✕'), [], 'a sidebar comparison ✕ button was rewritten');
+  });
+  S.sidebarTab = 'shortlist';
+});

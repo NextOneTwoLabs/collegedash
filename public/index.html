@@ -1169,9 +1169,12 @@ document.addEventListener('click', e => {
   const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav, f); syncToggles(); return; }
   const c = e.target.closest('[data-cmp]'); if (c) { e.stopPropagation(); e.preventDefault(); toggleCompare(c.dataset.cmp); syncToggles(); return; }
 });
-function syncToggles() { // refresh every star / compare control in place without re-rendering the view
-  document.querySelectorAll('[data-fav]').forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
-  document.querySelectorAll('[data-cmp]').forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
+/* Refresh every star / compare control in place without re-rendering the view. The sidebar's and Compare's ✕
+   remove buttons (.rm, .chip-x) carry data-fav / data-cmp too but are not toggles: they keep their ✕ (#297). */
+const NOT_RM = ':not(.rm):not(.chip-x)';
+function syncToggles() {
+  document.querySelectorAll('[data-fav]' + NOT_RM).forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
+  document.querySelectorAll('[data-cmp]' + NOT_RM).forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
   document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('in-compare', S.compare.includes(c.dataset.slug)));
 }
 
@@ -2608,7 +2611,7 @@ async function tabSchool(p) {
       ${prov(s._meta)}</div>
     <div class="card"><h3>Cost</h3><table>
       ${kv('Type', esc(dash(s.ownership)))}${kv('Tuition (in-state)', fmtUsd(s.tuitionInState))}${kv('Tuition (out-of-state)', fmtUsd(s.tuitionOutOfState))}
-      ${kv('Cost of attendance', fmtUsd(s.costOfAttendance))}${kv('Average net price (after aid)', fmtUsd(s.netPriceAverage))}</table>
+      ${kv('Cost of attendance', coaCell(s, S.residency))}${kv('Average net price (after aid)', fmtUsd(s.netPriceAverage))}</table>
       <p class="small muted" style="margin-top:8px">${netPriceNote(p.division)}</p></div>
     <div class="card"><h3>Location</h3><table>
       ${kv('Campus', `${esc(s.city)}, ${esc(s.state)} ${esc(s.zip || '')}`)}${kv('Setting', esc(dash(s.locale)))}${kv('Region', esc(dash(s.region)))}

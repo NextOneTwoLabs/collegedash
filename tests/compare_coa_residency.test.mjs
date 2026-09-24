@@ -14,6 +14,7 @@
 //   - "(not set)": both figures, the out-of-state one marked (est.);
 //   - private: the published figure, identical for every residency and with no residency label;
 //   - missing fields show '—', and a public COA below its own in-state tuition is not shown at all.
+// Issue #299: the Profile page's School tab (tabSchool) shows the same residency treatment, checked the same ways.
 // What it cannot prove: layout at 400 px and the tooltip wording as read in a browser (checked by hand).
 // COA_TEST_HTML (optional) points at another copy of index.html, to show these checks failing on a mutation.
 import { test } from 'node:test';
@@ -66,7 +67,7 @@ function loadPage(extra = {}) {
   const lines = fs.readFileSync(HTML, 'utf8').split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'index.html: could not find the inline <script>');
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ['S','renderCompare']) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ['S','renderCompare','tabSchool']) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return sandbox;
@@ -147,4 +148,37 @@ test("missing fields show '—'; a public COA below its own in-state tuition is 
   assert.equal(ca.coa[0], '—'); assert.equal(ca.coa[3], '—');
   assert.deepEqual(dollars(ca.coa[1]), [U.costOfAttendance]);
   assert.equal(text(ca.coa[2]), '—', 'a COA below the in-state tuition it includes is shown');
+});
+
+// Issue #299: the Profile page's School tab shows the same residency treatment as Compare. Residency is the one
+// "I live in" choice (S.residency), set on Compare and remembered.
+async function profileCoa(sb, profile, home) {
+  sb.S.residency = home;
+  const html = await sb.tabSchool(profile);
+  const m = /<tr><th>Cost of attendance<\/th><td>([\s\S]*?)<\/td><\/tr>/.exec(html);
+  assert.ok(m, 'Profile has no "Cost of attendance" row');
+  return m[1];
+}
+test('#299 Profile, public: in-state label, out-of-state estimate labelled est. with its tooltip, both when unset', async () => {
+  const sb = loadPage();
+  const est = U.costOfAttendance - U.tuitionInState + U.tuitionOutOfState;
+  const ca = await profileCoa(sb, UCLA, 'CA');
+  assert.deepEqual(dollars(ca), [U.costOfAttendance]);
+  assert.match(text(ca), /in-state/); assert.doesNotMatch(text(ca), /out-of-state|est\./);
+  const ny = await profileCoa(sb, UCLA, 'NY');
+  assert.deepEqual(dollars(ny), [est]);
+  assert.match(text(ny), /out-of-state, est\./);
+  assert.match(ny, /title="Estimate: [^"]*in-state tuition[^"]*out-of-state tuition/, 'the estimate has no tooltip saying how it is built');
+  assert.ok(dollars(ny)[0] >= U.tuitionOutOfState, 'out-of-state COA shown below out-of-state tuition');
+  const unset = await profileCoa(sb, UCLA, '');
+  assert.deepEqual(dollars(unset), [U.costOfAttendance, est]);
+  assert.match(text(unset), /in \/ .* out \(est\.\)/);
+});
+test("#299 Profile, private: the published figure at every residency, no label; missing fields show '—'", async () => {
+  const sb = loadPage();
+  for (const home of ['', 'CA', 'NY']) assert.equal(await profileCoa(sb, STANFORD, home), usd(S_.costOfAttendance), `Stanford COA changed at residency "${home}"`);
+  const noCoa = { ...UCLA, school: { ...U, costOfAttendance: null } };
+  for (const home of ['', 'CA', 'NY']) assert.equal(await profileCoa(sb, noCoa, home), '—');
+  const noOut = { ...UCLA, school: { ...U, tuitionOutOfState: null } };
+  assert.deepEqual(dollars(await profileCoa(sb, noOut, 'NY')), [], 'no out-of-state tuition: the in-state COA must not stand in for it');
 });
