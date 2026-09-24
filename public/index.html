@@ -417,6 +417,7 @@ details p { font-size: 12px; color: var(--text-secondary); margin: 6px 0; }
 .trend-input { width: 100%; height: 38px; padding: 8px 10px; font-size: 13px; font-family: var(--font); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); background: var(--bg-body); }
 .trend-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 .trend-hits { display: flex; flex-wrap: wrap; gap: 6px; }
+.trend-hit.kbd { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 a.pill { text-decoration: none; }
 .trend-table th .th-sub { display: block; font-weight: 500; font-size: 10px; }
 .trend-table td.trend-sep, .trend-table th.trend-sep { border-left: 1px solid var(--border); }
@@ -1960,6 +1961,45 @@ function trendsSortCmp(a, b) { // most players first; commits never decide the o
   return (b.current + b.past) - (a.current + a.past) || b.current - a.current || (b.commits || 0) - (a.commits || 0)
     || String(a.slug || a.name || '').localeCompare(String(b.slug || b.name || ''));
 }
+/* The #/trends type-ahead boxes (#307). A club's or school's search key is its name plus the `aka` keys the index
+   carries (a club's reviewed aliases from data/clubs.json, e.g. "mvla"; a school's roster spellings that resolved
+   to it, e.g. "southlake carroll"); both sides are cleaned the way clubs.clean_key
+   does ('&' spelled out, apostrophes dropped) so an alias written as a cleaned key matches what a person types. */
+const trendsKey = s => normText(String(s || '').replace(/&/g, ' and ').replace(/['’]/g, ''));
+// "mvla" -> "MVLA": a one-word key of up to five letters is a short name and reads in capitals; any other key is
+// stored lower-case and reads with capital initials ("southlake carroll" -> "Southlake Carroll")
+const trendsAkaLabel = k => /^[a-z]{2,5}$/.test(k) ? k.toUpperCase() : k.replace(/\b[a-z]/g, c => c.toUpperCase());
+// The clubs and schools a query finds: by name, else by the shortest alias it hits (`aka` is stored shortest first).
+function trendsFind(entities, q) {
+  const nq = trendsKey(q);
+  if (!nq) return [];
+  return entities.map(e => {
+    if (e.norm.includes(nq)) return { e };
+    const aka = (e.aka || []).find(k => k.includes(nq));
+    return aka ? { e, aka } : null;
+  }).filter(Boolean);
+}
+// Arrow keys move through the hits, wrapping; Enter opens the marked hit, or the first when none is marked.
+function trendsKeyStep(at, key, count) {
+  if (!count) return { at: -1 };
+  if (key === 'ArrowDown') return { at: (at + 1) % count };
+  if (key === 'ArrowUp') return { at: at <= 0 ? count - 1 : at - 1 };
+  if (key === 'Enter') return { at, go: Math.max(at, 0) };
+  return { at };
+}
+function trendsWireTypeahead(input, box, render) {
+  let at = -1;
+  input.oninput = () => { at = -1; box.innerHTML = render(input.value); };
+  input.onkeydown = e => {
+    const list = [...box.querySelectorAll('a.trend-hit')], step = trendsKeyStep(at, e.key, list.length);
+    if (step.at === at && step.go == null) return;
+    e.preventDefault();
+    at = step.at;
+    list.forEach((a, i) => { a.classList.toggle('kbd', i === at); a.setAttribute('aria-selected', i === at ? 'true' : 'false'); });
+    if (step.go != null) location.hash = list[step.go].getAttribute('href');
+    else list[at]?.scrollIntoView?.({ block: 'nearest' });
+  };
+}
 function trendsProgramsFor(doc, kind, id) {
   const entry = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
   if (!entry) return [];
@@ -2022,21 +2062,40 @@ async function renderTrends(kind, rawId) {
   const total = e => Object.values(e.programs).reduce((a, [c, p]) => a + c + p, 0);
   const entities = Object.entries(doc.clubs).map(([eid, e]) => ({ kind: 'club', id: eid, name: e.name, state: e.state, unmatched: !!e.unmatched, total: total(e) }))
     .concat(hasSchools ? Object.entries(doc.schools).map(([eid, e]) => ({ kind: 'school', id: eid, name: e.name, state: e.state, city: e.city, total: total(e) })) : []);
-  entities.forEach(e => { e.norm = normText(e.name); });
+  entities.forEach(e => { e.norm = trendsKey(e.name); e.aka = ((e.kind === 'club' ? doc.clubs : doc.schools)[e.id].aka || []).map(trendsKey); });
 
   // The picker: a name search over every club (and school) in the index, and a program select.
-  const hit = e => `<a class="pill trend-hit${e.kind === kind && e.id === id ? ' active' : ''}" href="${trendsHref(e.kind, e.id)}">${esc(e.name)}<span class="pill-sub">${[e.kind === 'school' ? 'HS' : '', e.state, `${e.total} player${e.total === 1 ? '' : 's'}`].filter(Boolean).join(' · ')}${e.unmatched ? ' · unmatched' : ''}</span></a>`;
+  const hit = ({ e, aka }) => `<a class="pill trend-hit${e.kind === kind && e.id === id ? ' active' : ''}" href="${trendsHref(e.kind, e.id)}">${esc(e.name)}<span class="pill-sub">${[aka ? `also known as ${esc(trendsAkaLabel(aka))}` : '', e.kind === 'school' ? 'HS' : '', [e.city, e.state].filter(Boolean).join(', '), `${e.total} player${e.total === 1 ? '' : 's'}`].filter(Boolean).join(' · ')}${e.unmatched ? ' · unmatched' : ''}</span></a>`;
+  // What the page below is showing, named in a search's no-match line so the header, the card and the search
+  // never disagree about the selection (#307: the header kept "MENLO SCHOOL" beside a bare "no match").
+  const selProg = kind === 'program' && id && doc.programs[id] ? idx.programs.find(p => p.slug === id) : null;
+  const selected = (kind === 'club' || kind === 'school') && id ? (kind === 'school' ? doc.schools : doc.clubs)?.[id]?.name
+    : selProg ? displayName(selProg) : '';
+  const noMatch = (what, q) => `<span class="small muted">No ${what} in the index matches “${esc(q)}”.${selected ? ` Still showing ${esc(selected)} below; pick another to change it.` : ''}</span>`;
   const hitsHtml = q => {
-    const nq = normText(q);
-    const list = (nq ? entities.filter(e => e.norm.includes(nq)) : entities.filter(e => e.kind === 'club' && !e.unmatched))
-      .sort((a, b) => b.total - a.total || a.norm.localeCompare(b.norm)).slice(0, 12);
-    return list.map(hit).join('') || `<span class="small muted">No club${hasSchools ? ' or high school' : ''} in the index matches “${esc(q)}”.</span>`;
+    const found = trendsKey(q) ? trendsFind(entities, q) : entities.filter(e => e.kind === 'club' && !e.unmatched).map(e => ({ e }));
+    const list = found.sort((a, b) => b.e.total - a.e.total || a.e.norm.localeCompare(b.e.norm)).slice(0, 12);
+    return list.map(hit).join('') || noMatch(`club${hasSchools ? ' or high school' : ''}`, q);
   };
-  const d1 = idx.programs.filter(p => doc.programs[p.slug]).sort((a, b) => displayName(a).localeCompare(displayName(b)));
+  // The program box: the site's own program search (matchScore: name, short name, other names, nickname) over the
+  // programs the index carries; empty, it offers the programs with the most players.
+  const progs = idx.programs.filter(p => doc.programs[p.slug]);
+  const progPlayers = p => doc.programs[p.slug].current + doc.programs[p.slug].past;
+  // Stand-in for #308's shared programLine() (division first); switched to programLine() once #308 is on main.
+  const progLine = p => [divisionTag(p.division), esc(p.conference || '')].filter(Boolean).join(' · ');
+  const progHit = ({ p, why }) => `<a class="pill trend-hit${kind === 'program' && id === p.slug ? ' active' : ''}" href="#/trends/program/${esc(p.slug)}">${esc(displayName(p))}<span class="pill-sub">${progLine(p)}${why ? ` · ${esc(why)}` : ''}</span></a>`;
+  const progHitsHtml = q => {
+    const nq = normText(q), exact = x => normText(x.m.why) === nq; // "cardinal": the Cardinal before the Cardinals
+    const list = nq ? progs.map(p => ({ p, m: matchScore(p, nq) })).filter(x => x.m)
+      .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || progPlayers(b.p) - progPlayers(a.p)).map(x => ({ p: x.p, why: x.m.why }))
+      : progs.slice().sort((a, b) => progPlayers(b) - progPlayers(a) || displayName(a).localeCompare(displayName(b))).map(p => ({ p }));
+    return list.slice(0, 12).map(progHit).join('') || noMatch('program', q);
+  };
   const picker = `<div class="card trend-picker">
       <div class="trend-picker-row"><label class="trend-label" for="trendsQ">Club${hasSchools ? ' or high school' : ''}</label><input class="trend-input" id="trendsQ" type="search" placeholder="Type a club name, e.g. MVLA" autocomplete="off" aria-controls="trendsHits"></div>
       <div class="trend-hits" id="trendsHits" aria-live="polite">${hitsHtml('')}</div>
-      <div class="trend-picker-row"><label class="trend-label" for="trendsProgram">Or a program</label><select class="season-select" id="trendsProgram"><option value="">Choose a program…</option>${[...new Set(d1.map(p => p.division))].map(d => `<optgroup label="${esc(divisionName(d))}">${d1.filter(p => p.division === d).map(p => `<option value="${esc(p.slug)}"${kind === 'program' && id === p.slug ? ' selected' : ''}>${esc(displayName(p))}</option>`).join('')}</optgroup>`).join('')}</select></div>
+      <div class="trend-picker-row"><label class="trend-label" for="trendsProgram">Or a program</label><input class="trend-input" id="trendsProgram" type="search" placeholder="Type a program, e.g. Stanford or Cardinal" autocomplete="off" aria-controls="trendsProgHits"></div>
+      <div class="trend-hits" id="trendsProgHits" aria-live="polite">${progHitsHtml('')}</div>
     </div>`;
 
   const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.`;
@@ -2098,8 +2157,8 @@ async function renderTrends(kind, rawId) {
   }
   app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: `${subtitle} · ${bits.join(' · ')}`, tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
   wireAskBanner(); wireTabs();
-  const q = $('#trendsQ'); if (q) q.oninput = () => { const h = $('#trendsHits'); if (h) h.innerHTML = hitsHtml(q.value); };
-  const sel = $('#trendsProgram'); if (sel) sel.onchange = () => { if (sel.value) location.hash = `#/trends/program/${sel.value}`; };
+  const q = $('#trendsQ'), qh = $('#trendsHits'); if (q && qh) trendsWireTypeahead(q, qh, hitsHtml);
+  const pq = $('#trendsProgram'), ph = $('#trendsProgHits'); if (pq && ph) trendsWireTypeahead(pq, ph, progHitsHtml);
   // Current players of a program, loaded from its profile only when the visitor opens the row (public roster names only).
   app.querySelectorAll('details.trend-players').forEach(d => d.addEventListener('toggle', async () => {
     if (!d.open || d.dataset.loaded) return; d.dataset.loaded = '1';
