@@ -182,11 +182,12 @@ test('the Pipelines program page subtitle reads "Name · D1 · Conference · Cit
   assert.match(page, /^<p>AlphaTU · <span class="div-tag" title="Division I">D1<\/span><span class="pl-rest"> · Test D1 Conference · Alphaville, CA<\/span> · 3 current players, 2 former, 1 commit<\/p>/);
 });
 
-test('a D2 or D3 program on Pipelines (Division I index) is named with its division in words', () => {
+test('a D2 or D3 program on Pipelines is in the index (#315) and named with its division', () => {
   assert.equal(REAL.offIndex.length, 2);
   for (const [p, html] of REAL.offIndex) {
     const words = { D2: 'Division II', D3: 'Division III' }[p.division];
-    assert.ok(html.includes(`${p.shortName} is a ${words} program`), `${p.slug}: the note does not name ${words}`);
+    assert.ok(!html.includes('not in the clubs and schools index'), `${p.slug}: read as outside the index`);
+    assert.ok(html.includes(`title="${words}">${p.division}</span>`), `${p.slug}: the page does not name ${words}`);
   }
 });
 

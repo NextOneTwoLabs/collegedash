@@ -1256,16 +1256,16 @@ def annotate_roster_schools(roster: dict | None, *, division: str, table=None, r
     the NCES school id when exactly one school in the hometown's state carries that name, and the
     status (matched / unmatched / ambiguous / outside-us), per issue #229. Never without the state.
 
-    D1 only for now (the owner's decision 7 on #225: D1 first, then D2 on the same model). A D2
-    roster is left as it is - no `schoolInfo` - rather than annotated and not counted."""
-    if not roster or division != "D1":
+    Every division since #315 (D1 only before it), by the same rule; `division` is tallied in the
+    review report so a D2 or D3 unmatched name is seen as such."""
+    if not roster:
         return
     table = table or schools.load_table()
     for q in roster["players"]:
         m = table.match(q.get("highSchool"), q.get("hometown"))
         q["schoolInfo"] = None if m.status == "none" else m.as_dict()
         if recorder is not None:
-            recorder.observe(q, m, slug=roster.get("_slug"))
+            recorder.observe(q, m, slug=roster.get("_slug"), division=division)
 
 
 def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dict]:
@@ -2011,7 +2011,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     school_report = (school_recorder.write() if publishing
                      else school_recorder.report(common.read_json(schools.REVIEW_PATH)))
     ss = school_report["summary"]
-    common.log(f"build: high schools (D1) {ss['matched']} of {ss['playersWithAHighSchool']} players matched "
+    common.log(f"build: high schools (all divisions) {ss['matched']} of {ss['playersWithAHighSchool']} players matched "
                f"({ss['matchedShareOfPlayersWithAHighSchool']}%) to {ss['distinctSchoolsMatched']} NCES schools; "
                f"{ss['unmatched']} unmatched ({ss['unmatchedWithoutAState']} with no state), "
                f"{ss['ambiguous']} ambiguous, {ss['outsideUS']} outside the US "

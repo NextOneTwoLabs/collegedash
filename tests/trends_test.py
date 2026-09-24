@@ -17,7 +17,12 @@ What this proves
 * A past player's club comes from the recruiting records and the past roster page's Club column,
   resolved by the same most-recent-source rule as a current player's.
 * Unmatched spellings are counted in the open; placeholders and empty clubs are not counted.
-* D2 profiles are left out entirely; a program with nothing known is still in `programs`.
+* D1, D2 and D3 profiles are all counted (#315); a program with nothing known is still in `programs`.
+  `divisions` replaces the v1 field `"division": "D1"`.
+* D2/D3 commits are "not collected" (#315, C1): null, never 0, in the program row, in every club and school
+  cell, in the totals and in the coverage - even for a D2 program that holds a verbal commit.
+* Coverage is per division (#315, C2): a D2-only result states the D2 rate, never the merged one.
+* The published index stays under a 450 KB gzip budget (#315): growth is a decision, not a surprise.
 * `schoolInfo` (issue #229): absent in the build -> `schools` is null and the coverage says "not
   available", never 0; present -> matched schools are counted, ambiguous and unmatched are not;
   commits carry no school today, so their school count is null.
@@ -30,6 +35,7 @@ What this proves
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import os
 import sys
@@ -175,8 +181,8 @@ def direct_counts(profiles_and_sources) -> dict[str, dict[str, list[int]]]:
     the recorder: the same definitions, a different route."""
     out: dict[str, dict[str, list[int]]] = {}
 
-    def add(eid, slug, col):
-        out.setdefault(eid, {}).setdefault(slug, [0, 0, 0])[col] += 1
+    def add(eid, slug, col, d1=True):
+        out.setdefault(eid, {}).setdefault(slug, [0, 0, 0 if d1 else None])[col] += 1
 
     def entry_of(info):
         if not info or info.get("status") not in ("matched", "unmatched"):
@@ -184,14 +190,13 @@ def direct_counts(profiles_and_sources) -> dict[str, dict[str, list[int]]]:
         return info["clubId"] if info.get("status") == "matched" else "raw:" + info["key"]
 
     for prof, ath, cands in profiles_and_sources:
-        if prof["division"] != "D1":
-            continue
+        d1 = prof["division"] == "D1"
         slug = prof["slug"]
         cur = {common.norm_name(q["name"]) for q in prof["roster"]["players"]}
         for q in prof["roster"]["players"]:
             e = entry_of(q.get("clubInfo"))
             if e:
-                add(e, slug, 0)
+                add(e, slug, 0, d1)
         seen = set()
         for y in sorted(prof["rosterHistory"], reverse=True):
             col = {common.norm_name(r["name"]): r.get("club") or "" for r in (ath.get("data") or {}).get("rosterHistory", {}).get(y, [])}
@@ -206,9 +211,9 @@ def direct_counts(profiles_and_sources) -> dict[str, dict[str, list[int]]]:
                 chosen = clubs.resolve(rows, TABLE) if rows else None
                 e = entry_of(TABLE.match(chosen["raw"]).as_dict()) if chosen else None
                 if e:
-                    add(e, slug, 1)
+                    add(e, slug, 1, d1)
         for c in prof["commitments"]:
-            if c["status"] in ("verbal", "signed"):
+            if d1 and c["status"] in ("verbal", "signed"):
                 e = entry_of(c.get("clubInfo"))
                 if e:
                     add(e, slug, 2)
@@ -236,18 +241,33 @@ def test_counts_equal_a_direct_computation() -> None:
     ok("a current player's past rows never count as former", doc["clubs"]["y-club"]["programs"]["alpha"][1] == 1)
     ok("the enrolled and the decommitted recruits are not commits", doc["programs"]["alpha"]["commits"] == 3)
     ok("program row alpha: current 6, past 2, commits 3, club known [4, 2, 2]",
-       doc["programs"]["alpha"] == {"current": 6, "past": 2, "commits": 3, "clubKnown": [4, 2, 2], "schoolKnown": [0, 0, 0]}, doc["programs"]["alpha"])
-    ok("a D1 program with nothing known is still a row", doc["programs"]["delta"] == {"current": 1, "past": 0, "commits": 0, "clubKnown": [0, 0, 0], "schoolKnown": [0, 0, 0]})
-    ok("the D2 profile is left out of programs and of every club", "gamma" not in doc["programs"] and not any("gamma" in e["programs"] for e in doc["clubs"].values()))
-    # #94: publishing D3 must leave the trends index as it is, apart from the `updated` stamp trends.py writes.
-    # Fails if observe() ever counts a division other than D1 (e.g. its filter becomes "!= 'D2'").
+       doc["programs"]["alpha"] == {"division": "D1", "current": 6, "past": 2, "commits": 3, "clubKnown": [4, 2, 2], "schoolKnown": [0, 0, 0]}, doc["programs"]["alpha"])
+    ok("a D1 program with nothing known is still a row", doc["programs"]["delta"] == {"division": "D1", "current": 1, "past": 0, "commits": 0, "clubKnown": [0, 0, 0], "schoolKnown": [0, 0, 0]})
+    # #315: D2 is counted. Fails if the D1 gate in observe() comes back (gamma absent).
+    ok("the D2 program is a row, its commits null although it holds a verbal commit (C1)",
+       doc["programs"].get("gamma") == {"division": "D2", "current": 1, "past": 0, "commits": None, "clubKnown": [1, 0, None], "schoolKnown": [0, 0, None]},
+       doc["programs"].get("gamma"))
+    ok("the D2 program's club cell reads null commits, never 0 and never the verbal commit's 1",
+       doc["clubs"]["x-sc"]["programs"].get("gamma") == [1, 0, None], doc["clubs"]["x-sc"]["programs"].get("gamma"))
+    # #315, C3: `divisions` replaces the v1 field `"division": "D1"`.
     with_d3 = record()
     with_d3.observe({**profile_gamma_d2(), "slug": "epsilon", "division": "D3"}, {"slug": "epsilon", "division": "D3"}, ath={}, tds={}, sw={})
-    masked = lambda d: {k: v for k, v in d.items() if k != "updated"}  # noqa: E731
-    ok("a D3 profile leaves the index unchanged apart from `updated`", masked(with_d3.index()) == masked(record().index()))
+    d3 = with_d3.index()
+    ok("a D3 profile is counted, commits null", d3["programs"].get("epsilon", {}).get("commits", 0) is None
+       and d3["clubs"]["x-sc"]["programs"].get("epsilon") == [1, 0, None], d3["programs"].get("epsilon"))
+    ok("the v1 field `division` is replaced by `divisions`, the divisions the index holds, sorted",
+       "division" not in d3 and d3["divisions"] == ["D1", "D2", "D3"] and doc["divisions"] == ["D1", "D2"], (d3.get("divisions"), d3.get("division")))
+    ok("`commitDivisions` names the divisions whose commits are collected", d3["commitDivisions"] == ["D1"])
+    ok("a program of an unknown division is left out", (lambda r: (r.observe({**profile_gamma_d2(), "slug": "zeta"}, {"slug": "zeta", "division": "NAIA"}, ath={}, tds={}, sw={}), r.index())[1])(record())["programs"].get("zeta") is None)
     cov = doc["coverage"]
-    ok("coverage current: 8 players (6 alpha, 1 beta, 1 delta), 5 known (4 alpha, 1 beta)",
-       cov["current"] == {"players": 8, "clubKnown": 5, "schoolNamed": 2, "schoolKnown": None}, cov["current"])
+    ok("coverage current, all divisions: 9 players (6 alpha, 1 beta, 1 delta, 1 gamma), 6 known",
+       {k: cov["current"][k] for k in ("players", "clubKnown")} == {"players": 9, "clubKnown": 6}, cov["current"])
+    by = cov["byDivision"]
+    ok("coverage by division (C2): D1 8 players, 5 known; D2 1 player, 1 known",
+       by["D1"]["current"] == {"players": 8, "clubKnown": 5, "schoolNamed": 2, "schoolKnown": None}
+       and by["D2"]["current"] == {"players": 1, "clubKnown": 1, "schoolNamed": 0, "schoolKnown": None}, by)
+    ok("D2 commit coverage is null, and the D2 verbal commit is not in the commit coverage (C1)",
+       by["D2"]["commits"] is None and by["D1"]["commits"]["recruits"] == 8 and cov["commits"]["recruits"] == 8, (by["D2"]["commits"], cov["commits"]))
     ok("coverage past: 2 former players, both known", cov["past"]["players"] == 2 and cov["past"]["clubKnown"] == 2)
     ok("coverage commits: 8 verbal, 7 known", cov["commits"]["recruits"] == 8 and cov["commits"]["clubKnown"] == 7, cov["commits"])
     ok("season and past seasons come from the data", doc["season"] == 2026 and doc["pastSeasons"] == [2024, 2025])
@@ -257,12 +277,20 @@ def test_counts_equal_a_direct_computation() -> None:
 def test_commits_never_enter_a_total() -> None:
     doc = record().index()
     rows = trends.programs_for(doc, "club", "x-sc")
-    ok("programs_for lists alpha before beta: 3 people vs 0, though beta has 5 commits to alpha's 2",
-       [r["slug"] for r in rows] == ["alpha", "beta"], rows)
-    ok("each row carries the three counts separately", rows[1] == {"slug": "beta", "current": 0, "past": 0, "commits": 5}, rows[1])
-    ok("no row carries a total that includes commits", all(set(r) == {"slug", "current", "past", "commits"} for r in rows))
+    rows = trends.programs_for(doc, "club", "x-sc")
+    ok("programs_for lists alpha, gamma (1 player, commits null), then beta (0 players, 5 commits)",
+       [r["slug"] for r in rows] == ["alpha", "gamma", "beta"], rows)
+    ok("each row carries the three counts separately", rows[2] == {"slug": "beta", "division": "D1", "current": 0, "past": 0, "commits": 5}, rows[2])
+    ok("a D2 row's commits are null", rows[1] == {"slug": "gamma", "division": "D2", "current": 1, "past": 0, "commits": None}, rows[1])
+    ok("no row carries a total that includes commits", all(set(r) == {"slug", "division", "current", "past", "commits"} for r in rows))
     a = trends.answer(doc, {"kind": "club", "id": "x-sc"})
-    ok("answer totals keep commits apart from current + past", a["totals"] == {"current": 2, "past": 1, "commits": 7}, a["totals"])
+    ok("answer totals keep commits apart from current + past; a D2 row adds nothing to commits",
+       a["totals"] == {"current": 3, "past": 1, "commits": 7}, a["totals"])
+    g = trends.answer(doc, {"kind": "club", "program": "gamma"})
+    ok("a D2 program's answer: commits total null, not 0 (C1)", g["totals"] == {"current": 1, "past": 0, "commits": None}
+       and all(r["commits"] is None for r in g["rows"]), g["totals"])
+    ok("... and its coverage is the D2 line, commits not collected", len(g["coverage"]) == 1 and g["coverage"][0].startswith("Division II:")
+       and "commits not collected" in g["coverage"][0], g["coverage"])
     ok("the answer says so in words", "never added" in a["note"])
     feeders = trends.feeders_for(doc, "club", "beta")
     ok("feeders_for beta: Y (1 current) before X (5 commits, no player)", [r["id"] for r in feeders] == ["y-club", "x-sc"], feeders)
@@ -271,18 +299,28 @@ def test_commits_never_enter_a_total() -> None:
             "coverage": doc["coverage"]}
     ok("ties: current + past, then current, then commits, then slug",
        [r["slug"] for r in trends.programs_for(fake, "club", "c")] == ["p2", "p4", "p1", "p3"])
+    # C1: null ("not collected") is no data: it sorts after a 0, never level with it
+    fake["clubs"]["c"]["programs"] = {"a-null": [2, 0, None], "b-zero": [2, 0, 0]}
+    ok("ties on players: null commits sort after 0 commits", [r["slug"] for r in trends.programs_for(fake, "club", "c")] == ["b-zero", "a-null"])
 
 
 def test_schools_field_gate() -> None:
     without = record().index()
     ok("no schoolInfo in the build: schools is null", without["schools"] is None)
     ok("... and every school coverage reads not available, never 0",
-       all(without["coverage"][k]["schoolKnown"] is None for k in ("current", "past", "commits")))
+       all(without["coverage"][k]["schoolKnown"] is None for k in ("current", "past", "commits"))
+       and all(c[k] is None or c[k]["schoolKnown"] is None for c in without["coverage"]["byDivision"].values() for k in ("current", "past", "commits")))
     lines = trends.coverage_lines(without, "school")
     ok("the school coverage lines say not available", all("not available" in l for l in lines), lines)
-    ok("the club coverage line has the documented shape", trends.coverage_lines(without, "club", {"current": 2, "past": 1, "commits": 7})
-       == ["2 of 8 current players; club known for 62%", "1 of 2 former players (stored past rosters); club known for 100%",
-           "7 of 8 verbal or signed commits; club known for 88%"], trends.coverage_lines(without, "club", {"current": 2, "past": 1, "commits": 7}))
+    got = trends.coverage_lines(without, "club", {"D1": {"current": 2, "past": 1, "commits": 7}})
+    ok("the club coverage line has the documented shape, one per division", got
+       == ["Division I: 2 of 8 current players, club known for 62%; 1 of 2 former players (stored past rosters), club known for 100%; "
+           "7 of 8 verbal or signed commits, club known for 88%",
+           "Division II: 1 current players, club known for 100%; 0 former players (stored past rosters), club known for 0%; commits not collected"], got)
+    # C2: a D2-only result states the D2 rate (100%), never the merged 67% (6 of 9) nor D1's 62%. Fails if the split is dropped.
+    d2 = trends.coverage_lines(without, "club", {"D2": {"current": 1, "past": 0, "commits": None}}, ["D2"])
+    ok("a D2-only result's coverage is the D2 rate alone", d2 == ["Division II: 1 of 1 current players, club known for 100%; "
+       "0 of 0 former players (stored past rosters), club known for 0%; commits not collected"], d2)
 
     class FakeMatch:
         def __init__(self, status, sid=None):
@@ -310,7 +348,14 @@ def test_schools_field_gate() -> None:
        and with_["coverage"]["commits"]["schoolKnown"] is None, with_["coverage"])
     ok("program row alpha counts schools [1, 1, 0]", with_["programs"]["alpha"]["schoolKnown"] == [1, 1, 0])
     rows = trends.programs_for(with_, "school", "ccd:1")
-    ok("programs_for a school reports commits as None, not 0", rows == [{"slug": "alpha", "current": 1, "past": 0, "commits": None}], rows)
+    ok("programs_for a school reports commits as None, not 0", rows == [{"slug": "alpha", "division": "D1", "current": 1, "past": 0, "commits": None}], rows)
+    # #315: a D2 former player's school cell carries null commits
+    rec = record(with_schools=True, school_table=FakeSchoolTable())
+    rec.observe({"slug": "eta", "division": "D2", "roster": {"season": 2026, "players": []}, "commitments": [commit("R Q", CI_X)],
+                 "rosterHistory": {"2025": {"players": [{"name": "Ona Former", "hometown": "Davis, Calif.", "highSchool": "Davis HS"}]}}},
+                {"slug": "eta", "division": "D2"}, ath={}, tds={}, sw={})
+    ok("a D2 program's school cell is [0, 1, null]", rec.index()["schools"]["ccd:davis"]["programs"].get("eta") == [0, 1, None],
+       rec.index()["schools"]["ccd:davis"]["programs"])
     ok("feeders_for a school carries the city", trends.feeders_for(with_, "school", "alpha")[0].get("city") == "Rocklin")
 
 
@@ -348,8 +393,39 @@ def test_written_file() -> None:
         names = ["Ada Current", "Ann Former", "Bea Former", "R One", "R Two", "R Five", "Gil Current"]
         ok("no player's or recruit's name is in the file", not any(n in text for n in names))
         ok("the only name keys are club and school names", text.count('"name"') == len(doc["clubs"]) + len(doc["schools"] or {}))
+        ok("no D2 recruit's name is in the file either", "R Z" not in text and "Hal Current" not in text)
         ok("no tmp file is left behind", sorted(os.listdir(os.path.dirname(path))) == ["index.json"])
-    ok("summary_line reads the coverage", "8 current players, club known 5 (62%)" in trends.summary_line(doc), trends.summary_line(doc))
+    line = trends.summary_line(doc)
+    ok("summary_line reads the coverage, per division", "trends (D1, D2): D1 club known 62%; D2 club known 100%; commits D1 only; "
+       "9 current players, club known 6 (67%)" in line, line)
+
+
+BUDGET_GZ = 450 * 1024  # #315: the one file for all divisions measured 327,233 B at gzip -9 on 2026-09-24
+
+
+def gz_size(raw: bytes) -> int:
+    return len(gzip.compress(raw, 9))
+
+
+def within_budget(size: int) -> bool:
+    return size <= BUDGET_GZ
+
+
+def test_size_budget() -> None:
+    """The published index, gzipped, stays under the budget; growing past it is a decision (#315, C3).
+    Checked on the committed file (rewritten by every refresh) and on a synthetic index of that budget's size."""
+    path = os.path.join(common.PUBLIC_DATA_DIR, "trends", "index.json")
+    ok("public/data/trends/index.json exists (it is tracked; a missing file fails, never skips)", os.path.exists(path), path)
+    if os.path.exists(path):
+        size = gz_size(open(path, "rb").read())
+        ok(f"public/data/trends/index.json is {size:,} B gzipped, under {BUDGET_GZ:,}", within_budget(size), size)
+    # the check itself can fail: an index past the budget is refused by the same comparison
+    rec = record()
+    for i in range(20000):
+        rec._club_entry({"status": "unmatched", "raw": f"Club {i:05d} {os.urandom(12).hex()}", "key": f"club {i:05d} {os.urandom(12).hex()}"})["programs"]["alpha"] = [1, 0, 0]
+    big = gz_size(json.dumps(rec.index(), separators=(",", ":")).encode())
+    ok("an index past the budget fails the check", not within_budget(big), big)
+    ok("an index under the budget passes it", within_budget(gz_size(json.dumps(record().index()).encode())))
 
 
 def test_out_dir_follows_the_programs_dir() -> None:
@@ -382,7 +458,8 @@ def test_answer_shapes() -> None:
     ok("answer for a program: rows are feeders with ids, names and the three counts",
        a["program"] == "alpha" and [r["id"] for r in a["rows"]] == ["x-sc", "y-club", "raw:zeta united"]
        and all({"id", "name", "current", "past", "commits"} <= set(r) for r in a["rows"]), a["rows"])
-    ok("answer carries coverage lines and no person", len(a["coverage"]) == 3 and "Ada" not in json.dumps(a))
+    ok("answer carries coverage lines (one per division in the result) and no person", len(a["coverage"]) == 1 and "Ada" not in json.dumps(a))
+    ok("answer names the divisions, not the v1 `division`", a["divisions"] == ["D1", "D2"] and "division" not in a)
     ok("an unknown club answers with no rows rather than raising", trends.answer(doc, {"kind": "club", "id": "nope"})["rows"] == [])
     try:
         trends.programs_for(doc, "team", "x")
@@ -397,7 +474,7 @@ def main() -> int:
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args().verbose
     for fn in (test_counts_equal_a_direct_computation, test_commits_never_enter_a_total, test_schools_field_gate, test_search_aka,
-               test_written_file, test_out_dir_follows_the_programs_dir, test_build_hook_is_wired, test_answer_shapes):
+               test_written_file, test_size_budget, test_out_dir_follows_the_programs_dir, test_build_hook_is_wired, test_answer_shapes):
         print(fn.__name__)
         fn()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))

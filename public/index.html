@@ -456,6 +456,8 @@ a.pill { text-decoration: none; }
   .trend-table .team-sub .pl-rest, .trend-table th .th-sub { display: none; }
   .trend-table td, .trend-table th { padding-left: 6px; padding-right: 6px; }
   .trend-table th { white-space: normal; font-size: 11px; }
+  /* "Not collected" (D2/D3 commits, #315) fits the narrow Commits column on two lines at 400px */
+  .trend-table .tr-nc { display: inline-block; font-size: 10px; line-height: 1.25; }
 }
 /* Phones: every tap target in the picker is at least 44px (#310). */
 @media (max-width: 480px) {
@@ -1006,13 +1008,25 @@ async function loadCamps() {
   }
   return S.camps;
 }
-/* The clubs and high-schools index (trends.py, issue #230), fetched on first entry to #/trends and never
-   before. Counts only, Division I only: { coverage, programs, clubs, schools | null, ... }. A 404 (the
-   index is built by the daily refresh, so a page deployed before the next refresh has none) is left to
-   the caller, which says so rather than showing an empty table. */
+/* The clubs and high-schools index (trends.py, issues #230, #315), fetched on first entry to #/trends and never
+   before. Counts only, all three divisions in one file (about 330 KB gzipped): { divisions, commitDivisions,
+   coverage: { ..., byDivision }, programs, clubs, schools | null, ... }. A failed fetch (a 404 before the first
+   refresh, or a dropped connection on a phone) is left to the caller and leaves S.trends unset, so the next
+   entry to the view fetches again. */
+let trendsInFlight = null; // the first load, shared: leaving and re-entering #/trends mid-download does not fetch twice
 async function loadTrends() {
-  if (!S.trends) S.trends = await getJSON('/api/v1/trends');
+  if (S.trends) return S.trends;
+  trendsInFlight ||= getJSON('/api/v1/trends').then(trendsNormalize).finally(() => { trendsInFlight = null; });
+  S.trends = await trendsInFlight;
   return S.trends;
+}
+// An index built before #315 (Division I only, `division: "D1"`, one coverage object) reads as a one-division index.
+function trendsNormalize(doc) {
+  if (!Array.isArray(doc.divisions)) doc.divisions = [doc.division || 'D1'];
+  if (!Array.isArray(doc.commitDivisions)) doc.commitDivisions = ['D1'];
+  const c = doc.coverage || {};
+  if (!c.byDivision) c.byDivision = { [doc.divisions[0]]: { current: c.current, past: c.past, commits: c.commits } };
+  return doc;
 }
 const observedIso = () => S.refresh?.updated || S.index?.updated;
 const observedText = () => observedIso() ? `Data checked ${fmtDate(observedIso())}` : '';
@@ -1989,7 +2003,7 @@ async function renderCamps() {
 }
 
 /* ---------- trends: where players come from (#/trends, issue #230) ----------
-   "Which D1 programs have the most players from club X?" and the reverse, "which clubs feed program Y?",
+   "Which programs have the most players from club X?" and the reverse, "which clubs feed program Y?",
    from data/trends/index.json (trends.py). Three counts side by side, three disjoint populations:
      current  - players on the program's current roster;
      past     - players on a stored past roster who are not on the current one (former players);
@@ -1997,12 +2011,15 @@ async function renderCamps() {
                 added into a program's total (the owner's decision 2 on #225).
    Every result carries its coverage line ("25 of 9,481 current players; club known for 31%"), so a low
    count is read as a lower bound and never as a true zero. College players on public rosters may be
-   listed by name under a program; commits are counts only, never a list of recruits. Division I only.
+   listed by name under a program; commits are counts only, never a list of recruits. D1, D2 and D3 since #315;
+   commits are collected for doc.commitDivisions (D1) only and read "Not collected" (null, never 0) elsewhere.
 
    The four functions below are pure functions over the index and mirror trends.py's programs_for,
    feeders_for and coverage_lines: the same answers the Worker could give the ask feature (#165). */
+// null commits ("Not collected") are no data: in the last tie-break they sort after 0, never level with it
+const trendsCm = r => r.commits == null ? -1 : r.commits;
 function trendsSortCmp(a, b) { // most players first; commits never decide the order because they are not in the total
-  return (b.current + b.past) - (a.current + a.past) || b.current - a.current || (b.commits || 0) - (a.commits || 0)
+  return (b.current + b.past) - (a.current + a.past) || b.current - a.current || trendsCm(b) - trendsCm(a)
     || String(a.slug || a.name || '').localeCompare(String(b.slug || b.name || ''));
 }
 /* The #/trends type-ahead boxes (#307). A club's or school's search key is its name plus the `aka` keys the index
@@ -2034,7 +2051,7 @@ function trendsKeyStep(at, key, count) {
 function trendsProgramsFor(doc, kind, id) {
   const entry = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
   if (!entry) return [];
-  return Object.entries(entry.programs).map(([slug, [c, p, m]]) => ({ slug, current: c, past: p, commits: kind === 'school' ? null : m })).sort(trendsSortCmp);
+  return Object.entries(entry.programs).map(([slug, [c, p, m]]) => ({ slug, division: doc.programs?.[slug]?.division || null, current: c, past: p, commits: kind === 'school' ? null : m })).sort(trendsSortCmp);
 }
 function trendsFeedersFor(doc, kind, slug) {
   const rows = [];
@@ -2053,15 +2070,29 @@ function trendsBothFor(doc, clubId, schoolId) {
     .sort((a, b) => (b.club + b.school) - (a.club + a.school) || b.club - a.club || a.slug.localeCompare(b.slug));
 }
 const trendsPct = (n, d) => d ? Math.round(100 * n / d) : 0;
-// One honest sentence per column. `totals` are the counts on screen; without them the line states the denominators alone.
-function trendsCoverageLines(doc, kind, totals) {
-  const c = doc.coverage, what = kind === 'club' ? 'club' : 'high school', key = kind === 'club' ? 'clubKnown' : 'schoolKnown';
-  return [['current', 'current players', 'players'], ['past', 'former players (stored past rosters)', 'players'], ['commits', 'verbal or signed commits', 'recruits']].map(([col, noun, dk]) => {
-    const denom = c[col][dk], known = c[col][key];
-    if (known == null) return `${noun[0].toUpperCase()}${noun.slice(1)}: ${what} not available yet`;
-    const n = totals?.[col];
-    return `${n != null ? `${fmtNum(n)} of ` : ''}${fmtNum(denom)} ${noun}; ${what} known for ${trendsPct(known, denom)}%`;
-  });
+// {division: {current, past, commits}} over result rows (each row carries `division`); commits null when no row has a count.
+function trendsDivisionTotals(rows) {
+  const out = {};
+  for (const r of rows) {
+    const t = out[r.division || 'D1'] ||= { current: 0, past: 0, commits: null };
+    t.current += r.current; t.past += r.past;
+    if (r.commits != null) t.commits = (t.commits || 0) + r.commits;
+  }
+  return out;
+}
+// One honest sentence per division in the result (#315: club coverage is 31% in D1 and 5% in D2, so it is never
+// merged). `divs` are the divisions on screen (default: every division in the index); `totals` ({division:
+// {current, past, commits}}) are the counts on screen; without them the line states the denominators alone.
+function trendsCoverageLines(doc, kind, totals, divs) {
+  const by = doc.coverage.byDivision, what = kind === 'club' ? 'club' : 'high school', key = kind === 'club' ? 'clubKnown' : 'schoolKnown';
+  return (divs || doc.divisions).filter(d => by[d]).map(d => `${divisionName(d)}: ` + [['current', 'current players', 'players'], ['past', 'former players (stored past rosters)', 'players'], ['commits', 'verbal or signed commits', 'recruits']].map(([col, noun, dk]) => {
+    const c = by[d][col];
+    if (!c) return 'commits not collected';
+    const denom = c[dk], known = c[key];
+    if (known == null) return `${noun}: ${what} not available yet`;
+    const n = totals?.[d]?.[col];
+    return `${n != null ? `${fmtNum(n)} of ` : ''}${fmtNum(denom)} ${noun}, ${what} known for ${trendsPct(known, denom)}%`;
+  }).join('; '));
 }
 // The current-roster players of one program from one club or school (and, with `schoolId`, from that club and
 // that school both), read off the profile the page already serves (public rosters). Never called for commits.
@@ -2098,10 +2129,10 @@ function trendsResolveClub(doc, id) {
   const hit = key && Object.entries(doc.clubs).find(([, e]) => !e.unmatched && (trendsKey(e.name) === key || (e.aka || []).some(k => trendsKey(k) === key)));
   return hit ? hit[0] : id;
 }
-// The roster tab's club cell: a reviewed club links to its trends page (D1 only, where the index reaches).
+// The roster tab's club cell: a reviewed club links to its trends page (every division since #315).
 function trendsClubCell(p, pl) {
   const ci = pl.clubInfo;
-  if (p.division === 'D1' && pl.club && ci?.status === 'matched' && ci.clubId) return `<a href="${esc(trendsUrl({ club: ci.clubId }))}" title="Which programs have players from ${esc(pl.club)}">${esc(pl.club)}</a>`;
+  if (pl.club && ci?.status === 'matched' && ci.clubId) return `<a href="${esc(trendsUrl({ club: ci.clubId }))}" title="Which programs have players from ${esc(pl.club)}">${esc(pl.club)}</a>`;
   return esc(pl.club || '');
 }
 const unmatchedBadge = '<span class="badge warn" title="This spelling is not in the reviewed club table yet, so it is counted on its own and may be the same club as another entry">unmatched spelling</span>';
@@ -2117,20 +2148,32 @@ async function renderTrends() {
   const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Pipelines' }];
   const tabs = listTabs('trends');
   const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  const subtitle = 'Clubs and high schools behind college rosters';
   let doc;
-  try { doc = await loadTrends(); } catch {
+  if (!S.trends) { // first entry: the one file for all divisions is ~330 KB gzipped, a visible wait on a phone
     TR = null;
-    app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle: 'Clubs and high schools behind Division I rosters', tabs })
-      + `<div class="content-body"><div class="card"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><a class="btn primary" href="#/">All programs</a></p></div></div>`;
-    wireTabs(); return;
+    app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle, tabs })
+      + `<div class="content-body"><div class="card" id="trLoading" role="status"><h3>Loading…</h3><p class="muted">Loading the clubs and high-schools index for Division I, II and III programs.</p></div></div>`;
+    wireTabs();
   }
+  try { doc = await loadTrends(); } catch (err) {
+    TR = null; // S.trends stays unset, so Try again (or the next entry) fetches again
+    if (currentView() !== 'trends') return;
+    const missing = /HTTP 404/.test(String(err?.message || ''));
+    app.innerHTML = pageHeader({ crumbs, title: 'Where players come from', subtitle, tabs })
+      + `<div class="content-body"><div class="card" id="trFailed">${missing
+        ? '<h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p>'
+        : '<h3>Could not load</h3><p class="muted">The clubs and high-schools index did not load. Check your connection and try again.</p>'}<p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div></div>`;
+    wireTabs(); $('#trRetry').onclick = () => renderTrends(); return;
+  }
+  if (currentView() !== 'trends') return;
   const hasSchools = !!doc.schools;
   const total = e => Object.values(e.programs).reduce((a, [c, p]) => a + c + p, 0);
   const ents = kind => Object.entries((kind === 'school' ? doc.schools : doc.clubs) || {}).map(([id, e]) => ({ kind, id, name: e.name, state: e.state, city: e.city,
     unmatched: !!e.unmatched, total: total(e), norm: trendsKey(e.name), aka: (e.aka || []).map(trendsKey) }));
   const seasons = doc.pastSeasons || [];
-  // The Program box and the URL reach only the programs the index carries, and the index is Division I only.
-  const progs = idx.programs.filter(p => p.division === 'D1' && doc.programs[p.slug]);
+  // The Program box and the URL reach the programs the index carries: every division since #315.
+  const progs = idx.programs.filter(p => doc.programs[p.slug]);
   TR = { doc, idx, hasSchools, progs, progSet: new Set(progs.map(p => p.slug)), byProgram: new Map(idx.programs.map(p => [p.slug, p])),
     ents: { club: ents('club'), school: hasSchools ? ents('school') : [] },
     pastLabel: seasons.length ? `${seasons[0]}–${seasons[seasons.length - 1]} rosters` : 'stored past rosters',
@@ -2175,7 +2218,7 @@ function trendsSelect(kind, id) {
 function trendsBoxHtml(kind) {
   if (kind === 'school' && !TR.hasSchools) return `<div class="tr-box"><span class="trend-label">High school</span><p class="small muted">High-school results are not published yet.</p></div>`;
   const label = { club: 'Club', school: 'High school', program: 'Program' }[kind];
-  const ph = { club: 'Type a club, e.g. MVLA', school: 'Type a high school', program: 'Type a D1 program, e.g. Stanford' }[kind];
+  const ph = { club: 'Type a club, e.g. MVLA', school: 'Type a high school', program: 'Type a program, e.g. Stanford' }[kind];
   return `<div class="tr-box" id="trBox-${kind}">
       <label class="trend-label" id="trLbl-${kind}" for="trIn-${kind}">${label}</label>
       <div class="tr-field"><div class="tr-chip" id="trChip-${kind}" hidden><button type="button" class="tr-chip-name" id="trChg-${kind}"></button><button type="button" class="tr-chip-x" id="trClr-${kind}">✕</button></div>
@@ -2184,12 +2227,13 @@ function trendsBoxHtml(kind) {
       <div class="tr-msg small muted" id="trMsg-${kind}"></div>
     </div>`;
 }
-// What a chip reads: the name, or the id and "not in the index" (a D2 or D3 program names its division).
+// What a chip reads: the name, or the id and "not in the index" (a program the index lacks names its division).
 function trendsLabel(kind, id) {
   const { doc } = TR;
   if (kind === 'program') {
     const p = TR.byProgram.get(id);
-    if (TR.progSet.has(id)) return { text: displayName(p) };
+    // A picked program names its division (#315, the division-everywhere rule) with the shared divisionTag, as programLine does.
+    if (TR.progSet.has(id)) return { text: displayName(p), html: `${esc(displayName(p))} ${divisionTag(p.division)}`, spoken: `${displayName(p)}, ${divisionName(p.division)}` };
     return { text: `${p ? `${displayName(p)} (${p.division})` : id} — not in the index`, missing: true };
   }
   const e = (kind === 'school' ? doc.schools : doc.clubs)?.[id];
@@ -2202,11 +2246,12 @@ function trendsBoxSync(kind) {
   const showChip = !!id && !TR.editing[kind];
   chip.hidden = !showChip; input.hidden = showChip;
   if (!id) return;
-  const { text, missing } = trendsLabel(kind, id), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
+  const { text, html, spoken = text, missing } = trendsLabel(kind, id), chg = $(`#trChg-${kind}`), clr = $(`#trClr-${kind}`);
   chip.classList.toggle('missing', !!missing);
-  chg.textContent = text; chg.title = text;
-  chg.setAttribute('aria-label', `Change ${TR_WHAT[kind]}: ${text}`);
-  clr.setAttribute('aria-label', `Clear ${TR_WHAT[kind]}: ${text}`); clr.title = `Clear ${TR_WHAT[kind]}`;
+  if (html) chg.innerHTML = html; else chg.textContent = text;
+  chg.title = spoken;
+  chg.setAttribute('aria-label', `Change ${TR_WHAT[kind]}: ${spoken}`);
+  clr.setAttribute('aria-label', `Clear ${TR_WHAT[kind]}: ${spoken}`); clr.title = `Clear ${TR_WHAT[kind]}`;
 }
 // The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
 const trendsHitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
@@ -2356,9 +2401,10 @@ function trendsView(sel) {
   // A picked program names its division in the Table's form (#306): "Stanford · D1 · ACC · Stanford, CA".
   const named = TR_KINDS.filter(k => sel[k]).map(k => k === 'program' && slug ? `${esc(displayName(p))} · ${programLine(p)}` : esc(trendsLabel(k, sel[k]).text));
   const cov = doc.coverage, pr = slug && doc.programs[slug];
+  const commitsText = n => n == null ? 'commits not collected' : `${n} commit${n === 1 ? '' : 's'}`;
   // A program alone: its own counts, as #308 wrote the program page's subtitle; otherwise the index's.
-  const bits = pr && !club && !school ? [`${pr.current} current players, ${pr.past} former, ${pr.commits} commit${pr.commits === 1 ? '' : 's'}`]
-    : ['Division I', `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} commits`];
+  const bits = pr && !club && !school ? [`${pr.current} current players, ${pr.past} former, ${commitsText(pr.commits)}`]
+    : [doc.divisions.join(', '), `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} ${doc.commitDivisions.join(', ')} commits`];
   if ((club || school) && !slug) {
     if (f.conf.length) bits.push(esc(f.conf.join(', ')));
     if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
@@ -2366,22 +2412,24 @@ function trendsView(sel) {
     if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
     if (S.q) bits.push(`programs matching “${esc(S.qRaw)}”`);
   }
-  const sub = `${named.length ? named.join(' × ') : 'Clubs and high schools behind Division I rosters'} · ${bits.join(' · ')}`;
+  const sub = `${named.length ? named.join(' × ') : 'Clubs and high schools behind college rosters'} · ${bits.join(' · ')}`;
 
   // Notes above the results: a selection the index does not carry, and a picked program outside the sidebar filters.
   const notes = TR_KINDS.filter(k => sel[k] && !trendsKnown(k, sel[k])).map(k => {
     const q = byProgram.get(sel[k]);
-    return k === 'program' && q ? `${esc(displayName(q))} is a ${esc(divisionName(q.division))} program, and the clubs and schools index covers Division I only for now; the results below leave it out.`
+    return k === 'program' && q ? `${esc(displayName(q))} (${esc(divisionName(q.division))}) is not in the clubs and schools index yet; the results below leave it out.`
       : `There is no ${TR_WHAT[k]} “${esc(sel[k])}” in the clubs and schools index; the results below leave it out.`;
   });
   if (p && !matchesFilters(p, null)) notes.push(`${esc(displayName(p))} is outside your sidebar filters; it is shown because you picked it.`);
   const noteHtml = notes.map(n => `<p class="small muted tr-note">${n}</p>`).join('');
 
-  const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.`;
+  const uncollected = doc.divisions.filter(d => !doc.commitDivisions.includes(d));
+  const commitsNote = `Commits are verbal or signed recruits not yet on a roster, shown beside the roster counts and never added into a program's total.${uncollected.length ? ` They are collected for ${doc.commitDivisions.map(divisionName).join(', ')} only; ${uncollected.map(divisionName).join(' and ')} programs read “Not collected”.` : ''}`;
   const progCell = q => `<div class="team-cell">${swatchesHtml(q)}<span><a href="#/p/${esc(q.slug)}/roster" class="team-name">${esc(displayName(q))}</a><br><span class="team-sub">${programLine(q)}</span></span></div>`;
   const head = (first, sch) => `<thead><tr><th>${first}</th><th class="num">Players<span class="th-sub">current + past</span></th><th class="num">Current roster</th><th class="num">Past rosters<span class="th-sub">${esc(pastLabel)}</span></th><th class="num trend-sep">Commits<span class="th-sub">${sch ? 'not available' : 'not in total'}</span></th></tr></thead>`;
   const dash = '<span class="muted" title="No recruit carries a matched high school yet">—</span>';
-  const cells = r => `<td class="num"><span class="num-strong">${r.current + r.past}</span></td><td class="num">${r.current}</td><td class="num">${r.past}</td><td class="num trend-sep">${r.commits == null ? dash : r.commits}</td>`;
+  const notCollected = `<span class="muted tr-nc" title="Commits are collected for ${esc(doc.commitDivisions.join(', '))} programs only">Not collected</span>`;
+  const cells = (r, sch) => `<td class="num"><span class="num-strong">${r.current + r.past}</span></td><td class="num">${r.current}</td><td class="num">${r.past}</td><td class="num trend-sep">${r.commits != null ? r.commits : sch ? dash : notCollected}</td>`;
   const where = e => [e.city, e.state].filter(Boolean).join(', ');
   const filtered = rows => { const shown = rows.filter(r => byProgram.has(r.slug) && matchesFilters(byProgram.get(r.slug), null)); return { shown, hidden: rows.length - shown.length }; };
   const hiddenLine = (n, what) => n ? `${n} program${n === 1 ? '' : 's'} with ${what} ${n === 1 ? 'is' : 'are'} hidden by your sidebar filters. ` : '';
@@ -2401,9 +2449,9 @@ function trendsView(sel) {
         <p class="small muted">Past players and commits are counted, never named.</p><div class="tr-actions">${back}</div></div>`;
       return { html, sub, names: { slug, club, school, cur: null }, say: `${clubE.name} × ${schoolE.name} × ${displayName(p)}: current players with both are listed below.` };
     }
-    const kind = clubE ? 'club' : 'school', e = clubE || schoolE, [c, pa, m] = e.programs[slug] || [0, 0, 0], commits = kind === 'school' ? null : m;
+    const kind = clubE ? 'club' : 'school', e = clubE || schoolE, [c, pa, m] = e.programs[slug] || [0, 0, pr.commits == null ? null : 0], commits = kind === 'school' ? null : m;
     const html = `${noteHtml}<div class="card"><h3>${title}</h3><div class="small muted">${programLine(p)}${where(e) ? ` · ${esc(e.name)}: ${esc(where(e))}` : ''} ${e.unmatched ? unmatchedBadge : ''}</div>
-      <div class="tr-stats">${stat(c + pa, 'Players', 'players')}${stat(c, 'Current', 'current')}${stat(pa, 'Past', 'past')}${stat(commits == null ? '—' : commits, 'Commits', 'commits')}</div>
+      <div class="tr-stats">${stat(c + pa, 'Players', 'players')}${stat(c, 'Current', 'current')}${stat(pa, 'Past', 'past')}${stat(commits != null ? commits : kind === 'school' ? '—' : 'Not collected', 'Commits', 'commits')}</div>
       ${c ? '<div class="trend-names small" id="trNames">Loading current players…</div>' : ''}
       ${e.programs[slug] ? '' : `<p class="small">No player from ${esc(e.name)} is known at ${esc(displayName(p))}. ${esc(displayName(p))} has ${pr.current} current players; a ${TR_WHAT[kind]} is known for ${kind === 'club' ? pr.clubKnown[0] : pr.schoolKnown[0]} of them, so this is a lower bound, not a true zero.</p>`}
       <p class="small muted">Players = current + past. Past players and commits are counted, never named. ${kind === 'school' ? 'Commits are not available for high schools yet.' : commitsNote}</p><div class="tr-actions">${back}</div></div>`;
@@ -2415,7 +2463,7 @@ function trendsView(sel) {
     const { shown, hidden } = filtered(trendsBothFor(doc, club, school));
     const trs = shown.map(r => `<tr class="team-row"><td>${progCell(byProgram.get(r.slug))}${link({ program: r.slug }, 'both at this program →', 'tr-go')}</td><td class="num"><span class="num-strong">${r.club}</span></td><td class="num">${r.school}</td></tr>`).join('');
     const html = `${noteHtml}<div class="card"><h3>${esc(clubE.name)} and ${esc(schoolE.name)}</h3>
-      <p class="small"><b>Not necessarily the same players.</b> These are the Division I programs with players from this club and players from this high school. The index counts the two separately, so a program with 2 from each may have 2 players or 4.</p>
+      <p class="small"><b>Not necessarily the same players.</b> These are the programs with players from this club and players from this high school. The index counts the two separately, so a program with 2 from each may have 2 players or 4.</p>
       <div class="tscroll"><table class="trend-table"><thead><tr><th>Program</th><th class="num">From this club<span class="th-sub">current + past</span></th><th class="num">From this school<span class="th-sub">current + past</span></th></tr></thead>
       <tbody>${trs || `<tr><td colspan="3"><div class="empty">${hidden ? 'Every program with players from both is hidden by your filters.' : 'No program has players from both.'}</div></td></tr>`}</tbody></table></div>
       <div class="table-footnote">${hiddenLine(hidden, 'players from both')}Counts are lower bounds: a club or a high school is known for only some players.</div></div>`;
@@ -2424,22 +2472,24 @@ function trendsView(sel) {
   // 2, 3: a club or a high school: the programs it feeds.
   if (clubE || schoolE) {
     const kind = clubE ? 'club' : 'school', id = club || school, e = clubE || schoolE;
-    const rows = trendsProgramsFor(doc, kind, id);
-    const totals = { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: rows.reduce((a, r) => a + (r.commits || 0), 0) };
+    const rows = trendsProgramsFor(doc, kind, id).map(r => ({ ...r, division: r.division || byProgram.get(r.slug)?.division || 'D1' }));
+    const known = rows.filter(r => r.commits != null);
+    const totals = { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: known.length ? known.reduce((a, r) => a + r.commits, 0) : null };
+    const byDiv = trendsDivisionTotals(rows), divs = doc.divisions.filter(d => byDiv[d]);
     const { shown, hidden } = filtered(rows);
-    const trs = shown.map(r => { const q = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(q)}${link({ program: q.slug }, `with this ${kind === 'school' ? 'school' : 'club'} →`, 'tr-go')}${r.current ? `<details class="trend-players" data-slug="${esc(q.slug)}" data-kind="${kind}" data-id="${esc(id)}"><summary>current players</summary><div class="trend-names small muted">Loading…</div></details>` : ''}</td>${cells(r)}</tr>`; }).join('');
+    const trs = shown.map(r => { const q = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(q)}${link({ program: q.slug }, `with this ${kind === 'school' ? 'school' : 'club'} →`, 'tr-go')}${r.current ? `<details class="trend-players" data-slug="${esc(q.slug)}" data-kind="${kind}" data-id="${esc(id)}"><summary>current players</summary><div class="trend-names small muted">Loading…</div></details>` : ''}</td>${cells(r, kind === 'school')}</tr>`; }).join('');
     const html = `${noteHtml}<div class="card"><h3>${esc(e.name)}${where(e) ? ` <span class="muted" style="font-weight:400">· ${esc(where(e))}</span>` : ''} ${e.unmatched ? unmatchedBadge : ''}</h3>
-      <p class="small muted">Division I programs with players from this ${TR_WHAT[kind]}, most players first: ${totals.current} current, ${totals.past} former, ${totals.commits} commit${totals.commits === 1 ? '' : 's'} at ${rows.length} program${rows.length === 1 ? '' : 's'}. ${commitsNote}</p>
+      <p class="small muted">Programs with players from this ${TR_WHAT[kind]}, most players first: ${totals.current} current, ${totals.past} former, ${commitsText(totals.commits)} at ${rows.length} program${rows.length === 1 ? '' : 's'}. ${commitsNote}</p>
       <div class="tscroll"><table class="trend-table">${head('Program', kind === 'school')}<tbody>${trs || `<tr><td colspan="5"><div class="empty">${rows.length ? 'Every program with these players is hidden by your filters.' : 'No program carries this entry.'}</div></td></tr>`}</tbody></table></div>
-      <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:<ul class="trend-cov">${trendsCoverageLines(doc, kind, totals).map(l => `<li>${esc(l)}</li>`).join('')}</ul>${hiddenLine(hidden, 'these players')}${kind === 'school' ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
+      <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:<ul class="trend-cov">${trendsCoverageLines(doc, kind, byDiv, divs.length ? divs : null).map(l => `<li>${esc(l)}</li>`).join('')}</ul>${hiddenLine(hidden, 'these players')}${kind === 'school' ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
     return { html, sub, say: `${e.name}: ${rows.length} program${rows.length === 1 ? '' : 's'} with players from this ${TR_WHAT[kind]}.` };
   }
   // 4: a program: the clubs and the high schools feeding it.
   if (slug) {
     const pr = doc.programs[slug];
     const covLine = (known, label) => [[pr.current, known[0], 'current players'], [pr.past, known[1], 'former players'], [pr.commits, known[2], 'verbal or signed commits']]
-      .map(([n, k, noun]) => k == null ? `${n} ${noun}; ${label} not available yet` : `${n} ${noun}; ${label} known for ${k} (${trendsPct(k, n)}%)`).join(' · ');
-    const table = (rows, k) => rows.length ? `<div class="tscroll"><table class="trend-table">${head(k === 'school' ? 'High school' : 'Club', k === 'school')}<tbody>${rows.map(r => `<tr><td>${link({ [k]: r.id }, esc(r.name))}${where(r) ? ` <span class="muted small">${esc(where(r))}</span>` : ''}${r.unmatched ? ` ${unmatchedBadge}` : ''}</td>${cells(r)}</tr>`).join('')}</tbody></table></div>`
+      .map(([n, k, noun]) => n == null ? 'commits not collected' : k == null ? `${n} ${noun}; ${label} not available yet` : `${n} ${noun}; ${label} known for ${k} (${trendsPct(k, n)}%)`).join(' · ');
+    const table = (rows, k) => rows.length ? `<div class="tscroll"><table class="trend-table">${head(k === 'school' ? 'High school' : 'Club', k === 'school')}<tbody>${rows.map(r => `<tr><td>${link({ [k]: r.id }, esc(r.name))}${where(r) ? ` <span class="muted small">${esc(where(r))}</span>` : ''}${r.unmatched ? ` ${unmatchedBadge}` : ''}</td>${cells(r, k === 'school')}</tr>`).join('')}</tbody></table></div>`
       : `<div class="empty">No ${TR_WHAT[k]} is known for any of this program's players yet.</div>`;
     const clubs = trendsFeedersFor(doc, 'club', slug), schools = TR.hasSchools ? trendsFeedersFor(doc, 'school', slug) : null;
     const html = `${noteHtml}<div class="card section"><h3>Clubs feeding ${esc(displayName(p))}</h3><p class="small muted">Most players first. ${commitsNote}</p>${table(clubs, 'club')}
@@ -2451,7 +2501,7 @@ function trendsView(sel) {
   }
   // 1: nothing selected.
   const html = `${noteHtml}<div class="card"><h3>How to read this</h3>
-    <p class="small ink2">Pick a club${TR.hasSchools ? ', a high school' : ''} or a program, or any two or three of them. A club${TR.hasSchools ? ' or a high school' : ''} alone shows the Division I programs its players went to; a program alone shows where its players came from; a pair shows the players they share. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote}</p>
+    <p class="small ink2">Pick a club${TR.hasSchools ? ', a high school' : ''} or a program, or any two or three of them. A club${TR.hasSchools ? ' or a high school' : ''} alone shows the programs its players went to; a program alone shows where its players came from; a pair shows the players they share. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote}</p>
     <p class="small ink2" style="margin-top:8px"><b>Coverage today</b> — ${trendsCoverageLines(doc, 'club').map(esc).join(' · ')}. A club is known mostly from recruiting records and from roster pages that carry a Club column, so every count is a lower bound: a program showing one player from a club may well have more whose club no public source states.${TR.hasSchools ? ` High schools: ${trendsCoverageLines(doc, 'school').map(esc).join(' · ')}.` : ' High-school results are not published yet.'}</p></div>`;
   return { html, sub, say: 'Nothing selected. Pick a club, a high school or a program.' };
 }
@@ -2718,7 +2768,7 @@ async function tabRoster(p) {
     <div class="card"><h3>${r.season} roster · ${r.count} players</h3><div class="tscroll"><table>
       <tr><th class="num">#</th><th>Name</th><th>Pos</th><th>Class</th><th>Ht</th><th>Hometown</th><th>High school</th><th>Club</th><th>Major</th></tr>${rows}</table></div>
       ${prov(r._meta, 'Club comes from TopDrawerSoccer / SoccerWire commitment records where available; "bio text" means a best-effort read of the official bio.'
-        + (p.division === 'D1' ? ` <a href="${esc(trendsUrl({ program: p.slug }))}">Where ${esc(displayName(p))}'s players come from →</a>` : ''))}</div>`;
+        + ` <a href="${esc(trendsUrl({ program: p.slug }))}">Where ${esc(displayName(p))}'s players come from →</a>`)}</div>`;
 }
 
 async function tabCommitments(p) {
