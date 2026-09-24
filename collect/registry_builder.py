@@ -67,6 +67,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 
 from . import common
+from .wikipedia import MENS_TITLE_RE
 
 DIRECTORY_URL = "https://web3.ncaa.org/directory/api/directory/memberList?type=12&division={roman}&sportCode=WSO"
 DIVISION_ROMAN = {"D1": "I", "D2": "II", "D3": "III"}
@@ -1043,10 +1044,13 @@ def soccer_article_for(athletics_article: str | None) -> str | None:
     if not athletics_article:
         return None
     if "soccer" in athletics_article.lower():
-        return wiki_canonical(athletics_article)
+        t = wiki_canonical(athletics_article)
+        return None if t and MENS_TITLE_RE.search(t) else t
     for suffix in ("_women's_soccer", "_soccer"):
         t = wiki_canonical(athletics_article + suffix)
-        if t and "soccer" in t.lower():
+        # #349: 'Old_Dominion_Monarchs_soccer' redirects to the men's team's article; following it published the
+        # men's seasons as the women's (old-dominion, campbell, east-tennessee-state, manhattan; fixed in #346)
+        if t and "soccer" in t.lower() and not MENS_TITLE_RE.search(t):
             return t
     return None
 
@@ -1282,11 +1286,16 @@ def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
 def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = None) -> dict:
     """Fill ids.wikipedia for onboarded programs that have none. Dry run by default; --apply
     writes the registry (locked). Prints found / none tables."""
+    # a program whose registry records that it has no women's article (ids.wikipediaNone, #349) is looked up
+    # again only when named with a slug
     targets = [p for p in registry["programs"] if (slugs and p["slug"] in slugs)
-               or (not slugs and p.get("onboarded") and not (p.get("ids") or {}).get("wikipedia"))]
+               or (not slugs and p.get("onboarded") and not (p.get("ids") or {}).get("wikipedia")
+                   and not (p.get("ids") or {}).get("wikipediaNone"))]
     found, none = {}, []
     for p in targets:
         title, others = find_wiki_article(p)
+        if title and MENS_TITLE_RE.search(title):  # never a men's team's article, whatever the lookup returns
+            others, title = [title, *others], None
         if title:
             found[p["slug"]] = title
             common.log(f"wiki: {p['slug']:24} -> {title}" + (f"   (also: {', '.join(others)})" if others else ""))
