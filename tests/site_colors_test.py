@@ -215,7 +215,8 @@ def test_politeness() -> None:
             net.fetch_calls.append(url)
             raise common.FetchError("HTTP 429", status=429, final_url="https://final.example/x")
         common.fetch_text = refuse
-        rep = sc.run({"programs": [d1, d2]}, report_path=None, sleep=lambda s: None)
+        # one worker: across workers a final-host stop only reaches requests that start after it
+        rep = sc.run({"programs": [d1, d2]}, report_path=None, sleep=lambda s: None, workers=1)
     ok("a 429 stops both the requested host and the final host", len(net.fetch_calls) == 1
        and [x["outcome"] for x in rep["programs"]] == ["skipped: host stopped (429)"] * 2, str(net.fetch_calls))
     # fails if a program with athletics.skipReason is fetched

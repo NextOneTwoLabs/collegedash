@@ -33,6 +33,7 @@ import re
 import sys
 import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 
 if __package__ in (None, ""):  # run as a script: python collect/site_colors.py
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -52,6 +53,7 @@ MIN_ACCEPTED_D1 = 280                # of the D1 ground-truth rows (308), see ag
 MIN_ALL_AGREE = 0.90
 MIN_PRIMARY_AGREE = 0.95
 HOST_PAUSE = 1.5
+WORKERS = 8                          # distinct hosts fetched side by side; one host is never concurrent
 MAX_AGE_HOURS = 24 * 30
 SAMPLE_SEED, SAMPLE_N = 276, 20      # the report's random accepted-D3 sample
 TRUTH_PAGES = ("/roster", "", "/schedule", "/coaches")
@@ -344,22 +346,44 @@ def build_report(records: list[dict], skipped: list[dict], truth: list[dict]) ->
 
 
 def run(registry: dict, *, slugs: list[str] | None = None, report_path: str | None = REPORT_PATH,
-        sleep=time.sleep) -> dict:
-    """The dry run: fetch, decide, write the report. Never writes the registry."""
+        sleep=time.sleep, workers: int = WORKERS) -> dict:
+    """The dry run: fetch, decide, write the report. Never writes the registry.
+
+    Programs are grouped by host and each host's programs run in order in one worker, so the host-stop
+    rule holds within a host and no host sees two requests at once; up to `workers` different hosts run
+    side by side. Most Sidearm hosts ask Crawl-delay 30s, which common's per-host gate honours between
+    the robots.txt request and the page, so one host at a time would take hours for no politeness gain."""
     targets, skipped, truth_progs = _targets(registry, slugs)
     stopped: dict[str, int] = {}
-    records, truth = [], []
     common.log(f"site colours: {len(targets)} to fetch, {len(truth_progs)} ground truth, "
-               f"{len(skipped)} skipped for athletics.skipReason")
-    for group, progs in (("target", targets), ("truth", truth_progs)):
-        for i, p in enumerate(progs, 1):
+               f"{len(skipped)} skipped for athletics.skipReason, {workers} workers")
+    jobs = [("target", p) for p in targets] + [("truth", p) for p in truth_progs]
+    by_host: dict[str, list] = {}
+    for job in jobs:
+        by_host.setdefault(common._host(page_url(job[1])), []).append(job)
+    done: dict[str, dict] = {}
+    n = [0]
+
+    def one_host(host_jobs):
+        for group, p in host_jobs:
             r = fetch_site_page(p, stopped)
             if group == "truth":
                 r["wikipedia"] = [norm_hex(c) for c in p["colors"]]
-            (records if group == "target" else truth).append(r)
-            common.log(f"site colours: {group} {i}/{len(progs)} {p['slug']:28} {r['outcome'] or r['template']}")
+            done[p["slug"]] = r
+            n[0] += 1
+            common.log(f"site colours: {n[0]}/{len(jobs)} {group} {p['slug']:28} {r['outcome'] or r['template']}")
             if r["live"]:
                 sleep(HOST_PAUSE)
+
+    if workers <= 1:
+        for host_jobs in by_host.values():
+            one_host(host_jobs)
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for f in [pool.submit(one_host, hj) for hj in by_host.values()]:
+                f.result()
+    records = [done[p["slug"]] for p in targets]
+    truth = [done[p["slug"]] for p in truth_progs]
     decide_all(records)
     decide_all(truth, guard_hosts=None)  # ten programs: the pair guard is for the target set
     for r in records + truth:
