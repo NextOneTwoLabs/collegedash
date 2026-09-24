@@ -299,8 +299,11 @@ test('#315 phone first load: a visible Loading state; a failed load leaves S.tre
   page.sandbox.location.hash = '#/trends';
   const done = page.sandbox.route(); await tick();
   assert.ok(page.app().includes('id="trLoading"') && page.app().includes('Loading…'), 'Loading is on screen while the index downloads');
+  const heading = '<h1 class="content-title">From Youth Clubs/High Schools to Colleges<'; // #329: every state carries it
+  assert.ok(page.app().includes(heading), 'the Loading state has the page title');
   release(); await done; await tick();
   assert.ok(page.app().includes('Could not load') && page.app().includes('id="trRetry"'), 'a failed load says so and offers Try again');
+  assert.ok(page.app().includes(heading), 'the Could not load state has the page title');
   assert.equal(page.sandbox.S.trends, null, 'S.trends stays unset');
   page.sandbox.fetch = real;
   click(page.el('#trRetry')); await tick(40);
@@ -324,10 +327,12 @@ test('#315 phone first load: a visible Loading state; a failed load leaves S.tre
   assert.ok(p4.results().includes('How to read this'));
   const missing = await open('#/trends', null);
   assert.ok(missing.app().includes('Not built yet') && missing.app().includes('id="trRetry"'), 'a 404 still reads "Not built yet"');
+  assert.ok(missing.app().includes(heading), 'the Not built yet state has the page title');
+  assert.ok(![page, missing].some(pg => pg.app().includes('Where players come from')), 'no state carries the old title');
 });
 
 /* ---------- the tab's name (#322) ---------- */
-test('the tab and the breadcrumb read "Pipelines"; the page title and the #/trends URL are unchanged', async () => {
+test('the tab and the breadcrumb read "Pipelines"; the page title reads "From Youth Clubs/High Schools to Colleges" (#329); the #/trends URL is unchanged', async () => {
   const page = await open('#/trends');
   const html = page.app();
   const tabs = [...html.matchAll(/<a href="([^"]*)" class="view-tab[^"]*"[^>]*>([^<]*)<\/a>/g)];
@@ -337,7 +342,8 @@ test('the tab and the breadcrumb read "Pipelines"; the page title and the #/tren
   assert.ok(tab[0].includes('aria-selected="true"'), 'and is the selected tab');
   assert.ok(!/Clubs &amp; schools|Clubs &amp; high schools|Clubs & high schools/.test(html), 'no old label left on the page');
   assert.ok(/class="breadcrumb-current"[^>]*>Pipelines</.test(html), 'the breadcrumb reads Pipelines');
-  assert.ok(html.includes('Where players come from'), 'the page title is kept');
+  assert.ok(/<h1 class="content-title">From Youth Clubs\/High Schools to Colleges</.test(html), 'the page title reads the owner\'s wording (#329)');
+  assert.ok(!html.includes('Where players come from'), 'the old page title is gone');
 });
 
 /* ---------- states ---------- */
@@ -580,6 +586,12 @@ test('the list view offers the tab; the roster tab links a reviewed club and the
   assert.ok(p2.tab().includes('href="#/trends?club=mvla"'), 'a matched club links to its trends page');
   assert.ok(!p2.tab().includes('club=raw'), 'an unmatched spelling does not');
   assert.ok(p2.tab().includes(`href="#/trends?program=${A.slug}"`), 'the roster tab links to where the program\'s players come from');
+  // #329: the link reads like the page it opens
+  const link = p2.tab().match(new RegExp(`<a href="#/trends\\?program=${A.slug}">([^<]*)</a>`));
+  assert.ok(link, 'the program link is there');
+  const html = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  assert.equal(link[1], `${html(disp(prof))}'s youth clubs and high schools →`, 'the link reads "{School}\'s youth clubs and high schools →" (#329)');
+  assert.ok(!p2.tab().includes('players come from'), 'the old link text is gone');
   assert.deepEqual(plain(p2.sandbox.trendsRosterNames({ roster: null, commitments: prof.commitments }, 'club', 'mvla')), [], 'commitments are never a source of names');
   // #315: every division links (the D1 gate is gone)
   const d2 = JSON.parse(JSON.stringify(prof)); d2.division = 'D2';
