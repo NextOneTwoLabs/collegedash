@@ -88,6 +88,19 @@ def test_blank_positions_filled_and_other_fields_from_table():
        == ("4", "SR", "Example Academy", "Example Community College", "Nursing"), mk)
 
 
+def test_social_links_come_with_the_list_link():
+    # A made-up handle, added here rather than to the fixture file.
+    ig = "https://www.instagram.com/placeholder.handle.example/"
+    html = fixture().replace(
+        '<h3><a href="/sports/womens-soccer/roster/alex-placeholder/9001">Alex Placeholder</a></h3></div>',
+        '<h3><a href="/sports/womens-soccer/roster/alex-placeholder/9001">Alex Placeholder</a></h3></div>'
+        f'<div class="sidearm-roster-player-social"><a href="{ig}">Instagram</a></div>')
+    p = by_name(sidearm.parse_roster(html, BASE))
+    ok("linked player takes the list item's social link", p["Alex Placeholder"]["social"] == {"instagram": ig},
+       p["Alex Placeholder"]["social"])
+    ok("player whose list item has none gets none", p["Pat Sample"]["social"] == {}, p["Pat Sample"]["social"])
+
+
 def test_ambiguous_names_are_not_linked():
     # Two list items with the same name: no way to tell which bio is whose, so neither is taken.
     html = fixture().replace(">Pat Sample</a>", ">Alex Placeholder</a>")
@@ -96,6 +109,22 @@ def test_ambiguous_names_are_not_linked():
        p["Alex Placeholder"])
     ok("unmatched table name stays unlinked", p["Pat Sample"]["bioUrl"] is None, p["Pat Sample"])
     ok("unique name beside them is linked", p["Mary Kate Example"]["bioUrl"] is not None, p["Mary Kate Example"])
+
+
+def test_duplicate_table_names_are_not_linked():
+    # Two TABLE rows with the same name and one list item: the one bio cannot belong to both rows, so
+    # neither takes it (a join that only checked the list side would give both rows the same URL).
+    html = fixture().replace('<td class="player_firstname">Pat</td><td class="player_lastname">Sample</td>',
+                             '<td class="player_firstname">Alex</td><td class="player_lastname">Placeholder</td>')
+    players = sidearm.parse_roster(html, BASE)["players"]
+    twins = [x for x in players if x["name"] == "Alex Placeholder"]
+    ok("the table has two rows of the same name", len(twins) == 2, [x["name"] for x in players])
+    ok("neither duplicate table row takes the one list bio", all(x["bioUrl"] is None for x in twins),
+       [x["bioUrl"] for x in twins])
+    ok("neither duplicate table row takes the list position", all(x["pos"] == "" for x in twins),
+       [x["pos"] for x in twins])
+    mk = next((x for x in players if x["name"] == "Mary Kate Example"), {})
+    ok("unique name beside them is still linked", mk.get("bioUrl") == f"{BASE}/mary-kate-example/9002", mk)
 
 
 def test_partly_linked_table_is_not_joined_by_name():
@@ -114,6 +143,17 @@ def test_single_name_column_unchanged():
     ok("non-adjacent second 'Name' is not a last-name column", "last name" not in idx, idx)
 
 
+def test_name_then_full_name_is_not_joined():
+    # 'Full Name' aliases to "name" too, but 'Name | Full Name' is not a first/last pair.
+    html = fixture().replace('<th scope="col">Name</th><th scope="col">Name</th>',
+                             '<th scope="col">Name</th><th scope="col">Full Name</th>')
+    html = html.replace('<td class="player_lastname">Placeholder</td>', '<td>Alex Placeholder</td>')
+    idx, _, _ = sidearm._header_index(sidearm.BeautifulSoup(html, "html.parser").table)
+    ok("'Name | Full Name' has no last-name column", "last name" not in idx, idx)
+    names = [x["name"] for x in sidearm.parse_roster(html, BASE)["players"]]
+    ok("no doubled name", not any("Alex Alex" in n for n in names), names)
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -121,7 +161,9 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_first_and_last_name_are_joined, test_bio_urls_come_from_the_list_by_name,
                  test_blank_positions_filled_and_other_fields_from_table, test_ambiguous_names_are_not_linked,
-                 test_partly_linked_table_is_not_joined_by_name, test_single_name_column_unchanged):
+                 test_social_links_come_with_the_list_link, test_duplicate_table_names_are_not_linked,
+test_partly_linked_table_is_not_joined_by_name,
+                 test_single_name_column_unchanged, test_name_then_full_name_is_not_joined):
         try:
             case()
         except Exception as e:  # a crash is a failure of that case, not of the run

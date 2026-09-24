@@ -269,11 +269,15 @@ def _header_index(table) -> tuple[dict[str, int], int, str]:
     rows = table.find_all("tr")[:2]
     caption = ""
     for n, tr in enumerate(rows, start=1):
-        heads = [_norm_header(c.get_text(" ")) for c in tr.find_all(["th", "td"])]
+        raw = [common.clean(c.get_text(" ")).lower() for c in tr.find_all(["th", "td"])]
+        heads = [HEADER_ALIASES.get(h, h) for h in raw]
         if "name" in heads:
             idx: dict[str, int] = {}
             for i, h in enumerate(heads):
-                if h == "name" and idx.get("name") == i - 1 and "last name" not in idx:
+                # both headers literally 'Name': 'Name | Full Name' (both alias to "name") is not a
+                # first/last pair and must not be joined into a doubled name
+                if (raw[i] == "name" and i > 0 and raw[i - 1] == "name" and idx.get("name") == i - 1
+                        and "last name" not in idx):
                     idx["last name"] = i
                 idx.setdefault(h, i)
             return idx, n, caption
@@ -558,6 +562,17 @@ def _parse_person_cards(soup: BeautifulSoup, base_url: str, social_by_url: dict)
     return players
 
 
+def _list_view_social(li) -> dict:
+    """Instagram / X links from a legacy list-view item's social block."""
+    social: dict[str, str] = {}
+    for a in li.select(".sidearm-roster-player-social a[href]"):
+        if "instagram.com" in a["href"]:
+            social.setdefault("instagram", a["href"])
+        elif "twitter.com" in a["href"] or "x.com/" in a["href"]:
+            social.setdefault("x", a["href"])
+    return social
+
+
 def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
     """Players from the legacy Sidearm list view, li.sidearm-roster-player (issue #156). Used only when
     neither the tables nor the person cards gave a player. Some legacy pages (Mercyhurst, Hawaii-Hilo)
@@ -589,12 +604,7 @@ def _parse_list_view(soup: BeautifulSoup, base_url: str) -> list[dict]:
         forms = [re.sub(r"\s*\([^)]*\)\s*$", "", common.clean(x.get_text(" ")))
                  for x in li.select(".sidearm-roster-player-position-long-short")]
         pos = forms[-1] if forms else re.sub(r"\s*\([^)]*\)\s*$", "", first(li, "position"))
-        social = {}
-        for a in li.select(".sidearm-roster-player-social a[href]"):
-            if "instagram.com" in a["href"]:
-                social.setdefault("instagram", a["href"])
-            elif "twitter.com" in a["href"] or "x.com/" in a["href"]:
-                social.setdefault("x", a["href"])
+        social = _list_view_social(li)
         record = _player_record(
             number=first(li, "jersey-number"), name=name, pos_label=pos, height=first(li, "height"),
             class_label=first(li, "academic-year"), hometown=first(li, "hometown"), high_school=first(li, "highschool"),
@@ -673,16 +683,20 @@ def _link_unlinked_table_from_list_view(players: list[dict], soup: BeautifulSoup
     Only when NOT ONE table player has a bio URL, take each player's URL from the list item whose
     name is the same (case-insensitive, whitespace-normalised), and only when that name occurs once
     in the table and once in the list - never by row order (issue #183). A table with even one
-    linked row is left exactly as it was."""
+    linked row is left exactly as it was. A player linked this way also takes the list item's social
+    links when the table gave none (these pages have no person cards to take them from)."""
     if not players or any(p["bioUrl"] for p in players):
         return
     items: dict[str, list[str]] = {}
+    social_by_url: dict[str, dict] = {}
     for li in soup.select("li.sidearm-roster-player"):
         name_el = li.select_one(".sidearm-roster-player-name h3") or li.select_one(".sidearm-roster-player-name a")
         link = li.select_one(".sidearm-roster-player-name a[href]")
         href = link["href"] if link else li.get("data-player-url")
         if name_el is not None and href:
-            items.setdefault(common.clean(name_el.get_text(" ")).lower(), []).append(urljoin(base_url, href))
+            url = urljoin(base_url, href)
+            items.setdefault(common.clean(name_el.get_text(" ")).lower(), []).append(url)
+            social_by_url.setdefault(url, _list_view_social(li))
     in_table: dict[str, int] = {}
     for p in players:
         in_table[p["name"].lower()] = in_table.get(p["name"].lower(), 0) + 1
@@ -691,6 +705,8 @@ def _link_unlinked_table_from_list_view(players: list[dict], soup: BeautifulSoup
         urls_ = items.get(key, [])
         if in_table[key] == 1 and len(set(urls_)) == 1:
             p["bioUrl"] = urls_[0]
+            if not p["social"]:
+                p["social"] = dict(social_by_url.get(urls_[0], {}))
 
 
 def looks_client_rendered(html: str) -> bool:
