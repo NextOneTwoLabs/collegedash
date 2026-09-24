@@ -127,6 +127,27 @@ championship to spring 2021. No table will ever exist for it, so add the year to
 nothing at all; only years after its last sheet are checked, which is why the absent 2020 sheet is silent
 today.
 
+### When the season ends: `registry.season.finalRpiThrough` (issue #249)
+
+The season being played (`season.current`) stays "in progress" for every program, in every division, until
+the NCAA's table through the D1 College Cup final is stored. It does not end when a program's own schedule
+runs out. The build finishes the season once a `public/data/rpi/weekly/<season>/` snapshot is dated on or
+after `season.finalRpiThrough["<season>"]`. From then on `index.json`'s `season.finished` is that season
+and `season.rpiFinal` names the table. A date outside Nov 15 to Jan 31 fails the build.
+
+**Once a year, before the College Cup:** enter the final's date, taken from an NCAA page that names it, and
+cite the page in the `_comment`. The build and refresh runs print `::warning` notes, but never fail over this:
+
+- *"registry season.finalRpiThrough has no <year> date"* (from Oct 1): enter the date as above.
+- *"no final <year> RPI seen"* (from Jan 15): look at ncaa.com. If the NCAA's last table of the season is
+  dated earlier than `finalRpiThrough`, set `finalRpiThrough` to that table's date. The snapshots are
+  already stored, so the next build finishes the season.
+- *"the registry moved on to <year>, but <year-1>'s last snapshot is through ..."*: the previous season
+  is published from a table that may not include the final. Check that no later table exists.
+
+Moving `season.current` to the next year still finishes the old season from its last snapshot, as it
+always has.
+
 ## Deploying
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at the repo root:

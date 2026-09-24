@@ -10,9 +10,10 @@ export function expectedRpi(index) {
   const years = (index.programs || []).flatMap((p) => (p.rpiHistory || []).map((h) => h.year));
   const current = index.season?.current ?? null;
   const season = years.length ? Math.max(...years) : null;
-  const inProgress = season != null && season === current;
+  // issue #249: once the build publishes season.rpiFinal, the season being played is over
+  const inProgress = season != null && season === current && !index.season?.rpiFinal;
   const done = years.filter((y) => current == null || y < current);
-  const finished = done.length ? Math.max(...done) : current != null ? current - 1 : null;
+  const finished = index.season?.finished ?? (done.length ? Math.max(...done) : current != null ? current - 1 : null);
   const label = season == null ? 'RPI' : `RPI ${season}${inProgress ? ' (in progress)' : ''}`;
   return { season, inProgress, finished, label };
 }

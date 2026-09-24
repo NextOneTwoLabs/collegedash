@@ -1005,8 +1005,11 @@ function rpiSeasons() {
   const current = idx?.season?.current ?? null;
   const years = [...new Set((idx?.programs || []).flatMap(p => (p.rpiHistory || []).map(h => h.year)))].sort((a, b) => b - a);
   const season = years[0] ?? null;
-  const finished = years.find(y => current == null || y < current) ?? (current != null ? current - 1 : null);
-  rpiMemo = { index: idx, season, inProgress: season != null && season === current, finished };
+  // issue #249: the build says when the season being played is over (its final RPI is out) and which
+  // season is finished; the calculation below is only the fallback for an index without those fields
+  const final = !!idx?.season?.rpiFinal;
+  const finished = idx?.season?.finished ?? years.find(y => current == null || y < current) ?? (current != null ? current - 1 : null);
+  rpiMemo = { index: idx, season, inProgress: season != null && season === current && !final, finished };
   return rpiMemo;
 }
 const rpiSeason = () => rpiSeasons().season;
