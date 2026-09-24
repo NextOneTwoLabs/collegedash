@@ -493,12 +493,9 @@ def _write_refused(host: str, entry: dict | None) -> None:
             if host in cur:
                 return
             cur[host] = entry
-        os.makedirs(os.path.dirname(REFUSED_PATH), exist_ok=True)
-        tmp = REFUSED_PATH + ".tmp"
-        with open(tmp, "w", encoding="utf-8", newline="\n") as f:
-            json.dump(dict(sorted(cur.items())), f, indent=2, sort_keys=True, ensure_ascii=False)
-            f.write("\n")
-        os.replace(tmp, REFUSED_PATH)
+        # common.write_json: a unique <name>.<random>.tmp beside the file, removed if the write fails, and
+        # matched by .gitignore's *.tmp, so a run killed mid-write never has it committed (issue #289)
+        common.write_json(REFUSED_PATH, dict(sorted(cur.items())), sort_keys=True)
 
 
 def _retry_due(e: dict) -> bool:

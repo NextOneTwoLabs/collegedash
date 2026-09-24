@@ -749,6 +749,59 @@ def test_commit_steps(tmp):
     ok("exits 0 with a warning and pushes nothing", code == 0 and "nothing is committed or pushed" in out
        and remote_branches(origin) == ["main"], out[-300:])
 
+    # issue #289: data/camps-refused-hosts.json rides along when the run changed it, and only then; the
+    # writer's temp file (a <name>.<random>.tmp; a killed run can leave one) is never committed. The seed
+    # repo here has no .gitignore, so this checks the step's own exact-path staging, not *.tmp in .gitignore.
+    refused_path = "data/camps-refused-hosts.json"
+    refused_v1 = '{\n  "camps.example.com": {\n    "firstAt": "2026-09-24",\n    "status": 403\n  }\n}\n'
+    for case, on_main in (("refused-new", False), ("refused-changed", True)):
+        print(f"commit-{case}: a batch that records a refused camp host commits the file, never a leftover .tmp")
+        origin, work, temp = setup(tmp, case)
+        if on_main:
+            write(os.path.join(work, refused_path), "{}\n")
+            git(work, "add", "--", refused_path)
+            git(work, "commit", "-q", "-m", "refused-hosts file on main")
+            git(work, "push", "-q", "origin", "HEAD:refs/heads/main")
+        run_step("Prepare the batch branch", work, env_for(temp))
+        collect_in(work, temp)
+        write(os.path.join(work, refused_path), refused_v1)
+        write(os.path.join(work, refused_path + ".tmp"), '{\n  "half-writ')
+        write(os.path.join(work, "data/camps-refused-hosts.json.x1y2z3.tmp"), '{\n  "half-writ')
+        code, out = run_step("Commit to the batch branch", work, env_for(temp))
+        got = committed(origin, "onboard/t")
+        ok(f"{case}: the refused-hosts file is committed with the batch's paths, and nothing else",
+           code == 0 and got == sorted(EXPECTED + [refused_path]), (got, out[-300:]))
+        ok(f"{case}: the committed file is the run's", git(origin, "show", f"onboard/t:{refused_path}", check=False)
+           == refused_v1.strip())
+        ok(f"{case}: no .tmp is committed, and the leftovers are still on the runner, untracked",
+           not any(p.endswith(".tmp") for p in got)
+           and git(work, "ls-files", "--", "*.tmp") == ""
+           and os.path.exists(os.path.join(work, refused_path + ".tmp")), got)
+
+    print("commit-refused-untouched: a batch that records no refused host leaves the file as it is on main")
+    origin, work, temp = setup(tmp, "refused-untouched")
+    write(os.path.join(work, refused_path), "{}\n")
+    git(work, "add", "--", refused_path)
+    git(work, "commit", "-q", "-m", "refused-hosts file on main")
+    git(work, "push", "-q", "origin", "HEAD:refs/heads/main")
+    run_step("Prepare the batch branch", work, env_for(temp))
+    collect_in(work, temp)
+    write(os.path.join(work, refused_path + ".tmp"), '{\n  "half-writ')
+    code, out = run_step("Commit to the batch branch", work, env_for(temp))
+    ok("refused-untouched: exactly the batch's paths, the file unchanged on the branch",
+       code == 0 and committed(origin, "onboard/t") == EXPECTED
+       and git(origin, "show", f"onboard/t:{refused_path}", check=False) == "{}", (committed(origin, "onboard/t"), out[-300:]))
+
+    print("commit-refused-only: a run that only recorded a refused host is still not a batch")
+    origin, work, temp = setup(tmp, "refused-only")
+    run_step("Prepare the batch branch", work, env_for(temp))
+    write(os.path.join(temp, "onboard", "slugs.txt"), "a1\n")
+    write(os.path.join(work, "data/onboard-batches/t.md"), "summary\n")
+    write(os.path.join(work, refused_path), refused_v1)
+    code, out = run_step("Commit to the batch branch", work, env_for(temp))
+    ok("refused-only: exits 0 with the warning and pushes nothing", code == 0 and "nothing is committed or pushed" in out
+       and remote_branches(origin) == ["main"], out[-300:])
+
 
 def main(argv=None) -> int:
     global VERBOSE

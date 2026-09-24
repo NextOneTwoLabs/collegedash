@@ -34,6 +34,7 @@ import os
 import re
 import shlex
 import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -339,6 +340,37 @@ def test_refused(tmp):
         w.close()
 
 
+def test_refused_write_interrupted(tmp):
+    print("refused-hosts write (#289): an interrupted write leaves the file whole and no temp file behind")
+    w = World(tmp, "write-interrupted")
+    try:
+        w.seed({"old.example.com": {"firstAt": "2026-09-01", "status": 403}})
+        before = w.raw()
+        seen: list[str] = []
+
+        def dying_dump(obj, f, *a, **kw):
+            seen.extend(n for n in os.listdir(os.path.dirname(w.refused)) if n != os.path.basename(w.refused))
+            f.write('{\n  "half-writ')
+            raise KeyboardInterrupt("killed mid-write")
+
+        camps.reset_refused()
+        with patched(camps, REFUSED_PATH=w.refused), patched(json, dump=dying_dump):
+            try:
+                camps._write_refused("new.example.com", {"firstAt": "2026-09-24", "status": 403})
+            except KeyboardInterrupt:
+                pass
+        left = sorted(os.listdir(os.path.dirname(w.refused)))
+        ok("the file is unchanged", w.raw() == before, str(w.raw()))
+        ok("FIX no temp file is left beside it", left == [os.path.basename(w.refused)], str(left))
+        tmps = [n for n in seen if n.endswith(".tmp")]  # (the other name seen is _locked's <name>.lock)
+        ignored = bool(tmps) and all(subprocess.run(["git", "-C", ROOT, "check-ignore", "-q", "--no-index", "data/" + n],
+                                                    capture_output=True).returncode == 0 for n in tmps)
+        ok("the temp name the write used is one .gitignore ignores (so a SIGKILL leftover is never committed)",
+           ignored, str(seen))
+    finally:
+        w.close()
+
+
 def test_429_rule(tmp):
     print("429 rule: one retry on a Monday run, >= 7 days after recording")
     cases = [("due-kept", 8, ["--camps-retry-429"], 429, 1, True),
@@ -435,6 +467,7 @@ def main(argv=None) -> int:
         test_schedule()
         test_about()
         test_refused(tmp)
+        test_refused_write_interrupted(tmp)
         test_429_rule(tmp)
         test_stored_link(tmp)
     finally:
