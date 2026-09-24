@@ -226,8 +226,9 @@ def test_no_contact_details() -> None:
     cc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cc)
     names = sorted(f for f in os.listdir(FIXTURES) if f.endswith(".html"))
-    # plus roster-mixed-theme-staff from issue #145 (tests/staff_fallback_test.py)
-    ok("fixtures present (13 new + 1 control + 1 roster)", len(names) == 15, f"{len(names)}")
+    # plus roster-mixed-theme-staff from issue #145 (tests/staff_fallback_test.py) and the two made-up
+    # unlabelled roster themes from issue #263 (tests/wmt_unlabeled_roster_test.py)
+    ok("fixtures present (13 new + 1 control + 3 roster)", len(names) == 17, f"{len(names)}")
     for f in names:
         with open(os.path.join(FIXTURES, f), encoding="utf-8") as h:
             emails, phones = cc.contact_hits(h.read())
