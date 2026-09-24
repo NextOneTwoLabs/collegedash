@@ -22,6 +22,8 @@ name: Onboard a batch
 #   data/onboard-batches/<batch name>.json   the batch summary: per program roster, schedule and staff rows,
 #   data/onboard-batches/<batch name>.md     collector failures, 403/429 hosts and skipReason (also the
 #                                            Summary tab)
+#   data/camps-refused-hosts.json            only when the run changed it: a camp host that refused this
+#                                            batch (#284/#289), so the daily refresh does not request it again
 # Nothing else. build() output under public/data, the RPI tables `onboard` refreshes on the way, and
 # public/archive/refresh-state.json change on main every day, so carrying them would make every batch PR
 # conflict with the daily refresh; main's next refresh (or a build_only dispatch of refresh.yml) rebuilds
@@ -42,9 +44,11 @@ name: Onboard a batch
 # the per-host gate and Crawl-delay. The one addition is the D2 batches' rule: after a host's first HTTP 403
 # or 429, no further request is sent to it for the rest of the batch.
 #
-# dry_run=true runs the whole path with no network - every request is refused before it is sent - writes
-# the summary to the Summary tab and makes the commit on the runner, but pushes nothing. Use it to check a
-# batch's plan and the workflow itself; every collector reports a failure, by design.
+# dry_run=true runs the whole path with no network - every request is refused before it is sent - and
+# writes the summary to the Summary tab, which is the dry run's output. It pushes nothing, and normally
+# commits nothing either: with every collector failing, by design, no batch source or onboarded flag
+# changes, so the commit step stops at "a summary alone is not a batch". Use it to check a batch's plan and
+# the workflow itself.
 #
 # Time: on the D2 timings a batch costs about 7 minutes per 16 programs (16 workers); 60 programs is about
 # 30 minutes. The collect step stops at 300 minutes and the job at 350, under the 360-minute limit; a
@@ -231,7 +235,9 @@ jobs:
             echo "::warning title=onboard::this run changed none of the batch's sources or onboarded flags; nothing is committed or pushed"
             exit 0
           fi
-          for f in "data/onboard-batches/$NAME.json" "data/onboard-batches/$NAME.md"; do
+          # the summary, and the refused camp hosts (#289) - an exact path, so staged only when changed and
+          # never its write's *.tmp; a refused host alone is not a batch either, hence after the check above
+          for f in "data/onboard-batches/$NAME.json" "data/onboard-batches/$NAME.md" data/camps-refused-hosts.json; do
             if [ -e "$f" ]; then git add -- "$f"; fi
           done
           git commit -q -m "data: onboard $NAME ($DIVISION, $n programs)" \
