@@ -223,7 +223,8 @@ def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
       rpiYears        seasons with a row under the program's own ids: an archive sheet keyed by
                       ids.rpiHistoryName, or an NCAA table keyed by ids.ncaaName (exact, as the build joins)
       finishedRecord  some source carries a record for LAST_DONE: its NCAA table row, a LAST_DONE schedule
-                      history, the live schedule if it is LAST_DONE's, or a Wikipedia LAST_DONE record
+                      history that is that season's (#287), the live schedule if it is LAST_DONE's and has
+                      a result, or a Wikipedia LAST_DONE record with games in it
       anySeason       any source that creates a season row at all
     """
     ctx = swapped(RPI_OUT_DIR=rpi_dir) if rpi_dir else contextlib.nullcontext()
@@ -243,12 +244,19 @@ def entitlements(registry: dict, rpi_dir: str | None = None) -> dict[str, dict]:
         wseasons = wiki.get("seasons") or []
         sched = ath.get("schedule") or {}
         history = ath.get("scheduleHistory") or {}
+        # Issue #287: a history year counts only when it really is that season's (not a copy of the
+        # current schedule, not a spring page, not a page without results); the live schedule creates a
+        # row when it has a result or a dated fixture; no games played is no record. The predicate is
+        # build's own, and tests/season_records_test.py holds it down on synthetic schedules.
+        cur_games = sched.get("games") or []
+        valid = {int(y) for y, g in history.items() if build.schedule_valid_for(g, int(y), cur_games)}
+        live = build._has_result(cur_games) or any(g.get("date") for g in cur_games)
         record = (bool((finals_rows.get(LAST_DONE) or {}).get("record"))
-                  or bool(history.get(str(LAST_DONE)))
-                  or bool(sched.get("games") and (sched.get("season") or registry["season"]["current"]) == LAST_DONE)
-                  or any(w.get("year") == LAST_DONE and w.get("record") for w in wseasons))
+                  or LAST_DONE in valid
+                  or bool(build._has_result(cur_games) and (sched.get("season") or registry["season"]["current"]) == LAST_DONE)
+                  or any(w.get("year") == LAST_DONE and sum(build._wlt(w.get("record")) or ()) for w in wseasons))
         out[p["slug"]] = {"rpiYears": years, "finishedRecord": record,
-                          "anySeason": bool(years or wseasons or sched.get("games") or history)}
+                          "anySeason": bool(years or wseasons or live or valid)}
     return out
 
 

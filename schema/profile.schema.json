@@ -77,7 +77,9 @@
         "properties": {
           "year": {"type": "integer", "minimum": 1950, "maximum": 2100},
           "record": {"type": ["string", "null"], "pattern": "^\\d+-\\d+-\\d+$"},
-          "rpiRank": {"type": ["integer", "null"], "minimum": 1}
+          "rpiRank": {"type": ["integer", "null"], "minimum": 1},
+          "gamesPlayed": {"type": "integer", "minimum": 1, "description": "Games with a result behind `record`, exhibitions excluded. Present exactly when `record` is (issue #287)."},
+          "recordSource": {"enum": ["schedule", "wikipedia", "wikipedia-swapped", "ncaa-rpi-d1"], "description": "Where `record` and `confRecord` come from: the athletics schedule, Wikipedia, Wikipedia with its overall and conference columns swapped back, or the NCAA RPI table (Division I games only)."}
         }
       }
     },

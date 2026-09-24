@@ -1621,16 +1621,24 @@ const classLabel = years => years.length ? `Commits ${years.map(y => `'${String(
    miss(p) orders the rows without one (1 = no value, 2 = the measure does not apply to the division, #198).
    Rows without a value come last in BOTH directions; only the rows with one are reversed. Ties, and the rows
    without a value, fall back to Name A-Z so the order is total. dir is the column's natural first click.
-   Record sorts by win percentage, ties counting half a win: (W + T/2) / (W + L + T).
+   Record sorts by win percentage, ties counting half a win: (W + T/2) / (W + L + T). A season of fewer than
+   SHORT_SEASON games sorts after the full ones in both directions (#287), and says how many it had.
    Tuition sorts by the out-of-state figure (the in-state one when that is all a school publishes), as the
    sidebar's "Tuition (out-of-state)" always has. Titles stay grouped by division (#198) twice over: among the
    programs with titles, then among the '—' rows after them. Keys are read once per row per sort (the comparator memoises them), not once per comparison. */
+const SHORT_SEASON = 10;
+const gamesNote = s => s && !s.inProgress && s.gamesPlayed != null && s.gamesPlayed < SHORT_SEASON ? ` (${s.gamesPlayed} game${s.gamesPlayed === 1 ? '' : 's'})` : '';
+/* A record taken from the NCAA RPI table (recordSource 'ncaa-rpi-d1') counts only games against Division I opponents,
+   so it can be a few games short of the overall record: it says so wherever a season record shows (#287, owner decision). */
+const D1_ONLY_TITLE = 'From the NCAA RPI table, which counts only games against Division I opponents; games against non-Division I teams are not in this record';
+const recordNote = s => { const g = gamesNote(s); return (g ? `<span class="muted small">${g}</span>` : '')
+  + (s?.recordSource === 'ncaa-rpi-d1' ? `<span class="muted small" title="${D1_ONLY_TITLE}"> (D1 games)</span>` : ''); };
 const winPct = rec => { const m = /^(\d+)-(\d+)(?:-(\d+))?$/.exec(rec || ''); if (!m) return null; const w = +m[1], l = +m[2], t = +(m[3] || 0); return w + l + t ? (w + t / 2) / (w + l + t) : null; };
 const byText = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'accent' }) || a.localeCompare(b);
 const SORT_SPECS = {
   name: { dir: 'asc', label: () => 'Name', key: p => p, cmp: byDisplayName },
   rpi: { dir: 'asc', label: rpiLabel, key: p => appliesTo('rpi', p) ? rpiOf(p) : null, miss: p => appliesTo('rpi', p) ? 1 : 2 },
-  record: { dir: 'desc', label: () => `Record ${finishedSeason() ?? ''}`.trim(), key: p => p.lastSeason?.year === finishedSeason() ? winPct(p.lastSeason.record) : null },
+  record: { dir: 'desc', label: () => `Record ${finishedSeason() ?? ''}`.trim(), key: p => p.lastSeason?.year === finishedSeason() ? winPct(p.lastSeason.record) : null, group: p => gamesNote(p.lastSeason) ? 1 : 0 },
   admit: { dir: 'asc', label: () => 'Admission rate', key: p => p.admissionRate ?? null },
   academicRank: { dir: 'asc', label: () => 'US rank (THE)', key: p => p.academicRank ?? null },
   tuition: { dir: 'asc', label: () => 'Tuition (out-of-state)', key: p => p.tuitionOutOfState ?? p.tuitionInState ?? null },
@@ -1745,7 +1753,7 @@ function tableHtml(rows) {
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
     ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${[divisionTag(p.division), esc(p.conference || ''), p.city ? `${esc(p.city)}, ${esc(p.state || '')}` : ''].filter(Boolean).join(' · ')}</span></span></div>`, 'name'],
-    ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>` : '—', 'record'],
+    ['record', `Record ${finishedSeason() ?? ''}`.trim(), 'num', p => p.lastSeason?.year === finishedSeason() ? `<span class="num-strong">${esc(p.lastSeason.record || '—')}</span>${p.lastSeason.record ? recordNote(p.lastSeason) : ''}` : '—', 'record'],
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
@@ -2308,7 +2316,7 @@ async function tabHistory(p) {
         ${prov(pr._meta?.wikipedia)}</div>` : ''}
       ${has.seasons(p) ? `<div class="card"><h3>Season by season</h3><div class="tscroll" style="max-height:520px;overflow-y:auto"><table>
         <tr><th>Year</th><th>Coach</th><th>Record</th><th>Conf</th><th>Finish</th><th>NCAA</th>${rpi ? '<th class="num">RPI</th><th class="num">Seed</th><th class="num">KPI</th><th class="num">Massey</th>' : ''}</tr>
-        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ` <span class="badge">${IN_PROGRESS}</span>` : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b></td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td>${rpi ? `<td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td>` : ''}</tr>`).join('')}</table></div></div>` : ''}
+        ${p.seasons.map(s => `<tr><td>${esc(s.label || s.year)}${s.inProgress ? ` <span class="badge">${IN_PROGRESS}</span>` : ''}</td><td class="small">${esc(s.headCoach || '')}</td><td><b>${esc(s.record || '—')}</b>${s.record ? recordNote(s) : ''}</td><td>${esc(s.confRecord || '')}</td><td>${esc(s.confFinish || '')}</td><td class="small">${esc((s.ncaaResult || '').replace('NCAA ', ''))}</td>${rpi ? `<td class="num">${rankStr(s.rpiRank)}</td><td class="num">${dash(s.rpi?.ncaaSeed)}</td><td class="num">${dash(s.rpi?.kpiRank)}</td><td class="num">${dash(s.rpi?.masseyRank)}</td>` : ''}</tr>`).join('')}</table></div></div>` : ''}
     </div>`;
 }
 
@@ -2390,7 +2398,7 @@ async function tabSchedule(p) {
     <td class="small">${Object.entries(g.links || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(' · ')}</td></tr>`;
   const hist = Object.entries(s.history || {}).sort((a, b) => b[0] - a[0]);
   const pending = s.games.filter(g => !g.exhibition && !g.result && g.date && g.date < today).length;
-  return `<div class="card section"><h3>${s.season} season · ${esc(s.record.text)}${s.record.confText && s.record.confText !== '0-0-0' ? ` · ${esc(s.record.confText)} conference` : ''} <span class="muted small">(${s.record.played} of ${s.record.scheduled} played${pending ? `, ${pending} pending` : ''}${s.record.exhibitions ? `, ${s.record.exhibitions} exhibition excluded` : ''})</span></h3>
+  return `<div class="card section"><h3>${s.season} season · ${s.record.played ? esc(s.record.text) : 'no results yet'}${s.record.confText && s.record.confText !== '0-0-0' ? ` · ${esc(s.record.confText)} conference` : ''} <span class="muted small">(${s.record.played} of ${s.record.scheduled} played${pending ? `, ${pending} pending` : ''}${s.record.exhibitions ? `, ${s.record.exhibitions} exhibition excluded` : ''})</span></h3>
       <div class="tscroll"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${s.games.map(g => row(g, false)).join('')}</table></div>${prov(s._meta)}</div>
     ${hist.map(([y, h]) => `<details class="card section" style="padding:12px 16px"><summary style="font-size:14px;color:var(--ink)"><b>${y}</b> season · ${esc(h.record)}</summary><div class="tscroll" style="margin-top:8px"><table><tr><th>Date</th><th>Opponent</th><th>Where</th><th>Result</th><th>Links</th></tr>${h.games.map(g => row(g, true)).join('')}</table></div></details>`).join('')}`;
 }
@@ -2502,8 +2510,8 @@ async function renderCompare() {
       [rpiLabel(), p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason()); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       [`RPI ${rpiSeason() - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason() - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       ['Avg RPI, last 5 seasons', p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
-      [`${finishedSeason()} record`, p => { const s = p.seasons.find(x => x.year === finishedSeason()); return s?.record ? `${esc(s.record)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
-      ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record)} (${s.year})` : '—'; }],
+      [`${finishedSeason()} record`, p => { const s = p.seasons.find(x => x.year === finishedSeason()); return s?.record ? `${esc(s.record)}${recordNote(s)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
+      ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record || '—')}${s.record ? recordNote(s) : ''} (${s.year})` : '—'; }],
       ['National titles', p => p.division === 'D1' || !p.division ? p.program.nationalTitles.length : `${p.program.nationalTitles.length} <span class="muted small">NCAA ${esc(p.division)}</span>`],
       ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],
       ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],

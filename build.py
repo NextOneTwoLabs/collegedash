@@ -847,7 +847,8 @@ def build_program_section(program, wiki, ath) -> dict:
     a = ath["data"] if ath else {}
     staff = a.get("staff", [])
     head = next((s for s in staff if s.get("isHeadCoach")), None)
-    seasons = w.get("seasons", [])
+    # the same column repair build_seasons makes, so the all-time total adds overall records (#287)
+    seasons = [_repair_wiki_row(s)[0] for s in w.get("seasons", [])]
     head_name = head["name"] if head else (re.sub(r"\(.*?\)", "", w.get("headCoach") or "").strip() or None)
     since = head_coach_first_season(program, head_name, seasons, w.get("headCoach"), a.get("headCoachBio"))
     wins = sum(s.get("wins") or 0 for s in seasons)
@@ -968,6 +969,80 @@ def _record_from_games(games: list[dict]) -> dict:
             "confText": f"{cw}-{cl}-{ct}" if conf else None, "exhibitions": len(games) - len(real)}
 
 
+# Issue #287: where a season's record came from. A fixed set, published on every season row with a
+# record and documented in schema/ and the research plugin's data guide.
+RECORD_SOURCES = ("schedule", "wikipedia", "wikipedia-swapped", "ncaa-rpi-d1")
+# Gaps between the published record and a second source that the build log reports.
+RECORD_GAP_WARN = 3
+_RECORD_RE = re.compile(r"^(\d+)-(\d+)(?:-(\d+))?$")
+
+
+def _wlt(text) -> tuple[int, int, int] | None:
+    m = _RECORD_RE.match(str(text or "").strip())
+    return (int(m[1]), int(m[2]), int(m[3] or 0)) if m else None
+
+
+def _repair_wiki_row(row: dict) -> tuple[dict, bool]:
+    """A Wikipedia season row with its overall and conference columns in the right order.
+
+    Three programs' tables are read with the two columns swapped (florida, san-diego-state,
+    north-dakota-state), which shows as a conference record larger than the overall one - impossible.
+    Until the collector reads them in order, swap them back rather than drop the row: for most of
+    those seasons Wikipedia is the only source there is (issue #287)."""
+    ov, cf = _wlt(row.get("record")), _wlt(row.get("confRecord"))
+    if not (ov and cf and sum(cf) > sum(ov)):
+        return row, False
+    out = dict(row, record=row["confRecord"], confRecord=row["record"])
+    out["wins"], out["losses"], out["ties"] = cf
+    return out, True
+
+
+def _in_fall(date, year: int) -> bool:
+    """A game dated August-December of `year`: the fall season, December's College Cup included."""
+    return bool(date) and str(date)[:4] == str(year) and "08" <= str(date)[5:7] <= "12"
+
+
+def _has_result(games: list[dict]) -> bool:
+    return any(g.get("result") in ("W", "L", "T") and not g.get("exhibition") for g in games)
+
+
+def schedule_valid_for(games: list[dict], year: int, current: list[dict] | None = None) -> bool:
+    """Whether a stored history schedule really is season `year`'s (issue #287).
+
+    A dated schedule needs at least one result dated August-December of that year, and most of its
+    dated games in that window. This rejects an old-season URL that served the current season (29
+    season-years were copies of 2026), a spring schedule stored as the fall (gonzaga 2024) and a year
+    with no results at all (daemen, alcorn-state 2024), all of which used to publish as a record.
+    A schedule whose page gives no dates at all (ucla) cannot be placed by date: it counts when it
+    has results and is not the `current` schedule's game list over again."""
+    dated = [g for g in games if g.get("date")]
+    if not dated:
+        opponents = lambda gs: [g.get("opponent") for g in gs or []]
+        return _has_result(games) and opponents(games) != opponents(current)
+    fall = [g for g in dated if _in_fall(g["date"], year)]
+    return _has_result(fall) and 2 * len(fall) > len(dated)
+
+
+def _set_record(s: dict, wlt: tuple[int, int, int], source: str, conf: str | None) -> None:
+    w, l, t = wlt
+    s.update({"record": f"{w}-{l}-{t}", "wins": w, "losses": l, "ties": t,
+              "gamesPlayed": w + l + t, "recordSource": source})
+    if conf:
+        s["confRecord"] = conf
+    else:  # never another source's conference record next to this one's overall
+        s.pop("confRecord", None)
+
+
+def _record_gap(slug: str, year: int, chosen: str, played: int, other: str, other_played: int,
+                schedule_short: bool = False) -> None:
+    """Log a disagreement between the published record and a second source (issue #287): 3+ games
+    either way, or with `schedule_short`, any gap where the schedule is the shorter one against
+    Wikipedia (a possibly missing postseason game)."""
+    gap = other_played - played
+    if abs(gap) >= RECORD_GAP_WARN or (schedule_short and gap >= 1):
+        print(f"RECORD {slug} {year}: {chosen} has {played} games, {other} has {other_played}")
+
+
 def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final: dict | None = None) -> list[dict]:
     """Every season this program has a record of, newest first.
 
@@ -976,35 +1051,68 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final:
     seasons ever had (issue #3). Both joins are exact matches on the curated ids and nothing else -
     no shortName fallback, no normalisation - because a near-match here does not lose a season, it
     publishes another school's one. Wikipedia and the athletics schedule stay authoritative for
-    record, headCoach, confRecord, confFinish and ncaaResult.
+    record, headCoach, confRecord, confFinish and ncaaResult; between the two, a schedule that is
+    that season's wins the record and confRecord (issue #287), and the NCAA table only fills a gap.
     """
     ids = program["ids"]
+    slug = program.get("slug")
     hist_name = ids.get("rpiHistoryName")
     ncaa_name = ids.get("ncaaName")
-    seasons = {s["year"]: dict(s) for s in ((wiki or {}).get("data", {}).get("seasons") or [])}
     cur_season = registry["season"]["current"]
+    # Issue #287: a season's record, and its conference record with it, comes from the first source
+    # that holds up: a schedule that really is that season's, then Wikipedia (older seasons), then the
+    # NCAA's D1-only table. A source with no games played gives no record, never 0-0-0.
+    seasons = {}
+    for row in ((wiki or {}).get("data", {}).get("seasons") or []):
+        s, swapped = _repair_wiki_row(row)
+        s = dict(s)
+        wlt = _wlt(s.get("record"))
+        if swapped:
+            print(f"RECORD {slug} {s['year']}: Wikipedia overall {row.get('record')} is smaller than conference "
+                  f"{row.get('confRecord')} - columns swapped")
+        if wlt and sum(wlt):
+            s["gamesPlayed"], s["recordSource"] = sum(wlt), "wikipedia-swapped" if swapped else "wikipedia"
+        elif s.get("record") is not None:
+            s.update({"record": None, "wins": None, "losses": None, "ties": None})
+        seasons[s["year"]] = s
     a = (ath or {}).get("data", {})
-    # Current season from the live schedule (Wikipedia lags).
+
+    def from_schedule(s: dict, games: list[dict], year: int) -> None:
+        rec = _record_from_games(games)
+        wiki_wlt = _wlt(s.get("record")) if str(s.get("recordSource", "")).startswith("wikipedia") else None
+        own = (rec["wins"], rec["losses"], rec["ties"])
+        conf = rec["confText"] if rec.get("confText") and rec["confText"] != "0-0-0" else None
+        if conf is None and wiki_wlt == own:  # the two sources agree, so Wikipedia's conference record is this one's
+            conf = s.get("confRecord")
+        if wiki_wlt and year != cur_season:
+            _record_gap(slug, year, "schedule", rec["played"], "Wikipedia", sum(wiki_wlt), schedule_short=True)
+        _set_record(s, own, "schedule", conf)
+
+    # Current season from the live schedule (Wikipedia lags). A page parsed with neither dates nor
+    # results (daemen) is not a season at all; dated fixtures with nothing played yet (preseason) keep
+    # the row, in progress, with no record.
     sched = a.get("schedule") or {}
-    if sched.get("games"):
+    cur_games = sched.get("games") or []
+    if _has_result(cur_games) or any(g.get("date") for g in cur_games):
         yr = sched.get("season") or cur_season
         rec = _record_from_games(sched["games"])
         s = seasons.setdefault(yr, {"year": yr, "label": str(yr)})
-        s.update({"record": rec["text"], "wins": rec["wins"], "losses": rec["losses"], "ties": rec["ties"],
-                  "inProgress": rec["played"] < rec["scheduled"], "gamesPlayed": rec["played"]})
-        if rec.get("confText") and rec["confText"] != "0-0-0" and not s.get("confRecord"):
-            s["confRecord"] = rec["confText"]
+        if rec["played"]:
+            from_schedule(s, sched["games"], yr)
+        else:
+            for k in ("wins", "losses", "ties", "gamesPlayed", "recordSource", "confRecord"):
+                s.pop(k, None)
+            s["record"] = None
+        s["inProgress"] = rec["played"] < rec["scheduled"]
         if not s.get("headCoach"):
             head = next((st["name"] for st in a.get("staff", []) if st.get("isHeadCoach")), None)
             s["headCoach"] = head
-    # Prior seasons' schedules give conference-record-free but reliable records too.
+    # Prior seasons' schedules win over Wikipedia (per game, auditable) - when they are that season's.
     for y, games in (a.get("scheduleHistory") or {}).items():
-        s = seasons.setdefault(int(y), {"year": int(y), "label": y})
-        if not s.get("record"):
-            rec = _record_from_games(games)
-            s.update({"record": rec["text"], "wins": rec["wins"], "losses": rec["losses"], "ties": rec["ties"]})
-            if rec.get("confText") and rec["confText"] != "0-0-0" and not s.get("confRecord"):
-                s["confRecord"] = rec["confText"]
+        y = int(y)
+        if not schedule_valid_for(games, y, cur_games) or seasons.get(y, {}).get("recordSource") == "schedule":
+            continue
+        from_schedule(seasons.setdefault(y, {"year": y, "label": str(y)}), games, y)
     # Chris Thomas's archive (from 2010 restated as if the No Overtime rule and the 2024 formula had applied).
     from_archive = set()
     for y, table in (rpi_hist.items() if hist_name else ()):
@@ -1034,8 +1142,13 @@ def build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final:
                         "source": "NCAA.com final RPI" if final else "NCAA.com weekly RPI",
                         "weekly": rpi_weekly_for(ncaa_name, y)}
         # not setdefault: a Wikipedia row can carry the key with a null in it (miami-fl 2023-2025).
+        ncaa = _wlt(row.get("record"))
+        if not ncaa or not sum(ncaa):
+            continue
         if not s.get("record"):
-            s["record"] = row.get("record")
+            _set_record(s, ncaa, "ncaa-rpi-d1", None)
+        elif y != cur_season and s.get("gamesPlayed") is not None:
+            _record_gap(slug, y, s["recordSource"], s["gamesPlayed"], "NCAA table (D1 games)", sum(ncaa))
     # Issue #249: the season being played ends for every program, in every division, on one site-wide
     # switch - the NCAA's table through the College Cup final (rpi_final_state) - and never on its own
     # schedule. A complete schedule is not a finished season: a team out of its conference tournament
@@ -1209,7 +1322,9 @@ def build_schedule(ath) -> dict | None:
     if not s:
         return None
     rec = _record_from_games(s["games"])
-    hist = {y: {"record": _record_from_games(g)["text"], "games": g} for y, g in (a.get("scheduleHistory") or {}).items()}
+    # only years whose schedule really is that season's (#287): not a copy of the current one, not spring
+    hist = {y: {"record": _record_from_games(g)["text"], "games": g} for y, g in (a.get("scheduleHistory") or {}).items()
+            if schedule_valid_for(g, int(y), s.get("games"))}
     return {"season": s.get("season"), "record": rec, "games": s["games"], "history": hist,
             "_meta": _meta(ath, (ath or {}).get("scheduleUrl"))}
 
@@ -1802,7 +1917,8 @@ def summary_row(p: dict) -> dict:
         "nationalTitles": len(p["program"].get("nationalTitles") or []),
         "collegeCups": len(p["program"].get("collegeCups") or []),
         "currentSeason": ({"year": cur["year"], "record": cur.get("record"), "rpiRank": cur.get("rpiRank")} if cur else None),
-        "lastSeason": ({"year": last_final["year"], "record": last_final.get("record"), "rpiRank": last_final.get("rpiRank"),
+        "lastSeason": ({"year": last_final["year"], "record": last_final.get("record"), "gamesPlayed": last_final.get("gamesPlayed"),
+                        "recordSource": last_final.get("recordSource"), "rpiRank": last_final.get("rpiRank"),
                         "ncaaResult": last_final.get("ncaaResult")} if last_final else None),
         "rpiHistory": [{"year": s["year"], "rank": s.get("rpiRank")} for s in seasons if s.get("rpiRank")],
         "rosterSize": (p.get("roster") or {}).get("count"),

@@ -168,6 +168,24 @@ test("the '#' column is labelled with the RPI season, and the footnote no longer
   assert.doesNotMatch(html, /<th[^>]*>#<\/th>|RPI \(#\)/);
 });
 
+// Issue #287 (owner decision): a finished season of fewer than 10 games sorts after the full ones in both
+// directions, ahead of the rows with no record, and says how many games it had; a full season says nothing.
+test('Record: a season under 10 games sorts after the full ones and says how many', async () => {
+  const pg = await page();
+  const fox = (await pg.sb.loadIndex()).programs.find((p) => p.slug === F);
+  const saved = fox.lastSeason;
+  try {
+    fox.lastSeason = { year: 2025, record: '5-0-0', gamesPlayed: 5 };
+    assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'desc', moreStats: true })), [A, B, C, D, F, E, G], 'descending');
+    assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'asc', moreStats: true })), [D, B, C, A, F, E, G], 'ascending');
+    assert.match(await table({ sort: 'record', sortDir: 'desc', moreStats: true }), /5-0-0<\/span><span class="muted small"> \(5 games\)<\/span>/);
+    fox.lastSeason = { year: 2025, record: '15-1-0', gamesPlayed: 16 };
+    const full = await table({ sort: 'record', sortDir: 'desc', moreStats: true });
+    assert.deepEqual(rowSlugs(full), EXPECTED.record[2]);
+    assert.doesNotMatch(full, /games\)/);
+  } finally { fox.lastSeason = saved; }
+});
+
 test('the tuition and record headers say what they sort by', async () => {
   const html = await table({});
   assert.match(th(html, 'tuition'), /title="Sorts by out-of-state tuition"/);
