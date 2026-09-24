@@ -318,6 +318,81 @@ def test_scratch_build_leaves_the_report_alone() -> None:
     check("the swap is undone", build.publishing_run())
 
 
+def test_d2_d3_phase_2_315(table: clubs.Table) -> None:
+    """Issue #315 phase 2 (option A): D2/D3 names seen 5+ times, prepared by rule, pending a Reviewer.
+    Spellings of existing clubs point at them; new clubs take their spellings; the owner-list and
+    unclear names stay unmatched until someone decides them."""
+    to_existing = {"Sporting Iowa ECNL": "Sporting Iowa", "Dallas Texans ECNL": "Dallas Texans",
+                   "Connecticut Football Club": "Connecticut FC", "PDA White ECNL": "PDA",
+                   "Club: Baltimore Armour GA": "Baltimore Armour", "PA Classics Elite Blue": "PA Classics"}
+    for raw, name in to_existing.items():
+        m = table.match(raw)
+        check(f"#315 alias: {raw!r} -> {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
+    together = [("Wisconsin United FC", "Wisconsin United"), ("NJ Premier", "NJ Premier FC"),
+                ("Albany Alleycats", "Albany Alleycats ECRL"), ("Skyline Elite", "Skyline Elite GA")]
+    for a, b in together:
+        ma, mb = table.match(a), table.match(b)
+        check(f"#315 new club: {a!r} and {b!r} are one club", ma.status == mb.status == "matched"
+              and ma.clubId == mb.clubId, f"{ma.clubId} vs {mb.clubId}")
+    # kept apart by the rules: a longer name is its own club, never folded into its prefix
+    check("#315 near-miss: Rush Wisconsin West stays apart from Rush Wisconsin",
+          table.match("Rush Wisconsin West").clubId != table.match("Rush Wisconsin").clubId)
+    check("#315: 'She/Her' is not a club", table.match("She/Her").status == "not-a-club", table.match("She/Her").status)
+    # held: ambiguous (Huatuo R1/R3; Beach FC ECNL and Sting ECNL wait for the state split in #339)
+    held = ["Beach FC ECNL", "Sting ECNL", "Back Mountain", "St. Croix", "ECNL Central Il Eclipse", "BC United",
+            "AUFC Thorns", "Liverpool FC", "FSA FC", "Force FC", "Sparta FC", "CFC"]
+    for raw in held:
+        check(f"#315 held for a decision: {raw!r} stays unmatched", table.match(raw).status == "unmatched",
+              f"{table.match(raw).status} {table.match(raw).name}")
+    # Huatuo R2: four spellings of clubs already in the table are aliases, not new rows
+    dup = {"Matchfit Academy": "Match Fit Academy FC", "Matchfit": "Match Fit Academy FC", "PAC NW ECNL": "Pacific NW",
+           "Chicago Sockers": "Sockers FC", "WI United FC": "Wisconsin United FC"}
+    for raw, name in dup.items():
+        m = table.match(raw)
+        check(f"#336 R2: {raw!r} -> existing {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
+    for gone in ("matchfit-academy", "pac-nw-ecnl", "chicago-sockers", "wi-united-fc", "back-mountain", "st-croix",
+                 "ecnl-central-il-eclipse", "bc-united", "aufc-thorns", "richmond-strikers", "santa-clara-sporting-ga"):
+        check(f"#336: row {gone!r} is not in the table", gone not in table.clubs)
+    # R4: league tag out of the display name, the tagged spelling still matches
+    m = table.match("Santa Clara Sporting GA")
+    check("#336 R4: 'Santa Clara Sporting GA' -> 'Santa Clara Sporting'", m.status == "matched"
+          and m.name == "Santa Clara Sporting", f"{m.status} {m.name}")
+    # promotions from Huatuo's section 3
+    promoted = {"RUSA FC": "RUSA FC", "FC Frederick": "FC Frederick", "Club: FC Frederick": "FC Frederick",
+                "BoReal FC": "BoReal FC", "TempesT FC": "TempesT FC", "Firebirds SC": "Firebirds SC",
+                "Broomfield SC": "Broomfield SC"}
+    for raw, name in promoted.items():
+        m = table.match(raw)
+        check(f"#336 promoted: {raw!r} -> {name!r}", m.status == "matched" and m.name == name, f"{m.status} {m.name}")
+    # the owner's decisions
+    owner = {"PDA Shore": "pda", "PDA SCP": "pda", "PDA North": "pda", "PDA South": "pda", "PDA South ECNL": "pda",
+             "Cedar Stars": "cedar-stars-academy", "Cedar Stars GA": "cedar-stars-academy",
+             "Hex/Keystone FC": "hex-fc", "Beach Futbol Club (CA)": "beach-fc-ca", "Beach FC (CA)": "beach-fc-ca",
+             "Richmond Strikers": "richmond-united", "Richmond United": "richmond-united"}
+    for raw, cid in owner.items():
+        m = table.match(raw)
+        check(f"#336 owner: {raw!r} -> {cid!r}", m.status == "matched" and m.clubId == cid, f"{m.status} {m.clubId}")
+    check("#336 owner: 'Richmond Strikers' is Richmond United's former name, not an alias",
+          "Richmond Strikers" in (table.clubs["richmond-united"].get("formerNames") or []))
+    check("#336 owner: rows pda-south and beach-futbol-club-ca are merged away",
+          "pda-south" not in table.clubs and "beach-futbol-club-ca" not in table.clubs)
+    check("#336 owner: Beach FC (VA) is untouched and still its own club",
+          table.match("Beach FC (VA)").clubId not in (None, "beach-fc-ca"), str(table.match("Beach FC (VA)").clubId))
+    with open(clubs.TABLE_PATH, encoding="utf-8") as f:
+        doc = json.load(f)
+    # reversible merges: every key that came from a removed row names that row
+    for key, src in (("pda south", "pda-south"), ("pda south ecnl", "pda-south"),
+                     ("beach futbol club ca", "beach-futbol-club-ca")):
+        basis = (doc["aliases"].get(key) or {}).get("basis", "")
+        check(f"#336 provenance: alias {key!r} records the removed row {src!r}",
+              f"merged row {src} " in basis and "owner decision #336" in basis, basis)
+    rows = [c for c in doc["clubs"] if c.get("prepared") == "2026-09-24"]
+    check("#315: 59 rows were added under phase 2 (53 confirmed + 6 promoted)", len(rows) == 59, str(len(rows)))
+    check("#336 R6: every phase 2 row carries Huatuo's review",
+          all(c.get("reviewed") == "2026-09-24" and c.get("reviewedBy", "").startswith("Huatuo") for c in rows),
+          str([c["id"] for c in rows if not c.get("reviewedBy", "").startswith("Huatuo")][:5]))
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -336,6 +411,7 @@ def main() -> int:
     test_suggestions_are_only_suggestions(table)
     test_committed_table(table)
     test_owner_decisions_233(table)
+    test_d2_d3_phase_2_315(table)
     test_scratch_build_leaves_the_report_alone()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
     return 1 if FAILS else 0

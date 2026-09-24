@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-17",
-  "note": "Reviewed club table for issue #228 (phase 2a of #225). Matching is exact against `aliases` after the conservative cleanup in clubs.clean_key: no fuzzy merging. Seeded under the owner's option A: club names seen 5 or more times in the D1 corpus (current rosters, past rosters and commitment records). Everything else stays unmatched and is listed in data/clubs-review.json. Rows and aliases carrying `reviewed`/`reviewedBy` were confirmed by the owner on issue #233.",
+  "updated": "2026-09-24",
+  "note": "Reviewed club table for issue #228 (phase 2a of #225). Matching is exact against `aliases` after the conservative cleanup in clubs.clean_key: no fuzzy merging. Seeded under the owner's option A: club names seen 5 or more times in the D1 corpus (current rosters, past rosters and commitment records). Everything else stays unmatched and is listed in data/clubs-review.json. Rows and aliases carrying `reviewed`/`reviewedBy` were confirmed by the owner on issue #233. Rows and aliases prepared on 2026-09-24 extend the table to D2/D3 names seen 5 or more times (issue #315 phase 2, option A), confirmed by Huatuo's group check on PR #336 and the owner's decisions there.",
   "clubs": [
     {
       "id": "ac-florida",
@@ -28,6 +28,19 @@
       "seenAs": 42,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "albany-alleycats",
+      "name": "Albany Alleycats",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 15,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "albion-hurricanes-fc-tx",
@@ -94,6 +107,32 @@
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "city": "San Diego"
+    },
+    {
+      "id": "alliance-fire",
+      "name": "Alliance Fire",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 5,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "amarillo-rush",
+      "name": "Amarillo Rush",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "arizona-arsenal",
@@ -208,6 +247,32 @@
       "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
+      "id": "back-mountain-impact",
+      "name": "Back Mountain Impact",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 12,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "back-mt-freedom",
+      "name": "Back Mt. Freedom",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "baltimore-armour",
       "name": "Baltimore Armour",
       "state": "MD",
@@ -276,7 +341,9 @@
       "leagues": [],
       "seenAs": 26,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     {
       "id": "beach-fc-va",
@@ -286,17 +353,6 @@
       "formerNames": [],
       "leagues": [],
       "seenAs": 8,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "beach-futbol-club-ca",
-      "name": "Beach Futbol Club (CA)",
-      "state": "CA",
-      "country": "US",
-      "formerNames": [],
-      "leagues": [],
-      "seenAs": 17,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
@@ -334,6 +390,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "black-rock-fc",
+      "name": "Black Rock FC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "boise-timbers-thorns-sc",
       "name": "Boise Timbers Thorns SC",
       "state": null,
@@ -350,6 +419,32 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "reviewed": "2026-09-17",
       "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    {
+      "id": "boreal-fc",
+      "name": "BoReal FC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 9,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "broomfield-sc",
+      "name": "Broomfield SC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 10,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "carolina-elite-soccer-academy",
@@ -371,7 +466,9 @@
       "leagues": [],
       "seenAs": 6,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     {
       "id": "cedar-stars-academy-bergen",
@@ -480,6 +577,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "charlotte-development-academy",
+      "name": "Charlotte Development Academy",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 10,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "charlotte-independence-sc",
       "name": "Charlotte Independence SC",
       "state": "NC",
@@ -553,6 +663,19 @@
       "seenAs": 6,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "chicago-rush",
+      "name": "Chicago Rush",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "cincinnati-development-academy",
@@ -764,6 +887,19 @@
       "city": "Baltimore"
     },
     {
+      "id": "coquitlam-metro-ford",
+      "name": "Coquitlam Metro-Ford",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 10,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "crossfire",
       "name": "Crossfire",
       "state": null,
@@ -791,6 +927,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "reviewed": "2026-09-17",
       "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    {
+      "id": "crystal-lake-force",
+      "name": "Crystal Lake Force",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 19,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "dallas-sting",
@@ -940,6 +1089,32 @@
       "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
+      "id": "elite-soccer-academy",
+      "name": "Elite Soccer Academy",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "elmbrook-united",
+      "name": "Elmbrook United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 17,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "fairfax-virginia-union",
       "name": "Fairfax Virginia Union",
       "state": null,
@@ -998,6 +1173,19 @@
       "seenAs": 9,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "fc-berna-legacy",
+      "name": "FC Berna Legacy",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "fc-bucks",
@@ -1068,6 +1256,32 @@
       "seenAs": 6,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "fc-frederick",
+      "name": "FC Frederick",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 22,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "fc-green-bay",
+      "name": "FC Green Bay",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "fc-pride",
@@ -1210,6 +1424,19 @@
       "seenAs": 18,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "firebirds-sc",
+      "name": "Firebirds SC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 5,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "florida-elite",
@@ -1416,7 +1643,9 @@
       "leagues": [],
       "seenAs": 17,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     {
       "id": "houston-dash",
@@ -1543,6 +1772,19 @@
       "seenAs": 5,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "jr-irish-sc",
+      "name": "Jr. Irish SC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "kansas-city-athletics",
@@ -1758,6 +2000,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "libertyville-fc-1974",
+      "name": "Libertyville FC 1974",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "liverpool-fc-ia-michigan",
       "name": "Liverpool FC-IA Michigan",
       "state": null,
@@ -1865,6 +2120,32 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "madison-56ers",
+      "name": "Madison 56ers",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 22,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "mankato-united",
+      "name": "Mankato United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 11,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "marin-fc",
       "name": "Marin FC",
       "state": null,
@@ -1935,6 +2216,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "medford-strikers",
+      "name": "Medford Strikers",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "michigan-hawks",
       "name": "Michigan Hawks",
       "state": null,
@@ -1968,6 +2262,19 @@
       "city": "Novi"
     },
     {
+      "id": "midland-fusion",
+      "name": "Midland Fusion",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "midwest-united-fc",
       "name": "Midwest United FC",
       "state": "MI",
@@ -1987,6 +2294,19 @@
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "city": "Kentwood"
+    },
+    {
+      "id": "millville-pride",
+      "name": "Millville Pride",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "minnesota-thunder",
@@ -2217,6 +2537,45 @@
       "city": "Purchase"
     },
     {
+      "id": "nj-premier",
+      "name": "NJ Premier",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 12,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "nj-rush",
+      "name": "NJ Rush",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "nj-stallions",
+      "name": "NJ Stallions",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "north-carolina-courage",
       "name": "North Carolina Courage",
       "state": null,
@@ -2268,6 +2627,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "north-oaks-blast-soccer-club",
+      "name": "North Oaks Blast Soccer Club",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "north-shore-united",
       "name": "North Shore United",
       "state": "WI",
@@ -2294,6 +2666,32 @@
       "seenAs": 5,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "north-union-united",
+      "name": "North Union United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 10,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "northeast-attack",
+      "name": "Northeast Attack",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "northern-virginia-alliance",
@@ -2509,23 +2907,9 @@
       ],
       "seenAs": 77,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
-    },
-    {
-      "id": "pda-south",
-      "name": "PDA South",
-      "state": null,
-      "country": null,
-      "formerNames": [],
-      "leagues": [
-        {
-          "league": "ECNL",
-          "basis": "tagged in the source strings"
-        }
-      ],
-      "seenAs": 11,
-      "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     {
       "id": "penn-fusion",
@@ -2555,6 +2939,19 @@
       "seenAs": 6,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "peoria-fc-united",
+      "name": "Peoria FC United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "philadelphia-ukrainian-nationals",
@@ -2796,7 +3193,9 @@
       "name": "Richmond United",
       "state": null,
       "country": null,
-      "formerNames": [],
+      "formerNames": [
+        "Richmond Strikers"
+      ],
       "leagues": [
         {
           "league": "ECNL",
@@ -2805,7 +3204,9 @@
       ],
       "seenAs": 63,
       "prepared": "2026-09-17",
-      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+      "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     {
       "id": "rise-sc",
@@ -2845,6 +3246,45 @@
       "seenAs": 49,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "rusa-fc",
+      "name": "RUSA FC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 18,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "rush-wisconsin",
+      "name": "Rush Wisconsin",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 11,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "rush-wisconsin-west",
+      "name": "Rush Wisconsin West",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 15,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "salvo-soccer-club",
@@ -2915,6 +3355,32 @@
       "seenAs": 61,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "santa-clara-sporting",
+      "name": "Santa Clara Sporting",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 5,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "santa-monica-surf",
+      "name": "Santa Monica Surf",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "santa-rosa-united",
@@ -3047,6 +3513,19 @@
       "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
+      "id": "skyline-elite",
+      "name": "Skyline Elite",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 10,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "slammers-fc",
       "name": "Slammers FC",
       "state": null,
@@ -3174,6 +3653,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "southern-minnesota-select",
+      "name": "Southern Minnesota Select",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "southern-soccer-academy",
       "name": "Southern Soccer Academy",
       "state": "GA",
@@ -3189,6 +3681,32 @@
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "city": "Marietta"
+    },
+    {
+      "id": "southwestern-youth-association-sya",
+      "name": "Southwestern Youth Association (SYA)",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "space-coast-united",
+      "name": "Space Coast United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "spokane-shadow",
@@ -3274,6 +3792,32 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "sporting-ct",
+      "name": "Sporting CT",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 12,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "sporting-de",
+      "name": "Sporting DE",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "sporting-delaware-soccer-club",
       "name": "Sporting Delaware Soccer Club",
       "state": null,
@@ -3324,6 +3868,19 @@
       "city": "Omaha"
     },
     {
+      "id": "sporting-springfield",
+      "name": "Sporting Springfield",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "sporting-stl",
       "name": "Sporting STL",
       "state": null,
@@ -3344,6 +3901,19 @@
       "seenAs": 6,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "st-croix-academy",
+      "name": "St. Croix Academy",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "st-louis-development-academy",
@@ -3416,6 +3986,19 @@
       "city": "Morris Plains"
     },
     {
+      "id": "steel-united",
+      "name": "Steel United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 18,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "sting-royal",
       "name": "Sting Royal",
       "state": null,
@@ -3465,6 +4048,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "swmo-rush",
+      "name": "SWMO Rush",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "syracuse-development-academy",
       "name": "Syracuse Development Academy",
       "state": null,
@@ -3496,6 +4092,32 @@
       "seenAs": 6,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "team-chicago",
+      "name": "Team Chicago",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 9,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "tempest-fc",
+      "name": "TempesT FC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2: promoted from 'unclear' per Huatuo's group check",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "tennessee-soccer-club",
@@ -3624,6 +4246,19 @@
       "reviewedBy": "owner (zhenyisx), issue #233"
     },
     {
+      "id": "united-hurricanes",
+      "name": "United Hurricanes",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "united-soccer-alliance",
       "name": "United Soccer Alliance",
       "state": null,
@@ -3701,6 +4336,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "vale-sc-east",
+      "name": "Vale SC East",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 11,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "vancouver-rise",
       "name": "Vancouver Rise",
       "state": null,
@@ -3761,6 +4409,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "virginia-rush",
+      "name": "Virginia Rush",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "wake-fc",
       "name": "Wake FC",
       "state": "NC",
@@ -3776,6 +4437,19 @@
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232",
       "city": "Holly Springs"
+    },
+    {
+      "id": "wall-elite",
+      "name": "Wall Elite",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 8,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "wasatch-sc",
@@ -3804,6 +4478,19 @@
       "seenAs": 12,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "washington-united",
+      "name": "Washington United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "west-coast-fc",
@@ -3840,6 +4527,32 @@
       "city": "Apollo Beach"
     },
     {
+      "id": "west-mont-premier",
+      "name": "West Mont Premier",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 5,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
+      "id": "west-mont-united",
+      "name": "West-Mont United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "west-side-alliance",
       "name": "West Side Alliance",
       "state": null,
@@ -3851,6 +4564,19 @@
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
     },
     {
+      "id": "western-lehigh-united",
+      "name": "Western Lehigh United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 7,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    {
       "id": "western-new-york-flash-wny",
       "name": "Western New York Flash (WNY)",
       "state": null,
@@ -3860,6 +4586,19 @@
       "seenAs": 8,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "wheaton-united",
+      "name": "Wheaton United",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 6,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "wilmington-hammerheads-fc",
@@ -3876,6 +4615,19 @@
       "seenAs": 22,
       "prepared": "2026-09-17",
       "preparedBy": "Chitu, #228 option A: mechanical rules over names seen 5+ times, pending a Reviewer's confirmation in PR #232"
+    },
+    {
+      "id": "wisconsin-united-fc",
+      "name": "Wisconsin United FC",
+      "state": null,
+      "country": null,
+      "formerNames": [],
+      "leagues": [],
+      "seenAs": 15,
+      "prepared": "2026-09-24",
+      "preparedBy": "Jueying, #315 phase 2 option A: mechanical rules over D2/D3 names seen 5+ times, pending a Reviewer's confirmation in the phase 2 PR",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     {
       "id": "wny-flash",
@@ -3937,6 +4689,13 @@
       "club": "alabama-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "albany alleycats ecrl": {
+      "club": "albany-alleycats",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "albion hurricanes": {
       "club": "albion-hurricanes-fc-tx",
@@ -4030,6 +4789,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "beach futbol club ca": {
+      "club": "beach-fc-ca",
+      "prepared": "2026-09-24",
+      "basis": "owner decision #336 (2026-09-24): merged row beach-futbol-club-ca ('Beach Futbol Club (CA)') into beach-fc-ca; one club held as two rows",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
     "beadling s c": {
       "club": "beadling-sc",
       "prepared": "2026-09-17",
@@ -4078,6 +4844,20 @@
       "club": "carolina-elite-soccer-academy",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "cedar stars": {
+      "club": "cedar-stars-academy",
+      "prepared": "2026-09-24",
+      "basis": "folded into Cedar Stars Academy by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
+    "cedar stars ga": {
+      "club": "cedar-stars-academy",
+      "prepared": "2026-09-24",
+      "basis": "folded into Cedar Stars Academy by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     "central coast united": {
       "club": "central-coast-united-sc",
@@ -4149,6 +4929,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "chicago sockers": {
+      "club": "sockers-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315); duplicate of an existing club (Huatuo R2)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "cincinnati united": {
       "club": "cincinnati-united-premier",
       "prepared": "2026-09-17",
@@ -4218,6 +5005,34 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "club baltimore armour ga": {
+      "club": "baltimore-armour",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    "club fc frederick": {
+      "club": "fc-frederick",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    "club fc stars ecnl": {
+      "club": "fc-stars",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    "club maryland united ecnl": {
+      "club": "maryland-united-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "colorado rapids ecnl": {
       "club": "colorado-rapids",
       "prepared": "2026-09-17",
@@ -4247,6 +5062,13 @@
       "club": "connecticut-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "connecticut football club": {
+      "club": "connecticut-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "connecticut football club ecnl": {
       "club": "connecticut-fc",
@@ -4281,6 +5103,13 @@
       "basis": "same club, spelling or team-label variant",
       "reviewed": "2026-09-17",
       "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "dallas texans ecnl": {
+      "club": "dallas-texans",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "dallas texans ecnl 05": {
       "club": "dallas-texans",
@@ -4321,6 +5150,13 @@
       "club": "dksc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "dksc ecnl rl": {
+      "club": "dksc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "eagles sc": {
       "club": "eagles-sc-ca",
@@ -4434,6 +5270,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "fc bucks ecrl": {
+      "club": "fc-bucks",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "fc dallas da": {
       "club": "fc-dallas",
       "prepared": "2026-09-17",
@@ -4540,6 +5383,20 @@
       "club": "heat-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "hex fc ecnl": {
+      "club": "hex-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    "hex keystone fc": {
+      "club": "hex-fc",
+      "prepared": "2026-09-24",
+      "basis": "HEX FC's merged successor name; folded into HEX FC by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
     },
     "houston dash ga": {
       "club": "houston-dash",
@@ -4651,6 +5508,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "la breakers ecnl": {
+      "club": "la-breakers-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "la roca": {
       "club": "la-roca-fc",
       "prepared": "2026-09-17",
@@ -4736,6 +5600,13 @@
       "reviewed": "2026-09-17",
       "reviewedBy": "owner (zhenyisx), issue #233"
     },
+    "louisiana tdp elite ga": {
+      "club": "louisiana-tdp-elite",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "marin fc ecnl": {
       "club": "marin-fc",
       "prepared": "2026-09-17",
@@ -4765,6 +5636,20 @@
       "club": "match-fit-academy-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "matchfit": {
+      "club": "match-fit-academy-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
+    "matchfit academy": {
+      "club": "match-fit-academy-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315); duplicate of an existing club (Huatuo R2)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "mclean ecnl": {
       "club": "mclean-fc",
@@ -4880,6 +5765,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "nefc ga": {
+      "club": "nefc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "nefc ga red": {
       "club": "nefc",
       "prepared": "2026-09-17",
@@ -4889,6 +5781,13 @@
       "club": "new-york-sc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "nj premier fc": {
+      "club": "nj-premier",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "north carolina fusion ecnl": {
       "club": "north-carolina-fusion",
@@ -4963,10 +5862,24 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "pa classics elite blue": {
+      "club": "pa-classics",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "pa classics ga": {
       "club": "pa-classics",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "pac nw ecnl": {
+      "club": "pacific-nw",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315); duplicate of an existing club (Huatuo R2)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "pateadores": {
       "club": "pateadores-sc",
@@ -4988,10 +5901,47 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "pda north": {
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "a PDA branch; folded into PDA by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
+    "pda scp": {
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "a PDA branch; folded into PDA by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
+    "pda shore": {
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "a PDA branch; folded into PDA by the owner (#336)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
+    "pda south": {
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "owner decision #336 (2026-09-24): merged row pda-south ('PDA South') into pda; PDA South is a PDA branch",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
     "pda south ecnl": {
-      "club": "pda-south",
-      "prepared": "2026-09-17",
-      "basis": "same club, spelling or team-label variant"
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "owner decision #336 (2026-09-24): merged row pda-south ('PDA South') into pda; PDA South is a PDA branch",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "owner (zhenyisx), PR #336 (issuecomment-5822370356 and the four folds before it)"
+    },
+    "pda white ecnl": {
+      "club": "pda",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "penn fusion ecnl": {
       "club": "penn-fusion",
@@ -5021,6 +5971,13 @@
       "club": "pickering-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "pipeline ecnl": {
+      "club": "pipeline-sc-md",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "pipeline sc": {
       "club": "pipeline-sc-md",
@@ -5164,6 +6121,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "santa clara sporting ga": {
+      "club": "santa-clara-sporting",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "seattle united ecnl": {
       "club": "seattle-united",
       "prepared": "2026-09-17",
@@ -5206,6 +6170,13 @@
       "basis": "same club, spelling or team-label variant",
       "reviewed": "2026-09-17",
       "reviewedBy": "owner (zhenyisx), issue #233"
+    },
+    "skyline elite ga": {
+      "club": "skyline-elite",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "slammers ecnl": {
       "club": "slammers-fc",
@@ -5294,6 +6265,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "solar ecrl 05": {
+      "club": "solar-soccer-club",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "solar fc": {
       "club": "solar-soccer-club",
       "prepared": "2026-09-17",
@@ -5353,6 +6331,13 @@
       "club": "sporting-delaware-soccer-club",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "sporting iowa ecnl": {
+      "club": "sporting-iowa",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "sporting nebraska": {
       "club": "sporting-nebraska-fc",
@@ -5547,6 +6532,13 @@
       "prepared": "2026-09-17",
       "basis": "the club's own short name, published in brackets beside its full name"
     },
+    "vda ecnl": {
+      "club": "virginia-development-academy",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "virginia development academy ecnl": {
       "club": "virginia-development-academy",
       "prepared": "2026-09-17",
@@ -5587,6 +6579,13 @@
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
     },
+    "wi united fc": {
+      "club": "wisconsin-united-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315); duplicate of an existing club (Huatuo R2)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
+    },
     "wilmington hammerheads": {
       "club": "wilmington-hammerheads-fc",
       "prepared": "2026-09-17",
@@ -5596,6 +6595,13 @@
       "club": "wilmington-hammerheads-fc",
       "prepared": "2026-09-17",
       "basis": "same club, spelling or team-label variant"
+    },
+    "wisconsin united": {
+      "club": "wisconsin-united-fc",
+      "prepared": "2026-09-24",
+      "basis": "same club, spelling or team-label variant (D2/D3, issue #315)",
+      "reviewed": "2026-09-24",
+      "reviewedBy": "Huatuo, PR #336 group check (issuecomment-5822261923)"
     },
     "wny flash ecnl": {
       "club": "wny-flash",
@@ -5610,6 +6616,7 @@
   },
   "notAClub": {
     "n a": "placeholder, not a club name",
-    "none": "placeholder, not a club name"
+    "none": "placeholder, not a club name",
+    "she her": "pronouns written in a roster's Club column, not a club name (issue #315)"
   }
 }
