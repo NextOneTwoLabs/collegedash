@@ -1111,6 +1111,8 @@ const REGIONS = ['West', 'Midwest', 'South', 'Mid-Atlantic', 'Northeast'];
    not in this table prints itself rather than disappearing. */
 const DIVISION_NAMES = { D1: 'Division I', D2: 'Division II', D3: 'Division III' };
 const divisionName = d => DIVISION_NAMES[d] || d;
+// The division as the sidebar's Division pills label it (D1 / D2 / D3), spelled out on hover (#278).
+const divisionTag = d => d ? `<span class="div-tag" title="${esc(divisionName(d))}">${esc(d)}</span>` : '';
 // The divisions on screen: the selection when there is one, otherwise everything the data carries.
 function shownDivisions() {
   const all = S.index?.divisions || [];
@@ -1429,7 +1431,7 @@ window.addEventListener('hashchange', route);
 function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', tabs = '' }) {
   const crumb = crumbs.map((c, i) => i === crumbs.length - 1
     ? `<span class="breadcrumb-current">${esc(c.label)}</span>`
-    : `<a href="${esc(c.href)}">${esc(c.label)}</a><span class="breadcrumb-sep">›</span>`).join('');
+    : `${c.href ? `<a href="${esc(c.href)}">${esc(c.label)}</a>` : `<span${c.title ? ` title="${esc(c.title)}"` : ''}>${esc(c.label)}</span>`}<span class="breadcrumb-sep">›</span>`).join('');
   return `<div class="content-header"><div class="content-header-row">
       <div class="content-header-main">${crumb ? `<div class="breadcrumb">${crumb}</div>` : ''}
         <h1 class="content-title">${title}${nick ? `<span class="nick">${esc(nick)}</span>` : ''}</h1>
@@ -1455,6 +1457,22 @@ function slugSuggestions(parts) {
 }
 
 /* ---------- charts (inline SVG, no library) ---------- */
+/* The y axis of a rank chart (#279): the plotted range is the data's own min-max widened to round ranks,
+   and the ticks are round ranks inside it, a fixed step apart, so a #206 program is not drawn against
+   #1/#10/#25 labels squeezed into the top few pixels. Rank 0 does not exist, so an axis that would start
+   at 0 starts at #1 instead, and the first round tick is dropped when it would sit too close to #1. */
+function rankAxis(ranks) {
+  const lo = Math.min(...ranks), hi = Math.max(...ranks);
+  const step = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000].find(n => n * 3 >= hi - lo) || 1000;
+  let yMin = Math.floor(lo / step) * step, yMax = Math.ceil(hi / step) * step;
+  if (yMax === yMin) yMax += step;
+  const ticks = [];
+  for (let v = yMin; v <= yMax; v += step) {
+    const y = Math.max(1, v);
+    if (!ticks.length || y - ticks[ticks.length - 1].y >= step * 0.6) ticks.push({ y, label: `#${y}` });
+  }
+  return { yMin: Math.max(1, yMin), yMax, yTicks: ticks };
+}
 function svgLine(cfg) {
   // cfg: {series:[{name,color,points:[{x,y,label}]}], xTicks:[{x,label}], yTicks:[{y,label}], yInverted, height, yLabel, fmt}
   const W = cfg.width || 720, H = cfg.height || 260, m = { t: 14, r: 40, b: 28, l: 40 };
@@ -1619,7 +1637,7 @@ function cardHtml(p) {
     p.undergradEnrollment != null ? fact('Undergrads', fmtNum(p.undergradEnrollment)) : '',
     p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
   const foot = [has.rowCommits(p) ? `Commits ${commits}` : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
-  const meta = [p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc).join(' · ');
+  const meta = [divisionTag(p.division), ...[p.conference, [p.city, p.state].filter(Boolean).join(', '), (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '')].filter(Boolean).map(esc)].filter(Boolean).join(' · ');
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
     <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
       ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
@@ -2027,7 +2045,7 @@ function glanceHtml(p, row) {
   return `<div class="glance-head">
       <div class="glance-eyebrow">Program at a glance</div>
       <div class="glance-name">${swatchesHtml(row || p, true)}<span title="${esc(p.name)}">${esc(displayName(p))}</span></div>
-      <div class="glance-meta">${esc(p.conference || '')}${sch.city ? ` · ${esc(sch.city)}, ${esc(sch.state || '')}` : ''}</div>
+      <div class="glance-meta">${p.division ? `${divisionTag(p.division)} · ` : ''}${esc(p.conference || '')}${sch.city ? ` · ${esc(sch.city)}, ${esc(sch.state || '')}` : ''}</div>
       <div class="glance-follow">${starBtn(p.slug, true)}${cmpBtn(p.slug, true)}</div>
     </div>
     <div class="glance-stats">
@@ -2074,10 +2092,10 @@ async function renderProfile(slug, tab) {
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
   const titles = p.program?.nationalTitles?.length || 0;
-  const subtitle = [esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
+  const subtitle = [divisionTag(p.division), esc(p.conference || ''), [p.school?.city, p.school?.state].filter(Boolean).map(esc).join(', '), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
@@ -2106,7 +2124,7 @@ async function tabOverview(p) {
     </div>
     ${rpiPts.length || has.roster(p) ? `<div class="grid g2">
       ${rpiPts.length ? `<div class="card"><h3>RPI, recent seasons</h3>
-        <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, yMin: 1, yMax: Math.max(25, ...rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}${s.inProgress ? ` ${IN_PROGRESS}` : ''}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), yTicks: [{ y: 1, label: '#1' }, { y: 10, label: '#10' }, { y: 25, label: '#25' }], fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
+        <div class="chart">${svgLine({ width: 380, height: 200, yInverted: true, ...rankAxis(rpiPts.map(s => s.rpiRank)), series: [{ name: 'RPI rank', color: 'var(--s1)', points: rpiPts.map(s => ({ x: s.year, y: s.rpiRank, label: `#${s.rpiRank}${s.inProgress ? ` ${IN_PROGRESS}` : ''}` })) }], xTicks: rpiPts.map(s => ({ x: s.year, label: String(s.year) })), fmt: v => '#' + v, xLabel: x => String(x), aria: 'RPI rank by season' })}</div>
         <p class="small muted">Lower is better. End-of-season RPI; the current season shows the latest weekly rank once published.</p></div>` : ''}
       ${has.roster(p) ? `<div class="card"><h3>Roster snapshot${p.roster ? ` ${p.roster.season}` : ''}</h3>
         ${p.roster ? `<p>${p.roster.count} players · graduating this year: ${Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none listed'}</p>
@@ -2360,6 +2378,7 @@ async function renderCompare() {
       ['6-yr graduation rate', p => fmtPct(p.school?.gradRate6yr)], ['Setting', p => esc(p.school?.locale || '—')],
     ]],
     ['Soccer', [
+      ['Division', p => p.division ? `${divisionTag(p.division)}${p.conference ? ` · ${esc(p.conference)}` : ''}` : '—'],
       [rpiLabel(), p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason()); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       [`RPI ${rpiSeason() - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason() - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       ['Avg RPI, last 5 seasons', p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],

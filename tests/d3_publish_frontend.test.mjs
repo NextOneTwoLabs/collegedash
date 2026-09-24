@@ -229,7 +229,8 @@ test('titles: a D3 program with no table shows no title figure and no error; a D
   assert.match(card(cards, 'test-d3-champion'), /<span class="titles">3 NCAA D3 titles<\/span>/);
   for (const slug of ['test-d3-full', 'test-d3-thin']) {
     const o = await profile(pg, slug);
-    assert.doesNotMatch(subtitle(o.app), /title/, `${slug}: the subtitle names a title count with no D3 table`);
+    assert.doesNotMatch(subtitle(o.app).replace(/<[^>]*>/g, ''), /title/, // the visible text: the division tag's hover attribute is not a title count (#278)
+      `${slug}: the subtitle names a title count with no D3 table`);
     assert.doesNotMatch(o.app + o.tab, /NCAA D3 titles|National titles/, `${slug}: a title figure shows with no D3 table`);
     const h = await profile(pg, slug, 'history');
     assert.doesNotMatch(h.tab, /NCAA D3 championships<\/th><td><b>0/, `${slug}: History states a zero it cannot vouch for`);
