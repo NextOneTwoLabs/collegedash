@@ -269,18 +269,17 @@ test('every program shows the RPI it showed when the page read the table, on the
   const wrong = [];
   // #248: every published D1 program carries the ids.ncaaName the build joins the NCAA RPI table by. West Florida
   // (D1 from 2026) was onboarded without one, so its 2026 rank (#171) never showed; the registry now has it.
-  const reg = new Map(registry.programs.map(p => [p.slug, p]));
   const noName = published.filter(p => p.division === 'D1' && !(p.ids || {}).ncaaName).map(p => p.slug);
   assert.deepEqual(noName, [], 'published D1 programs without ids.ncaaName: the build cannot join their RPI rank');
+  // #365: strict, no allowance. The index was rebuilt with West Florida's name, so every D1 program whose registry
+  // ncaaName the RPI season's table ranks must carry that join in the committed index.
+  const byName = new Map(registry.programs.map(p => [p.slug, (p.ids || {}).ncaaName]));
+  const unjoined = programs.filter(p => p.division === 'D1' && bySchool.has(byName.get(p.slug)) && sandbox.rpiOf(p) == null).map(p => p.slug);
+  assert.deepEqual(unjoined, [], 'D1 programs the RPI table ranks under their registry ncaaName but the index does not join');
   for (const p of programs) {
     const before = bySchool.get(p.shortName || p.name)
       ?? (p.lastSeason?.year === sandbox.rpiSeason() ? p.lastSeason.rpiRank : null)
       ?? (p.rpiHistory || []).find(r => r.year === sandbox.rpiSeason())?.rank ?? null;
-    // A registry id added after the committed index was built (#248): the index row joins at the next build.
-    // Only a program whose registry ncaaName is a team name in the table, and whose index row has not been rebuilt
-    // since, waits; a wrong name or any other gap still fails.
-    const regName = reg.get(p.slug)?.ids?.ncaaName;
-    if (before != null && sandbox.rpiOf(p) == null && regName && bySchool.has(regName) && !(p.rpiHistory || []).length) continue;
     const shown = before == null ? '—' : '#' + before;
     const card = sandbox.cardHtml(p);
     const tableRow = sandbox.tableHtml([p]);
