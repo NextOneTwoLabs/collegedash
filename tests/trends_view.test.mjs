@@ -544,6 +544,19 @@ test('#348 an older link with more than three values keeps the first three and s
   assert.ok(!three.results().includes('This link listed'), 'three values: nothing left out, no note');
 });
 
+test('#339 + #348 a retired id in an over-long link: the first three are kept, the retired one is rewritten, and the note stays', async () => {
+  const doc = fixture();
+  doc.retiredClubs = { 'old-mvla': 'mvla' };
+  const page = await open('#/trends?club=old-mvla,surf,mx,lone', doc);
+  assert.equal(page.sandbox.location.hash, '#/trends?club=mvla,surf,mx', 'cut to three, then the retired id rewritten in place');
+  assert.equal(page.hist.pushes, 0, 'with replaceState only');
+  assert.deepEqual(chipNames(page, 'club'), ['Mountain View Los Altos SC', 'San Diego Surf', 'MX United']);
+  assert.ok(page.results().includes('This link listed 4 clubs; a box takes up to 3, so the first 3 are shown and 1 were left out.')
+    || page.results().includes('This link listed 4 clubs; a box takes up to 3, so the first 3 are shown and 1 was left out.'), 'the note survives the rewrite');
+  await page.sandbox.route();  // the page may render twice on one entry (#348): the second read keeps the note
+  assert.ok(page.results().includes('This link listed 4 clubs'), 'the note survives a second render after the rewrite');
+});
+
 test('suggestions follow the "1–2" rule (#343, Bianque): a range with two or more boxes, exact with one', async () => {
   const doc = fixture({ schools: true, extra: [[B.slug, 1, 'mx', 'ccd:1']] });
   let page = await open('#/trends?club=mx', doc);

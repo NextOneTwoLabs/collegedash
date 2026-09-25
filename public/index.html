@@ -2197,8 +2197,11 @@ let trendsCut = { hash: null, dropped: {} };
 function trendsFromUrl() {
   const { sel, dropped } = trendsParseLink(location.hash);
   if (Object.keys(dropped).length) { history.replaceState(null, '', trendsUrl(sel)); trendsCut = { hash: location.hash, dropped }; }
-  TR.dropped = location.hash === trendsCut.hash ? trendsCut.dropped : {};
-  return trendsResolve(sel);
+  const cut = location.hash === trendsCut.hash;
+  TR.dropped = cut ? trendsCut.dropped : {};
+  const out = trendsResolve(sel);
+  if (cut) trendsCut.hash = location.hash; // #339: a retired or raw: id rewritten after the cut keeps the note
+  return out;
 }
 function trendsUrl(sel) {
   const q = TR_KINDS.map(k => [k, trendsVals(sel[k])]).filter(([, v]) => v.length).map(([k, v]) => `${k}=${v.map(encodeURIComponent).join(',')}`).join('&');
