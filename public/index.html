@@ -1870,7 +1870,7 @@ function tableHtml(rows) {
     <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
-    <div class="table-footnote">${rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table` : `RPI is the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
+    <div class="table-footnote">${rpiSeason() == null ? 'No RPI season is in the data yet' /* #250 */ : rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table` : `RPI is the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
   </div>`;
 }
 
@@ -3055,9 +3055,10 @@ async function renderCompare() {
     ['Soccer', [
       ['Division', p => p.division ? `${divisionTag(p.division)}${p.conference ? ` · ${esc(p.conference)}` : ''}` : '—'],
       [rpiLabel(), p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason()); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
-      [`RPI ${rpiSeason() - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = p.seasons.find(x => x.year === rpiSeason() - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
+      // an index with no ranked season has no RPI year (issue #250): name the rows without one, as the table header does
+      [rpiSeason() == null ? 'RPI, season before' : `RPI ${rpiSeason() - 1}`, p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const s = rpiSeason() == null ? null : p.seasons.find(x => x.year === rpiSeason() - 1); return s?.rpiRank ? `#${s.rpiRank}` : '—'; }],
       ['Avg RPI, last 5 seasons', p => { if (!appliesTo('rpi', p)) return notApplicableCell(p); const r = p.seasons.filter(x => !x.inProgress && x.rpiRank).slice(0, 5).map(x => x.rpiRank); return r.length ? '#' + (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1) : '—'; }],
-      [`${finishedSeason()} record`, p => { const s = p.seasons.find(x => x.year === finishedSeason()); return s?.record ? `${esc(s.record)}${recordNote(s)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
+      [finishedSeason() == null ? 'Last season record' : `${finishedSeason()} record`, p => { const s = finishedSeason() == null ? null : p.seasons.find(x => x.year === finishedSeason()); return s?.record ? `${esc(s.record)}${recordNote(s)}${s.ncaaResult ? ` · ${esc(s.ncaaResult.replace('NCAA ', ''))}` : ''}` : '—'; }],
       ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record || '—')}${s.record ? recordNote(s) : ''} (${s.year})` : '—'; }],
       ['National titles', p => p.division === 'D1' || !p.division ? p.program.nationalTitles.length : `${p.program.nationalTitles.length} <span class="muted small">NCAA ${esc(p.division)}</span>`],
       ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],

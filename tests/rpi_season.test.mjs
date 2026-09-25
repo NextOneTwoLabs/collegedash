@@ -210,3 +210,26 @@ test('a record from the NCAA table is labelled D1 games in History and Compare (
   sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();
   assert.match(app(), new RegExp(`<tr><th>2025 record</th><td>18-4-2${D1.source}</td><td>18-4-2</td>`), 'Compare: the D1 note is missing or on the wrong program');
 });
+
+// Issue #250: an index with no ranked season at all (no rpiHistory anywhere, no registry season) has no RPI year and
+// no finished season. Compare used to label its rows 'RPI -1' (or NaN) and 'null record'; the table footnote said
+// 'the null season'. Current data cannot produce this; the guard is for the index that one day might.
+test('#250: with no ranked season, Compare and the table name no year - no NaN, -1 or null', async () => {
+  const files = filesFor('before');
+  const idx = files['api/v1/programs'];
+  idx.season = { current: null };
+  for (const r of idx.programs) { r.rpiHistory = []; r.currentSeason = null; }
+  for (const slug of ['alpha', 'beta']) for (const s of files[`api/v1/programs/${slug}`].seasons) { delete s.rpiRank; delete s.rpi; }
+  const pg = loadPage(files); await pg.sb.loadIndex();
+  const { sb, app } = pg;
+  assert.equal(sb.rpiSeason(), null, 'the fixture has no ranked season');
+  assert.equal(sb.finishedSeason(), null, 'and no finished season');
+  sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();
+  const html = app();
+  assert.doesNotMatch(html, /RPI NaN|RPI -1|null record|undefined record/, 'a label names a year that does not exist');
+  assert.match(html, /<tr><th>RPI, season before<\/th>/);
+  assert.match(html, /<tr><th>Last season record<\/th><td>—<\/td><td>—<\/td>/);
+  assert.match(html, /<tr><th>RPI<\/th>/, 'the RPI row keeps its plain label');
+  const table = sb.tableHtml(sb.S.index.programs);
+  assert.doesNotMatch(table, /null season|undefined season|NaN/, 'the table footnote names a year that does not exist');
+});
