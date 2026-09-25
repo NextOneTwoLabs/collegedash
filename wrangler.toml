@@ -41,13 +41,6 @@ run_worker_first = ["/", "/api/*", "/archive*", "/data*"]
 ASK_ENABLED = "true"
 ACCESS_TEAM_DOMAIN = "https://broad-snowflake-934e.cloudflareaccess.com"
 ACCESS_AUD = "b9c9162446e83350b83b6e6cc4ee0b4d386a1cf55e3fabb6b52f4822a1e5080b"
-# The /api/v1 gate (issue #345, api/access.mjs): "off", "report" or "enforce". "report" classifies and counts every
-# request and refuses NOTHING. Switching to "enforce" is its own PR, only after the owner approves the report-mode
-# numbers against owner decision 8: at least 7 days of report mode AND at least 5,000 /api/v1/programs site requests
-# in the window (extend report mode until there are), under 0.1% of them with no first-party signal, and no
-# would-be 429 from a normal visitor. Rolling back is this one line plus a deploy (about 5-15 minutes), not instant.
-# tests/api_access.test.mjs checks this value.
-API_GATE = "report"
 
 [[kv_namespaces]]
 binding = "FEEDBACK"
@@ -61,51 +54,39 @@ id = "effbba53953e424aa9f528b2a6f00f4e"
 binding = "ASK_BUDGET"
 id = "dfdeb314f1b848a287e6f99b453a5d22"
 
-# ---- the /api/v1 gate (issue #345) ----
-# Report-mode counts: one data point per gated request (decision, signal class, route; for a would-be 429 by IP a
-# short HMAC bucket, never an IP). Read as grouped counts with Analytics Engine SQL, never as raw logs.
-# COMMENTED OUT until the owner has checked why a build with it failed (#355): Workers Builds rejected this block on
-# the Free account (builds 7b706d79 and ec3b75e8 failed with it; 57322d21 and c7c762fc passed without it). The
-# likeliest cause, unverified, is that Analytics Engine has not been enabled on the account yet. Until it is back,
-# env.API_GATE_STATS is missing and the gate classifies but counts nothing - report mode cannot be measured.
-# [[analytics_engine_datasets]]
-# binding = "API_GATE_STATS"
-# dataset = "collegedash_api_gate"
-
-# Per-minute limits (owner decision 2 and plan section 2.2). Counts are per Cloudflare location and approximate by
-# design. If a binding is missing at runtime the gate fails OPEN for the site and carries on for keys (the D1 daily
-# quota still bounds them). The namespace ids are account-scoped integers, not credentials. Workers Builds accepts
-# all three on the Free plan (build 7707c826 passed; #355). Whether they are live at runtime shows in the counts'
-# limiter field ('ok' vs 'missing') once the Analytics Engine binding above is back.
-[[ratelimits]]
-name = "SITE_RL"
-namespace_id = "3451"
-  [ratelimits.simple]
-  limit = 300
-  period = 60
-
-[[ratelimits]]
-name = "KEYED_IP_RL"
-namespace_id = "3452"
-  [ratelimits.simple]
-  limit = 120
-  period = 60
-
-[[ratelimits]]
-name = "KEY_RL"
-namespace_id = "3453"
-  [ratelimits.simple]
-  limit = 60
-  period = 60
-
-# Keys and usage (plan section 4.2): the D1 database the owner creates and gives the schema in api/schema.sql
-# (steps in the PR for #345). Commented out until the owner has created it and posted its database_id, which is an
-# identifier, not a credential. Until then env.API_DB is missing: the site path never reads it, and a keyed request
-# is classified 'd1-error' (served in report mode, 503 when enforcing).
-# [[d1_databases]]
-# binding = "API_DB"
-# database_name = "collegedash-api"
-# database_id = "<from `wrangler d1 create collegedash-api`>"
+# ---- the /api/v1 session cookie, limits and counts (issue #345 phase 1, api/session.mjs; ported from ECNL #90) ----
+# SESSION_SECRET is a Worker secret, never in this file: set it with
+#   npx.cmd wrangler versions secret put SESSION_SECRET --name collegedash
+# then Retry build (docs/data-api.md, "Owner setup"). Never list it under [secrets] required: a missing required
+# secret blocks every deploy, the data refreshes included. Without it sessions are "off": no cookie, RL_IP only.
 #
-# The IP bucket's HMAC key is the Worker secret IP_BUCKET_SECRET, set with `wrangler secret put IP_BUCKET_SECRET`.
-# It never goes in this file or anywhere in the repository. Without it no bucket is written.
+# Counts: at most one data point per non-routine request (the outcome, the route kind, the Sec-Fetch-Site class,
+# production or preview; for keys the key id). Never an IP, session id, user agent, key or hash. The dataset is
+# created in the dashboard before the first build that binds it (Workers & Pages > Analytics Engine); the owner
+# enabled Analytics Engine on 2026-09-25 and #366's build passed with this block.
+[[analytics_engine_datasets]]
+binding = "API_GATE_STATS"
+dataset = "collegedash_api_gate"
+
+# Per-minute limits, measured from this site's own journeys (#345 round-3 section 4; owner decision 3). Counters
+# are per Cloudflare location and deliberately approximate: errors favour visitors. A missing binding is treated
+# as allowed, which is how the rollback PR (claude/345-rollback-limits) removes RL_SESSION and RL_ANON in one
+# deploy. A namespace_id is shared by every Worker on the account that uses it: 3461-3464 are this site's (ECNL
+# uses 9001-9004; nextonetwo-website has none). tests/session.test.mjs checks these values.
+[[ratelimits]]
+name = "RL_SESSION"          # per session id, for requests with a valid session cookie
+namespace_id = "3461"
+simple = { limit = 180, period = 60 }
+
+[[ratelimits]]
+name = "RL_ANON"             # per IP (IPv6 /64): the small allowance for requests with neither a key nor a cookie
+namespace_id = "3462"
+simple = { limit = 60, period = 60 }
+
+[[ratelimits]]
+name = "RL_IP"               # per IP (IPv6 /64), every request on every door: a ceiling sized for a shared Wi-Fi
+namespace_id = "3463"
+simple = { limit = 1200, period = 60 }
+
+# Phase 2 adds RL_KEY (namespace_id 3464) and the KV namespace COLLEGEDASH_API_KEYS (binding API_KEYS). Until then
+# a request with an Authorization header is judged as a key and, with no key store, answered 503 (fails closed).

@@ -4,7 +4,7 @@
 //
 // Tests both worker.js edge routing and api/data-api.mjs contract behavior:
 //   - All 6 v1 routes (/api/v1/programs, /programs/:slug, /camps, /trends, /commitments, /status)
-//   - Cache-Control: public, max-age=300, must-revalidate on prod edge responses
+//   - Cache-Control: no-cache on data answers (issue #345: session-scoped and rate-limited, so every copy revalidates)
 //   - ETag generation and 304 conditional revalidation
 //   - Strict slug validation (400 on invalid format)
 //   - HTTP 405 Method Not Allowed on non-GET/HEAD methods with Allow: GET, HEAD
@@ -70,7 +70,8 @@ test('all 6 v1 routes return 200, valid JSON, and edge cache headers', async () 
     const res = await worker.fetch(new Request(HOST + r.path), env);
     assert.equal(res.status, 200, `${r.path} status expected 200, got ${res.status}`);
     assert.ok(res.headers.get('content-type')?.includes('application/json'), `${r.path} content-type missing json`);
-    assert.equal(res.headers.get('cache-control'), 'public, max-age=300, must-revalidate', `${r.path} cache-control mismatch`);
+    assert.equal(res.headers.get('cache-control'), 'no-cache', `${r.path} cache-control mismatch`);
+    assert.equal(res.headers.get('x-collegedash-session'), 'off', `${r.path}: no SESSION_SECRET in this env, so sessions are off`);
     assert.ok(res.headers.get('etag'), `${r.path} missing etag header`);
 
     const json = await res.json();
@@ -95,7 +96,7 @@ test('conditional GET with matching ETag returns 304 with empty body', async () 
   }), env);
   assert.equal(res2.status, 304, `Expected 304, got ${res2.status}`);
   assert.equal(await res2.text(), '', '304 response should have empty body');
-  assert.equal(res2.headers.get('cache-control'), 'public, max-age=300, must-revalidate');
+  assert.equal(res2.headers.get('cache-control'), 'no-cache');
 });
 
 test('HEAD request on v1 routes returns 200 with headers and empty body', async () => {
@@ -103,7 +104,7 @@ test('HEAD request on v1 routes returns 200 with headers and empty body', async 
   const res = await worker.fetch(new Request(HOST + '/api/v1/programs', { method: 'HEAD' }), env);
   assert.equal(res.status, 200);
   assert.ok(res.headers.get('etag'), 'HEAD missing etag');
-  assert.equal(res.headers.get('cache-control'), 'public, max-age=300, must-revalidate');
+  assert.equal(res.headers.get('cache-control'), 'no-cache');
   assert.equal(await res.text(), '', 'HEAD response must have an empty body');
 });
 

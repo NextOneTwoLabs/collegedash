@@ -39,6 +39,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if "/api/" in (args[0] if args else ""):
             super().log_message(fmt, *args)
 
+    # Issue #345: the local server runs with sessions off, as the Worker does without SESSION_SECRET: no cookie, no
+    # rate limits, and no API key checks (an Authorization header or a key in the URL changes nothing). Every
+    # /api/v1 answer says so, as the Worker's do.
+    # (sent by end_headers below)
+    _session_off = False
+
     def _json(self, code: int, obj, extra_headers: dict | None = None) -> None:
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
@@ -72,6 +78,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def _handle_v1(self) -> bool:
         path = urllib.parse.urlparse(self.path).path
+        self._session_off = path == "/api/v1" or path.startswith("/api/v1/")
         if path == "/api/v1" or path == "/api/v1/":
             self._json(404, {"ok": False, "error": "Not found"})
             return True
@@ -192,6 +199,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         if self.path.startswith("/data/") or self.path.startswith("/archive/"):
             self.send_header("Cache-Control", "no-store")
+        if self._session_off:
+            self.send_header("X-CollegeDash-Session", "off")
         super().end_headers()
 
     def do_PUT(self):

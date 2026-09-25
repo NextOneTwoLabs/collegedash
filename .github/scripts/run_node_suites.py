@@ -56,7 +56,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from run_suite import annotate, make_output_lossless, parse_counts, summarise  # noqa: E402
+from run_suite import annotate, guarded_env, make_output_lossless, parse_counts, summarise  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -195,6 +195,12 @@ def main() -> int:
         junit_path = Path(workspace) / "node-junit.xml"
         command = [
             "node",
+            # Issue #345: every Node suite runs with the network guard preloaded (tests/netguard/netguard.mjs,
+            # ported from ecnl-dashboard). It refuses any non-loopback connection, DNS lookup or fetch and fails
+            # that suite's process with status 97 at exit, even if the code under test swallowed the error.
+            # `node --test` passes --import on to the child process each file runs in.
+            "--import",
+            "./tests/netguard/netguard.mjs",
             "--test",
             # tap to stdout keeps the log and the count line exactly as they were; junit to a file
             # is what makes the per-file assertion below possible.
@@ -209,6 +215,7 @@ def main() -> int:
         process = subprocess.Popen(
             command,
             cwd=REPO_ROOT,
+            env=guarded_env(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             encoding="utf-8",

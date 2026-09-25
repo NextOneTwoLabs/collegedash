@@ -1,19 +1,23 @@
 import { dataApi } from './api/data-api.mjs';
-import { apiGate, gateMode } from './api/access.mjs';
+import { gate, pageCookie, decorate, sessionFault, HEADER } from './api/session.mjs';
 
 // Entry point for the deployed Worker. The site itself is the static files in public/ (see
 // [assets] in wrangler.toml). This script does five things and runs ahead of the static assets
 // only for "/", "/api/*", "/archive*" and "/data*" (run_worker_first in wrangler.toml), so every other
 // file is served as a free static asset:
 //
-//   1. Sends the workers.dev address to the canonical custom domain. Browsers carry the #fragment
-//      across a redirect, so deep links such as #/p/stanford/roster still land on the right page.
+//   1. Sends the Worker's own plain workers.dev address (WORKERS_DEV_HOST) to the canonical custom domain.
+//      Browsers carry the #fragment across a redirect, so deep links such as #/p/stanford/roster still land
+//      on the right page. Version and branch preview hosts (<version>-collegedash.<subdomain>.workers.dev)
+//      are NOT redirected: they serve their own deployment, so a preview can be checked, cookie included,
+//      without testing production (issue #345, round-4 plan change 1).
 //   2. Answers GET /api/status with {"local":false}. The local dev server (serve.py) answers true;
 //      the front end uses it to decide whether write actions are available. Before this existed
 //      the request 404'd and logged a console error on every page load (issue #11).
-//   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240), behind the API gate of
-//      issue #345 (api/access.mjs): a customer key or the site's own first-party call. In "report" mode (wrangler.toml
-//      API_GATE) the gate only counts; it refuses nothing until it is switched to "enforce".
+//   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240), behind the session
+//      cookie and rate limits of issue #345 (api/session.mjs): "/" sets a signed session cookie, and every
+//      /api/v1* request is served on its API key, its session, or a small per-IP allowance, each rate-limited.
+//      A session fault serves the data ungated, never HTML; a key fault answers 503 (fails closed).
 //   4. Accepts footer feedback at POST /api/feedback and stores it in the FEEDBACK KV namespace,
 //      one key per submission. Stored: when it was sent, the message, the reply email if the
 //      visitor gave one, and which page they were on. No IP, no user agent.
@@ -28,6 +32,9 @@ import { apiGate, gateMode } from './api/access.mjs';
 //
 // Nothing here echoes a submission back to the client, and nothing renders one into the site.
 const CANONICAL_HOST = 'college.nextonetwo.com';
+// The Worker's own plain workers.dev address, confirmed by the owner on #345 (2026-09-25). Only this host is
+// redirected; a preview host is any other *.workers.dev name.
+const WORKERS_DEV_HOST = 'collegedash.nextonetwolabs.workers.dev';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Matches the textarea's maxlength in public/index.html; both count UTF-16 code units.
 const MAX_MESSAGE = 2000;
@@ -60,15 +67,16 @@ export default {
     // Off: fall through to the assets below, the same path - and so the same 404 - as any unknown /api route.
     if (url.pathname === '/api/ask' && askEnabled(env)) return ask(request, env);
     if (url.pathname === '/api/ask/status' && askEnabled(env)) return askStatus(request, env);
-    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await v1(request, env, url);
+    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await v1(request, env);
 
     // Block direct access to raw data and archive files (issues #100, #240).
     if (isBlockedRawPath(url.pathname)) return notFound(request);
 
-    if (url.hostname.endsWith('.workers.dev')) {
+    if (url.hostname === WORKERS_DEV_HOST) {
       url.hostname = CANONICAL_HOST;
       return Response.redirect(url.toString(), 301);
     }
+    if (url.pathname === '/' && (request.method === 'GET' || request.method === 'HEAD')) return await page(request, env);
     return env.ASSETS.fetch(request);
   },
   // Not a handler: the ask vocabulary and pure helpers, exposed for the tests (tests/ask_*.test.mjs),
@@ -76,36 +84,30 @@ export default {
   get ask() { return ASK; },
 };
 
-// /api/v1/* behind the API gate (issue #345, api/access.mjs). /api/v1/status is never gated. The gate's verdict
-// either refuses (only when API_GATE is "enforce") or adds headers to the data response. If the gate itself throws,
-// a keyless request - the website's own - is served exactly as before (fail open, plan section 2.3); a keyed one is
-// refused with 503 when enforcing, because it could not be metered (owner decision 9). Nothing about the request is
-// logged: the error's name only.
-async function v1(request, env, url) {
-  let verdict = null;
-  // a method the API does not serve is answered 405 by dataApi without being classified or counted
-  if (url.pathname !== '/api/v1/status' && (request.method === 'GET' || request.method === 'HEAD')) {
-    try {
-      verdict = await apiGate(request, env);
-    } catch (error) {
-      console.error('api-gate', error?.name || 'Error');
-      if (request.headers.has('authorization') && gateMode(env) === 'enforce') {
-        return new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Key check unavailable' }), {
-          status: 503, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'retry-after': '30' },
-        });
-      }
-    }
-    if (verdict?.response) return verdict.response;
+// /api/v1/* behind the session gate (issue #345, api/session.mjs). The gate has its own catches: a throw there
+// is a session fault, served ungated as JSON (never the assets' HTML), and the key path answers its own faults
+// with 503 before any of this. Ported from ecnl-dashboard's worker.js (#90, #93).
+async function v1(request, env) {
+  let verdict;
+  try { verdict = await gate(request, env); } catch (err) { verdict = sessionFault(request, env, err); }
+  if (verdict.response) return verdict.response;
+  const response = await dataApi(request, env);
+  try { return decorate(response, verdict); } catch (err) {
+    sessionFault(request, env, err);
+    try { response.headers.set(HEADER, 'error'); } catch {}
+    return response;
   }
-  const res = await dataApi(request, env);
-  if (!verdict) return res;
-  const headers = new Headers(res.headers);
-  for (const [k, v] of Object.entries(verdict.headers || {})) {
-    // a data response's public caching becomes private; an error's no-store stays as it is
-    if (k === 'cache-control' && headers.get('cache-control') === 'no-store') continue;
-    headers.set(k, v);
-  }
-  return new Response(res.body, { status: res.status, headers });
+}
+
+// "/": the page, with a signed session cookie when the visitor has no usable one (or it is due for renewal).
+// A fault never takes the page down: it is served without a cookie.
+async function page(request, env) {
+  const response = await env.ASSETS.fetch(request);
+  try {
+    const cookie = response.status < 400 ? await pageCookie(request, env) : null;
+    if (cookie) return decorate(response, { cookie });
+  } catch (err) { sessionFault(request, env, err); }
+  return response;
 }
 
 const notFound = request =>
