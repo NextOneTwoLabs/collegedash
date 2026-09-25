@@ -165,7 +165,7 @@ function loadPage(overrides = {}) {
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'public/index.html: could not find the inline <script>');
   const src = lines.slice(a + 1, b).join('\n')
-    + '\n;Object.assign(globalThis, { S, route, renderProfile, trendsQuery, trendsFeeders, trendsCoverageLines, trendsRosterNames, listTabs, trendsKeyStep, trendsParse, trendsParseLink, trendsUrl, trendsClubCell, trState: () => TR });\n';
+    + '\n;Object.assign(globalThis, { S, route, renderProfile, trendsQuery, trendsFeeders, trendsCoverageLines, trendsRosterNames, listTabs, trendsKeyStep, trendsParse, trendsParseLink, trendsUrl, trendsInPlace, trendsClubCell, trState: () => TR });\n';
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const el = sel => bySelector(sel);
@@ -600,6 +600,33 @@ test('#310 sidebar filters never hide a picked program', async () => {
   page.sandbox.location.hash = '#/trends?club=mvla'; await page.sandbox.route(); await tick();
   assert.deepEqual(cellsOf(page.results()), [], 'unpicked program rows are still filtered');
   assert.ok(page.results().includes('3 programs with these players are hidden by your sidebar filters.'));
+});
+
+test('#316 Back and Forward close an open suggestion list, without adding a history entry', async () => {
+  const page = await open('#/trends', searchFixture());
+  add(page, 'club', 'mvla');
+  const input = page.el('#trIn-program'), list = page.el('#trList-program');
+  input.onfocus();
+  assert.equal(list.hidden, false, 'premise: the Program list is open');
+  const pushes = page.hist.pushes, replaces = page.hist.replaces;
+  page.sandbox.history.back(); await page.sandbox.route(); await tick();
+  assert.equal(page.sandbox.location.hash, '#/trends', 'Back went to the state before the pick');
+  assert.equal(list.hidden, true, 'the list is closed');
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+  assert.equal(input.getAttribute('aria-activedescendant'), null);
+  assert.deepEqual([page.hist.pushes, page.hist.replaces], [pushes, replaces], 'no history entry added or replaced');
+  input.onfocus();
+  assert.equal(list.hidden, false);
+  page.sandbox.trendsInPlace();
+  assert.equal(list.hidden, true, 'a popstate onto the same entry closes it too');
+});
+
+test('#316 on phones every tap target in the results is at least 44px', () => {
+  const css = fs.readFileSync(HTML, 'utf8');
+  const phone = [...css.replace(/\r\n/g, '\n').matchAll(/@media \(max-width: 480px\) \{([\s\S]*?)\n\}/g)].map(m => m[1]).join('\n');
+  const rule = sel => phone.split('\n').some(l => l.includes('min-height: 44px') && l.split('{')[0].split(',').map(x => x.trim()).includes(sel));
+  for (const sel of ['.trend-table a', '.trend-players summary', '#trResults .table-footnote a', '.tr-actions .btn', '#trFailed .btn', '.tr-go'])
+    assert.ok(rule(sel), `${sel}: no 44px rule for phones`);
 });
 
 /* ---------- the rest of the site ---------- */
