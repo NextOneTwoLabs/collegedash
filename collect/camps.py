@@ -1267,7 +1267,15 @@ def _is_chrome_name(name: str) -> bool:
     return any(CHROME_NOUN_RE.match(t) for t in toks) or all(t in _PLAIN_CAMP_WORDS for t in toks)
 
 
-def _table_entries(soup, page_url: str, published: str | None, sports: set | None = None) -> list[dict]:
+def _table_entries(soup, page_url: str, published: str | None, sports: set | None = None,
+                   parsed: list | None = None) -> list[dict]:
+    """Rows from camp tables: a header row naming a date column and a camp column.
+
+    #356: a table read COMPLETELY here - every data row became a row, or was a TBD / registration
+    line skipped on purpose - is appended to `parsed`, so the prose path leaves its cells alone. A
+    table with any row this path could not read (a date it cannot parse, no camp name) is not, and
+    the prose path still reads it exactly as before: florida-state's table dates ("March 21st ID
+    Camp") are only readable as prose."""
     out = []
     for table in soup.find_all("table"):
         rows = table.find_all("tr")
@@ -1293,12 +1301,17 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
         section = _sport_section(pre) or _preceding_section(table)
         if section is not None and sports is not None:
             sports.add(section["token"])
+        data_rows = read = 0
         for r in rows[hi + 1:]:
             cells = r.find_all(["th", "td"])
             texts = [common.clean(c.get_text(" ")) for c in cells]
+            if not any(texts):
+                continue
+            data_rows += 1
             if len(texts) <= max(c_date, c_name):
                 continue
             if TBD_RE.search(texts[c_date]) or REGISTRATION_RE.search(texts[c_date]):
+                read += 1
                 continue
             dates = parse_camp_dates(texts[c_date], published, default_year=default_year)
             if not dates:
@@ -1306,6 +1319,7 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
             name = texts[c_name] or _camp_phrase(" ".join(texts), None)
             if not CAMP_RE.search(name) and not CAMP_RE.search(" ".join(header)):
                 continue
+            read += 1
             details = _details(texts)
             if c_age is not None and texts[c_age]:
                 details["ages"] = texts[c_age]
@@ -1318,6 +1332,8 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
                                  page_url),
                         "_section": section, "_evidence": " | ".join(texts),
                         "_named": "page" if _is_chrome_name(name) else "row"})
+        if parsed is not None and data_rows and read == data_rows:
+            parsed.append(table)
     return out
 
 
@@ -1661,8 +1677,16 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     page_name = _clean_name(title) if title and not _is_chrome_name(title) else None
     if page_name is None and title:
         page_name = _page_camp_name(lines) or _clean_name(title)
-    entries = session_rows + _table_entries(root, page_url, published, sports) \
-        + _prose_entries(lines, page_url, published, page_name, title, sports)
+    # #356: a table _table_entries has read (a date column and a camp column) is not read again as
+    # prose. Its cells as text lines paired one row's name with the NEXT row's date: UCCS published a
+    # women's "Elite ID Camp" on the date of the softball camp below it. The table rows themselves are
+    # the page's answer for those dates.
+    tables: list = []
+    table_rows = _table_entries(root, page_url, published, sports, parsed=tables)
+    if tables:
+        ids = {id(t) for t in tables}
+        lines = [ln for ln in lines if not any(id(p) in ids for p in (ln[1], *getattr(ln[1], "parents", ())))]
+    entries = session_rows + table_rows + _prose_entries(lines, page_url, published, page_name, title, sports)
     day_months = {e["startDate"][:7] for e in entries if e["precision"] == "day"}
     entries = [e for e in entries if not (e["precision"] == "month" and e["startDate"] in day_months)]
     # Gating is inserted upstream of the cap, which already ran last. MAX_CAMPS is a defence against

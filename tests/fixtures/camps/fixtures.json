@@ -814,6 +814,35 @@
    "reject": [{"name": "11v11 Showcase Camp"}, {"name": "Winter ID Clinic"}, {"name": "Elite Prospect Camp"}]
   },
   {
+   "file": "extract/synth-table-twin.html",
+   "pageUrl": "https://www.example-athletics.test/camps",
+   "title": "Example Camps",
+   "pageSoccer": false,
+   "_note": "#356, fails on main (2 rows): UCCS's table, read by the table path; the prose path read the cells again and paired the women's row's name with the next row's (softball's) date. A fully read table is not read again as prose.",
+   "count": 1,
+   "expect": [{"name": "Elite ID Camp", "startDate": "2027-10-24"}],
+   "reject": [{"startDate": "2027-10-25"}]
+  },
+  {
+   "file": "extract/synth-table-deadline.html",
+   "pageUrl": "https://www.example-camps.test/index.cfm",
+   "title": "Example Women's Soccer Camps and Clinics",
+   "pageSoccer": true,
+   "_note": "#356, fails on main (2 rows): vassar's one-row table with a Deadline column; the prose path published the registration deadline as a second, page-named camp.",
+   "count": 1,
+   "expect": [{"name": "ID Clinic | October", "startDate": "2027-10-04"}],
+   "reject": [{"startDate": "2027-10-03"}]
+  },
+  {
+   "file": "extract/synth-table-unread-row.html",
+   "pageUrl": "https://www.example-camps.test/camps",
+   "title": "Example Women's Soccer Camps",
+   "pageSoccer": true,
+   "_note": "#356 GUARD: a table with a row the table path cannot read ('Spring' in its Dates cell) is still read as prose, so the April camp stays (florida-state's case). Fails if every recognised table is skipped.",
+   "count": 2,
+   "expect": [{"name": "Summer ID Camp", "startDate": "2027-06-12"}, {"name": "Spring ID Camp", "startDate": "2027-04-10"}]
+  },
+  {
    "file": "extract/synth-allsport-register-url.html",
    "pageUrl": "https://www.example-athletics.test/sports-camps",
    "title": "Example Sports Camps",
