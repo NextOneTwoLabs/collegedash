@@ -59,7 +59,6 @@ from __future__ import annotations
 import collections
 import copy
 import functools
-import json
 import os
 import re
 import urllib.parse
@@ -71,7 +70,13 @@ from .wikipedia import MENS_TITLE_RE
 
 DIRECTORY_URL = "https://web3.ncaa.org/directory/api/directory/memberList?type=12&division={roman}&sportCode=WSO"
 DIVISION_ROMAN = {"D1": "I", "D2": "II", "D3": "III"}
-WIKI_LIST = {"D1": "https://en.wikipedia.org/api/rest_v1/page/html/List_of_NCAA_Division_I_women%27s_soccer_programs"}
+# Issue #99: every Wikipedia request here is a /wiki/ page, which en.wikipedia.org/robots.txt allows. It disallows
+# /api/ and /w/ for every agent, and this builder used both (the REST html and summary endpoints, the search API,
+# and index.php?action=raw), without ever asking robots_allowed(). Each request now goes through _wiki_fetch, which
+# asks first and refuses what robots.txt disallows. tests/registry_wiki_robots_test.py holds every URL built here to
+# those rules.
+WIKI = "https://en.wikipedia.org/wiki/"
+WIKI_LIST = {"D1": WIKI + "List_of_NCAA_Division_I_women%27s_soccer_programs"}
 TDS_CONFERENCES = [
     ("america-east", 1), ("american-athletic", 1047), ("asun", 22), ("atlantic-10", 2), ("atlantic-coast", 3),
     ("big-12", 23), ("big-east", 5), ("big-sky", 24), ("big-south", 6), ("big-ten", 7), ("big-west", 8),
@@ -980,12 +985,31 @@ def assign_slugs(rows: list[dict], taken: set[str], preferred: dict[int, str] | 
 
 # ---------- enrichment of a new program ----------
 
+def _wiki_fetch(url: str, **kw) -> tuple[bytes, dict]:
+    """common.fetch for a Wikipedia page, only when robots.txt allows it (issue #99). A disallowed URL raises
+    FetchError before any request, so a future edit that points back at /api/ or /w/ fails instead of fetching."""
+    if not common.robots_allowed(url):
+        raise common.FetchError(f"robots.txt disallows {url}")
+    return common.fetch(url, **kw)
+
+
+def _wiki_article_href(href: str | None) -> str | None:
+    """The article title a Wikipedia link points at: '/wiki/Title' on a rendered page, './Title' in the REST API's
+    HTML (still accepted, for a page cached before #99). None for anything else (red links, other namespaces' URLs)."""
+    if not href:
+        return None
+    for prefix in ("/wiki/", "./"):
+        if href.startswith(prefix):
+            return urllib.parse.unquote(href[len(prefix):].split("#", 1)[0]) or None
+    return None
+
+
 def fetch_wiki_list(division: str = "D1") -> list[dict]:
     url = WIKI_LIST.get(division)
     if not url:
         return []
-    html, _ = common.fetch_text(url, max_age_hours=24 * 30)
-    soup = BeautifulSoup(html, "html.parser")
+    body, _ = _wiki_fetch(url, max_age_hours=24 * 30)
+    soup = BeautifulSoup(body.decode("utf-8", "replace"), "html.parser")
     t = soup.find_all("table", "wikitable")[0]
     rows = []
     for tr in t.find_all("tr")[1:]:
@@ -998,7 +1022,7 @@ def fetch_wiki_list(division: str = "D1") -> list[dict]:
 
         def link(i):
             a = c[i].find("a")
-            return urllib.parse.unquote(a["href"].replace("./", "")) if a and a.get("href", "").startswith("./") else None
+            return _wiki_article_href(a.get("href")) if a else None
 
         rows.append({"institution": cell(0), "institutionArticle": link(0), "city": cell(1), "state": cell(2),
                      "type": cell(3), "nickname": cell(4), "athleticsArticle": link(4), "conference": cell(5)})
@@ -1024,18 +1048,26 @@ def fetch_tds_teams() -> dict[str, dict]:
 
 
 def wiki_canonical(title: str) -> str | None:
-    """Canonical article title (follows redirects), or None if the page does not exist."""
-    url = "https://en.wikipedia.org/api/rest_v1/page/summary/" + urllib.parse.quote(title, safe="")
+    """Canonical article title (follows redirects), or None if the page does not exist.
+
+    Read from the article's own /wiki/ page (issue #99): a missing article is a 404, and a redirect is served as
+    the target's page, whose <link rel="canonical"> names the target. This replaced the REST summary endpoint
+    under /api/, which robots.txt disallows."""
+    url = WIKI + urllib.parse.quote(title, safe="")
     try:
-        body, meta = common.fetch(url, max_age_hours=24 * 90, allow_status=(200, 404))
+        body, meta = _wiki_fetch(url, max_age_hours=24 * 90, allow_status=(200, 404))
     except common.FetchError:
         return None
     if meta.get("status") != 200:
         return None
-    try:
-        return json.loads(body.decode("utf-8", "replace")).get("title", title).replace(" ", "_")
-    except ValueError:
-        return title
+    return canonical_from_page(body.decode("utf-8", "replace")) or title
+
+
+def canonical_from_page(html: str) -> str | None:
+    """The title in a rendered article's <link rel="canonical" href="https://en.wikipedia.org/wiki/Title">."""
+    link = BeautifulSoup(html, "html.parser").find("link", rel="canonical")
+    href = urllib.parse.urlparse(link.get("href", "")).path if link else ""
+    return _wiki_article_href(href)
 
 
 def soccer_article_for(athletics_article: str | None) -> str | None:
@@ -1225,17 +1257,7 @@ def build(registry: dict, *, limit: int | None = None) -> dict:
 
 # ---------- post-build fixes ----------
 
-WIKI_SEARCH = "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=6&srsearch={q}"
 SEASON_ARTICLE_RE = re.compile(r"^\d{4}")
-
-
-def _wiki_search(q: str) -> list[str]:
-    url = WIKI_SEARCH.format(q=urllib.parse.quote(q, safe=""))
-    try:
-        payload, _ = common.fetch_json(url, max_age_hours=24 * 30)
-    except common.FetchError:
-        return []
-    return [hit.get("title", "") for hit in payload.get("query", {}).get("search", [])]
 
 
 def _norm_title(t: str) -> str:
@@ -1256,31 +1278,25 @@ def _accept_title(title: str, short: str, nick: str = "") -> bool:
 
 
 def find_wiki_article(program: dict) -> tuple[str | None, list[str]]:
-    """Best guess at the program's Wikipedia team article, verified to exist. Direct title probes
-    first ('Kentucky Wildcats women's soccer'), then the search API; a probe that redirects to the
-    athletics article ('Kentucky Wildcats') means there is no dedicated article.
-    Returns (canonical title or None, rejected-but-plausible candidates)."""
+    """Best guess at the program's Wikipedia team article, verified to exist, by direct title probes
+    ('Kentucky Wildcats women's soccer', then 'Kentucky women's soccer'); a probe that redirects to the athletics
+    article ('Kentucky Wildcats') means there is no dedicated article.
+
+    There is no search step any more (issue #99): the search API is under /w/, and Special:Search is not a page a
+    crawler may ask for either, so the fallback that searched when both probes missed is gone rather than moved.
+    Measured offline over the cached lookups before removing it: of the 100 programs with a registered article, 92
+    are found by a direct probe and none is known to have needed the search (the other 8 have no cached probe to
+    check against). A program the probes miss is left with no article, as one the search
+    missed was, for `registry fix-wiki --slug` with a hand-checked title.
+    Returns (canonical title or None, rejected-but-plausible candidates: now always empty, kept for callers)."""
     short = program.get("shortName") or program["name"]
     nick = program.get("nickname") or ""
-    rejected: list[str] = []
     probes = [f"{short} {nick} women's soccer", f"{short} women's soccer"] if nick else [f"{short} women's soccer"]
     for title in probes:
         canon = wiki_canonical(title.replace(" ", "_"))
         if canon and _accept_title(canon, short, nick):
-            return canon, rejected
-    seen = []
-    for q in (f"{short} {nick} women's soccer", f"{short} women's soccer"):
-        for title in _wiki_search(q):
-            if title in seen:
-                continue
-            seen.append(title)
-            if _accept_title(title, short, nick):
-                canon = wiki_canonical(title.replace(" ", "_"))
-                if canon and _accept_title(canon, short, nick):
-                    return canon, rejected
-            elif _norm_title(title).endswith("women s soccer") and not SEASON_ARTICLE_RE.match(title):
-                rejected.append(title)
-    return None, rejected
+            return canon, []
+    return None, []
 
 
 def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = None) -> dict:
@@ -1317,7 +1333,10 @@ def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = N
 
 # ---------- team colours (Wikipedia Module:College color/data) ----------
 
-COLOR_MODULE_URL = "https://en.wikipedia.org/w/index.php?title=Module:College_color/data&action=raw"
+# The module's own /wiki/ page (issue #99), which shows its Lua source in a <pre>; it replaced index.php?action=raw
+# under /w/, which robots.txt disallows.
+COLOR_MODULE_URL = WIKI + "Module:College_color/data"
+COLOR_MIN_ENTRIES, COLOR_MIN_ALIASES = 1400, 850  # ~90% of 1,554 / 949 (the 2026-09-07 copy); see fetch_color_table
 # One entry per line:  ["Key"] = {"RRGGBB", "RRGGBB", ..., name1="crimson", cite="..."},  -- optional comment
 #                      ["Alias"] = "Canonical Key",
 _COLOR_ENTRY = re.compile(r'^\s*\["(?P<key>[^"]+)"\]\s*=\s*(?:"(?P<alias>[^"]+)"|\{(?P<body>.*)\})\s*,?\s*(?:--.*)?$')
@@ -1330,9 +1349,24 @@ COLOR_OVERRIDES = {  # registry slug -> module key where no name form matches
 }
 
 
+def module_source(html: str) -> str:
+    """The Lua source shown on a Module: page: the text of the highlighted code block (div.mw-highlight pre), or of
+    the plain code block (pre.mw-code) a page without highlighting uses, else of the longest <pre>. The text is the
+    source character for character (highlighting only wraps it in spans; line numbers are empty spans). A page that
+    has none of these returns '', and fetch_color_table's floors then fail loudly rather than quietly.
+    Unverified against the live page until the next `registry colors` run (#99): no copy of it is cached."""
+    soup = BeautifulSoup(html, "html.parser")
+    pre = soup.select_one("div.mw-highlight pre") or soup.select_one("pre.mw-code")
+    if pre is None:
+        pres = soup.find_all("pre")
+        pre = max(pres, key=lambda p: len(p.get_text()), default=None)
+    return pre.get_text() if pre is not None else ""
+
+
 def fetch_color_table() -> tuple[dict[str, list[str]], dict[str, str]]:
     """(entries: key -> ['#RRGGBB', ...], aliases: key -> canonical key) from the Lua data module."""
-    text, _ = common.fetch_text(COLOR_MODULE_URL, max_age_hours=24 * 30)
+    body, _ = _wiki_fetch(COLOR_MODULE_URL, max_age_hours=24 * 30)
+    text = module_source(body.decode("utf-8", "replace"))
     entries: dict[str, list[str]] = {}
     aliases: dict[str, str] = {}
     for line in text.splitlines():
@@ -1346,8 +1380,13 @@ def fetch_color_table() -> tuple[dict[str, list[str]], dict[str, str]]:
         hexes = ["#" + h.upper() for h in _HEX6.findall(head)]
         if hexes:
             entries[m.group("key")] = hexes
-    if len(entries) < 500:
-        raise common.FetchError(f"college colour table parsed only {len(entries)} entries (format change?)")
+    # Floors at about 90% of the last known module (PR #362 review, R1): the raw copy cached on 2026-09-07 parses to
+    # 1,554 entries and 949 aliases with these same patterns. A parse that half-failed on the new /wiki/ page layout
+    # must not pass, because match_colors falls back to a unique-prefix scan, and a dropped key ('Miami') could then
+    # take a neighbour's colours ('Miami (OH)'). Nothing is written when this raises.
+    if len(entries) < COLOR_MIN_ENTRIES or len(aliases) < COLOR_MIN_ALIASES:
+        raise common.FetchError(f"college colour table parsed only {len(entries)} entries and {len(aliases)} aliases "
+                                f"(expected at least {COLOR_MIN_ENTRIES} and {COLOR_MIN_ALIASES}; format change?)")
     common.log(f"colors: {len(entries)} entries, {len(aliases)} aliases from Wikipedia")
     return entries, aliases
 
