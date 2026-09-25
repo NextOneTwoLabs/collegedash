@@ -267,20 +267,20 @@ test('every program shows the RPI it showed when the page read the table, on the
     'the index does not hold every published registry program');
   assert.ok(programs.length > 0);
   const wrong = [];
-  // A known registry gap, not a page fault, found by #62: West Florida joined D1 in 2026 and was onboarded with
-  // ids.ncaaName null, as no NCAA table held it then. The 2026 table now does ("West Florida"), so the old
-  // by-name rule ranks it while the page, which joins only by curated id, shows nothing. The fix is the
-  // registry's ids.ncaaName, outside this test's reach. Listed exactly, so it fails both ways: when the id is
-  // added (delete the entry) and when any other program shows the same gap.
-  const KNOWN_UNJOINED = new Set(['west-florida']);
+  // #248: every published D1 program carries the ids.ncaaName the build joins the NCAA RPI table by. West Florida
+  // (D1 from 2026) was onboarded without one, so its 2026 rank (#171) never showed; the registry now has it.
+  const reg = new Map(registry.programs.map(p => [p.slug, p]));
+  const noName = published.filter(p => p.division === 'D1' && !(p.ids || {}).ncaaName).map(p => p.slug);
+  assert.deepEqual(noName, [], 'published D1 programs without ids.ncaaName: the build cannot join their RPI rank');
   for (const p of programs) {
     const before = bySchool.get(p.shortName || p.name)
       ?? (p.lastSeason?.year === sandbox.rpiSeason() ? p.lastSeason.rpiRank : null)
       ?? (p.rpiHistory || []).find(r => r.year === sandbox.rpiSeason())?.rank ?? null;
-    if (KNOWN_UNJOINED.has(p.slug)) {
-      if (!(before != null && sandbox.rpiOf(p) == null)) wrong.push(`${p.slug}: no longer unjoined (rpiOf ${sandbox.rpiOf(p)}); remove it from KNOWN_UNJOINED`);
-      continue;
-    }
+    // A registry id added after the committed index was built (#248): the index row joins at the next build.
+    // Only a program whose registry ncaaName is a team name in the table, and whose index row has not been rebuilt
+    // since, waits; a wrong name or any other gap still fails.
+    const regName = reg.get(p.slug)?.ids?.ncaaName;
+    if (before != null && sandbox.rpiOf(p) == null && regName && bySchool.has(regName) && !(p.rpiHistory || []).length) continue;
     const shown = before == null ? '—' : '#' + before;
     const card = sandbox.cardHtml(p);
     const tableRow = sandbox.tableHtml([p]);
