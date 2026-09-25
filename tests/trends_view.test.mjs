@@ -165,7 +165,7 @@ function loadPage(overrides = {}) {
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'public/index.html: could not find the inline <script>');
   const src = lines.slice(a + 1, b).join('\n')
-    + '\n;Object.assign(globalThis, { S, route, renderProfile, trendsQuery, trendsFeeders, trendsCoverageLines, trendsRosterNames, listTabs, trendsKeyStep, trendsParse, trendsUrl, trendsClubCell, trState: () => TR });\n';
+    + '\n;Object.assign(globalThis, { S, route, renderProfile, trendsQuery, trendsFeeders, trendsCoverageLines, trendsRosterNames, listTabs, trendsKeyStep, trendsParse, trendsParseLink, trendsUrl, trendsClubCell, trState: () => TR });\n';
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const el = sel => bySelector(sel);
@@ -250,7 +250,9 @@ test('T5 URL: several values per box round-trip; one value is byte-for-byte #310
   assert.equal(url, '#/trends?club=raw%3Azeta%20%26%20sons%20united,mvla,odd%2Cclub&school=ccd%3A1,ccd%3A2&program=stanford,ucla');
   assert.deepEqual(plain(s.trendsParse(url)), sel, 'parse(url(sel)) == sel, the comma value included');
   assert.deepEqual(plain(s.trendsParse('#/trends?school=ccd%3A1&program=stanford&bogus=1')), { school: ['ccd:1'], program: ['stanford'] }, 'an old single value parses to a one-element list');
-  assert.equal(s.trendsParse(`#/trends?club=${Array.from({ length: 12 }, (_, i) => `c${i}`).join(',')}`).club.length, 10, 'at most ten per box');
+  assert.deepEqual(plain(s.trendsParse('#/trends?club=c0,c1,c2,c3,c4')), { club: ['c0', 'c1', 'c2'] }, 'at most three per box (#348): the first three');
+  assert.deepEqual(plain(s.trendsParseLink('#/trends?club=c0,c1,c2,c3,c4&program=p0,p1,p2')), { sel: { club: ['c0', 'c1', 'c2'], program: ['p0', 'p1', 'p2'] }, dropped: { club: 2 } },
+    'and says how many it left out; three is not cut');
 });
 
 test('#310 old links: the three path forms redirect with replaceState (not a push); no old-form link is left in the page', async () => {
@@ -482,18 +484,51 @@ test('T8 chips: pick returns focus to the input; remove moves to the next chip, 
   assert.equal(page.el('#trMsg-club').textContent, 'No club matches “zzzz”.');
 });
 
-test('T8 the ten-value cap: the input stays focusable (aria-disabled), says why, and offers nothing more', async () => {
+test('T8 the three-value cap (#348): the input stays focusable (aria-disabled), says why, and a fourth is refused', async () => {
   const page = await open('#/trends', searchFixture());
-  for (let i = 1; i <= 9; i++) add(page, 'club', `club ${i}`);
-  add(page, 'club', 'mvla');
-  assert.equal(page.sandbox.trState().sel.club.length, 10);
-  assert.equal(page.sandbox.document.activeElement, page.el('#trIn-club'), 'focus after the 10th value: the input, never a disabled element');
+  add(page, 'club', 'club 1'); add(page, 'club', 'club 2');
+  assert.equal(page.el('#trIn-club').getAttribute('aria-disabled'), null, 'two values: not at the cap');
+  type(page, 'club', 'club 3');
+  assert.deepEqual(plain(optIds(page, 'club')), ['c3'], 'the third is still offered');
+  add(page, 'club', 'club 3');
+  assert.deepEqual(plain(page.sandbox.trState().sel.club), ['c1', 'c2', 'c3']);
+  assert.equal(page.sandbox.document.activeElement, page.el('#trIn-club'), 'focus after the 3rd value: the input, never a disabled element');
   assert.equal(page.el('#trIn-club').getAttribute('aria-disabled'), 'true');
-  assert.ok(page.el('#trLive').textContent.includes('That is 10 clubs, the most one box takes'), page.el('#trLive').textContent);
-  type(page, 'club', 'surf');
-  assert.deepEqual(plain(optIds(page, 'club')), [], 'nothing more is offered');
-  assert.equal(page.el('#trMsg-club').textContent, 'You can choose up to 10 clubs. Remove one to add another.');
-  assert.ok(page.el('#trSel-club').textContent.endsWith('10 is the most.'));
+  assert.ok(page.el('#trLive').textContent.includes('That is 3 clubs, the most one box takes'), page.el('#trLive').textContent);
+  type(page, 'club', 'mvla');
+  assert.deepEqual(plain(optIds(page, 'club')), [], 'a fourth is not offered');
+  assert.equal(page.el('#trMsg-club').textContent, 'You can choose up to 3 clubs. Remove one to add another.');
+  assert.ok(page.el('#trSel-club').textContent.endsWith('3 is the most.'));
+  const pushes = page.hist.pushes;
+  page.sandbox.trState().opts.club = [{ id: 'mvla', label: 'x', sub: '' }];
+  page.el('#trList-club').onclick({ target: { closest: () => ({ dataset: { i: '0' } }) } });
+  assert.deepEqual(plain(page.sandbox.trState().sel.club), ['c1', 'c2', 'c3'], 'a fourth pick changes nothing');
+  assert.equal(page.hist.pushes, pushes, 'and pushes no history entry');
+});
+
+test('#348 an older link with more than three values keeps the first three and says what it left out', async () => {
+  const page = await open('#/trends?club=mvla,surf,mx,lone,raw%3Azeta%20united&program=' + A.slug);
+  assert.equal(page.sandbox.location.hash, `#/trends?club=mvla,surf,mx&program=${A.slug}`, 'the URL is rewritten to what the page shows');
+  assert.equal(page.hist.pushes, 0, 'with replaceState, so Back does not bounce');
+  assert.deepEqual(chipNames(page, 'club'), ['Mountain View Los Altos SC', 'San Diego Surf', 'MX United']);
+  assert.ok(page.results().includes('This link listed 5 clubs; a box takes up to 3, so the first 3 are shown and 2 were left out.'));
+  assert.ok(page.results().includes('data-stat="players"'), 'the results render for the three kept');
+  removeChip(page, 'club', 2);
+  assert.ok(!page.results().includes('This link listed'), 'the note goes once the visitor changes the selection');
+  const three = await open('#/trends?club=mvla,surf,mx');
+  assert.equal(three.sandbox.location.hash, '#/trends?club=mvla,surf,mx');
+  assert.ok(!three.results().includes('This link listed'), 'three values: nothing left out, no note');
+});
+
+test('suggestions follow the "1–2" rule (#343, Bianque): a range with two or more boxes, exact with one', async () => {
+  const doc = fixture({ schools: true, extra: [[B.slug, 1, 'mx', 'ccd:1']] });
+  let page = await open('#/trends?club=mx', doc);
+  let list = type(page, 'school', '');
+  assert.ok(list.includes('Rocklin · CA · 1 player<') || list.includes('1 player</span>'), `one box: exact (${list})`);
+  assert.ok(!list.includes('1–2'), 'one box: no range in the suggestions');
+  page = await open(`#/trends?club=mx&program=${B.slug}`, doc);
+  list = type(page, 'school', '');
+  assert.ok(list.includes('1–2 players'), `two boxes: the former player reads 1–2 (${list})`);
 });
 
 test('#310 keyboard: one listbox of options (not tab stops), arrows, Enter adds, Backspace reaches the last chip, Escape closes', async () => {

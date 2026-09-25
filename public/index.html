@@ -2040,7 +2040,7 @@ async function renderCamps() {
    listed by name under a program; commits are counts only, never a list of recruits. D1, D2 and D3 since #315;
    commits are collected for doc.commitDivisions (D1) only and read "Not collected" (null, never 0) elsewhere.
 
-   #327: each box takes up to ten values. Values in one box are combined with OR, the three boxes with AND,
+   #327, #348: each box takes up to three values. Values in one box are combined with OR, the three boxes with AND,
    answered exactly from the index's records (one per counted person). With two or more boxes chosen, past and
    commit counts of 1 or 2 read "1–2" (the owner's decision, option a); one box shows exact counts; current is exact. trendsQuery and trendsFeeders mirror
    trends.py's select and feeders: the same answers the Worker could give the ask feature (#165). */
@@ -2167,24 +2167,38 @@ function trendsRosterNames(profile, sel) {
 
 /* The #/trends URL (#310, #327): #/trends?club=a,b&school=x&program=p,q. Any subset, always in that order; each
    value is URI-encoded, then the values are joined with a literal comma, and parsing splits on the comma before
-   decoding, so a comma inside a value survives as %2C. One value per box is byte-for-byte #310's URL. Up to ten
-   values per box, in the order they were picked, repeats dropped. */
+   decoding, so a comma inside a value survives as %2C. One value per box is byte-for-byte #310's URL. Up to three
+   values per box (#348, the owner's cap; #327 took ten), in the order they were picked, repeats dropped. A link
+   with more (an older shared link) keeps the first three; trendsParseLink says how many it dropped, and the page
+   says so and rewrites the URL to what it shows. */
 const TR_KINDS = ['club', 'school', 'program'];
 const TR_WHAT = { club: 'club', school: 'high school', program: 'program' };
 const TR_PLURAL = { club: 'clubs', school: 'high schools', program: 'programs' };
-const TR_MAX = 10;
-function trendsParse(hash) {
-  const q = String(hash || '').split('?')[1] || '', sel = {};
+const TR_MAX = 3;
+function trendsParseLink(hash) {
+  const q = String(hash || '').split('?')[1] || '', sel = {}, dropped = {};
   for (const part of q.split('&')) {
     const i = part.indexOf('='), k = part.slice(0, i);
     if (i < 0 || !TR_KINDS.includes(k)) continue;
     const vals = [];
     for (const raw of part.slice(i + 1).split(',')) {
-      try { const v = decodeURIComponent(raw); if (v && !vals.includes(v) && vals.length < TR_MAX) vals.push(v); } catch { }
+      try { const v = decodeURIComponent(raw); if (v && !vals.includes(v)) vals.push(v); } catch { }
     }
-    if (vals.length) sel[k] = vals;
+    if (vals.length > TR_MAX) dropped[k] = vals.length - TR_MAX;
+    if (vals.length) sel[k] = vals.slice(0, TR_MAX);
   }
-  return sel;
+  return { sel, dropped };
+}
+const trendsParse = hash => trendsParseLink(hash).sel;
+// The selection a link asks for, cut to the cap: the URL is rewritten in place to what the page shows, and the
+// note above the results names what was dropped (#348).
+// The page may render twice on one entry; the second read sees the rewritten URL, so what was dropped is kept with it.
+let trendsCut = { hash: null, dropped: {} };
+function trendsFromUrl() {
+  const { sel, dropped } = trendsParseLink(location.hash);
+  if (Object.keys(dropped).length) { history.replaceState(null, '', trendsUrl(sel)); trendsCut = { hash: location.hash, dropped }; }
+  TR.dropped = location.hash === trendsCut.hash ? trendsCut.dropped : {};
+  return trendsResolve(sel);
 }
 function trendsUrl(sel) {
   const q = TR_KINDS.map(k => [k, trendsVals(sel[k])]).filter(([, v]) => v.length).map(([k, v]) => `${k}=${v.map(encodeURIComponent).join(',')}`).join('&');
@@ -2268,7 +2282,7 @@ async function renderTrends() {
     if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button) return;
     e.preventDefault(); trendsSelect(a.dataset.trKind, a.dataset.trId || null);
   };
-  trendsApply(trendsResolve(trendsParse(location.hash)));
+  trendsApply(trendsFromUrl());
 }
 // raw: ids resolved through the alias table, value by value; the URL is rewritten in place when one resolves.
 function trendsResolve(sel) {
@@ -2281,11 +2295,12 @@ function trendsResolve(sel) {
 // Back or forward: re-read the selection from the URL. false when the trends page is not on screen.
 function trendsInPlace() {
   if (!TR || !$('#trResults')) return false;
-  if (location.hash !== TR.hash) trendsApply(trendsResolve(trendsParse(location.hash)));
+  if (location.hash !== TR.hash) trendsApply(trendsFromUrl());
   return true;
 }
 // One history entry per change. `vals` replaces a box's values; `say` goes to the live region (a change only).
 function trendsCommit(kind, vals, { say, focus } = {}) {
+  TR.dropped = {}; trendsCut = { hash: null, dropped: {} }; // a change of the selection replaces what the link asked for
   const sel = { ...TR.sel };
   if (vals.length) sel[kind] = vals; else delete sel[kind];
   const input = $(`#trIn-${kind}`); if (input) input.value = '';
@@ -2368,7 +2383,7 @@ function trendsOptions(kind, q) {
   const others = trendsOthers(sel, kind), following = Object.keys(others).length > 0;
   // "1–2" only when two or more boxes have values (#327, option a), as in the results
   const small = TR_KINDS.filter(k => trendsKnownVals(sel, k).length).length >= 2, order = small ? trendsShownCmp : trendsSortCmp;
-  const shown = (c, p) => `${small ? trendsPlayersShown(c, p) : fmtNum(c + p)} player${c + p === 1 ? '' : 's'}`;
+  const shown = (c, p) => small && (p === 1 || p === 2) ? `${trendsPlayersShown(c, p)} players` : `${fmtNum(c + p)} player${c + p === 1 ? '' : 's'}`;
   if (kind === 'program') {
     const players = p => doc.programs[p.slug].current + doc.programs[p.slug].past;
     // Each suggestion names its division first, in the Table's form (#306).
@@ -2532,6 +2547,9 @@ function trendsView(sel) {
         : `There is no ${TR_WHAT[k]} “${esc(id)}” in the clubs and schools index; the results below leave it out.`);
     }
   }
+  for (const [k, n] of Object.entries(TR.dropped || {})) {
+    notes.push(`This link listed ${n + TR_MAX} ${TR_PLURAL[k]}; a box takes up to ${TR_MAX}, so the first ${TR_MAX} are shown and ${n} ${n === 1 ? 'was' : 'were'} left out.`);
+  }
   for (const id of P) { const pq = byProgram.get(id); if (pq && !matchesFilters(pq, null)) notes.push(`${esc(displayName(pq))} is outside your sidebar filters; it is shown because you picked it.`); }
   const pairsNote = doc.pairsUnknown && C.length && H.length;
   if (pairsNote) notes.push('This index was built before clubs and high schools could be combined; club and high school together are answered after the next data refresh. The results below leave the high schools out.');
@@ -2613,7 +2631,7 @@ function trendsView(sel) {
   }
   // Nothing selected.
   const html = `${noteHtml}<div class="card"><h3>How to read this</h3>
-    <p class="small ink2">Pick one or more clubs${TR.hasSchools ? ', high schools' : ''} or programs, in any of the boxes. Values in one box are combined with <b>or</b>; the boxes are combined with <b>and</b>: “MVLA or Mustang SC” and “UCLA” means players from either club at UCLA. Clubs${TR.hasSchools ? ' or high schools' : ''} alone show the programs their players went to; programs alone show where their players came from. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote} With two or more boxes chosen, past and commit counts of 1 or 2 read “1–2”.</p>
+    <p class="small ink2">Pick one or more clubs${TR.hasSchools ? ', high schools' : ''} or programs, up to ${TR_MAX} in each box. Values in one box are combined with <b>or</b>; the boxes are combined with <b>and</b>: “MVLA or Mustang SC” and “UCLA” means players from either club at UCLA. Clubs${TR.hasSchools ? ' or high schools' : ''} alone show the programs their players went to; programs alone show where their players came from. Three counts sit side by side: players on the <b>current roster</b>, <b>former players</b> on the ${esc(pastLabel)} who are no longer on it, and <b>commits</b> (verbal or signed recruits not yet on a roster). ${commitsNote} With two or more boxes chosen, past and commit counts of 1 or 2 read “1–2”.</p>
     <p class="small ink2" style="margin-top:8px"><b>Coverage today</b> — ${trendsCoverageLines(doc, 'club').map(esc).join(' · ')}. A club is known mostly from recruiting records and from roster pages that carry a Club column, so every count is a lower bound: a program showing one player from a club may well have more whose club no public source states.${TR.hasSchools ? ` High schools: ${trendsCoverageLines(doc, 'school').map(esc).join(' · ')}.` : ' High-school results are not published yet.'}</p></div>`;
   return { html, sub, say: 'Nothing selected.' };
 }
