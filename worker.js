@@ -1,4 +1,5 @@
 import { dataApi } from './api/data-api.mjs';
+import { apiGate, gateMode } from './api/access.mjs';
 
 // Entry point for the deployed Worker. The site itself is the static files in public/ (see
 // [assets] in wrangler.toml). This script does five things and runs ahead of the static assets
@@ -10,7 +11,9 @@ import { dataApi } from './api/data-api.mjs';
 //   2. Answers GET /api/status with {"local":false}. The local dev server (serve.py) answers true;
 //      the front end uses it to decide whether write actions are available. Before this existed
 //      the request 404'd and logged a console error on every page load (issue #11).
-//   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240).
+//   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240), behind the API gate of
+//      issue #345 (api/access.mjs): a customer key or the site's own first-party call. In "report" mode (wrangler.toml
+//      API_GATE) the gate only counts; it refuses nothing until it is switched to "enforce".
 //   4. Accepts footer feedback at POST /api/feedback and stores it in the FEEDBACK KV namespace,
 //      one key per submission. Stored: when it was sent, the message, the reply email if the
 //      visitor gave one, and which page they were on. No IP, no user agent.
@@ -57,7 +60,7 @@ export default {
     // Off: fall through to the assets below, the same path - and so the same 404 - as any unknown /api route.
     if (url.pathname === '/api/ask' && askEnabled(env)) return ask(request, env);
     if (url.pathname === '/api/ask/status' && askEnabled(env)) return askStatus(request, env);
-    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await dataApi(request, env);
+    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await v1(request, env, url);
 
     // Block direct access to raw data and archive files (issues #100, #240).
     if (isBlockedRawPath(url.pathname)) return notFound(request);
@@ -72,6 +75,38 @@ export default {
   // which pin them to public/index.html and run the eval set offline through them.
   get ask() { return ASK; },
 };
+
+// /api/v1/* behind the API gate (issue #345, api/access.mjs). /api/v1/status is never gated. The gate's verdict
+// either refuses (only when API_GATE is "enforce") or adds headers to the data response. If the gate itself throws,
+// a keyless request - the website's own - is served exactly as before (fail open, plan section 2.3); a keyed one is
+// refused with 503 when enforcing, because it could not be metered (owner decision 9). Nothing about the request is
+// logged: the error's name only.
+async function v1(request, env, url) {
+  let verdict = null;
+  // a method the API does not serve is answered 405 by dataApi without being classified or counted
+  if (url.pathname !== '/api/v1/status' && (request.method === 'GET' || request.method === 'HEAD')) {
+    try {
+      verdict = await apiGate(request, env);
+    } catch (error) {
+      console.error('api-gate', error?.name || 'Error');
+      if (request.headers.has('authorization') && gateMode(env) === 'enforce') {
+        return new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Key check unavailable' }), {
+          status: 503, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'retry-after': '30' },
+        });
+      }
+    }
+    if (verdict?.response) return verdict.response;
+  }
+  const res = await dataApi(request, env);
+  if (!verdict) return res;
+  const headers = new Headers(res.headers);
+  for (const [k, v] of Object.entries(verdict.headers || {})) {
+    // a data response's public caching becomes private; an error's no-store stays as it is
+    if (k === 'cache-control' && headers.get('cache-control') === 'no-store') continue;
+    headers.set(k, v);
+  }
+  return new Response(res.body, { status: res.status, headers });
+}
 
 const notFound = request =>
   new Response(request.method === 'HEAD' ? null : JSON.stringify({ ok: false, error: 'Not found' }), {
