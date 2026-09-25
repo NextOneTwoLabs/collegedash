@@ -24,4 +24,18 @@ export const expectedRpiOf = (index) => {
   return (p) => (p.rpiHistory || []).find((r) => r.year === season)?.rank ?? null;
 };
 
+/* An unranked Division I program, built from a ranked one (#365). The committed index can have none: since #248 every
+   D1 program joins the NCAA RPI table (West Florida was the last), so a test of how the page shows a D1 program with
+   no rank brings its own - a new D1 program with no RPI history at all, as West Florida was before. */
+const deepCopy = (v) => JSON.parse(JSON.stringify(v));
+export const UNRANKED_D1_SLUG = 'test-d1-unranked';
+export const unrankedD1Row = (row) => ({ ...deepCopy(row), slug: UNRANKED_D1_SLUG, name: 'Test D1 Unranked', shortName: 'Test D1 Unranked',
+  nickname: 'Testers', rpiHistory: [], lastSeason: row.lastSeason ? { ...deepCopy(row.lastSeason), rpiRank: null } : null });
+export const unrankedD1Profile = (profile) => {
+  const p = deepCopy(profile);
+  Object.assign(p, { slug: UNRANKED_D1_SLUG, name: 'Test D1 Unranked', shortName: 'Test D1 Unranked', nickname: 'Testers' });
+  p.seasons = (p.seasons || []).map((s) => ({ ...s, rpiRank: null, rpi: null }));
+  return p;
+};
+
 export const reEscape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

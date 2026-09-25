@@ -35,7 +35,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
-import { expectedRpi, expectedRpiOf, reEscape } from './rpi_season_helpers.mjs';
+import { expectedRpi, expectedRpiOf, reEscape, unrankedD1Row, unrankedD1Profile, UNRANKED_D1_SLUG } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
@@ -55,6 +55,9 @@ const row = (slug) => { const r = REAL_INDEX.programs.find((p) => p.slug === slu
 // The RPI season is read from the index, not hardcoded (issue #62): the latest ranked season, in progress while it is played.
 const RPI = expectedRpi(REAL_INDEX), RPI_SEASON = RPI.season;
 const rpiOfRow = expectedRpiOf(REAL_INDEX);
+// #365: the committed index has no unranked D1 program any more (every one joins the RPI table), so one is built here
+REAL_INDEX.programs.push(unrankedD1Row(row('stanford')));
+D1_FILES[`data/programs/${UNRANKED_D1_SLUG}.json`] = unrankedD1Profile(readJson('data/programs/stanford.json'));
 const UNRANKED_D1 = REAL_INDEX.programs.find((p) => p.division === 'D1' && rpiOfRow(p) == null)?.slug;
 const TITLE_YEARS_D2 = [2009, 2010, 2013, 2015, 2016, 2019, 2021];
 
