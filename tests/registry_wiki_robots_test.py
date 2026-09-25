@@ -135,12 +135,39 @@ def article(canonical: str) -> str:
             f'<body><h1>{canonical.replace("_", " ")}</h1></body></html>')
 
 
-def module_page(n: int) -> str:
-    lines = ["return {"] + [f'\t["Example College {i}"] = {{"{i:06X}", "FFFFFF", name1="c{i}"}},' for i in range(n)]
-    lines += ['\t["Example Alias"] = "Example College 1",', "}"]
-    code = "\n".join(f'<span class="linenos" data-line="{k + 1}"></span>{line.replace("<", "&lt;")}' for k, line in enumerate(lines))
-    return ('<html><body><div class="mw-highlight mw-highlight-lang-lua mw-content-ltr mw-highlight-lines" dir="ltr">'
-            f"<pre>{code}</pre></div></body></html>")
+def module_source_lines(n: int, n_alias: int) -> tuple[list[str], dict, dict]:
+    """A made-up Module:College_color/data: n entries and n_alias aliases, with the shapes the parser meets
+    (a comment after an entry, cite text with a hex-looking string after name1). Returns (lines, entries, aliases)."""
+    lines, entries, aliases = ["-- made-up test data, issue #99 / PR #362", "return {"], {}, {}
+    for i in range(n):
+        a, b = f"{(i * 37) % 0xFFFFFF:06X}", f"{(i * 91 + 5) % 0xFFFFFF:06X}"
+        tail = f', cite="see ABCDEF {i}"' if i % 7 == 0 else ""
+        lines.append(f'\t["Example College {i}"] = {{"{a}", "{b}", name1="c{i}"{tail}}},' + (" -- note" if i % 11 == 0 else ""))
+        entries[f"Example College {i}"] = ["#" + a, "#" + b]
+    for j in range(n_alias):
+        lines.append(f'\t["Example Alias {j}"] = "Example College {j % max(n, 1)}",')
+        aliases[f"Example Alias {j}"] = f"Example College {j % max(n, 1)}"
+    return lines + ["}"], entries, aliases
+
+
+def _highlight(line: str) -> str:
+    """One Lua line as the SyntaxHighlight extension renders it: tokens wrapped in spans, quotes as &quot;."""
+    out = []
+    for tok in re.findall(r'"[^"]*"|--.*$|\w+|\s+|.', line):
+        esc = tok.replace("&", "&amp;").replace("<", "&lt;").replace('"', "&quot;")
+        cls = "s2" if tok.startswith('"') else "c1" if tok.startswith("--") else "w" if tok.isspace() else "n" if tok[0].isalnum() else "p"
+        out.append(esc if cls == "w" else f'<span class="{cls}">{esc}</span>')
+    return "".join(out)
+
+
+def module_page(n: int, n_alias: int = 950) -> tuple[str, dict, dict]:
+    """The /wiki/Module: page layout: div.mw-highlight > pre, one empty line-number span per line, span-wrapped
+    tokens. SYNTHETIC: the real page's layout is unverified until the next `registry colors` run (#362)."""
+    lines, entries, aliases = module_source_lines(n, n_alias)
+    code = "\n".join(f'<span class="linenos" data-line="{k + 1}"></span>{_highlight(line)}' for k, line in enumerate(lines))
+    html = ('<html><body><div id="mw-content-text"><div class="mw-highlight mw-highlight-lang-lua mw-content-ltr '
+            f'mw-highlight-lines" dir="ltr"><pre>{code}</pre></div></div></body></html>')
+    return html, entries, aliases
 
 
 def test_parse() -> None:
@@ -172,15 +199,27 @@ def test_parse() -> None:
     ok("a miss makes only the two probes, both /wiki/ pages, and no search", miss == (None, []) and len(asked) == 2
        and all(u.startswith(rb.WIKI) for u in asked), asked)
 
-    (entries, aliases), _ = with_fetch({rb.COLOR_MODULE_URL: (200, module_page(600))}, rb.fetch_color_table)
-    ok("the colour module's source is read from its page", len(entries) == 600 and aliases == {"Example Alias": "Example College 1"},
-       (len(entries), aliases))
-    ok("an entry's colours parse", entries.get("Example College 10") == ["#00000A", "#FFFFFF"], entries.get("Example College 10"))
-    try:
-        with_fetch({rb.COLOR_MODULE_URL: (200, "<html><body><p>no code</p></body></html>")}, rb.fetch_color_table)
-        ok("a page with no code block fails loudly", False)
-    except common.FetchError as e:
-        ok("a page with no code block fails loudly", "parsed only 0 entries" in str(e), str(e))
+    # the Module: page, span-wrapped as SyntaxHighlight renders it, at the size of the real module (1,554 entries and
+    # 949 aliases in the 2026-09-07 raw copy): every entry and alias comes back exactly (PR #362 review, R1)
+    page, want_entries, want_aliases = module_page(1560, 950)
+    ok("the source text is the module, line for line",
+       rb.module_source(page).splitlines() == module_source_lines(1560, 950)[0])
+    (entries, aliases), _ = with_fetch({rb.COLOR_MODULE_URL: (200, page)}, rb.fetch_color_table)
+    ok("FIX every entry is recovered, colours exact", entries == want_entries,
+       (len(entries), len(want_entries), next((k for k in want_entries if entries.get(k) != want_entries[k]), None)))
+    ok("every alias is recovered", aliases == want_aliases, (len(aliases), len(want_aliases)))
+    ok("cite text after name1 adds no colour", entries["Example College 7"] == want_entries["Example College 7"], entries["Example College 7"])
+
+    def refused(html):
+        try:
+            with_fetch({rb.COLOR_MODULE_URL: (200, html)}, rb.fetch_color_table)
+            return ""
+        except common.FetchError as e:
+            return str(e)
+    ok("FIX a half-parsed module (800 entries) is refused, not written", "parsed only 800 entries" in refused(module_page(800, 950)[0]))
+    ok("FIX a parse missing most aliases (1,560 entries, 300 aliases) is refused", "and 300 aliases" in refused(module_page(1560, 300)[0]))
+    ok("the floors are about 90% of the last known module", (rb.COLOR_MIN_ENTRIES, rb.COLOR_MIN_ALIASES) == (1400, 850))
+    ok("a page with no code block fails loudly", "parsed only 0 entries" in refused("<html><body><p>no code</p></body></html>"))
 
 
 def main(argv=None) -> int:

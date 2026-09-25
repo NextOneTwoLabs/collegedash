@@ -1336,6 +1336,7 @@ def fix_wiki(registry: dict, *, apply: bool = False, slugs: list[str] | None = N
 # The module's own /wiki/ page (issue #99), which shows its Lua source in a <pre>; it replaced index.php?action=raw
 # under /w/, which robots.txt disallows.
 COLOR_MODULE_URL = WIKI + "Module:College_color/data"
+COLOR_MIN_ENTRIES, COLOR_MIN_ALIASES = 1400, 850  # ~90% of 1,554 / 949 (the 2026-09-07 copy); see fetch_color_table
 # One entry per line:  ["Key"] = {"RRGGBB", "RRGGBB", ..., name1="crimson", cite="..."},  -- optional comment
 #                      ["Alias"] = "Canonical Key",
 _COLOR_ENTRY = re.compile(r'^\s*\["(?P<key>[^"]+)"\]\s*=\s*(?:"(?P<alias>[^"]+)"|\{(?P<body>.*)\})\s*,?\s*(?:--.*)?$')
@@ -1352,7 +1353,7 @@ def module_source(html: str) -> str:
     """The Lua source shown on a Module: page: the text of the highlighted code block (div.mw-highlight pre), or of
     the plain code block (pre.mw-code) a page without highlighting uses, else of the longest <pre>. The text is the
     source character for character (highlighting only wraps it in spans; line numbers are empty spans). A page that
-    has none of these returns '', and fetch_color_table's 500-entry floor then fails loudly rather than quietly.
+    has none of these returns '', and fetch_color_table's floors then fail loudly rather than quietly.
     Unverified against the live page until the next `registry colors` run (#99): no copy of it is cached."""
     soup = BeautifulSoup(html, "html.parser")
     pre = soup.select_one("div.mw-highlight pre") or soup.select_one("pre.mw-code")
@@ -1379,8 +1380,13 @@ def fetch_color_table() -> tuple[dict[str, list[str]], dict[str, str]]:
         hexes = ["#" + h.upper() for h in _HEX6.findall(head)]
         if hexes:
             entries[m.group("key")] = hexes
-    if len(entries) < 500:
-        raise common.FetchError(f"college colour table parsed only {len(entries)} entries (format change?)")
+    # Floors at about 90% of the last known module (PR #362 review, R1): the raw copy cached on 2026-09-07 parses to
+    # 1,554 entries and 949 aliases with these same patterns. A parse that half-failed on the new /wiki/ page layout
+    # must not pass, because match_colors falls back to a unique-prefix scan, and a dropped key ('Miami') could then
+    # take a neighbour's colours ('Miami (OH)'). Nothing is written when this raises.
+    if len(entries) < COLOR_MIN_ENTRIES or len(aliases) < COLOR_MIN_ALIASES:
+        raise common.FetchError(f"college colour table parsed only {len(entries)} entries and {len(aliases)} aliases "
+                                f"(expected at least {COLOR_MIN_ENTRIES} and {COLOR_MIN_ALIASES}; format change?)")
     common.log(f"colors: {len(entries)} entries, {len(aliases)} aliases from Wikipedia")
     return entries, aliases
 
