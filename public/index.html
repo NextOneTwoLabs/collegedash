@@ -958,10 +958,33 @@ $('#sidebarOverlay').onclick = toggleSidebar;
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- data ---------- */
+// Every call says it is the site's own (issue #345): the Worker counts it as first-party and, once the API gate
+// enforces, serves it without a key. A custom header is something another site's page cannot send here without a
+// CORS preflight the Worker never approves. It is not a secret: anyone can send it by hand, and the gate's rate
+// limit is what bounds that. A failed call carries its HTTP status (and Retry-After) for loadFailedHtml.
 async function getJSON(url, opts) {
-  const r = await fetch(url, { cache: 'no-cache', ...(opts || {}) });
-  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  const o = opts || {};
+  let r;
+  try { r = await fetch(url, { cache: 'no-cache', ...o, headers: { 'X-CollegeDash-Client': 'web', ...(o.headers || {}) } }); }
+  catch (err) { const e = new Error(`${url}: ${err?.message || 'network error'}`); e.status = 0; throw e; } // status 0: no response at all
+  if (!r.ok) {
+    const e = new Error(`${url}: HTTP ${r.status}`);
+    e.status = r.status;
+    e.retryAfter = r.headers?.get?.('retry-after') || null;
+    throw e;
+  }
   return r.json();
+}
+// The card a data load that failed shows instead of a blank page or a raw error (issue #345): what happened in words,
+// and a Try again button (id `id`) that the caller wires. 429 means the site's rate limit for this connection; 401
+// and 503 are the API gate refusing or unable to answer; anything else is a dropped connection or a server error.
+function loadFailedHtml(err, id = 'loadRetry') {
+  const s = err?.status;
+  const why = s === 429 ? `Too many requests from this connection. Wait ${err.retryAfter && /^\d+$/.test(err.retryAfter) ? `${err.retryAfter} seconds` : 'a minute'} and try again.`
+    : s === 401 || s === 403 ? 'The data service refused this request. Reload the page and try again.'
+    : s === 503 ? 'The data service is briefly unavailable. Try again in a moment.'
+    : 'The data did not load. Check your connection and try again.';
+  return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/">All programs</a></p></div>`;
 }
 async function loadIndex() {
   if (S.index) return S.index;
@@ -1530,7 +1553,11 @@ function route() {
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
   else if (!parts[1] && trendsInPlace()) return;
-  const go = p => p.catch(e => { app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e); });
+  // A data load that failed (an HTTP status on the error, #345) gets the try-again card; anything else is a bug and says so.
+  const go = p => p.catch(e => {
+    if (Number.isInteger(e?.status)) { app.innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; const b = $('#loadRetry'); if (b) b.onclick = () => route(); return; }
+    app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e);
+  });
   $('#main').scrollTop = 0;
   syncSidebarForView(view);
   if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
@@ -1556,6 +1583,7 @@ function route() {
     return go(renderTrends());
   }
   if (view === 'faq') return go(renderFaq());
+  if (view === 'api') return go(renderApiDocs());
   if (view === 'list') return go(renderList());
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
 }
@@ -2253,11 +2281,11 @@ async function renderTrends() {
   try { doc = await loadTrends(); } catch (err) {
     TR = null; // S.trends stays unset, so Try again (or the next entry) fetches again
     if (currentView() !== 'trends') return;
-    const missing = /HTTP 404/.test(String(err?.message || ''));
+    const missing = err?.status === 404;
     app.innerHTML = pageHeader({ crumbs, title, subtitle, tabs })
-      + `<div class="content-body"><div class="card" id="trFailed">${missing
-        ? '<h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p>'
-        : '<h3>Could not load</h3><p class="muted">The clubs and high-schools index did not load. Check your connection and try again.</p>'}<p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div></div>`;
+      + `<div class="content-body">${missing
+        ? '<div class="card" id="trFailed"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div>'
+        : loadFailedHtml(err, 'trRetry')}</div>`; // the same card as every other data load (#345)
     wireTabs(); $('#trRetry').onclick = () => renderTrends(); return;
   }
   if (currentView() !== 'trends') return;
@@ -2720,7 +2748,11 @@ async function renderProfile(slug, tab) {
   if (!row) return renderNotFound({ title: 'Program not found', message: `There is no program at <code>#/p/${esc(slug)}</code>.`, suggestions: slugSuggestions([slug]) });
   let p;
   try { p = await loadProfile(slug); }
-  catch { return renderNotFound({ title: 'Profile not built yet', message: `${esc(row.name)} is in the index but its profile has not been built yet. Check back after the next data refresh.` }); }
+  catch (e) {
+    // only a 404 means the profile is not built; a refusal, a rate limit or a dropped connection is a load failure (#345)
+    if (e?.status !== 404) throw e;
+    return renderNotFound({ title: 'Profile not built yet', message: `${esc(row.name)} is in the index but its profile has not been built yet. Check back after the next data refresh.` });
+  }
   if (!TABS.some(([k]) => k === tab)) tab = 'overview';
   // Tabs this program has no data for are not offered. Overview always is, so it is the default and the
   // landing place for a link to a hidden tab (a shared #/p/<slug>/camps): the address is rewritten to the
@@ -3142,6 +3174,46 @@ async function renderFaq() {
 
     <div class="card"><h3>Found a mistake or have a suggestion?</h3>
       <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
+
+    <div class="card"><h3>Can I use the data in my own software?</h3>
+      <p>Yes: see the <a href="#/api">data API</a>. It serves the same JSON this site reads, with an API key.</p></div>
+  </div></div>`;
+}
+
+/* ---------- data API docs (#/api, issue #345) ---------- */
+// The customer-facing description of /api/v1. Static text: no key is ever shown, generated or accepted here.
+async function renderApiDocs() {
+  const base = 'https://college.nextonetwo.com/api/v1';
+  const routes = [
+    ['/programs', 'Every published program: the index the list, table and search read (name, division, conference, RPI, admission, tuition, commitments by class and more).'],
+    ['/programs/{slug}', 'One program’s full profile: seasons, roster, schedule, staff, commitments, camps and each section’s sources. Slugs are the ones in /programs.'],
+    ['/commitments', 'Recruiting commitments by graduating class, with their sources and status.'],
+    ['/camps', 'Published ID camps and clinics, with dates and links.'],
+    ['/trends', 'The clubs and high schools behind college rosters (counts only; no player names).'],
+    ['/status', 'When the data was last refreshed. Open without a key.'],
+  ];
+  const codes = [
+    ['200 / 304', 'The data, or “not modified” when you send the ETag back in If-None-Match.'],
+    ['401', 'No key, or a key that is not recognised.'],
+    ['403', 'The key has been revoked.'],
+    ['429', 'Too many requests: over the key’s daily quota or its per-minute limit. Retry-After says when to try again.'],
+    ['503', 'The service cannot check keys right now. Retry-After says when to try again.'],
+  ];
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site, for your own software' }) + `<div class="content-body"><div class="faq">
+    <div class="card"><h3>What it is</h3>
+      <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. Every response is JSON. The project’s repository and its published data are public; the API is a hosted, metered way to read them, and a key identifies who is using it. It does not make the data secret.</p></div>
+    <div class="card"><h3>Authentication</h3>
+      <p>Send your key in the <code>Authorization</code> header on every request. Never put it in the URL.</p>
+      <pre class="small">curl -H "Authorization: Bearer YOUR_API_KEY" ${esc(base)}/programs</pre>
+      <p class="muted small">Keep the key on a server. A key used from a web page is visible to that page’s visitors, and browsers cannot call this API from another site.</p></div>
+    <div class="card"><h3>Endpoints</h3><div class="tscroll"><table><tr><th>GET</th><th>What it returns</th></tr>
+      ${routes.map(([p, w]) => `<tr><td><code>/api/v1${esc(p)}</code></td><td>${esc(w)}</td></tr>`).join('')}</table></div></div>
+    <div class="card"><h3>Limits and responses</h3>
+      <p>Each key has a daily quota (UTC days) and a per-minute limit. Successful keyed responses carry <code>X-Quota-Limit</code> and <code>X-Quota-Remaining</code>. Only served requests count against the quota.</p>
+      <div class="tscroll"><table><tr><th>Status</th><th>Meaning</th></tr>${codes.map(([c, m]) => `<tr><td>${esc(c)}</td><td>${esc(m)}</td></tr>`).join('')}</table></div>
+      <p class="muted small">Responses may be cached for five minutes; send the ETag back to revalidate cheaply. The data is refreshed daily.</p></div>
+    <div class="card"><h3>Getting a key</h3>
+      <p>Keys are issued by hand while the API is new. Email ${feedbackLink()} with who you are and what you will use it for.</p></div>
   </div></div>`;
 }
 
@@ -3200,7 +3272,14 @@ async function renderFaq() {
 })();
 
 /* ---------- boot ---------- */
-loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => { $('#app').innerHTML = `<div class="content-body"><div class="card"><h2>The data could not be loaded</h2><p class="muted">${esc(e.message)}. Please try again in a few minutes.</p></div></div>`; });
+// First load. A failure shows the try-again card (#345), whose button runs this same start again.
+function boot() {
+  return loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => {
+    $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`;
+    const b = $('#loadRetry'); if (b) b.onclick = () => boot();
+  });
+}
+boot();
 </script>
 </body>
 </html>

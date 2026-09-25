@@ -445,7 +445,9 @@ test('#315 phone first load: Loading, then a failed load leaves S.trends unset a
   const heading = '<h1 class="content-title">From Youth Clubs/High Schools to Colleges<'; // #329: every state carries it
   assert.ok(page.app().includes(heading), 'the Loading state has the page title');
   release(); await done; await tick();
-  assert.ok(page.app().includes('Could not load') && page.app().includes('id="trRetry"'), 'a failed load says so and offers Try again');
+  // #345: the shared load-failed card, which names a 503 as the service being briefly unavailable
+  assert.ok(page.app().includes('Couldn’t load the data') && page.app().includes('briefly unavailable') && page.app().includes('id="trRetry"'),
+    'a failed load says so and offers Try again');
   assert.ok(page.app().includes(heading), 'the Could not load state has the page title');
   assert.equal(page.sandbox.S.trends, null, 'S.trends stays unset');
   page.sandbox.fetch = real;
