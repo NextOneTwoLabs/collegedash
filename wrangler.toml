@@ -73,6 +73,12 @@ id = "dfdeb314f1b848a287e6f99b453a5d22"
 # on this account: the first build of PR 1 with those three blocks failed in Workers Builds on the Free plan (#345,
 # PR #355), so they are left out. Without them the gate records the limiter as 'missing', the site path fails
 # open, and keys stay bounded by their D1 daily quota; api/access.mjs needs no change when they are added.
+[[ratelimits]]
+name = "SITE_RL"
+namespace_id = "3451"
+  [ratelimits.simple]
+  limit = 300
+  period = 60
 # Keys and usage (plan section 4.2): the D1 database the owner creates and gives the schema in api/schema.sql
 # (steps in the PR for #345). Commented out until the owner has created it and posted its database_id, which is an
 # identifier, not a credential. Until then env.API_DB is missing: the site path never reads it, and a keyed request
