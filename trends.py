@@ -296,7 +296,7 @@ class Recorder:
         # season order newest first, so the most recent stored row is the one that speaks for a person
         for y in sorted(hist, key=lambda s: -int(s)):
             self.past_seasons.add(int(y))
-            column = {common.norm_name(p.get("name") or ""): (p.get("club") or "").strip()
+            column = {common.norm_name(p.get("name") or ""): common.drop_placeholders(p.get("club"))  # 'None' is no club (#224)
                       for p in (source_hist.get(y) or [])}
             for q in (hist[y].get("players") or []):
                 n = common.norm_name(q.get("name") or "")

@@ -1224,7 +1224,7 @@ def annotate_roster_clubs(roster: dict | None, ath, tds, sw, table=None, school_
     school_table = school_table or schools.load_table()
     cands = club_candidates(tds, sw)
     stored = ((ath or {}).get("data", {}).get("roster") or {}).get("players") or []
-    column = {common.norm_name(p["name"]): (p.get("club") or "").strip() for p in stored}
+    column = {common.norm_name(p["name"]): common.drop_placeholders(p.get("club")) for p in stored}  # 'None' is no club (#224)
     season_date = clubs.season_date(roster.get("season"))
     for q in roster["players"]:
         key = common.norm_name(q["name"])
@@ -1253,7 +1253,7 @@ def observe_clubs(recorder, ath, tds, sw, *, slug: str, division: str, school_ta
     seasons = [("roster page", ((data.get("roster") or {}).get("players")) or [])]
     seasons += [("roster page (past season)", pl or []) for pl in (data.get("rosterHistory") or {}).values()]
     for source, players in seasons:
-        for p in players:
+        for p in map(without_placeholders, players):  # a Club cell reading 'None' is no club (#224)
             hs = schools.club_state(school_table, p.get("highSchool"), p.get("hometown")) if p.get("club") else None
             recorder.observe(p.get("club"), source=source, division=division, slug=slug, hs=hs)
     for r in ((tds or {}).get("data", {}).get("records") or {}).values():
@@ -1279,6 +1279,23 @@ def annotate_roster_schools(roster: dict | None, *, division: str, table=None, r
             recorder.observe(q, m, slug=roster.get("_slug"), division=division)
 
 
+PLACEHOLDER_FIELDS = ("number", "posLabel", "height", "classLabel", "hometown", "highSchool", "previousSchool", "club", "major")
+
+
+def without_placeholders(p: dict) -> dict:
+    """A stored roster row with the placeholder words a site printed for a missing value dropped (#224): the parser
+    no longer stores them, and this keeps rows collected before that fix (or held back from re-collection) from
+    showing 'null' until they are collected again. A field with no placeholder is left exactly as stored."""
+    out = dict(p)
+    for k in PLACEHOLDER_FIELDS:
+        v = out.get(k)
+        if isinstance(v, str):
+            w = common.drop_placeholders(v)
+            if w != common.clean(v):
+                out[k] = w
+    return out
+
+
 def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dict]:
     a = (ath or {}).get("data") or {}
     roster = a.get("roster")
@@ -1287,7 +1304,7 @@ def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dic
     players = []
     matrix = {p: {c: 0 for c in CLASS_ORDER} for p in POS_ORDER}
     for p in roster["players"]:
-        q = dict(p)
+        q = without_placeholders(p)
         secs = (q.get("bio") or {}).get("sections") or {}
         q["bio"] = {k: (v[:1500] + "…" if len(v) > 1500 else v) for k, v in secs.items()}
         # Club: recruiting databases are far more reliable than the roster page's own Club column.
@@ -1320,7 +1337,7 @@ def build_roster(ath, club_lookup: dict | None = None) -> tuple[dict | None, dic
     for y, plist in (a.get("rosterHistory") or {}).items():
         names = {common.norm_name(p["name"]) for p in plist}
         hist[y] = {"count": len(plist),
-                   "players": [{k: p.get(k) for k in ("number", "name", "pos", "classCode", "hometown", "highSchool")} for p in plist],
+                   "players": [{k: q.get(k) for k in ("number", "name", "pos", "classCode", "hometown", "highSchool")} for q in map(without_placeholders, plist)],
                    "departed": sorted(n for n in names - cur_names) if int(y) == roster["season"] - 1 else None}
     return ({"season": roster["season"], "count": len(players), "players": players,
              "byPosClass": matrix, "byClass": dict(by_class), "graduatingByPos": dict(graduating),
@@ -1575,7 +1592,7 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry, tabl
         c = find(rec["name"], gy)
         if c is None:
             c = {"id": record_key(rec["name"], gy), "name": rec["name"], "aliases": [], "gradYear": gy,
-                 "pos": rec.get("pos") or "", "club": rec.get("club") or "", "state": rec.get("state") or "",
+                 "pos": rec.get("pos") or "", "club": rec.get("club") or "", "state": common.drop_placeholders(rec.get("state")),
                  "city": rec.get("city") or "", "highSchool": rec.get("highSchool") or "",
                  "college": slug, "status": "verbal", "announced": None, "announcedSource": None,
                  "firstSeen": None, "sources": [], "flags": []}
@@ -1590,7 +1607,7 @@ def resolve_commitments(program, tds, sw, reviewed, news, roster, registry, tabl
                 c["name"] = rec["name"]
                 c["id"] = record_key(rec["name"], gy)
         for k in ("pos", "club", "state", "city", "highSchool"):
-            v = rec.get(k) or ""
+            v = common.drop_placeholders(rec.get(k)) if k == "state" else rec.get(k) or ""  # 'None' is no state (#224)
             if v and (prefer or not c[k]):
                 c[k] = v
         c["sources"].append(source)
