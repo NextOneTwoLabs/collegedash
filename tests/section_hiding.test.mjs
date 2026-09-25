@@ -24,7 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
-import { expectedRpi } from './rpi_season_helpers.mjs';
+import { expectedRpi, unrankedD1Row, unrankedD1Profile, UNRANKED_D1_SLUG } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -266,7 +266,10 @@ const skippedCamps = d2Profile('synthetic-d2-camps-skipped', { _build: { ...bare
 const failedCamps = d2Profile('synthetic-d2-camps-failed', { _build: { ...bare._build, failed: [{ collector: 'camps', error: 'HTTP 500' }] } });
 const emptyCamps = d2Profile('synthetic-d2-camps-none', { camps: { url: null, items: [], parsed: false, _meta: [] } });
 const synthetic = [bare, committed, skippedCamps, failedCamps, emptyCamps];
-const overrides = { 'data/programs/index.json': { ...REAL_INDEX, programs: [...REAL_INDEX.programs, ...synthetic.map(d2Row)] } };
+// #365: an unranked D1 program for the missing-data dash; the committed index has none since every D1 program is ranked
+const unrankedRow = unrankedD1Row(REAL_INDEX.programs.find(r => r.slug === 'stanford'));
+const overrides = { 'data/programs/index.json': { ...REAL_INDEX, programs: [...REAL_INDEX.programs, unrankedRow, ...synthetic.map(d2Row)] },
+  [`data/programs/${UNRANKED_D1_SLUG}.json`]: unrankedD1Profile(JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data/programs/stanford.json'), 'utf8'))) };
 for (const p of synthetic) overrides[`data/programs/${p.slug}.json`] = p;
 
 const page = loadPage(overrides);
@@ -359,7 +362,7 @@ test('table columns: a data column is left out only when no row on screen has da
   assert.ok(mixed.includes(RPI.label) && mixed.includes('Titles'), 'one ranked program on screen must keep the RPI and Titles columns');
   // A Division I row without data in a kept column shows a dash. A Division II row shows nothing there at all:
   // RPI does not apply to Division II (#198), which is not the same as missing.
-  const unrankedD1 = REAL_INDEX.programs.find(r => r.division === 'D1' && !(r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank) && !(r.rpiHistory || []).some(h => h.year === RPI_SEASON));
+  const unrankedD1 = [...REAL_INDEX.programs, unrankedRow].find(r => r.division === 'D1' && !(r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank) && !(r.rpiHistory || []).some(h => h.year === RPI_SEASON));
   assert.ok(unrankedD1, 'no unranked Division I program in the index to check the dash with');
   assert.ok(page.sandbox.tableHtml([rowOf('stanford'), rowOf(unrankedD1.slug)]).includes('<span class="rank-num">—</span>'), 'a row without data in a kept column shows a dash');
   assert.ok(!page.sandbox.tableHtml([rowOf('stanford'), rowOf(bare.slug)]).includes('<span class="rank-num">—</span>'), 'a Division II row shows the missing-data dash for an RPI that does not apply to it');
