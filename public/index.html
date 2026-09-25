@@ -912,7 +912,9 @@ function condNaText(t, conds, unit = '') {
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } }
 S.favorites = new Set(lsGet('cd.favorites', []));
-S.compare = (lsGet('cd.compare', []) || []).slice(0, 4);
+// Cut to four LIVE programs once the index has loaded (capCompare, #111): cut here, before anyone knows which
+// saved slugs are still published, a removed program would push a live one out.
+S.compare = (lsGet('cd.compare', []) || []).filter(v => typeof v === 'string').slice(0, 16);
 Object.assign(S.filters, lsGet('cd.filters', {}) || {});
 // Every pill group is an array of strings on the way in, whatever a saved cd.filters actually holds:
 // an older save with one value, a save written before the group existed at all (`undefined`, which is
@@ -1015,6 +1017,7 @@ async function loadIndex() {
      that is how it already behaves and changing it is not this change's business. */
   const live = new Set(S.index.divisions);
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
+  { const c = capCompare(S.compare); if (c.join(',') !== S.compare.join(',')) { S.compare = c; saveState(); } }  // #111
   getJSON('/api/v1/status').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
   getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
   // Ask is owner-only (#179): only Cloudflare Access's /api/ask* app can say so. redirect:'manual' means a visitor's probe ends as an unfollowed redirect to the login page - never loaded, and read as off like any error.
@@ -1092,6 +1095,24 @@ function renderObserved() {
   document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
 }
 const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
+/* #111: the saved slugs that name a program the index still carries. A program removed from the site (Saint
+   Francis, Mississippi Valley State) stays in a visitor's saved state - kept, not deleted, so it comes back
+   if the program is published again - but it is never counted, linked or named. Before the index loads,
+   every saved slug counts, as before. */
+const presentSlugs = list => (S.index ? [...list].filter(s => programBySlug(s)) : [...list]);
+/* #111 (Huatuo R1): the compare list cut to at most four LIVE programs, repeats dropped, order kept. A removed
+   slug is kept (it takes no place) so it comes back if the program does; every compare URL is built from the
+   live slugs only. Before the index loads every slug counts as live. */
+const capCompare = list => {
+  const out = []; let live = 0;
+  for (const slug of list) {
+    if (out.includes(slug)) continue;
+    if (!S.index || programBySlug(slug)) { if (live >= 4) continue; live++; }
+    out.push(slug);
+  }
+  return out;
+};
+const compareUrl = list => `#/compare/${presentSlugs(list).map(esc).join(',')}`;
 /* ---------- which RPI season the page shows (issue #62) ----------
    Read from the published index, never hardcoded, so a new season needs no edit here. build.py reads the
    NCAA's live table (current.json) only for the season being played (index.season.current, the registry's)
@@ -1229,7 +1250,7 @@ function toggleFav(slug, from) {
 function toggleCompare(slug) {
   const i = S.compare.indexOf(slug);
   if (i >= 0) S.compare.splice(i, 1);
-  else if (S.compare.length >= 4) { alert('Compare holds four programs at a time. Remove one to add another.'); return false; }
+  else if (presentSlugs(S.compare).length >= 4) { alert('Compare holds four programs at a time. Remove one to add another.'); return false; }
   else S.compare.push(slug);
   saveState(); renderSidebar(); return true;
 }
@@ -1306,7 +1327,8 @@ const sortOptions = () => SORTS.map(s => s[0]).concat(SORTS.some(s => s[0] === S
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
-  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${S.favorites.size ? ` (${S.favorites.size})` : ''}`], ['compare', `⇄ Compare${S.compare.length ? ` (${S.compare.length})` : ''}`]];
+  const nFav = presentSlugs(S.favorites).length, nCmp = presentSlugs(S.compare).length;  // #111: live programs only
+  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${nFav ? ` (${nFav})` : ''}`], ['compare', `⇄ Compare${nCmp ? ` (${nCmp})` : ''}`]];
   let body = '';
   if (tab === 'programs') {
     const years = S.index.season?.gradYears || [];
@@ -1374,7 +1396,7 @@ function renderSidebar() {
     const rows = S.compare.map(programBySlug).filter(Boolean);
     body = `<div class="sidebar-section-title">Comparing</div>` + (rows.length
       ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="prog-stack"><span class="name">${esc(displayName(p))}</span><span class="team-sub">${programLine(p)}</span></span><button class="rm" data-cmp="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
-         <div class="side-actions"><a class="btn primary" href="#/compare/${S.compare.map(esc).join(',')}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
+         <div class="side-actions"><a class="btn primary" href="${compareUrl(S.compare)}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
       : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
   }
   sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
@@ -1392,7 +1414,7 @@ function renderSidebar() {
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
   const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
-  const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = [...S.favorites].slice(0, 4); saveState(); location.hash = `#/compare/${S.compare.join(',')}`; };
+  const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = presentSlugs(S.favorites).slice(0, 4); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   const q = $('#q');
   if (q) {
@@ -1581,7 +1603,7 @@ function route() {
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
   if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/'); return; }
-  if (view === 'compare') { if (parts[1]) { S.compare = parts[1].split(',').filter(Boolean).slice(0, 4); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
+  if (view === 'compare') { if (parts[1]) { S.compare = capCompare(parts[1].split(',').filter(Boolean)); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
   // camps once should not be dropped back into them on their next visit.
@@ -2720,6 +2742,7 @@ function glanceHtml(p, row) {
   const last = games.filter(g => g.result).sort((a, b) => b.date.localeCompare(a.date))[0];
   const chip = r => r ? `<span class="form-chip inline ${r === 'W' ? 'w' : r === 'L' ? 'l' : 'd'}">${esc(r === 'T' ? 'D' : r)}</span>` : '';
   const at = g => g ? (g.homeAway === 'A' ? 'at ' : g.homeAway === 'N' ? 'vs ' : 'vs ') : '';
+  const cmpLive = presentSlugs(S.compare);  // #111: a removed program is never named or linked in "Compare with …"
   const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—';
   const moreFacts = [
     sch.tuitionInState != null || sch.tuitionOutOfState != null ? `<dt>Tuition (in / out)</dt><dd>${fmtUsd(sch.tuitionInState)} / ${fmtUsd(sch.tuitionOutOfState)}</dd>` : '',
@@ -2754,7 +2777,7 @@ function glanceHtml(p, row) {
       ${moreFacts[4]}
       ${moreFacts[5]}
     </dl></details>` : ''}
-    <div class="glance-actions">${S.compare.length && !S.compare.includes(p.slug) ? `<a class="glance-link" href="#/compare/${[...S.compare.slice(0, 3), p.slug].map(esc).join(',')}">Compare with ${esc(programBySlug(S.compare[0])?.shortName || 'selection')} →</a>` : `<a class="glance-link" href="#/compare/${esc(p.slug)}">Start a comparison →</a>`}</div>`;
+    <div class="glance-actions">${cmpLive.length && !cmpLive.includes(p.slug) ? `<a class="glance-link" href="#/compare/${[...cmpLive.slice(0, 3), p.slug].map(esc).join(',')}">Compare with ${esc(displayName(programBySlug(cmpLive[0])))} →</a>` : `<a class="glance-link" href="#/compare/${esc(p.slug)}">Start a comparison →</a>`}</div>`;
 }
 async function renderProfile(slug, tab) {
   await loadIndex();
@@ -3136,12 +3159,12 @@ async function renderCompare() {
       const hits = searchMatches(normText(add.value), 8).filter(h => !S.compare.includes(h.p.slug));
       res.hidden = !add.value || !hits.length;
       res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span class="prog-stack"><span>${esc(displayName(h.p))}</span><span class="team-sub">${programLine(h.p)}</span></span></button>`).join('');
-      res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = `#/compare/${S.compare.join(',')}`; });
+      res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = compareUrl(S.compare); });
     });
     add.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = res.querySelector('[data-add]'); if (first) first.click(); } });
   }
   const rs = $('#residency'); if (rs) rs.onchange = e => { S.residency = e.target.value; saveState(); renderCompare(); };
-  app.querySelectorAll('.chip-x[data-cmp]').forEach(b => b.addEventListener('click', () => { setTimeout(() => location.hash = `#/compare/${S.compare.join(',')}`, 0); }));
+  app.querySelectorAll('.chip-x[data-cmp]').forEach(b => b.addEventListener('click', () => { setTimeout(() => location.hash = compareUrl(S.compare), 0); }));
 }
 
 /* ---------- FAQ ---------- */
