@@ -330,6 +330,9 @@ MENS_TITLE_RE = re.compile(r"(?<!wo)men's[ _]soccer", re.I)
 
 def collect(program: dict, registry: dict) -> dict:
     title = program["ids"].get("wikipedia")
+    if not title and program["ids"].get("wikipediaNone"):
+        # #349: a lookup found no women's article; the registry says so, and nothing is looked up again
+        raise common.SkipCollector(f"wikipedia: {program['ids']['wikipediaNone']} (registry ids.wikipediaNone)")
     if not title:
         raise common.SkipCollector("wikipedia: no team article in the registry (most mid-majors have none; "
                                    "try `registry fix-wiki`)")
