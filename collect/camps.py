@@ -896,6 +896,10 @@ def page_soccer_flag(title: str | None, *urls: str | None) -> bool:
 # #317: "Men's Soccer" / "Boys Soccer" names soccer, but not the women's team's soccer. ("women's soccer"
 # never matches: \bmen needs a word boundary, and "women" has none before its "men".)
 MENS_SOCCER_RE = re.compile(r"\b(?:men|boys?)(?:'s|’s|s)?\s+soccer\b", re.I)
+# A co-ed phrase with the women's/girls' word first ("Women's and Men's Soccer", "Girls/Boys Soccer") ends in
+# a men's phrase, so stripping that would leave no soccer at all; it is the women's team's soccer too
+# (Huatuo, PR #354). The other order ("Boys & Girls Soccer") already keeps its "Girls Soccer".
+COED_SOCCER_RE = re.compile(r"\b(?:women|girls?)(?:'s|’s|s)?\s*(?:and|&|/|,|\+)\s*(?:men|boys?)(?:'s|’s|s)?\s+soccer\b", re.I)
 
 
 def _row_names_soccer(e: dict) -> bool:
@@ -911,7 +915,8 @@ def _row_names_soccer(e: dict) -> bool:
     sec = e.get("_section")
     if sec and sec["sport"] == "soccer" and not sec["male"]:
         return True
-    if any(SOCCER_RE.search(MENS_SOCCER_RE.sub(" ", x or "")) for x in (e.get("name"), e.get("_evidence"))):
+    if any(COED_SOCCER_RE.search(x or "") or SOCCER_RE.search(MENS_SOCCER_RE.sub(" ", x or ""))
+           for x in (e.get("name"), e.get("_evidence"))):
         return True
     url = e.get("registerUrl") or ""
     return bool(SOCCER_RE.search(url)) and not (MALE_LOOSE_RE.search(url) and not FEMALE_LOOSE_RE.search(url))
