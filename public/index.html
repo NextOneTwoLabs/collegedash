@@ -462,7 +462,7 @@ a.pill { text-decoration: none; }
   /* "Not collected" (D2/D3 commits, #315) fits the narrow Commits column on two lines at 400px */
   .trend-table .tr-nc { display: inline-block; font-size: 10px; line-height: 1.25; }
 }
-/* Phones: every tap target in the picker is at least 44px (#310). */
+/* Phones: every tap target in the picker (#310) and in the results (#316) is at least 44px. */
 @media (max-width: 480px) {
   .trend-input { height: 44px; }
   .tr-chip { height: 46px; } /* 44px buttons inside its 1px border */
@@ -471,6 +471,10 @@ a.pill { text-decoration: none; }
   .tr-clear-all { min-height: 44px; }
   .tr-list .trend-hit { min-height: 44px; display: inline-flex; align-items: center; }
   .tr-go { display: inline-flex; align-items: center; min-height: 44px; }
+  /* #316: the program and feeder links in the tables, the "current players" toggle, the coverage line's link and
+     the card buttons (Try again included) */
+  .trend-table a, #trResults .table-footnote a, .tr-actions .btn, #trFailed .btn { display: inline-flex; align-items: center; min-height: 44px; }
+  .trend-players summary { min-height: 44px; line-height: 44px; } /* stays a list item, so its disclosure marker stays */
 }
 
 /* Feedback panel — in the footer, so it is on every view */
@@ -2331,6 +2335,7 @@ function trendsResolve(sel) {
 // Back or forward: re-read the selection from the URL. false when the trends page is not on screen.
 function trendsInPlace() {
   if (!TR || !$('#trResults')) return false;
+  TR_KINDS.forEach(trendsCloseList); // #316: Back or Forward closes an open suggestion list (no history entry is added)
   if (location.hash !== TR.hash) trendsApply(trendsFromUrl());
   return true;
 }
