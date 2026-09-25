@@ -94,6 +94,10 @@ def test_registry() -> None:
     ok("no registry title names a men's team", mens == [], mens)
     both = [p["slug"] for p in reg["programs"] if (p.get("ids") or {}).get("wikipedia") and (p.get("ids") or {}).get("wikipediaNone")]
     ok("no program has both a title and a no-article record", both == [], both)
+    four = {p["slug"]: (p.get("ids") or {}).get("wikipediaNone") for p in reg["programs"]
+            if p["slug"] in ("old-dominion", "campbell", "east-tennessee-state", "manhattan")}
+    ok("#349: the four programs cleared in #346 record that they have no women's article, citing the 2026-09-06 lookup",
+       len(four) == 4 and all(v and "2026-09-06" in v for v in four.values()), four)
 
 
 def main() -> int:
