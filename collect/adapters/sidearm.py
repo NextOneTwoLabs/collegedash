@@ -395,6 +395,10 @@ def _home_col(idx: dict) -> int | None:
 
 def _player_record(*, number, name, pos_label, height, class_label, hometown, high_school,
                    previous_school="", club="", major="", bio_url=None, social=None) -> dict:
+    # #224: a cell the site filled with 'null' / 'None' (or ending ' / null') is absent, never shown as a word
+    d = common.drop_placeholders
+    number, pos_label, height, class_label = d(number), d(pos_label), d(height), d(class_label)
+    hometown, high_school, previous_school, club, major = d(hometown), d(high_school), d(previous_school), d(club), d(major)
     ht = height or ""
     return {
         "number": number or "", "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label or "",

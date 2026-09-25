@@ -39,7 +39,7 @@ def _record(hit: dict) -> dict | None:
         "name": common.clean(src.get("post_title", "")),
         "gradYear": int(gy[0]),
         "pos": "/".join(_vals(meta, "positions")),
-        "state": common.state_code((_vals(meta, "state_province") or [""])[0]),
+        "state": common.state_code(common.drop_placeholders((_vals(meta, "state_province") or [""])[0])),  # 'None' is no state (#224)
         "club": clubs[0] if clubs else "",
         "highSchool": (_vals(meta, "high_school") or [""])[0],
         "college": college[0] if college else "",

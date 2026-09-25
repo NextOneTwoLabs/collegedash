@@ -1009,6 +1009,24 @@ def clean(s: str | None) -> str:
     return _WS.sub(" ", s.replace("\xa0", " ")).strip()
 
 
+# A missing value some sites print as a word (#224): Sidearm's roster template writes 'Columbus, Ga. / null' for a
+# player with no high school, a Club cell reads 'None', SoccerWire's state reads 'None'. Never a real value here.
+PLACEHOLDER_WORDS = frozenset({"null", "undefined", "none", "nan"})
+_SLASH_PARTS = re.compile(r"(?:^|\s+)/(?:\s+|$)")  # ' / ' between parts, or a bare '/' at an end; never '5/7'
+
+
+
+def drop_placeholders(s: str | None) -> str:
+    """The text with placeholder words treated as absent: a whole value that is one ('null' -> ''), and a part of a
+    ' / '-joined value that is one ('Columbus, Ga. / null' -> 'Columbus, Ga.'). A value with no placeholder is returned
+    cleaned and otherwise unchanged."""
+    text = clean(s)
+    parts = [clean(x) for x in _SLASH_PARTS.split(text)]
+    if not any(p.lower() in PLACEHOLDER_WORDS for p in parts):
+        return text  # nothing to drop: the value is returned exactly as it was (a trailing '/' included)
+    return " / ".join(p for p in parts if p and p.lower() not in PLACEHOLDER_WORDS)
+
+
 # Position labels, in two dicts (#263). POS_EXACT keys match a whole label part only: every 1-2
 # letter abbreviation lives here, so 'Manager' is not M, 'Fullback' is not F and 'Student Intern'
 # is nothing. POS_MAP keys also match as a prefix ('Midfielders', 'Center Backs'), longest key
