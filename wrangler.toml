@@ -64,9 +64,9 @@ id = "dfdeb314f1b848a287e6f99b453a5d22"
 # ---- the /api/v1 gate (issue #345) ----
 # Report-mode counts: one data point per gated request (decision, signal class, route; for a would-be 429 by IP a
 # short HMAC bucket, never an IP). Read as grouped counts with Analytics Engine SQL, never as raw logs.
-[[analytics_engine_datasets]]
-binding = "API_GATE_STATS"
-dataset = "collegedash_api_gate"
+# [[analytics_engine_datasets]]
+# binding = "API_GATE_STATS"
+# dataset = "collegedash_api_gate"
 
 # Per-minute limits (owner decision 2 and plan section 2.2): SITE_RL 300/60 s per IP, KEYED_IP_RL 120/60 s per IP,
 # KEY_RL 60/60 s per key, as Workers Rate Limiting bindings ([[ratelimits]], namespace_id 3451-3453). NOT CONFIGURED
