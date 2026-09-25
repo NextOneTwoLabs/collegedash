@@ -433,7 +433,8 @@ def test_fixtures_carry_no_contact_details() -> None:
     #    roster-two-hometown-prefixed-columns (Prairie View A&M) - the last two from Huatuo's
     #    review of the first version of this fix (PR #231)
     # 34 since issue #313 added the synthetic roster-first-last-name-columns-no-links
-    ok("privacy: there are fixtures to check", len(names) == 34, str(names))
+    # 35 since issue #302 added the synthetic schedule-legacy-two-team (daemen's structure, made-up names)
+    ok("privacy: there are fixtures to check", len(names) == 35, str(names))
     for name in names:
         with open(os.path.join(FIXTURES, name), encoding="utf-8") as handle:
             text = handle.read()
