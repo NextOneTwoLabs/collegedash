@@ -1451,6 +1451,9 @@ function syncSidebarForView(view) {
 }
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, select, textarea')) return;
+  // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
+  // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
+  if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
   if (e.key === '/') { e.preventDefault(); S.sidebarTab = 'programs'; renderSidebar(); if (isPhone()) toggleSidebar(); $('#q')?.focus(); }
   else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); renderList(); }
 });
@@ -1953,20 +1956,22 @@ const CAMP_CLASSES = ['id', 'youth', 'unknown'];
 // soonest first; ties broken by end date then name so the order is total and stable across rebuilds
 const campCmp = (a, b) => (a.startDate || '').localeCompare(b.startDate || '')
   || (a.endDate || '').localeCompare(b.endDate || '') || (a.name || '').localeCompare(b.name || '');
-/* The published tally, site-wide. Prefers the index's own `counts` (build-side, verified by
-   check_camps_index) and falls back to counting the rows when the key is absent - an index built
-   before #85 carries neither `counts` nor `campType`. `unlabelled` is rows carrying no class at
-   all: normally zero, and loud rather than silent if a publish ever regresses. */
+/* The published tally, site-wide, counted from the rows the page actually received. `unlabelled` is
+   rows carrying no class at all: normally zero, and loud rather than silent if a publish ever
+   regresses (an index built before #85 carries neither `counts` nor `campType`).
+   #93: the index's own `counts` (build-side, verified by check_camps_index) are cross-checked, never
+   trusted over the rows: when they disagree - including a tally whose classes add up to more than
+   its total, which a clamp used to turn into "All N camps are shown here" - `t.disagree` carries
+   the index's figures so the footnote says so. Counted from rows, nothing here can go negative. */
 function campTally(doc) {
   const t = { total: doc.camps.length, id: 0, youth: 0, unknown: 0 };
+  doc.camps.forEach(r => { if (CAMP_CLASSES.includes(r.campType)) t[r.campType]++; });
+  t.unlabelled = t.total - t.id - t.youth - t.unknown;
   const c = doc.counts;
-  if (c && typeof c === 'object' && CAMP_CLASSES.every(k => Number.isFinite(c[k]))) {
-    CAMP_CLASSES.forEach(k => { t[k] = c[k]; });
-    if (Number.isFinite(c.total)) t.total = c.total;
-  } else {
-    doc.camps.forEach(r => { if (CAMP_CLASSES.includes(r.campType)) t[r.campType]++; });
+  if (c && typeof c === 'object' && CAMP_CLASSES.every(k => Number.isFinite(c[k]))
+      && (CAMP_CLASSES.some(k => c[k] !== t[k]) || (Number.isFinite(c.total) && c.total !== t.total))) {
+    t.disagree = { total: Number.isFinite(c.total) ? c.total : null, id: c.id, youth: c.youth, unknown: c.unknown };
   }
-  t.unlabelled = Math.max(0, t.total - t.id - t.youth - t.unknown);
   return t;
 }
 // The list header strip. Cards and Table are f.view and switch in place; ID Camps and Pipelines (#322) are
@@ -2013,13 +2018,14 @@ async function renderCamps() {
 
   // The hidden count, site-wide and not narrowed by the filters. A number that collapsed to "0 of 0"
   // whenever a region was picked would hide exactly the classifier drift it exists to expose.
-  const hidden = Math.max(0, tally.total - tally.id);
+  const hidden = tally.total - tally.id;  // counted from the rows: never negative, never clamped (#93)
   const why = [`${tally.youth} youth or kids' camp${tally.youth === 1 ? '' : 's'}`,
     `${tally.unknown} we could not classify`]
     .concat(tally.unlabelled ? [`${tally.unlabelled} published without a classification`] : []).join(', ');
   const foot = [
     `Women's soccer ID and prospect camps only.`,
     hidden ? `${hidden} of ${tally.total} upcoming camps are not shown here — ${why}.` : `All ${tally.total} upcoming camps we publish are shown here.`,
+    tally.disagree ? `The camp list's own tally (${tally.disagree.total ?? '?'} camps, ${tally.disagree.id} ID) does not match the rows it carries (${tally.total} camps, ${tally.id} ID), so these numbers are counted from the rows.` : '',
     orphans ? `${orphans} row${orphans === 1 ? '' : 's'} could not be matched to a program.` : '',
     `Every camp a school lists, youth camps included, is on that program's ID Camps tab. Programs whose camp page we could not read do not appear here.`,
     doc.updated ? `Camp list checked ${fmtDate(doc.updated)}.` : '',

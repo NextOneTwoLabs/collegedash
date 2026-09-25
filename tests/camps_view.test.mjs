@@ -66,7 +66,9 @@ function makeEnv(fetchLog) {
     Object, RegExp, Intl, isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
     document: {
       documentElement: makeElement('html'), body: makeElement('body'),
-      querySelector: bySelector, querySelectorAll: () => [], addEventListener() { }, createElement: makeElement,
+      querySelector: bySelector, querySelectorAll: () => [], createElement: makeElement,
+      // #93: document-level listeners are kept, so a test can hand them an event the way the browser would
+      _handlers: {}, addEventListener(type, fn) { (this._handlers[type] ||= []).push(fn); },
     },
     location: { hash: '', replace(h) { this.hash = h; } },
     history: { replaceState() { } },
@@ -320,4 +322,71 @@ test('an index published without campType is reported rather than silently rende
   S.camps = { updated: published.updated, window: published.window, counts: null, camps: [{ slug: 'ucla', name: 'x' }, { slug: 'duke', name: 'y' }] };
   await sandbox.renderCamps();
   assert.ok(app().includes('2 published without a classification'));
+});
+
+/* ---------- #93: the hidden-count footnote tells the truth when the index's own tally is wrong ---------- */
+const campRow = (slug, campType, d) => ({ slug, name: `Example ${campType} camp`, campType, startDate: d, endDate: d, precision: 'day' });
+
+test('#93 a tally that under-counts the rows: the footnote counts the rows and says the index disagrees', async () => {
+  const [p1, p2] = S.index.programs;
+  S.camps = { updated: published.updated, window: published.window, counts: { total: 2, id: 2, youth: 0, unknown: 0 },
+    camps: [campRow(p1.slug, 'id', '2030-06-01'), campRow(p2.slug, 'id', '2030-06-02'),
+            campRow(p1.slug, 'youth', '2030-06-03'), campRow(p2.slug, 'youth', '2030-06-04'), campRow(p1.slug, 'unknown', '2030-06-05')] };
+  await sandbox.renderCamps();
+  const html = app();
+  assert.ok(html.includes('3 of 5 upcoming camps are not shown here'), 'the footnote trusted the index\'s counts over the rows it received');
+  assert.ok(!html.includes('All 2 upcoming camps we publish are shown here'), 'a wrong tally was reported as reassurance');
+  assert.ok(html.includes("The camp list's own tally (2 camps, 2 ID) does not match the rows it carries (5 camps, 2 ID)"), 'the disagreement is not said');
+});
+
+test('#93 a tally whose classes exceed its total (a negative difference) is an error, not "All N shown"', async () => {
+  const [p1] = S.index.programs;
+  S.camps = { updated: published.updated, window: published.window, counts: { total: 1, id: 3, youth: 0, unknown: 0 },
+    camps: [campRow(p1.slug, 'id', '2030-07-01'), campRow(p1.slug, 'youth', '2030-07-02'), campRow(p1.slug, 'youth', '2030-07-03')] };
+  await sandbox.renderCamps();
+  const html = app();
+  assert.ok(!html.includes('All 1 upcoming camps we publish are shown here'), 'Math.max(0, …) turned a corrupt tally into reassurance');
+  assert.ok(html.includes('2 of 3 upcoming camps are not shown here'), 'the rows were not counted');
+  assert.ok(html.includes('does not match the rows it carries'), 'the corrupt tally is not reported');
+  const t = sandbox.campTally(S.camps);
+  assert.equal(t.total, t.id + t.youth + t.unknown + t.unlabelled, 'the tally does not add up');
+});
+
+test('#93 a tally that agrees with its rows adds no note', async () => {
+  const [p1] = S.index.programs;
+  S.camps = { updated: published.updated, window: published.window, counts: { total: 2, id: 1, youth: 1, unknown: 0 },
+    camps: [campRow(p1.slug, 'id', '2030-08-01'), campRow(p1.slug, 'youth', '2030-08-02')] };
+  await sandbox.renderCamps();
+  assert.ok(app().includes('1 of 2 upcoming camps are not shown here') && !app().includes('does not match the rows'));
+});
+
+/* ---------- #93: Space activates the link tabs as it does the button tabs ----------
+   Proven through the page's own document keydown handler with a stub event: the in-app browser does
+   not deliver real key presses, so a person should still press Space on the ID Camps tab once. */
+function keyOn(target, key) {
+  const ev = { key, target, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; }, stopPropagation() { } };
+  for (const fn of sandbox.document._handlers.keydown || []) fn(ev);
+  return ev;
+}
+function tabTarget(isLinkTab) {
+  const t = { clicks: 0, click() { this.clicks++; } };
+  t.matches = sel => (sel === 'input, select, textarea' ? false : sel === 'a.view-tab[role="tab"]' ? isLinkTab : false);
+  return t;
+}
+
+test('#93 Space on the ID Camps (link) tab activates it, and is not a page scroll', () => {
+  const tab = tabTarget(true);
+  const ev = keyOn(tab, ' ');
+  assert.equal(tab.clicks, 1, 'Space did not activate the link tab');
+  assert.ok(ev.defaultPrevented, 'Space would also scroll the page');
+});
+
+test('#93 Space elsewhere is left alone; Enter on the link tab is left to the browser', () => {
+  const other = tabTarget(false);
+  const ev = keyOn(other, ' ');
+  assert.equal(other.clicks, 0);
+  assert.ok(!ev.defaultPrevented, 'Space was swallowed outside the tab strip');
+  const tab = tabTarget(true);
+  keyOn(tab, 'Enter');
+  assert.equal(tab.clicks, 0, 'Enter is the browser\'s own activation for a link; a second click would double it');
 });
