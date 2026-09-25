@@ -1092,6 +1092,11 @@ function renderObserved() {
   document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
 }
 const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
+/* #111: the saved slugs that name a program the index still carries. A program removed from the site (Saint
+   Francis, Mississippi Valley State) stays in a visitor's saved state - kept, not deleted, so it comes back
+   if the program is published again - but it is never counted, linked or named. Before the index loads,
+   every saved slug counts, as before. */
+const presentSlugs = list => (S.index ? [...list].filter(s => programBySlug(s)) : [...list]);
 /* ---------- which RPI season the page shows (issue #62) ----------
    Read from the published index, never hardcoded, so a new season needs no edit here. build.py reads the
    NCAA's live table (current.json) only for the season being played (index.season.current, the registry's)
@@ -1229,7 +1234,7 @@ function toggleFav(slug, from) {
 function toggleCompare(slug) {
   const i = S.compare.indexOf(slug);
   if (i >= 0) S.compare.splice(i, 1);
-  else if (S.compare.length >= 4) { alert('Compare holds four programs at a time. Remove one to add another.'); return false; }
+  else if (presentSlugs(S.compare).length >= 4) { alert('Compare holds four programs at a time. Remove one to add another.'); return false; }
   else S.compare.push(slug);
   saveState(); renderSidebar(); return true;
 }
@@ -1306,7 +1311,8 @@ const sortOptions = () => SORTS.map(s => s[0]).concat(SORTS.some(s => s[0] === S
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
-  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${S.favorites.size ? ` (${S.favorites.size})` : ''}`], ['compare', `⇄ Compare${S.compare.length ? ` (${S.compare.length})` : ''}`]];
+  const nFav = presentSlugs(S.favorites).length, nCmp = presentSlugs(S.compare).length;  // #111: live programs only
+  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${nFav ? ` (${nFav})` : ''}`], ['compare', `⇄ Compare${nCmp ? ` (${nCmp})` : ''}`]];
   let body = '';
   if (tab === 'programs') {
     const years = S.index.season?.gradYears || [];
@@ -2720,6 +2726,7 @@ function glanceHtml(p, row) {
   const last = games.filter(g => g.result).sort((a, b) => b.date.localeCompare(a.date))[0];
   const chip = r => r ? `<span class="form-chip inline ${r === 'W' ? 'w' : r === 'L' ? 'l' : 'd'}">${esc(r === 'T' ? 'D' : r)}</span>` : '';
   const at = g => g ? (g.homeAway === 'A' ? 'at ' : g.homeAway === 'N' ? 'vs ' : 'vs ') : '';
+  const cmpLive = presentSlugs(S.compare);  // #111: a removed program is never named or linked in "Compare with …"
   const commits = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—';
   const moreFacts = [
     sch.tuitionInState != null || sch.tuitionOutOfState != null ? `<dt>Tuition (in / out)</dt><dd>${fmtUsd(sch.tuitionInState)} / ${fmtUsd(sch.tuitionOutOfState)}</dd>` : '',
@@ -2754,7 +2761,7 @@ function glanceHtml(p, row) {
       ${moreFacts[4]}
       ${moreFacts[5]}
     </dl></details>` : ''}
-    <div class="glance-actions">${S.compare.length && !S.compare.includes(p.slug) ? `<a class="glance-link" href="#/compare/${[...S.compare.slice(0, 3), p.slug].map(esc).join(',')}">Compare with ${esc(programBySlug(S.compare[0])?.shortName || 'selection')} →</a>` : `<a class="glance-link" href="#/compare/${esc(p.slug)}">Start a comparison →</a>`}</div>`;
+    <div class="glance-actions">${cmpLive.length && !cmpLive.includes(p.slug) ? `<a class="glance-link" href="#/compare/${[...cmpLive.slice(0, 3), p.slug].map(esc).join(',')}">Compare with ${esc(displayName(programBySlug(cmpLive[0])))} →</a>` : `<a class="glance-link" href="#/compare/${esc(p.slug)}">Start a comparison →</a>`}</div>`;
 }
 async function renderProfile(slug, tab) {
   await loadIndex();
