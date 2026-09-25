@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import build  # noqa: E402
 import clubs  # noqa: E402
+import schools  # noqa: E402
 from collect import common  # noqa: E402
 
 
@@ -39,6 +40,7 @@ def main() -> int:
     registry = common.load_registry()
     table = clubs.load_table(reload=True)
     recorder = clubs.Recorder(table)
+    school_table = schools.load_table()  # the build's school table: state-split keys resolve as in a build (#339)
     programs = 0
     for program in common.iter_programs(registry):
         division = program.get("division", "D1")
@@ -47,7 +49,8 @@ def main() -> int:
         programs += 1
         S = lambda n: common.load_source(program["slug"], n)  # noqa: E731
         build.observe_clubs(recorder, S("athletics"), S("commitments.tds"), S("commitments.soccerwire"),
-                            slug=program["slug"], division=division)
+                            slug=program["slug"], division=division,
+                            school_table=school_table)
     report = recorder.report(common.read_json(clubs.REVIEW_PATH)) if args.dry_run else recorder.write()
     s = report["summary"]
     print(f"{programs} programs; {s['recordsWithAClubString']} club strings, "

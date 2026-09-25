@@ -2197,8 +2197,11 @@ let trendsCut = { hash: null, dropped: {} };
 function trendsFromUrl() {
   const { sel, dropped } = trendsParseLink(location.hash);
   if (Object.keys(dropped).length) { history.replaceState(null, '', trendsUrl(sel)); trendsCut = { hash: location.hash, dropped }; }
-  TR.dropped = location.hash === trendsCut.hash ? trendsCut.dropped : {};
-  return trendsResolve(sel);
+  const cut = location.hash === trendsCut.hash;
+  TR.dropped = cut ? trendsCut.dropped : {};
+  const out = trendsResolve(sel);
+  if (cut) trendsCut.hash = location.hash; // #339: a retired or raw: id rewritten after the cut keeps the note
+  return out;
 }
 function trendsUrl(sel) {
   const q = TR_KINDS.map(k => [k, trendsVals(sel[k])]).filter(([, v]) => v.length).map(([k, v]) => `${k}=${v.map(encodeURIComponent).join(',')}`).join('&');
@@ -2207,12 +2210,17 @@ function trendsUrl(sel) {
 // A "raw:<key>" id names a spelling no reviewed club claimed when the index was built. Once a Monday refresh
 // reviews that spelling into a club, the key becomes one of the club's `aka` keys (or its name), so an old
 // shared link is resolved to the club instead of reading "not in the index".
+// #339: a club id merged into another (retiredClubs in the index) resolves to the club it went into. A raw:
+// spelling resolves only when exactly one club claims it: a state-split key (Beach FC ECNL) is an aka of two clubs.
 function trendsResolveClub(doc, id) {
   const ix = trendsIx(doc).club;
-  if (!id || ix.has(id) || !id.startsWith('raw:')) return id;
+  if (!id || ix.has(id)) return id;
+  const to = doc.retiredClubs?.[id];
+  if (to && ix.has(to)) return to;
+  if (!id.startsWith('raw:')) return id;
   const key = trendsKey(id.slice(4)), d = doc.clubs, unm = new Set(d.unmatched || []);
-  const i = key ? d.id.findIndex((_, j) => !unm.has(j) && (trendsKey(d.name[j]) === key || (d.aka?.[j] || []).some(k => trendsKey(k) === key))) : -1;
-  return i >= 0 ? d.id[i] : id;
+  const hits = key ? d.id.filter((_, j) => !unm.has(j) && (trendsKey(d.name[j]) === key || (d.aka?.[j] || []).some(k => trendsKey(k) === key))) : [];
+  return hits.length === 1 ? hits[0] : id;
 }
 // The roster tab's club cell: a reviewed club links to its trends page (every division since #315).
 function trendsClubCell(p, pl) {

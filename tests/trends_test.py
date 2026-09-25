@@ -211,8 +211,11 @@ def direct_counts(profiles_and_sources) -> dict[str, dict[str, list[int]]]:
                 rows = list(cands.get(n, []))
                 if col.get(n):
                     rows.append({"raw": col[n], "source": "roster page", "updated": f"{y}-08-01"})
-                chosen = clubs.resolve(rows, TABLE) if rows else None
-                e = entry_of(TABLE.match(chosen["raw"]).as_dict()) if chosen else None
+                # #339: the same per-player state the build uses for a state-split key
+                import schools
+                hs = schools.club_state(schools.load_table(), q.get("highSchool"), q.get("hometown")) if rows else None
+                chosen = clubs.resolve(rows, TABLE, hs) if rows else None
+                e = entry_of(TABLE.match(chosen["raw"], hs).as_dict()) if chosen else None
                 if e:
                     add(e, slug, 1, d1)
         for c in prof["commitments"]:
