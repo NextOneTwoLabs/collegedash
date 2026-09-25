@@ -75,7 +75,8 @@ id = "dfdeb314f1b848a287e6f99b453a5d22"
 # Per-minute limits (owner decision 2 and plan section 2.2). Counts are per Cloudflare location and approximate by
 # design. If a binding is missing at runtime the gate fails OPEN for the site and carries on for keys (the D1 daily
 # quota still bounds them). The namespace ids are account-scoped integers, not credentials. Workers Builds accepts
-# these on the Free plan (build c7c762fc passed with SITE_RL; #355).
+# all three on the Free plan (build 7707c826 passed; #355). Whether they are live at runtime shows in the counts'
+# limiter field ('ok' vs 'missing') once the Analytics Engine binding above is back.
 [[ratelimits]]
 name = "SITE_RL"
 namespace_id = "3451"
