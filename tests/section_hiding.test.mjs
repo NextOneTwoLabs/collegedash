@@ -127,7 +127,8 @@ const expectProfile = p => {
   // carries its D1-era ranks (#94) - is expected hidden, not shown
   const rpiSeasons = ['D2', 'D3'].includes(p.division) ? [] : seasons.filter(s => s.rpiRank);
   const scheduleData = !!p.schedule && (nonEmpty(p.schedule.games) || nonEmpty(p.schedule.history));
-  const titles = nonEmpty(pr.nationalTitles) || p.division === 'D1';
+  // #214: a zero is a real 0 in every division with an NCAA champions table (the page's TITLE_TABLE_DIVISIONS)
+  const titles = nonEmpty(pr.nationalTitles) || (['D1', 'D2', 'D3'].includes(p.division) && Array.isArray(pr.nationalTitles));
   const cups = nonEmpty(pr.collegeCups) || !!pr._meta?.wikipedia;
   const honors = !!pr._meta?.wikipedia || HONORS.some(k => nonEmpty(pr[k]));
   const rosterData = !!p.roster && nonEmpty(p.roster.players);
