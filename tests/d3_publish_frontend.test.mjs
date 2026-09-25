@@ -223,16 +223,18 @@ test('titles: TITLE_TABLE_DIVISIONS names the divisions build.py has a champions
   assert.ok(tables.includes('D3'), `build.py CHAMPION_TABLES has no D3: ${tables}`);
 });
 
-test('titles: a D3 program with no titles shows no title figure and no error; a D3 count reads "3 NCAA D3 titles"', async () => {
+test('titles: a D3 program with no titles shows a real 0 on its profile (#214) and no error; a D3 count reads "3 NCAA D3 titles"', async () => {
   const pg = await ready(MIXED_FILES);
   const cards = await list(pg);
-  assert.doesNotMatch(card(cards, 'test-d3-full'), /class="titles"/);
+  assert.doesNotMatch(card(cards, 'test-d3-full'), /class="titles"/, 'a card still shows only a count above 0 (#115)');
   assert.match(card(cards, 'test-d3-champion'), /<span class="titles">3 NCAA D3 titles<\/span>/);
   for (const slug of ['test-d3-full', 'test-d3-thin']) {
     const o = await profile(pg, slug);
     assert.doesNotMatch(subtitle(o.app).replace(/<[^>]*>/g, ''), /title/, // the visible text: the division tag's hover attribute is not a title count (#278)
       `${slug}: the subtitle names a title count for a program with none`);
-    assert.doesNotMatch(o.app + o.tab, /NCAA D3 titles|National titles/, `${slug}: a title figure shows for a program with none`);
+    // #214: D3 has an NCAA champions table (TITLE_TABLE_DIVISIONS), so its zero is a real 0, as the Titles condition
+    // already counted it: the profile's titles tile reads 0, never "not collected", and never an error
+    assert.match(o.tab, /<div class="label">NCAA D3 titles<\/div><div class="value">0<\/div>/, `${slug}: the titles tile does not read 0`);
     const h = await profile(pg, slug, 'history');
     assert.doesNotMatch(h.tab, /NCAA D3 championships<\/th><td><b>0/, `${slug}: History lists a zero championships row`);
   }

@@ -96,7 +96,7 @@ function makeElement(name) {
     matches: () => false, focus() { }, contains: () => false,
   };
 }
-const HANDLES = ['S', 'renderList', 'renderSidebar', 'renderCamps', 'renderProfile', 'renderCompare', 'renderFaq', 'loadIndex', 'condNaTally', 'condNaText', 'condTally'];
+const HANDLES = ['S', 'renderList', 'renderSidebar', 'renderCamps', 'renderProfile', 'renderCompare', 'renderFaq', 'loadIndex', 'condNaTally', 'condNaText', 'condTally', 'has', 'COND_FIELDS'];
 
 function loadPage(html = PAGE, files = {}) {
   const els = new Map();
@@ -162,6 +162,22 @@ const tabLabels = (html) => [...html.matchAll(/class="view-tab[^"]*"[^>]*>([^<]*
 const PROFILE_TABS = ['overview', 'school', 'climate', 'history', 'staff', 'roster', 'commitments', 'schedule', 'news', 'camps'];
 
 // ---------- Division I, as it has always been ----------
+
+test('#214 one titles rule: the profile titles tile shows a zero exactly where the Titles condition counts it as a real 0', async () => {
+  const pg = await ready(MIXED_FILES);
+  const tile = (n, label) => new RegExp(`<div class="label">${label}</div><div class="value">${n}</div>`);
+  const d2 = await profile(pg, 'test-d2-plain');
+  assert.match(d2.tab, tile(0, 'NCAA D2 titles'), 'a D2 program with no titles: the tile reads a real 0 (it was hidden)');
+  const titles = pg.sb.COND_FIELDS.find(f => f.key === 'nationalTitles');
+  const prof = (division, list) => ({ division, program: { nationalTitles: list } });
+  const row = (division, n) => ({ division, nationalTitles: n });
+  for (const [division, shown] of [['D1', true], ['D2', true], ['D3', true], ['NAIA', false]]) {
+    assert.equal(pg.sb.has.titles(prof(division, [])), shown, `${division} zero: the tile ${shown ? 'shows 0' : 'is left out'}`);
+    assert.equal(titles.get(row(division, 0)) === 0, shown, `${division} zero: the Titles condition ${shown ? 'counts a real 0' : 'reads not collected'}`);
+    assert.equal(pg.sb.has.titles(prof(division, [2021])), true, `${division} with a title: the tile shows`);
+  }
+  assert.equal(pg.sb.has.titles({ division: 'D2', program: {} }), false, 'no title list in the profile at all: left out, never an error');
+});
 
 test('D1 only: titles, RPI, College Cups and the equivalencies note read exactly as before', async () => {
   const pg = await ready();
