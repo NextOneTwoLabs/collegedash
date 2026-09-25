@@ -64,21 +64,39 @@ id = "dfdeb314f1b848a287e6f99b453a5d22"
 # ---- the /api/v1 gate (issue #345) ----
 # Report-mode counts: one data point per gated request (decision, signal class, route; for a would-be 429 by IP a
 # short HMAC bucket, never an IP). Read as grouped counts with Analytics Engine SQL, never as raw logs.
+# COMMENTED OUT until the owner has checked why a build with it failed (#355): Workers Builds rejected this block on
+# the Free account (builds 7b706d79 and ec3b75e8 failed with it; 57322d21 and c7c762fc passed without it). The
+# likeliest cause, unverified, is that Analytics Engine has not been enabled on the account yet. Until it is back,
+# env.API_GATE_STATS is missing and the gate classifies but counts nothing - report mode cannot be measured.
 # [[analytics_engine_datasets]]
 # binding = "API_GATE_STATS"
 # dataset = "collegedash_api_gate"
 
-# Per-minute limits (owner decision 2 and plan section 2.2): SITE_RL 300/60 s per IP, KEYED_IP_RL 120/60 s per IP,
-# KEY_RL 60/60 s per key, as Workers Rate Limiting bindings ([[ratelimits]], namespace_id 3451-3453). NOT CONFIGURED
-# on this account: the first build of PR 1 with those three blocks failed in Workers Builds on the Free plan (#345,
-# PR #355), so they are left out. Without them the gate records the limiter as 'missing', the site path fails
-# open, and keys stay bounded by their D1 daily quota; api/access.mjs needs no change when they are added.
+# Per-minute limits (owner decision 2 and plan section 2.2). Counts are per Cloudflare location and approximate by
+# design. If a binding is missing at runtime the gate fails OPEN for the site and carries on for keys (the D1 daily
+# quota still bounds them). The namespace ids are account-scoped integers, not credentials. Workers Builds accepts
+# these on the Free plan (build c7c762fc passed with SITE_RL; #355).
 [[ratelimits]]
 name = "SITE_RL"
 namespace_id = "3451"
   [ratelimits.simple]
   limit = 300
   period = 60
+
+[[ratelimits]]
+name = "KEYED_IP_RL"
+namespace_id = "3452"
+  [ratelimits.simple]
+  limit = 120
+  period = 60
+
+[[ratelimits]]
+name = "KEY_RL"
+namespace_id = "3453"
+  [ratelimits.simple]
+  limit = 60
+  period = 60
+
 # Keys and usage (plan section 4.2): the D1 database the owner creates and gives the schema in api/schema.sql
 # (steps in the PR for #345). Commented out until the owner has created it and posted its database_id, which is an
 # identifier, not a credential. Until then env.API_DB is missing: the site path never reads it, and a keyed request
