@@ -15,8 +15,9 @@ en.wikipedia.org/robots.txt disallows /api/ (and /w/) for every agent (the rules
   source      collect/wikipedia.py and registry sources.wikipedia name no /api/ or /w/ Wikipedia URL
   parse       the same infobox and season table parse to the same result from a rendered /wiki/ page (mw-parser-output,
               edit-section links, footnote markers) and from the REST HTML shape (section wrappers)
-  keep        a page that parses to nothing does not replace a stored source that had seasons (control: with nothing
-              stored, it is saved)
+  keep        a parse that loses a part the stored source has does not replace it, each part on its own (R1 on #375):
+              no seasons or under half the stored seasons, no infobox or under half the stored infobox rows; controls
+              save; every stored source on disk passes against itself and is kept if its season table stops parsing
   athletics   a title with no 'soccer' in it (a general athletics article) is skipped with no request; northwestern and
               georgia record that they have no women's article, and their athletics-article sources are gone
 Offline: common.fetch_text, load_source and save_source are replaced; nothing is requested or written.
@@ -202,23 +203,63 @@ def test_parse() -> None:
        and d["founded"] == 1994, {k: d[k] for k in ("seasons", "collegeCups", "stadium", "founded")})
 
 
-def test_keep() -> None:
-    print("keep: a page that parses to nothing does not replace a stored source")
-    common.set_robots_txt("en.wikipedia.org", WIKIPEDIA_ROBOTS)
+def wrapped(body: str) -> str:
+    return "<html><body><div class='mw-parser-output'>" + body + "</div></body></html>"
+
+
+def stored_with(n_seasons: int, n_infobox: int) -> dict:
+    return {"x": {"data": {"seasons": [{"year": 2000 + i} for i in range(n_seasons)],
+                           "infobox": {f"Row {i}": "value" for i in range(n_infobox)}}}}
+
+
+def keep_case(name: str, html: str, stored: dict | None, expect: list[str], refuse: list[str] = ()) -> None:
+    """collect() over `stored`: raises FetchError naming each part in `expect` (and none in `refuse`), saving
+    nothing; or, when `expect` is empty, saves."""
     reg = common.load_registry()
     p = {"slug": "x", "ids": {"wikipedia": "Example_Owls_women's_soccer"}}
-    stored = {"x": {"data": {"seasons": [{"year": 2023}] * 20, "infobox": {"Founded": "1994"}}}}
-    empty = "<html><body><div class='mw-parser-output'><p>Nothing here.</p></div></body></html>"
-    with Harness(empty, stored) as h:
+    with Harness(html, stored) as h:
         try:
             wikipedia.collect(p, reg)
-            ok("FIX an empty parse over a stored source raises FetchError", False, "no error")
+            ok(f"{name}: saved" if not expect else f"{name}: raises FetchError", not expect and len(h.saved) == 1,
+               "no error" if expect else h.saved)
         except common.FetchError as e:
-            ok("FIX an empty parse over a stored source raises FetchError", "kept the stored source (20 seasons)" in str(e), str(e))
-        ok("and saves nothing", h.saved == [], h.saved)
-    with Harness(empty) as h:
-        wikipedia.collect(p, reg)
-        ok("control: with nothing stored, the empty parse is saved", len(h.saved) == 1, h.saved)
+            msg = str(e)
+            ok(f"{name}: raises FetchError naming {expect}", bool(expect) and all(x in msg for x in expect)
+               and not any(x in msg for x in refuse) and "kept the stored source" in msg, msg)
+            ok(f"{name}: saves nothing", h.saved == [], h.saved)
+
+
+def test_keep() -> None:
+    print("keep: a parse that loses a part the stored source has does not replace it, part by part")
+    common.set_robots_txt("en.wikipedia.org", WIKIPEDIA_ROBOTS)
+    empty = wrapped("<p>Nothing here.</p>")
+    # the fixture page: 4 infobox rows, 5 seasons
+    keep_case("FIX nothing parses", empty, stored_with(20, 4),
+              ["0 seasons where the stored source has 20", "0 infobox rows where the stored source has 4"])
+    keep_case("FIX R1 the infobox parses, the season table does not", wrapped(INFOBOX), stored_with(5, 4),
+              ["0 seasons where the stored source has 5"], ["infobox rows"])
+    keep_case("FIX R1 the season table parses, the infobox does not", wrapped(SEASONS), stored_with(5, 4),
+              ["0 infobox rows where the stored source has 4"], ["seasons where"])
+    keep_case("FIX R1 far fewer seasons than stored (5 of 20)", rendered_page(), stored_with(20, 4),
+              ["5 seasons where the stored source has 20"], ["infobox rows"])
+    keep_case("FIX R1 far fewer infobox rows than stored (4 of 9)", rendered_page(), stored_with(5, 9),
+              ["4 infobox rows where the stored source has 9"], ["seasons where"])
+    keep_case("control: at least half of each part (5 of 8 seasons, 4 of 8 rows) is saved", rendered_page(), stored_with(8, 8), [])
+    keep_case("control: more than stored is saved", rendered_page(), stored_with(2, 1), [])
+    keep_case("control: with nothing stored, an empty parse is saved", empty, None, [])
+
+    # every stored source on disk: held to itself it passes; with its season table gone, it is caught
+    stored = [(p["slug"], common.load_source(p["slug"], "wikipedia")) for p in registered()]
+    stored = [(s, d) for s, d in stored if d]
+    self_ok = [s for s, d in stored if wikipedia._shrunk_parts(d, d["data"].get("infobox") or {}, d["data"].get("seasons") or [])]
+    ok("every stored source, parsed the same again, passes", len(stored) >= 90 and not self_ok, (len(stored), self_ok[:5]))
+    with_seasons = [(s, d) for s, d in stored if d["data"].get("seasons")]
+    missed = [s for s, d in with_seasons if not wikipedia._shrunk_parts(d, d["data"].get("infobox") or {}, [])]
+    n = sum(len(d["data"]["seasons"]) for _, d in with_seasons)
+    ok(f"every stored source with seasons ({len(with_seasons)} sources, {n} seasons) is kept when its season table "
+       "stops parsing", not missed and n >= 1000, (missed[:5], n))
+    if VERBOSE:
+        print(f"       {len(stored)} stored sources, {len(with_seasons)} with seasons, {n} seasons protected")
 
 
 def test_athletics() -> None:

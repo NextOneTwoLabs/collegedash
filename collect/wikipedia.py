@@ -330,6 +330,18 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
 MENS_TITLE_RE = re.compile(r"(?<!wo)men's[ _]soccer", re.I)
 
 
+def _shrunk_parts(stored: dict | None, infobox: dict, seasons: list) -> list[str]:
+    """The parts of a new parse that fell below half of the stored source's (issue #364): season rows, and infobox
+    rows. Empty when nothing is stored or each part kept at least half. Each part is checked on its own."""
+    before = (stored or {}).get("data") or {}
+    out = []
+    for label, new, old in (("seasons", seasons, before.get("seasons")), ("infobox rows", infobox, before.get("infobox"))):
+        n_old, n_new = len(old or []), len(new or [])
+        if n_old and n_new * 2 < n_old:
+            out.append(f"{n_new} {label} where the stored source has {n_old}")
+    return out
+
+
 def page_url(registry: dict, title: str) -> str:
     """The article page the collector reads: registry sources.wikipedia.page, '/wiki/{title}' (issue #364)."""
     return registry["sources"]["wikipedia"]["page"].format(title=urllib.parse.quote(title, safe=""))
@@ -382,12 +394,13 @@ def collect(program: dict, registry: dict) -> dict:
     stadium_txt = find("stadium")
     cap = re.search(r"capacity[:\s]*([\d,]+)", stadium_txt, re.I)
     seasons = _seasons_table(soup)
-    before = (common.load_source(program["slug"], NAME) or {}).get("data") or {}
-    if not ib and not seasons and (before.get("seasons") or before.get("infobox")):
-        # #364: the page format changed with the move to /wiki/. A page that parses to nothing does not replace a
-        # stored source that had an infobox or seasons; the stored copy stays, and the refresh reports the failure
-        raise common.FetchError(f"wikipedia: {url} parsed to no infobox and no seasons table; kept the stored "
-                                f"source ({len(before.get('seasons') or [])} seasons)")
+    shrunk = _shrunk_parts(common.load_source(program["slug"], NAME), ib, seasons)
+    if shrunk:
+        # #364: the page format changed with the move to /wiki/. Each part is held to the stored copy on its own, so a
+        # page whose season table stops parsing while its infobox still does (or the reverse) cannot overwrite good
+        # data; the stored copy stays and the refresh reports the failure
+        raise common.FetchError(f"wikipedia: {url} parsed to {'; '.join(shrunk)}; kept the stored source (a real "
+                                f"change on the article: delete programs/{program['slug']}/sources/{NAME}.json to accept it)")
     data = {
         "title": title,
         "pageUrl": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(title)}",
