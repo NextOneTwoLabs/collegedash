@@ -64,19 +64,17 @@ id = "dfdeb314f1b848a287e6f99b453a5d22"
 # ---- the /api/v1 gate (issue #345) ----
 # Report-mode counts: one data point per gated request (decision, signal class, route; for a would-be 429 by IP a
 # short HMAC bucket, never an IP). Read as grouped counts with Analytics Engine SQL, never as raw logs.
-# COMMENTED OUT until the owner has checked why a build with it failed (#355): Workers Builds rejected this block on
-# the Free account (builds 7b706d79 and ec3b75e8 failed with it; 57322d21 and c7c762fc passed without it). The
-# likeliest cause, unverified, is that Analytics Engine has not been enabled on the account yet. Until it is back,
-# env.API_GATE_STATS is missing and the gate classifies but counts nothing - report mode cannot be measured.
-# [[analytics_engine_datasets]]
-# binding = "API_GATE_STATS"
-# dataset = "collegedash_api_gate"
+# Workers Builds rejected this block in #355 (builds 7b706d79 and ec3b75e8) until the owner enabled Analytics Engine
+# on the account (2026-09-25); re-enabled in the connect PR for #345.
+[[analytics_engine_datasets]]
+binding = "API_GATE_STATS"
+dataset = "collegedash_api_gate"
 
 # Per-minute limits (owner decision 2 and plan section 2.2). Counts are per Cloudflare location and approximate by
 # design. If a binding is missing at runtime the gate fails OPEN for the site and carries on for keys (the D1 daily
 # quota still bounds them). The namespace ids are account-scoped integers, not credentials. Workers Builds accepts
 # all three on the Free plan (build 7707c826 passed; #355). Whether they are live at runtime shows in the counts'
-# limiter field ('ok' vs 'missing') once the Analytics Engine binding above is back.
+# limiter field ('ok' vs 'missing').
 [[ratelimits]]
 name = "SITE_RL"
 namespace_id = "3451"
@@ -98,14 +96,15 @@ namespace_id = "3453"
   limit = 60
   period = 60
 
-# Keys and usage (plan section 4.2): the D1 database the owner creates and gives the schema in api/schema.sql
-# (steps in the PR for #345). Commented out until the owner has created it and posted its database_id, which is an
-# identifier, not a credential. Until then env.API_DB is missing: the site path never reads it, and a keyed request
-# is classified 'd1-error' (served in report mode, 503 when enforcing).
+# Keys and usage (plan section 4.2): the D1 database collegedash-api, created by the owner with api/schema.sql applied.
+# Its database_id is an identifier, not a credential (like the KV ids above). PLACEHOLDER - the block stays commented
+# out until the owner's id is filled in, because an active block with a placeholder id fails the Workers Build. Until
+# then env.API_DB is missing: the site path never reads it, and a keyed request is classified 'd1-error' (served in
+# report mode, 503 when enforcing).
 # [[d1_databases]]
 # binding = "API_DB"
 # database_name = "collegedash-api"
-# database_id = "<from `wrangler d1 create collegedash-api`>"
+# database_id = "PLACEHOLDER-owner-posts-the-id-from-wrangler-d1-create"
 #
 # The IP bucket's HMAC key is the Worker secret IP_BUCKET_SECRET, set with `wrangler secret put IP_BUCKET_SECRET`.
 # It never goes in this file or anywhere in the repository. Without it no bucket is written.

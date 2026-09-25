@@ -97,7 +97,9 @@ const signals = e => e.API_GATE_STATS.points.map(p => p.blobs[2]);
 test('wrangler.toml ships the gate in report mode, with the site limit and the stats binding', () => {
   const toml = fs.readFileSync(path.join(ROOT, 'wrangler.toml'), 'utf8');
   assert.match(toml, /^API_GATE = "report"$/m, 'PR 1 must ship report mode (enforcement is its own PR, owner decision 8)');
-  assert.match(toml, /binding = "API_GATE_STATS"/, 'the stats binding is named (commented out until #355 is resolved)');
+  assert.match(toml, /^\[\[analytics_engine_datasets\]\]\nbinding = "API_GATE_STATS"$/m, 'the stats binding is live (report mode counts nothing without it)');
+  // the D1 block is live only with a real id: a placeholder in an active block fails the Workers Build
+  assert.doesNotMatch(toml, /^database_id = ".*PLACEHOLDER/m, 'an active D1 block still carries the placeholder id');
   for (const name of ['SITE_RL', 'KEYED_IP_RL', 'KEY_RL']) assert.match(toml, new RegExp(`^name = "${name}"$`, 'm'), name);
   assert.doesNotMatch(toml, /^\s*IP_BUCKET_SECRET\s*=/m, 'the HMAC key is a Worker secret, never a var');
   assert.doesNotMatch(toml, /cdk_[a-z0-9]{12}_[A-Za-z0-9_-]{43}/, 'a key value in wrangler.toml');
