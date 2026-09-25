@@ -100,7 +100,7 @@ def test_usual_order_unchanged() -> None:
 
 
 def test_mens_article_skipped() -> None:
-    reg = {"sources": {"wikipedia": {"htmlApi": "https://example.invalid/{title}"}}}
+    reg = {"sources": {"wikipedia": {"page": "https://example.invalid/{title}"}}}
     for title in ("Old_Dominion_Monarchs_men's_soccer", "Campbell Fighting Camels men's soccer"):
         try:
             wikipedia.collect({"slug": "x", "ids": {"wikipedia": title}}, reg)
