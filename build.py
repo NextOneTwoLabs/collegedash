@@ -1793,7 +1793,10 @@ def build_profile(program: dict, registry: dict, rpi_hist, rpi_finals, state: di
         },
         "school": ({**scorecard["data"], "region": region_for(scorecard["data"].get("state")), "_meta": _meta(scorecard)} if scorecard else None),
         "academicRank": ranks[slug],
-        "climate": ({**climate["data"], "_meta": _meta(climate)} if climate else None),
+        # #114: the time zone is the registry's (location.timezone, checked against the program's coordinates), not a
+        # copy stored with a climate collection that runs once a year, so a corrected zone shows at the next build
+        "climate": ({**climate["data"], "timezone": (program.get("location") or {}).get("timezone") or climate["data"].get("timezone"),
+                     "_meta": _meta(climate)} if climate else None),
         "program": build_program_section(program, wiki, ath),
         "seasons": build_seasons(program, wiki, ath, rpi_hist, rpi_finals, registry, rpi_final),
         "roster": roster,
