@@ -98,7 +98,8 @@ test('wrangler.toml ships the gate in report mode, with the site limit and the s
   const toml = fs.readFileSync(path.join(ROOT, 'wrangler.toml'), 'utf8');
   assert.match(toml, /^API_GATE = "report"$/m, 'PR 1 must ship report mode (enforcement is its own PR, owner decision 8)');
   assert.match(toml, /binding = "API_GATE_STATS"/);
-  assert.match(toml, /name = "SITE_RL"/);
+  // the Rate Limiting bindings failed the Workers Build on the Free plan (#355); the gate runs without them
+  assert.doesNotMatch(toml, /^\[\[ratelimits\]\]/m, 'a [[ratelimits]] block is back: confirm the plan supports it first');
   assert.doesNotMatch(toml, /^\s*IP_BUCKET_SECRET\s*=/m, 'the HMAC key is a Worker secret, never a var');
   assert.doesNotMatch(toml, /cdk_[a-z0-9]{12}_[A-Za-z0-9_-]{43}/, 'a key value in wrangler.toml');
 });
