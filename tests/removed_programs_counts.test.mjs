@@ -57,14 +57,14 @@ function loadPage(saved) {
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = fs.readFileSync(HTML, 'utf8').split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-  const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, renderSidebar, glanceHtml, toggleCompare });\n';
+  const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, renderSidebar, glanceHtml, toggleCompare, route });\n';
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sandbox, sidebar: () => bySelector('#sidebar').innerHTML };
+  return { sandbox, sidebar: () => bySelector('#sidebar').innerHTML, el: bySelector };
 }
 
 const INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data/programs/index.json'), 'utf8'));
-const [P1, P2, P3] = INDEX.programs;
+const [P1, P2, P3, P4, P5] = INDEX.programs;
 
 test('#111 the Shortlist and Compare tab counts leave out programs the index does not carry', async () => {
   const page = loadPage({ 'cd.favorites': [P1.slug, GONE[0], P2.slug], 'cd.compare': [GONE[1], P1.slug] });
@@ -96,4 +96,42 @@ test('#111 West Florida\'s athletics host is stored as the final host (goargos.c
   const reg = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data/registry.json'), 'utf8'));
   const wf = (reg.programs || reg).find(p => p.slug === 'west-florida');
   assert.equal(wf?.athletics?.baseUrl, 'https://goargos.com');
+});
+
+/* ---------- Huatuo's R1 on PR #367: wherever the compare list is cut, it is cut by LIVE programs ---------- */
+test('#111 R1 reload: a removed program saved with four live ones does not push a live one out', async () => {
+  const page = loadPage({ 'cd.compare': [GONE[0], P1.slug, P2.slug, P3.slug, P4.slug] });
+  await page.sandbox.loadIndex();
+  const cmp = [...page.sandbox.S.compare];
+  for (const p of [P1, P2, P3, P4]) assert.ok(cmp.includes(p.slug), `the reload lost ${p.slug}: ${cmp}`);
+});
+
+test('#111 R1 compare route: a link with a removed program and four live ones keeps all four live', async () => {
+  const page = loadPage({});
+  await page.sandbox.loadIndex();
+  page.sandbox.location.hash = `#/compare/${GONE[0]},${P1.slug},${P2.slug},${P3.slug},${P4.slug}`;
+  try { await page.sandbox.route(); } catch { /* the stub DOM cannot draw the compare page; the list is set first */ }
+  const cmp = [...page.sandbox.S.compare];
+  for (const p of [P1, P2, P3, P4]) assert.ok(cmp.includes(p.slug), `the compare route lost ${p.slug}: ${cmp}`);
+  assert.ok(!cmp.includes(P5.slug));
+});
+
+test('#111 R1 the sidebar "Open comparison" link carries live programs only', async () => {
+  const page = loadPage({ 'cd.compare': [GONE[0], P1.slug, P2.slug] });
+  await page.sandbox.loadIndex();
+  page.sandbox.S.sidebarTab = 'compare';
+  page.sandbox.renderSidebar();
+  assert.ok(page.sidebar().includes(`href="#/compare/${P1.slug},${P2.slug}"`), 'the Open comparison link carries a removed program');
+});
+
+test('#111 "Compare my shortlist" takes four LIVE favourites', async () => {
+  const page = loadPage({ 'cd.favorites': [GONE[0], P1.slug, GONE[1], P2.slug, P3.slug, P4.slug, P5.slug] });
+  await page.sandbox.loadIndex();
+  page.sandbox.S.sidebarTab = 'shortlist';
+  page.sandbox.renderSidebar();
+  const btn = page.el('#cmpShortlist');
+  assert.equal(typeof btn.onclick, 'function', 'the Compare my shortlist button was not wired');
+  btn.onclick();
+  assert.deepEqual([...page.sandbox.S.compare], [P1.slug, P2.slug, P3.slug, P4.slug], 'removed favourites took compare places');
+  assert.equal(page.sandbox.location.hash, `#/compare/${P1.slug},${P2.slug},${P3.slug},${P4.slug}`);
 });
