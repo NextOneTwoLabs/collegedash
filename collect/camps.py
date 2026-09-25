@@ -893,13 +893,28 @@ def page_soccer_flag(title: str | None, *urls: str | None) -> bool:
     return False
 
 
+# #317: "Men's Soccer" / "Boys Soccer" names soccer, but not the women's team's soccer. ("women's soccer"
+# never matches: \bmen needs a word boundary, and "women" has none before its "men".)
+MENS_SOCCER_RE = re.compile(r"\b(?:men|boys?)(?:'s|’s|s)?\s+soccer\b", re.I)
+
+
 def _row_names_soccer(e: dict) -> bool:
     """#293: a row-level soccer signal - soccer in the row's name, its own window or table cells
-    (`_evidence`), its register URL, or a soccer section heading that is not men's."""
+    (`_evidence`), its register URL, or a soccer section heading that is not men's.
+
+    #317: a men's or boys' soccer mention is not a signal, the same exclusion the section heading
+    already had. UCCS's all-sport page lists each camp under a plain sport label ("Men's Soccer",
+    then the date, then "11v11 Showcase Camp"); the label sat in the row's own window and its
+    "soccer" alone kept a men's camp on the women's list. Only what counts AS a signal changes: a
+    women's or unqualified "soccer" anywhere in the same text still counts, and nothing here rejects
+    a row for a men's word (the evidence gender rule _row_allowed deliberately does not have)."""
     sec = e.get("_section")
     if sec and sec["sport"] == "soccer" and not sec["male"]:
         return True
-    return any(SOCCER_RE.search(x or "") for x in (e.get("name"), e.get("_evidence"), e.get("registerUrl")))
+    if any(SOCCER_RE.search(MENS_SOCCER_RE.sub(" ", x or "")) for x in (e.get("name"), e.get("_evidence"))):
+        return True
+    url = e.get("registerUrl") or ""
+    return bool(SOCCER_RE.search(url)) and not (MALE_LOOSE_RE.search(url) and not FEMALE_LOOSE_RE.search(url))
 
 
 def _sport_section(line: str) -> dict | None:

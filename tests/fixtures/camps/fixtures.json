@@ -804,6 +804,16 @@
    "reject": [{"name": "Summer Showcase Camp"}]
   },
   {
+   "file": "extract/synth-allsport-mens-label.html",
+   "pageUrl": "https://www.example-athletics.test/camps",
+   "title": "Example Camps",
+   "pageSoccer": false,
+   "_note": "#317, fails on main (3 rows): UCCS's layout, a SPORT | DATE | CAMP/CLINIC | REGISTER table. A 'Men's Soccer' or 'Boys Soccer' Sport cell is not a women's soccer signal, so those rows go with the softball and volleyball ones; the 'Women's Soccer' row stays.",
+   "count": 1,
+   "expect": [{"name": "Elite ID Camp", "startDate": "2027-12-19"}],
+   "reject": [{"name": "11v11 Showcase Camp"}, {"name": "Winter ID Clinic"}, {"name": "Elite Prospect Camp"}]
+  },
+  {
    "file": "extract/synth-allsport-register-url.html",
    "pageUrl": "https://www.example-athletics.test/sports-camps",
    "title": "Example Sports Camps",
