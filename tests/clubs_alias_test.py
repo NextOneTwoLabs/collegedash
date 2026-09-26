@@ -393,6 +393,61 @@ def test_d2_d3_phase_2_315(table: clubs.Table) -> None:
           str([c["id"] for c in rows if not c.get("reviewedBy", "").startswith("Huatuo")][:5]))
 
 
+def test_suggest_folds_385(table: clubs.Table) -> None:
+    """Issue #385: every unmatched spelling whose suggest_key points at exactly ONE existing club is an alias of
+    it, with provenance; a short name that also sits in other clubs' names, a same-name/state-split key and the
+    names the #336 group check held stay unmatched."""
+    m = table.match("MVLA ECNL")
+    check("#385: 'MVLA ECNL' -> Mountain View Los Altos SC", m.status == "matched" and m.clubId == "mountain-view-los-altos-sc",
+          f"{m.status} {m.clubId}")
+    for raw, name in (("Skyline Elite SC", "Skyline Elite"), ("Albion Hurricanes 05 ECNL", "Albion Hurricanes FC (TX)"),
+                      ("Pipeline ECRL", "Pipeline SC (MD)")):
+        mm = table.match(raw)
+        check(f"#385: {raw!r} -> {name!r}", mm.status == "matched" and mm.name == name, f"{mm.status} {mm.name}")
+    for raw in ("Sting ECNL", "Sting Black RL", "Albion FC", "Arlington", "Rise Soccer Club", "Beach FC ECNL", "United FC"):
+        check(f"#385: ambiguous {raw!r} stays unmatched", table.match(raw).status == "unmatched", table.match(raw).clubId)
+    # Huatuo on PR #386: a spelling naming another state IN WORDS is held too; his promotions are exact name + tag
+    check("#385: 'Scorpions FC New Hampshire' stays unmatched (names a state the club is not recorded in)",
+          table.match("Scorpions FC New Hampshire").status == "unmatched", table.match("Scorpions FC New Hampshire").clubId)
+    for raw, name in (("FC Wisconsin ECNL-RL", "FC Wisconsin"), ("Concorde Fire Soccer Club", "Concorde Fire"),
+                      ("FC Stars RL ECNL", "FC Stars"), ("Club: FC Virginia GA", "FC Virginia"),
+                      ("New York Soccer Club GA", "New York SC"), ("FC Dallas 01 DPL", "FC Dallas"),
+                      ("Heat FC 02 ECNL", "Heat FC"), ("Long Island SC GA", "Long Island SC")):
+        mm = table.match(raw)
+        check(f"#385 promoted: {raw!r} -> {name!r}", mm.status == "matched" and mm.name == name, f"{mm.status} {mm.name}")
+    for raw in ("Long Island GA", "Crossfire ECNL", "Nationals FC", "Portland Thorns ECNL"):
+        check(f"#385: still held {raw!r}", table.match(raw).status == "unmatched", table.match(raw).clubId)
+    with open(clubs.TABLE_PATH, encoding="utf-8") as f:
+        doc = json.load(f)
+    mine = {k: a for k, a in doc["aliases"].items() if isinstance(a, dict) and "issue #385" in a.get("basis", "")}
+    check("#385: 163 folds and 12 promotions, each naming its club and the rule it came from",
+          len(mine) == 175 and all(a.get("prepared") and a["basis"].startswith("issue #385: ") for a in mine.values()),
+          str(len(mine)))
+    # the state guard, as a property of the table: no #385 alias names a US state in words that its club's own name
+    # and recorded state do not carry ('scorpions fc new hampshire' -> Scorpions SC was one)
+    stray = []
+    for k, a in mine.items():
+        club = table.clubs[a["club"]]
+        own = f" {clubs.clean_key(club['name'])} "
+        for word, code in US_STATE_NAMES.items():
+            if f" {word} " in f" {k} " and f" {word} " not in own and code != club.get("state") \
+                    and not (word == "virginia" and " west virginia " in f" {k} "):
+                stray.append(f"{k} -> {club['name']} ({word})")
+    check("#385: no alias names a state (in words) its club does not carry", not stray, str(stray[:5]))
+
+
+US_STATE_NAMES = {"alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR", "california": "CA", "colorado": "CO",
+                  "connecticut": "CT", "delaware": "DE", "florida": "FL", "georgia": "GA", "hawaii": "HI", "idaho": "ID",
+                  "illinois": "IL", "indiana": "IN", "iowa": "IA", "kansas": "KS", "kentucky": "KY", "louisiana": "LA",
+                  "maine": "ME", "maryland": "MD", "massachusetts": "MA", "michigan": "MI", "minnesota": "MN",
+                  "mississippi": "MS", "missouri": "MO", "montana": "MT", "nebraska": "NE", "nevada": "NV",
+                  "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY", "north carolina": "NC",
+                  "north dakota": "ND", "ohio": "OH", "oklahoma": "OK", "oregon": "OR", "pennsylvania": "PA",
+                  "rhode island": "RI", "south carolina": "SC", "south dakota": "SD", "tennessee": "TN", "texas": "TX",
+                  "utah": "UT", "vermont": "VT", "virginia": "VA", "washington": "WA", "west virginia": "WV",
+                  "wisconsin": "WI", "wyoming": "WY"}
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -412,6 +467,7 @@ def main() -> int:
     test_committed_table(table)
     test_owner_decisions_233(table)
     test_d2_d3_phase_2_315(table)
+    test_suggest_folds_385(table)
     test_scratch_build_leaves_the_report_alone()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
     return 1 if FAILS else 0
