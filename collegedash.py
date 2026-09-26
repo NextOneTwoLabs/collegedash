@@ -62,6 +62,11 @@ def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, d
     refresh-state. The entry is None when there is nothing to record (an unknown collector name).
     Every Exception the collector raises becomes a failed outcome; nothing else here can raise one."""
     r = {"program": program["slug"], "collector": name, "outcome": "ok", "error": ""}
+    with common.fetch_site(name):  # the label robots.txt counts are kept under; catch sites refine it (#101)
+        return _collect_one(name, program, registry, r, **kw)
+
+
+def _collect_one(name: str, program: dict, registry: dict, r: dict, **kw) -> tuple[dict, dict | None]:
     try:
         if name == "scorecard":
             from collect import scorecard as m
@@ -96,6 +101,10 @@ def collect_one(name: str, program: dict, registry: dict, **kw) -> tuple[dict, d
         common.log(f"-- {name} skipped for {program['slug']}: {e}")
         r.update(outcome="skipped", error=common.error_text(e, 300))
         entry = {"ok": True, "skipped": common.error_text(e, 300)}
+    except common.RobotsDisallowed as e:  # enforce mode (#101): a skip, not a failure; the source is not rewritten
+        common.log(f"-- {name} skipped for {program['slug']}: {e}")
+        r.update(outcome="skipped", error=common.error_text(f"robots: {e.site}", 300))
+        entry = {"ok": True, "skipped": r["error"]}
     except Exception as e:  # keep going; partial progress is still committed
         common.log(f"!! {name} failed for {program['slug']}: {e}")
         common.log_traceback()
@@ -503,6 +512,13 @@ def onboard_batch(reg, slugs: list[str], *, bios: bool, workers: int) -> int:
 
 
 def cmd_refresh(args):
+    started = _clock()
+    robots_env = (os.environ.get("COLLEGEDASH_ROBOTS") or "off").strip().lower()
+    if robots_env not in common.ROBOTS_MODES:
+        common.log(f"!! COLLEGEDASH_ROBOTS={robots_env!r} is not one of {', '.join(common.ROBOTS_MODES)}")
+        return 2
+    budget = getattr(args, "time_budget_minutes", None)
+    deadline = started + budget * 60 if budget else None
     reg = common.load_registry()
     only = [c.strip() for c in args.only.split(",")] if args.only else COLLECTORS
     unknown = [c for c in only if c not in COLLECTORS and c != "rpi"]
@@ -530,6 +546,7 @@ def cmd_refresh(args):
         print(f"-- {len(plan)} programs, {total} collector runs" + (", plus rpi current" if run_rpi else ""))
         return 0
     clear_not_recorded()
+    common.reset_robots_report()
     if any("camps" in cs for _, cs in plan):
         from collect import camps
         camps.configure(stored_link=args.camps_stored_link, retry_429=args.camps_retry_429)
@@ -537,7 +554,8 @@ def cmd_refresh(args):
     if run_rpi:
         from collect import rpi
         try:
-            rpi.current(reg)
+            with common.fetch_site("rpi"):
+                rpi.current(reg)
             results.append({"program": "-", "collector": "rpi", "outcome": "ok", "error": ""})
         except Exception as e:
             common.log(f"!! rpi current failed: {e}")
@@ -545,7 +563,7 @@ def cmd_refresh(args):
     # --coach-bios fetches the head coach's bio with player bios off (the weekly and full runs, issue #168);
     # without either, a run with player bios fetches it too, and a --no-bios run keeps the stored one
     results += collect_plan(plan, reg, bios=not args.no_bios, coach_bios=args.coach_bios or not args.no_bios,
-                            workers=args.workers)
+                            workers=args.workers, deadline=deadline)
     if not plan and not run_rpi:
         common.log("nothing to refresh")
         return 0
@@ -555,12 +573,43 @@ def cmd_refresh(args):
         line = camps.refused_summary()  # this run's refused-camp-host counts (issue #284)
         if line:
             common.log(line)
+    if common.robots_mode() != "off":
+        report_robots(common.robots_report(elapsed_seconds=_clock() - started, workers=args.workers))
     build.build(common.load_registry())
-    return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
+    return report_refresh(results, threshold=args.fail_threshold, mode=args.mode, time_budget=budget)
+
+
+def report_robots(rep: dict) -> None:
+    """Log, record (refresh-state.robots) and summarise this run's robots.txt counts (issue #101)."""
+    key = "wouldBlock" if "wouldBlock" in rep else "blocked"
+    wb = rep[key]
+    common.log(f"robots ({rep['mode']}): {rep['requestsChecked']} requests to {rep['hostsChecked']} hosts checked; "
+               f"{wb['total']} {'would be blocked' if key == 'wouldBlock' else 'blocked'}"
+               + (f" ({', '.join(f'{k} {v}' for k, v in wb['byCollector'].items())})" if wb["byCollector"] else "")
+               + f"; robots.txt {rep['robotsTxt']}; projected enforced run "
+               f"{rep['projection']['projectedEnforcedMinutes']} min (this run {rep['projection']['actualMinutes']})")
+    common.update_refresh_state("robots", {**rep, "at": common.now_iso()})
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY") if os.environ.get("GITHUB_ACTIONS") else None
+    if summary_path:
+        with open(summary_path, "a", encoding="utf-8") as f:
+            f.write(f"## robots.txt ({rep['mode']}, issue #101)\n\n{rep['requestsChecked']} requests to "
+                    f"{rep['hostsChecked']} hosts checked; **{wb['total']} "
+                    f"{'would be blocked' if key == 'wouldBlock' else 'blocked'}**. robots.txt: {rep['robotsTxt']}. "
+                    f"Projected enforced run: {rep['projection']['projectedEnforcedMinutes']} min "
+                    f"(this run {rep['projection']['actualMinutes']}).\n\n")
+            if wb["bySite"]:
+                f.write("| Call site | Count |\n|---|---|\n")
+                for site, n in wb["bySite"].items():
+                    f.write(f"| {site} | {n} |\n")
+                f.write("\n")
+
+
+TIME_BUDGET = "time budget"
+_clock = time.monotonic  # tests move it
 
 
 def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, workers: int,
-                 coach_bios: bool | None = None) -> list[dict]:
+                 coach_bios: bool | None = None, deadline: float | None = None) -> list[dict]:
     """Run every (program, collectors) pair of the plan and return the outcomes in plan order.
 
     workers <= 1 walks the programs one at a time, as before. With more, up to `workers` programs are
@@ -577,8 +626,16 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
     run made the lock the bottleneck and, with the old timeout, a way to crash the run (PR #105).
     Nothing a program does can raise out of its worker, so one program cannot cancel the programs
     still queued. The returned list is in plan order whatever order programs finish in, so the
-    summary, lastRun and the exit code are the ones a sequential run would produce."""
+    summary, lastRun and the exit code are the ones a sequential run would produce.
+
+    deadline (a _clock() value, issue #101): a program not started by then is not started at all. Its collectors
+    are skipped with reason "time budget", never failed; no request is made, its sources are not touched, and its
+    refresh-state entries are left as they were (so `refresh --failed` still sees yesterday's failures). Programs
+    already in flight finish."""
     def one(program: dict, collectors: list[str]) -> list[dict]:
+        if deadline is not None and _clock() >= deadline:
+            return [{"program": program["slug"], "collector": c, "outcome": "skipped", "error": TIME_BUDGET}
+                    for c in collectors]
         results, entries = [], {}
         try:
             for c in collectors:
@@ -615,9 +672,10 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
         return [r for rs in pool.map(worker, plan) for r in rs]
 
 
-def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
+def report_refresh(results: list[dict], *, threshold: float, mode: str, time_budget: float | None = None) -> int:
     """Print the run summary, record it in refresh-state as lastRun, annotate GitHub Actions, and
-    return the exit code: 0 when the failed share is within the threshold, 1 when above it."""
+    return the exit code: 0 when the failed share is within the threshold, 1 when above it. Programs the time
+    budget kept from starting are skips, never failures (issue #101), and are named."""
     total = len(results)
     # every error below is printed, annotated, written to the step summary and committed in refresh-state:
     # redact it once here (issue #258), whatever wrote it
@@ -627,8 +685,13 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
     share = len(failed) / total if total else 0.0
     exceeded = share > threshold
     stale = not_recorded()
+    not_started = sorted({r["program"] for r in results if r["outcome"] == "skipped" and r.get("error") == TIME_BUDGET})
+    robots_skips = sum(1 for r in results if r["outcome"] == "skipped" and str(r.get("error", "")).startswith("robots: "))
     common.log(f"refresh summary: {total} runs, {ok} ok, {skipped} skipped, {len(failed)} failed "
                f"({share:.1%}, threshold {threshold:.0%}){' - THRESHOLD EXCEEDED' if exceeded else ''}")
+    if not_started:
+        common.log(f"!! time budget ({time_budget:g} min) reached: {len(not_started)} program(s) not started, their "
+                   f"stored sources kept: {', '.join(not_started[:20])}{' …' if len(not_started) > 20 else ''}")
     for r in failed:
         common.log(f"   {r['program']:24} {r['collector']:10} {r['error'][:120]}")
     if stale:
@@ -641,8 +704,13 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
         "failures": [{k: r[k] for k in ("program", "collector", "error")} for r in failed[:100]],
         "notRecorded": {"programs": len(stale), "entries": sum(n for _, n, _ in stale),
                         "slugs": [s for s, _, _ in stale[:100]]},
+        "timeBudget": {"minutes": time_budget, "programsNotStarted": len(not_started), "slugs": not_started[:100]},
+        "robotsSkipped": robots_skips,
     })
     if os.environ.get("GITHUB_ACTIONS"):
+        if not_started:
+            print(f"::warning title=refresh::time budget ({time_budget:g} min) reached: {len(not_started)} program(s) "
+                  f"not started; their stored sources are kept")
         for r in failed:
             print(f"::warning title=refresh: {r['collector']} failed for {r['program']}::{r['error'][:200]}")
         if stale:
@@ -657,6 +725,9 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:
                 f.write(f"## Refresh ({mode})\n\n{total} collector runs: **{ok} ok**, {skipped} skipped, "
                         f"**{len(failed)} failed** ({share:.1%}, threshold {threshold:.0%})"
                         f"{' - **threshold exceeded**' if exceeded else ''}\n\n")
+                if not_started:
+                    f.write(f"**Time budget ({time_budget:g} min) reached:** {len(not_started)} program(s) not started; "
+                            f"their stored sources are kept: {', '.join(not_started[:20])}.\n\n")
                 if stale:
                     f.write(f"**refresh-state not recorded for {len(stale)} program(s)** "
                             f"({sum(n for _, n, _ in stale)} entries): {', '.join(s for s, _, _ in stale[:20])}. "
@@ -779,6 +850,11 @@ def main(argv=None):
     p.add_argument("--fail-threshold", type=float, default=float(os.environ.get("COLLEGEDASH_FAIL_THRESHOLD", "0.05")),
                    help="share of collector runs allowed to fail before the run counts as failed (default 0.05, env COLLEGEDASH_FAIL_THRESHOLD)")
     p.add_argument("--mode", default="manual", help="label recorded with the run summary (daily, weekly, full, manual)")
+    p.add_argument("--time-budget-minutes", type=float,
+                   default=float(os.environ.get("COLLEGEDASH_TIME_BUDGET_MINUTES") or 0) or None,
+                   help="start no new program after this many minutes; the rest are skipped (reason 'time budget') "
+                        "and keep their stored sources (issue #101; refresh.yml sets 270 via env "
+                        "COLLEGEDASH_TIME_BUDGET_MINUTES). Default: no budget")
     p.add_argument("--workers", type=int, default=int(os.environ.get("COLLEGEDASH_WORKERS", "16")),
                    help="programs collected at once (default 16, env COLLEGEDASH_WORKERS; 1 = the sequential walk). "
                         "Per-host politeness is the same at any value")

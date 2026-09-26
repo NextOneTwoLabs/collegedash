@@ -124,18 +124,33 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         raise common.FetchError(f"athletics: roster parse found 0 players at {u['roster']}")
     season = roster["season"] or registry["season"]["current"]
     common.log(f"athletics[{platform}]: {season} roster {len(roster['players'])} players, {len(roster['staff'])} staff")
+    # Issue #101: a page robots.txt disallows (RobotsDisallowed, enforce mode only) never erases what is stored. Each
+    # catch site below keeps the stored value, matched by a stable key: bioUrl for a player, the season year for
+    # history, the stored staff for the coaches page.
+    stored_env = common.load_source(slug, NAME) or {}
+    stored = stored_env.get("data") or {}
     staff, staff_url = roster["staff"], None
     if not staff and u.get("coaches"):
-        staff = _coaches_page_staff(ad, u["coaches"], base, program["athletics"]["sportPath"])
-        staff_url = u["coaches"] if staff else None
+        try:
+            staff = _coaches_page_staff(ad, u["coaches"], base, program["athletics"]["sportPath"])
+            staff_url = u["coaches"] if staff else None
+        except common.RobotsDisallowed:
+            staff, staff_url = stored.get("staff") or [], stored_env.get("staffUrl")
+            common.log(f"  coaches page disallowed by robots.txt; keeping the {len(staff)} stored staff")
 
     if bios:
+        stored_bios = {p.get("bioUrl"): p for p in ((stored.get("roster") or {}).get("players") or []) if p.get("bioUrl")}
         for p in roster["players"]:
             try:
-                bhtml, _ = common.fetch_text(p["bioUrl"], max_age_hours=24 * 7)
+                with common.fetch_site("athletics.bio"):
+                    bhtml, _ = common.fetch_text(p["bioUrl"], max_age_hours=24 * 7)
                 b = ad.parse_bio(bhtml)
                 p["bio"] = {"sections": b.get("sections", {})}
                 p["club"] = _extract_club(b.get("sections", {}))
+            except common.RobotsDisallowed:
+                old = stored_bios.get(p.get("bioUrl")) or {}
+                p["bio"], p["club"] = old.get("bio") or {}, old.get("club") or ""
+                common.log(f"  bio for {p['name']} disallowed by robots.txt; keeping the stored bio")
             except common.FetchError as e:
                 common.log(f"  bio failed for {p['name']}: {e}")
                 p["bio"], p["club"] = {}, ""
@@ -146,11 +161,17 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     history = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
         try:
-            h, _ = common.fetch_text(u["rosterSeason"](y), max_age_hours=24 * 30)
+            with common.fetch_site("athletics.historyRoster"):
+                h, _ = common.fetch_text(u["rosterSeason"](y), max_age_hours=24 * 30)
             r = ad.parse_roster(h, base)
             if r["players"]:
                 history[str(y)] = [{k: v for k, v in p.items() if k not in ("bio", "social")} for p in r["players"]]
                 common.log(f"  {y} roster: {len(r['players'])} players")
+        except common.RobotsDisallowed:
+            kept = (stored.get("rosterHistory") or {}).get(str(y))
+            if kept:
+                history[str(y)] = kept
+            common.log(f"  {y} roster disallowed by robots.txt; {'keeping the stored year' if kept else 'none stored'}")
         except common.FetchError as e:
             common.log(f"  {y} roster unavailable: {e}")
 
@@ -160,7 +181,8 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     sched_hist = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
         try:
-            h, _ = common.fetch_text(u["scheduleSeason"](y), max_age_hours=24 * 30)
+            with common.fetch_site("athletics.historySchedule"):
+                h, _ = common.fetch_text(u["scheduleSeason"](y), max_age_hours=24 * 30)
             s = ad.parse_schedule(h, base)
             if not s["games"]:
                 continue
@@ -172,6 +194,11 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
                            f"so the page is not the {y} season")
                 continue
             sched_hist[str(y)] = s["games"]
+        except common.RobotsDisallowed:
+            kept = (stored.get("scheduleHistory") or {}).get(str(y))
+            if kept:
+                sched_hist[str(y)] = kept  # stored earlier, so it passed the #301 season check then
+            common.log(f"  {y} schedule disallowed by robots.txt; {'keeping the stored year' if kept else 'none stored'}")
         except common.FetchError as e:
             common.log(f"  {y} schedule unavailable: {e}")
 
@@ -238,8 +265,9 @@ def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
     if not head:
         return None
     try:
-        html, _ = common.fetch_text(head["bioUrl"], max_age_hours=24 * 7)
-    except common.FetchError as e:
+        with common.fetch_site("athletics.coachBio"):
+            html, _ = common.fetch_text(head["bioUrl"], max_age_hours=24 * 7)
+    except common.FetchError as e:  # a robots.txt block too: _coach_bio_for_run keeps a stored bio (issue #101)
         common.log(f"  head coach bio failed for {head['name']}: {e}")
         return {"name": head["name"], "url": head["bioUrl"], "firstSeason": None, "conflict": False, "statements": [],
                 "error": common.error_text(e, 200)}
@@ -272,7 +300,10 @@ def _coaches_page_staff(ad, url: str, base: str, sport_path: str) -> list[dict]:
     published as this program's staff. A failed fetch leaves the program as it was, with no staff.
     """
     try:
-        html, meta = common.fetch_text(url, max_age_hours=24)
+        with common.fetch_site("athletics.coachesPage"):
+            html, meta = common.fetch_text(url, max_age_hours=24)
+    except common.RobotsDisallowed:
+        raise  # the caller keeps the stored staff (issue #101)
     except common.FetchError as e:
         common.log(f"  coaches page unavailable: {e}")
         return []
