@@ -131,6 +131,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
 
     if bios:
         for p in roster["players"]:
+            if not p.get("bioUrl"):  # no bio link to follow (the list view without one; the embedded roster, #145)
+                p["bio"], p["club"] = {}, ""
+                continue
             try:
                 bhtml, _ = common.fetch_text(p["bioUrl"], max_age_hours=24 * 7)
                 b = ad.parse_bio(bhtml)
