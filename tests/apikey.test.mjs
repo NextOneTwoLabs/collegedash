@@ -1,7 +1,7 @@
 // API keys for direct use of /api/v1 (issue #345). Ported from ecnl-dashboard's tests/apikey.test.mjs (#93; R-A to R-I
 // are that plan review's cases), on this site's names and limits. Keys are built at run time, so no key-shaped
-// literal is ever in the tree. Phase 1 ships the key door without a key store: these tests give it a fake one;
-// production answers 503 to a well-formed key until phase 2 binds API_KEYS.
+// literal is ever in the tree. KV and the limiters are fakes here; phase 2 binds the real key store (API_KEYS) and
+// RL_KEY in wrangler.toml, and tests/apikey-tool.test.mjs covers the owner's tool.
 //
 //     node --test tests/apikey.test.mjs
 import { test } from 'node:test';
@@ -395,15 +395,20 @@ test('R-I: refusal reasons differ in time only by microseconds and not at all in
   assert.ok(Object.values(out).every(us => us > 0 && us < 5000), JSON.stringify(out));
 });
 
-test('phase 1: wrangler.toml declares no key store and no RL_KEY yet; namespace ids are unique; well-formed keys answer 503', async () => {
+test('phase 2: wrangler.toml declares RL_KEY 3464 at 60/60 s and its own API_KEYS store; namespace ids are unique; no store answers 503', async () => {
   const toml = readFileSync('wrangler.toml', 'utf8').replace(/\r\n/g, '\n');
-  assert.doesNotMatch(toml, /^binding = "API_KEYS"$/m, 'phase 2 adds the key store');
-  assert.doesNotMatch(toml, /^name = "RL_KEY"/m, 'phase 2 adds RL_KEY (namespace_id 3464)');
+  assert.match(toml, /\[\[ratelimits\]\]\nname = "RL_KEY"[^\n]*\nnamespace_id = "3464"\nsimple = \{ limit = 60, period = 60 \}/, 'RL_KEY 3464, 60 per 60 s');
+  const kv = [...toml.matchAll(/^\[\[kv_namespaces\]\]\nbinding = "([A-Z_]+)"\nid = "([^"]+)"$/gm)].map(m => [m[1], m[2]]);
+  assert.deepEqual(kv.map(([b]) => b).sort(), ['API_KEYS', 'ASK_BUDGET', 'FEEDBACK'], 'the key store is its own binding');
+  assert.equal(new Set(kv.map(([, id]) => id)).size, kv.length, 'and its own namespace, never the feedback or budget store');
+  // the id itself is checked by tests/apikey-tool.test.mjs ("OWNER STEP"), against the owner's tool
   const ids = [...toml.matchAll(/^namespace_id = "(\d+)"$/gm)].map(m => m[1]);
+  // RL_SESSION/RL_ANON (3461/3462) may be absent: the rollback PR (claude/345-rollback-limits) removes them
   assert.equal(new Set(ids).size, ids.length, 'each limiter has its own namespace_id');
+  assert.ok(ids.includes('3463') && ids.includes('3464') && ids.every(id => /^346[1-4]$/.test(id)), 'this site\'s 3461-3464: ' + ids);
   const { env, good } = await setup({ extra: { API_KEYS: undefined, RL_KEY: undefined } });
   const { result } = await quietly(() => gate(req('/api/v1/programs', bearer(good.key)), env, T0));
-  assert.equal(result.response.status, 503, 'fails closed until phase 2');
+  assert.equal(result.response.status, 503, 'fails closed without a store');
   assert.equal((await gate(req('/api/v1/programs', { authorization: 'Bearer junk' }), env, T0)).response.status, 401, 'a malformed key is refused without a store');
 });
 

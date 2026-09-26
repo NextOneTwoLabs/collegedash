@@ -1,4 +1,4 @@
-// Session cookie and rate limits for /api/v1/* (issue #345, phase 1). See docs/data-api.md, "Sessions and rate
+// Session cookie, API keys and rate limits for /api/v1/* (issue #345, phases 1 and 2). See docs/data-api.md, "Sessions and rate
 // limits". Ported from NextOneTwoLabs/ecnl-dashboard api/session.mjs (#90, #93), which is verified on production
 // there; the cookie, header, host, realm and binding names are this site's, and the logic is unchanged.
 //
