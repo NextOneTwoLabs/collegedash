@@ -644,7 +644,7 @@ def _is_position_label(label: str) -> bool:
     map through common.pos_code: a POS_EXACT key exactly ('D', 'CB') or a part starting with a
     POS_MAP word or phrase, all of them 3+ letters ('Midfield', 'Center Back'), never merely 'm'."""
     ok = False
-    for part in re.split(r"[/,]", label):
+    for part in common.pos_parts(label):  # the same splitter as norm_pos (#263 part C); the rule is unchanged
         if not part.strip():
             continue
         if common.pos_code(part):
