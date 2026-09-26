@@ -163,6 +163,26 @@ test('generated Division II profile: Honors keeps its titles and season table, a
   assert.match(r, /<tr><th>All-time record<\/th><td>120-40-10 \(0\.735\) over 9 seasons<\/td><\/tr>/, 'a counted record is shown as before');
 });
 
+// Issue #226 (Bianque on PR #222): the row shows when ANY game was counted, not only when one was won. No committed
+// profile has a winless record, so this generated one is what fails if the check is narrowed to `wins > 0`: a new
+// program's single 0-15-1 season, and a 0-0-2 all-ties record.
+test('#226 a winless record with losses or ties still shows its all-time record row', async () => {
+  const winless = d2Profile({ record: { wins: 0, losses: 15, ties: 1, winPct: 0.031, seasons: 1 } });
+  const tiesOnly = d2Profile({ record: { wins: 0, losses: 0, ties: 2, winPct: 0.5, seasons: 1 } });
+  tiesOnly.p.slug = tiesOnly.row.slug = 'generated-d2-ties';
+  const index = { ...clone(readJsonFrom(PUBLIC, 'data/programs/index.json')) };
+  index.programs = [...index.programs, winless.row, tiesOnly.row];
+  if (index.divisions && !index.divisions.includes('D2')) index.divisions = [...index.divisions, 'D2'];
+  const pg = loadPage(PAGE, PUBLIC, { 'data/programs/index.json': index, [`data/programs/${winless.p.slug}.json`]: winless.p,
+    [`data/programs/${tiesOnly.p.slug}.json`]: tiesOnly.p });
+  await pg.sb.loadIndex();
+  await pg.sb.renderProfile(winless.p.slug, 'history');
+  assert.match(pg.tab(), /<tr><th>All-time record<\/th><td>0-15-1 \(0\.031\) over 1 seasons<\/td><\/tr>/,
+    'a 0-15-1 record is hidden: the row must show when any game was counted, not only a win');
+  await pg.sb.renderProfile(tiesOnly.p.slug, 'history');
+  assert.match(pg.tab(), /<tr><th>All-time record<\/th><td>0-0-2 \(0\.5\) over 1 seasons<\/td><\/tr>/, 'an all-ties record is hidden');
+});
+
 const D2_PUBLIC = process.env.HONORS_D2_PUBLIC;
 test('D2-published data (PR #220): every profile follows the rule, and no Honors box says 0-0-0',
   { skip: D2_PUBLIC ? false : 'set HONORS_D2_PUBLIC to a D2-published public/ directory (PR #220\'s branch) to run this' }, async () => {
