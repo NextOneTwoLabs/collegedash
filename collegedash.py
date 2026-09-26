@@ -555,7 +555,6 @@ def cmd_refresh(args):
         line = camps.refused_summary()  # this run's refused-camp-host counts (issue #284)
         if line:
             common.log(line)
-        write_allsport_shadow(camps.allsport_shadow_summary)  # guarded: report only (#326)
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode)
 
@@ -614,40 +613,6 @@ def collect_plan(plan: list[tuple[dict, list[str]]], reg: dict, *, bios: bool, w
     with ThreadPoolExecutor(max_workers=min(workers, len(plan)), thread_name_prefix="collect") as pool:
         # map() yields in submission order; `one` raises no Exception, so no program is cancelled
         return [r for rs in pool.map(worker, plan) for r in rs]
-
-
-SHADOW_REPORT_FAILURES = 0  # #326: shadow report writes that raised this process (report only, never fatal)
-
-
-def write_allsport_shadow(summary) -> bool:
-    """#326 PR A: the camps all-sport shadow report goes to the run log and, on GitHub Actions, to the
-    step Summary as its own block. Never to a committed file (#235).
-
-    `summary` is the callable that builds the lines (camps.allsport_shadow_summary), called here so
-    that building AND writing sit inside one guard: this is report-only code running before the build
-    and report_refresh, so an error in it (an OSError on GITHUB_STEP_SUMMARY, a bad row) is logged,
-    warned and counted, and the refresh carries on. False when it failed."""
-    global SHADOW_REPORT_FAILURES
-    try:
-        lines = summary()
-        if not lines:
-            return True
-        for ln in lines:
-            common.log(ln)
-        summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
-        if summary_path:
-            with open(summary_path, "a", encoding="utf-8") as f:
-                f.write("## Camps all-sport shadow (#326)\n\n" + lines[0] + "\n\n")
-                if len(lines) > 1:
-                    f.write("```\n" + "\n".join(lines[1:]) + "\n```\n\n")
-        return True
-    except Exception as e:  # noqa: BLE001 - a report must never mark the refresh as crashed
-        SHADOW_REPORT_FAILURES += 1
-        msg = f"camps all-sport shadow report failed (report only; the refresh continues): {common.error_text(e, 200)}"
-        common.log(f"!! {msg}")
-        if os.environ.get("GITHUB_ACTIONS"):
-            print(f"::warning title=camps shadow (#326)::{msg}")
-        return False
 
 
 def report_refresh(results: list[dict], *, threshold: float, mode: str) -> int:

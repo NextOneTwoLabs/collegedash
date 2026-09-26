@@ -33,7 +33,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
-import { expectedRpi, expectedRpiOf, reEscape } from './rpi_season_helpers.mjs';
+import { expectedRpi, expectedRpiOf, reEscape, unrankedD1Row, unrankedD1Profile, UNRANKED_D1_SLUG } from './rpi_season_helpers.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(HERE, '..');
@@ -49,6 +49,9 @@ const D1_FILES = { 'data/programs/index.json': REAL_INDEX };
 const anyRow = (slug) => { const r = COMMITTED_INDEX.programs.find((p) => p.slug === slug); assert.ok(r, `no ${slug} in the index`); return r; };
 const RPI = expectedRpi(REAL_INDEX), RPI_SEASON = RPI.season;
 const rpiOfRow = expectedRpiOf(REAL_INDEX);
+// #365: the committed index has no unranked D1 program any more (every one joins the RPI table), so one is built here
+REAL_INDEX.programs.push(unrankedD1Row(anyRow('stanford')));
+D1_FILES[`data/programs/${UNRANKED_D1_SLUG}.json`] = unrankedD1Profile(readJson('data/programs/stanford.json'));
 const UNRANKED_D1 = REAL_INDEX.programs.find((p) => rpiOfRow(p) == null)?.slug;
 const D3_CONF = 'Test Division III Conference';
 

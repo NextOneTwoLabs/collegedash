@@ -81,7 +81,7 @@
       "normalsPeriod": "1991-2020"
     },
     "wikipedia": {
-      "htmlApi": "https://en.wikipedia.org/api/rest_v1/page/html/{title}"
+      "page": "https://en.wikipedia.org/wiki/{title}"
     },
     "athleticsPlatforms": {
       "_comment": "Adapter per site platform. wmt = WMT Digital (Stanford, UCLA): /roster, /roster/season/{year}, /roster/player/{slug}, /schedule/season/{year}, /news. sidearm = Sidearm Sports (USC, Duke, most D1): /roster, /roster/{year}, /roster/{slug}/{id}, /schedule/{year}, news via /rss?path=wsoc plus /archives.",
@@ -615,7 +615,7 @@
         "state": "TN",
         "lat": 35.952082,
         "lon": -83.925852,
-        "timezone": "America/Chicago"
+        "timezone": "America/New_York"
       },
       "onboardedAt": "2026-09-06"
     },
@@ -1480,7 +1480,8 @@
         "scorecardUnitId": 147767,
         "tdsClgId": 499,
         "tdsSlug": "northwestern",
-        "wikipedia": "Northwestern_Wildcats",
+        "wikipedia": null,
+        "wikipediaNone": "no women's soccer article: the project's registry lookup of 2026-09-06 found 'Northwestern Wildcats women's soccer' redirecting to the athletics article (#364; it had been registered to that athletics article)",
         "ncaaName": "Northwestern",
         "ncaaSlug": "northwestern",
         "rpiHistoryName": "NorthwesternU",
@@ -1844,7 +1845,8 @@
         "scorecardUnitId": 139959,
         "tdsClgId": 278,
         "tdsSlug": "georgia",
-        "wikipedia": "Georgia_Bulldogs",
+        "wikipedia": null,
+        "wikipediaNone": "no women's soccer article: the project's registry lookup of 2026-09-06 found 'Georgia Lady Bulldogs soccer' redirecting to the athletics article (#364; it had been registered to that athletics article)",
         "ncaaName": "Georgia",
         "ncaaSlug": "georgia",
         "rpiHistoryName": "GeorgiaU",
@@ -4046,7 +4048,7 @@
         "state": "TN",
         "lat": 36.301643,
         "lon": -82.366954,
-        "timezone": "America/Chicago"
+        "timezone": "America/New_York"
       },
       "onboardedAt": "2026-09-06"
     },
@@ -4530,7 +4532,7 @@
         "state": "TN",
         "lat": 35.047519,
         "lon": -85.300247,
-        "timezone": "America/Chicago"
+        "timezone": "America/New_York"
       },
       "onboardedAt": "2026-09-06",
       "searchAliases": [
@@ -4854,7 +4856,7 @@
         "state": "KY",
         "lat": 36.612419,
         "lon": -88.323629,
-        "timezone": "America/New_York"
+        "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-06"
     },
@@ -7436,7 +7438,7 @@
         "state": "KY",
         "lat": 36.985035,
         "lon": -86.456828,
-        "timezone": "America/New_York"
+        "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -8808,7 +8810,7 @@
         "state": "ID",
         "lat": 46.727406,
         "lon": -117.014167,
-        "timezone": "America/Boise"
+        "timezone": "America/Los_Angeles"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -9172,7 +9174,7 @@
         "state": "IN",
         "lat": 37.971549,
         "lon": -87.531644,
-        "timezone": "America/New_York"
+        "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -10988,7 +10990,7 @@
         "state": "IN",
         "lat": 37.962374,
         "lon": -87.677214,
-        "timezone": "America/New_York"
+        "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -11228,7 +11230,7 @@
         "state": "TX",
         "lat": 31.77015,
         "lon": -106.504098,
-        "timezone": "America/Chicago"
+        "timezone": "America/Denver"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -11949,7 +11951,7 @@
         "state": "IN",
         "lat": 41.462239,
         "lon": -87.040172,
-        "timezone": "America/New_York"
+        "timezone": "America/Chicago"
       },
       "onboardedAt": "2026-09-07"
     },
@@ -14131,7 +14133,7 @@
       ],
       "athletics": {
         "platform": "sidearm",
-        "baseUrl": "https://www.goargos.com",
+        "baseUrl": "https://goargos.com",
         "sportPath": "/sports/womens-soccer"
       },
       "ids": {

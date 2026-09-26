@@ -2,7 +2,9 @@
 Program history from the team's Wikipedia article: infobox facts (founded, stadium, titles,
 College Cups, conference championships) and the year-by-year results table.
 
-Writes programs/<slug>/sources/wikipedia.json. Uses the REST HTML endpoint (stable markup).
+Writes programs/<slug>/sources/wikipedia.json. Reads the article page itself, /wiki/<title> (issue #364): the REST
+HTML endpoint this used before is under /api/, which en.wikipedia.org/robots.txt disallows for every agent. The
+parser reads only table.infobox and table.wikitable rows, which the rendered page and the REST HTML both carry.
 """
 
 from __future__ import annotations
@@ -328,6 +330,23 @@ def _seasons_table(soup: BeautifulSoup) -> list[dict]:
 MENS_TITLE_RE = re.compile(r"(?<!wo)men's[ _]soccer", re.I)
 
 
+def _shrunk_parts(stored: dict | None, infobox: dict, seasons: list) -> list[str]:
+    """The parts of a new parse that fell below half of the stored source's (issue #364): season rows, and infobox
+    rows. Empty when nothing is stored or each part kept at least half. Each part is checked on its own."""
+    before = (stored or {}).get("data") or {}
+    out = []
+    for label, new, old in (("seasons", seasons, before.get("seasons")), ("infobox rows", infobox, before.get("infobox"))):
+        n_old, n_new = len(old or []), len(new or [])
+        if n_old and n_new * 2 < n_old:
+            out.append(f"{n_new} {label} where the stored source has {n_old}")
+    return out
+
+
+def page_url(registry: dict, title: str) -> str:
+    """The article page the collector reads: registry sources.wikipedia.page, '/wiki/{title}' (issue #364)."""
+    return registry["sources"]["wikipedia"]["page"].format(title=urllib.parse.quote(title, safe=""))
+
+
 def collect(program: dict, registry: dict) -> dict:
     title = program["ids"].get("wikipedia")
     if not title and program["ids"].get("wikipediaNone"):
@@ -340,7 +359,15 @@ def collect(program: dict, registry: dict) -> dict:
         # #303: old-dominion, east-tennessee-state, manhattan and campbell were registered to the men's team's
         # article, and their men's season records were published as the women's
         raise common.SkipCollector(f"wikipedia: {title!r} is the men's team's article, not this program's")
-    url = registry["sources"]["wikipedia"]["htmlApi"].format(title=urllib.parse.quote(title, safe=""))
+    if "soccer" not in title.lower():
+        # #364: northwestern and georgia were registered to their general athletics articles ('Georgia_Bulldogs'),
+        # which have no soccer seasons, and their profiles published a stadium from those articles' infoboxes
+        raise common.SkipCollector(f"wikipedia: {title!r} is not a soccer article (a general athletics article?); "
+                                   "record ids.wikipediaNone or register the women's soccer article")
+    url = page_url(registry, title)
+    if not common.robots_allowed(url):
+        # #364: asked before any request, so a template pointed back at /api/ or /w/ fails instead of fetching
+        raise common.FetchError(f"robots.txt disallows {url}")
     html, meta = common.fetch_text(url, max_age_hours=24 * 7)
     soup = BeautifulSoup(html, "html.parser")
     ib = _infobox(soup)
@@ -367,6 +394,13 @@ def collect(program: dict, registry: dict) -> dict:
     stadium_txt = find("stadium")
     cap = re.search(r"capacity[:\s]*([\d,]+)", stadium_txt, re.I)
     seasons = _seasons_table(soup)
+    shrunk = _shrunk_parts(common.load_source(program["slug"], NAME), ib, seasons)
+    if shrunk:
+        # #364: the page format changed with the move to /wiki/. Each part is held to the stored copy on its own, so a
+        # page whose season table stops parsing while its infobox still does (or the reverse) cannot overwrite good
+        # data; the stored copy stays and the refresh reports the failure
+        raise common.FetchError(f"wikipedia: {url} parsed to {'; '.join(shrunk)}; kept the stored source (a real "
+                                f"change on the article: delete programs/{program['slug']}/sources/{NAME}.json to accept it)")
     data = {
         "title": title,
         "pageUrl": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(title)}",

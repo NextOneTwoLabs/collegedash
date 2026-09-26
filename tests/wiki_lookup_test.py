@@ -78,7 +78,7 @@ def test_fix_wiki() -> None:
 
 
 def test_collector_reads_the_marker() -> None:
-    reg = {"sources": {"wikipedia": {"htmlApi": "https://example.invalid/{title}"}}}
+    reg = {"sources": {"wikipedia": {"page": "https://example.invalid/{title}"}}}
     try:
         wikipedia.collect({"slug": "b", "ids": {"wikipedia": None, "wikipediaNone": "no women's soccer article (checked 2026-09-24)"}}, reg)
         ok("FIX the collector skips with the recorded reason", False)
