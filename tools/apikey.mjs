@@ -27,6 +27,9 @@ const WIN = process.platform === 'win32';
 const NPX = WIN ? 'npx.cmd' : 'npx';   // PowerShell's execution policy blocks plain npx (npx.ps1)
 const WHERE = `--namespace-id ${NAMESPACE_ID} --remote`;
 const REMOTE = '(--remote because wrangler v4 otherwise uses a local copy on this computer: the command would seem to work and change nothing online.)';
+// #345: a multi-line paste can feed the next line to an npx or login prompt as its answer (cancelling the put), and
+// a failed put scrolls past; so one line at a time, and the record file is deleted only after KV shows the record.
+const PASTE = 'Paste one line at a time, and run each step only after the one before it worked.';
 const LABEL = /^[A-Za-z0-9][A-Za-z0-9 ._-]{0,39}$/;
 const ID = /^[0-9a-f]{12}$/;
 const MIN_TTL = 60;                     // KV's minimum expiration TTL, in seconds
@@ -105,6 +108,8 @@ if (cmd === 'new') {
   say([
     `New API key "${label}", id ${id}.`,
     '',
+    PASTE,
+    '',
     '1. Give this key to its holder privately, by email. Never in GitHub, a chat or a screenshot.',
     '   It is shown only this once:',
     '',
@@ -117,11 +122,15 @@ if (cmd === 'new') {
     `   ${REMOTE}`,
     ...(ttl ? [`   KV deletes the record after ${ttl} seconds, and the key stops working then.`] : []),
     '',
-    '3. Delete the record file (it holds only the hash):',
+    `3. Check that it landed. This must show key:${id}; if it shows [], stop and run step 2 again:`,
+    '',
+    `   ${cmds.list()}`,
+    '',
+    '4. Only then delete the record file (it holds only the hash):',
     '',
     `   ${cmds.remove(file)}`,
     '',
-    'The key works about 2 minutes after step 2 (caches). To check the record:',
+    'The key works about 2 minutes after step 2 (caches). To see the record itself:',
     '',
     `   ${cmds.get(id)}`,
     '',
@@ -139,13 +148,19 @@ if (cmd === 'new') {
     `Revoke key ${id} ("${label}"). The record keeps the id, the label and the revoke time; the`,
     'hash is dropped, so the key stops working within about 2 minutes (caches).',
     '',
+    PASTE,
+    '',
     '1. Overwrite its record:',
     '',
     `   ${cmds.put(id, file)}`,
     '',
     `   ${REMOTE}`,
     '',
-    '2. Delete the record file:',
+    '2. Check that it landed. This must show "status":"revoked"; if not, stop and run step 1 again:',
+    '',
+    `   ${cmds.get(id)}`,
+    '',
+    '3. Only then delete the record file:',
     '',
     `   ${cmds.remove(file)}`,
     '',

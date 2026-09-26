@@ -69,6 +69,18 @@ test('docs: the owner steps name the key store, the tool commands and the test k
   assert.match(DOCS, /never the feedback store/);
 });
 
+test('docs: the owner stores a record one line at a time, and deletes its file only after KV shows it (#378 preview)', () => {
+  const at = text => { const i = DOCS.indexOf(text); assert.ok(i >= 0, 'missing: ' + text); return i; };
+  const paste = at('**Paste one line at a time, and run each step only after the one before it worked:**');
+  const put = at('1. **Store the record**');
+  const exit = at('2. **Check it worked:** `$LASTEXITCODE` must print `0`.');
+  const list = at('3. **Check it landed:**');
+  const remove = at('4. **Only then** run the printed `Remove-Item`');
+  assert.ok(paste < put && put < exit && exit < list && list < remove, 'paste note, put, exit code, list, Remove-Item');
+  assert.match(DOCS, /--remote --prefix\s+key:` \*\*must show `key:<id>`\*\*\. If it shows `\[\]`, stop/);
+  assert.match(DOCS, /a `kv key get` that \*\*must show `"status":"revoked"`\*\*, then the\s+`Remove-Item`/);
+});
+
 test('page #/api: key required for direct use, the limits bound, a link to #api-keys, and ECNL\'s status table', () => {
   assert.match(PAGE, /<b>Direct use needs an API key<\/b>/);
   assert.match(PAGE, new RegExp('<b>' + LIMITS.RL_KEY + ' a minute per key</b>'));

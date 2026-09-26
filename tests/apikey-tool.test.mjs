@@ -126,6 +126,44 @@ test('tool revoke: needs --label; its record reads as revoked; prints the purge'
   } finally { s.cleanup(); }
 });
 
+// #345 (the #378 preview): a put that failed or was cancelled by a multi-line paste scrolled past, and the next printed
+// line deleted the record file, leaving an empty store. The record file is now deleted only after KV shows the record.
+const at = (out, text) => { const i = out.indexOf(text); assert.ok(i >= 0, `missing: ${text}\n${out}`); return i; };
+const PASTE_NOTE = 'Paste one line at a time, and run each step only after the one before it worked.';
+
+test('tool new: prints put, then the list check that must show key:<id>, then Remove-Item; one line at a time', () => {
+  const s = sandbox();
+  try {
+    const r = s.run('new', '--label', 'order-test', '--ttl', '604800');
+    assert.equal(r.status, 0, r.err);
+    const id = KEY.exec(r.out.match(KEY_ANYWHERE)[0])[1];
+    const file = join(s.temp, `cdash-apikey-${id}.json`);
+    const note = at(r.out, PASTE_NOTE);
+    const put = at(r.out, `   ${NPX} wrangler kv key put "key:${id}" --path "${file}" ${WHERE} --ttl 604800\n`);
+    const check = at(r.out, `must show key:${id}; if it shows [], stop and run step 2 again`);
+    const list = at(r.out, `   ${NPX} wrangler kv key list ${WHERE} --prefix key:\n`);
+    const remove = at(r.out, process.platform === 'win32' ? `   Remove-Item "${file}"\n` : `   rm "${file}"\n`);
+    assert.ok(note < put && put < check && check < list && list < remove, 'the note, the put, the check, the list, then Remove-Item');
+    assert.ok(/4\. Only then delete the record file/.test(r.out));
+  } finally { s.cleanup(); }
+});
+
+test('tool revoke: prints put, then the get check that must show "status":"revoked", then Remove-Item', () => {
+  const s = sandbox();
+  try {
+    const id = 'abcdef012345';
+    const r = s.run('revoke', id, '--label', 'order-test');
+    assert.equal(r.status, 0, r.err);
+    const file = join(s.temp, `cdash-apikey-${id}-revoked.json`);
+    const note = at(r.out, PASTE_NOTE);
+    const put = at(r.out, `   ${NPX} wrangler kv key put "key:${id}" --path "${file}" ${WHERE}\n`);
+    const check = at(r.out, 'must show "status":"revoked"; if not, stop and run step 1 again');
+    const get = at(r.out, `   ${NPX} wrangler kv key get "key:${id}" ${WHERE}\n`);
+    const remove = at(r.out, process.platform === 'win32' ? `   Remove-Item "${file}"\n` : `   rm "${file}"\n`);
+    assert.ok(note < put && put < check && check < get && get < remove, 'the note, the put, the check, the get, then Remove-Item');
+  } finally { s.cleanup(); }
+});
+
 test('tool list, get, purge and help print the exact commands', () => {
   const s = sandbox();
   try {
