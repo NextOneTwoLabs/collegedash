@@ -4,13 +4,12 @@
 //
 // A key is `cdash_live_<id>_<secret>`: id 12 lowercase hex (6 random bytes; not secret, used as the KV key,
 // the limiter key and in counts), secret 64 lowercase hex (32 random bytes). KV (binding API_KEYS, namespace
-// COLLEGEDASH_API_KEYS) holds `key:<id>` -> {"v":1,"hash":<SHA-256 hex of the whole key>,"label","created",
+// COLLEGE_API_KEYS) holds `key:<id>` -> {"v":1,"hash":<SHA-256 hex of the whole key>,"label","created",
 // "tier","status"}. The key itself is never stored, logged or counted.
 //
-// Phase 1 of #345 ships this module WITHOUT the API_KEYS binding and without keys: the key door already
-// judges every `Authorization` header (a key in the URL is refused with 400, a malformed one with 401) and,
-// with no key store to ask, fails closed with 503. Phase 2 adds the binding, the per-key limiter, the owner's
-// tool and the first keys.
+// Phase 2 of #345 binds the store (wrangler.toml [[kv_namespaces]] API_KEYS) and the per-key limiter RL_KEY
+// (3464, 60 per 60 s); the owner issues keys with tools/apikey.mjs. With the store missing or failing, keyed
+// requests fail closed with 503.
 export const KEY = /^cdash_live_([0-9a-f]{12})_([0-9a-f]{64})$/;
 export const HELP_URL = 'https://github.com/NextOneTwoLabs/collegedash/blob/main/docs/data-api.md#api-keys';
 const KEY_IN_URL = /cdash_live_([0-9a-f]{12})?/i;

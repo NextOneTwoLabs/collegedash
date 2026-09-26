@@ -88,5 +88,17 @@ name = "RL_IP"               # per IP (IPv6 /64), every request on every door: a
 namespace_id = "3463"
 simple = { limit = 1200, period = 60 }
 
-# Phase 2 adds RL_KEY (namespace_id 3464) and the KV namespace COLLEGEDASH_API_KEYS (binding API_KEYS). Until then
-# a request with an Authorization header is judged as a key and, with no key store, answered 503 (fails closed).
+[[ratelimits]]
+name = "RL_KEY"              # per API key id ("key:<id>"), after RL_IP and the key check (#345 phase 2)
+namespace_id = "3464"
+simple = { limit = 60, period = 60 }
+
+# ---- API keys (issue #345 phase 2, api/apikey.mjs; ported from ECNL #93) ----
+# One record per key in the KV namespace titled COLLEGE_API_KEYS (its own store, never FEEDBACK or ASK_BUDGET):
+# "key:<id>" -> {"v":1,"hash":<SHA-256 hex of the whole key>,"label","created","tier","status"}. The key itself is
+# never stored. The owner created the namespace in the dashboard (Workers & Pages > KV) on 2026-09-25 and recorded
+# its id on #345; the id is an identifier, not a credential. tools/apikey.mjs carries the same id (tests/apikey-tool.test.mjs
+# checks they match). With the binding missing or failing, keyed requests fail closed with 503.
+[[kv_namespaces]]
+binding = "API_KEYS"
+id = "66b2f1f49eed4fbc9e7d8bb760f4a79b"

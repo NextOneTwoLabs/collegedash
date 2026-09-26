@@ -194,6 +194,23 @@ def main() -> int:
         ok("GET /api/status yields 200", st_status == 200, f"got {st_status}")
         ok("GET /api/status local: true", json.loads(b_status.decode("utf-8")).get("local") is True)
 
+        # 11. Issue #345 phase 2: the local server checks no keys. A made-up key (built here, so no key-shaped literal
+        # is in the tree), junk, Basic, an empty header and a key in the query are all served, sessions "off", with no
+        # WWW-Authenticate and no cookie.
+        fake = "cdash" + "_live_" + "0" * 12 + "_" + "f" * 64
+        cases = [
+            ("Bearer made-up key", "/api/v1/status", {"Authorization": "Bearer " + fake}),
+            ("Bearer junk", "/api/v1/status", {"Authorization": "Bearer junk"}),
+            ("Basic", "/api/v1/status", {"Authorization": "Basic eDp5"}),
+            ("empty Authorization", "/api/v1/status", {"Authorization": ""}),
+            ("key in the query", "/api/v1/status?key=" + fake, {}),
+        ]
+        for name, path, headers in cases:
+            st, hd, _ = request_raw("127.0.0.1", port, "GET", path, headers=headers)
+            ok(f"local keys ignored ({name}): 200 off, no WWW-Authenticate, no cookie",
+               st == 200 and hd.get("X-CollegeDash-Session") == "off" and not hd.get("WWW-Authenticate")
+               and not hd.get("Set-Cookie"), f"got {st} {hd.get('X-CollegeDash-Session')}")
+
     finally:
         httpd.shutdown()
 

@@ -3299,7 +3299,7 @@ async function renderApiDocs() {
   ];
   $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h3>What it is, honestly</h3>
-      <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. The website stays free with no login. Light use without a key is fine; heavy direct use needs a key the owner issues. The limits make copying the data slow and visible, not impossible: the project’s repository is public and holds the same data.</p></div>
+      <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. The website stays free with no login and never needs a key. <b>Direct use needs an API key</b> the owner issues: scripts, agents and other servers send one. Without a key there is only a small allowance per internet address, for a quick look. The limits make copying the data slow and visible, not impossible: the project’s repository is public and holds the same data.</p></div>
     <div class="card"><h3>Three ways in</h3>
       <p><b>This website</b> uses a session cookie that loading the page sets. <b>Scripts and agents</b> send an API key in the <code>Authorization</code> header. <b>Anything else</b> gets a small allowance per internet address; beyond it, a 429 points here.</p>
       <pre class="small">curl -H "Authorization: Bearer $COLLEGEDASH_API_KEY" ${esc(base)}/programs</pre>
@@ -3307,11 +3307,11 @@ async function renderApiDocs() {
     <div class="card"><h3>Endpoints</h3><div class="tscroll"><table><tr><th>GET</th><th>What it returns</th></tr>
       ${routes.map(([p, w]) => `<tr><td><code>/api/v1${esc(p)}</code></td><td>${esc(w)}</td></tr>`).join('')}</table></div></div>
     <div class="card"><h3>Limits and answers</h3>
-      <p>Every request is rate-limited per minute, whichever way it comes in. Details, and the current numbers, are in the <a href="${esc(docs)}" target="_blank" rel="noopener">API documentation</a>.</p>
+      <p>Every request is rate-limited per minute, whichever way it comes in: <b>60 a minute per key</b>, and 60 a minute per internet address without a key or this website’s cookie. At a key’s pace a copy of every program takes about 17 minutes. The counters are approximate and kept per Cloudflare location. Details are in the <a href="${esc(docs)}" target="_blank" rel="noopener">API documentation</a>.</p>
       <div class="tscroll"><table><tr><th>Status</th><th>Meaning</th></tr>${codes.map(([c, m]) => `<tr><td>${esc(c)}</td><td>${esc(m)}</td></tr>`).join('')}</table></div>
       <p class="muted small">Send the ETag back to revalidate cheaply. The data is refreshed daily.</p></div>
     <div class="card"><h3>Getting a key</h3>
-      <p>Keys are issued by hand, and not yet to anyone outside the project while the service runs on a free hosting plan. Use Send feedback, or email ${feedbackLink()}, with who you are and what you would use it for. A key is sent only by private email.</p></div>
+      <p>Keys are issued by hand, and not yet to anyone outside the project while the service runs on a free hosting plan. Use Send feedback, or email ${feedbackLink()}, with who you are and what you would use it for. A key is sent only by private email. How keys work: <a href="${esc(docs)}#api-keys" target="_blank" rel="noopener">API keys</a>.</p></div>
   </div></div>`;
 }
 
