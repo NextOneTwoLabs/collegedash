@@ -3025,13 +3025,17 @@ async function tabCommitments(p) {
     ${prov([{ source: 'TopDrawerSoccer team page', url: p.links.tds ? p.links.tds + '/tab-commitments' : null, asOf: null }, { source: 'SoccerWire player directory', url: 'https://www.soccerwire.com/soccer-player-directory/', asOf: null }])}`;
 }
 
+/* #374: the venue word before an opponent. Only a game the source marks neutral ('N') reads "vs (N)"; a game
+   with no home/away value at all (233 published games in 59 programs: the schedule page did not say) reads a
+   plain "vs", never a neutral site nobody stated. */
+const venueMark = g => (g.homeAway === 'A' ? 'at' : g.homeAway === 'N' ? 'vs (N)' : 'vs');
 async function tabSchedule(p) {
   const s = p.schedule;
   if (!s) return '<div class="card empty">Schedule not collected yet.</div>';
   const today = todayLocal();
   // unscored cell: future dates are upcoming; history and exhibitions were never recorded; a past date is a result we have not collected yet
   const unscored = (g, isHist) => !g.date ? '—' : g.date >= today ? 'upcoming' : (isHist || g.exhibition) ? 'not recorded' : 'result pending';
-  const row = (g, isHist) => `<tr><td>${fmtDate(g.date)}</td><td>${g.homeAway === 'H' ? 'vs' : g.homeAway === 'A' ? 'at' : 'vs (N)'} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${seedMark(g) ? ` ${seedMark(g)}` : ''}${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
+  const row = (g, isHist) => `<tr><td>${fmtDate(g.date)}</td><td>${venueMark(g)} ${g.opponentRank ? `<span class="muted">#${g.opponentRank}</span> ` : ''}<b>${esc(g.opponent)}</b>${seedMark(g) ? ` ${seedMark(g)}` : ''}${g.conferenceGame ? ' <span class="badge">conf</span>' : ''}${g.exhibition ? ' <span class="badge">exhibition</span>' : ''}</td><td class="small">${esc(g.location || '')}</td>
     <td>${g.result ? `<b class="${g.result === 'W' ? 'good-text' : ''}" style="color:${g.result === 'W' ? 'var(--good-text)' : g.result === 'L' ? 'var(--critical)' : 'inherit'}">${g.result}</b> ${esc(g.score || '')}` : `<span class="muted">${unscored(g, isHist)}</span>`}</td>
     <td class="small">${Object.entries(g.links || {}).map(([k, v]) => `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a>`).join(' · ')}</td></tr>`;
   const hist = Object.entries(s.history || {}).sort((a, b) => b[0] - a[0]);
