@@ -21,14 +21,17 @@ counts, hosts and paths only, never a query string or page content:
 - `crawlDelay`: the values asked for, and how many are applied today versus only recorded;
 - `projection`: this run's minutes and an estimate of an enforced run (every `Crawl-delay` applied, capped at 30 s).
 
-## Owner decision 1 = B: a broken robots.txt is allowed
+## Owner decision 1 = B: a broken robots.txt is allowed by the hook, in report mode only
 
-**When a host's robots.txt cannot be reached, or answers a server error (5xx), the host is allowed, and counted.**
-This **departs from RFC 9309**, which says to assume complete disallow in that case, and from this code before #101,
-which disallowed such a host. The owner chose it (2026-09-25) so a host with a broken robots.txt does not drop out of
-the collection. It applies to the explicit checks too: off-site camp hosts, THE, `site_colors` and the registry
-builder. The report counts these hosts, and whether their pages then loaded, so the choice can be revisited with
-numbers. A 4xx robots.txt (no file) is allowed, as before and as the RFC says.
+**When a host's robots.txt cannot be reached, or answers a server error (5xx), the new hook allows the request, and
+counts it.** This **departs from RFC 9309**, which says to assume complete disallow in that case. The owner chose it
+(2026-09-25) so a host with a broken robots.txt does not drop out of the collection, and the report counts these hosts,
+and whether their pages then loaded, so the choice can be revisited with numbers. How enforce mode treats these hosts
+is decided with PR B.
+
+**The existing explicit checks stay strict** (the owner, 2026-09-26): `robots_allowed()`, which off-site camp hosts, THE,
+`site_colors` and the registry builder call, still returns False for a host whose robots.txt is unreachable or 5xx, as
+before #101 and as the RFC says. A 4xx robots.txt (no file) is allowed by both, as before and as the RFC says.
 
 ## Crawl-delay in report mode
 

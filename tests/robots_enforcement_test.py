@@ -168,32 +168,47 @@ def test_adapter(tmp: str) -> None:
 # ---------- decision B ----------
 
 def test_decision_b(tmp: str) -> None:
-    print("decision B: robots.txt 5xx or unreachable = allowed and counted (not RFC 9309); 4xx allowed")
+    print("decision B: the hook (report mode) allows and counts a 5xx or unreachable robots.txt; the explicit "
+          "robots_allowed() checks stay strict (the owner, 2026-09-26); 4xx allowed by both")
     s5 = pol.Stub("5xx", routes={"/robots.txt": lambda p, n: (503, {}, b"down", 0.0), "/page": page()})
     s4 = pol.Stub("4xx", routes={"/robots.txt": lambda p, n: (404, {}, b"", 0.0), "/page": page()})
     dead = f"127.0.0.1:{free_port()}"
     try:
-        with fresh(tmp), mode("enforce"):
+        with fresh(tmp), mode("report"):
             body, _ = common.fetch(s5.url("/page"), max_age_hours=None)
-            ok("FIX a 5xx robots.txt: the page is fetched, even in enforce mode", body == b"<html>page</html>")
+            ok("B, the hook: a 5xx robots.txt - the page is fetched and nothing is counted as a block",
+               body == b"<html>page</html>")
             body, _ = common.fetch(s4.url("/page"), max_age_hours=None)
             ok("CONTROL a 4xx robots.txt: allowed, as before", body == b"<html>page</html>")
             try:
                 common.fetch(f"http://{dead}/page", max_age_hours=None, retries=1)
                 ok("unreachable: the page fetch fails on the network", False, "no error")
-            except common.RobotsDisallowed:
-                ok("FIX an unreachable robots.txt is not a robots block", False, "RobotsDisallowed")
             except common.FetchError:
-                ok("FIX an unreachable robots.txt is not a robots block (the page's own network error instead)", True)
+                ok("B, the hook: an unreachable robots.txt is not a block (the page's own network error instead)", True)
             rep = common.robots_report(elapsed_seconds=1, workers=1)
+            ok("B, the hook: none of the three is counted as a would-be block", rep["wouldBlock"]["total"] == 0,
+               rep["wouldBlock"])
             ok("the robots.txt states are counted", rep["robotsTxt"] == {"4xx": 1, "5xx": 1, "unreachable": 1}, rep["robotsTxt"])
             un = {u["host"]: u for u in rep["unavailableHosts"]}
             ok("and whether their pages then loaded",
                un.get(s5.host, {}).get("pagesLoaded") == 1 and un.get(dead, {}).get("pagesFailed") == 1
                and s4.host not in un, rep["unavailableHosts"])
-            ok("the report says B departs from RFC 9309", "departs from RFC 9309" in rep["decision1"], rep["decision1"])
+            ok("the report says B is the hook's only, and departs from RFC 9309",
+               "departing from RFC 9309" in rep["decision1"] and "report mode only" in rep["decision1"], rep["decision1"])
+            # the other way, on the SAME hosts the hook has just loaded: the explicit checks stay strict
+            ok("STRICT explicit robots_allowed() disallows a host whose robots.txt answered 5xx (hook loaded it first)",
+               common.robots_allowed(s5.url("/x")) is False)
+            ok("STRICT explicit robots_allowed() disallows a host whose robots.txt was unreachable",
+               common.robots_allowed(f"http://{dead}/x") is False)
+            ok("CONTROL explicit robots_allowed() allows a 4xx host", common.robots_allowed(s4.url("/x")) is True)
         with fresh(tmp), mode(None):
-            ok("FIX explicit robots_allowed() follows B for a 5xx robots.txt", common.robots_allowed(s5.url("/x")) is True)
+            ok("STRICT with the hook off, an explicit check alone still disallows the 5xx host",
+               common.robots_allowed(s5.url("/x")) is False)
+        with fresh(tmp), mode("report"):
+            ok("(setup) an explicit check first disallows the 5xx host", common.robots_allowed(s5.url("/x")) is False)
+            body, _ = common.fetch(s5.url("/page"), max_age_hours=None)
+            ok("B, the hook: after an explicit check on the same host, the hook still allows it in report mode",
+               body == b"<html>page</html>" and common.robots_report(elapsed_seconds=1, workers=1)["wouldBlock"]["total"] == 0)
     finally:
         s5.close(); s4.close()
 

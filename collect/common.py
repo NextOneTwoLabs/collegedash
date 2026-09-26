@@ -651,11 +651,11 @@ def _apply_crawl_delay(host: str, rp) -> None:
 def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser", str, str | None]:
     """(parser, state, text). state: ok, 4xx, 5xx, unreachable or offline.
 
-    Issue #101, owner decision 1 = B (2026-09-25): robots.txt unreachable, or answering a server error, is
-    ALLOWED and counted. This departs from RFC 9309 (section 2.3.1.4: a server or network error means assume
-    complete disallow) and from this code before #101, which disallowed such a host. The owner chose it so a
-    host with a broken robots.txt does not drop out of the collection; report mode counts these hosts (and
-    whether their pages then loaded) so the choice can be revisited with numbers."""
+    The parser for an unreachable or 5xx robots.txt allows everything; which callers honour that is decided by
+    the state. Issue #101, owner decision 1 = B (2026-09-25), narrowed by the owner on 2026-09-26: B (allowed and
+    counted, departing from RFC 9309 section 2.3.1.4, which says assume complete disallow) applies ONLY to the new
+    hook in _PoliteAdapter.send, in report mode. robots_allowed() - the explicit checks: off-site camp hosts, THE,
+    site_colors, the registry builder - keeps the strict rule for these states: disallowed."""
     rp = robotparser.RobotFileParser()
     if os.environ.get("COLLEGEDASH_OFFLINE"):
         rp.disallow_all = True  # unknown = do not fetch (no request can be made to find out)
@@ -666,7 +666,7 @@ def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser",
         with _session() as s:
             resp = s.get(url, headers=DEFAULT_HEADERS, timeout=20)
     except requests.RequestException as e:
-        log(f"robots: {host} unreachable ({type(e).__name__}); allowed and counted (#101 decision B, not RFC 9309)")
+        log(f"robots: {host} unreachable ({type(e).__name__}); explicit checks disallow it, the hook counts it (#101)")
         rp.allow_all = True
         return rp, "unreachable", None
     finally:
@@ -684,7 +684,7 @@ def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser",
         # Worth re-checking if 4xx rates on robots.txt ever climb after an agent change.
         rp.allow_all = True
         return rp, "4xx", None
-    log(f"robots: {host} returned HTTP {resp.status_code}; allowed and counted (#101 decision B, not RFC 9309)")
+    log(f"robots: {host} returned HTTP {resp.status_code}; explicit checks disallow it, the hook counts it (#101)")
     rp.allow_all = True
     return rp, "5xx", None
 
@@ -727,13 +727,17 @@ def robots_allowed(url: str) -> bool:
     'Disallow: /' is not honoured; agent matching is substring; and path wildcards are unsupported.
     See the notes above ROBOTS_AGENT for which of those fail open and which fail closed.
 
-    4xx = allowed; since issue #101 (owner decision B), unreachable or 5xx = allowed and counted, which departs
-    from RFC 9309. Applies the host's Crawl-delay to its politeness gate (_polite)."""
+    4xx = allowed; unreachable or 5xx = DISALLOWED, as before #101 and as RFC 9309 asks (the owner, 2026-09-26:
+    decision B does not extend to these explicit checks). Applies the host's Crawl-delay to its politeness gate
+    (_polite)."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False
     scheme, host = m.group(1), m.group(2).lower()
-    return _robots_for(host, scheme, explicit=True).can_fetch(ROBOTS_AGENT, url)
+    rp = _robots_for(host, scheme, explicit=True)
+    if _robots_state.get(host) in ("unreachable", "5xx"):
+        return False
+    return rp.can_fetch(ROBOTS_AGENT, url)
 
 
 # ---------- robots.txt in the shared fetch path (issue #101) ----------
@@ -822,7 +826,8 @@ def _robots_check(url: str) -> str | None:
 
 
 def _robots_note_answer(host: str | None, status: int | None) -> None:
-    """For hosts whose robots.txt was unreachable or a 5xx (allowed under decision B): did the page then load?"""
+    """For hosts whose robots.txt was unreachable or a 5xx (allowed by the hook under decision B): did the page then
+    load?"""
     if host is None or _robots_state.get(host) not in ("unreachable", "5xx"):
         return
     with _robots_lock:
@@ -854,8 +859,9 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
     projected = max(elapsed_seconds + extra / max(1, workers), slowest_s)
     return {
         "mode": robots_mode(),
-        "decision1": "B: a robots.txt that is unreachable or answers 5xx is allowed and counted; this departs from "
-                     "RFC 9309 (assume complete disallow) and from the code before #101",
+        "decision1": "B, for this hook in report mode only: a robots.txt that is unreachable or answers 5xx is allowed "
+                     "and counted, departing from RFC 9309 (assume complete disallow); the explicit robots_allowed() "
+                     "checks keep disallowing such a host",
         "hostsChecked": len(checked),
         "requestsChecked": sum(requests_.values()),
         "robotsTxt": dict(sorted(state_counts.items())),
