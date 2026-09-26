@@ -73,16 +73,8 @@ dataset = "collegedash_api_gate"
 # as allowed, which is how the rollback PR (claude/345-rollback-limits) removes RL_SESSION and RL_ANON in one
 # deploy. A namespace_id is shared by every Worker on the account that uses it: 3461-3464 are this site's (ECNL
 # uses 9001-9004; nextonetwo-website has none). tests/session.test.mjs checks these values.
-[[ratelimits]]
-name = "RL_SESSION"          # per session id, for requests with a valid session cookie
-namespace_id = "3461"
-simple = { limit = 180, period = 60 }
-
-[[ratelimits]]
-name = "RL_ANON"             # per IP (IPv6 /64): the small allowance for requests with neither a key nor a cookie
-namespace_id = "3462"
-simple = { limit = 60, period = 60 }
-
+# ROLLBACK (#345, claude/345-rollback-limits): RL_SESSION and RL_ANON are removed, so session and anonymous
+# requests are not limited (a missing limiter is allowed); RL_IP still holds. Revert this to restore them.
 [[ratelimits]]
 name = "RL_IP"               # per IP (IPv6 /64), every request on every door: a ceiling sized for a shared Wi-Fi
 namespace_id = "3463"
