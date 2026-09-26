@@ -57,6 +57,7 @@ function loadPage(answer) {
       requests.push({ url: String(url), method: opts?.method || 'GET', headers: { ...(opts?.headers || {}) } });
       const a = (page.answer && page.answer(String(url))) || real(url);
       if (a === 'network') throw new TypeError('Failed to fetch');
+      if (a.wait) await a.wait; // an answer held in flight until the test lets it through
       const h = new Map(Object.entries(a.headers || {}));
       return { ok: a.status < 400, status: a.status, headers: { get: k => h.get(k.toLowerCase()) ?? null }, async json() { return JSON.parse(JSON.stringify(a.body)); } };
     },
@@ -229,4 +230,76 @@ test('phase 3: Pipelines - a refused roster says so, waits for a click, and one 
   await go(page, '#/trends'); await go(page, card);
   assert.equal(count(page, u => u === profileUrl(slug)), 2);
   assert.ok(page.el('#trNames').innerHTML.includes('Current players'), 'after the wait the names load');
+});
+
+/* ---------- phase 3, Bianque's review of #377 ---------- */
+test('phase 3 review: the wait is capped at 120 s, whatever Retry-After says (a proxy or firewall page)', async () => {
+  let fail = true;
+  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '86400' } } : null));
+  await settle();
+  assert.ok(page.app().includes('Try again in 120 seconds'), `the card names the capped wait: ${page.app().slice(0, 300)}`);
+  fail = false;
+  page.advance(119_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again before the cap');
+  page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 2, 'the cap, not the day, ends the hold');
+  assert.ok(!page.app().includes(CARD));
+});
+
+test('phase 3 review: a 429 without Retry-After holds for 60 s', async () => {
+  let fail = true;
+  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {} } : null));
+  await settle();
+  assert.ok(page.app().includes('Try again in a minute'), page.app().slice(0, 300));
+  fail = false;
+  page.advance(59_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again within the 60 s default');
+  page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 2);
+});
+
+test('phase 3 review: a 503 that names a wait holds for it; a 503 without one does not hold', async () => {
+  let fail = true;
+  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 503, body: {}, headers: { 'retry-after': '20' } } : null));
+  await settle();
+  assert.ok(page.app().includes('briefly unavailable'), page.app().slice(0, 300));
+  fail = false;
+  page.advance(19_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again within the 503 Retry-After');
+  page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 2);
+  let bare = true;
+  const plain503 = loadPage(u => (bare && u === '/api/v1/programs' ? { status: 503, body: {} } : null));
+  await settle();
+  bare = false;
+  plain503.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(plain503, u => u === '/api/v1/programs'), 2, 'a 503 with no wait lets Try again ask at once');
+});
+
+test('phase 3 review: a success from a request sent before the hold does not clear it (two requests in flight)', async () => {
+  let releaseStatus;
+  const statusGate = new Promise(r => { releaseStatus = r; });
+  const page = loadPage(u => (u === '/api/v1/status' ? { status: 200, body: {}, wait: statusGate }
+    : u.startsWith('/api/v1/programs/') ? { status: 429, body: {}, headers: { 'retry-after': '60' } } : null));
+  await settle(); // the index loaded; the (unlimited) status call is still in flight
+  await go(page, `#/p/${SLUGS[0]}`); // a profile is refused: the hold begins
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 1);
+  releaseStatus(); await settle(); // the status call, sent before the hold, now succeeds
+  await go(page, `#/p/${SLUGS[1]}`);
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 1, 'the stale success cleared the hold and the next profile was asked for');
+  assert.ok(page.app().includes(CARD));
+});
+
+test('phase 3 review: a refused Pipelines roster does not ask again by itself when the hold runs out', async () => {
+  const doc = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'trends', 'index.json'), 'utf8'));
+  const r = doc.records, i = r.p.findIndex((p, k) => r.s[k] === 0 && r.c[k] >= 0 && SLUGS.includes(doc.programIds[p]));
+  const club = doc.clubs.id[r.c[i]], slug = doc.programIds[r.p[i]];
+  const page = loadPage(u => (u === profileUrl(slug) ? { status: 429, body: {}, headers: { 'retry-after': '60' } } : null));
+  await settle();
+  await go(page, `#/trends?club=${encodeURIComponent(club)}&program=${slug}`);
+  assert.equal(count(page, u => u === profileUrl(slug)), 1);
+  page.advance(61_000);
+  for (let k = 0; k < 5; k++) await settle(); // time passes on the same page, nobody clicks
+  assert.equal(count(page, u => u === profileUrl(slug)), 1, 'the roster asked again on its own after the hold');
+  assert.ok(page.el('#trNames').innerHTML.includes('Try again'), 'it still waits for a click');
 });

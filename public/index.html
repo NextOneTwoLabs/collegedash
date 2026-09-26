@@ -971,7 +971,11 @@ if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').cl
 /* #345 phase 3 (ECNL #92): after a 429, or a 503 that names a wait, the page sends no data request until the
    Retry-After has passed. Every load in that window fails at once with the same refusal and the seconds still to
    wait, so no path (a click, a navigation, a Try again, a Pipelines row, Compare) can turn one refusal into many
-   requests. A 429 without Retry-After waits 60 s, the limit's own window. Nothing retries by itself. */
+   requests. A 429 without Retry-After waits 60 s, the limit's own window; any wait is capped at 120 s, so a huge
+   Retry-After from a proxy or firewall page cannot hold every load until a reload. The hold ends by time only: a
+   success from a request sent before it began (the unlimited status call runs in parallel) never clears it.
+   Nothing retries by itself. */
+const API_HOLD_MAX_S = 120;
 let apiHoldUntil = 0, apiHold = null;
 function apiHeld(url) {
   const secs = Math.max(1, Math.ceil((apiHoldUntil - Date.now()) / 1000));
@@ -990,11 +994,13 @@ async function getJSON(url, opts) {
     e.status = r.status;
     e.retryAfter = r.headers?.get?.('retry-after') || null;
     e.session = r.headers?.get?.('x-collegedash-session') || null;
-    const wait = /^\d+$/.test(e.retryAfter || '') ? +e.retryAfter : r.status === 429 ? 60 : 0;
-    if ((r.status === 429 || r.status === 503) && wait > 0) { apiHoldUntil = Date.now() + wait * 1000; apiHold = e; }
+    const wait = Math.min(API_HOLD_MAX_S, /^\d+$/.test(e.retryAfter || '') ? +e.retryAfter : r.status === 429 ? 60 : 0);
+    if ((r.status === 429 || r.status === 503) && wait > 0) {
+      if (e.retryAfter) e.retryAfter = String(wait); // the card names the capped wait, never a proxy's hours
+      apiHoldUntil = Date.now() + wait * 1000; apiHold = e;
+    }
     throw e;
   }
-  apiHold = null; apiHoldUntil = 0;
   return r.json();
 }
 // Issue #345 (ECNL #90, #92): an answer without a session (cookie lost, blocked or over a day old) says
