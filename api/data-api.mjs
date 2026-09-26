@@ -57,7 +57,10 @@ export async function dataApi(request, env) {
       return failure(request, stored.status === 200 ? 404 : 503);
     }
     const headers = new Headers(stored.headers);
-    headers.set('cache-control', 'public, max-age=300, must-revalidate');
+    // Every copy must revalidate (issue #345, as ECNL #90): answers are now session-scoped and rate-limited, so a
+    // shared cache must not hand one client's copy to another; ETag revalidation keeps it cheap. A response that
+    // sets the session cookie becomes `private, no-cache` (api/session.mjs decorate).
+    headers.set('cache-control', 'no-cache');
     headers.delete('set-cookie');
     return new Response(request.method === 'HEAD' || stored.status === 304 ? null : stored.body, {
       status: stored.status,

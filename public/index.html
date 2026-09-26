@@ -965,32 +965,50 @@ $('#sidebarOverlay').onclick = toggleSidebar;
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- data ---------- */
-// Every call says it is the site's own (issue #345): the Worker counts it as first-party and, once the API gate
-// enforces, serves it without a key. A custom header is something another site's page cannot send here without a
-// CORS preflight the Worker never approves. It is not a secret: anyone can send it by hand, and the gate's rate
-// limit is what bounds that. A failed call carries its HTTP status (and Retry-After) for loadFailedHtml.
+// Every data call is the site's own: it travels on the session cookie "/" set (issue #345, api/session.mjs), which
+// the browser sends by itself. A failed call carries its HTTP status, Retry-After and the X-CollegeDash-Session
+// value for loadFailedHtml; the refusal body's `help` link (meant for scripts) is never shown.
 async function getJSON(url, opts) {
-  const o = opts || {};
+  const sentAt = Date.now();
   let r;
-  try { r = await fetch(url, { cache: 'no-cache', ...o, headers: { 'X-CollegeDash-Client': 'web', ...(o.headers || {}) } }); }
+  try { r = await fetch(url, { cache: 'no-cache', ...(opts || {}) }); }
   catch (err) { const e = new Error(`${url}: ${err?.message || 'network error'}`); e.status = 0; throw e; } // status 0: no response at all
+  noteSession(r, sentAt);
   if (!r.ok) {
     const e = new Error(`${url}: HTTP ${r.status}`);
     e.status = r.status;
     e.retryAfter = r.headers?.get?.('retry-after') || null;
+    e.session = r.headers?.get?.('x-collegedash-session') || null;
     throw e;
   }
   return r.json();
 }
+// Issue #345 (ECNL #90, #92): an answer without a session (cookie lost, blocked or over a day old) says
+// X-CollegeDash-Session: none, whether it was served on the small anonymous allowance or refused with 429. The page
+// then re-requests "/" in the background, at most once a minute, so the browser gets a fresh session cookie for what
+// follows. If a request sent AFTER a renewal landed still says none, the browser is not keeping the cookie: renewing
+// stops (each one would be a request that cannot help) until an answer says ok or renewed again.
+let sessionRenewAt = 0, sessionRenewedAt = 0, cookiesKept = true;
+function noteSession(resp, sentAt = Date.now()) {
+  const s = resp?.headers?.get?.('x-collegedash-session');
+  if (s === 'ok' || s === 'renewed') { cookiesKept = true; sessionRenewedAt = 0; return; }
+  if (s !== 'none') return;
+  if (sessionRenewedAt && sentAt >= sessionRenewedAt) cookiesKept = false;
+  if (!cookiesKept || Date.now() < sessionRenewAt) return;
+  sessionRenewAt = Date.now() + 60000;
+  fetch('/', { method: 'HEAD', cache: 'no-store' }).then(() => { sessionRenewedAt = Date.now(); }, () => { });
+}
 // The card a data load that failed shows instead of a blank page or a raw error (issue #345): what happened in words,
-// and a Try again button (id `id`) that the caller wires. 429 means the site's rate limit for this connection; 401
-// and 503 are the API gate refusing or unable to answer; anything else is a dropped connection or a server error.
+// and a Try again button (id `id`) that the caller wires. 429 is a rate limit (with "allow cookies" when the answer
+// had no session: a browser that blocks cookies shares the small per-IP allowance); 503 is the service briefly
+// unable to answer; a dropped connection says so; anything else did not load. The site's own calls travel on the
+// session cookie and never send an API key, so a key's 401 is not a case of its own here. Nothing retries by itself.
 function loadFailedHtml(err, id = 'loadRetry') {
   const s = err?.status;
-  const why = s === 429 ? `Too many requests from this connection. Wait ${err.retryAfter && /^\d+$/.test(err.retryAfter) ? `${err.retryAfter} seconds` : 'a minute'} and try again.`
-    : s === 401 || s === 403 ? 'The data service refused this request. Reload the page and try again.'
+  const why = s === 429 ? `Too many requests. Try again in ${err.retryAfter && /^\d+$/.test(err.retryAfter) ? `${err.retryAfter} seconds` : 'a minute'}${err.session === 'none' ? ', or allow cookies for this site' : ''}.`
     : s === 503 ? 'The data service is briefly unavailable. Try again in a moment.'
-    : 'The data did not load. Check your connection and try again.';
+    : s === 0 ? 'The data did not load. Check your connection and try again.'
+    : 'The data did not load. Try again.';
   return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/">All programs</a></p></div>`;
 }
 async function loadIndex() {
@@ -3226,36 +3244,37 @@ async function renderFaq() {
 // The customer-facing description of /api/v1. Static text: no key is ever shown, generated or accepted here.
 async function renderApiDocs() {
   const base = 'https://college.nextonetwo.com/api/v1';
+  const docs = 'https://github.com/NextOneTwoLabs/collegedash/blob/main/docs/data-api.md';
   const routes = [
-    ['/programs', 'Every published program: the index the list, table and search read (name, division, conference, RPI, admission, tuition, commitments by class and more).'],
+    ['/programs', 'Every published program: the index the list, Stats and search read (name, division, conference, RPI, admission, tuition, commitments by class and more).'],
     ['/programs/{slug}', 'One program’s full profile: seasons, roster, schedule, staff, commitments, camps and each section’s sources. Slugs are the ones in /programs.'],
     ['/commitments', 'Recruiting commitments by graduating class, with their sources and status.'],
     ['/camps', 'Published ID camps and clinics, with dates and links.'],
     ['/trends', 'The clubs and high schools behind college rosters (counts only; no player names).'],
-    ['/status', 'When the data was last refreshed. Open without a key.'],
+    ['/status', 'When the data was last refreshed.'],
   ];
   const codes = [
     ['200 / 304', 'The data, or “not modified” when you send the ETag back in If-None-Match.'],
-    ['401', 'No key, or a key that is not recognised.'],
-    ['403', 'The key has been revoked.'],
-    ['429', 'Too many requests: over the key’s daily quota or its per-minute limit. Retry-After says when to try again.'],
-    ['503', 'The service cannot check keys right now. Retry-After says when to try again.'],
+    ['400', 'An API key was put in the URL. Send keys only in the Authorization header, and treat that key as exposed.'],
+    ['401', 'The API key is not valid or has been revoked, or the header is not “Bearer <key>”. The answer is the same for every reason.'],
+    ['429', 'Too many requests: over a per-minute limit. Retry-After says when to try again.'],
+    ['503', 'API keys cannot be checked right now. Retry-After says when to try again.'],
   ];
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site, for your own software' }) + `<div class="content-body"><div class="faq">
-    <div class="card"><h3>What it is</h3>
-      <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. Every response is JSON. The project’s repository and its published data are public; the API is a hosted, metered way to read them, and a key identifies who is using it. It does not make the data secret.</p></div>
-    <div class="card"><h3>Authentication</h3>
-      <p>Send your key in the <code>Authorization</code> header on every request. Never put it in the URL.</p>
-      <pre class="small">curl -H "Authorization: Bearer YOUR_API_KEY" ${esc(base)}/programs</pre>
-      <p class="muted small">Keep the key on a server. A key used from a web page is visible to that page’s visitors, and browsers cannot call this API from another site.</p></div>
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
+    <div class="card"><h3>What it is, honestly</h3>
+      <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. The website stays free with no login. Light use without a key is fine; heavy direct use needs a key the owner issues. The limits make copying the data slow and visible, not impossible: the project’s repository is public and holds the same data.</p></div>
+    <div class="card"><h3>Three ways in</h3>
+      <p><b>This website</b> uses a session cookie that loading the page sets. <b>Scripts and agents</b> send an API key in the <code>Authorization</code> header. <b>Anything else</b> gets a small allowance per internet address; beyond it, a 429 points here.</p>
+      <pre class="small">curl -H "Authorization: Bearer $COLLEGEDASH_API_KEY" ${esc(base)}/programs</pre>
+      <p class="muted small">Keep a key on a server and out of every URL: a key used from a web page is visible to its visitors, and browsers cannot call this API from another site. Every answer carries <code>X-CollegeDash-Session</code>: <code>key</code>, <code>ok</code>, <code>renewed</code>, <code>none</code> or <code>off</code>.</p></div>
     <div class="card"><h3>Endpoints</h3><div class="tscroll"><table><tr><th>GET</th><th>What it returns</th></tr>
       ${routes.map(([p, w]) => `<tr><td><code>/api/v1${esc(p)}</code></td><td>${esc(w)}</td></tr>`).join('')}</table></div></div>
-    <div class="card"><h3>Limits and responses</h3>
-      <p>Each key has a daily quota (UTC days) and a per-minute limit. Successful keyed responses carry <code>X-Quota-Limit</code> and <code>X-Quota-Remaining</code>. Only served requests count against the quota.</p>
+    <div class="card"><h3>Limits and answers</h3>
+      <p>Every request is rate-limited per minute, whichever way it comes in. Details, and the current numbers, are in the <a href="${esc(docs)}" target="_blank" rel="noopener">API documentation</a>.</p>
       <div class="tscroll"><table><tr><th>Status</th><th>Meaning</th></tr>${codes.map(([c, m]) => `<tr><td>${esc(c)}</td><td>${esc(m)}</td></tr>`).join('')}</table></div>
-      <p class="muted small">Responses may be cached for five minutes; send the ETag back to revalidate cheaply. The data is refreshed daily.</p></div>
+      <p class="muted small">Send the ETag back to revalidate cheaply. The data is refreshed daily.</p></div>
     <div class="card"><h3>Getting a key</h3>
-      <p>Keys are issued by hand while the API is new. Email ${feedbackLink()} with who you are and what you will use it for.</p></div>
+      <p>Keys are issued by hand, and not yet to anyone outside the project while the service runs on a free hosting plan. Use Send feedback, or email ${feedbackLink()}, with who you are and what you would use it for. A key is sent only by private email.</p></div>
   </div></div>`;
 }
 

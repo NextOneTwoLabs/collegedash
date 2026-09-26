@@ -80,6 +80,12 @@ def main() -> int:
                 hdrs.get("Cache-Control") == "no-store",
                 f"got {hdrs.get('Cache-Control')}",
             )
+            # issue #345: the local server runs with sessions off, as the Worker without SESSION_SECRET does
+            ok(
+                f"GET {route} X-CollegeDash-Session off",
+                hdrs.get("X-CollegeDash-Session") == "off",
+                f"got {hdrs.get('X-CollegeDash-Session')}",
+            )
             etag = hdrs.get("ETag")
             ok(f"GET {route} has etag", bool(etag and etag.startswith('"')), f"got {etag}")
 

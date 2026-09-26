@@ -59,6 +59,25 @@ import subprocess
 import sys
 import time
 
+REPO_ROOT_FOR_GUARD = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+GUARD_DIR = os.path.join(REPO_ROOT_FOR_GUARD, "tests", "netguard")
+DEAD_PROXY = "http://127.0.0.1:9"
+
+
+def guarded_env(base: dict | None = None) -> dict:
+    """The environment every suite runs in (issue #345): tests/netguard on PYTHONPATH, so each Python child imports
+    the network guard as `sitecustomize` (refuses non-loopback DNS and connections, exits 97 if anything was
+    attempted), and a dead proxy, so a request that bypassed the guard would still go nowhere. NO_PROXY keeps
+    requests to the suites' own loopback test servers direct. Node suites get the guard by --import instead
+    (run_node_suites.py); the variables do no harm there. Set by the runners, so local runs match CI."""
+    env = dict(os.environ if base is None else base)
+    env["PYTHONPATH"] = GUARD_DIR + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    for key in ("HTTPS_PROXY", "HTTP_PROXY", "https_proxy", "http_proxy"):
+        env[key] = DEAD_PROXY
+    env["NO_PROXY"] = env["no_proxy"] = "127.0.0.1,localhost,::1"
+    return env
+
+
 # Ordered by specificity. Each yields (passed, total); the TAP form has no separate total, so the
 # pass count stands as both and `# fail N` is left to the exit code, which node already sets.
 COUNT_PATTERNS = (
@@ -141,7 +160,7 @@ def run_and_check(
     # PYTHONUTF8 covers the child's own file reads, PYTHONIOENCODING its stdout; neither affects
     # node, which is UTF-8 unconditionally. Both are set for every child rather than only the
     # python ones, so adding a suite here cannot forget it.
-    env = dict(os.environ, PYTHONUTF8="1", PYTHONIOENCODING="utf-8")
+    env = dict(guarded_env(), PYTHONUTF8="1", PYTHONIOENCODING="utf-8")
 
     started = time.monotonic()
     process = subprocess.Popen(
