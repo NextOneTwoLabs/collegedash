@@ -393,6 +393,26 @@ def test_d2_d3_phase_2_315(table: clubs.Table) -> None:
           str([c["id"] for c in rows if not c.get("reviewedBy", "").startswith("Huatuo")][:5]))
 
 
+def test_suggest_folds_385(table: clubs.Table) -> None:
+    """Issue #385: every unmatched spelling whose suggest_key points at exactly ONE existing club is an alias of
+    it, with provenance; a short name that also sits in other clubs' names, a same-name/state-split key and the
+    names the #336 group check held stay unmatched."""
+    m = table.match("MVLA ECNL")
+    check("#385: 'MVLA ECNL' -> Mountain View Los Altos SC", m.status == "matched" and m.clubId == "mountain-view-los-altos-sc",
+          f"{m.status} {m.clubId}")
+    for raw, name in (("Skyline Elite SC", "Skyline Elite"), ("Albion Hurricanes 05 ECNL", "Albion Hurricanes FC (TX)"),
+                      ("Pipeline ECRL", "Pipeline SC (MD)")):
+        mm = table.match(raw)
+        check(f"#385: {raw!r} -> {name!r}", mm.status == "matched" and mm.name == name, f"{mm.status} {mm.name}")
+    for raw in ("Sting ECNL", "Sting Black RL", "Albion FC", "Arlington", "Rise Soccer Club", "Beach FC ECNL", "United FC"):
+        check(f"#385: ambiguous {raw!r} stays unmatched", table.match(raw).status == "unmatched", table.match(raw).clubId)
+    with open(clubs.TABLE_PATH, encoding="utf-8") as f:
+        mine = [a for a in json.load(f)["aliases"].values() if isinstance(a, dict) and "issue #385" in a.get("basis", "")]
+    check("#385: 164 aliases, each naming its club and the rule it came from",
+          len(mine) == 164 and all("suggest_key groups this spelling with" in a["basis"] and a.get("prepared") for a in mine),
+          str(len(mine)))
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -412,6 +432,7 @@ def main() -> int:
     test_committed_table(table)
     test_owner_decisions_233(table)
     test_d2_d3_phase_2_315(table)
+    test_suggest_folds_385(table)
     test_scratch_build_leaves_the_report_alone()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
     return 1 if FAILS else 0
