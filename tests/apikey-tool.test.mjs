@@ -2,10 +2,9 @@
 // #93). It is run here as a lone copy in a fresh temp folder, under the network guard, with the system temp folder
 // pointed into that folder, so the test proves it is self-contained, and removes every file it made.
 //
-// Until the owner has created the COLLEGEDASH_API_KEYS namespace and its id is in wrangler.toml and the tool, the
-// tool carries a placeholder and refuses every command but help. The command tests then run on a copy with a test id
-// in place of the placeholder (the only line changed), and the "OWNER STEP" test fails, so the PR cannot go green
-// without the real id.
+// The key store is the KV namespace COLLEGE_API_KEYS, created by the owner and recorded on #345 (issuecomment-
+// 5842257833). A tool whose id is still a placeholder refuses every command but help; that guard is tested on a copy
+// carrying the old placeholder.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -54,8 +53,10 @@ test('tool: self-contained ASCII file; its namespace id is the one wrangler.toml
   assert.ok(TOOL_ID === PLACEHOLDER || REAL_ID.test(TOOL_ID), 'the placeholder or a real 32-hex id, nothing else');
 });
 
-test('OWNER STEP: the COLLEGEDASH_API_KEYS namespace id is set (fails until the owner posts it on #345)', () => {
-  assert.match(TOML_ID || '', REAL_ID, 'create the KV namespace COLLEGEDASH_API_KEYS in the dashboard and post its id on #345');
+test('OWNER STEP: the COLLEGE_API_KEYS namespace id recorded on #345 is set in wrangler.toml and the tool', () => {
+  assert.match(TOML_ID || '', REAL_ID, 'create the KV namespace in the dashboard and post its id on #345');
+  assert.equal(TOML_ID, '66b2f1f49eed4fbc9e7d8bb760f4a79b', 'the id the owner recorded on #345');
+  assert.equal(TOOL_ID, TOML_ID);
   assert.ok(!['effbba53953e424aa9f528b2a6f00f4e', 'dfdeb314f1b848a287e6f99b453a5d22'].includes(TOML_ID), 'its own store, never FEEDBACK or ASK_BUDGET');
 });
 

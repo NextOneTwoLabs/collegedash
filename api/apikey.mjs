@@ -4,7 +4,7 @@
 //
 // A key is `cdash_live_<id>_<secret>`: id 12 lowercase hex (6 random bytes; not secret, used as the KV key,
 // the limiter key and in counts), secret 64 lowercase hex (32 random bytes). KV (binding API_KEYS, namespace
-// COLLEGEDASH_API_KEYS) holds `key:<id>` -> {"v":1,"hash":<SHA-256 hex of the whole key>,"label","created",
+// COLLEGE_API_KEYS) holds `key:<id>` -> {"v":1,"hash":<SHA-256 hex of the whole key>,"label","created",
 // "tier","status"}. The key itself is never stored, logged or counted.
 //
 // Phase 2 of #345 binds the store (wrangler.toml [[kv_namespaces]] API_KEYS) and the per-key limiter RL_KEY

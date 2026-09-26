@@ -184,9 +184,10 @@ rollback.
 In PowerShell, in the CollegeDash checkout, in a standalone window (not the desktop app's Terminal panel):
 
 1. **Stores first, always in the dashboard.** The Analytics Engine dataset `collegedash_api_gate` (Workers & Pages >
-   Analytics Engine) and the KV namespace `COLLEGEDASH_API_KEYS` (Workers & Pages > KV > Create; its id is shown in the
+   Analytics Engine) and the KV namespace `COLLEGE_API_KEYS` (Workers & Pages > KV > Create; its id is shown in the
    namespace list) exist before the first build that binds them. A namespace id is an identifier, not a credential:
-   post it on #345, and it goes into `wrangler.toml` and `tools/apikey.mjs`.
+   post it on #345, and it goes into `wrangler.toml` and `tools/apikey.mjs`. `COLLEGE_API_KEYS` was created on
+   2026-09-25 (the name matches ECNL's `ECNL_API_KEYS`).
 2. **The session secret:** create it with a generated value and add it to a new version **without deploying**, then use
    **Retry build** on the PR's latest Workers Build:
 
@@ -259,7 +260,7 @@ with `Cache-Control: no-store`. A served request is answered as any other: the d
   them cannot push a real key out of the cache.
 - **The Workers Free quota applies to keyed traffic too**, 401s and 429s included (see "The Workers Free quota").
 
-**What the owner keeps about a key.** One KV record per key in the `COLLEGEDASH_API_KEYS` namespace (binding
+**What the owner keeps about a key.** One KV record per key in the `COLLEGE_API_KEYS` namespace (binding
 `API_KEYS`; its own store, never the feedback store), under `key:<id>`:
 
 | Field | Value |
@@ -307,7 +308,7 @@ node tools\apikey.mjs help                                          # all of the
 ```
 
 `new` prints, in order: the key (give it to its holder by private email; it is not shown again), the
-`npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id <COLLEGEDASH_API_KEYS id> --remote` that
+`npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id <COLLEGE_API_KEYS id> --remote` that
 stores the record, and the `Remove-Item` for the temp file (it holds only the hash). Use a project or agent name as the
 label, never a person's name. `--ttl` is in seconds, at least 60; `revoke` needs `--label`. **Once you have sent the key
 and run the printed commands, close that PowerShell window:** the key stays in its scrollback until you do.

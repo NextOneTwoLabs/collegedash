@@ -43,8 +43,8 @@ test('docs: every limit quoted matches wrangler.toml, and the approximate counti
 });
 
 test('docs: the owner steps name the key store, the tool commands and the test key variable', () => {
-  assert.match(DOCS, /KV namespace `COLLEGEDASH_API_KEYS`/);
-  assert.match(DOCS, /--namespace-id <COLLEGEDASH_API_KEYS id> --remote/);
+  assert.match(DOCS, /KV namespace `COLLEGE_API_KEYS`/);
+  assert.match(DOCS, /--namespace-id <COLLEGE_API_KEYS id> --remote/);
   assert.match(DOCS, /never `--binding`/);
   assert.match(DOCS, /node tools\\apikey\.mjs new --label "verifier-345" --ttl 604800/);
   assert.match(DOCS, /`COLLEGEDASH_TEST_KEY`, \*\*before\*\* the agent session starts/);

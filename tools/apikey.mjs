@@ -19,10 +19,10 @@ import { writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, isAbsolute } from 'node:path';
 
-// The COLLEGEDASH_API_KEYS namespace (binding API_KEYS in wrangler.toml). Named by id, not by
+// The COLLEGE_API_KEYS namespace (binding API_KEYS in wrangler.toml). Named by id, not by
 // binding, so the commands work from any folder and before the binding is merged. Until the
 // owner has created the namespace and its id is written here, every command but help refuses.
-const NAMESPACE_ID = 'OWNER_POSTS_THE_COLLEGEDASH_API_KEYS_ID';
+const NAMESPACE_ID = '66b2f1f49eed4fbc9e7d8bb760f4a79b';
 const WIN = process.platform === 'win32';
 const NPX = WIN ? 'npx.cmd' : 'npx';   // PowerShell's execution policy blocks plain npx (npx.ps1)
 const WHERE = `--namespace-id ${NAMESPACE_ID} --remote`;
@@ -68,7 +68,7 @@ function fail(message) {
 }
 function needNamespace() {
   if (!/^[0-9a-f]{32}$/.test(NAMESPACE_ID)) {
-    fail('The COLLEGEDASH_API_KEYS namespace id is not in this file yet. Create the namespace in the dashboard\n' +
+    fail('The COLLEGE_API_KEYS namespace id is not in this file yet. Create the namespace in the dashboard\n' +
          '(Workers & Pages > KV), post its id on issue #345, and use the copy of this tool that carries it.');
   }
 }
@@ -110,7 +110,7 @@ if (cmd === 'new') {
     '',
     `   ${key}`,
     '',
-    '2. Store its record (the hash of the key, never the key) in COLLEGEDASH_API_KEYS:',
+    '2. Store its record (the hash of the key, never the key) in COLLEGE_API_KEYS:',
     '',
     `   ${cmds.put(id, file, ttl)}`,
     '',
