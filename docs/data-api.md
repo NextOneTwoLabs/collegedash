@@ -307,11 +307,22 @@ node tools\apikey.mjs purge <id>                                    # prints the
 node tools\apikey.mjs help                                          # all of the above, with every wrangler command
 ```
 
-`new` prints, in order: the key (give it to its holder by private email; it is not shown again), the
-`npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id <COLLEGE_API_KEYS id> --remote` that
-stores the record, and the `Remove-Item` for the temp file (it holds only the hash). Use a project or agent name as the
-label, never a person's name. `--ttl` is in seconds, at least 60; `revoke` needs `--label`. **Once you have sent the key
-and run the printed commands, close that PowerShell window:** the key stays in its scrollback until you do.
+`new` prints, in order: the key (give it to its holder by private email; it is not shown again), then the steps below.
+**Paste one line at a time, and run each step only after the one before it worked:** in a multi-line paste, an `npx`
+install or login prompt takes the next line as its answer and cancels the put, and a failed put scrolls past unseen.
+
+1. **Store the record** with the printed
+   `npx.cmd wrangler kv key put "key:<id>" --path "<temp file>" --namespace-id <COLLEGE_API_KEYS id> --remote` line.
+   Answer any `npx` or login prompt first.
+2. **Check it worked:** `$LASTEXITCODE` must print `0`.
+3. **Check it landed:** the printed `npx.cmd wrangler kv key list --namespace-id <COLLEGE_API_KEYS id> --remote --prefix
+   key:` **must show `key:<id>`**. If it shows `[]`, stop: keep the temp file and run step 1 again.
+4. **Only then** run the printed `Remove-Item` for the temp file (it holds only the hash).
+
+`revoke` prints the same shape: the put, then a `kv key get` that **must show `"status":"revoked"`**, then the
+`Remove-Item`. Use a project or agent name as the label, never a person's name. `--ttl` is in seconds, at least 60;
+`revoke` needs `--label`. **Once you have sent the key and run the printed commands, close that PowerShell window:** the
+key stays in its scrollback until you do.
 
 **Revoking** keeps a record with the id, label and time, so the counts still show a revoked key that is being tried
 (`key-revoked`). **Purging** (`kv key delete`) removes it entirely; use it only to clean up.
