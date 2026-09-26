@@ -973,7 +973,8 @@ if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').cl
    wait, so no path (a click, a navigation, a Try again, a Pipelines row, Compare) can turn one refusal into many
    requests. A 429 without Retry-After waits 60 s, the limit's own window; any wait is capped at 120 s, so a huge
    Retry-After from a proxy or firewall page cannot hold every load until a reload. The hold ends by time only: a
-   success from a request sent before it began (the unlimited status call runs in parallel) never clears it.
+   success from a request sent before it began (the unlimited status call runs in parallel) never clears it, and a
+   refusal naming a shorter wait (an older request answered late) never shortens it: the later deadline holds.
    Nothing retries by itself. */
 const API_HOLD_MAX_S = 120;
 let apiHoldUntil = 0, apiHold = null;
@@ -997,7 +998,8 @@ async function getJSON(url, opts) {
     const wait = Math.min(API_HOLD_MAX_S, /^\d+$/.test(e.retryAfter || '') ? +e.retryAfter : r.status === 429 ? 60 : 0);
     if ((r.status === 429 || r.status === 503) && wait > 0) {
       if (e.retryAfter) e.retryAfter = String(wait); // the card names the capped wait, never a proxy's hours
-      apiHoldUntil = Date.now() + wait * 1000; apiHold = e;
+      const until = Date.now() + wait * 1000; // never shortens a running hold: a slower, older request's shorter wait
+      if (until > apiHoldUntil) { apiHoldUntil = until; apiHold = e; }
     }
     throw e;
   }

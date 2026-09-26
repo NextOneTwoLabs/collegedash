@@ -290,6 +290,24 @@ test('phase 3 review: a success from a request sent before the hold does not cle
   assert.ok(page.app().includes(CARD));
 });
 
+test('phase 3 follow-up: a shorter-wait 429 from an earlier request does not shorten a running hold', async () => {
+  let releaseStatus;
+  const statusGate = new Promise(r => { releaseStatus = r; });
+  const page = loadPage(u => (u === '/api/v1/status' ? { status: 429, body: {}, headers: { 'retry-after': '10' }, wait: statusGate }
+    : u.startsWith('/api/v1/programs/') ? { status: 429, body: {}, headers: { 'retry-after': '120' } } : null));
+  await settle(); // the index loaded; the status call, sent first, is still in flight
+  await go(page, `#/p/${SLUGS[0]}`); // a profile is refused for 120 s: the hold begins
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 1);
+  releaseStatus(); await settle(); // the earlier status call is now refused too, naming only 10 s
+  page.advance(11_000);
+  await go(page, `#/p/${SLUGS[1]}`);
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 1, 'the older 10 s refusal cut the 120 s hold short');
+  assert.ok(page.app().includes(CARD));
+  page.advance(110_000); // 121 s after the profile's refusal: the longer hold is over
+  await go(page, `#/p/${SLUGS[2]}`);
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 2, 'control: the hold ends at the later deadline');
+});
+
 test('phase 3 review: a refused Pipelines roster does not ask again by itself when the hold runs out', async () => {
   const doc = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'trends', 'index.json'), 'utf8'));
   const r = doc.records, i = r.p.findIndex((p, k) => r.s[k] === 0 && r.c[k] >= 0 && SLUGS.includes(doc.programIds[p]));
