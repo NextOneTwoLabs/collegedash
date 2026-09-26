@@ -636,10 +636,14 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0, slug
         out["robotsBlocked"] = True
         return out
     try:
-        with common.host_guard(_CampGuard(slug, base_host, record)):
+        with common.host_guard(_CampGuard(slug, base_host, record)), \
+                common.fetch_site("camps.page" if record else "camps.newsArticle"):
             html, meta = common.fetch_text(url, max_age_hours=max_age_hours, retries=1, timeout=30)
     except common.HostRefused as e:
         out["hostRefused"], out["error"] = True, common.error_text(e, 200)
+        return out
+    except common.RobotsDisallowed:  # enforce mode (issue #101): nothing was sent; collect() keeps the stored camps
+        out["robotsBlocked"] = out["robotsDisallowed"] = True
         return out
     except common.FetchError as e:
         out["error"], out["status"] = common.error_text(e, 200), e.status
@@ -1937,7 +1941,8 @@ def collect(program: dict, registry: dict) -> dict:
         common.log(f"camps: registry athletics.campsUrl is not an http(s) URL, ignored: {a['campsUrl']!r}")
 
     def discover():
-        html, _ = common.fetch_text(roster_url, max_age_hours=24)
+        with common.fetch_site("camps.roster"):
+            html, _ = common.fetch_text(roster_url, max_age_hours=24)
         return find_camps_link(html, roster_url)
 
     if registry_url:
@@ -2000,6 +2005,14 @@ def collect(program: dict, registry: dict) -> dict:
             short_title = re.split(r"\s+[-|–]\s+", data["pageTitle"] or "")[0] or None
             data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title,
                                           page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]))
+        elif r.get("robotsDisallowed"):
+            # issue #101, enforce mode: the camp page is disallowed, so nothing was read. The camps stored for the
+            # same campsUrl (the stable key) are kept, not replaced by an empty list; the page stays robotsBlocked.
+            stored = (common.load_source(slug, NAME) or {}).get("data") or {}
+            if stored.get("campsUrl") and stored.get("campsUrl") == data["campsUrl"]:
+                data["camps"] = stored.get("camps") or []
+                data["pageTitle"] = stored.get("pageTitle")
+                common.log(f"camps: {data['campsUrl']} disallowed by robots.txt; keeping {len(data['camps'])} stored camps")
         common.log(f"camps: {data['campsUrl']} via {data['discoveredVia']}"
                    + (f" -> {data['finalUrl']}" if data["finalUrl"] != data["campsUrl"] else "")
                    + (" [robots: link only]" if data["robotsBlocked"] else "")
