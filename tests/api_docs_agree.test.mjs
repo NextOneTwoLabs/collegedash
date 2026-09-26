@@ -1,6 +1,8 @@
 // #345 phase 2: the #/api page, docs/data-api.md and wrangler.toml say the same thing. Direct use needs a key; the
 // limits quoted are the ones bound; the page's status table is ECNL's (no 403); the owner steps name the key store,
-// the tool's --namespace-id/--remote commands and the test key's environment variable.
+// the tool's --namespace-id/--remote commands and the test key's file route (a file outside every repository, read
+// into a variable, deleted afterwards; never an environment variable set before the session, which a subagent in a
+// running session never sees).
 //
 //     node --test tests/api_docs_agree.test.mjs
 import { test } from 'node:test';
@@ -42,12 +44,21 @@ test('docs: every limit quoted matches wrangler.toml, and the approximate counti
   assert.match(DOCS, /\*\*The counters are approximate\.\*\*/);
 });
 
-test('docs: the owner steps name the key store, the tool commands and the test key variable', () => {
+test('docs: the owner steps name the key store, the tool commands and the test key file route', () => {
   assert.match(DOCS, /KV namespace `COLLEGE_API_KEYS`/);
   assert.match(DOCS, /--namespace-id <COLLEGE_API_KEYS id> --remote/);
   assert.match(DOCS, /never `--binding`/);
   assert.match(DOCS, /node tools\\apikey\.mjs new --label "verifier-345" --ttl 604800/);
-  assert.match(DOCS, /`COLLEGEDASH_TEST_KEY`, \*\*before\*\* the agent session starts/);
+  // the test key travels in a file outside every repository, in a standalone window; read into a variable, never printed
+  assert.doesNotMatch(DOCS, /COLLEGEDASH_TEST_KEY/, 'no environment-variable route: a subagent in a running session never sees it');
+  assert.match(DOCS, /writes it to a file outside every repository and worktree/);
+  assert.match(DOCS, /\*\*standalone\*\* PowerShell window/);
+  assert.match(DOCS, /Set-Content -NoNewline -Path "\$env:USERPROFILE\\\.collegedash\\test-key\.txt" -Value '<key>'/);
+  assert.match(DOCS, /\$k = \(Get-Content -Raw "\$env:USERPROFILE\\\.collegedash\\test-key\.txt"\)\.Trim\(\)/);
+  assert.match(DOCS, /-H "Authorization: Bearer \$k"/, 'the command text holds the variable, not the key');
+  assert.match(DOCS, /never `-i` on a keyed request/);
+  assert.match(DOCS, /\*\*deletes the file\*\*/);
+  assert.match(DOCS, /appears in any output, it is treated as\s+exposed/);
   assert.match(DOCS, /never the feedback store/);
 });
 

@@ -333,10 +333,30 @@ from your checkout, as above.
 **The team's test key.** One per verification round, issued by the owner:
 - `new --label "verifier-345" --ttl 604800`: KV deletes the record after 7 days, so a forgotten key expires. **Revoke it
   after the production check.**
-- **It never passes through a conversation.** The owner sets it in the verifier's shell environment, as
-  `COLLEGEDASH_TEST_KEY`, **before** the agent session starts: for example `$env:COLLEGEDASH_TEST_KEY = '<key>'`, typed
-  by the owner in the PowerShell window that launches the session. It is never pasted into a chat, an issue or a PR:
-  agent transcripts are stored. If it ever appears in one, it is treated as exposed: revoke it and issue another.
-- The verifier refers to it only as `$env:COLLEGEDASH_TEST_KEY`, never echoes it, never uses `curl -v`, HAR or traces
-  with it, and redacts it to `cdash_live_<id>_...` in reports.
+- **It never passes through a conversation.** It is never pasted into a chat, an issue or a PR: agent transcripts are
+  stored. The verifier runs as a subagent inside a session that is already running, so an environment variable set now
+  would never reach it; the key travels in a file instead.
+- **1. The owner writes it to a file outside every repository and worktree,** in a **standalone** PowerShell window
+  (not the desktop app's Terminal panel, which agents can read), never under `D:\Projects\CollegeDash`:
+
+  ```powershell
+  New-Item -ItemType Directory -Force "$env:USERPROFILE\.collegedash" | Out-Null
+  Set-Content -NoNewline -Path "$env:USERPROFILE\.collegedash\test-key.txt" -Value '<key>'
+  ```
+
+- **2. The verifier reads the file into a variable in code, and never prints it.** The command text holds the variable,
+  never the key:
+
+  ```powershell
+  $k = (Get-Content -Raw "$env:USERPROFILE\.collegedash\test-key.txt").Trim()
+  curl.exe -s -o NUL -w "%{http_code}" -H "Authorization: Bearer $k" https://<preview>/api/v1/status
+  ```
+
+  In Node or Python, the script reads the file and prints only status codes, the `X-CollegeDash-Session` value and the id
+  redacted to `cdash_live_<id>_...`. Never `curl -v`, never `-i` on a keyed request, no traces or HAR, and never
+  `Get-Content` the file to the output. Reading a file outside the working directory may need the owner to approve
+  that one read.
+- **3. Afterwards:** the owner revokes the key after the production check and **deletes the file**
+  (`Remove-Item "$env:USERPROFILE\.collegedash\test-key.txt"`). If the key ever appears in any output, it is treated as
+  exposed: revoke it and issue another.
 - **It works on production too:** previews use production's bindings, so preview and production read the same store.
