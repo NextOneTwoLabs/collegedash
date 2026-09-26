@@ -1042,6 +1042,8 @@ POS_EXACT = {
     "f": "F", "fw": "F", "cf": "F", "st": "F", "att": "F", "s": "F", "w": "F", "wing": "F",
     # short forms the old one-letter prefixes happened to map; kept at their old value
     "md": "M", "fd": "F", "fm": "F", "for": "F", "dlb": "D",
+    # #263 part C (Huatuo's plan review): wide mid, wing (the owner's W/Wing -> F), striker, defensive back
+    "wm": "M", "wng": "F", "str": "F", "db": "D",
 }
 POS_MAP = {
     "goalkeeper": "GK", "keeper": "GK", "goalie": "GK", "backup goalkeeper": "GK", "backup keeper": "GK",
@@ -1055,13 +1057,35 @@ POS_MAP = {
 }
 
 
-def pos_code(part: str) -> str:
-    """GK / D / M / F for one label part ('CB', 'Center Back', 'Midfielders'), '' when unknown."""
-    p = re.sub(r"[\s-]+", " ", part.lower()).strip(" .")
+# One splitter for a label's parts (#263 part C): '/', ',' and '' ('M\D' on malone's roster). norm_pos and
+# sidearm._is_position_label (#311's guard) both split with it, so the two never read a label differently.
+POS_PART_SEP = re.compile(r"[/\\,]")
+SIDE_WORD = re.compile(r"(left|right|center|centre)\s+(\S.*)$")
+
+
+def pos_parts(label: str | None) -> list[str]:
+    return POS_PART_SEP.split(label or "")
+
+
+def _pos_lookup(p: str) -> str:
     if p in POS_EXACT:
         return POS_EXACT[p]
     best = max((k for k in POS_MAP if p.startswith(k)), key=len, default=None)
     return POS_MAP[best] if best else ""
+
+
+def pos_code(part: str) -> str:
+    """GK / D / M / F for one label part ('CB', 'Center Back', 'Midfielders'), '' when unknown.
+
+    #263 part C: only when both lookups fail, a leading side word is dropped and the rest looked up again,
+    so 'Left Midfielder' is M and 'Left Wing Back' is D. A label that maps today ('Right Back', 'Center Mid') is
+    never re-read, and the side word must be followed by a position word ('Center Court' stays '')."""
+    p = re.sub(r"[\s-]+", " ", part.lower()).strip(" .")
+    code = _pos_lookup(p)
+    if code:
+        return code
+    m = SIDE_WORD.match(p)
+    return _pos_lookup(m.group(2)) if m else ""
 
 
 def norm_pos(s: str | None) -> str:
@@ -1069,7 +1093,7 @@ def norm_pos(s: str | None) -> str:
     if not s:
         return ""
     out = []
-    for p in re.split(r"[/,]", s):
+    for p in pos_parts(s):
         # 'F-M', 'D.MF': split on '-' or '.' only when the whole part is not a label ('Wing-Back')
         whole = pos_code(p)
         codes = [whole] if whole or not re.search(r"\w[-.]\w", p) else [pos_code(x) for x in re.split(r"[-.]", p)]
