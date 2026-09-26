@@ -53,9 +53,16 @@ test('docs: the owner steps name the key store, the tool commands and the test k
   assert.doesNotMatch(DOCS, /COLLEGEDASH_TEST_KEY/, 'no environment-variable route: a subagent in a running session never sees it');
   assert.match(DOCS, /writes it to a file outside every repository and worktree/);
   assert.match(DOCS, /\*\*standalone\*\* PowerShell window/);
-  assert.match(DOCS, /Set-Content -NoNewline -Path "\$env:USERPROFILE\\\.collegedash\\test-key\.txt" -Value '<key>'/);
-  assert.match(DOCS, /\$k = \(Get-Content -Raw "\$env:USERPROFILE\\\.collegedash\\test-key\.txt"\)\.Trim\(\)/);
-  assert.match(DOCS, /-H "Authorization: Bearer \$k"/, 'the command text holds the variable, not the key');
+  // entered at a Read-Host prompt, which PSReadLine does not save to its history file; never typed into a command
+  assert.match(DOCS, /\$k = Read-Host 'Paste the key'\n\s*Set-Content -NoNewline -Path "\$env:USERPROFILE\\\.collegedash\\test-key\.txt" -Value \$k\n\s*Remove-Variable k\n/);
+  assert.doesNotMatch(DOCS, /-Value '<key>'/, 'a key typed into a command lands in ConsoleHost_history.txt');
+  assert.match(DOCS, /ConsoleHost_history\.txt/);
+  assert.match(DOCS, /copied with the\s+clipboard, copy something else afterwards/);
+  // the verifier's keyed requests run inside a Node or Python script: the key is on no command line
+  assert.match(DOCS, /reads the file inside a Node or Python script, and never prints it/);
+  assert.match(DOCS, /readFileSync\(join\(process\.env\.USERPROFILE, '\.collegedash', 'test-key\.txt'\), 'utf8'\)\.trim\(\)/);
+  assert.match(DOCS, /console\.log\(r\.status, r\.headers\.get\('x-collegedash-session'\), key\.slice\(0, 23\) \+ '_\.\.\.'\)/);
+  assert.doesNotMatch(DOCS, /^\s*curl(\.exe)? [^\n]*Bearer \$k/m, 'no curl command carrying the key');
   assert.match(DOCS, /never `-i` on a keyed request/);
   assert.match(DOCS, /\*\*deletes the file\*\*/);
   assert.match(DOCS, /appears in any output, it is treated as\s+exposed/);

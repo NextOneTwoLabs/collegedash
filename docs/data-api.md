@@ -341,21 +341,31 @@ from your checkout, as above.
 
   ```powershell
   New-Item -ItemType Directory -Force "$env:USERPROFILE\.collegedash" | Out-Null
-  Set-Content -NoNewline -Path "$env:USERPROFILE\.collegedash\test-key.txt" -Value '<key>'
+  $k = Read-Host 'Paste the key'
+  Set-Content -NoNewline -Path "$env:USERPROFILE\.collegedash\test-key.txt" -Value $k
+  Remove-Variable k
   ```
 
-- **2. The verifier reads the file into a variable in code, and never prints it.** The command text holds the variable,
-  never the key:
+  The key is pasted at the `Read-Host` prompt, never typed into a command: PowerShell's PSReadLine saves every typed
+  command in plain text (`%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt`), which outlives
+  the window and which agents can read, but not what is entered at a prompt. **If the key was copied with the
+  clipboard, copy something else afterwards.**
+- **2. The verifier reads the file inside a Node or Python script, and never prints it.** The key stays inside that
+  one process: not in any command text, and not on another program's command line (with `curl.exe -H "Authorization:
+  Bearer $k"` the expanded key sits on curl's process command line while it runs, where any local process can list it).
+  The script prints only status codes, the `X-CollegeDash-Session` value and the id redacted to `cdash_live_<id>_...`.
+  For example, a script kept outside the repository and run as `node verify-key.mjs https://<preview>/api/v1/status`:
 
-  ```powershell
-  $k = (Get-Content -Raw "$env:USERPROFILE\.collegedash\test-key.txt").Trim()
-  curl.exe -s -o NUL -w "%{http_code}" -H "Authorization: Bearer $k" https://<preview>/api/v1/status
+  ```js
+  import { readFileSync } from 'node:fs';
+  import { join } from 'node:path';
+  const key = readFileSync(join(process.env.USERPROFILE, '.collegedash', 'test-key.txt'), 'utf8').trim();
+  const r = await fetch(process.argv[2], { headers: { authorization: 'Bearer ' + key } });
+  console.log(r.status, r.headers.get('x-collegedash-session'), key.slice(0, 23) + '_...');
   ```
 
-  In Node or Python, the script reads the file and prints only status codes, the `X-CollegeDash-Session` value and the id
-  redacted to `cdash_live_<id>_...`. Never `curl -v`, never `-i` on a keyed request, no traces or HAR, and never
-  `Get-Content` the file to the output. Reading a file outside the working directory may need the owner to approve
-  that one read.
+  Never `curl -v`, never `-i` on a keyed request, no traces or HAR, and never `Get-Content` the file to the output.
+  Reading a file outside the working directory may need the owner to approve that one read.
 - **3. Afterwards:** the owner revokes the key after the production check and **deletes the file**
   (`Remove-Item "$env:USERPROFILE\.collegedash\test-key.txt"`). If the key ever appears in any output, it is treated as
   exposed: revoke it and issue another.
