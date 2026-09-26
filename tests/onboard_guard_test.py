@@ -252,24 +252,15 @@ def test_the_shipped_registry():
        f"staged={staged} todo={len(todo)} max={collegedash.MAX_BATCH} refusal={refusal[:1]}")
     r = run_onboard(live, ["--all"])
     ok("no socket was opened", r.connects == 0)
+    if not too_many:
+        # issue #210: the over-limit check below only runs while the LIVE registry has more than
+        # MAX_BATCH collectable programs, which stops being true as divisions are collected. Say so,
+        # so a check that stops running is visible in the log; test_over_limit_batch runs the same
+        # checks on a synthetic registry every time, whatever the live one holds.
+        print(f"  skipped: only {len(todo)} collectable uncollected, not over MAX_BATCH "
+              f"({collegedash.MAX_BATCH}); the over-limit refusal is checked by test_over_limit_batch")
     if staged or too_many:
-        # the shape main has carried since #137: a division staged in the registry, or a batch
-        # past the limit, means the command refuses and collects nothing at all.
-        text = "\n".join(refusal)
-        ok("exit 2", r.code == 2, r.out[-400:])
-        ok("nothing was collected", r.collectors == [], r.collectors[:3])
-        ok("rpi was not asked either", r.rpi == [], r.rpi)
-        ok("nothing was recorded in refresh-state", r.state == [], r.state)
-        for division in staged or ["(none)"]:
-            ok(f"the refusal names {division}, which this registry stages",
-               division in refusal[0] if staged else True, refusal[:1])
-        ok(f"the refusal counts the batch this registry would have collected ({len(todo)})",
-           f"{len(todo)} programs" in text, text.splitlines()[:2])
-        if too_many:
-            ok(f"and says it is over the {collegedash.MAX_BATCH}-program limit, because it is",
-               f"over the {collegedash.MAX_BATCH}" in text, refusal[:1])
-        ok("and it says what to run instead",
-           "--conference" in text and "onboard <slug>" in text, text)
+        assert_refused(r, refusal, todo, staged, too_many)
     elif held and not todo:
         # every uncollected entry is under a collectionHold (issue #216): nothing to collect, so no
         # request at all - not even rpi's - and each held entry is named
@@ -286,6 +277,43 @@ def test_the_shipped_registry():
         ok("it collects the programs the code before the guard selected, in that order",
            r.slugs == [p["slug"] for p in todo], r.slugs[:5])
         ok("it still records the run in refresh-state", r.state == ["onboardAll"], r.state)
+
+
+def assert_refused(r, refusal: list[str], todo: list, staged: list[str], too_many: bool) -> None:
+    """The refusal path, shared by the live registry and test_over_limit_batch (issue #210): a division
+    staged in the registry, or a batch past the limit, means the command refuses and collects nothing."""
+    text = "\n".join(refusal)
+    ok("exit 2", r.code == 2, r.out[-400:])
+    ok("nothing was collected", r.collectors == [], r.collectors[:3])
+    ok("rpi was not asked either", r.rpi == [], r.rpi)
+    ok("nothing was recorded in refresh-state", r.state == [], r.state)
+    for division in staged or ["(none)"]:
+        ok(f"the refusal names {division}, which this registry stages",
+           division in refusal[0] if staged else True, refusal[:1])
+    ok(f"the refusal counts the batch this registry would have collected ({len(todo)})",
+       f"{len(todo)} programs" in text, text.splitlines()[:2])
+    if too_many:
+        ok(f"and says it is over the {collegedash.MAX_BATCH}-program limit, because it is",
+           f"over the {collegedash.MAX_BATCH}" in text, refusal[:1])
+    ok("and it says what to run instead",
+       "--conference" in text and "onboard <slug>" in text, text)
+
+
+def test_over_limit_batch():
+    """Issue #210: `onboard --all` over a batch past MAX_BATCH in a PUBLISHED division (nothing staged),
+    through the command, on a synthetic registry - so the over-limit refusal is exercised on every run
+    rather than only while the live registry happens to hold more than MAX_BATCH uncollected programs."""
+    n = collegedash.MAX_BATCH + 5
+    print(f"over-limit-batch: {n} unonboarded programs in a published division are refused on size alone")
+    reg = registry([program(f"d1-{i}", "D1", "ACC", onboarded=i >= n) for i in range(n + 10)])
+    todo = todo_before_the_guard(reg)
+    ok(f"the synthetic registry really is over the limit ({len(todo)} > {collegedash.MAX_BATCH})",
+       len(todo) > collegedash.MAX_BATCH, len(todo))
+    refusal = collegedash.batch_refusal(reg)
+    ok("it is refused, and on size alone", bool(refusal) and "does not publish yet" not in refusal[0], refusal[:1])
+    r = run_onboard(reg, ["--all"])
+    ok("no socket was opened", r.connects == 0)
+    assert_refused(r, refusal, todo, [], True)
 
 
 def test_unchanged_d1_batch():
@@ -513,7 +541,7 @@ def main(argv=None) -> int:
     ap.add_argument("--case", action="append", help="run only these cases (by function suffix)")
     args = ap.parse_args(argv)
     VERBOSE = args.verbose
-    cases = [test_the_shipped_registry, test_unchanged_d1_batch, test_staged_division, test_refusal_says_what_next,
+    cases = [test_the_shipped_registry, test_over_limit_batch, test_unchanged_d1_batch, test_staged_division, test_refusal_says_what_next,
              test_conference_batch, test_overrides, test_one_shot, test_odd_registries]
     for c in cases:
         if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
