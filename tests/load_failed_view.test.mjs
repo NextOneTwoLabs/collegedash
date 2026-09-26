@@ -25,7 +25,7 @@ function makeElement(name) {
   return {
     _name: name, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0, onclick: null,
     dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
-    setAttribute() { }, getAttribute: () => null, addEventListener() { }, removeEventListener() { },
+    setAttribute() { }, getAttribute: () => null, removeAttribute() { }, addEventListener() { }, removeEventListener() { },
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null, matches: () => false, focus() { }, contains: () => false,
   };
 }
@@ -39,11 +39,15 @@ function loadPage(answer) {
   const real = url => {
     const u = String(url);
     const file = u === '/api/v1/programs' ? 'data/programs/index.json' : u.startsWith('/api/v1/programs/') ? `data/programs/${u.split('/').pop()}.json`
-      : u === '/api/v1/camps' ? 'data/camps/index.json' : null;
+      : u === '/api/v1/camps' ? 'data/camps/index.json' : u === '/api/v1/trends' ? 'data/trends/index.json' : null;
     return file && fs.existsSync(path.join(PUBLIC, file)) ? { status: 200, body: JSON.parse(fs.readFileSync(path.join(PUBLIC, file), 'utf8')) } : { status: 404, body: {} };
   };
+  // a clock the tests move (#345 phase 3: waits of Retry-After seconds without waiting in real time)
+  let offset = 0;
+  const base = Date.now();
+  class FakeDate extends Date { static now() { return base + offset; } }
   const sandbox = {
-    console, setTimeout, clearTimeout, Promise, Map, Set, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl,
+    console, setTimeout, clearTimeout, Promise, Map, Set, Date: FakeDate, JSON, Math, Number, String, Array, Object, RegExp, Intl,
     isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
     document: { documentElement: makeElement('html'), body: makeElement('body'), querySelector: bySelector, querySelectorAll: () => [], addEventListener() { }, createElement: makeElement },
     location: { hash: '', replace(h) { this.hash = h; } }, history: { replaceState() { } }, matchMedia: () => ({ matches: false }),
@@ -57,7 +61,7 @@ function loadPage(answer) {
       return { ok: a.status < 400, status: a.status, headers: { get: k => h.get(k.toLowerCase()) ?? null }, async json() { return JSON.parse(JSON.stringify(a.body)); } };
     },
   };
-  const page = { answer, requests, sb: sandbox, app: () => bySelector('#app').innerHTML, el: bySelector };
+  const page = { answer, requests, sb: sandbox, app: () => bySelector('#app').innerHTML, el: bySelector, advance: ms => { offset += ms; } };
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8').split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
@@ -88,6 +92,7 @@ test('first load: a 429 shows the card with the wait, "allow cookies" only when 
   assert.ok(page.app().includes(CARD) && page.app().includes('Try again in 30 seconds, or allow cookies for this site') && page.app().includes('id="loadRetry"'), page.app().slice(0, 400));
   assert.ok(!/HTTP 429|github\.com/.test(page.app()), 'neither the raw status nor the help link is shown');
   fail = false;
+  page.advance(30_000); // phase 3: Try again asks again only once the Retry-After has passed
   page.el('#loadRetry').onclick();
   await settle();
   assert.ok(!page.app().includes(CARD) && page.sb.S.index?.programs?.length > 0, 'Try again loaded the index');
@@ -116,6 +121,7 @@ test('a profile: 429 is a load failure with Try again, and only a 404 says "not 
   assert.ok(page.app().includes(CARD) && page.app().includes('id="loadRetry"'), page.app().slice(0, 400));
   assert.ok(!page.app().includes('not been built yet'), 'a rate limit is not "not built yet"');
   status = 200;
+  page.advance(60_000); // a 429 without Retry-After waits the limit's 60 s window (phase 3)
   page.el('#loadRetry').onclick(); await settle();
   assert.ok(!page.app().includes(CARD), 'Try again rendered the profile');
   const missing = loadPage(u => (u === `/api/v1/programs/${SLUG}` ? { status: 404, body: {} } : null));
@@ -137,4 +143,90 @@ test('a bug is still a bug: an error with no HTTP status keeps "Something went w
   const html = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8');
   assert.match(html, /if \(Number\.isInteger\(e\?\.status\)\) \{ app\.innerHTML = `<div class="content-body">\$\{loadFailedHtml\(e\)\}/);
   assert.match(html, /<h2>Something went wrong<\/h2>/);
+});
+
+/* ---------- phase 3 (#345, ECNL #92): no retry storms, no silent empty states ---------- */
+const profileUrl = slug => `/api/v1/programs/${slug}`;
+const count = (page, pred) => page.requests.filter(r => pred(r.url)).length;
+const SLUGS = INDEX.programs.filter(p => fs.existsSync(path.join(PUBLIC, 'data', 'programs', `${p.slug}.json`))).map(p => p.slug);
+const go = async (page, hash) => { page.sb.location.hash = hash; page.sb.route(); await settle(); };
+
+test('phase 3: a retry waits at least Retry-After; Try again before then sends nothing and says how long is left', async () => {
+  let fail = true;
+  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '30' } } : null));
+  await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1);
+  fail = false; // the server would answer now, but the page must not ask before the wait is over
+  page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'Try again at once sent a request');
+  assert.ok(page.app().includes(CARD) && page.app().includes('Try again in 30 seconds'), page.app().slice(0, 300));
+  page.advance(29_000);
+  page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'Try again 29 s in sent a request');
+  assert.ok(page.app().includes('Try again in 1 second.'), 'the card counts down, in words');
+  page.advance(1_000);
+  page.el('#loadRetry').onclick(); await settle();
+  assert.equal(count(page, u => u === '/api/v1/programs'), 2, 'Try again after the wait sends exactly one request');
+  assert.ok(!page.app().includes(CARD) && page.sb.S.index?.programs?.length > 0, 'and loads the page');
+});
+
+test('phase 3: under a simulated 429 run, a visitor who keeps clicking sends no storm (every refused path counted)', async () => {
+  // the index loads; every profile answers 429 (Retry-After 60, no session): the visitor opens profiles, Compare,
+  // goes back and forth, presses Try again - 25 actions within the minute
+  const page = loadPage(u => (u.startsWith('/api/v1/programs/') ? { status: 429, body: {}, headers: { 'retry-after': '60', 'x-collegedash-session': 'none' } } : null));
+  await settle();
+  const actions = [];
+  for (let i = 0; i < 6; i++) actions.push(`#/p/${SLUGS[i % SLUGS.length]}`, '#/');
+  actions.push(`#/compare/${SLUGS.slice(0, 4).join(',')}`, `#/p/${SLUGS[0]}/roster`, `#/compare/${SLUGS.slice(1, 3).join(',')}`);
+  for (const h of actions) { await go(page, h); page.advance(1_000); }
+  for (let i = 0; i < 10; i++) { page.el('#loadRetry').onclick?.(); await settle(); page.advance(1_000); }
+  const refused = count(page, u => u.startsWith('/api/v1/programs/'));
+  assert.equal(refused, 1, `${refused} profile requests for one refusal: a retry storm`);
+  assert.equal(count(page, u => u === '/'), 1, 'the session is renewed once (one background HEAD /), not per request');
+  assert.ok(page.app().includes(CARD) && page.app().includes('allow cookies'), 'the refused view says so');
+  page.advance(60_000);
+  await go(page, `#/p/${SLUGS[0]}`);
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 2, 'after the wait, the next view asks once');
+});
+
+test('phase 3: Compare asks for one refused profile, not all of them, and shows the card, never partial columns', async () => {
+  const page = loadPage(u => (u.startsWith('/api/v1/programs/') ? { status: 429, body: {}, headers: { 'retry-after': '60' } } : null));
+  await settle();
+  await go(page, `#/compare/${SLUGS.slice(0, 4).join(',')}`);
+  assert.equal(count(page, u => u.startsWith('/api/v1/programs/')), 1, 'Compare sent one request per picked program after the first refusal');
+  assert.ok(page.app().includes(CARD) && !page.app().includes('<table'), 'Compare shows the card, not a table with missing columns');
+});
+
+test('phase 3: no silent empty state - every view a visitor waits on shows the card on 429, 401 or 503', async () => {
+  const views = [['#/', '/api/v1/programs'], ['#/', '/api/v1/programs', 'table'], ['#/camps', '/api/v1/camps'], ['#/trends', '/api/v1/trends'],
+    [`#/p/${SLUGS[0]}`, profileUrl(SLUGS[0])], [`#/compare/${SLUGS[0]},${SLUGS[1]}`, profileUrl(SLUGS[0])]];
+  for (const status of [429, 401, 503]) {
+    for (const [hash, url, listView] of views) {
+      const page = loadPage(u => (u === url ? { status, body: {} } : null));
+      if (listView) page.sb.S.filters.view = listView;
+      await settle();
+      await go(page, hash);
+      const html = page.app();
+      assert.ok(html.includes(CARD), `${hash}${listView ? ` (${listView})` : ''} on ${status}: no card - ${html.slice(0, 200)}`);
+      assert.ok(!/No programs match|0 programs|0 camps|>0 results/.test(html), `${hash} on ${status}: an empty result was shown`);
+    }
+  }
+});
+
+test('phase 3: Pipelines - a refused roster says so, waits for a click, and one click is one request', async () => {
+  const doc = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'trends', 'index.json'), 'utf8'));
+  const r = doc.records, i = r.p.findIndex((p, k) => r.s[k] === 0 && r.c[k] >= 0 && SLUGS.includes(doc.programIds[p]));
+  const club = doc.clubs.id[r.c[i]], slug = doc.programIds[r.p[i]];
+  let fail = true;
+  const page = loadPage(u => (fail && u === profileUrl(slug) ? { status: 429, body: {}, headers: { 'retry-after': '60' } } : null));
+  await settle();
+  const card = `#/trends?club=${encodeURIComponent(club)}&program=${slug}`;
+  await go(page, card);
+  assert.ok(page.el('#trNames').innerHTML.includes('could not be loaded') && page.el('#trNames').innerHTML.includes('Try again'), page.el('#trNames').innerHTML);
+  for (let k = 0; k < 5; k++) { await go(page, '#/trends'); await go(page, card); }
+  assert.equal(count(page, u => u === profileUrl(slug)), 1, 'coming back to the card re-asked for the refused roster');
+  fail = false; page.advance(60_000);
+  await go(page, '#/trends'); await go(page, card);
+  assert.equal(count(page, u => u === profileUrl(slug)), 2);
+  assert.ok(page.el('#trNames').innerHTML.includes('Current players'), 'after the wait the names load');
 });

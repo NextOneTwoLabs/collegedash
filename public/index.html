@@ -968,7 +968,18 @@ if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').cl
 // Every data call is the site's own: it travels on the session cookie "/" set (issue #345, api/session.mjs), which
 // the browser sends by itself. A failed call carries its HTTP status, Retry-After and the X-CollegeDash-Session
 // value for loadFailedHtml; the refusal body's `help` link (meant for scripts) is never shown.
+/* #345 phase 3 (ECNL #92): after a 429, or a 503 that names a wait, the page sends no data request until the
+   Retry-After has passed. Every load in that window fails at once with the same refusal and the seconds still to
+   wait, so no path (a click, a navigation, a Try again, a Pipelines row, Compare) can turn one refusal into many
+   requests. A 429 without Retry-After waits 60 s, the limit's own window. Nothing retries by itself. */
+let apiHoldUntil = 0, apiHold = null;
+function apiHeld(url) {
+  const secs = Math.max(1, Math.ceil((apiHoldUntil - Date.now()) / 1000));
+  const e = new Error(`${url}: not sent, waiting ${secs} s after HTTP ${apiHold.status}`);
+  return Object.assign(e, { status: apiHold.status, session: apiHold.session, retryAfter: String(secs), held: true });
+}
 async function getJSON(url, opts) {
+  if (apiHold && Date.now() < apiHoldUntil) throw apiHeld(url);
   const sentAt = Date.now();
   let r;
   try { r = await fetch(url, { cache: 'no-cache', ...(opts || {}) }); }
@@ -979,8 +990,11 @@ async function getJSON(url, opts) {
     e.status = r.status;
     e.retryAfter = r.headers?.get?.('retry-after') || null;
     e.session = r.headers?.get?.('x-collegedash-session') || null;
+    const wait = /^\d+$/.test(e.retryAfter || '') ? +e.retryAfter : r.status === 429 ? 60 : 0;
+    if ((r.status === 429 || r.status === 503) && wait > 0) { apiHoldUntil = Date.now() + wait * 1000; apiHold = e; }
     throw e;
   }
+  apiHold = null; apiHoldUntil = 0;
   return r.json();
 }
 // Issue #345 (ECNL #90, #92): an answer without a session (cookie lost, blocked or over a day old) says
@@ -1003,9 +1017,10 @@ function noteSession(resp, sentAt = Date.now()) {
 // had no session: a browser that blocks cookies shares the small per-IP allowance); 503 is the service briefly
 // unable to answer; a dropped connection says so; anything else did not load. The site's own calls travel on the
 // session cookie and never send an API key, so a key's 401 is not a case of its own here. Nothing retries by itself.
+const waitWords = ra => /^\d+$/.test(ra || '') ? `${ra} second${ra === '1' ? '' : 's'}` : 'a minute';
 function loadFailedHtml(err, id = 'loadRetry') {
   const s = err?.status;
-  const why = s === 429 ? `Too many requests. Try again in ${err.retryAfter && /^\d+$/.test(err.retryAfter) ? `${err.retryAfter} seconds` : 'a minute'}${err.session === 'none' ? ', or allow cookies for this site' : ''}.`
+  const why = s === 429 ? `Too many requests. Try again in ${waitWords(err.retryAfter)}${err.session === 'none' ? ', or allow cookies for this site' : ''}.`
     : s === 503 ? 'The data service is briefly unavailable. Try again in a moment.'
     : s === 0 ? 'The data did not load. Check your connection and try again.'
     : 'The data did not load. Try again.';
@@ -2564,12 +2579,15 @@ function trendsApply(sel, { say, focus } = {}) {
   $('#trSub').innerHTML = v.sub;
   const res = $('#trResults'); res.innerHTML = v.html;
   // Current players of a program, loaded from its profile only when the visitor opens the row (public roster names only).
-  res.querySelectorAll('details.trend-players').forEach(d => d.addEventListener('toggle', async () => {
-    if (!d.open || d.dataset.loaded) return; d.dataset.loaded = '1';
-    const box = d.querySelector('.trend-names');
-    try { const names = trendsRosterNames(await loadProfile(d.dataset.slug), TR.selNow); box.innerHTML = names.length ? esc(names.join(', ')) : 'Not listed on the current roster.'; }
-    catch { box.textContent = 'The roster could not be loaded.'; }
-  }));
+  res.querySelectorAll('details.trend-players').forEach(d => {
+    const load = async () => {
+      d.dataset.loaded = '1';
+      const box = d.querySelector('.trend-names');
+      try { const names = trendsRosterNames(await loadProfile(d.dataset.slug), TR.selNow); box.innerHTML = names.length ? esc(names.join(', ')) : 'Not listed on the current roster.'; }
+      catch (e) { trendsNamesFailed(box, e, load); } // #345 phase 3: says so and waits for a click; nothing retries by itself
+    };
+    d.addEventListener('toggle', () => { if (d.open && !d.dataset.loaded) load(); });
+  });
   const done = v.names ? trendsLoadNames(v.names) : Promise.resolve();
   if (say) trendsSay(`${say} ${v.say}`);
   if (focus) {
@@ -2580,11 +2598,18 @@ function trendsApply(sel, { say, focus } = {}) {
 }
 // The one-program card's names: its current-roster players from the chosen clubs and schools, from the public roster.
 // Past players and commits are never named.
+// A roster that did not load (#345 phase 3): the reason in words and a Try again button; one click, one request.
+function trendsNamesFailed(box, e, again) {
+  if (!box) return;
+  const why = e?.status === 429 ? ` Too many requests: try again in ${waitWords(e.retryAfter)}.` : '';
+  box.innerHTML = `The current players could not be loaded.${esc(why)} <button type="button" class="btn-link tr-names-retry">Try again</button>`;
+  const b = box.querySelector?.('.tr-names-retry'); if (b) b.onclick = () => { box.textContent = 'Loading…'; again(); };
+}
 async function trendsLoadNames({ slug, cur }) {
   const tok = ++TR.tok, box = () => TR && TR.tok === tok ? $('#trNames') : null;
   let names;
   try { names = trendsRosterNames(await loadProfile(slug), TR.selNow); }
-  catch { const b = box(); if (b) b.textContent = 'The roster could not be loaded.'; return; }
+  catch (e) { trendsNamesFailed(box(), e, () => trendsLoadNames({ slug, cur })); return; }
   const b = box(); if (!b) return;
   const n = names.length;
   const differs = n !== cur
@@ -3130,7 +3155,9 @@ function coaCell(s, home) {
 async function renderCompare() {
   const idx = await loadIndex();
   const picked = S.compare.filter(s => idx.programs.some(p => p.slug === s)).slice(0, 4);
-  const profiles = await Promise.all(picked.map(loadProfile));
+  // one at a time (#345 phase 3): the first refusal stops the rest, and the whole view shows the card, never partial columns
+  const profiles = [];
+  for (const s of picked) profiles.push(await loadProfile(s));
   const app = $('#app');
   const home = S.residency;
   const inState = p => home && p.school?.state === home;
