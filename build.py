@@ -228,8 +228,9 @@ def check_no_stale_profiles(registry: dict) -> bool:
 # The publish gate's reviewed list (#94; Bianque's review of #252, plan revision 1 on #94): a published program
 # with no stored athletics source that is explained by neither athletics.skipReason nor
 # athletics.rosterRequiresBrowser. Each entry is slug -> {"reason": why it publishes anyway, "date": "YYYY-MM-DD"
-# it was reviewed}, added in a reviewed PR. It starts empty: the six D1 programs with no athletics source
-# (oklahoma, utah-state, wyoming, ohio-university, george-mason, st-thomas) all carry rosterRequiresBrowser.
+# it was reviewed}, added in a reviewed PR. It starts empty: the three D1 programs with no athletics source
+# (oklahoma, ohio-university, st-thomas) all carry rosterRequiresBrowser. george-mason, utah-state and wyoming
+# carried it too until #145 found their roster embedded in the server HTML.
 # check_publish_gate() fails on a stale entry, so the list cannot quietly grow.
 PUBLISH_GATE_REVIEWED: dict[str, dict] = {}
 _GATE_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
