@@ -14,6 +14,7 @@ News:     /sports/<sport>/archives (links) and /rss?path=wsoc (titles + pubDate)
 from __future__ import annotations
 
 import collections
+import json
 import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
@@ -714,6 +715,88 @@ def _link_unlinked_table_from_list_view(players: list[dict], soup: BeautifulSoup
                 p["social"] = dict(social_by_url.get(urls_[0], {}))
 
 
+# ---------- the legacy Vue/Knockout roster template's embedded JSON (issue #145) ----------
+# george-mason, utah-state and wyoming serve no roster table, person card or list item: the page builds them in
+# the browser from a roster object written into the server HTML as `new Vue({ el: '...', data: () => ({ roster:
+# {...} ...`. That object is plain JSON already in the page, so it is read here with no browser - but it also holds
+# staff email and phone, player birthdates, social accounts and photos, none of which may be stored. So a row is
+# built ONLY from the named keys below, never by copying the object; everything else in it is ignored.
+EMBEDDED_ROSTER_SIG = re.compile(r"new Vue\(\{\s*el:\s*(['\"])[^'\"]*\1,\s*data:\s*\(\)\s*=>\s*\(\{\s*roster:\s*(?=\{)")
+# JSON key -> _player_record argument. The name (first_name + last_name), the height (height_feet, height_inches)
+# and the long position (position_long, when position_short is empty) are read by name in _embedded_player.
+EMBEDDED_PLAYER_FIELDS = {"jersey_number": "number", "position_short": "pos_label", "academic_year_short": "class_label",
+                          "hometown": "hometown", "highschool": "high_school", "previous_school": "previous_school",
+                          "major": "major"}
+# JSON key -> staff row field. The name is firstname + lastname.
+EMBEDDED_STAFF_FIELDS = {"title": "title"}
+
+
+def _embedded_text(v) -> str:
+    return common.clean(str(v)) if v not in (None, False) else ""
+
+
+def _embedded_roster_object(html: str) -> dict | None:
+    """The roster object after the legacy template's signature, when it is one: parses as JSON, carries the
+    template's own keys and a non-empty players list whose entries all have first_name, last_name and
+    jersey_number. An empty list is no roster, so its staff are not taken either."""
+    m = EMBEDDED_ROSTER_SIG.search(html)
+    if not m:
+        return None
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(html, m.end())
+    except ValueError:
+        return None
+    if not isinstance(obj, dict) or "template_id" not in obj or "display_coaches" not in obj:
+        return None
+    players = obj.get("players")
+    if not isinstance(players, list) or not players or not all(
+            isinstance(p, dict) and {"first_name", "last_name", "jersey_number"} <= p.keys() for p in players):
+        return None
+    return obj
+
+
+def _embedded_player(p: dict) -> dict | None:
+    name = common.clean(f"{_embedded_text(p.get('first_name'))} {_embedded_text(p.get('last_name'))}")
+    if not name or p.get("rp_hide"):  # rp_hide: the site itself does not show this player
+        return None
+    args = {arg: _embedded_text(p.get(key)) for key, arg in EMBEDDED_PLAYER_FIELDS.items()}
+    if not args.get("pos_label"):
+        args["pos_label"] = _embedded_text(p.get("position_long"))
+    ft, inch = _embedded_text(p.get("height_feet")), _embedded_text(p.get("height_inches"))
+    height = f"{ft}' {inch or 0}\"" if ft.isdigit() and ft != "0" else ""
+    return _player_record(name=name, height=height, bio_url=None, social={},
+                          **{k: args.get(k, "") for k in ("number", "pos_label", "class_label", "hometown",
+                                                          "high_school", "previous_school", "major")})
+
+
+def _embedded_staff(s: dict, is_coaching: bool) -> dict | None:
+    name = common.clean(f"{_embedded_text(s.get('firstname'))} {_embedded_text(s.get('lastname'))}")
+    if not name:
+        return None
+    row = {field: _embedded_text(s.get(key)) for key, field in EMBEDDED_STAFF_FIELDS.items()}
+    title = row.get("title", "")
+    return {"name": name, "title": title, "isHeadCoach": is_head_coach(title),
+            "isCoach": is_coaching or bool(re.search(r"coach", title, re.I)), "bioUrl": None, "social": {}}
+
+
+def _parse_embedded_roster(html: str) -> tuple[list[dict], list[dict]]:
+    """(players, staff) from the legacy template's embedded roster object (issue #145), or ([], []) when the
+    page does not carry it. Staff are the object's `coaches` then its `support` list. No bio URL is built: the
+    object carries none."""
+    obj = _embedded_roster_object(html)
+    if not obj:
+        return [], []
+    players = [r for r in (_embedded_player(p) for p in obj["players"]) if r]
+    staff = []
+    for key, is_coaching in (("coaches", True), ("support", False)):
+        for s in obj.get(key) or []:
+            if isinstance(s, dict):
+                row = _embedded_staff(s, is_coaching)
+                if row:
+                    staff.append(row)
+    return players, staff
+
+
 def looks_client_rendered(html: str) -> bool:
     """True when the roster page is a template filled in by the browser (legacy Sidearm Knockout /
     Vue sites, or the current theme's skeleton loader): the served HTML never contains players."""
@@ -746,6 +829,9 @@ def parse_roster(html: str, base_url: str) -> dict:
         players = _parse_person_cards(soup, base_url, social_by_url)
     if not players:
         players = _parse_list_view(soup, base_url)
+    if not players:  # issue #145: only when tables, person cards and the list view all found no player
+        players, embedded_staff = _parse_embedded_roster(html)
+        staff = staff or embedded_staff
     seen, uniq = set(), []
     for s in staff:
         k = s["bioUrl"] or s["name"]

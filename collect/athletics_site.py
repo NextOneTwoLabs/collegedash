@@ -141,6 +141,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     if bios:
         stored_bios = {p.get("bioUrl"): p for p in ((stored.get("roster") or {}).get("players") or []) if p.get("bioUrl")}
         for p in roster["players"]:
+            if not p.get("bioUrl"):  # no bio link to follow (the list view without one; the embedded roster, #145)
+                p["bio"], p["club"] = {}, ""
+                continue
             try:
                 with common.fetch_site("athletics.bio"):
                     bhtml, _ = common.fetch_text(p["bioUrl"], max_age_hours=24 * 7)
