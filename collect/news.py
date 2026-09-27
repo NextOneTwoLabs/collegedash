@@ -30,7 +30,8 @@ def collect(program: dict, registry: dict) -> dict:
     a = program["athletics"]
     news_url = u["news"]
     try:
-        html, meta = common.fetch_text(news_url, max_age_hours=12)
+        with common.fetch_site("news.page"):  # a robots.txt block re-raises below: the collector is skipped (#101)
+            html, meta = common.fetch_text(news_url, max_age_hours=12)
     except common.FetchError as e:
         # Some WMT sites (lsusports.net, purduesports.com, auburntigers.com) serve news only from the
         # site-wide archive filtered by sport: /news/?sport=<sport slug>.
@@ -43,7 +44,8 @@ def collect(program: dict, registry: dict) -> dict:
     # Older Sidearm themes have an empty /archives page and only the feed, so the feed counts too.
     if u.get("rss") and hasattr(ad, "parse_rss"):
         try:
-            xml_text, _ = common.fetch_text(u["rss"], max_age_hours=12)
+            with common.fetch_site("news.rss"):
+                xml_text, _ = common.fetch_text(u["rss"], max_age_hours=12)
             items = ad.parse_rss(xml_text, program["athletics"]["baseUrl"]) + items
         except common.FetchError as e:
             common.log(f"news: rss failed: {e}")

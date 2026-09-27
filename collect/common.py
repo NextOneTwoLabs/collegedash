@@ -11,6 +11,7 @@ Layout (mirrors ECNLDash):
 
 from __future__ import annotations
 
+import collections
 import contextlib
 import datetime as _dt
 import gzip
@@ -353,8 +354,9 @@ def forget_cached(url: str, *, method: str = "GET", json_body=None) -> bool:
 # The gap is per process. Two refresh processes at once (not something the workflow does: its
 # concurrency group forbids it) would each keep their own gates, exactly as before this change.
 #
-# A robots.txt check (issue #101, deliberately not done here) would go in _PoliteAdapter.send, before
-# the gate: it sees the first request and every redirect hop, keyed by the host actually contacted.
+# The robots.txt check of issue #101 is in _PoliteAdapter.send, before the gate: it sees the first request
+# and every redirect hop, keyed by the host actually contacted. See "robots.txt in the shared fetch path"
+# below.
 
 RETRY_STATUSES = (429, 500, 502, 503, 504)
 
@@ -487,6 +489,7 @@ class _PoliteAdapter(HTTPAdapter):
 
     def send(self, request, **kwargs):
         guard = getattr(_host_guard, "guard", None)
+        robots_host = _robots_check(request.url)  # issue #101: before the gate, on every hop; None = not checked
         with _polite(request.url) as g:
             if guard is not None:
                 why = guard.before(_host(request.url), request.url)
@@ -500,7 +503,9 @@ class _PoliteAdapter(HTTPAdapter):
                     resp.content  # read the body while the host is still held; Session reads it later otherwise
             except requests.RequestException:
                 _hold(g, _backoff_seconds(None))
+                _robots_note_answer(robots_host, None)
                 raise
+            _robots_note_answer(robots_host, resp.status_code)
             if guard is not None:
                 guard.after(_host(request.url), request.url, resp.status_code)
             return resp
@@ -572,42 +577,104 @@ ROBOTS_AGENT = USER_AGENT_PRODUCT
 
 
 def set_robots_txt(host: str, text: str | None) -> None:
-    """Seed the robots cache for `host` (tests, offline runs). None = no robots.txt (allow all)."""
+    """Seed the robots cache for `host` (tests, offline runs). None = no robots.txt (allow all). A seeded host
+    counts as explicitly loaded: its Crawl-delay applies."""
     rp = robotparser.RobotFileParser()
     if text is None:
         rp.allow_all = True
     else:
         rp.parse(text.splitlines())
+    with _robots_lock:
+        _robots_delay[host] = _crawl_delay_of(rp, text)
+        _robots_state[host] = "seeded"
+        _explicit_hosts.add(host)
+    _use_crawl_delay(host)
     _robots[host] = rp
-    _apply_crawl_delay(host, rp)
 
 
-def _apply_crawl_delay(host: str, rp) -> None:
+def _crawl_delay_of(rp, text: str | None) -> float | None:
+    """The Crawl-delay that applies to us, in seconds, or None. urllib.robotparser reads only whole numbers
+    ('Crawl-delay: 0.5' or '2.5' come back as None), so a value it drops is read from the raw lines with the
+    same group choice it makes: the first group naming us (substring match, as Entry.applies_to does), else
+    the '*' group."""
     try:
         delay = rp.crawl_delay(ROBOTS_AGENT)
     except Exception:  # robotparser raises on a parser that has not been fed
         delay = None
-    if delay and float(delay) > MIN_GAP_SECONDS:
-        _host_delay[host] = min(float(delay), 30.0)
-        log(f"robots: {host} asks Crawl-delay {delay}s; using {_host_delay[host]:.0f}s between requests")
+    if delay is not None or not text:
+        return float(delay) if delay is not None else None
+    groups, agents, in_rules = [], [], False
+    for raw in text.splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if ":" not in line:
+            continue
+        field, value = (s.strip() for s in line.split(":", 1))
+        field = field.lower()
+        if field == "user-agent":
+            if in_rules:
+                agents, in_rules = [], False
+            if not agents:
+                groups.append((agents, {}))
+            agents.append(value.lower())
+        elif groups:
+            in_rules = True
+            if field == "crawl-delay":
+                try:
+                    groups[-1][1].setdefault("delay", float(value))
+                except ValueError:
+                    pass
+    me = ROBOTS_AGENT.lower()
+    named = next((g for a, g in groups if any(x != "*" and x in me for x in a)), None)
+    star = next((g for a, g in groups if "*" in a), None)
+    chosen = named if named is not None else star
+    delay = (chosen or {}).get("delay")
+    return delay if delay is not None and delay >= 0 else None
 
 
-def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
+def _use_crawl_delay(host: str) -> None:
+    """Apply the host's recorded Crawl-delay to its politeness gate (above MIN_GAP_SECONDS, capped at 30 s)."""
+    delay = _robots_delay.get(host)
+    if delay and delay > MIN_GAP_SECONDS:
+        _host_delay[host] = min(delay, 30.0)
+        log(f"robots: {host} asks Crawl-delay {delay:g}s; using {_host_delay[host]:.0f}s between requests")
+
+
+def _apply_crawl_delay(host: str, rp) -> None:
+    """Apply the host's Crawl-delay: the one recorded when its robots.txt was read (raw lines included), else the
+    parser's."""
+    if host not in _robots_delay:
+        with _robots_lock:
+            _robots_delay[host] = _crawl_delay_of(rp, None)
+    _use_crawl_delay(host)
+
+
+def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser", str, str | None]:
+    """(parser, state, text). state: ok, 4xx, 5xx, unreachable or offline.
+
+    The parser for an unreachable or 5xx robots.txt allows everything; which callers honour that is decided by
+    the state. Issue #101, owner decision 1 = B (2026-09-25), narrowed by the owner on 2026-09-26: B (allowed and
+    counted, departing from RFC 9309 section 2.3.1.4, which says assume complete disallow) applies ONLY to the new
+    hook in _PoliteAdapter.send, in report mode. robots_allowed() - the explicit checks: off-site camp hosts, THE,
+    site_colors, the registry builder - keeps the strict rule for these states: disallowed."""
     rp = robotparser.RobotFileParser()
     if os.environ.get("COLLEGEDASH_OFFLINE"):
-        rp.disallow_all = True  # unknown = do not fetch
-        return rp
+        rp.disallow_all = True  # unknown = do not fetch (no request can be made to find out)
+        return rp, "offline", None
     url = f"{scheme}://{host}/robots.txt"
+    _robots_fetching.on = True  # the robots.txt request itself is exempt from the check: no recursion
     try:
         with _session() as s:
             resp = s.get(url, headers=DEFAULT_HEADERS, timeout=20)
     except requests.RequestException as e:
-        log(f"robots: {host} unreachable ({type(e).__name__}); treating as disallowed")
-        rp.disallow_all = True
-        return rp
+        log(f"robots: {host} unreachable ({type(e).__name__}); explicit checks disallow it, the hook counts it (#101)")
+        rp.allow_all = True
+        return rp, "unreachable", None
+    finally:
+        _robots_fetching.on = False
     if 200 <= resp.status_code < 300:
         rp.parse(resp.text.splitlines())
-    elif 400 <= resp.status_code < 500:
+        return rp, "ok", resp.text
+    if 400 <= resp.status_code < 500:
         # No robots.txt = no restrictions. Note this fails OPEN, and that this request carries the
         # same User-Agent as everything else: a host that served robots.txt to the old Chrome string
         # but refused our token would silently lose its rules rather than fail loudly. Measured
@@ -616,9 +683,36 @@ def _load_robots(host: str, scheme: str) -> "robotparser.RobotFileParser":
         # differed between the two agents, so the risk is real in principle and absent in practice.
         # Worth re-checking if 4xx rates on robots.txt ever climb after an agent change.
         rp.allow_all = True
-    else:
-        log(f"robots: {host} returned HTTP {resp.status_code}; treating as disallowed")
-        rp.disallow_all = True
+        return rp, "4xx", None
+    log(f"robots: {host} returned HTTP {resp.status_code}; explicit checks disallow it, the hook counts it (#101)")
+    rp.allow_all = True
+    return rp, "5xx", None
+
+
+def _robots_for(host: str, scheme: str, *, explicit: bool) -> "robotparser.RobotFileParser":
+    """The host's parser, loaded once per host per run (a second worker waits for the first's answer).
+
+    Crawl-delay (issue #101, Bianque's condition 1): a host checked by an EXPLICIT robots_allowed() call (off-site
+    camp hosts, THE, site_colors, the registry builder) has its delay applied, as before #101, including when the
+    adapter's check loaded the host first. A host only the adapter has checked in report mode has its delay
+    recorded, not applied; enforce mode applies every host's delay. Applied before the parser is published, so a
+    worker that sees the parser also sees its delay."""
+    rp = _robots.get(host)
+    if rp is not None and (not explicit or host in _explicit_hosts):
+        return rp
+    with _key_lock("robots:" + host):
+        rp = _robots.get(host)
+        if rp is None:
+            rp, state, text = _load_robots(host, scheme)
+            with _robots_lock:
+                _robots_state[host] = state
+                _robots_delay[host] = _crawl_delay_of(rp, text)
+                _explicit_hosts.discard(host)  # a fresh parser: its delay is applied afresh below
+        if explicit and host not in _explicit_hosts:
+            with _robots_lock:
+                _explicit_hosts.add(host)
+            _apply_crawl_delay(host, rp)
+        _robots[host] = rp
     return rp
 
 
@@ -633,21 +727,168 @@ def robots_allowed(url: str) -> bool:
     'Disallow: /' is not honoured; agent matching is substring; and path wildcards are unsupported.
     See the notes above ROBOTS_AGENT for which of those fail open and which fail closed.
 
-    4xx = allowed; unreachable or 5xx = disallowed. Records the host's Crawl-delay for the host's
-    politeness gate (_polite)."""
+    4xx = allowed; unreachable or 5xx = DISALLOWED, as before #101 and as RFC 9309 asks (the owner, 2026-09-26:
+    decision B does not extend to these explicit checks). Applies the host's Crawl-delay to its politeness gate
+    (_polite)."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False
     scheme, host = m.group(1), m.group(2).lower()
-    rp = _robots.get(host)
-    if rp is None:
-        with _key_lock("robots:" + host):  # once per host: a second worker waits for the first's answer
-            rp = _robots.get(host)
-            if rp is None:
-                rp = _load_robots(host, scheme)
-                _apply_crawl_delay(host, rp)  # before publishing rp: a worker that sees the parser also sees its delay
-                _robots[host] = rp
+    rp = _robots_for(host, scheme, explicit=True)
+    if _robots_state.get(host) in ("unreachable", "5xx"):
+        return False
     return rp.can_fetch(ROBOTS_AGENT, url)
+
+
+# ---------- robots.txt in the shared fetch path (issue #101) ----------
+# COLLEGEDASH_ROBOTS = off (the default) | report | enforce. _PoliteAdapter.send asks the host's robots.txt for
+# the first request and every redirect hop, before the host's gate; cache hits make no request and are not
+# checked, and the robots.txt request itself is exempt.
+#   report  nothing is blocked and no delay changes (see _robots_for). Would-be blocks are counted per collector,
+#           per call site and per host, with robots.txt states and Crawl-delay values, for refresh-state.robots.
+#   enforce a disallowed request raises RobotsDisallowed before anything is sent, and every host's Crawl-delay
+#           applies. Collectors keep their stored data on a block (the catch sites handle RobotsDisallowed) and
+#           collect_one records the rest as skipped, reason robots.
+# The report holds counts, hosts and paths only: no query strings, no page content.
+ROBOTS_MODES = ("off", "report", "enforce")
+_robots_lock = threading.Lock()
+_robots_state: dict[str, str] = {}      # host -> ok | 4xx | 5xx | unreachable | offline | seeded
+_robots_delay: dict[str, float | None] = {}
+_explicit_hosts: set[str] = set()       # hosts an explicit robots_allowed() call (or a seed) has checked
+_robots_fetching = threading.local()    # .on while this thread fetches a robots.txt
+_site = threading.local()               # .label: the call site of the fetch in progress
+_robots_counts: dict = {}
+
+
+class RobotsDisallowed(FetchError):
+    """Enforce mode: robots.txt disallows this URL for us. Nothing was sent. `site` is the call-site label."""
+
+    def __init__(self, url: str, site: str):
+        super().__init__(f"robots.txt disallows {redact(url)} ({site})", final_url=url)
+        self.site = site
+
+
+def robots_mode() -> str:
+    mode = (os.environ.get("COLLEGEDASH_ROBOTS") or "off").strip().lower()
+    return mode if mode in ROBOTS_MODES else "off"
+
+
+@contextlib.contextmanager
+def fetch_site(label: str):
+    """Label the fetches made inside the block ('athletics.historyRoster', 'camps.page', ...) for the report."""
+    prev = getattr(_site, "label", None)
+    _site.label = label
+    try:
+        yield
+    finally:
+        _site.label = prev
+
+
+def current_site() -> str:
+    return getattr(_site, "label", None) or "other"
+
+
+def reset_robots_report() -> None:
+    with _robots_lock:
+        _robots_counts.clear()
+        _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
+                              by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
+                              loaded=collections.Counter(), failed=collections.Counter())
+
+
+def _robots_check(url: str) -> str | None:
+    """The adapter's check for one request or hop. Returns the host checked (None when off, exempt or not
+    http(s)); raises RobotsDisallowed in enforce mode."""
+    mode = robots_mode()
+    if mode == "off" or getattr(_robots_fetching, "on", False):
+        return None
+    m = re.match(r"^(https?)://([^/]+)", url)
+    if not m:
+        return None
+    host = m.group(2).lower()
+    rp = _robots_for(host, m.group(1), explicit=(mode == "enforce"))
+    allowed = rp.can_fetch(ROBOTS_AGENT, url)
+    site = current_site()
+    with _robots_lock:
+        if not _robots_counts:
+            reset_robots_report()
+        c = _robots_counts
+        c["requests"][host] += 1
+        if not allowed:
+            c["blocked"][host] += 1
+            c["by_site"][site] += 1
+            c["by_collector"][site.split(".", 1)[0]] += 1
+            if len(c["paths"]) < 50:
+                c["paths"].setdefault((host, urlsplit(url).path or "/"), site)
+    if not allowed and mode == "enforce":
+        raise RobotsDisallowed(url, site)
+    return host
+
+
+def _robots_note_answer(host: str | None, status: int | None) -> None:
+    """For hosts whose robots.txt was unreachable or a 5xx (allowed by the hook under decision B): did the page then
+    load?"""
+    if host is None or _robots_state.get(host) not in ("unreachable", "5xx"):
+        return
+    with _robots_lock:
+        if not _robots_counts:
+            reset_robots_report()
+        (_robots_counts["loaded"] if status is not None and status < 400 else _robots_counts["failed"])[host] += 1
+
+
+def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
+    """refresh-state.robots for this run: counts, hosts and paths only."""
+    with _robots_lock:
+        c = {k: (v.copy() if hasattr(v, "copy") else v) for k, v in _robots_counts.items()} if _robots_counts else {}
+        states = dict(_robots_state)
+        delays = dict(_robots_delay)
+        explicit = set(_explicit_hosts)
+    requests_ = c.get("requests", collections.Counter())
+    blocked = c.get("blocked", collections.Counter())
+    checked = set(requests_)
+    state_counts = collections.Counter(states.get(h, "unknown") for h in checked)
+    unavailable = sorted((h for h in checked if states.get(h) in ("unreachable", "5xx")),
+                         key=lambda h: (-requests_[h], h))
+    with_delay = {h: d for h, d in delays.items() if h in checked and d}
+    # Projected enforced run time (an estimate): every host's Crawl-delay applied. Extra time per host is its
+    # requests times the delay above today's gap, spread over the workers; never less than the slowest host alone.
+    gap_now = MIN_GAP_SECONDS + JITTER_SECONDS / 2
+    extra = sum(requests_[h] * max(0.0, min(d, 30.0) - max(gap_now, _host_delay.get(h, 0.0))) for h, d in with_delay.items())
+    slowest = max(checked, key=lambda h: requests_[h] * max(gap_now, min(with_delay.get(h) or 0.0, 30.0)), default=None)
+    slowest_s = requests_[slowest] * max(gap_now, min(with_delay.get(slowest) or 0.0, 30.0)) if slowest else 0.0
+    projected = max(elapsed_seconds + extra / max(1, workers), slowest_s)
+    return {
+        "mode": robots_mode(),
+        "decision1": "B, for this hook in report mode only: a robots.txt that is unreachable or answers 5xx is allowed "
+                     "and counted, departing from RFC 9309 (assume complete disallow); the explicit robots_allowed() "
+                     "checks keep disallowing such a host",
+        "hostsChecked": len(checked),
+        "requestsChecked": sum(requests_.values()),
+        "robotsTxt": dict(sorted(state_counts.items())),
+        "unavailableHosts": [{"host": h, "state": states[h], "requests": requests_[h],
+                              "pagesLoaded": c.get("loaded", {}).get(h, 0), "pagesFailed": c.get("failed", {}).get(h, 0)}
+                             for h in unavailable[:50]],
+        "wouldBlock" if robots_mode() != "enforce" else "blocked": {
+            "total": sum(blocked.values()),
+            "byCollector": dict(sorted(c.get("by_collector", {}).items())),
+            "bySite": dict(sorted(c.get("by_site", {}).items())),
+            "topHosts": [{"host": h, "count": n} for h, n in blocked.most_common(20)],
+            "samplePaths": [{"host": h, "path": p, "site": s} for (h, p), s in list(c.get("paths", {}).items())[:50]],
+        },
+        "crawlDelay": {
+            "hosts": len(with_delay),
+            "values": dict(sorted(collections.Counter(f"{d:g}" for d in with_delay.values()).items(),
+                                  key=lambda kv: float(kv[0]))),
+            "applied": sum(1 for h in with_delay if h in explicit),
+            "recordedOnly": sum(1 for h in with_delay if h not in explicit),
+        },
+        "projection": {"actualMinutes": round(elapsed_seconds / 60, 1),
+                       "projectedEnforcedMinutes": round(projected / 60, 1),
+                       "slowestHost": ({"host": slowest, "requests": requests_[slowest],
+                                        "crawlDelay": with_delay.get(slowest), "minutes": round(slowest_s / 60, 1)}
+                                       if slowest else None),
+                       "note": "estimate: this run's requests with every host's Crawl-delay applied (capped at 30 s)"},
+    }
 
 
 def fetch(

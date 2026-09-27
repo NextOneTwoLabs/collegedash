@@ -84,6 +84,10 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    # issue #101: GitHub kills a job at 6 h, and a kill must not lose the run. The collector step stops starting
+    # programs at 4.5 h (COLLEGEDASH_TIME_BUDGET_MINUTES below) and is killed at 5 h; the commit step is
+    # `if: always()`, so it still runs, with about 50 minutes before this job limit.
+    timeout-minutes: 350
     steps:
       # `only` is free text from the dispatch form, so it is never interpolated into a shell
       # command: it travels in `env` and is read as "$ONLY_INPUT". This step additionally checks it
@@ -146,8 +150,14 @@ jobs:
         id: refresh
         if: inputs.build_only != true && inputs.build_only != 'true'
         continue-on-error: true
+        timeout-minutes: 300
         env:
           SCORECARD_API_KEY: ${{ secrets.SCORECARD_API_KEY }}
+          # issue #101 PR A: robots.txt is checked on every request and hop and COUNTED, nothing is blocked
+          # (refresh-state.robots). Enforcing waits for the owner's bar (decision 5). Rollback: `off`.
+          COLLEGEDASH_ROBOTS: report
+          # start no new program after 4.5 h; the rest are skipped ('time budget') and keep their sources
+          COLLEGEDASH_TIME_BUDGET_MINUTES: "270"
           COLLEGEDASH_FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
           ONLY_INPUT: ${{ inputs.only }}
           FULL_INPUT: ${{ inputs.full }}

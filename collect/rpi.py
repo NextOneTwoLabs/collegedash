@@ -112,7 +112,8 @@ def history(registry: dict, years: list[int] | None = None, *, force: bool = Fal
         for kind, url in (("xlsx", src["xlsxTemplate"].format(sheetId=sheet_id)),
                           ("csv", src["csvTemplate"].format(sheetId=sheet_id))):
             try:
-                blob, meta = common.fetch(url, max_age_hours=24 * 365, timeout=180)
+                with common.fetch_site("rpi.history"):
+                    blob, meta = common.fetch(url, max_age_hours=24 * 365, timeout=180)
                 teams = parse_history_xlsx(blob) if kind == "xlsx" else parse_history_csv(blob.decode("utf-8", "replace"))
             except ImportError:
                 common.log("rpi history: openpyxl not installed (pip install openpyxl); trying CSV")
