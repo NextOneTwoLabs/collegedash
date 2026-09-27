@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gowilkesu.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:19:49Z"
+        "asOf": "2026-09-27T16:09:03Z"
       }
     }
   },
@@ -311,12 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-3-0",
-      "wins": 5,
+      "record": "6-3-0",
+      "wins": 6,
       "losses": 3,
       "ties": 0,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
+      "confRecord": "1-0-0",
       "inProgress": true,
       "headCoach": "John McNichol"
     },
@@ -454,11 +455,13 @@
         "clubInfo": {
           "raw": "HTX Football Club",
           "key": "htx football club",
-          "clubId": null,
-          "club": null,
-          "status": "unmatched",
+          "clubId": "htx-soccer",
+          "club": "HTX Soccer",
+          "status": "matched",
           "source": "roster page",
-          "updated": "2026-08-01"
+          "updated": "2026-08-01",
+          "state": "TX",
+          "country": "US"
         },
         "schoolInfo": {
           "raw": "Tompkins",
@@ -1578,7 +1581,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gowilkesu.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:19:49Z"
+      "asOf": "2026-09-27T16:09:03Z"
     }
   },
   "rosterHistory": {
@@ -2325,13 +2328,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 3,
       "ties": 0,
-      "text": "5-3-0",
-      "played": 8,
+      "text": "6-3-0",
+      "played": 9,
       "scheduled": 18,
-      "confText": "0-0-0",
+      "confText": "1-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2488,10 +2491,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Elizabethtown, PA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "live stats": "https://etownbluejays.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.gowilkesu.com/sports/womens-soccer/stats/2026/elizabethtown-college/boxscore/8736",
+          "recap": "https://www.gowilkesu.com/news/2026/9/26/womens-soccer-wilkes-womens-soccer-wins-1-0-over-elizabethtown-in-landmark-conference-opener.aspx",
           "history": "https://www.gowilkesu.com/sports/womens-soccer/opponent-history/elizabethtown-college/33"
         }
       },
@@ -3605,13 +3609,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gowilkesu.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:19:49Z"
+      "asOf": "2026-09-27T16:09:03Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Wilkes Women’s Soccer Wins 1-0 Over Elizabethtown in Landmark Conference Opener",
+        "url": "https://gowilkesu.com/news/2026/9/26/womens-soccer-wilkes-womens-soccer-wins-1-0-over-elizabethtown-in-landmark-conference-opener.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Wilkes Women’s Soccer Dominates Mount Aloysius with 5-0 Victory",
         "url": "https://gowilkesu.com/news/2026/9/23/womens-soccer-wilkes-womens-soccer-dominates-mount-aloysius-with-5-0-victory.aspx",
@@ -3682,7 +3692,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gowilkesu.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:19:52Z"
+      "asOf": "2026-09-27T16:09:09Z"
     }
   },
   "camps": {
@@ -3696,20 +3706,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gowilkesu.com/sports/2011/3/21/GEN_0321111734.aspx",
-        "asOf": "2026-09-26T15:20:00Z"
+        "asOf": "2026-09-27T16:09:13Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-27T16:11:04Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3730,7 +3740,7 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:19:49Z"
+        "at": "2026-09-27T16:09:03Z"
       }
     ]
   }

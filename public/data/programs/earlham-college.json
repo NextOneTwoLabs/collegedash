@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goearlham.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:11:26Z"
+        "asOf": "2026-09-27T15:59:14Z"
       }
     }
   },
@@ -286,11 +286,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-0",
+      "record": "2-4-1",
       "wins": 2,
       "losses": 4,
-      "ties": 0,
-      "gamesPlayed": 6,
+      "ties": 1,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Lydia Harvey"
@@ -788,11 +788,13 @@
         "clubInfo": {
           "raw": "Indy Premier SC",
           "key": "indy premier sc",
-          "clubId": null,
-          "club": null,
-          "status": "unmatched",
+          "clubId": "indy-premier-soccer-club",
+          "club": "Indy Premier Soccer Club",
+          "status": "matched",
           "source": "roster page",
-          "updated": "2026-08-01"
+          "updated": "2026-08-01",
+          "state": null,
+          "country": null
         },
         "schoolInfo": {
           "raw": "Mount Vernon",
@@ -897,11 +899,13 @@
         "clubInfo": {
           "raw": "North Union United SC",
           "key": "north union united sc",
-          "clubId": null,
-          "club": null,
-          "status": "unmatched",
+          "clubId": "north-union-united",
+          "club": "North Union United",
+          "status": "matched",
           "source": "roster page",
-          "updated": "2026-08-01"
+          "updated": "2026-08-01",
+          "state": null,
+          "country": null
         },
         "schoolInfo": {
           "raw": "Warrior Run",
@@ -1314,7 +1318,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goearlham.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:11:26Z"
+      "asOf": "2026-09-27T15:59:14Z"
     }
   },
   "rosterHistory": {
@@ -1968,9 +1972,9 @@
     "record": {
       "wins": 2,
       "losses": 4,
-      "ties": 0,
-      "text": "2-4-0",
-      "played": 6,
+      "ties": 1,
+      "text": "2-4-1",
+      "played": 7,
       "scheduled": 15,
       "confText": null,
       "exhibitions": 0
@@ -2094,11 +2098,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "North Manchester, IN",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://www.youtube.com/@MUSpartans",
-          "live stats": "https://muspartans.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.goearlham.com/news/2026/9/26/womens-soccer-womens-soccer-opens-conference-play-with-draw-at-manchester.aspx",
+          "box score": "https://www.goearlham.com/sports/womens-soccer/stats/2026/manchester-university/boxscore/5996",
           "history": "https://www.goearlham.com/sports/womens-soccer/opponent-history/manchester-university/83"
         }
       },
@@ -3123,13 +3127,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goearlham.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:11:26Z"
+      "asOf": "2026-09-27T15:59:14Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's soccer opens conference play with draw at Manchester",
+        "url": "https://goearlham.com/news/2026/9/26/womens-soccer-womens-soccer-opens-conference-play-with-draw-at-manchester.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Early goals push women's soccer over Muskungum",
         "url": "https://goearlham.com/news/2026/9/23/womens-soccer-early-goals-push-womens-soccer-over-muskungum.aspx",
@@ -3200,7 +3210,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goearlham.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:11:31Z"
+      "asOf": "2026-09-27T15:59:20Z"
     }
   },
   "camps": {
@@ -3214,20 +3224,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.goearlham.com/sports/2026/2/4/womens-soccer-id-camps.aspx",
-        "asOf": "2026-09-26T15:11:34Z"
+        "asOf": "2026-09-27T15:59:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-27T16:10:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3248,7 +3258,7 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:11:26Z"
+        "at": "2026-09-27T15:59:14Z"
       }
     ]
   }
