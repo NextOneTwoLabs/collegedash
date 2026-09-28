@@ -61,7 +61,7 @@
       "type": "object",
       "required": ["headCoach", "nationalTitles"],
       "properties": {
-        "headCoach": {"type": "object", "properties": {"name": {"type": ["string", "null"]}, "since": {"type": ["integer", "null"]}}},
+        "headCoach": {"type": "object", "properties": {"name": {"type": ["string", "null"]}, "source": {"enum": ["athletics", "wikipedia", null]}, "since": {"type": ["integer", "null"]}}},
         "coaches": {"type": "array"},
         "stadium": {"type": ["object", "null"]},
         "nationalTitles": {"type": "array", "items": {"type": "integer"}},
