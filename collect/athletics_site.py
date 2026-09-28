@@ -141,7 +141,10 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         # Issue #387: the FINAL staff list is empty - after the roster page, the coaches page and (robots enforce
         # mode) the kept stored staff - while the roster has players (0 players raised above). Log what staff-like
         # markup the roster page has, name-free, so the parser fix can be planned from evidence. No request.
-        common.log(zero_staff_diagnostic(html, base, program["athletics"]["sportPath"]))
+        try:
+            common.log(zero_staff_diagnostic(html, base, program["athletics"]["sportPath"]))
+        except Exception as e:  # log-only: it must never fail a roster that was collected
+            common.log(f"  !! zero-staff diagnostic failed ({type(e).__name__})")
 
     if bios:
         stored_bios = {p.get("bioUrl"): p for p in ((stored.get("roster") or {}).get("players") or []) if p.get("bioUrl")}

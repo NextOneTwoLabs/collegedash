@@ -122,7 +122,7 @@ def test_counts_and_masked_paths():
     ok("name-bearing coach links masked", links[0] == "/sports/womens-soccer/roster/coaches/<x>/<n>", links)
     ok("every coaches link masks to the same shape (deduplicated)",
        links.count("/sports/womens-soccer/roster/coaches/<x>/<n>") == 1, links)
-    ok("at most 8 paths", len(links) <= athletics_site.DIAG_MAX_LINKS, links)
+    ok("at most 8 paths", len(links) <= 8, links)
     ok("/staff-directory kept, query and fragment dropped, canonical spelling", "/staff-directory" in links, links)
 
 
@@ -168,12 +168,53 @@ def test_other_hosts_log_nothing():
     ok("off-host links absent entirely", line.endswith("links=[/staff-directory]"), line)
 
 
-def test_line_length_cap():
+def _links(line: str) -> list[str]:
+    inner = line.split("links=[", 1)[1].split("]", 1)[0]
+    return inner.split(", ") if inner else []
+
+
+def _uncapped(html: str) -> str:
+    """The same line with both caps lifted - proves a fixture really goes over them."""
+    real = (athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_MAX_LINKS)
+    athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_MAX_LINKS = 10 ** 9, 10 ** 9
+    try:
+        return diag(html)
+    finally:
+        athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_MAX_LINKS = real
+
+
+def test_caps_are_400_characters_and_8_links():
+    # The literal values, not the constants: raising either constant must fail here (Bianque's review on #390).
+    ok("DIAG_MAX_LEN is 400", athletics_site.DIAG_MAX_LEN == 400, athletics_site.DIAG_MAX_LEN)
+    ok("DIAG_MAX_LINKS is 8", athletics_site.DIAG_MAX_LINKS == 8, athletics_site.DIAG_MAX_LINKS)
+
+    # link cap alone: 9 short, distinct structural shapes - over 8 links, under 400 characters
+    nine = page("".join(f'<a href="/staff{"/bio" * i}">l</a>' for i in range(9)))
+    free = _uncapped(nine)
+    ok("link fixture has 9 paths uncapped", len(_links(free)) == 9, free)
+    ok("link fixture stays under 400 characters uncapped", len(free) < 400, len(free))
+    line = diag(nine)
+    ok("link cap: exactly 8 paths logged", len(_links(line)) == 8, line)
+    ok("link cap: the ninth is counted, not logged", line.endswith(" +1 more"), line)
+
+    # length cap alone: 3 long structural shapes - under 8 links, over 400 characters
+    long3 = page("".join(f'<a href="/coaches{"/roster" * (25 + i)}">l</a>' for i in range(3)))
+    free = _uncapped(long3)
+    ok("length fixture has 3 paths uncapped", len(_links(free)) == 3, free)
+    ok("length fixture goes over 400 characters uncapped", len(free) > 400, len(free))
+    line = diag(long3)
+    ok("length cap: the line is at most 400 characters", len(line) <= 400, len(line))
+    ok("length cap: paths dropped are counted", " more" in line, line)
+
+    # both at once: 40 long distinct shapes plus 59 more
     many = "".join(f'<a href="/staff/{"a" * 30}/{i}/{"b" * 30}/{"c" * i}/{i}{"/x" * i}">l</a>' for i in range(40))
     many += "".join(f'<a href="/coaches/{"/".join(["roster"] * i)}">m</a>' for i in range(1, 60))
+    free = _uncapped(page(many))
+    ok("big fixture goes over both caps uncapped", len(free) > 400 and len(_links(free)) > 8, (len(free), len(_links(free))))
     line = diag(page(many))
-    ok(f"line capped at {athletics_site.DIAG_MAX_LEN} characters", len(line) <= athletics_site.DIAG_MAX_LEN, len(line))
-    ok("a capped line says how many paths were left out", "more" in line, line)
+    ok("big fixture: at most 400 characters", len(line) <= 400, len(line))
+    ok("big fixture: at most 8 paths", len(_links(line)) <= 8, _links(line))
+    ok("big fixture: a capped line says how many paths were left out", " more" in line, line)
 
 
 def test_no_leak_and_contact_scanner():
@@ -216,6 +257,9 @@ def test_no_request():
 
 # ---------- the trigger, through athletics_site.collect ----------
 
+SAVED: list = []
+
+
 def run_collect(pages: dict, *, robots: tuple = (), stored: dict | None = None) -> tuple[list[str], list[str], Exception | None]:
     logs, requests = [], []
     pages = {BASE + SPORT + "/schedule": page(), **pages}  # an empty schedule page, so collect runs to the end
@@ -231,7 +275,8 @@ def run_collect(pages: dict, *, robots: tuple = (), stored: dict | None = None) 
     program = {"slug": "fixture", "athletics": {"platform": "sidearm", "baseUrl": BASE, "sportPath": SPORT}}
     real = (common.fetch_text, common.save_source, common.log, common.load_source)
     common.fetch_text, common.log = fetch_text, logs.append
-    common.save_source = lambda *a, **k: None
+    SAVED.clear()
+    common.save_source = lambda *a, **k: SAVED.append(True)
     common.load_source = lambda slug, name: copy.deepcopy(stored) if stored else None
     err = None
     try:
@@ -240,7 +285,7 @@ def run_collect(pages: dict, *, robots: tuple = (), stored: dict | None = None) 
         err = e
     finally:
         common.fetch_text, common.save_source, common.log, common.load_source = real
-    return [l for l in logs if "no staff found" in l], requests, err
+    return [l for l in logs if "no staff found" in l or "diagnostic failed" in l], requests, err
 
 
 def test_trigger():
@@ -262,14 +307,32 @@ def test_trigger():
     ok("silent: 0 players (a roster problem; collect raises first)", lines == [] and isinstance(err, common.FetchError), (lines, err))
 
 
+def test_a_failing_diagnostic_never_fails_the_collection():
+    real = athletics_site.zero_staff_diagnostic
+
+    def boom(*a, **k):
+        raise RuntimeError("unexpected")
+    athletics_site.zero_staff_diagnostic = boom
+    try:
+        lines, _, err = run_collect({ROSTER: page(player_table(), no_staff_markup())})
+    finally:
+        athletics_site.zero_staff_diagnostic = real
+    ok("collect still succeeds when the diagnostic raises", err is None, err)
+    ok("... and the source is still saved", SAVED == [True], SAVED)
+    ok("... with one short failure line, naming only the exception type",
+       lines == ["  !! zero-staff diagnostic failed (RuntimeError)"], lines)
+    ok("diagnostic restored", athletics_site.zero_staff_diagnostic is real)
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_counts_and_masked_paths, test_exact_whole_segment_match, test_sport_path_is_the_programs_own,
-                 test_encoded_upper_and_at_segments, test_other_hosts_log_nothing, test_line_length_cap,
-                 test_no_leak_and_contact_scanner, test_mutation_unmasked_path_fails, test_no_request, test_trigger):
+                 test_encoded_upper_and_at_segments, test_other_hosts_log_nothing, test_caps_are_400_characters_and_8_links,
+                 test_no_leak_and_contact_scanner, test_mutation_unmasked_path_fails, test_no_request, test_trigger,
+                 test_a_failing_diagnostic_never_fails_the_collection):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
