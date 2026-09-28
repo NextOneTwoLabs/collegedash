@@ -282,7 +282,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://uofrathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:53Z"
+        "asOf": "2026-09-28T18:57:24Z"
       }
     }
   },
@@ -1301,7 +1301,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uofrathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:53Z"
+      "asOf": "2026-09-28T18:57:24Z"
     }
   },
   "rosterHistory": {
@@ -3415,13 +3415,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uofrathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:53Z"
+      "asOf": "2026-09-28T18:57:24Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "McGuire Repeats as UAA Athlete of the Week",
+        "url": "https://uofrathletics.com/news/2026/9/28/womens-soccer-mcguire-repeats-as-uaa-athlete-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Rochester Draws Even with Misericordia",
         "url": "https://uofrathletics.com/news/2026/9/26/womens-soccer-rochester-draws-even-with-misericordia.aspx",
@@ -3487,18 +3493,12 @@
         "url": "https://uofrathletics.com/news/2026/9/1/womens-soccer-three-second-half-goals-lift-urochester-women-in-opener.aspx",
         "date": "2026-09-01",
         "recruiting": false
-      },
-      {
-        "title": "Yellowjackets Score Academic Praise from United Soccer Coaches",
-        "url": "https://uofrathletics.com/news/2026/8/7/womens-soccer-yellowjackets-score-academic-praise-from-united-soccer-coaches.aspx",
-        "date": "2026-08-07",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://uofrathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:58Z"
+      "asOf": "2026-09-28T18:57:33Z"
     }
   },
   "camps": {
@@ -3512,20 +3512,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://rochesterwomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T16:06:00Z"
+        "asOf": "2026-09-28T18:57:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3538,15 +3538,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:54Z"
+        "at": "2026-09-28T18:57:24Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:54Z"
       }
     ]
   }

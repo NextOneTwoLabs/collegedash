@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.unionathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:07:55Z"
+        "asOf": "2026-09-28T18:59:53Z"
       }
     }
   },
@@ -1266,7 +1266,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.unionathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:07:55Z"
+      "asOf": "2026-09-28T18:59:53Z"
     }
   },
   "rosterHistory": {
@@ -2131,6 +2131,7 @@
         "result": null,
         "score": null,
         "links": {
+          "live stats": "https://bardathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.unionathletics.com/sports/womens-soccer/opponent-history/bard-college/116"
         }
       },
@@ -2147,6 +2148,7 @@
         "result": null,
         "score": null,
         "links": {
+          "live stats": "http://sidearmstats.com/rpi/wsoc/",
           "history": "https://www.unionathletics.com/sports/womens-soccer/opponent-history/rensselaer-polytechnic-institute/4"
         }
       },
@@ -3344,13 +3346,31 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.unionathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:07:55Z"
+      "asOf": "2026-09-28T18:59:53Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Garnet Chargers Take 13th at Williams",
+        "url": "https://unionathletics.com/news/2026/9/27/womens-golf-garnet-chargers-take-13th-at-williams.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
+      {
+        "title": "Men's Rowing Starts Fall Season at Mohawk Fall Invite",
+        "url": "https://unionathletics.com/news/2026/9/27/mens-rowing-starts-fall-season-at-mohawk-fall-invite.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
+      {
+        "title": "Women's Rowing Races at Season-Opening Mohawk Fall Classic",
+        "url": "https://unionathletics.com/news/2026/9/27/womens-rowing-womens-crew-races-at-season-opening-mohawk-fall-classic.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Football Starts Liberty League Defense with Rout of Buffalo State",
         "url": "https://unionathletics.com/news/2026/9/26/football-starts-liberty-league-defense-with-rout-of-buffalo-state.aspx",
@@ -3404,30 +3424,12 @@
         "url": "https://unionathletics.com/news/2026/9/26/mens-tennis-ends-run-at-ita-northeast-regionals.aspx",
         "date": "2026-09-26",
         "recruiting": false
-      },
-      {
-        "title": "Women's Golf 14th After Day One of Williams Fall Invite",
-        "url": "https://unionathletics.com/news/2026/9/26/womens-golf-14th-after-day-one-of-williams-fall-invite.aspx",
-        "date": "2026-09-26",
-        "recruiting": false
-      },
-      {
-        "title": "Leaney Breaks Career Points Mark as Union Wins Season-Opener in OT",
-        "url": "https://unionathletics.com/news/2026/9/25/womens-ice-hockey-leaney-breaks-career-points-mark-as-union-wins-season-opener-in-ot.aspx",
-        "date": "2026-09-25",
-        "recruiting": false
-      },
-      {
-        "title": "Sosa and Saxe Both Win Three on Day One of ITA Regionals",
-        "url": "https://unionathletics.com/news/2026/9/25/mens-tennis-sosa-and-saxe-both-win-three-on-day-one-of-ita-regionals.aspx",
-        "date": "2026-09-25",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.unionathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:08:03Z"
+      "asOf": "2026-09-28T18:59:56Z"
     }
   },
   "camps": {
@@ -3441,20 +3443,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 26,
+    "newsScanned": 29,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.unionathletics.com/camp/wsoc",
-        "asOf": "2026-09-27T16:08:08Z"
+        "asOf": "2026-09-28T19:00:01Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3467,15 +3469,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:07:55Z"
+        "at": "2026-09-28T18:59:53Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:59:08Z"
       }
     ]
   }

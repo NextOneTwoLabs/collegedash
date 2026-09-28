@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.wesleyan.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:08:30Z"
+        "asOf": "2026-09-28T19:00:00Z"
       }
     }
   },
@@ -1399,7 +1399,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wesleyan.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:08:30Z"
+      "asOf": "2026-09-28T19:00:00Z"
     }
   },
   "rosterHistory": {
@@ -3452,7 +3452,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wesleyan.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:08:30Z"
+      "asOf": "2026-09-28T19:00:00Z"
     }
   },
   "commitments": [],
@@ -3535,7 +3535,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.wesleyan.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:08:33Z"
+      "asOf": "2026-09-28T19:00:05Z"
     }
   },
   "camps": {
@@ -3550,43 +3550,19 @@
     "fetchError": null,
     "parsed": true,
     "newsScanned": 14,
-    "items": [
-      {
-        "name": "Wesleyan Soccer ID Clinic",
-        "startDate": "2026-09-27",
-        "endDate": "2026-09-27",
-        "dateText": "09/27/2026",
-        "precision": "day",
-        "yearInferred": false,
-        "location": null,
-        "ages": "9th - 12th Grade as of Fall 2026",
-        "price": null,
-        "registerUrl": "https://register.ryzer.com/camp.cfm?sport=7&id=339302",
-        "sourceUrl": "https://www.wessoccerclinics.com/",
-        "confidence": "heuristic",
-        "kind": "camp",
-        "campType": "id",
-        "sources": [
-          {
-            "kind": "camp",
-            "name": "Wesleyan Soccer ID Clinic",
-            "sourceUrl": "https://www.wessoccerclinics.com/"
-          }
-        ]
-      }
-    ],
+    "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.wessoccerclinics.com/",
-        "asOf": "2026-09-27T16:08:36Z"
+        "asOf": "2026-09-28T19:00:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3599,15 +3575,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:08:30Z"
+        "at": "2026-09-28T19:00:00Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:59:37Z"
       }
     ]
   }

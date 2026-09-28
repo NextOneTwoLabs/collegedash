@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.cairnhighlanders.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:38Z"
+        "asOf": "2026-09-28T18:48:00Z"
       }
     }
   },
@@ -886,7 +886,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cairnhighlanders.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:38Z"
+      "asOf": "2026-09-28T18:48:00Z"
     }
   },
   "rosterHistory": {
@@ -1570,6 +1570,7 @@
         "result": "T",
         "score": "1-1",
         "links": {
+          "recap": "https://www.cairnhighlanders.com/news/2026/9/28/womens-soccer-highlanders-draw-with-lbc-in-conference-opener.aspx",
           "box score": "https://www.cairnhighlanders.com/sports/womens-soccer/stats/2026/lancaster-bible-college/boxscore/8257",
           "history": "https://www.cairnhighlanders.com/sports/womens-soccer/opponent-history/lancaster-bible-college/57"
         }
@@ -1587,7 +1588,7 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.cairnhighlanders.com/sports/2016/8/29/cairn-highlanders-tv-womens-soccer.aspx",
+          "watch": "https://vcloud.hudl.com/broadcast/embed/4531998?w=640",
           "live stats": "http://www.sidearmstats.com/cairn/wsoc/",
           "history": "https://www.cairnhighlanders.com/sports/womens-soccer/opponent-history/penn-st-abington/297"
         }
@@ -2624,13 +2625,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cairnhighlanders.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:38Z"
+      "asOf": "2026-09-28T18:48:00Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Highlanders Draw with LBC in Conference Opener",
+        "url": "https://cairnhighlanders.com/news/2026/9/28/womens-soccer-highlanders-draw-with-lbc-in-conference-opener.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "WSOC: Erspamer Earns Defensive Player of the Week Honors",
         "url": "https://cairnhighlanders.com/news/2026/9/21/womens-soccer-wsoc-erspamer-earns-defensive-player-of-the-week-honors.aspx",
@@ -2695,7 +2702,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.cairnhighlanders.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:42Z"
+      "asOf": "2026-09-28T18:48:06Z"
     }
   },
   "camps": {
@@ -2709,20 +2716,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.cairnhighlanders.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:42Z"
+        "asOf": "2026-09-28T18:48:06Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2735,15 +2742,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:38Z"
+        "at": "2026-09-28T18:48:00Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:43Z"
       }
     ]
   }

@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://skidmoreathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:33Z"
+        "asOf": "2026-09-28T18:58:17Z"
       }
     }
   },
@@ -1198,7 +1198,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://skidmoreathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:33Z"
+      "asOf": "2026-09-28T18:58:17Z"
     }
   },
   "rosterHistory": {
@@ -2065,6 +2065,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://athletics.ithaca.edu/sports/2026/7/8/streams.aspx",
+          "live stats": "https://athletics.ithaca.edu/sidearmstats/wsoc/summary",
           "history": "https://skidmoreathletics.com/sports/womens-soccer/opponent-history/ithaca/24"
         }
       },
@@ -3178,13 +3180,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://skidmoreathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:33Z"
+      "asOf": "2026-09-28T18:58:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Goodman named Liberty League Singles Performer of the Week, Blake selected as Field Hockey Rookie of the Week; three on Honor Roll",
+        "url": "https://skidmoreathletics.com/news/2026/9/28/general-goodman-named-liberty-league-singles-performer-of-the-week-blake-selected-as-field-hockey-rookie-of-the-week-three-on-honor-roll.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Lewis, Skidmore battles Saints to 1-1 draw in conference home opener",
         "url": "https://skidmoreathletics.com/news/2026/9/26/womens-soccer-lewis-skidmore-battles-saints-to-1-1-draw-in-conference-home-opener.aspx",
@@ -3255,7 +3263,7 @@
     "_meta": {
       "source": "news",
       "url": "https://skidmoreathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:37Z"
+      "asOf": "2026-09-28T18:58:24Z"
     }
   },
   "camps": {
@@ -3269,20 +3277,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.skidmore.edu/summer_sports/",
-        "asOf": "2026-09-27T16:06:41Z"
+        "asOf": "2026-09-28T18:58:29Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3295,15 +3303,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:33Z"
+        "at": "2026-09-28T18:58:17Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:41Z"
       }
     ]
   }

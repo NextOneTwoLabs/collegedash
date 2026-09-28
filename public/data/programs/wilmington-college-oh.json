@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://wilmingtonquakers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:08:54Z"
+        "asOf": "2026-09-28T19:00:25Z"
       }
     }
   },
@@ -1381,7 +1381,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://wilmingtonquakers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:08:54Z"
+      "asOf": "2026-09-28T19:00:25Z"
     }
   },
   "rosterHistory": {
@@ -3564,7 +3564,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://wilmingtonquakers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:08:54Z"
+      "asOf": "2026-09-28T19:00:25Z"
     }
   },
   "commitments": [],
@@ -3641,7 +3641,7 @@
     "_meta": {
       "source": "news",
       "url": "https://wilmingtonquakers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:08:58Z"
+      "asOf": "2026-09-28T19:00:47Z"
     }
   },
   "camps": {
@@ -3661,14 +3661,14 @@
       {
         "source": "camps",
         "url": "https://www.wilmingtonathleticcamps.com/",
-        "asOf": "2026-09-27T16:09:01Z"
+        "asOf": "2026-09-28T19:00:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3681,15 +3681,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:08:54Z"
+        "at": "2026-09-28T19:00:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:09Z"
       }
     ]
   }

@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:59:34Z"
+        "asOf": "2026-09-28T18:50:25Z"
       }
     }
   },
@@ -1125,7 +1125,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:59:34Z"
+      "asOf": "2026-09-28T18:50:25Z"
     }
   },
   "rosterHistory": {
@@ -3154,13 +3154,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:59:34Z"
+      "asOf": "2026-09-28T18:50:25Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Rodriguez and Wilcox Named Pietro & Son's Soaring Eagle Athletes of the Week",
+        "url": "https://athletics.elmira.edu/news/2026/9/28/field-hockey-rodriguez-and-wilcox-named-pietro-sons-soaring-eagle-athletes-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Soaring Eagles Mark 2-2 Draw in Tough Battle Against Highlanders",
         "url": "https://athletics.elmira.edu/news/2026/9/26/womens-soccer-soaring-eagles-mark-2-2-draw-in-tough-battle-against-highlanders.aspx",
@@ -3226,18 +3232,12 @@
         "url": "https://athletics.elmira.edu/news/2026/7/31/soaring-eagles-release-2026-womens-soccer-schedule.aspx",
         "date": "2026-07-31",
         "recruiting": false
-      },
-      {
-        "title": "Women's Soccer Sees Six Earn CSC Academic All-District Honors",
-        "url": "https://athletics.elmira.edu/news/2025/11/28/womens-soccer-sees-six-earn-csc-academic-all-district-honors.aspx",
-        "date": "2025-11-28",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.elmira.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:59:43Z"
+      "asOf": "2026-09-28T18:50:28Z"
     }
   },
   "camps": {
@@ -3251,20 +3251,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.elmira.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:59:43Z"
+        "asOf": "2026-09-28T18:50:29Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3277,15 +3277,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:59:34Z"
+        "at": "2026-09-28T18:50:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:49:53Z"
       }
     ]
   }

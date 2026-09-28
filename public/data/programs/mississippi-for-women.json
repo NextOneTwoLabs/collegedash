@@ -271,7 +271,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.owlsathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:03:21Z"
+        "asOf": "2026-09-28T18:54:39Z"
       }
     }
   },
@@ -971,7 +971,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:03:21Z"
+      "asOf": "2026-09-28T18:54:39Z"
     }
   },
   "rosterHistory": {
@@ -1584,6 +1584,7 @@
         "score": "0-6",
         "links": {
           "box score": "https://www.owlsathletics.com/sports/womens-soccer/stats/2026/spalding-university-ky-/boxscore/3520",
+          "recap": "https://www.owlsathletics.com/news/2026/9/27/womens-soccer-womens-soccer-blanked-by-spalding-in-sliac-opener.aspx",
           "history": "https://www.owlsathletics.com/sports/womens-soccer/opponent-history/spalding-university-ky-/207"
         }
       },
@@ -2810,13 +2811,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:03:21Z"
+      "asOf": "2026-09-28T18:54:39Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s soccer blanked by Spalding in SLIAC opener",
+        "url": "https://owlsathletics.com/news/2026/9/27/womens-soccer-womens-soccer-blanked-by-spalding-in-sliac-opener.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Owls’ women’s soccer pushes #2 USSU to the brink in 2-1 loss",
         "url": "https://owlsathletics.com/news/2026/9/23/womens-soccer-owls-womens-soccer-pushes-2-ussu-to-the-brink-in-2-1-loss.aspx",
@@ -2887,7 +2894,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.owlsathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:03:30Z"
+      "asOf": "2026-09-28T18:54:47Z"
     }
   },
   "camps": {
@@ -2901,20 +2908,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.owlsathletics.com/sb_output.aspx?form=13",
-        "asOf": "2026-09-27T16:03:32Z"
+        "asOf": "2026-09-28T18:54:51Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:01Z",
+    "builtAt": "2026-09-28T19:02:57Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2927,15 +2934,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:03:21Z"
+        "at": "2026-09-28T18:54:39Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:12Z"
       }
     ]
   }

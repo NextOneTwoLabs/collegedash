@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.wpi.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:09:38Z"
+        "asOf": "2026-09-28T19:01:26Z"
       }
     }
   },
@@ -1198,7 +1198,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:09:38Z"
+      "asOf": "2026-09-28T19:01:26Z"
     }
   },
   "rosterHistory": {
@@ -3004,13 +3004,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:09:38Z"
+      "asOf": "2026-09-28T19:01:26Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Marsolais Tabbed NEWMAC Women's Soccer Defensive Player of the Week",
+        "url": "https://athletics.wpi.edu/news/2026/9/28/marsolais-tabbed-newmac-womens-soccer-defensive-player-of-the-year.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Rolls Past Mount Holyoke, 3-0, on Senior Day",
         "url": "https://athletics.wpi.edu/news/2026/9/26/womens-soccer-womens-soccer-rolls-past-mount-holyoke-3-0-on-senior-day.aspx",
@@ -3081,7 +3087,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.wpi.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:09:44Z"
+      "asOf": "2026-09-28T19:01:31Z"
     }
   },
   "camps": {
@@ -3095,20 +3101,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://wpiwomenssoccercampsandclinics.totalcamps.com/shop/EVENT",
-        "asOf": "2026-09-27T16:09:46Z"
+        "asOf": "2026-09-28T19:01:33Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:03:00Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3121,15 +3127,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:09:38Z"
+        "at": "2026-09-28T19:01:26Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:01:00Z"
       }
     ]
   }

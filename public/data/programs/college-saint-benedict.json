@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gobennies.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:34Z"
+        "asOf": "2026-09-28T18:57:42Z"
       }
     }
   },
@@ -1269,7 +1269,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gobennies.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:34Z"
+      "asOf": "2026-09-28T18:57:42Z"
     }
   },
   "rosterHistory": {
@@ -3483,13 +3483,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gobennies.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:34Z"
+      "asOf": "2026-09-28T18:57:42Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Soccer Returns Home to Host Saint Mary's",
+        "url": "https://gobennies.com/news/2026/9/28/soccer-returns-home-to-host-saint-mary-s.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Soccer Suffers First Defeat at St. Kate's",
         "url": "https://gobennies.com/news/2026/9/26/soccer-suffers-first-defeat-at-st-kate-s.aspx",
@@ -3555,18 +3561,12 @@
         "url": "https://gobennies.com/news/2026/9/8/soccer-mollenhauer-named-miac-defensive-player-of-the-week.aspx",
         "date": "2026-09-08",
         "recruiting": false
-      },
-      {
-        "title": "Magnifi Financial Feature - CSB Soccer’s Anya Finding New Ways to Go the Distance",
-        "url": "https://gobennies.com/news/2026/9/8/magnifi-financial-feature-csb-soccers-anya-finding-new-ways-to-go-the-distance.aspx",
-        "date": "2026-09-08",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.gobennies.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:41Z"
+      "asOf": "2026-09-28T18:57:47Z"
     }
   },
   "camps": {
@@ -3580,20 +3580,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.csbcamps.com/",
-        "asOf": "2026-09-27T16:06:44Z"
+        "asOf": "2026-09-28T18:57:50Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3606,15 +3606,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:34Z"
+        "at": "2026-09-28T18:57:42Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:05Z"
       }
     ]
   }

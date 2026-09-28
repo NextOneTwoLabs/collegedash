@@ -314,7 +314,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.clusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:44Z"
+        "asOf": "2026-09-28T18:48:09Z"
       }
     }
   },
@@ -1424,7 +1424,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.clusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:44Z"
+      "asOf": "2026-09-28T18:48:09Z"
     }
   },
   "rosterHistory": {
@@ -2459,6 +2459,7 @@
         "score": "1-0",
         "links": {
           "box score": "https://www.clusports.com/sports/womens-soccer/stats/2026/university-of-la-verne/boxscore/12258",
+          "recap": "https://www.clusports.com/news/2026/9/27/womens-soccer-hahns-heroics-lift-regals-past-la-verne.aspx",
           "history": "https://www.clusports.com/sports/womens-soccer/opponent-history/university-of-la-verne/137"
         }
       },
@@ -4048,13 +4049,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.clusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:44Z"
+      "asOf": "2026-09-28T18:48:09Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Hahn’s Heroics Lift Regals Past La Verne",
+        "url": "https://clusports.com/news/2026/9/27/womens-soccer-hahns-heroics-lift-regals-past-la-verne.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Regals Roar Back in Shutout Win",
         "url": "https://clusports.com/news/2026/9/23/womens-soccer-regals-roar-back-in-shutout-win.aspx",
@@ -4125,7 +4132,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.clusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:51Z"
+      "asOf": "2026-09-28T18:48:16Z"
     }
   },
   "camps": {
@@ -4139,7 +4146,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Regals Soccer ID Clinic",
@@ -4169,14 +4176,14 @@
       {
         "source": "camps",
         "url": "https://clusports.com/sports/2023/8/8/regals-soccer-id-clinic.aspx",
-        "asOf": "2026-09-27T15:57:55Z"
+        "asOf": "2026-09-28T18:48:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4189,15 +4196,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:44Z"
+        "at": "2026-09-28T18:48:09Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:44Z"
       }
     ]
   }

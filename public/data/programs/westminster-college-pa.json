@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.westminster.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:08:45Z"
+        "asOf": "2026-09-28T19:00:10Z"
       }
     }
   },
@@ -1198,7 +1198,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.westminster.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:08:45Z"
+      "asOf": "2026-09-28T19:00:10Z"
     }
   },
   "rosterHistory": {
@@ -3473,7 +3473,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.westminster.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:08:45Z"
+      "asOf": "2026-09-28T19:00:10Z"
     }
   },
   "commitments": [],
@@ -3556,7 +3556,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.westminster.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:08:54Z"
+      "asOf": "2026-09-28T19:00:14Z"
     }
   },
   "camps": {
@@ -3576,14 +3576,14 @@
       {
         "source": "camps",
         "url": "https://portal.campnetwork.com/Register/Register.php?camp_id=398667",
-        "asOf": "2026-09-27T16:08:55Z"
+        "asOf": "2026-09-28T19:00:15Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3596,15 +3596,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:08:45Z"
+        "at": "2026-09-28T19:00:10Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:59:40Z"
       }
     ]
   }

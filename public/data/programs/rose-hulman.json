@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.rose-hulman.edu/sports/wsoc/roster",
-        "asOf": "2026-09-27T16:05:54Z"
+        "asOf": "2026-09-28T18:57:27Z"
       }
     }
   },
@@ -1448,7 +1448,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/roster",
-      "asOf": "2026-09-27T16:05:54Z"
+      "asOf": "2026-09-28T18:57:27Z"
     }
   },
   "rosterHistory": {
@@ -3663,13 +3663,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/schedule",
-      "asOf": "2026-09-27T16:05:54Z"
+      "asOf": "2026-09-28T18:57:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Set to Host Hanover in HCAC Homecoming Showdown Saturday",
+        "url": "https://athletics.rose-hulman.edu/news/2026/9/28/womens-soccer-set-to-host-hanover-in-hcac-homecoming-showdown-saturday.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Earns Draw Against Berea in HCAC Opener",
         "url": "https://athletics.rose-hulman.edu/news/2026/9/26/womens-soccer-earns-draw-against-berea-in-hcac-opener.aspx",
@@ -3735,18 +3741,12 @@
         "url": "https://athletics.rose-hulman.edu/news/2026/8/17/general-rose-hulman-announces-2026-athletic-hall-of-fame-class.aspx",
         "date": "2026-08-17",
         "recruiting": false
-      },
-      {
-        "title": "Fightin' Engineers to Watch: Lena Darini",
-        "url": "https://athletics.rose-hulman.edu/news/2026/7/6/womens-soccer-fightin-engineers-to-watch-lena-darini.aspx",
-        "date": "2026-07-06",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.rose-hulman.edu/sports/wsoc/archives",
-      "asOf": "2026-09-27T16:06:03Z"
+      "asOf": "2026-09-28T18:57:36Z"
     }
   },
   "camps": {
@@ -3760,20 +3760,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 14,
+    "newsScanned": 15,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.rose-hulman.edu/documents/2026/2/23/2026_ROSE_WSOC_July_18_Prospect_Camp_Form.docx",
-        "asOf": "2026-09-27T16:06:06Z"
+        "asOf": "2026-09-28T18:57:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3786,15 +3786,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:54Z"
+        "at": "2026-09-28T18:57:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:57Z"
       }
     ]
   }

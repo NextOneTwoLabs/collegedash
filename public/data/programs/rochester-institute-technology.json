@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ritathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:33Z"
+        "asOf": "2026-09-28T18:57:27Z"
       }
     }
   },
@@ -1270,7 +1270,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ritathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:33Z"
+      "asOf": "2026-09-28T18:57:27Z"
     }
   },
   "rosterHistory": {
@@ -2128,7 +2128,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "Rochester",
-        "opponentRank": null,
+        "opponentRank": 22,
         "opponentSeed": null,
         "location": "Rochester, N.Y. / Fauver Stadium",
         "result": null,
@@ -2146,7 +2146,7 @@
         "conferenceGame": true,
         "homeAway": "A",
         "opponent": "Vassar",
-        "opponentRank": null,
+        "opponentRank": 10,
         "opponentSeed": null,
         "location": "Poughkeepsie, N.Y. / Gordon Field",
         "result": null,
@@ -3328,7 +3328,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ritathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:33Z"
+      "asOf": "2026-09-28T18:57:27Z"
     }
   },
   "commitments": [],
@@ -3342,6 +3342,18 @@
       }
     ],
     "latest": [
+      {
+        "title": "Three Tigers earn Liberty League weekly honors",
+        "url": "https://ritathletics.com/news/2026/9/28/womens-soccer-three-tigers-earn-liberty-league-weekly-honors.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "RIT Athletics Preview: Sep. 28 – Oct. 4",
+        "url": "https://ritathletics.com/news/2026/9/28/mens-soccer-rit-athletics-preview-sep-28-oct-4.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer comes back to beat RPI, 2-1",
         "url": "https://ritathletics.com/news/2026/9/26/womens-soccer-comes-back-to-beat-rpi-2-1.aspx",
@@ -3401,24 +3413,12 @@
         "url": "https://ritathletics.com/news/2026/9/9/womens-soccer-falls-to-st-john-fisher-1-0.aspx",
         "date": "2026-09-09",
         "recruiting": false
-      },
-      {
-        "title": "RIT Athletics Preview: Sep. 8 – 13",
-        "url": "https://ritathletics.com/news/2026/9/8/womens-volleyball-rit-athletics-preview-sep-8-13.aspx",
-        "date": "2026-09-08",
-        "recruiting": false
-      },
-      {
-        "title": "Tigers in the News",
-        "url": "https://ritathletics.com/news/2024/10/17/general-tigers-in-the-news.aspx",
-        "date": "2024-10-17",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.ritathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:39Z"
+      "asOf": "2026-09-28T18:57:35Z"
     }
   },
   "camps": {
@@ -3432,20 +3432,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 14,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.rit.edu/studentaffairs/sportscamps/",
-        "asOf": "2026-09-27T16:06:45Z"
+        "asOf": "2026-09-28T18:57:41Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3458,15 +3458,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:33Z"
+        "at": "2026-09-28T18:57:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:55Z"
       }
     ]
   }

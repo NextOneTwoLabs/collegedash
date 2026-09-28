@@ -312,7 +312,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.nec.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:03:48Z"
+        "asOf": "2026-09-28T18:55:15Z"
       }
     }
   },
@@ -1027,7 +1027,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.nec.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:03:48Z"
+      "asOf": "2026-09-28T18:55:15Z"
     }
   },
   "rosterHistory": {
@@ -1721,7 +1721,8 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://rivierathletics.com/sports/2025/3/25/rivier-tv.aspx"
+          "watch": "https://rivierathletics.com/sports/2025/3/25/rivier-tv.aspx",
+          "live stats": "https://rivierathletics.com/sidearmstats/wsoc/summary"
         }
       },
       {
@@ -2840,7 +2841,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.nec.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:03:48Z"
+      "asOf": "2026-09-28T18:55:15Z"
     }
   },
   "commitments": [],
@@ -2917,7 +2918,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.nec.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:03:51Z"
+      "asOf": "2026-09-28T18:55:19Z"
     }
   },
   "camps": {
@@ -2937,14 +2938,14 @@
       {
         "source": "camps",
         "url": "https://athletics.nec.edu/sports/2022/9/13/information-Camps-and-Clinics.aspx",
-        "asOf": "2026-09-27T16:03:54Z"
+        "asOf": "2026-09-28T18:55:22Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:01Z",
+    "builtAt": "2026-09-28T19:02:57Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2957,15 +2958,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:03:48Z"
+        "at": "2026-09-28T18:55:15Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:51Z"
       }
     ]
   }

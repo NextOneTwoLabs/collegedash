@@ -309,7 +309,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://tlubulldogs.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:07:22Z"
+        "asOf": "2026-09-28T18:59:06Z"
       }
     }
   },
@@ -317,11 +317,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-2-0",
+      "record": "6-3-0",
       "wins": 6,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Kerwin Johnson"
@@ -1156,7 +1156,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://tlubulldogs.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:07:22Z"
+      "asOf": "2026-09-28T18:59:06Z"
     }
   },
   "rosterHistory": {
@@ -1832,10 +1832,10 @@
     "season": 2026,
     "record": {
       "wins": 6,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "text": "6-2-0",
-      "played": 8,
+      "text": "6-3-0",
+      "played": 9,
       "scheduled": 18,
       "confText": "0-0-0",
       "exhibitions": 1
@@ -2011,11 +2011,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Gustafson Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://flosports.link/4yX9G33",
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=661922",
+          "box score": "https://tlubulldogs.com/sports/womens-soccer/stats/2026/southwestern/boxscore/4045",
+          "recap": "https://tlubulldogs.com/news/2026/9/27/womens-soccer-tlu-falls-to-southwestern-1-0.aspx",
           "history": "https://tlubulldogs.com/sports/womens-soccer/opponent-history/southwestern-university/130"
         }
       },
@@ -3433,13 +3433,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://tlubulldogs.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:07:22Z"
+      "asOf": "2026-09-28T18:59:06Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "TLU Falls to Southwestern, 1-0",
+        "url": "https://tlubulldogs.com/news/2026/9/27/womens-soccer-tlu-falls-to-southwestern-1-0.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "TLU Falls to Trinity, 1-0",
         "url": "https://tlubulldogs.com/news/2026/9/25/womens-soccer-tlu-falls-to-trinity-1-0.aspx",
@@ -3505,18 +3511,12 @@
         "url": "https://tlubulldogs.com/news/2026/9/2/womens-soccer-cortezs-late-goal-gives-tlu-2-1-win-over-umhb.aspx",
         "date": "2026-09-02",
         "recruiting": false
-      },
-      {
-        "title": "Bulldogs Earn Top Spot in SCAC Preseason Poll",
-        "url": "https://tlubulldogs.com/news/2026/8/18/womens-soccer-bulldogs-earn-top-spot-in-scac-preseason-poll.aspx",
-        "date": "2026-08-18",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://tlubulldogs.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:07:26Z"
+      "asOf": "2026-09-28T18:59:09Z"
     }
   },
   "camps": {
@@ -3530,20 +3530,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://tlubulldogs.com/sports/2025/5/27/information-Sports-Camps-Information.aspx",
-        "asOf": "2026-09-27T16:07:28Z"
+        "asOf": "2026-09-28T18:59:12Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3556,15 +3556,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:07:22Z"
+        "at": "2026-09-28T18:59:06Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:58:44Z"
       }
     ]
   }

@@ -102,7 +102,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.cmsathletics.org/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:58:28Z"
+        "asOf": "2026-09-28T18:48:48Z"
       }
     }
   },
@@ -1229,7 +1229,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:58:28Z"
+      "asOf": "2026-09-28T18:48:48Z"
     }
   },
   "rosterHistory": {
@@ -3343,7 +3343,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:58:28Z"
+      "asOf": "2026-09-28T18:48:48Z"
     }
   },
   "commitments": [
@@ -3367,7 +3367,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/jesselyn-lee/",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-27",
+          "lastSeen": "2026-09-28",
           "missingSince": null,
           "profileCreated": "2023-10-22"
         }
@@ -3474,7 +3474,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.cmsathletics.org/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:58:33Z"
+      "asOf": "2026-09-28T18:48:54Z"
     }
   },
   "camps": {
@@ -3494,7 +3494,7 @@
       {
         "source": "camps",
         "url": "https://www.carteesoccercamp.com",
-        "asOf": "2026-09-27T15:58:40Z"
+        "asOf": "2026-09-28T18:49:01Z"
       }
     ]
   },
@@ -3503,7 +3503,7 @@
     "2026": 1
   },
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.67,
     "sections": {
       "school": false,
@@ -3518,15 +3518,19 @@
     },
     "stale": [
       "scorecard: never collected",
-      "climate: never collected",
-      "wikipedia: never collected"
+      "climate: never collected"
     ],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:58:29Z"
+        "at": "2026-09-28T18:48:48Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:28Z"
       }
     ]
   }

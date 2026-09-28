@@ -292,7 +292,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://calvinknights.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:44Z"
+        "asOf": "2026-09-28T18:48:08Z"
       }
     }
   },
@@ -1280,7 +1280,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://calvinknights.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:44Z"
+      "asOf": "2026-09-28T18:48:08Z"
     }
   },
   "rosterHistory": {
@@ -2157,6 +2157,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.youtube.com/watch?v=p6SMzJffQ-A",
+          "live stats": "https://adrianbulldogs.com/sidearmstats/wsoc/summary",
           "history": "https://calvinknights.com/sports/womens-soccer/opponent-history/adrian-college/1"
         }
       },
@@ -3434,7 +3436,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://calvinknights.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:44Z"
+      "asOf": "2026-09-28T18:48:08Z"
     }
   },
   "commitments": [
@@ -3458,7 +3460,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/ella-mcclure/",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-27",
+          "lastSeen": "2026-09-28",
           "missingSince": null,
           "profileCreated": "2025-01-15"
         }
@@ -3565,7 +3567,7 @@
     "_meta": {
       "source": "news",
       "url": "https://calvinknights.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:48Z"
+      "asOf": "2026-09-28T18:48:13Z"
     }
   },
   "camps": {
@@ -3609,7 +3611,7 @@
       {
         "source": "camps",
         "url": "https://wsoccer.calvinsportscamps.com/events__manual-table.cfm",
-        "asOf": "2026-09-27T15:57:50Z"
+        "asOf": "2026-09-28T18:48:15Z"
       }
     ]
   },
@@ -3618,7 +3620,7 @@
     "2027": 1
   },
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.89,
     "sections": {
       "school": true,
@@ -3631,15 +3633,18 @@
       "commitments": true,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:44Z"
+        "at": "2026-09-28T18:48:08Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:51Z"
       }
     ]
   }

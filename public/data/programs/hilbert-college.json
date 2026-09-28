@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hilberthawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:40Z"
+        "asOf": "2026-09-28T18:51:45Z"
       }
     }
   },
@@ -296,11 +296,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-0",
+      "record": "1-6-0",
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Hannah Callaghan"
@@ -929,7 +929,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:40Z"
+      "asOf": "2026-09-28T18:51:45Z"
     }
   },
   "rosterHistory": {
@@ -1485,10 +1485,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "1-5-0",
-      "played": 6,
+      "text": "1-6-0",
+      "played": 7,
       "scheduled": 15,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1612,11 +1612,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Delhi, NY, Neil Riddell Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://vcloud.hudl.com/broadcast/embed/4153008",
-          "live stats": "https://delhibroncos.com/sports/wsoc/2026-27/boxscores/20260927_raxc.xml",
+          "box score": "https://www.hilberthawks.com/sports/womens-soccer/stats/2026/suny-delhi/boxscore/5538",
+          "recap": "https://www.hilberthawks.com/news/2026/9/27/womens-soccer-falls-to-suny-delhi.aspx",
           "history": "https://www.hilberthawks.com/sports/womens-soccer/opponent-history/suny-delhi/139"
         }
       },
@@ -2666,7 +2666,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:40Z"
+      "asOf": "2026-09-28T18:51:45Z"
     }
   },
   "commitments": [],
@@ -2680,6 +2680,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Women's Soccer Falls to SUNY Delhi",
+        "url": "https://hilberthawks.com/news/2026/9/27/womens-soccer-falls-to-suny-delhi.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Takes on Keuka in Home Opener",
         "url": "https://hilberthawks.com/news/2026/9/23/womens-soccer-takes-on-keuka-in-home-opener.aspx",
@@ -2750,7 +2756,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hilberthawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:45Z"
+      "asOf": "2026-09-28T18:51:57Z"
     }
   },
   "camps": {
@@ -2764,20 +2770,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hilbert.edu/summer-camps",
-        "asOf": "2026-09-27T16:01:07Z"
+        "asOf": "2026-09-28T18:52:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2790,15 +2796,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:40Z"
+        "at": "2026-09-28T18:51:45Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:06Z"
       }
     ]
   }

@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:49Z"
+        "asOf": "2026-09-28T18:47:52Z"
       }
     }
   },
@@ -475,8 +475,8 @@
       {
         "number": "3",
         "name": "Maddy Loranger",
-        "pos": "M",
-        "posLabel": "M",
+        "pos": "F",
+        "posLabel": "F",
         "height": "5-3",
         "heightIn": 63,
         "classLabel": "Fr.",
@@ -1413,7 +1413,7 @@
         "GR": 0
       },
       "M": {
-        "FR": 3,
+        "FR": 2,
         "R-FR": 0,
         "SO": 5,
         "R-SO": 0,
@@ -1424,7 +1424,7 @@
         "GR": 0
       },
       "F": {
-        "FR": 0,
+        "FR": 1,
         "R-FR": 0,
         "SO": 3,
         "R-SO": 0,
@@ -1450,7 +1450,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:49Z"
+      "asOf": "2026-09-28T18:47:52Z"
     }
   },
   "rosterHistory": {
@@ -3775,7 +3775,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bctornados.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:49Z"
+      "asOf": "2026-09-28T18:47:52Z"
     }
   },
   "commitments": [],
@@ -3858,7 +3858,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.bctornados.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:54Z"
+      "asOf": "2026-09-28T18:47:59Z"
     }
   },
   "camps": {
@@ -3878,14 +3878,14 @@
       {
         "source": "camps",
         "url": "https://www.bctornados.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:54Z"
+        "asOf": "2026-09-28T18:47:59Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3898,15 +3898,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:49Z"
+        "at": "2026-09-28T18:47:52Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:17Z"
       }
     ]
   }

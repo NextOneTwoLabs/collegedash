@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.montclairathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:03:31Z"
+        "asOf": "2026-09-28T18:54:57Z"
       }
     }
   },
@@ -302,11 +302,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-1",
-      "wins": 5,
+      "record": "6-1-1",
+      "wins": 6,
       "losses": 1,
       "ties": 1,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Patrick Naughter"
@@ -1168,7 +1168,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.montclairathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:03:31Z"
+      "asOf": "2026-09-28T18:54:57Z"
     }
   },
   "rosterHistory": {
@@ -1943,11 +1943,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 1,
       "ties": 1,
-      "text": "5-1-1",
-      "played": 7,
+      "text": "6-1-1",
+      "played": 8,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 0
@@ -2089,11 +2089,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Montclair, NJ, MSU Soccer Park",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-3",
         "links": {
-          "watch": "https://www.youtube.com/watch?v=m4N8f4p40g4",
-          "live stats": "http://montclairathletics.com/sidearmstats/wsoc",
+          "recap": "https://www.montclairathletics.com/news/2026/9/27/-23-womens-soccer-notches-game-winner-with-five-seconds-remaining-edges-berry-4-3.aspx",
+          "box score": "https://www.montclairathletics.com/sports/womens-soccer/stats/2026/berry-college/boxscore/21151",
           "history": "https://www.montclairathletics.com/sports/womens-soccer/opponent-history/berry-college-ga-/359"
         }
       },
@@ -3456,13 +3456,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.montclairathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:03:31Z"
+      "asOf": "2026-09-28T18:54:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "#23 Women's Soccer Notches Game-Winner With Five Seconds Remaining; Edges Berry 4-3",
+        "url": "https://montclairathletics.com/news/2026/9/27/-23-womens-soccer-notches-game-winner-with-five-seconds-remaining-edges-berry-4-3.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "#23 Women's Soccer Falls to NYU, 2-0",
         "url": "https://montclairathletics.com/news/2026/9/23/-23-womens-soccer-falls-to-nyu-2-0.aspx",
@@ -3533,7 +3539,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.montclairathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:03:40Z"
+      "asOf": "2026-09-28T18:55:03Z"
     }
   },
   "camps": {
@@ -3547,20 +3553,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.montclairathletics.com/sports/2012/3/27/GEN_0327124739",
-        "asOf": "2026-09-27T16:03:43Z"
+        "asOf": "2026-09-28T18:55:05Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:01Z",
+    "builtAt": "2026-09-28T19:02:57Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3573,15 +3579,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:03:31Z"
+        "at": "2026-09-28T18:54:57Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:18Z"
       }
     ]
   }

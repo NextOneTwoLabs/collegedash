@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://mbusabercats.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:02:21Z"
+        "asOf": "2026-09-28T18:53:46Z"
       }
     }
   },
@@ -304,11 +304,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
+      "record": "3-3-1",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "confRecord": "0-1-0",
       "inProgress": true,
@@ -794,7 +794,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://mbusabercats.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:02:21Z"
+      "asOf": "2026-09-28T18:53:46Z"
     }
   },
   "rosterHistory": {
@@ -1292,10 +1292,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "3-3-1",
+      "played": 7,
       "scheduled": 20,
       "confText": "0-1-0",
       "exhibitions": 0
@@ -1429,11 +1429,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Elsah, Ill.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "2-3",
         "links": {
-          "watch": "https://mbusabercats.com/youtube.com/@prin_athletics/streams?themeRefresh=1",
-          "live stats": "https://athletics.principiacollege.edu/sidearmstats/wsoc/summary",
+          "box score": "https://mbusabercats.com/sports/womens-soccer/stats/2026/principia/boxscore/5533",
           "history": "https://mbusabercats.com/sports/womens-soccer/opponent-history/principia-college/133"
         }
       },
@@ -2589,7 +2588,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://mbusabercats.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:02:21Z"
+      "asOf": "2026-09-28T18:53:46Z"
     }
   },
   "commitments": [],
@@ -2660,7 +2659,7 @@
     "_meta": {
       "source": "news",
       "url": "https://mbusabercats.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:02:28Z"
+      "asOf": "2026-09-28T18:53:52Z"
     }
   },
   "camps": {
@@ -2680,14 +2679,14 @@
       {
         "source": "camps",
         "url": "https://mbusabercats.com/sports/2023/12/15/camp-girls-soccer.aspx",
-        "asOf": "2026-09-27T16:02:33Z"
+        "asOf": "2026-09-28T18:53:59Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:01Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2700,15 +2699,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:02:21Z"
+        "at": "2026-09-28T18:53:46Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:53:13Z"
       }
     ]
   }

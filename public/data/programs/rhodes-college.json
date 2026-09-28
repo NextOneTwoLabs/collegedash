@@ -300,7 +300,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.rhodeslynx.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:39Z"
+        "asOf": "2026-09-28T18:57:22Z"
       }
     }
   },
@@ -1270,7 +1270,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rhodeslynx.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:39Z"
+      "asOf": "2026-09-28T18:57:22Z"
     }
   },
   "rosterHistory": {
@@ -2084,7 +2084,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rhodeslynx.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:39Z"
+      "asOf": "2026-09-28T18:57:22Z"
     }
   },
   "commitments": [],
@@ -2155,7 +2155,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.rhodeslynx.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:44Z"
+      "asOf": "2026-09-28T18:57:26Z"
     }
   },
   "camps": {
@@ -2175,14 +2175,14 @@
       {
         "source": "camps",
         "url": "https://www.rhodessoccercamps.com/content/womens-soccer-id-camps",
-        "asOf": "2026-09-27T16:05:45Z"
+        "asOf": "2026-09-28T18:57:26Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.67,
     "sections": {
       "school": true,
@@ -2195,15 +2195,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:39Z"
+        "at": "2026-09-28T18:57:22Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:42Z"
       }
     ]
   }

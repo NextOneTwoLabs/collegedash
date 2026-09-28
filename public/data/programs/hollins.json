@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hollinssports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:53Z"
+        "asOf": "2026-09-28T18:51:43Z"
       }
     }
   },
@@ -1030,7 +1030,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hollinssports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:53Z"
+      "asOf": "2026-09-28T18:51:43Z"
     }
   },
   "rosterHistory": {
@@ -1889,7 +1889,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hollinssports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:53Z"
+      "asOf": "2026-09-28T18:51:43Z"
     }
   },
   "commitments": [],
@@ -1966,7 +1966,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hollinssports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:58Z"
+      "asOf": "2026-09-28T18:51:50Z"
     }
   },
   "camps": {
@@ -2016,19 +2016,19 @@
       {
         "source": "camps",
         "url": "https://admissions.hollins.edu/register/form?id=97f63ec0-5e5b-41dd-99a4-375ca71fcdc5&path=wsoc",
-        "asOf": "2026-09-27T16:01:03Z"
+        "asOf": "2026-09-28T18:51:54Z"
       },
       {
         "source": "news",
         "url": "https://www.hollinssports.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-27T16:00:58Z"
+        "asOf": "2026-09-28T18:51:50Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2041,15 +2041,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:53Z"
+        "at": "2026-09-28T18:51:43Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:12Z"
       }
     ]
   }

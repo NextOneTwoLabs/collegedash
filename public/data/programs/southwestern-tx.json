@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.southwesternpirates.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:38Z"
+        "asOf": "2026-09-28T18:58:20Z"
       }
     }
   },
@@ -304,11 +304,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-2-2",
-      "wins": 4,
+      "record": "5-2-2",
+      "wins": 5,
       "losses": 2,
       "ties": 2,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Linda Hamilton"
@@ -1433,7 +1433,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:38Z"
+      "asOf": "2026-09-28T18:58:20Z"
     }
   },
   "rosterHistory": {
@@ -2308,11 +2308,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 2,
       "ties": 2,
-      "text": "4-2-2",
-      "played": 8,
+      "text": "5-2-2",
+      "played": 9,
       "scheduled": 19,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -2503,11 +2503,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Seguin, TX",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://www.flocollege.com/live/262525",
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=661922",
+          "box score": "https://www.southwesternpirates.com/sports/womens-soccer/stats/2026/texas-lutheran-university/boxscore/17341",
+          "recap": "https://www.southwesternpirates.com/news/2026/9/27/womens-soccer-wsoc-captures-gutsy-road-victory-against-a-tough-tlu-squad-1-0.aspx",
           "history": "https://www.southwesternpirates.com/sports/womens-soccer/opponent-history/texas-lutheran-university/18"
         }
       },
@@ -3782,13 +3782,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:38Z"
+      "asOf": "2026-09-28T18:58:20Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "WSOC Captures Gutsy Road Victory Against A Tough TLU Squad, 1-0",
+        "url": "https://southwesternpirates.com/news/2026/9/27/womens-soccer-wsoc-captures-gutsy-road-victory-against-a-tough-tlu-squad-1-0.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "WSOC Score Three Unanswered, Taking Down St. Thomas, 3-1",
         "url": "https://southwesternpirates.com/news/2026/9/26/womens-soccer-wsoc-score-three-unanswered-taking-down-st-thomas-3-1.aspx",
@@ -3859,7 +3865,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.southwesternpirates.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:44Z"
+      "asOf": "2026-09-28T18:58:28Z"
     }
   },
   "camps": {
@@ -3873,20 +3879,20 @@
     "robotsBlocked": false,
     "fetchError": "HTTP 202 for https://register.ryzer.com/camp.cfm?sport=7&id=322427",
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://register.ryzer.com/camp.cfm?sport=7&id=322427",
-        "asOf": "2026-09-27T16:06:44Z"
+        "asOf": "2026-09-28T18:58:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3899,15 +3905,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:38Z"
+        "at": "2026-09-28T18:58:20Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:46Z"
       }
     ]
   }

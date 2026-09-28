@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goboxers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:04:52Z"
+        "asOf": "2026-09-28T18:56:15Z"
       }
     }
   },
@@ -319,13 +319,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-3-1",
+      "record": "5-4-1",
       "wins": 5,
-      "losses": 3,
+      "losses": 4,
       "ties": 1,
-      "gamesPlayed": 9,
+      "gamesPlayed": 10,
       "recordSource": "schedule",
-      "confRecord": "3-2-0",
+      "confRecord": "3-3-0",
       "inProgress": true,
       "headCoach": "Kellan McNamara"
     },
@@ -1408,7 +1408,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goboxers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:04:52Z"
+      "asOf": "2026-09-28T18:56:15Z"
     }
   },
   "rosterHistory": {
@@ -2214,12 +2214,12 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 3,
+      "losses": 4,
       "ties": 1,
-      "text": "5-3-1",
-      "played": 9,
+      "text": "5-4-1",
+      "played": 10,
       "scheduled": 20,
-      "confText": "3-2-0",
+      "confText": "3-3-0",
       "exhibitions": 3
     },
     "games": [
@@ -2445,12 +2445,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Forest Grove, OR, Hanson Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-3",
         "links": {
-          "watch": "https://flosports.link/4hO1D2b",
-          "live stats": "http://stats.statbroadcast.com/broadcast/?id=665648",
-          "tickets": "https://goboxers.com/sports/2022/6/21/hometown-ticketing.aspx",
+          "box score": "https://www.goboxers.com/sports/womens-soccer/stats/2026/whitman-college/boxscore/8196",
           "history": "https://www.goboxers.com/sports/womens-soccer/opponent-history/whitman-college/17"
         }
       },
@@ -3798,7 +3796,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goboxers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:04:52Z"
+      "asOf": "2026-09-28T18:56:15Z"
     }
   },
   "commitments": [],
@@ -3875,7 +3873,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goboxers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:04:58Z"
+      "asOf": "2026-09-28T18:56:19Z"
     }
   },
   "camps": {
@@ -3895,14 +3893,14 @@
       {
         "source": "camps",
         "url": "http://www.boxerwsoc.com",
-        "asOf": "2026-09-27T16:05:00Z"
+        "asOf": "2026-09-28T18:56:22Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3915,15 +3913,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:04:52Z"
+        "at": "2026-09-28T18:56:15Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:55:45Z"
       }
     ]
   }

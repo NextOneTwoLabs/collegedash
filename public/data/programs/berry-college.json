@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.berryvikings.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:08Z"
+        "asOf": "2026-09-28T18:47:31Z"
       }
     }
   },
@@ -286,11 +286,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-2-0",
+      "record": "5-3-0",
       "wins": 5,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Kathy Brown"
@@ -1294,7 +1294,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.berryvikings.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:08Z"
+      "asOf": "2026-09-28T18:47:31Z"
     }
   },
   "rosterHistory": {
@@ -2113,10 +2113,10 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "text": "5-2-0",
-      "played": 7,
+      "text": "5-3-0",
+      "played": 8,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2258,11 +2258,11 @@
         "opponentRank": 23,
         "opponentSeed": null,
         "location": "Montclair, NJ",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "3-4",
         "links": {
-          "watch": "https://www.youtube.com/watch?v=m4N8f4p40g4",
-          "live stats": "https://montclairathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.berryvikings.com/sports/womens-soccer/stats/2026/montclair-state-university/boxscore/7701",
+          "recap": "https://www.berryvikings.com/news/2026/9/27/womens-soccer-vikings-come-up-just-short-against-no-23-montclair-state.aspx",
           "history": "https://www.berryvikings.com/sports/womens-soccer/opponent-history/montclair-state-university/483"
         }
       },
@@ -3438,7 +3438,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.berryvikings.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:08Z"
+      "asOf": "2026-09-28T18:47:31Z"
     }
   },
   "commitments": [],
@@ -3452,6 +3452,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Vikings Come Up Just Short Against No. 23 Montclair State",
+        "url": "https://berryvikings.com/news/2026/9/27/womens-soccer-vikings-come-up-just-short-against-no-23-montclair-state.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Falls to No. 14 TCNJ",
         "url": "https://berryvikings.com/news/2026/9/26/womens-soccer-falls-to-no-14-tcnj.aspx",
@@ -3522,7 +3528,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.berryvikings.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:16Z"
+      "asOf": "2026-09-28T18:47:35Z"
     }
   },
   "camps": {
@@ -3536,20 +3542,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.berrysoccercamps.com",
-        "asOf": "2026-09-27T15:57:24Z"
+        "asOf": "2026-09-28T18:47:43Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3562,15 +3568,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:08Z"
+        "at": "2026-09-28T18:47:31Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:01Z"
       }
     ]
   }

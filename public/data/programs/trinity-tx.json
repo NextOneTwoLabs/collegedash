@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.trinitytigers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:08:08Z"
+        "asOf": "2026-09-28T18:59:25Z"
       }
     }
   },
@@ -286,11 +286,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "7-0-0",
-      "wins": 7,
+      "record": "8-0-0",
+      "wins": 8,
       "losses": 0,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Dylan Harrison"
@@ -1435,7 +1435,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:08:08Z"
+      "asOf": "2026-09-28T18:59:25Z"
     }
   },
   "rosterHistory": {
@@ -2182,11 +2182,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 7,
+      "wins": 8,
       "losses": 0,
       "ties": 0,
-      "text": "7-0-0",
-      "played": 7,
+      "text": "8-0-0",
+      "played": 8,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2344,10 +2344,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "San Antonio, TX / Paul McGinlay Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-0",
         "links": {
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=666392",
+          "box score": "https://www.trinitytigers.com/sports/womens-soccer/stats/2026/st-thomas-tx-/boxscore/13295",
+          "recap": "https://www.trinitytigers.com/news/2026/9/27/wsoc_ust.aspx",
           "history": "https://www.trinitytigers.com/sports/womens-soccer/opponent-history/university-of-st-thomas-tx-/176"
         }
       },
@@ -3682,13 +3683,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:08:08Z"
+      "asOf": "2026-09-28T18:59:25Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Tiger Women's Soccer Slams St. Thomas on Sunday",
+        "url": "https://trinitytigers.com/news/2026/9/27/wsoc_ust.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Notches Shutout Win at Texas Lutheran",
         "url": "https://trinitytigers.com/news/2026/9/25/wsoc_tlu.aspx",
@@ -3759,7 +3766,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.trinitytigers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:08:17Z"
+      "asOf": "2026-09-28T18:59:35Z"
     }
   },
   "camps": {
@@ -3773,20 +3780,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://trinityuniversitysoccercamps.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T16:08:19Z"
+        "asOf": "2026-09-28T18:59:37Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3799,15 +3806,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:08:08Z"
+        "at": "2026-09-28T18:59:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:58:58Z"
       }
     ]
   }

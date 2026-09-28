@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.drewrangers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:59:08Z"
+        "asOf": "2026-09-28T18:49:49Z"
       }
     }
   },
@@ -1326,7 +1326,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drewrangers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:59:08Z"
+      "asOf": "2026-09-28T18:49:49Z"
     }
   },
   "rosterHistory": {
@@ -2316,6 +2316,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.stevensducks.tv/",
+          "live stats": "https://stevensducks.com/sidearmstats/wsoc/summary",
           "history": "https://www.drewrangers.com/sports/womens-soccer/opponent-history/stevens/25"
         }
       },
@@ -3672,7 +3674,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.drewrangers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:59:08Z"
+      "asOf": "2026-09-28T18:49:49Z"
     }
   },
   "commitments": [],
@@ -3755,7 +3757,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.drewrangers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:59:14Z"
+      "asOf": "2026-09-28T18:49:57Z"
     }
   },
   "camps": {
@@ -3775,14 +3777,14 @@
       {
         "source": "camps",
         "url": "https://drewrangers.com/sb_output.aspx?form=52",
-        "asOf": "2026-09-27T15:59:18Z"
+        "asOf": "2026-09-28T18:50:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3795,15 +3797,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:59:08Z"
+        "at": "2026-09-28T18:49:49Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:49:27Z"
       }
     ]
   }

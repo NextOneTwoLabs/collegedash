@@ -270,7 +270,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://fightingtigers.cobleskill.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:58:29Z"
+        "asOf": "2026-09-28T18:48:57Z"
       }
     }
   },
@@ -954,7 +954,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://fightingtigers.cobleskill.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:58:29Z"
+      "asOf": "2026-09-28T18:48:57Z"
     }
   },
   "rosterHistory": {
@@ -1613,6 +1613,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://delhibroncos.com/links/ifh0au",
+          "live stats": "https://delhibroncos.com/sports/wsoc/2026-27/boxscores/20260930_5oge.xml",
           "history": "https://fightingtigers.cobleskill.edu/sports/womens-soccer/opponent-history/suny-delhi/100"
         }
       },
@@ -2649,13 +2651,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://fightingtigers.cobleskill.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:58:29Z"
+      "asOf": "2026-09-28T18:48:57Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Alexa Siegel Named SUNYAC Women’s Soccer Offensive Athlete of the Week",
+        "url": "https://fightingtigers.cobleskill.edu/news/2026/9/28/womens-soccer-alexa-siegel-named-sunyac-womens-soccer-offensive-athlete-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Siegel Leads Cobleskill to 1-0 Senior Day Win in SUNYAC Opener",
         "url": "https://fightingtigers.cobleskill.edu/news/2026/9/26/womens-soccer-siegel-leads-cobleskill-to-1-0-senior-day-win-in-sunyac-opener.aspx",
@@ -2726,7 +2734,7 @@
     "_meta": {
       "source": "news",
       "url": "https://fightingtigers.cobleskill.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:58:35Z"
+      "asOf": "2026-09-28T18:49:01Z"
     }
   },
   "camps": {
@@ -2740,20 +2748,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://fightingtigers.cobleskill.edu/sports/2016/4/6/fighting-tigers-summer-camps",
-        "asOf": "2026-09-27T15:58:42Z"
+        "asOf": "2026-09-28T18:49:04Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:59Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2766,15 +2774,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:58:29Z"
+        "at": "2026-09-28T18:48:58Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:39Z"
       }
     ]
   }

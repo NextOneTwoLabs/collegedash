@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.plymouth.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:03Z"
+        "asOf": "2026-09-28T18:56:27Z"
       }
     }
   },
@@ -1142,7 +1142,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.plymouth.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:03Z"
+      "asOf": "2026-09-28T18:56:27Z"
     }
   },
   "rosterHistory": {
@@ -3334,13 +3334,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.plymouth.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:03Z"
+      "asOf": "2026-09-28T18:56:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "WSOC: Three Panthers earn LEC weekly honors",
+        "url": "https://athletics.plymouth.edu/news/2026/9/28/womens-soccer-wsoc-three-panthers-earn-lec-weekly-honors.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "WSOC: MacDonald’s brace leads Panthers over VTSU Castleton",
         "url": "https://athletics.plymouth.edu/news/2026/9/26/womens-soccer-wsoc-macdonalds-brace-leads-panthers-over-vtsu-castleton.aspx",
@@ -3411,7 +3417,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.plymouth.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:09Z"
+      "asOf": "2026-09-28T18:56:31Z"
     }
   },
   "camps": {
@@ -3425,20 +3431,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.plymouth.edu/documents/2022/6/9/Youth_Camp_Waiver_Forms_20220609.pdf",
-        "asOf": "2026-09-27T16:05:14Z"
+        "asOf": "2026-09-28T18:56:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3451,15 +3457,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:03Z"
+        "at": "2026-09-28T18:56:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:08Z"
       }
     ]
   }

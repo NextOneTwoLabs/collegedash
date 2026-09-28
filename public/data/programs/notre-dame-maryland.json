@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.notredamegators.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:04:21Z"
+        "asOf": "2026-09-28T18:55:59Z"
       }
     }
   },
@@ -929,7 +929,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.notredamegators.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:04:21Z"
+      "asOf": "2026-09-28T18:55:59Z"
     }
   },
   "rosterHistory": {
@@ -2604,13 +2604,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.notredamegators.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:04:21Z"
+      "asOf": "2026-09-28T18:55:59Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "This Week in Gators Athletics - Sept. 28-Oct. 3",
+        "url": "https://notredamegators.com/news/2026/9/28/general-this-week-in-gators-athletics-sept-28-oct-3.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Falls in Conference Opener",
         "url": "https://notredamegators.com/news/2026/9/26/womens-soccer-falls-in-conference-opener.aspx",
@@ -2681,7 +2687,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.notredamegators.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:04:33Z"
+      "asOf": "2026-09-28T18:56:10Z"
     }
   },
   "camps": {
@@ -2695,20 +2701,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.ndm.edu/sportscamps",
-        "asOf": "2026-09-27T16:04:43Z"
+        "asOf": "2026-09-28T18:56:20Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:57Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2721,15 +2727,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:04:21Z"
+        "at": "2026-09-28T18:55:59Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:55:22Z"
       }
     ]
   }

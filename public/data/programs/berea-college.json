@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.bereaathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:36Z"
+        "asOf": "2026-09-28T18:47:52Z"
       }
     }
   },
@@ -1262,7 +1262,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bereaathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:36Z"
+      "asOf": "2026-09-28T18:47:52Z"
     }
   },
   "rosterHistory": {
@@ -2045,6 +2045,7 @@
         "score": "0-0",
         "links": {
           "box score": "https://www.bereaathletics.com/sports/womens-soccer/stats/2026/rose-hulman/boxscore/3454",
+          "recap": "https://www.bereaathletics.com/news/2026/9/28/womens-soccer-berea-college-womens-soccer-week-4-recap.aspx",
           "history": "https://www.bereaathletics.com/sports/womens-soccer/opponent-history/rose-hulman/130"
         }
       },
@@ -3290,13 +3291,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bereaathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:36Z"
+      "asOf": "2026-09-28T18:47:52Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "BEREA COLLEGE WOMEN’S SOCCER WEEK 4 RECAP",
+        "url": "https://bereaathletics.com/news/2026/9/28/womens-soccer-berea-college-womens-soccer-week-4-recap.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "BEREA COLLEGE WOMEN’S SOCCER WEEK 3 RECAP",
         "url": "https://bereaathletics.com/news/2026/9/21/womens-soccer-berea-college-womens-soccer-week-2-recap.aspx",
@@ -3361,7 +3368,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.bereaathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:41Z"
+      "asOf": "2026-09-28T18:47:58Z"
     }
   },
   "camps": {
@@ -3375,20 +3382,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://bereacollegewomenssoccercamp.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T15:57:50Z"
+        "asOf": "2026-09-28T18:48:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3401,15 +3408,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:36Z"
+        "at": "2026-09-28T18:47:52Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:46:57Z"
       }
     ]
   }

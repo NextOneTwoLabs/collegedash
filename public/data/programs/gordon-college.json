@@ -296,7 +296,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.gordon.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:01Z"
+        "asOf": "2026-09-28T18:50:51Z"
       }
     }
   },
@@ -1072,7 +1072,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.gordon.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:01Z"
+      "asOf": "2026-09-28T18:50:51Z"
     }
   },
   "rosterHistory": {
@@ -1893,8 +1893,6 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.cnesportsnet.com/gcfightingscots/",
-          "live stats": "https://athletics.gordon.edu/sidearmstats/wsoc/",
           "history": "https://athletics.gordon.edu/sports/womens-soccer/opponent-history/bridgewater-state-university/23"
         }
       },
@@ -3201,7 +3199,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.gordon.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:01Z"
+      "asOf": "2026-09-28T18:50:51Z"
     }
   },
   "commitments": [],
@@ -3272,7 +3270,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.gordon.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:06Z"
+      "asOf": "2026-09-28T18:50:55Z"
     }
   },
   "camps": {
@@ -3322,19 +3320,19 @@
       {
         "source": "camps",
         "url": "https://camps.gordon.edu/product/girls-soccer-camp/01tNw00000AvkhtIAB",
-        "asOf": "2026-09-27T16:00:14Z"
+        "asOf": "2026-09-28T18:51:06Z"
       },
       {
         "source": "news",
         "url": "https://athletics.gordon.edu/sports/womens-soccer/archives",
-        "asOf": "2026-09-27T16:00:06Z"
+        "asOf": "2026-09-28T18:50:55Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3347,15 +3345,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:01Z"
+        "at": "2026-09-28T18:50:51Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:27Z"
       }
     ]
   }

@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.greensborocollegesports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:25Z"
+        "asOf": "2026-09-28T18:51:17Z"
       }
     }
   },
@@ -1151,7 +1151,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.greensborocollegesports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:25Z"
+      "asOf": "2026-09-28T18:51:17Z"
     }
   },
   "rosterHistory": {
@@ -1892,6 +1892,7 @@
         "score": "8-0",
         "links": {
           "box score": "https://www.greensborocollegesports.com/sports/womens-soccer/stats/2026/salem-college/boxscore/10485",
+          "recap": "https://www.greensborocollegesports.com/news/2026/9/27/womens-soccer-pride-dominate-on-senior-day-earn-8-0-win-over-salem.aspx",
           "history": "https://www.greensborocollegesports.com/sports/womens-soccer/opponent-history/salem-college/21"
         }
       },
@@ -3220,13 +3221,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.greensborocollegesports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:25Z"
+      "asOf": "2026-09-28T18:51:17Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Pride Dominate on Senior Day, Earn 8-0 Win Over Salem",
+        "url": "https://greensborocollegesports.com/news/2026/9/27/womens-soccer-pride-dominate-on-senior-day-earn-8-0-win-over-salem.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Pride Fall at Home to Pfeiffer 1-0",
         "url": "https://greensborocollegesports.com/news/2026/9/23/womens-soccer-pride-fall-to-pfeiffer-1-0.aspx",
@@ -3297,7 +3304,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.greensborocollegesports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:30Z"
+      "asOf": "2026-09-28T18:51:21Z"
     }
   },
   "camps": {
@@ -3311,20 +3318,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://greensborocollegewomenssoccercamps.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T16:00:34Z"
+        "asOf": "2026-09-28T18:51:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3337,15 +3344,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:25Z"
+        "at": "2026-09-28T18:51:17Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:30Z"
       }
     ]
   }

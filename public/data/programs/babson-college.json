@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.babsonathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:56:48Z"
+        "asOf": "2026-09-28T18:47:05Z"
       }
     }
   },
@@ -1396,7 +1396,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.babsonathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:56:48Z"
+      "asOf": "2026-09-28T18:47:05Z"
     }
   },
   "rosterHistory": {
@@ -3515,13 +3515,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.babsonathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:56:48Z"
+      "asOf": "2026-09-28T18:47:05Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Izzy Lee Named NEWMAC Women’s Soccer Offensive Athlete of the Week",
+        "url": "https://babsonathletics.com/news/2026/9/28/izzy-lee-named-newmac-womens-soccer-offensive-athlete-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Battles to Draw at Coast Guard, 1-1",
         "url": "https://babsonathletics.com/news/2026/9/25/womens-soccer-battles-to-draw-at-coast-guard-1-1.aspx",
@@ -3587,18 +3593,12 @@
         "url": "https://babsonathletics.com/news/2026/9/8/womens-soccer-set-for-50th-all-time-meeting-with-brandeis-on-wednesday-afternoon.aspx",
         "date": "2026-09-08",
         "recruiting": false
-      },
-      {
-        "title": "Radley's Goal Pushes Women's Soccer Past Union, 1-0",
-        "url": "https://babsonathletics.com/news/2026/9/5/radleys-goal-pushes-womens-soccer-past-union-1-0.aspx",
-        "date": "2026-09-05",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.babsonathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:56:53Z"
+      "asOf": "2026-09-28T18:47:09Z"
     }
   },
   "camps": {
@@ -3612,20 +3612,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.babson.edu/sports-camps/",
-        "asOf": "2026-09-27T15:57:01Z"
+        "asOf": "2026-09-28T18:47:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3638,15 +3638,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:56:48Z"
+        "at": "2026-09-28T18:47:05Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:46:34Z"
       }
     ]
   }

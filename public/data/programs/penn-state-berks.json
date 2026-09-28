@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.psuberksathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:27Z"
+        "asOf": "2026-09-28T18:56:20Z"
       }
     }
   },
@@ -914,7 +914,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:27Z"
+      "asOf": "2026-09-28T18:56:20Z"
     }
   },
   "rosterHistory": {
@@ -1608,6 +1608,7 @@
         "score": "7-0",
         "links": {
           "box score": "https://www.psuberksathletics.com/sports/womens-soccer/stats/2026/cedar-crest-college/boxscore/7182",
+          "recap": "https://www.psuberksathletics.com/news/2026/9/27/six-second-half-goals-lifts-womens-soccer-over-cedar-crest.aspx",
           "history": "https://www.psuberksathletics.com/sports/womens-soccer/opponent-history/cedar-crest-college/57"
         }
       },
@@ -2834,13 +2835,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:27Z"
+      "asOf": "2026-09-28T18:56:20Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Six Second Half Goals Lifts Women's Soccer Over Cedar Crest",
+        "url": "https://psuberksathletics.com/news/2026/9/27/six-second-half-goals-lifts-womens-soccer-over-cedar-crest.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Cruises to 6-0 Win Over Carlow",
         "url": "https://psuberksathletics.com/news/2026/9/23/womens-soccer-cruises-to-6-0-win-over-carlow.aspx",
@@ -2911,7 +2918,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.psuberksathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:32Z"
+      "asOf": "2026-09-28T18:56:24Z"
     }
   },
   "camps": {
@@ -2925,20 +2932,20 @@
     "robotsBlocked": true,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://app.campdoc.com/!/dn/login?r=psu%20berksgirlssoccerclinic11826",
-        "asOf": "2026-09-27T16:05:32Z"
+        "asOf": "2026-09-28T18:56:25Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2951,15 +2958,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:27Z"
+        "at": "2026-09-28T18:56:20Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:55:53Z"
       }
     ]
   }

@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://bergathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:31Z"
+        "asOf": "2026-09-28T18:51:25Z"
       }
     }
   },
@@ -1327,7 +1327,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:31Z"
+      "asOf": "2026-09-28T18:51:25Z"
     }
   },
   "rosterHistory": {
@@ -3379,7 +3379,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:31Z"
+      "asOf": "2026-09-28T18:51:25Z"
     }
   },
   "commitments": [],
@@ -3393,6 +3393,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Springer Earns OAC Athlete of the Week Honors",
+        "url": "https://bergathletics.com/news/2026/9/28/general-springer-earns-oac-athlete-of-the-week-honors.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Britons Surpass Berg",
         "url": "https://bergathletics.com/news/2026/9/26/womens-soccer-britons-surpass-berg.aspx",
@@ -3458,18 +3464,12 @@
         "url": "https://bergathletics.com/news/2026/2/6/general-womens-sports-collaborate-on-kids-camp.aspx",
         "date": "2026-02-06",
         "recruiting": false
-      },
-      {
-        "title": "First ever all girls sports, kids camp",
-        "url": "https://bergathletics.com/news/2026/1/6/general-first-ever-all-girls-sports-kids-camp.aspx",
-        "date": "2026-01-06",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://bergathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:34Z"
+      "asOf": "2026-09-28T18:51:28Z"
     }
   },
   "camps": {
@@ -3483,7 +3483,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [
       {
         "name": "ID Camp",
@@ -3513,14 +3513,14 @@
       {
         "source": "camps",
         "url": "https://www.huwscamps.com/elite-id-camp.cfm",
-        "asOf": "2026-09-27T16:00:40Z"
+        "asOf": "2026-09-28T18:51:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3533,15 +3533,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:31Z"
+        "at": "2026-09-28T18:51:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:00Z"
       }
     ]
   }

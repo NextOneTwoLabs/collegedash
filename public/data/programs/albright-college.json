@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.albrightathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:56:26Z"
+        "asOf": "2026-09-28T18:46:18Z"
       }
     }
   },
@@ -1364,7 +1364,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:56:26Z"
+      "asOf": "2026-09-28T18:46:18Z"
     }
   },
   "rosterHistory": {
@@ -2204,6 +2204,7 @@
         "score": null,
         "links": {
           "watch": "https://atlanticeastnetwork.com/gwynedd/",
+          "live stats": "https://gwyneddathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.albrightathletics.com/sports/womens-soccer/opponent-history/gwynedd-mercy-university/16"
         }
       },
@@ -2221,6 +2222,7 @@
         "score": null,
         "links": {
           "watch": "https://gomacsports.tv/albrightlions/",
+          "live stats": "https://albrightathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.albrightathletics.com/sports/womens-soccer/opponent-history/widener-university/7"
         }
       },
@@ -3448,7 +3450,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:56:26Z"
+      "asOf": "2026-09-28T18:46:18Z"
     }
   },
   "commitments": [],
@@ -3525,7 +3527,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:56:30Z"
+      "asOf": "2026-09-28T18:46:28Z"
     }
   },
   "camps": {
@@ -3545,14 +3547,14 @@
       {
         "source": "camps",
         "url": "https://docs.google.com/forms/d/e/1FAIpQLSfLduOutAJziy-Ca3kPypi9Y7EKyfdxEFbuS3KPEOYpcIavog/viewform",
-        "asOf": "2026-09-27T15:56:31Z"
+        "asOf": "2026-09-28T18:46:29Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3565,15 +3567,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:56:26Z"
+        "at": "2026-09-28T18:46:18Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:45:57Z"
       }
     ]
   }

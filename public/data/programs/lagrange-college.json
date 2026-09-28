@@ -268,7 +268,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.lagrangepanthers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:01:37Z"
+        "asOf": "2026-09-28T18:52:37Z"
       }
     }
   },
@@ -509,7 +509,7 @@
         "heightIn": 64,
         "classLabel": "Fr.",
         "classCode": "FR",
-        "hometown": "Rome Ga.",
+        "hometown": "Rome, Ga.",
         "highSchool": "Model High",
         "previousSchool": "",
         "major": "",
@@ -599,7 +599,7 @@
         "heightIn": 66,
         "classLabel": "Sr.",
         "classCode": "SR",
-        "hometown": "Marietta Ga.",
+        "hometown": "Marietta, Ga.",
         "highSchool": "Lassiter",
         "previousSchool": "",
         "major": "",
@@ -687,7 +687,7 @@
         "heightIn": 67,
         "classLabel": "Fr.",
         "classCode": "FR",
-        "hometown": "Columbus Ga.",
+        "hometown": "Columbus, Ga.",
         "highSchool": "Northside High",
         "previousSchool": "",
         "major": "",
@@ -743,9 +743,9 @@
         "posLabel": "M/F",
         "height": "5-6",
         "heightIn": 66,
-        "classLabel": "Fr.",
-        "classCode": "FR",
-        "hometown": "McDonough Ga.",
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "McDonough, Ga.",
         "highSchool": "Union Grove",
         "previousSchool": "",
         "major": "",
@@ -821,11 +821,11 @@
         "GR": 0
       },
       "M": {
-        "FR": 2,
+        "FR": 1,
         "R-FR": 0,
         "SO": 1,
         "R-SO": 0,
-        "JR": 1,
+        "JR": 2,
         "R-JR": 0,
         "SR": 1,
         "R-SR": 0,
@@ -844,10 +844,10 @@
       }
     },
     "byClass": {
-      "JR": 5,
+      "JR": 6,
       "SR": 3,
       "SO": 4,
-      "FR": 4
+      "FR": 3
     },
     "graduatingByPos": {
       "GK": 1,
@@ -857,7 +857,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lagrangepanthers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:01:37Z"
+      "asOf": "2026-09-28T18:52:37Z"
     }
   },
   "rosterHistory": {
@@ -941,7 +941,7 @@
           "name": "Madeline Kluth",
           "pos": "M",
           "classCode": "JR",
-          "hometown": "Marietta Ga.",
+          "hometown": "Marietta, Ga.",
           "highSchool": "Lassiter"
         },
         {
@@ -1145,7 +1145,7 @@
           "name": "Madeline Kluth",
           "pos": "",
           "classCode": "SO",
-          "hometown": "Marietta Ga.",
+          "hometown": "Marietta, Ga.",
           "highSchool": "Lassiter"
         },
         {
@@ -2837,7 +2837,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.lagrangepanthers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:01:37Z"
+      "asOf": "2026-09-28T18:52:37Z"
     }
   },
   "commitments": [],
@@ -2920,7 +2920,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.lagrangepanthers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:01:41Z"
+      "asOf": "2026-09-28T18:52:41Z"
     }
   },
   "camps": {
@@ -2940,14 +2940,14 @@
       {
         "source": "camps",
         "url": "https://www.lagrangepantherscamps.com/",
-        "asOf": "2026-09-27T16:01:44Z"
+        "asOf": "2026-09-28T18:52:43Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2960,15 +2960,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:01:37Z"
+        "at": "2026-09-28T18:52:37Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:52:17Z"
       }
     ]
   }

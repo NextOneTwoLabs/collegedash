@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:59:46Z"
+        "asOf": "2026-09-28T18:50:30Z"
       }
     }
   },
@@ -1179,7 +1179,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:59:46Z"
+      "asOf": "2026-09-28T18:50:30Z"
     }
   },
   "rosterHistory": {
@@ -2063,6 +2063,7 @@
         "score": "1-0",
         "links": {
           "box score": "https://www.franciscanathletics.com/sports/womens-soccer/stats/2026/westminster-college-pa-/boxscore/6885",
+          "recap": "https://www.franciscanathletics.com/news/2026/9/28/womens-soccer-shutout-streak-extends-to-six.aspx",
           "history": "https://www.franciscanathletics.com/sports/womens-soccer/opponent-history/westminster-college-pa-/163"
         }
       },
@@ -3237,13 +3238,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:59:46Z"
+      "asOf": "2026-09-28T18:50:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Shutout Streak Extends to Six",
+        "url": "https://franciscanathletics.com/news/2026/9/28/womens-soccer-shutout-streak-extends-to-six.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Travels to Westminster for Saturday Afternoon Affair",
         "url": "https://franciscanathletics.com/news/2026/9/25/womens-soccer-travels-to-westminster-for-saturday-afternoon-affair.aspx",
@@ -3309,18 +3316,12 @@
         "url": "https://franciscanathletics.com/news/2026/9/2/womens-soccer-opens-season-on-the-road.aspx",
         "date": "2026-09-02",
         "recruiting": false
-      },
-      {
-        "title": "Franciscan Women's Soccer Drops 2026 Schedule",
-        "url": "https://franciscanathletics.com/news/2026/8/24/franciscan-womens-soccer-drops-fall-2026-schedule.aspx",
-        "date": "2026-08-24",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.franciscanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:59:54Z"
+      "asOf": "2026-09-28T18:50:34Z"
     }
   },
   "camps": {
@@ -3334,20 +3335,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.franciscanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:59:54Z"
+        "asOf": "2026-09-28T18:50:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:55Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3360,15 +3361,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:59:46Z"
+        "at": "2026-09-28T18:50:30Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:09Z"
       }
     ]
   }

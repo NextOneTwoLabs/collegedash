@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.bvuathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T15:57:33Z"
+        "asOf": "2026-09-28T18:48:10Z"
       }
     }
   },
@@ -312,11 +312,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
+      "record": "1-5-1",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Mauricio Lozada"
@@ -1105,7 +1105,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bvuathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T15:57:33Z"
+      "asOf": "2026-09-28T18:48:10Z"
     }
   },
   "rosterHistory": {
@@ -1670,10 +1670,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "text": "1-5-1",
+      "played": 7,
       "scheduled": 16,
       "confText": null,
       "exhibitions": 0
@@ -1813,11 +1813,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Storm Lake, IA, J. Leslie Rollins Stadium & Peterson Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://team1sports.com/buenavista/",
-          "live stats": "https://bvuathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.bvuathletics.com/news/2026/9/27/cardinals-edge-womens-soccer-1-0.aspx",
+          "box score": "https://www.bvuathletics.com/sports/womens-soccer/stats/2026/saint-marys-university-minn-/boxscore/14080",
           "history": "https://www.bvuathletics.com/sports/womens-soccer/opponent-history/saint-marys-university-minn-/144"
         }
       },
@@ -2983,13 +2983,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.bvuathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T15:57:33Z"
+      "asOf": "2026-09-28T18:48:10Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Cardinals Edge Women's Soccer 1-0",
+        "url": "https://bvuathletics.com/news/2026/9/27/cardinals-edge-womens-soccer-1-0.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Returns Home and Picks up 5-1 Victory",
         "url": "https://bvuathletics.com/news/2026/9/24/womens-soccer-returns-home-and-picks-up-5-1-victory.aspx",
@@ -3055,18 +3061,12 @@
         "url": "https://bvuathletics.com/news/2025/11/26/five-womens-soccer-student-athletes-named-csc-academic-all-district.aspx",
         "date": "2025-11-26",
         "recruiting": false
-      },
-      {
-        "title": "Beavers Land 34 Student-Athletes on A-R-C Fall All-Academic List",
-        "url": "https://bvuathletics.com/news/2025/11/14/general-beavers-land-34-student-athletes-on-a-r-c-fall-all-academic-list.aspx",
-        "date": "2025-11-14",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.bvuathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T15:57:37Z"
+      "asOf": "2026-09-28T18:48:17Z"
     }
   },
   "camps": {
@@ -3080,20 +3080,20 @@
     "robotsBlocked": true,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bvuwsoccercamp.com/",
-        "asOf": "2026-09-27T15:57:42Z"
+        "asOf": "2026-09-28T18:48:20Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:10:58Z",
+    "builtAt": "2026-09-28T19:02:54Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3106,15 +3106,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T15:57:33Z"
+        "at": "2026-09-28T18:48:10Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:35Z"
       }
     ]
   }

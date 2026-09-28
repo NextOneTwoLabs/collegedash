@@ -316,7 +316,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://ephsports.williams.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:08:55Z"
+        "asOf": "2026-09-28T19:00:41Z"
       }
     }
   },
@@ -1343,7 +1343,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:08:55Z"
+      "asOf": "2026-09-28T19:00:41Z"
     }
   },
   "rosterHistory": {
@@ -3341,7 +3341,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:08:55Z"
+      "asOf": "2026-09-28T19:00:41Z"
     }
   },
   "commitments": [],
@@ -3418,7 +3418,7 @@
     "_meta": {
       "source": "news",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:09:00Z"
+      "asOf": "2026-09-28T19:00:53Z"
     }
   },
   "camps": {
@@ -3438,14 +3438,14 @@
       {
         "source": "camps",
         "url": "https://ephswomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T16:09:02Z"
+        "asOf": "2026-09-28T19:00:55Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:02:59Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3458,15 +3458,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:08:55Z"
+        "at": "2026-09-28T19:00:41Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:08Z"
       }
     ]
   }

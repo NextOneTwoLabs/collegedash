@@ -308,7 +308,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:01:11Z"
+        "asOf": "2026-09-28T18:52:14Z"
       }
     }
   },
@@ -1364,7 +1364,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:01:11Z"
+      "asOf": "2026-09-28T18:52:14Z"
     }
   },
   "rosterHistory": {
@@ -2499,6 +2499,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://sabreathletics.com/watch/?Live=444&type=Live",
+          "live stats": "https://sabreathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.illinoistechathletics.com/sports/womens-soccer/opponent-history/marian-university/46"
         }
       },
@@ -4071,7 +4073,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:01:11Z"
+      "asOf": "2026-09-28T18:52:14Z"
     }
   },
   "commitments": [],
@@ -4154,7 +4156,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.illinoistechathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:01:16Z"
+      "asOf": "2026-09-28T18:52:23Z"
     }
   },
   "camps": {
@@ -4204,19 +4206,19 @@
       {
         "source": "camps",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:01:24Z"
+        "asOf": "2026-09-28T18:52:26Z"
       },
       {
         "source": "news",
         "url": "https://www.illinoistechathletics.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-27T16:01:16Z"
+        "asOf": "2026-09-28T18:52:23Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4229,15 +4231,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:01:11Z"
+        "at": "2026-09-28T18:52:14Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:26Z"
       }
     ]
   }

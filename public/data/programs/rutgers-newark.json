@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.rutgersnewarkathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:03Z"
+        "asOf": "2026-09-28T18:57:30Z"
       }
     }
   },
@@ -1181,7 +1181,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rutgersnewarkathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:03Z"
+      "asOf": "2026-09-28T18:57:30Z"
     }
   },
   "rosterHistory": {
@@ -2236,6 +2236,7 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://youtube.com/live/qh7w3rDVSYw?feature=share",
           "live stats": "https://rutgersnewarkathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.rutgersnewarkathletics.com/sports/womens-soccer/opponent-history/medgar-evers-college/224"
         }
@@ -2265,7 +2266,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "Montclair State University",
-        "opponentRank": null,
+        "opponentRank": 23,
         "opponentSeed": null,
         "location": "Montclair, NJ",
         "result": null,
@@ -2301,7 +2302,7 @@
         "conferenceGame": false,
         "homeAway": "H",
         "opponent": "The College of New Jersey",
-        "opponentRank": null,
+        "opponentRank": 14,
         "opponentSeed": null,
         "location": "Newark, NJ, Frederick Douglass Field (Soccer)",
         "result": null,
@@ -2371,7 +2372,7 @@
         "conferenceGame": false,
         "homeAway": "A",
         "opponent": "Rowan University",
-        "opponentRank": null,
+        "opponentRank": 6,
         "opponentSeed": null,
         "location": "Glassboro, NJ",
         "result": null,
@@ -3548,7 +3549,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rutgersnewarkathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:03Z"
+      "asOf": "2026-09-28T18:57:30Z"
     }
   },
   "commitments": [],
@@ -3619,7 +3620,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.rutgersnewarkathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:11Z"
+      "asOf": "2026-09-28T18:57:40Z"
     }
   },
   "camps": {
@@ -3639,14 +3640,14 @@
       {
         "source": "camps",
         "url": "https://www.rutgersnewarkathletics.com/sb_output.aspx?form=25",
-        "asOf": "2026-09-27T16:06:13Z"
+        "asOf": "2026-09-28T18:57:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3659,15 +3660,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:03Z"
+        "at": "2026-09-28T18:57:30Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:02Z"
       }
     ]
   }

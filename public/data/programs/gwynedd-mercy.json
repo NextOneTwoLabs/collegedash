@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:34Z"
+        "asOf": "2026-09-28T18:51:43Z"
       }
     }
   },
@@ -1068,7 +1068,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:00:34Z"
+      "asOf": "2026-09-28T18:51:43Z"
     }
   },
   "rosterHistory": {
@@ -1869,6 +1869,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://atlanticeastnetwork.com/pratt/",
+          "live stats": "https://goprattgo.com/sidearmstats/wsoc/",
           "history": "https://gwyneddathletics.com/sports/womens-soccer/opponent-history/pratt-institute/227"
         }
       },
@@ -3091,7 +3093,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:00:34Z"
+      "asOf": "2026-09-28T18:51:43Z"
     }
   },
   "commitments": [],
@@ -3168,7 +3170,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gwyneddathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:00:38Z"
+      "asOf": "2026-09-28T18:51:48Z"
     }
   },
   "camps": {
@@ -3188,14 +3190,14 @@
       {
         "source": "camps",
         "url": "https://gwyneddathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:00:38Z"
+        "asOf": "2026-09-28T18:51:48Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:00Z",
+    "builtAt": "2026-09-28T19:02:56Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3208,15 +3210,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:00:34Z"
+        "at": "2026-09-28T18:51:43Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:45Z"
       }
     ]
   }

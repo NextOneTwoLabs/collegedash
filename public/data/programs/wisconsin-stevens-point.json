@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.uwsp.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:09:20Z"
+        "asOf": "2026-09-28T19:01:12Z"
       }
     }
   },
@@ -1132,7 +1132,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:09:20Z"
+      "asOf": "2026-09-28T19:01:12Z"
     }
   },
   "rosterHistory": {
@@ -1901,7 +1901,11 @@
         "location": "La Crosse, Wis.",
         "result": null,
         "score": null,
-        "links": {}
+        "links": {
+          "watch": "https://www.wiacnetwork.com/uwlacrosse/",
+          "live stats": "https://uwlathletics.com/sidearmstats/wsoc/summary",
+          "tickets": "https://gofan.co/event/6786020?schoolId=WI100293"
+        }
       },
       {
         "date": "2026-10-07",
@@ -3099,7 +3103,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:09:20Z"
+      "asOf": "2026-09-28T19:01:12Z"
     }
   },
   "commitments": [],
@@ -3182,7 +3186,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.uwsp.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:09:26Z"
+      "asOf": "2026-09-28T19:01:26Z"
     }
   },
   "camps": {
@@ -3202,14 +3206,14 @@
       {
         "source": "camps",
         "url": "https://athletics.uwsp.edu/documents/2021/6/14/Camp_Health_Form_Combined.pdf?path=at",
-        "asOf": "2026-09-27T16:09:32Z"
+        "asOf": "2026-09-28T19:01:29Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:03:00Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3222,15 +3226,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:09:20Z"
+        "at": "2026-09-28T19:01:12Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:48Z"
       }
     ]
   }

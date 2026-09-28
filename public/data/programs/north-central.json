@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ncurams.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:04:14Z"
+        "asOf": "2026-09-28T18:55:35Z"
       }
     }
   },
@@ -726,8 +726,8 @@
         "posLabel": "D",
         "height": "5-8",
         "heightIn": 68,
-        "classLabel": "Fr.",
-        "classCode": "FR",
+        "classLabel": "So.",
+        "classCode": "SO",
         "hometown": "Ireton, IA",
         "highSchool": "West Sioux HS",
         "previousSchool": "",
@@ -756,8 +756,8 @@
         "posLabel": "M",
         "height": "5-4",
         "heightIn": 64,
-        "classLabel": "So.",
-        "classCode": "SO",
+        "classLabel": "Jr.",
+        "classCode": "JR",
         "hometown": "New London, WI",
         "highSchool": "New London HS",
         "previousSchool": "",
@@ -874,9 +874,9 @@
         "GR": 0
       },
       "D": {
-        "FR": 1,
+        "FR": 0,
         "R-FR": 0,
-        "SO": 0,
+        "SO": 1,
         "R-SO": 0,
         "JR": 1,
         "R-JR": 0,
@@ -887,9 +887,9 @@
       "M": {
         "FR": 0,
         "R-FR": 0,
-        "SO": 1,
+        "SO": 0,
         "R-SO": 0,
-        "JR": 0,
+        "JR": 1,
         "R-JR": 0,
         "SR": 2,
         "R-SR": 0,
@@ -908,9 +908,9 @@
       }
     },
     "byClass": {
-      "FR": 4,
+      "FR": 3,
       "SR": 8,
-      "JR": 3,
+      "JR": 4,
       "SO": 2,
       "?": 2
     },
@@ -923,7 +923,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ncurams.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:04:14Z"
+      "asOf": "2026-09-28T18:55:35Z"
     }
   },
   "rosterHistory": {
@@ -2920,7 +2920,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ncurams.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:04:14Z"
+      "asOf": "2026-09-28T18:55:35Z"
     }
   },
   "commitments": [],
@@ -2997,7 +2997,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ncurams.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:04:23Z"
+      "asOf": "2026-09-28T18:55:39Z"
     }
   },
   "camps": {
@@ -3017,14 +3017,14 @@
       {
         "source": "camps",
         "url": "https://www.ncurams.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:04:23Z"
+        "asOf": "2026-09-28T18:55:39Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:57Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3037,15 +3037,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:04:14Z"
+        "at": "2026-09-28T18:55:35Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:55:08Z"
       }
     ]
   }

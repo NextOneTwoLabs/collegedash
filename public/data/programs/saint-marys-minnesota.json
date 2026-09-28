@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.saintmaryssports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:52Z"
+        "asOf": "2026-09-28T18:58:36Z"
       }
     }
   },
@@ -287,11 +287,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-1",
-      "wins": 2,
+      "record": "3-5-1",
+      "wins": 3,
       "losses": 5,
       "ties": 1,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "confRecord": "1-2-0",
       "inProgress": true,
@@ -1633,7 +1633,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:52Z"
+      "asOf": "2026-09-28T18:58:36Z"
     }
   },
   "rosterHistory": {
@@ -2621,11 +2621,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 5,
       "ties": 1,
-      "text": "2-5-1",
-      "played": 8,
+      "text": "3-5-1",
+      "played": 9,
       "scheduled": 20,
       "confText": "1-2-0",
       "exhibitions": 0
@@ -2801,11 +2801,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Storm Lake, IA / J. Leslie Rollins Stadium & Peterson Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://team1sports.com/buenavista/",
-          "live stats": "https://bvuathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://www.saintmaryssports.com/news/2026/9/27/womens-soccer-womens-soccer-earns-back-to-back-wins.aspx",
+          "box score": "https://www.saintmaryssports.com/sports/womens-soccer/stats/2026/buena-vista-university/boxscore/25367",
           "history": "https://www.saintmaryssports.com/sports/womens-soccer/opponent-history/buena-vista-university/57"
         }
       },
@@ -4070,13 +4070,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:52Z"
+      "asOf": "2026-09-28T18:58:36Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Earns Back-to-Back Wins",
+        "url": "https://saintmaryssports.com/news/2026/9/27/womens-soccer-womens-soccer-earns-back-to-back-wins.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Pray Nets Two in Cardinals MIAC Win",
         "url": "https://saintmaryssports.com/news/2026/9/26/womens-soccer-pray-nets-two-in-cardinals-miac-win.aspx",
@@ -4142,18 +4148,12 @@
         "url": "https://saintmaryssports.com/news/2026/5/22/general-rizzo-announces-resignation-will-return-to-alma-mater.aspx",
         "date": "2026-05-22",
         "recruiting": false
-      },
-      {
-        "title": "Sam Munson: From Putting In The Work Nobody Saw, To The Name Nobody Will Forget",
-        "url": "https://saintmaryssports.com/news/2026/5/12/womens-soccer-sam-munson-from-putting-in-the-work-nobody-saw-to-the-name-nobody-will-forget.aspx",
-        "date": "2026-05-12",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.saintmaryssports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:06:56Z"
+      "asOf": "2026-09-28T18:58:41Z"
     }
   },
   "camps": {
@@ -4167,20 +4167,20 @@
     "robotsBlocked": true,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://smumn.universitytickets.com/w/event.aspx?id=1739&p=1",
-        "asOf": "2026-09-27T16:07:05Z"
+        "asOf": "2026-09-28T18:58:42Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4193,15 +4193,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:52Z"
+        "at": "2026-09-28T18:58:36Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:58:07Z"
       }
     ]
   }

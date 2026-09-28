@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.sjfathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:06:59Z"
+        "asOf": "2026-09-28T18:58:33Z"
       }
     }
   },
@@ -1169,7 +1169,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:06:59Z"
+      "asOf": "2026-09-28T18:58:33Z"
     }
   },
   "rosterHistory": {
@@ -3209,13 +3209,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:06:59Z"
+      "asOf": "2026-09-28T18:58:33Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Four Cardinals Earn Empire 8 Weekly Accolades",
+        "url": "https://athletics.sjfc.edu/news/2026/9/28/general-four-cardinals-earn-empire-8-weekly-accolades.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Kalil Scores Twice To Lead Women's Soccer Past Hartwick",
         "url": "https://athletics.sjfc.edu/news/2026/9/26/kalil-nets-two-as-womens-soccer-beats-hartwick-4-1.aspx",
@@ -3281,18 +3287,12 @@
         "url": "https://athletics.sjfc.edu/news/2026/9/1/womens-soccer-opens-season-with-4-2-road-win-over-clarkson.aspx",
         "date": "2026-09-01",
         "recruiting": false
-      },
-      {
-        "title": "2026 Season Preview: Women's Soccer",
-        "url": "https://athletics.sjfc.edu/news/2026/8/31/2026-season-preview-womens-soccer.aspx",
-        "date": "2026-08-31",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:07:04Z"
+      "asOf": "2026-09-28T18:58:37Z"
     }
   },
   "camps": {
@@ -3306,20 +3306,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://sjfwomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-27T16:07:06Z"
+        "asOf": "2026-09-28T18:58:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:03Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3332,15 +3332,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:06:59Z"
+        "at": "2026-09-28T18:58:33Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:56Z"
       }
     ]
   }

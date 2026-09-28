@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://stoutbluedevils.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:09:17Z"
+        "asOf": "2026-09-28T19:01:08Z"
       }
     }
   },
@@ -295,11 +295,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-2",
+      "record": "4-4-2",
       "wins": 4,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
-      "gamesPlayed": 9,
+      "gamesPlayed": 10,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Marcos Rodriguez"
@@ -1299,7 +1299,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://stoutbluedevils.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:09:17Z"
+      "asOf": "2026-09-28T19:01:08Z"
     }
   },
   "rosterHistory": {
@@ -2083,10 +2083,10 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 3,
+      "losses": 4,
       "ties": 2,
-      "text": "4-3-2",
-      "played": 9,
+      "text": "4-4-2",
+      "played": 10,
       "scheduled": 23,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2263,11 +2263,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "St. Paul, Minn. / Outdoor Fields and Courts",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-5",
         "links": {
-          "watch": "https://miacsportsnetwork.com/stkates/?B=4160612",
-          "live stats": "https://stkatesathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://stoutbluedevils.com/sports/womens-soccer/stats/2026/st-catherine-university/boxscore/16292",
+          "recap": "https://stoutbluedevils.com/news/2026/9/27/womens-soccer-stout-drops-5-1-decision-at-st-catherine.aspx",
           "history": "https://stoutbluedevils.com/sports/womens-soccer/opponent-history/st-catherine-university/32"
         }
       },
@@ -3511,13 +3511,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://stoutbluedevils.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:09:17Z"
+      "asOf": "2026-09-28T19:01:08Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Stout Drops 5-1 Decision at St. Catherine",
+        "url": "https://stoutbluedevils.com/news/2026/9/27/womens-soccer-stout-drops-5-1-decision-at-st-catherine.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Blue Devils Blank Saint Mary's 4-0",
         "url": "https://stoutbluedevils.com/news/2026/9/23/womens-soccer-blue-devils-blank-saint-marys-4-0.aspx",
@@ -3588,7 +3594,7 @@
     "_meta": {
       "source": "news",
       "url": "https://stoutbluedevils.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:09:23Z"
+      "asOf": "2026-09-28T19:01:25Z"
     }
   },
   "camps": {
@@ -3602,20 +3608,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.uwstoutsportscamps.com/",
-        "asOf": "2026-09-27T16:09:26Z"
+        "asOf": "2026-09-28T19:01:27Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:04Z",
+    "builtAt": "2026-09-28T19:03:00Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3628,15 +3634,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:09:17Z"
+        "at": "2026-09-28T19:01:08Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:49Z"
       }
     ]
   }

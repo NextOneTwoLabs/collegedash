@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.piedmontlions.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:27Z"
+        "asOf": "2026-09-28T18:56:49Z"
       }
     }
   },
@@ -328,11 +328,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
+      "record": "3-2-2",
       "wins": 3,
       "losses": 2,
-      "ties": 1,
-      "gamesPlayed": 6,
+      "ties": 2,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "confRecord": "0-1-1",
       "inProgress": true,
@@ -1470,7 +1470,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.piedmontlions.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:27Z"
+      "asOf": "2026-09-28T18:56:49Z"
     }
   },
   "rosterHistory": {
@@ -2467,9 +2467,9 @@
     "record": {
       "wins": 3,
       "losses": 2,
-      "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "ties": 2,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 25,
       "confText": "0-1-1",
       "exhibitions": 0
@@ -2611,11 +2611,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Demorest, Georgia, Walker Athletic Complex (Soccer)",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://www.youtube.com/live/-b8l7GDnsoE?si=ShkjNlI2n8Phr60p",
-          "live stats": "http://www.sidearmstats.com/piedmont/wsoc/",
+          "box score": "https://www.piedmontlions.com/sports/womens-soccer/stats/2026/maryville-college/boxscore/9643",
+          "recap": "https://www.piedmontlions.com/news/2026/9/26/womens-soccer-wsoc-final-piedmont-vs-maryville.aspx",
           "history": "https://www.piedmontlions.com/sports/womens-soccer/opponent-history/maryville-college/7"
         }
       },
@@ -4121,7 +4121,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.piedmontlions.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:27Z"
+      "asOf": "2026-09-28T18:56:49Z"
     }
   },
   "commitments": [],
@@ -4131,6 +4131,12 @@
       {
         "title": "WSOC Final: Piedmont 0, Belhaven 2",
         "url": "https://piedmontlions.com/news/2026/9/26/womens-soccer-wsoc-final-piedmont-0-belhaven-2.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
+      {
+        "title": "WSOC Final: Piedmont 1, Maryville 1",
+        "url": "https://piedmontlions.com/news/2026/9/26/womens-soccer-wsoc-final-piedmont-vs-maryville.aspx",
         "date": "2026-09-26",
         "recruiting": false
       },
@@ -4198,7 +4204,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.piedmontlions.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:34Z"
+      "asOf": "2026-09-28T18:56:52Z"
     }
   },
   "camps": {
@@ -4212,7 +4218,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Women's Soccer Announces ID Camp Dates for 2026",
@@ -4271,19 +4277,19 @@
       {
         "source": "camps",
         "url": "https://www.piedmontlionsoccercamp.com/index.cfm",
-        "asOf": "2026-09-27T16:05:46Z"
+        "asOf": "2026-09-28T18:57:02Z"
       },
       {
         "source": "news",
         "url": "https://www.piedmontlions.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-27T16:05:34Z"
+        "asOf": "2026-09-28T18:56:52Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4296,15 +4302,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:27Z"
+        "at": "2026-09-28T18:56:49Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:03Z"
       }
     ]
   }

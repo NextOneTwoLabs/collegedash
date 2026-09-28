@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:14Z"
+        "asOf": "2026-09-28T18:56:41Z"
       }
     }
   },
@@ -921,7 +921,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-27T16:05:14Z"
+      "asOf": "2026-09-28T18:56:41Z"
     }
   },
   "rosterHistory": {
@@ -2597,7 +2597,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goprattgo.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-27T16:05:14Z"
+      "asOf": "2026-09-28T18:56:41Z"
     }
   },
   "commitments": [],
@@ -2674,7 +2674,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goprattgo.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-27T16:05:18Z"
+      "asOf": "2026-09-28T18:56:44Z"
     }
   },
   "camps": {
@@ -2694,14 +2694,14 @@
       {
         "source": "camps",
         "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-27T16:05:18Z"
+        "asOf": "2026-09-28T18:56:44Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-27T16:11:02Z",
+    "builtAt": "2026-09-28T19:02:58Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2714,15 +2714,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-27T16:05:14Z"
+        "at": "2026-09-28T18:56:41Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:20Z"
       }
     ]
   }
