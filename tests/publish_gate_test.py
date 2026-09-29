@@ -15,8 +15,8 @@ rosterRequiresBrowser on a program that has athletics data.
 Covers, in order:
   synthetic  each reason passes on its own, no reason fails, each stale / malformed reviewed entry fails,
              rosterRequiresBrowser with data fails, and a D3 program is covered the moment D3 is published
-  committed  the gate passes on the committed registry, the reviewed list is empty, and the six D1 programs
-             with no athletics source are the six that carry rosterRequiresBrowser
+  committed  the gate passes on the committed registry, the reviewed list is empty, and the three D1 programs
+             with no athletics source are the three that carry rosterRequiresBrowser (six until #145)
   mutations  the committed registry with one reason removed, or one stale entry added, fails
 """
 
@@ -41,7 +41,8 @@ from collect import common  # noqa: E402
 FAILS: list[str] = []
 TOTAL = 0
 VERBOSE = False
-BROWSER_D1 = {"oklahoma", "utah-state", "wyoming", "ohio-university", "george-mason", "st-thomas"}
+# george-mason, utah-state and wyoming left this list in #145 (their roster is embedded JSON, now collected)
+BROWSER_D1 = {"oklahoma", "ohio-university", "st-thomas"}
 
 
 def ok(name: str, cond: bool, detail: str = "") -> bool:
@@ -126,9 +127,9 @@ def test_committed(registry: dict) -> None:
     published = build.published_programs(registry)
     no_data = {p["slug"] for p in published if not os.path.isfile(common.source_path(p["slug"], "athletics"))}
     browser = {p["slug"] for p in published if (p.get("athletics") or {}).get("rosterRequiresBrowser") is True}
-    ok("the published programs flagged rosterRequiresBrowser are the six D1 programs Huatuo named on #94", browser == BROWSER_D1,
+    ok("the published programs flagged rosterRequiresBrowser are the three D1 programs left of the six Huatuo named on #94", browser == BROWSER_D1,
        str(sorted(browser ^ BROWSER_D1)))
-    ok("each of the six has no athletics source", BROWSER_D1 <= no_data, str(sorted(BROWSER_D1 - no_data)))
+    ok("each of the three has no athletics source", BROWSER_D1 <= no_data, str(sorted(BROWSER_D1 - no_data)))
     # not a check: what the gate would say if D3 were switched on with today's registry (#94 PR 4 must reach 0)
     d3 = copy.deepcopy(registry)
     d3["onboardedDivisions"] = sorted(set(d3.get("onboardedDivisions") or []) | {"D3"})
