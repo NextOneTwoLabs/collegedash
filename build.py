@@ -842,14 +842,41 @@ def head_coach_first_season(program: dict, head_name: str | None, seasons: list[
     return coach_since(head_name, seasons, infobox)
 
 
+def head_coach_choice(program: dict, staff: list[dict], wiki_head: str | None) -> tuple[dict | None, str | None, str | None]:
+    """(staff row, name, source) of the published head coach (issue #151). source is "athletics", "wikipedia" or None.
+
+    The school's own page wins: the first staff row flagged isHeadCoach, as before. Wikipedia's infobox name is
+    used only when the school names no head coach, and not even then when the school's stored page lists a
+    coaching staff: a page that lists coaches but no head coach is a vacancy or a title the collector did not
+    read, and in both cases the Wikipedia name cannot be checked against it. The infobox carries no date, so
+    a coaching change the article has not caught up with would be published as current; louisiana-monroe and
+    texas published a Wikipedia coach the school's own /coaches page contradicted.
+
+    A staleness test on the Wikipedia source itself was measured and rejected: across the 94 published
+    programs with both a school head coach and a Wikipedia one (2026-09-28), the Wikipedia name disagreed
+    with the school's on 2 of 35 whose seasons table reaches the last or current season with that coach, and
+    on 4 of 59 whose table does not; the table's age does not separate right names from wrong ones. So the
+    fallback stays, and says where the name came from (source), for the page to show."""
+    head = next((s for s in staff if s.get("isHeadCoach")), None)
+    if head:
+        return head, head["name"], "athletics"
+    name = re.sub(r"\(.*?\)", "", wiki_head or "").strip() or None
+    if not name:
+        return None, None, None
+    if any(s.get("isCoach") for s in staff):
+        common.log(f"build: {program.get('slug')}: the athletics staff lists coaches but no head coach; the "
+                   f"Wikipedia infobox's head coach is not published (#151)")
+        return None, None, None
+    return None, name, "wikipedia"
+
+
 def build_program_section(program, wiki, ath) -> dict:
     w = wiki["data"] if wiki else {}
     a = ath["data"] if ath else {}
     staff = a.get("staff", [])
-    head = next((s for s in staff if s.get("isHeadCoach")), None)
     # the same column repair build_seasons makes, so the all-time total adds overall records (#287)
     seasons = [_repair_wiki_row(s)[0] for s in w.get("seasons", [])]
-    head_name = head["name"] if head else (re.sub(r"\(.*?\)", "", w.get("headCoach") or "").strip() or None)
+    head, head_name, head_source = head_coach_choice(program, staff, w.get("headCoach"))
     since = head_coach_first_season(program, head_name, seasons, w.get("headCoach"), a.get("headCoachBio"))
     wins = sum(s.get("wins") or 0 for s in seasons)
     losses = sum(s.get("losses") or 0 for s in seasons)
@@ -858,7 +885,7 @@ def build_program_section(program, wiki, ath) -> dict:
     support = [s for s in staff if not s.get("isCoach")]
     titles, unsourced_titles = national_titles(program, w.get("nationalTitles", []))
     return {
-        "headCoach": {"name": head_name, "title": head["title"] if head else None,
+        "headCoach": {"name": head_name, "source": head_source, "title": head["title"] if head else None,
                       "since": since, "seasons": (CURRENT_SEASON_FALLBACK - since + 1) if since else None,
                       "bioUrl": head["bioUrl"] if head else None, "social": head.get("social", {}) if head else {}},
         "coaches": coaches,
