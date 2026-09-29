@@ -17,12 +17,19 @@ Each case:
   - moves origin's main mid-run, the way a merged PR would;
   - runs the step and inspects origin: main, and any refresh-sources/* branch.
 
-The stand-in `python` is a shell script on PATH: `build` writes one profile per slug listed in
-public/data/registry.json, removes any other profile, and writes the three indexes; it fails when the
-tree holds BUILD_FAILS, and writes a fifth output when it holds FIFTH_OUTPUT. It also writes the two review
-reports that live outside public/data (data/clubs-review.json, data/schools-review.json: issues #228, #229),
-as the real build does. `validate` fails when the tree holds VALIDATE_FAILS. `sleep` is a no-op so the retry
-loop runs in milliseconds.
+The stand-in `python` is a shell script on PATH: `build` writes one profile per slug in public/data/registry.json's
+`programs` (heldPrograms is not read, as in the real build), except slugs listed in an UNPUBLISH marker file,
+removes any other profile, and writes the three indexes; it fails when the tree holds BUILD_FAILS, and writes a
+fifth output when it holds FIFTH_OUTPUT. It also writes the two review reports that live outside public/data
+(data/clubs-review.json, data/schools-review.json: issues #228, #229), as the real build does. `validate` fails
+when the tree holds VALIDATE_FAILS. Any other `python` command - the step's .github/scripts/merge_registry.py -
+runs the real interpreter on the copy of the script the seeded repository carries, so a commit on main can
+break or delete it. `sleep` is a no-op so the retry loop runs in milliseconds.
+
+The registry has the real one's shape, as far as the step cares: `updated`, `programs` (slug, onboarded,
+athletics.baseUrl and athletics.platform) and `heldPrograms`, written the way common.write_json writes it. A
+run's registry change is what a refresh really writes: athletics.platform, plus `updated`, which
+common.save_registry sets on every write.
 
 Cases (issue #117 first, then the #82 gate behaviour that must not change):
   deleted-upstream        main deletes a profile the run rewrote (modify/delete). The deletion stands, the
@@ -30,14 +37,14 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   deleted-and-gated       the same conflict, and validate fails on the rebuilt data. Nothing is published;
                           the collection is on refresh-sources/*, with public/data exactly as main has it
                           (the deleted profile included) apart from rpi and registry.
-  deleted-registry-kept   main deletes a profile BY HAND and leaves the registry alone (the issue #107
+  deleted-registry-kept   main deletes a profile BY HAND and keeps it in the registry (the issue #107
                           shape). The rebuild puts it back, because the registry still publishes it, and
                           the step says so in a ::warning instead of claiming the deletion was kept.
   deletion-direction      the same, against a build that never recreates a deleted profile: what the step
                           leaves behind is then visible, and it must be the deletion.
-  registry-both-sides     main and the run both change registry.json and a profile conflicts: `-X theirs`
-                          would keep the run's registry and revert main's membership change, so the step
-                          fails closed and keeps the collection.
+  registry-both-sides     (#124, meaning changed by #132) main removes a program the run detected a platform
+                          for, and its profile conflicts. The PR #124 guard refused this; the registry merge
+                          now publishes it with main's membership standing and the profile not republished.
   content-conflict        both sides change public/data/rpi/current.json: `-X theirs` keeps the run's
                           collected table, which is what the whole step is built on.
   upstream-code-change    main changes collegedash.py mid-run: the published data must be the output of
@@ -46,9 +53,9 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   unhandled-conflict      main deletes a collected SOURCE file the run modified - a conflict the step
                           must not resolve. Nothing is published, and the collection is saved on a
                           refresh-sources/* branch with an ::error saying why.
-  pruned-by-run           the run's own registry change unpublishes a profile (the build prunes it) while
-                          main rewrites that profile (delete/modify, the reverse direction). The deletion
-                          stands and the run publishes.
+  pruned-by-run           the run's build unpublishes a profile (the UNPUBLISH marker: a refresh can no longer
+                          change membership, #132) while main rewrites that profile (delete/modify, the
+                          reverse direction). The deletion stands and the run publishes.
   mixed-conflict          main deletes a profile the run rewrote AND a source the run modified. One conflict is
                           not the step's to settle, so none is: the collection is saved on a branch.
   push-always-rejected    origin rejects every push to main. After the retries the collection is saved on
@@ -63,6 +70,29 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
                           the previous report: a key main's copy lacks is published as new, and firstSeen is
                           main's. A control run of the step without the restore publishes nothing new, as
                           every refresh did before #235. With no report on main, the rebuild writes a first one.
+
+Issue #132, the registry merge after the rebase (the four conditions are Huatuo's plan review):
+  registry-only-revert    the #132 shape: the run detects alpha's platform and main puts a collectionHold on alpha
+                          mid-run, in the same hunk. Main's hold stands and the run's platform is kept. A control
+                          run of the step without the merge shows today's silent revert.
+  registry-same-field     both sides change alpha's platform, differently: main's value stands, with a ::warning.
+  registry-identical      both sides make the same platform change and a profile conflicts (the #124 guard's
+                          over-fire): published, main's registry bytes exactly.
+  registry-untouched      the run does not touch the registry and main rewrites it in another format: main's
+                          bytes exactly, no reformat.
+  registry-unexpected     the run changes another field, or heldPrograms: nothing published, the collection on
+                          refresh-sources/*, that branch the run's own commit with its registry as written and an
+                          annotation saying not to merge it as is (condition 3).
+  registry-held           main moves the program the run detected to heldPrograms: the detection is dropped with
+                          a ::warning, and the program is not republished (condition 4).
+  registry-script-fails   main's merge script crashes, or is missing: fail closed through save_collection, the
+                          collection on refresh-sources/*, exit 1 (condition 1).
+  registry-retry          attempt 1 merges, builds and loses the push race to a second registry edit on main;
+                          attempt 2 publishes both of main's edits and the run's platform. A control that
+                          re-captures pre_rebase inside the loop loses the platform (condition 2).
+  registry-gates          build, then validate, fail after a merge: the sources branch carries the merged registry,
+                          not the run's (condition 3).
+  rebased-label           every attempt's fetch fails, so nothing was ever rebased: the final save says unrebased.
 """
 
 from __future__ import annotations
@@ -181,7 +211,18 @@ def tree_files(repo: str, rev: str) -> dict[str, bytes]:
 # collegedash.py, so a commit on main can change them. That is what makes the rebuild-after-rebase property
 # of issue #75 testable here: after a rebase onto a main whose collegedash.py stamps differently, the
 # published profiles must carry main's stamp, not the one the run built with.
-FAKE_PYTHON = "#!/usr/bin/env bash\nexec bash ./collegedash.py \"$@\"\n"
+# Anything else - the step's `python .github/scripts/merge_registry.py` (#132) - runs the real interpreter, on the
+# script the seeded repository carries. HARNESS_MOVE_MAIN_TO, when set, moves origin's main to that commit the first
+# time validate runs, so the attempt that just rebased and built loses the push race (the registry-retry case).
+FAKE_PYTHON = r'''#!/usr/bin/env bash
+if [ "$1" = collegedash.py ]; then
+  if [ "$2" = validate ] && [ -n "$HARNESS_MOVE_MAIN_TO" ] && [ ! -e "$HARNESS_MOVE_MAIN_FLAG" ]; then
+    git -C "$HARNESS_ORIGIN" update-ref refs/heads/main "$HARNESS_MOVE_MAIN_TO" && : > "$HARNESS_MOVE_MAIN_FLAG"
+  fi
+  exec bash ./collegedash.py "$@"
+fi
+exec "$HARNESS_PYTHON" "$@"
+'''
 
 COLLEGEDASH = r'''#!/usr/bin/env bash
 # stand-in for collegedash.py: build and validate, enough of their contract for the commit step.
@@ -194,7 +235,11 @@ case "$cmd" in
     if [ -f BUILD_FAILS ]; then echo "harness: build crashed" >&2; exit 1; fi
     stamp="$STAMP_PREFIX-$(date +%s%N)"
     mkdir -p public/data/programs public/data/commitments public/data/camps
-    slugs=$(sed -n 's/.*"published": \[\(.*\)\].*/\1/p' public/data/registry.json | tr -d '" ' | tr ',' ' ')
+    # programs[] only, as build.py reads it: heldPrograms is never built. UNPUBLISH lists slugs the build skips.
+    slugs=$("$HARNESS_PYTHON" -c 'import json, os
+skip = open("UNPUBLISH").read().split() if os.path.exists("UNPUBLISH") else []
+reg = json.load(open("public/data/registry.json", encoding="utf-8"))
+print(" ".join(p["slug"] for p in reg["programs"] if p["slug"] not in skip))' | tr -d '\r')
     for f in public/data/programs/*.json; do
       s=$(basename "$f" .json); [ "$s" = index ] && continue
       case " $slugs " in *" $s "*) ;; *) rm -f "$f" ;; esac
@@ -246,10 +291,68 @@ def write_exe(path: str, text: str) -> None:
 
 # ---------- one case ----------
 
+REG = "public/data/registry.json"
+MERGE_SCRIPT = ".github/scripts/merge_registry.py"
+BASE_DAY, RUN_DAY = "2026-09-01", "2026-09-28"
+
+
+def program(slug: str, platform: str = "auto") -> dict:
+    # athletics.platform is the last line of its block, so an edit main appends after the block (a collectionHold)
+    # touches the line after the run's platform line: the same hunk, as in #132
+    return {"slug": slug, "onboarded": True, "athletics": {"baseUrl": f"https://{slug}.example", "platform": platform}}
+
+
+def registry_doc(published=("alpha", "beta", "ghost")) -> dict:
+    return {"updated": BASE_DAY, "programs": [program(s) for s in published], "heldPrograms": []}
+
+
+def reg_bytes(doc: dict) -> bytes:
+    """As common.write_json writes the registry."""
+    return (json.dumps(doc, indent=2, ensure_ascii=False) + "\n").encode()
+
+
+def reg_of(files: dict[str, bytes]) -> dict:
+    return json.loads(files[REG])
+
+
+def prog(doc: dict, slug: str) -> dict | None:
+    return next((p for p in doc["programs"] if p["slug"] == slug), None)
+
+
+def edit_registry(files: dict[str, bytes], *edits) -> dict[str, bytes]:
+    doc = reg_of(files)
+    for e in edits:
+        e(doc)
+    files[REG] = reg_bytes(doc)
+    return files
+
+
+def detect(*pairs):
+    """What a refresh writes: athletics.platform for each (slug, platform), and `updated` (common.save_registry)."""
+    def edit(doc):
+        for slug, platform in pairs:
+            prog(doc, slug)["athletics"]["platform"] = platform
+        doc["updated"] = RUN_DAY
+    return edit
+
+
+def hold(slug: str):
+    def edit(doc):
+        prog(doc, slug)["collectionHold"] = {"reason": "owner-hold", "evidence": "harness", "since": "2026-09-20"}
+    return edit
+
+
+def set_platform(slug: str, platform: str):
+    def edit(doc):
+        prog(doc, slug)["athletics"]["platform"] = platform
+    return edit
+
+
 def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
-    reg = json.dumps({"published": list(published)}) + "\n"
-    files = {"README.md": b"harness\n", "public/data/registry.json": reg.encode(),
-             "public/data/rpi/current.json": b'{"season": 2025}\n'}
+    files = {"README.md": b"harness\n", REG: reg_bytes(registry_doc(published)),
+             "public/data/rpi/current.json": b'{"season": 2025}\n',
+             # the step runs the checkout's copy, which after the rebase is main's (#132)
+             MERGE_SCRIPT: open(os.path.join(ROOT, *MERGE_SCRIPT.split("/")), "rb").read().replace(b"\r\n", b"\n")}
     for s in published:
         files[f"programs/{s}/sources/athletics.json"] = f'"{s}-v1"\n'.encode()
         files[f"public/data/programs/{s}.json"] = f'{{"slug": "{s}", "source": "{s}-v1", "builtAt": "old"}}\n'.encode()
@@ -260,9 +363,14 @@ def base_files(published=("alpha", "beta", "ghost")) -> dict[str, bytes]:
     return files
 
 
-def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry=None, run_files=None,
-             seed_files=None, yml_text=None):
-    """Returns (exit code, output, origin path, main-before sha, upstream sha, run clone path)."""
+def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=False, run_registry_edit=None, run_files=None,
+             seed_files=None, yml_text=None, pre_markers=None, upstream2=None, break_fetch=False):
+    """Returns (exit code, output, origin path, upstream sha, run clone path).
+
+    run_registry_edit: edits the run's registry (a callable on the parsed document), before its own build.
+    pre_markers: {name: text} runner-state files the stand-in build reads, there before the run's own build.
+    upstream2: a second change on main, committed on top of `upstream` and moved to when attempt 1 validates.
+    break_fetch: every `git pull` fails (a bad fetch URL); pushes still reach origin."""
     root = os.path.join(tmp, name)
     origin = os.path.join(root, "origin.git")
     work = os.path.join(root, "runner")
@@ -280,7 +388,19 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
     write_exe(os.path.join(bin_dir, "python"), FAKE_PYTHON)
     write_exe(os.path.join(bin_dir, "sleep"), "#!/usr/bin/env bash\nexit 0\n")
     env = {**os.environ, **GIT_ENV, "PATH": bin_dir + os.pathsep + os.environ.get("PATH", ""),
-           "GITHUB_RUN_ID": "123", "GITHUB_RUN_ATTEMPT": "1", "BUILD_ONLY": "false"}
+           "GITHUB_RUN_ID": "123", "GITHUB_RUN_ATTEMPT": "1", "BUILD_ONLY": "false",
+           "HARNESS_PYTHON": sys.executable.replace("\\", "/")}
+    if break_fetch:
+        git(work, "config", "remote.origin.pushurl", origin)
+        git(work, "config", "remote.origin.url", origin + "-unreachable")
+
+    def exclude(marker: str) -> None:  # runner state, never committed
+        with open(os.path.join(work, ".git", "info", "exclude"), "a") as f:
+            f.write(marker + "\n")
+    for m, text in (pre_markers or {}).items():
+        with open(os.path.join(work, m), "w", newline="\n") as f:
+            f.write(text)
+        exclude(m)
 
     # --- the refresh: collected sources and RPI change, then the refresh's own build rewrites every profile
     with open(os.path.join(work, "programs", "alpha", "sources", "athletics.json"), "w", newline="\n") as f:
@@ -294,15 +414,12 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
         os.makedirs(os.path.dirname(full), exist_ok=True)
         with open(full, "wb") as f:
             f.write(body)
-    if run_registry is not None:  # the run's own registry change (a registry build or onboard during the run)
-        with open(os.path.join(work, "public", "data", "registry.json"), "w", newline="\n") as f:
-            f.write(json.dumps({"published": run_registry}) + "\n")
-        for slug in run_registry:  # a program the run onboarded has sources but no profile on main yet
-            d = os.path.join(work, "programs", slug, "sources")
-            os.makedirs(d, exist_ok=True)
-            if not os.path.exists(os.path.join(d, "athletics.json")):
-                with open(os.path.join(d, "athletics.json"), "w", newline="\n") as f:
-                    f.write(f'"{slug}-v2-collected"\n')
+    if run_registry_edit is not None:  # the run's own registry change: a platform detection, in a real refresh
+        path = os.path.join(work, *REG.split("/"))
+        doc = json.loads(open(path, "rb").read())
+        run_registry_edit(doc)
+        with open(path, "wb") as f:
+            f.write(reg_bytes(doc))
     r = subprocess.run([BASH, "-e", os.path.join(bin_dir, "python"), "collegedash.py", "build"], cwd=work, env=env, capture_output=True)
     assert r.returncode == 0, r.stderr
 
@@ -310,16 +427,17 @@ def run_case(tmp: str, name: str, *, upstream, run_markers=(), reject_main_push=
     up_files = upstream(dict(c0_files))
     c1 = commit_files(origin, up_files, c0, f"upstream change for {name}")
     git(origin, "update-ref", "refs/heads/main", c1)
+    if upstream2 is not None:  # main moves again, once, while attempt 1 is between its rebase and its push
+        c2 = commit_files(origin, upstream2(dict(up_files)), c1, f"second upstream change for {name}")
+        env.update({"HARNESS_ORIGIN": origin.replace("\\", "/"), "HARNESS_MOVE_MAIN_TO": c2,
+                    "HARNESS_MOVE_MAIN_FLAG": os.path.join(root, "moved").replace("\\", "/")})
     if reject_main_push:
         hooks = os.path.join(origin, "hooks")
         write_exe(os.path.join(hooks, "pre-receive"),
                   "#!/usr/bin/env bash\nwhile read old new ref; do\n  if [ \"$ref\" = refs/heads/main ]; then echo 'harness: main is protected' >&2; exit 1; fi\ndone\nexit 0\n")
     for m in run_markers:  # markers the stand-in build/validate read from the working tree after the rebase
-        up_marker = os.path.join(work, m)
-        open(up_marker, "w").close()
-        # keep the marker out of the commit: it is runner state, not data
-        with open(os.path.join(work, ".git", "info", "exclude"), "a") as f:
-            f.write(m + "\n")
+        open(os.path.join(work, m), "w").close()
+        exclude(m)  # keep the marker out of the commit: it is runner state, not data
 
     script = os.path.join(root, "step.sh")
     with open(script, "w", encoding="utf-8", newline="\n") as f:
@@ -339,12 +457,26 @@ def data_view(files: dict[str, bytes]) -> dict[str, bytes]:
             and k != "public/data/registry.json"}
 
 
+def expected_registry(origin: str, rev: str, *edits) -> bytes:
+    """The registry at `rev` with `edits` applied, as write_json writes it: what a merge onto `rev` should publish."""
+    return edit_registry(tree_files(origin, rev), *edits)[REG]
+
+
+def registry_warnings(out: str) -> list[str]:
+    return [l for l in out.splitlines() if l.startswith("::warning title=registry merge::")]
+
+
 # ---------- the cases ----------
 
 def drop_ghost(files):
     files.pop("public/data/programs/ghost.json")
-    files["public/data/registry.json"] = (json.dumps({"published": ["alpha", "beta"]}) + "\n").encode()
-    return files
+    return edit_registry(files, lambda d: d["programs"].remove(prog(d, "ghost")))
+
+
+def onboard_newprog(files):
+    """main onboards a program mid-run: registry entry and sources, no profile yet (the next build writes it)."""
+    files["programs/newprog/sources/athletics.json"] = b'"newprog-v1"\n'
+    return edit_registry(files, lambda d: d["programs"].append(program("newprog")))
 
 
 def test_deleted_upstream(tmp):
@@ -364,13 +496,13 @@ def test_deleted_upstream(tmp):
 
 def test_deleted_and_gated(tmp):
     print("deleted-and-gated: main deletes a profile, and validate fails on the rebuilt data")
-    # the run also onboards a new program, so the rebuild creates a profile main has no file for: the gate's restore
-    # has to remove it again, which is what `rm -rf public/data/programs` before the checkout is for
     # the run's registry still publishes ghost, so its build rewrites ghost.json and main's deletion really
-    # conflicts (a delete/delete would not: PR #124 review, item 6). It also onboards a new program, so the
-    # rebuild creates a profile main has no file for and the gate's restore has to remove it again.
-    code, out, origin, c1, _ = run_case(tmp, "deleted-and-gated", upstream=drop_ghost, run_markers=("VALIDATE_FAILS",),
-                                        run_registry=["alpha", "beta", "ghost", "newprog"])
+    # conflicts (a delete/delete would not: PR #124 review, item 6). main also onboards a program in the same
+    # change, with no profile yet, so the rebuild creates a profile main has no file for and the gate's restore has
+    # to remove it again, which is what `rm -rf public/data/programs` before the checkout is for. (Before #132 the
+    # run onboarded it; a refresh can no longer change membership.)
+    code, out, origin, c1, _ = run_case(tmp, "deleted-and-gated", upstream=lambda f: onboard_newprog(drop_ghost(f)),
+                                        run_markers=("VALIDATE_FAILS",))
     ok("the step fails", code != 0, out[-800:])
     ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
     bs = branches(origin)
@@ -379,9 +511,10 @@ def test_deleted_and_gated(tmp):
         files = tree_files(origin, bs[0])
         ok("the branch holds the collected source and RPI table", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n'
            and files.get("public/data/rpi/current.json") == b'{"season": 2026}\n')
-        ok("and the newly onboarded program's sources, with no profile for it (main has none)",
-           files.get("programs/newprog/sources/athletics.json") == b'"newprog-v2-collected"\n'
+        ok("and the program main onboarded has its sources and no profile (main has none)",
+           files.get("programs/newprog/sources/athletics.json") == b'"newprog-v1"\n'
            and "public/data/programs/newprog.json" not in files, sorted(k for k in files if "newprog" in k))
+        ok("and main's registry (the run did not touch it)", files.get(REG) == tree_files(origin, c1)[REG])
         ok("its public/data (except rpi and registry) is exactly main's, the deleted profile included",
            data_view(files) == data_view(tree_files(origin, c1)), sorted(set(data_view(files)) ^ set(data_view(tree_files(origin, c1)))))
         ok("the branch is one commit on top of main", git(origin, "rev-parse", f"{bs[0]}~1") == c1)
@@ -433,12 +566,15 @@ def test_pruned_by_run(tmp):
     def rewrite_ghost(files):
         files["public/data/programs/ghost.json"] = b'{"slug": "ghost", "source": "ghost-v1", "builtAt": "upstream-rebuild"}\n'
         return files
-    code, out, origin, c1, _ = run_case(tmp, "pruned-by-run", upstream=rewrite_ghost, run_registry=["alpha", "beta"])
+    # the run's build skips ghost (UNPUBLISH, there before the run's own build), so the run's commit deletes ghost.json
+    code, out, origin, c1, _ = run_case(tmp, "pruned-by-run", upstream=rewrite_ghost, pre_markers={"UNPUBLISH": "ghost\n"})
     files = tree_files(origin, "refs/heads/main")
     ok("the step succeeds", code == 0, out[-1500:])
     ok("published on top of main", git(origin, "rev-parse", "refs/heads/main~1") == c1)
+    ok("the resolution really fired: the rebase hit a conflict on the profile", "CONFLICT" in out and "public/data/programs/ghost.json" in out,
+       out[-600:])
     ok("the profile the run unpublished is gone, main's rewrite notwithstanding", "public/data/programs/ghost.json" not in files, sorted(files))
-    ok("with the run's registry and collection", files.get("public/data/registry.json") == b'{"published": ["alpha", "beta"]}\n'
+    ok("with main's registry and the run's collection", files.get(REG) == tree_files(origin, c1)[REG]
        and files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
     ok("no sources branch", branches(origin) == [])
 
@@ -480,13 +616,12 @@ def test_push_always_rejected(tmp):
 
 
 def test_deleted_registry_kept(tmp):
-    print("deleted-registry-kept: main deletes a profile by hand and leaves the registry alone (#107's shape)")
+    print("deleted-registry-kept: main deletes a profile by hand and keeps it in the registry (#107's shape)")
     def delete_file_only(files):
         files.pop("public/data/programs/ghost.json")
-        return files
-    # the run also onboards newprog, whose profile is new to main as well: the warning must not name it
-    code, out, origin, c1, _ = run_case(tmp, "deleted-registry-kept", upstream=delete_file_only,
-                                        run_registry=["alpha", "beta", "ghost", "newprog"])
+        # main also onboards newprog, whose profile is new to main as well: the warning must not name it
+        return onboard_newprog(files)
+    code, out, origin, c1, _ = run_case(tmp, "deleted-registry-kept", upstream=delete_file_only)
     files = tree_files(origin, "refs/heads/main")
     ok("the step succeeds", code == 0, out[-1200:])
     # the registry still publishes ghost, so the rebuild recreates it: that is the registry's call, not the step's
@@ -517,32 +652,29 @@ def test_deletion_direction(tmp):
 
 
 def test_registry_both_sides(tmp):
-    print("registry-both-sides: main and the run both change registry.json, and a profile conflicts")
-    def drop_ghost_upstream(files):
-        return drop_ghost(files)
-    # the run writes registry.json too (it onboarded newprog), and its copy still publishes ghost, so -X theirs
-    # would keep the run's registry and put main's removed program back
-    code, out, origin, c1, work = run_case(tmp, "registry-both-sides", upstream=drop_ghost_upstream,
-                                           run_registry=["alpha", "beta", "ghost", "newprog"])
-    ok("the step fails", code != 0, out[-800:])
-    ok("main is exactly the upstream commit, with its membership change intact",
-       git(origin, "rev-parse", "refs/heads/main") == c1
-       and tree_files(origin, c1)["public/data/registry.json"] == b'{"published": ["alpha", "beta"]}\n')
-    bs = branches(origin)
-    ok("the collection is saved on the unpublished branch", bs == ["refs/heads/refresh-sources/123-1-unpublished"], bs)
-    if bs:
-        files = tree_files(origin, bs[0])
-        ok("which holds the run's collection", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
-    # fails if the run's registry can silently overwrite main's (PR #124 review, item 2)
-    ok("the ::error says both sides changed the registry", "::error" in out and "both changed public/data/registry.json" in out, out[-900:])
-    # fails if the guard's annotation tells the operator to push the branch as it stands, which would republish
-    # the very registry the guard refused (R2), or claims a rebuild that never ran on this path
-    ok("the ::error says main's change stands and the branch is pre-rebuild",
-       "MAIN'S MEMBERSHIP CHANGE STANDS" in out and "BEFORE the rebuild" in out, out[-1400:])
-    ok("and does not tell the operator to push it as it stands",
-       "everything except the push to main succeeded" not in out and "Do NOT rebase it onto main and push it as it stands" in out, out[-1400:])
-    ok("and says how to recover: take main's registry, rebuild, validate",
-       "public/data/registry.json" in out and "collegedash.py build" in out and "validate" in out, out[-1400:])
+    print("registry-both-sides (#124, now #132): main removes a program the run detected a platform for, and a profile conflicts")
+    # main drops ghost (registry entry and profile). The run detected platforms for alpha and ghost, so both sides
+    # changed registry.json and the rebase resolves ghost.json: the case the PR #124 guard refused. The merge now
+    # settles it: main's membership stands, alpha's detection is kept, ghost's is dropped with a warning.
+    code, out, origin, c1, _ = run_case(tmp, "registry-both-sides", upstream=drop_ghost,
+                                        run_registry_edit=detect(("alpha", "sidearm"), ("ghost", "sidearm")))
+    files = tree_files(origin, "refs/heads/main")
+    reg = json.loads(files.get(REG) or b'{"programs": []}')
+    ok("the step succeeds: the merge settles what the guard refused", code == 0, out[-1500:])
+    ok("the run is published on top of main", git(origin, "rev-parse", "refs/heads/main~1") == c1)
+    ok("the resolution really fired: the rebase hit a conflict on the profile", "CONFLICT" in out and "public/data/programs/ghost.json" in out,
+       out[-600:])
+    # fails if the run's registry can put main's removed program back (PR #124 review, item 2)
+    ok("FIX main's membership change stands: ghost is not in the published registry", prog(reg, "ghost") is None,
+       [p["slug"] for p in reg["programs"]])
+    ok("FIX and the profile main deleted is not republished", "public/data/programs/ghost.json" not in files, sorted(files))
+    ok("the registry is exactly main's plus the run's platform for alpha",
+       files.get(REG) == expected_registry(origin, c1, detect(("alpha", "sidearm"))), files.get(REG, b"")[:400])
+    warn = registry_warnings(out)
+    ok("a ::warning says ghost's detection was dropped because main removed it",
+       len(warn) == 1 and "ghost" in warn[0] and "removed it from programs" in warn[0], warn)
+    ok("no ::warning claims the rebuild put a profile back", "put back" not in out, out[-900:])
+    ok("no sources branch", branches(origin) == [], branches(origin))
 
 
 def test_content_conflict(tmp):
@@ -785,6 +917,247 @@ def test_fifth_output(tmp):
     ok("the fifth-output assertion is what stopped it", "does not match" in out, out[-1200:])
 
 
+# ---------- issue #132: the registry merge ----------
+
+UNPUBLISHED = "refs/heads/refresh-sources/123-1-unpublished"
+
+
+def without_registry_merge(yml: str) -> tuple[str, int]:
+    """The workflow minus the #132 registry merge after the rebase: the step as it behaved before."""
+    return re.subn(r"( *)if ! merge_base=\$\(git merge-base [^\n]*\n(?:\1   [^\n]*\n)*?\1  save_collection [^\n]*\"registry\" [^\n]*\n\1fi\n",
+                   "", yml)
+
+
+def recapturing_pre_rebase(yml: str) -> tuple[str, int]:
+    """The workflow with pre_rebase re-captured at the top of every attempt: what plan review condition 2 forbids."""
+    return re.subn(r"( *)for attempt in 1 2 3; do\n", lambda m: m.group(0) + m.group(1) + "  pre_rebase=$(git rev-parse HEAD)\n", yml)
+
+
+def test_registry_only_revert(tmp):
+    print("registry-only-revert (#132): the run detects alpha's platform while main puts a hold on alpha, in the same hunk")
+    def hold_alpha(files):
+        return edit_registry(files, hold("alpha"))
+    code, out, origin, c1, _ = run_case(tmp, "registry-only-revert", upstream=hold_alpha, run_registry_edit=detect(("alpha", "sidearm")))
+    files = tree_files(origin, "refs/heads/main")
+    reg = json.loads(files.get(REG) or b'{"programs": []}')
+    alpha = prog(reg, "alpha") or {}
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("the run is published on top of main", git(origin, "rev-parse", "refs/heads/main~1") == c1)
+    # -X theirs settles a content conflict silently, so that the two edits really overlap is shown by the control
+    # below, where main's hold is lost
+    ok("FIX main's hold stands", "collectionHold" in alpha, alpha)
+    ok("and the run's platform is kept", alpha.get("athletics", {}).get("platform") == "sidearm", alpha)
+    ok("the registry is exactly main's plus the run's platform and `updated`, as write_json writes it",
+       files.get(REG) == expected_registry(origin, c1, detect(("alpha", "sidearm"))), files.get(REG, b"")[:400])
+    ok("no registry ::warning: nothing clashed", registry_warnings(out) == [], registry_warnings(out))
+    ok("the merge says what it applied", "athletics.platform for alpha" in out, out[-900:])
+    ok("no sources branch", branches(origin) == [], branches(origin))
+
+    # control: the step without the merge publishes the -X theirs registry, and main's hold silently disappears
+    text, n = without_registry_merge(open(YML, encoding="utf-8").read())
+    ok("control: the registry merge is found exactly once", n == 1, n)
+    code, out, origin, c1, _ = run_case(tmp, "registry-only-revert-control", upstream=hold_alpha,
+                                        run_registry_edit=detect(("alpha", "sidearm")), yml_text=text)
+    reg = json.loads(tree_files(origin, "refs/heads/main").get(REG) or b'{"programs": []}')
+    ok("control: the step succeeds, silently", code == 0 and "::warning" not in out and "::error" not in out, out[-1500:])
+    ok("control: main's hold is reverted (the #132 bug)", "collectionHold" not in (prog(reg, "alpha") or {}), prog(reg, "alpha"))
+    ok("control: while the run's platform is published", (prog(reg, "alpha") or {}).get("athletics", {}).get("platform") == "sidearm",
+       prog(reg, "alpha"))
+
+
+def test_registry_same_field(tmp):
+    print("registry-same-field (#132): both sides change alpha's platform, differently")
+    code, out, origin, c1, _ = run_case(tmp, "registry-same-field", upstream=lambda f: edit_registry(f, set_platform("alpha", "presto")),
+                                        run_registry_edit=detect(("alpha", "sidearm")))
+    files = tree_files(origin, "refs/heads/main")
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("main's value stands: the registry is main's, byte for byte", files.get(REG) == tree_files(origin, c1)[REG], files.get(REG, b"")[:400])
+    warn = registry_warnings(out)
+    ok("a ::warning names alpha and says main's value stands", len(warn) == 1 and "alpha" in warn[0] and "Main's value stands" in warn[0], warn)
+    ok("no sources branch", branches(origin) == [], branches(origin))
+
+
+def test_registry_identical(tmp):
+    print("registry-identical (#132): both sides make the same platform change, and a profile conflicts (the #124 over-fire)")
+    def same_and_drop(files):
+        return edit_registry(drop_ghost(files), set_platform("alpha", "sidearm"))
+    code, out, origin, c1, _ = run_case(tmp, "registry-identical", upstream=same_and_drop, run_registry_edit=detect(("alpha", "sidearm")))
+    files = tree_files(origin, "refs/heads/main")
+    ok("the step succeeds: identical edits are not a conflict to refuse", code == 0, out[-1500:])
+    ok("the resolution fired, which is what made the #124 guard refuse it", "CONFLICT" in out and "public/data/programs/ghost.json" in out)
+    ok("the registry is main's, byte for byte", files.get(REG) == tree_files(origin, c1)[REG], files.get(REG, b"")[:400])
+    ok("no registry ::warning", registry_warnings(out) == [], registry_warnings(out))
+    ok("no sources branch", branches(origin) == [], branches(origin))
+
+
+def test_registry_untouched(tmp):
+    print("registry-untouched (#132): the run does not touch the registry; main rewrites it in another format")
+    def compact(files):
+        doc = reg_of(edit_registry(files, hold("beta")))
+        files[REG] = (json.dumps(doc) + "\n").encode()  # one line: not write_json's format
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "registry-untouched", upstream=compact)
+    files = tree_files(origin, "refs/heads/main")
+    ok("the step succeeds", code == 0, out[-1500:])
+    # fails if the merge re-serialises main's registry when the run had nothing to add
+    ok("main's registry bytes exactly, not reformatted", files.get(REG) == tree_files(origin, c1)[REG], files.get(REG, b"")[:200])
+    ok("the merge says it applied nothing", "applied no platform of its own" in out, out[-900:])
+
+
+def test_registry_unexpected(tmp):
+    print("registry-unexpected (#132): the run changes a registry field a refresh must not")
+    def base_url(doc):
+        detect(("alpha", "sidearm"))(doc)
+        prog(doc, "alpha")["athletics"]["baseUrl"] = "https://elsewhere.example"
+    def held(doc):
+        doc["heldPrograms"].append({**program("dropped"), "hold": {"reason": "not-in-directory"}})
+    for label, edit, named in (("field", base_url, "alpha's athletics.baseUrl"), ("heldPrograms", held, "`heldPrograms`")):
+        code, out, origin, c1, _ = run_case(tmp, f"registry-unexpected-{label}", upstream=lambda f: edit_registry(f, hold("beta")),
+                                            run_registry_edit=edit)
+        c0 = git(origin, "rev-parse", f"{c1}~1")
+        run_reg = registry_doc()
+        edit(run_reg)
+        ok(f"{label}: the step fails", code == 1, out[-800:])
+        ok(f"{label}: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+        bs = branches(origin)
+        ok(f"{label}: the collection is saved on the unpublished branch", bs == [UNPUBLISHED], bs)
+        ok(f"{label}: the merge's ::error names what the run changed", any(l.startswith("::error title=registry merge::") and named in l
+                                                                           for l in out.splitlines()), out[-1500:])
+        if bs == [UNPUBLISHED]:
+            files = tree_files(origin, bs[0])
+            # condition 3: the branch keeps the run's registry as the run wrote it, for a human to inspect
+            ok(f"FIX {label}: the branch's registry is the run's, exactly as written", files.get(REG) == reg_bytes(run_reg),
+               files.get(REG, b"")[:300])
+            ok(f"{label}: the branch is the run's own commit, not rebased", git(origin, "rev-parse", f"{bs[0]}~1") == c0)
+            ok(f"{label}: and holds the collection", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
+        ok(f"FIX {label}: the ::error says main's registry stands and not to merge the branch as is",
+           "MAIN'S REGISTRY STANDS" in out and f"Do NOT merge refresh-sources/123-1-unpublished or push it as it stands" in out, out[-1500:])
+        ok(f"{label}: and never that only the push failed", "everything except the push to main succeeded" not in out)
+
+
+def test_registry_held(tmp):
+    print("registry-held (#132, condition 4): main moves the program the run detected to heldPrograms")
+    def move_alpha(files):
+        files.pop("public/data/programs/alpha.json")
+        def move(doc):
+            p = prog(doc, "alpha")
+            doc["programs"].remove(p)
+            doc["heldPrograms"].append({**p, "hold": {"reason": "not-in-directory", "since": "2026-09-20"}})
+        return edit_registry(files, move)
+    code, out, origin, c1, _ = run_case(tmp, "registry-held", upstream=move_alpha,
+                                        run_registry_edit=detect(("alpha", "sidearm"), ("beta", "sidearm")))
+    files = tree_files(origin, "refs/heads/main")
+    reg = json.loads(files.get(REG) or b'{"programs": [], "heldPrograms": []}')
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("FIX alpha stays held, with main's platform, and is not back in programs",
+       prog(reg, "alpha") is None and [p["athletics"]["platform"] for p in reg["heldPrograms"] if p["slug"] == "alpha"] == ["auto"],
+       reg.get("heldPrograms"))
+    ok("FIX and its profile is not republished", "public/data/programs/alpha.json" not in files, sorted(files))
+    ok("the registry is main's plus beta's platform", files.get(REG) == expected_registry(origin, c1, detect(("beta", "sidearm"))),
+       files.get(REG, b"")[:400])
+    warn = registry_warnings(out)
+    ok("a ::warning says alpha's detection was dropped because main held it",
+       len(warn) == 1 and "alpha" in warn[0] and "moved it to heldPrograms" in warn[0], warn)
+    ok("no sources branch", branches(origin) == [], branches(origin))
+
+
+def test_registry_script_fails(tmp):
+    print("registry-script-fails (#132, condition 1): main's merge script crashes, or is missing")
+    def crash(files):
+        files[MERGE_SCRIPT] = b'raise RuntimeError("harness: merge_registry crashed")\n'
+        return files
+    def missing(files):
+        files.pop(MERGE_SCRIPT)
+        return files
+    for label, upstream, edit in (("crashed", crash, detect(("alpha", "sidearm"))), ("missing", missing, None)):
+        code, out, origin, c1, _ = run_case(tmp, f"registry-script-{label}", upstream=upstream, run_registry_edit=edit)
+        ok(f"{label}: the step exits 1", code == 1, out[-1200:])
+        ok(f"{label}: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+        bs = branches(origin)
+        # fails if the failure goes through errexit: the step would then stop with the collection only on the runner
+        ok(f"FIX {label}: the collection is on refresh-sources/*", bs == [UNPUBLISHED], (bs, out[-1200:]))
+        if bs == [UNPUBLISHED]:
+            ok(f"{label}: which holds the collected source", tree_files(origin, bs[0]).get("programs/alpha/sources/athletics.json")
+               == b'"alpha-v2-collected"\n')
+            ok(f"{label}: and is the run's own commit, not rebased", git(origin, "rev-parse", f"{bs[0]}~1") == git(origin, "rev-parse", f"{c1}~1"))
+        ok(f"{label}: save_collection said so", "::error title=refresh::The registry merge after the rebase" in out
+           and "NOTHING WAS PUBLISHED" in out, out[-1200:])
+
+
+def test_registry_retry(tmp):
+    print("registry-retry (#132, condition 2): attempt 1 loses the push race to a second registry edit on main")
+    # main's first change holds beta and sets alpha's platform by hand; the second, landing while attempt 1 validates,
+    # holds ghost and puts alpha's platform back. Measured against the run's own base, main changed alpha's platform
+    # not at all, so the run's detection applies. Re-capturing pre_rebase after attempt 1 would compare against
+    # attempt 1's merged registry instead, where main's hand-set value had won, and lose it.
+    def first(files):
+        return edit_registry(files, hold("beta"), set_platform("alpha", "presto"))
+    def second(files):
+        return edit_registry(files, hold("ghost"), set_platform("alpha", "auto"))
+    code, out, origin, c1, _ = run_case(tmp, "registry-retry", upstream=first, upstream2=second, run_registry_edit=detect(("alpha", "sidearm")))
+    c2 = git(origin, "rev-parse", "refs/heads/main~1")
+    files = tree_files(origin, "refs/heads/main")
+    reg = json.loads(files.get(REG) or b'{"programs": []}')
+    ok("the step succeeds", code == 0, out[-1500:])
+    ok("attempt 1 merged, built and lost the push race", "attempt 1 did not publish" in out
+       and "Main's value stands" in out, out[-2000:])
+    ok("published on top of main's second change", git(origin, "rev-parse", f"{c2}~1") == c1, (c1, c2))
+    ok("FIX both of main's edits stand", "collectionHold" in (prog(reg, "beta") or {}) and "collectionHold" in (prog(reg, "ghost") or {}),
+       reg)
+    ok("FIX and the run's platform is published", (prog(reg, "alpha") or {}).get("athletics", {}).get("platform") == "sidearm", prog(reg, "alpha"))
+    ok("the registry is exactly main's second change plus the run's platform",
+       files.get(REG) == expected_registry(origin, c2, detect(("alpha", "sidearm"))), files.get(REG, b"")[:400])
+    step = extract_step(YML)
+    ok("pre_rebase is assigned once, before the retry loop", step.count("pre_rebase=") == 1
+       and step.index("pre_rebase=") < step.index("for attempt in 1 2 3"), step.count("pre_rebase="))
+
+    # control: re-capturing pre_rebase inside the loop makes attempt 2 treat attempt 1's merge as the run's registry
+    text, n = recapturing_pre_rebase(open(YML, encoding="utf-8").read())
+    ok("control: the loop is found exactly once", n == 1, n)
+    code, out, origin, c1, _ = run_case(tmp, "registry-retry-control", upstream=first, upstream2=second,
+                                        run_registry_edit=detect(("alpha", "sidearm")), yml_text=text)
+    reg = json.loads(tree_files(origin, "refs/heads/main").get(REG) or b'{"programs": []}')
+    ok("control: the step succeeds", code == 0, out[-1500:])
+    ok("control: the run's platform is lost", (prog(reg, "alpha") or {}).get("athletics", {}).get("platform") == "auto", prog(reg, "alpha"))
+
+
+def test_registry_gates(tmp):
+    print("registry-gates (#132, condition 3): build or validate fails after a merge")
+    def hold_alpha(files):
+        return edit_registry(files, hold("alpha"))
+    for marker, label in (("BUILD_FAILS", "build"), ("VALIDATE_FAILS", "validate")):
+        code, out, origin, c1, _ = run_case(tmp, f"registry-gate-{label}", upstream=hold_alpha, run_markers=(marker,),
+                                            run_registry_edit=detect(("alpha", "sidearm")))
+        ok(f"{label}: the step fails", code != 0, out[-800:])
+        ok(f"{label}: main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+        bs = branches(origin)
+        ok(f"{label}: the collection is on the gate's per-attempt branch", bs == ["refs/heads/refresh-sources/123-1-1"], bs)
+        if len(bs) == 1:
+            files = tree_files(origin, bs[0])
+            ok(f"FIX {label}: the branch carries the merged registry: main's hold and the run's platform",
+               files.get(REG) == expected_registry(origin, c1, detect(("alpha", "sidearm"))), files.get(REG, b"")[:400])
+            ok(f"{label}: with public/data (except rpi, registry) exactly main's", data_view(files) == data_view(tree_files(origin, c1)))
+        ok(f"{label}: the ::error says the branch holds the merged registry", "never the run's raw copy" in out, out[-1500:])
+
+
+def test_rebased_label(tmp):
+    print("rebased-label (#132): every attempt's fetch fails, so no attempt ever rebased")
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    code, out, origin, c1, _ = run_case(tmp, "rebased-label", upstream=readme, break_fetch=True)
+    c0 = git(origin, "rev-parse", f"{c1}~1")
+    ok("the step fails", code == 1, out[-800:])
+    ok("main is unchanged", git(origin, "rev-parse", "refs/heads/main") == c1)
+    bs = branches(origin)
+    ok("the collection is on the unpublished branch", bs == [UNPUBLISHED], (bs, out[-1200:]))
+    if bs == [UNPUBLISHED]:
+        ok("which is the run's own commit, on the commit it started from", git(origin, "rev-parse", f"{bs[0]}~1") == c0)
+    # fails if the final save still calls a commit that never rebased "rebased, rebuilt and gated"
+    ok("FIX the ::error says the commit is NOT rebased", "NOT rebased onto the current main" in out
+       and "everything except the push to main succeeded" not in out, out[-1500:])
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -798,7 +1171,10 @@ def main(argv=None) -> int:
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
              test_build_gate, test_fifth_output, test_review_reports,
-             test_refused_hosts_file, test_stray_locks, test_review_reports_previous]
+             test_refused_hosts_file, test_stray_locks, test_review_reports_previous,
+             test_registry_only_revert, test_registry_same_field, test_registry_identical, test_registry_untouched,
+             test_registry_unexpected, test_registry_held, test_registry_script_fails, test_registry_retry,
+             test_registry_gates, test_rebased_label]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
