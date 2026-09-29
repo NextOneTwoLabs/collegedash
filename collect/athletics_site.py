@@ -12,7 +12,7 @@ career notes are available; pass bios=False to skip.
 from __future__ import annotations
 
 import re
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 from . import adapters, coach_bio, common
 
@@ -137,6 +137,14 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         except common.RobotsDisallowed:
             staff, staff_url = stored.get("staff") or [], stored_env.get("staffUrl")
             common.log(f"  coaches page disallowed by robots.txt; keeping the {len(staff)} stored staff")
+    if not staff:
+        # Issue #387: the FINAL staff list is empty - after the roster page, the coaches page and (robots enforce
+        # mode) the kept stored staff - while the roster has players (0 players raised above). Log what staff-like
+        # markup the roster page has, name-free, so the parser fix can be planned from evidence. No request.
+        try:
+            common.log(zero_staff_diagnostic(html, base, program["athletics"]["sportPath"]))
+        except Exception as e:  # log-only: it must never fail a roster that was collected
+            common.log(f"  !! zero-staff diagnostic failed ({type(e).__name__})")
 
     if bios:
         stored_bios = {p.get("bioUrl"): p for p in ((stored.get("roster") or {}).get("players") or []) if p.get("bioUrl")}
@@ -286,6 +294,83 @@ def school_names(program: dict) -> list[str]:
     athletics site's host label (goduke, uclabruins)."""
     host = re.sub(r"^https?://(?:www\.)?", "", (program.get("athletics") or {}).get("baseUrl") or "").split("/")[0]
     return [n for n in (program.get("name"), program.get("shortName"), program.get("nickname"), host.split(".")[0]) if n]
+
+
+# ---------- issue #387: a name-free line for a roster with players and no staff ----------
+# The line goes to the refresh log, which is public. It holds integers, 0/1 flags and link PATHS masked segment by
+# segment: a segment is logged only as one of these structural words (exact, case-insensitive match; the word
+# logged is this list's own spelling, never the page's), as <n> when it is all digits, and as <x> otherwise - so a
+# person's name slug, whatever it contains ('coach-...', '%20', '@', capitals), can never reach the log. The raw
+# path is split on '/' before anything else and is never decoded. Links to another host log nothing at all.
+DIAG_STRUCTURAL_WORDS = ("sports", "roster", "rosters", "coaches", "coach", "staff", "staff-directory", "directory",
+                         "bios", "bio")
+DIAG_MAX_LINKS = 8
+DIAG_MAX_LEN = 400
+_DIAG_WORD = re.compile(r"\b(coach|staff)", re.I)
+
+
+def _mask_path_segment(seg: str, sport_segments: dict[str, str]) -> str:
+    low = seg.lower()
+    for word in DIAG_STRUCTURAL_WORDS:
+        if low == word:
+            return word
+    if low in sport_segments:
+        return sport_segments[low]
+    if seg.isascii() and seg.isdigit():
+        return "<n>"
+    return "<x>"
+
+
+def _masked_staff_links(soup, base: str, sport_path: str) -> list[str]:
+    """Masked paths of same-host links whose path mentions coach or staff; deduplicated, in page order."""
+    host = urlparse(base).netloc.lower().removeprefix("www.")
+    sport_segments = {s.lower(): s.lower() for s in sport_path.split("/") if s}
+    out: list[str] = []
+    for a in soup.find_all("a", href=True):
+        href = (a.get("href") or "").strip()
+        if not href or href.lower().startswith(("mailto:", "tel:", "javascript:", "#")):
+            continue
+        u = urlparse(urljoin(base + "/", href))
+        if u.scheme not in ("http", "https") or u.netloc.lower().removeprefix("www.") != host:
+            continue  # another host: nothing logged, not even masked
+        path = u.path  # raw, never decoded; query and fragment dropped
+        if not _DIAG_WORD.search(path):
+            continue
+        masked = "/" + "/".join(_mask_path_segment(s, sport_segments) for s in path.split("/") if s)
+        if masked not in out:
+            out.append(masked)
+    return out
+
+
+def zero_staff_diagnostic(html: str, base: str, sport_path: str) -> str:
+    """One name-free log line describing the staff-like markup of a roster page that yielded no staff (issue
+    #387). Counts, 0/1 flags and masked same-host link paths only; at most DIAG_MAX_LINKS paths and DIAG_MAX_LEN
+    characters. Makes no request."""
+    from bs4 import BeautifulSoup
+    from .adapters.sidearm import EMBEDDED_ROSTER_SIG
+    soup = BeautifulSoup(html, "html.parser")
+    links = _masked_staff_links(soup, base, sport_path)
+    for el in soup(["script", "style", "noscript", "template"]):
+        el.extract()
+    text = soup.get_text(" ")
+    tables = soup.find_all("table")
+    staff_tables = sum(1 for t in tables if _DIAG_WORD.search(" ".join(
+        x.get_text(" ") for x in t.find_all(["th", "caption"]))))
+    staff_classes = sum(1 for el in soup.find_all(class_=True)
+                        if any(_DIAG_WORD.search(c) for c in (el.get("class") or [])))
+    counts = (f"coach={len(re.findall(r'coach', text, re.I))} staff={len(re.findall(r'staff', text, re.I))} "
+              f"tables={len(tables)} staffTables={staff_tables} personCards={len(soup.select('.s-person-card'))} "
+              f"staffClasses={staff_classes} sig145={int(bool(EMBEDDED_ROSTER_SIG.search(html)))}")
+    shown = links[:DIAG_MAX_LINKS]
+
+    def line(paths, more):
+        extra = f" +{more} more" if more else ""
+        return f"  no staff found: roster markup {counts} links=[{', '.join(paths)}]{extra}"
+    out = line(shown, len(links) - len(shown))
+    while len(out) > DIAG_MAX_LEN and shown:
+        shown = shown[:-1]
+        out = line(shown, len(links) - len(shown))
+    return out[:DIAG_MAX_LEN]
 
 
 def _coaches_page_staff(ad, url: str, base: str, sport_path: str) -> list[dict]:
