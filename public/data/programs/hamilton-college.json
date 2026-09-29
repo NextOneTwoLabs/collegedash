@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.hamilton.edu/sports/wsoc/roster",
-        "asOf": "2026-09-26T15:12:25Z"
+        "asOf": "2026-09-29T17:09:44Z"
       }
     }
   },
@@ -1188,7 +1188,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.hamilton.edu/sports/wsoc/roster",
-      "asOf": "2026-09-26T15:12:25Z"
+      "asOf": "2026-09-29T17:09:44Z"
     }
   },
   "rosterHistory": {
@@ -3053,13 +3053,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.hamilton.edu/sports/wsoc/schedule",
-      "asOf": "2026-09-26T15:12:25Z"
+      "asOf": "2026-09-29T17:09:44Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Sullivan '29 is NESCAC Women's Soccer Player of the Week for Sept. 28",
+        "url": "https://athletics.hamilton.edu/news/2026/9/28/sullivan-29-is-nescac-womens-soccer-player-of-the-week-for-sept-28.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women’s soccer bests Connecticut College, extends unbeaten streak to five",
         "url": "https://athletics.hamilton.edu/news/2026/9/25/WSOCvsConnCollegeRecapSep25.aspx",
@@ -3125,18 +3131,12 @@
         "url": "https://athletics.hamilton.edu/news/2025/12/4/NESCACAllSportsmanshipFall2025.aspx",
         "date": "2025-12-04",
         "recruiting": false
-      },
-      {
-        "title": "Women's soccer puts three athletes on 2025 Division III all-region team",
-        "url": "https://athletics.hamilton.edu/news/2025/12/3/womens-soccer-womens-soccer-puts-three-athletes-on-2025-division-iii-all-region-team.aspx",
-        "date": "2025-12-03",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.hamilton.edu/sports/wsoc/archives",
-      "asOf": "2026-09-26T15:12:34Z"
+      "asOf": "2026-09-29T17:09:48Z"
     }
   },
   "camps": {
@@ -3150,20 +3150,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://athletics.hamilton.edu/documents/2026/2/10/MenSocIDclinics2026.pdf",
-        "asOf": "2026-09-26T15:12:39Z"
+        "asOf": "2026-09-29T17:09:51Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3176,15 +3176,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:25Z"
+        "at": "2026-09-29T17:09:44Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:45Z"
       }
     ]
   }

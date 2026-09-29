@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.loggerathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:16:46Z"
+        "asOf": "2026-09-29T17:15:31Z"
       }
     }
   },
@@ -302,13 +302,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-0-1",
-      "wins": 6,
+      "record": "7-0-1",
+      "wins": 7,
       "losses": 0,
       "ties": 1,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
-      "confRecord": "3-0-0",
+      "confRecord": "4-0-0",
       "inProgress": true,
       "headCoach": "Stephanie Cox"
     },
@@ -1240,7 +1240,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.loggerathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:16:46Z"
+      "asOf": "2026-09-29T17:15:31Z"
     }
   },
   "rosterHistory": {
@@ -1872,13 +1872,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 6,
+      "wins": 7,
       "losses": 0,
       "ties": 1,
-      "text": "6-0-1",
-      "played": 7,
+      "text": "7-0-1",
+      "played": 8,
       "scheduled": 22,
-      "confText": "3-0-0",
+      "confText": "4-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2018,11 +2018,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Salem, Ore.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-0",
         "links": {
-          "watch": "https://wubearcats.com/links/tmview",
-          "live stats": "https://wubearcats.com/sports/wsoc/2026-27/boxscores/20260926_dbxq.xml",
+          "box score": "https://www.loggerathletics.com/sports/womens-soccer/stats/2026/willamette/boxscore/6078",
+          "recap": "https://www.loggerathletics.com/news/2026/9/26/womens-soccer-ulrich-nets-first-goal-as-a-logger-in-2-0-win-over-bearcats.aspx",
           "history": "https://www.loggerathletics.com/sports/womens-soccer/opponent-history/willamette-university/87"
         }
       },
@@ -3441,13 +3441,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.loggerathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:16:46Z"
+      "asOf": "2026-09-29T17:15:31Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Ulrich Nets First Goal As A Logger In 2-0 Win Over Bearcats",
+        "url": "https://loggerathletics.com/news/2026/9/26/womens-soccer-ulrich-nets-first-goal-as-a-logger-in-2-0-win-over-bearcats.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Puget Sound Women's Soccer Hands PLU First NWC Loss in Three Years",
         "url": "https://loggerathletics.com/news/2026/9/23/puget-sound-womens-soccer-hands-plu-first-nwc-loss-in-three-years.aspx",
@@ -3518,7 +3524,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.loggerathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:16:50Z"
+      "asOf": "2026-09-29T17:15:36Z"
     }
   },
   "camps": {
@@ -3532,7 +3538,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Winter ID Camp",
@@ -3562,14 +3568,14 @@
       {
         "source": "camps",
         "url": "http://www.loggersoccercamps.com/camps.php",
-        "asOf": "2026-09-26T15:16:55Z"
+        "asOf": "2026-09-29T17:15:41Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3582,15 +3588,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:16:46Z"
+        "at": "2026-09-29T17:15:31Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:23Z"
       }
     ]
   }

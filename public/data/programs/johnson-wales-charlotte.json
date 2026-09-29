@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://charlotte.jwuathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:14Z"
+        "asOf": "2026-09-29T17:10:41Z"
       }
     }
   },
@@ -319,11 +319,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-1-2",
+      "record": "3-2-2",
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "confRecord": "1-0-0",
       "inProgress": true,
@@ -1044,7 +1044,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://charlotte.jwuathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:14Z"
+      "asOf": "2026-09-29T17:10:41Z"
     }
   },
   "rosterHistory": {
@@ -1632,10 +1632,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 1,
+      "losses": 2,
       "ties": 2,
-      "text": "3-1-2",
-      "played": 6,
+      "text": "3-2-2",
+      "played": 7,
       "scheduled": 16,
       "confText": "1-0-0",
       "exhibitions": 0
@@ -1759,11 +1759,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Pineville, NC, OrthoCarolina Sportsplex",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.youtube.com/@JWUAthleticsCLT/streams",
-          "live stats": "https://charlotte.jwuathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://charlotte.jwuathletics.com/sports/womens-soccer/stats/2026/methodist/boxscore/2665",
+          "recap": "https://charlotte.jwuathletics.com/news/2026/9/28/monarchs-slip-past-womens-soccer.aspx",
           "history": "https://charlotte.jwuathletics.com/sports/womens-soccer/opponent-history/methodist/47"
         }
       },
@@ -2910,7 +2910,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://charlotte.jwuathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:14Z"
+      "asOf": "2026-09-29T17:10:41Z"
     }
   },
   "commitments": [],
@@ -2924,6 +2924,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Monarchs Slip Past Women's Soccer",
+        "url": "https://charlotte.jwuathletics.com/news/2026/9/28/monarchs-slip-past-womens-soccer.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Kieffer's Brace Pushes JWU Past Warren Wilson",
         "url": "https://charlotte.jwuathletics.com/news/2026/9/25/womens-soccer-kieffers-brace-pushes-jwu-past-warren-wilson.aspx",
@@ -2994,7 +3000,7 @@
     "_meta": {
       "source": "news",
       "url": "https://charlotte.jwuathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:18Z"
+      "asOf": "2026-09-29T17:10:48Z"
     }
   },
   "camps": {
@@ -3008,20 +3014,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://charlotte.jwuathletics.com/registrations/#!/camps/",
-        "asOf": "2026-09-26T15:13:20Z"
+        "asOf": "2026-09-29T17:10:49Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3034,15 +3040,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:14Z"
+        "at": "2026-09-29T17:10:42Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:48Z"
       }
     ]
   }

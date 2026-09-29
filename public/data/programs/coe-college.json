@@ -288,7 +288,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.kohawkathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:46Z"
+        "asOf": "2026-09-29T17:08:10Z"
       }
     }
   },
@@ -296,11 +296,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-5-0",
+      "record": "3-6-0",
       "wins": 3,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "James Culotta"
@@ -1243,7 +1243,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.kohawkathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:46Z"
+      "asOf": "2026-09-29T17:08:10Z"
     }
   },
   "rosterHistory": {
@@ -1898,10 +1898,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "3-5-0",
-      "played": 8,
+      "text": "3-6-0",
+      "played": 9,
       "scheduled": 20,
       "confText": null,
       "exhibitions": 2
@@ -2093,11 +2093,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Stevens Point, Wisc.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://www.wiacnetwork.com/stevenspoint/",
-          "live stats": "https://athletics.uwsp.edu/sidearmstats/wsoc/summary",
+          "recap": "https://www.kohawkathletics.com/news/2026/9/26/womens-soccer-stevens-point-shuts-out-womens-soccer.aspx",
+          "box score": "https://www.kohawkathletics.com/sports/womens-soccer/stats/2026/university-of-wisconsin-stevens-point/boxscore/11378",
           "history": "https://www.kohawkathletics.com/sports/womens-soccer/opponent-history/university-of-wisconsin-stevens-point/143"
         }
       },
@@ -3348,13 +3348,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.kohawkathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:46Z"
+      "asOf": "2026-09-29T17:08:10Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Stevens Point shuts out Women’s Soccer",
+        "url": "https://kohawkathletics.com/news/2026/9/26/womens-soccer-stevens-point-shuts-out-womens-soccer.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer picks up shutout victory over Principia",
         "url": "https://kohawkathletics.com/news/2026/9/23/womens-soccer-womens-soccer-picks-up-shutout-victory-over-principia.aspx",
@@ -3425,7 +3431,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.kohawkathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:10:53Z"
+      "asOf": "2026-09-29T17:08:15Z"
     }
   },
   "camps": {
@@ -3439,20 +3445,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://soccer.coecamps.com/index.cfm",
-        "asOf": "2026-09-26T15:10:55Z"
+        "asOf": "2026-09-29T17:08:18Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3465,15 +3471,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:46Z"
+        "at": "2026-09-29T17:08:10Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:41Z"
       }
     ]
   }

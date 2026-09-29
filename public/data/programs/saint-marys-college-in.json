@@ -292,7 +292,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://belles.saintmarys.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:18:17Z"
+        "asOf": "2026-09-29T17:17:23Z"
       }
     }
   },
@@ -300,11 +300,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
+      "record": "3-3-1",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Farkhod Kurbonov"
@@ -1116,7 +1116,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://belles.saintmarys.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:18:17Z"
+      "asOf": "2026-09-29T17:17:23Z"
     }
   },
   "rosterHistory": {
@@ -1730,10 +1730,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "3-3-1",
+      "played": 7,
       "scheduled": 16,
       "confText": "0-0-0",
       "exhibitions": 2
@@ -1889,11 +1889,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Purcell Athletic Fields",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.miaasportsnetwork.com/smcbelles/",
-          "live stats": "https://belles.saintmarys.edu/sidearmstats/wsoc/summary",
+          "box score": "https://belles.saintmarys.edu/sports/womens-soccer/stats/2026/lake-forest/boxscore/2407",
+          "recap": "https://belles.saintmarys.edu/news/2026/9/26/soccer-belles-fall-in-hard-fought-match-with-foresters.aspx",
           "history": "https://belles.saintmarys.edu/sports/womens-soccer/opponent-history/lake-forest-college/103"
         }
       },
@@ -3033,13 +3033,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://belles.saintmarys.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:18:17Z"
+      "asOf": "2026-09-29T17:17:23Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Belles Fall in Hard Fought Match with Foresters",
+        "url": "https://belles.saintmarys.edu/news/2026/9/26/soccer-belles-fall-in-hard-fought-match-with-foresters.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Belles and Thunder End in Draw After Defensive Battle",
         "url": "https://belles.saintmarys.edu/news/2026/9/16/soccer-belles-and-thunder-end-in-draw-after-defensive-battle.aspx",
@@ -3104,7 +3110,7 @@
     "_meta": {
       "source": "news",
       "url": "https://belles.saintmarys.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:18:24Z"
+      "asOf": "2026-09-29T17:17:31Z"
     }
   },
   "camps": {
@@ -3118,7 +3124,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [
       {
         "name": "Sports Exploration Day Camp",
@@ -3148,14 +3154,14 @@
       {
         "source": "camps",
         "url": "https://www.saintmarys.edu/camps/summer-programs-sports",
-        "asOf": "2026-09-26T15:18:28Z"
+        "asOf": "2026-09-29T17:17:36Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3168,15 +3174,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:18:17Z"
+        "at": "2026-09-29T17:17:23Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:58:07Z"
       }
     ]
   }

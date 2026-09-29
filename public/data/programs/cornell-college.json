@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.cornellrams.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:55Z"
+        "asOf": "2026-09-29T17:08:16Z"
       }
     }
   },
@@ -295,13 +295,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-0",
+      "record": "2-6-0",
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
-      "confRecord": "0-1-0",
+      "confRecord": "0-2-0",
       "inProgress": true,
       "headCoach": "Francis Lee"
     },
@@ -988,7 +988,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cornellrams.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:55Z"
+      "asOf": "2026-09-29T17:08:16Z"
     }
   },
   "rosterHistory": {
@@ -1450,12 +1450,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 5,
+      "losses": 6,
       "ties": 0,
-      "text": "2-5-0",
-      "played": 7,
+      "text": "2-6-0",
+      "played": 8,
       "scheduled": 22,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 2
     },
     "games": [
@@ -1659,11 +1659,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Mount Vernon, IA, Cornell Soccer Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://watchmidwestsports.com/cornellcollegeathletics/",
-          "live stats": "https://cornellrams.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.cornellrams.com/sports/womens-soccer/stats/2026/knox/boxscore/8138",
+          "recap": "https://www.cornellrams.com/news/2026/9/26/womens-soccer-rams-battle-hard-against-knox-falling-3-0.aspx",
           "history": "https://www.cornellrams.com/sports/womens-soccer/opponent-history/knox/27"
         }
       },
@@ -1680,6 +1680,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://watchmidwestsports.com/monmouthscots/?B=4524238",
+          "live stats": "https://monmouthscots.com/sidearmstats/msoc/summary",
           "history": "https://www.cornellrams.com/sports/womens-soccer/opponent-history/monmouth/34"
         }
       },
@@ -2832,13 +2834,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.cornellrams.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:55Z"
+      "asOf": "2026-09-29T17:08:16Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Rams battle hard against Knox, falling 3-0",
+        "url": "https://cornellrams.com/news/2026/9/26/womens-soccer-rams-battle-hard-against-knox-falling-3-0.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Unbeaten Foresters take MWC opener over Cornell women",
         "url": "https://cornellrams.com/news/2026/9/20/womens-soccer-unbeaten-foresters-take-mwc-opener-over-cornell-women.aspx",
@@ -2903,7 +2911,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.cornellrams.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:11:04Z"
+      "asOf": "2026-09-29T17:08:21Z"
     }
   },
   "camps": {
@@ -2917,20 +2925,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.cornellrams.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:11:04Z"
+        "asOf": "2026-09-29T17:08:21Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2943,15 +2951,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:55Z"
+        "at": "2026-09-29T17:08:16Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:53Z"
       }
     ]
   }

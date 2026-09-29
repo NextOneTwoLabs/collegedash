@@ -310,7 +310,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:59Z"
+        "asOf": "2026-09-29T17:07:50Z"
       }
     }
   },
@@ -318,11 +318,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-1",
-      "wins": 1,
+      "record": "2-5-1",
+      "wins": 2,
       "losses": 5,
       "ties": 1,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Betsy Warren"
@@ -1151,7 +1151,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:59Z"
+      "asOf": "2026-09-29T17:07:50Z"
     }
   },
   "rosterHistory": {
@@ -1812,11 +1812,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 5,
       "ties": 1,
-      "text": "1-5-1",
-      "played": 7,
+      "text": "2-5-1",
+      "played": 8,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 2
@@ -1990,11 +1990,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Pittsburgh, PA, UPMC Graham Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-1",
         "links": {
-          "watch": "https://www.pacdigitalnetwork.com/chatham/",
-          "live stats": "http://www.sidearmstats.com/chatham/wsoc/",
+          "recap": "https://www.gochathamcougars.com/news/2026/9/26/womens-soccer-first-home-game-win-on-homecoming-and-senior-day.aspx",
+          "box score": "https://www.gochathamcougars.com/sports/womens-soccer/stats/2026/hiram/boxscore/6984",
           "history": "https://www.gochathamcougars.com/sports/womens-soccer/opponent-history/hiram-college/60"
         }
       },
@@ -3183,13 +3183,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:59Z"
+      "asOf": "2026-09-29T17:07:50Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "First Home Game Win on Homecoming and Senior Day",
+        "url": "https://gochathamcougars.com/news/2026/9/26/womens-soccer-first-home-game-win-on-homecoming-and-senior-day.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "The Cougars are Defeated by Franciscan",
         "url": "https://gochathamcougars.com/news/2026/9/23/womens-soccer-the-cougars-are-defeated-by-franciscan.aspx",
@@ -3255,18 +3261,12 @@
         "url": "https://gochathamcougars.com/news/2026/4/8/womens-soccer-d3-week-athlete-spotlight-lauren-le-prevost-groves.aspx",
         "date": "2026-04-08",
         "recruiting": false
-      },
-      {
-        "title": "Athletic Alley",
-        "url": "https://www.gochathamcougars.com/news/2025/2/6/general-chatham-announces-wrestling-programs-athletic-alley-purple-gray-club.aspx",
-        "date": "2025-02-06",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.gochathamcougars.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:11:07Z"
+      "asOf": "2026-09-29T17:07:59Z"
     }
   },
   "camps": {
@@ -3280,20 +3280,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gochathamcougars.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:11:07Z"
+        "asOf": "2026-09-29T17:07:59Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3306,15 +3306,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:59Z"
+        "at": "2026-09-29T17:07:50Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:24Z"
       }
     ]
   }

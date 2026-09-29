@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.fredoniabluedevils.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:00Z"
+        "asOf": "2026-09-29T17:09:18Z"
       }
     }
   },
@@ -295,11 +295,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-0",
-      "wins": 4,
+      "record": "5-3-0",
+      "wins": 5,
       "losses": 3,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Chris Case"
@@ -1177,7 +1177,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.fredoniabluedevils.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:00Z"
+      "asOf": "2026-09-29T17:09:18Z"
     }
   },
   "rosterHistory": {
@@ -1792,11 +1792,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 3,
       "ties": 0,
-      "text": "4-3-0",
-      "played": 7,
+      "text": "5-3-0",
+      "played": 8,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -1938,11 +1938,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Fredonia, N.Y., University Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-2",
         "links": {
-          "watch": "https://team1sports.com/fredonia/",
-          "live stats": "https://fredoniabluedevils.com/sidearmstats/msoc2/summary",
+          "box score": "https://www.fredoniabluedevils.com/sports/womens-soccer/stats/2026/john-carroll/boxscore/9368",
+          "recap": "https://www.fredoniabluedevils.com/news/2026/9/26/womens-soccer-womens-soccer-storms-past-jcu-for-3-2-victory.aspx",
           "history": "https://www.fredoniabluedevils.com/sports/womens-soccer/opponent-history/john-carroll-university/40"
         }
       },
@@ -1960,7 +1960,7 @@
         "score": null,
         "links": {
           "watch": "https://team1sports.com/fredonia/",
-          "live stats": "https://fredoniabluedevils.com/sidearmstats/msoc2/summary",
+          "live stats": "https://fredoniabluedevils.com/sidearmstats/wsoc/summary",
           "history": "https://www.fredoniabluedevils.com/sports/womens-soccer/opponent-history/oswego-state/8"
         }
       },
@@ -1977,6 +1977,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://sunyacsportsnetwork.com/alfredstate/",
+          "live stats": "https://alfredstateathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.fredoniabluedevils.com/sports/womens-soccer/opponent-history/alfred-state-college/50"
         }
       },
@@ -3289,13 +3291,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.fredoniabluedevils.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:00Z"
+      "asOf": "2026-09-29T17:09:18Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's soccer storms past JCU for 3-2 victory",
+        "url": "https://fredoniabluedevils.com/news/2026/9/26/womens-soccer-womens-soccer-storms-past-jcu-for-3-2-victory.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Late goals by RIT sink Devils",
         "url": "https://fredoniabluedevils.com/news/2026/9/22/womens-soccer-late-goals-by-rit-sink-devils.aspx",
@@ -3360,7 +3368,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.fredoniabluedevils.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:10Z"
+      "asOf": "2026-09-29T17:09:25Z"
     }
   },
   "camps": {
@@ -3374,20 +3382,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.fredoniabluedevils.com/sports/2010/9/29/GEN_0929102731?id=13",
-        "asOf": "2026-09-26T15:12:14Z"
+        "asOf": "2026-09-29T17:09:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3400,15 +3408,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:00Z"
+        "at": "2026-09-29T17:09:18Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:12Z"
       }
     ]
   }

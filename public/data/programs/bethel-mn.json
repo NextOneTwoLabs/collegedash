@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.bethel.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:09:45Z"
+        "asOf": "2026-09-29T17:06:42Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-0",
-      "wins": 1,
+      "record": "2-5-0",
+      "wins": 2,
       "losses": 5,
       "ties": 0,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "0-2-0",
+      "confRecord": "1-2-0",
       "inProgress": true,
       "headCoach": "Sheila McGill"
     },
@@ -1210,7 +1210,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:09:45Z"
+      "asOf": "2026-09-29T17:06:42Z"
     }
   },
   "rosterHistory": {
@@ -1812,13 +1812,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 1,
+      "wins": 2,
       "losses": 5,
       "ties": 0,
-      "text": "1-5-0",
-      "played": 6,
+      "text": "2-5-0",
+      "played": 7,
       "scheduled": 17,
-      "confText": "0-2-0",
+      "confText": "1-2-0",
       "exhibitions": 2
     },
     "games": [
@@ -1987,11 +1987,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "St. Peter, Minn.",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://miacsportsnetwork.com/?S=gacgusties",
-          "live stats": "https://gogusties.com/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.bethel.edu/sports/womens-soccer/stats/2026/gustavus-adolphus-college/boxscore/19275",
+          "recap": "https://athletics.bethel.edu/news/2026/9/26/womens-soccer-three-goal-first-half-powers-royals-past-gustavus.aspx",
           "history": "https://athletics.bethel.edu/sports/womens-soccer/opponent-history/gustavus-adolphus-college/4"
         }
       },
@@ -3191,13 +3191,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:09:45Z"
+      "asOf": "2026-09-29T17:06:42Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Three-Goal First Half Powers Royals Past Gustavus",
+        "url": "https://athletics.bethel.edu/news/2026/9/26/womens-soccer-three-goal-first-half-powers-royals-past-gustavus.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Second-Half Push Comes Up Short at Wartburg",
         "url": "https://athletics.bethel.edu/news/2026/9/23/womens-soccer-second-half-push-comes-up-short-at-wartburg.aspx",
@@ -3268,7 +3274,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.bethel.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:09:53Z"
+      "asOf": "2026-09-29T17:06:51Z"
     }
   },
   "camps": {
@@ -3282,20 +3288,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bethel.edu/events/2024/athletics/wsocid24",
-        "asOf": "2026-09-26T15:10:11Z"
+        "asOf": "2026-09-29T17:07:18Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:18Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3308,15 +3314,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:09:45Z"
+        "at": "2026-09-29T17:06:42Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:04Z"
       }
     ]
   }

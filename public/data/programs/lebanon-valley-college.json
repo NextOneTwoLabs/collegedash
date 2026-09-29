@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.godutchmen.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:49Z"
+        "asOf": "2026-09-29T17:11:24Z"
       }
     }
   },
@@ -1444,7 +1444,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.godutchmen.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:49Z"
+      "asOf": "2026-09-29T17:11:24Z"
     }
   },
   "rosterHistory": {
@@ -2231,6 +2231,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.gomacsports.tv/goeasterneagles/",
+          "live stats": "https://goeasterneagles.com/sidearmstats/wsoc/summary",
           "history": "https://www.godutchmen.com/sports/womens-soccer/opponent-history/eastern-university/27"
         }
       },
@@ -2247,6 +2249,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://gomacsports.tv/flyingdutchmen/",
+          "live stats": "https://godutchmen.com/sidearmstats/wsoc/summary",
           "history": "https://www.godutchmen.com/sports/womens-soccer/opponent-history/misericordia-university/22"
         }
       },
@@ -3319,7 +3323,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.godutchmen.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:49Z"
+      "asOf": "2026-09-29T17:11:24Z"
     }
   },
   "commitments": [],
@@ -3396,7 +3400,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.godutchmen.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:55Z"
+      "asOf": "2026-09-29T17:11:32Z"
     }
   },
   "camps": {
@@ -3416,14 +3420,14 @@
       {
         "source": "camps",
         "url": "https://www.godutchmen.com/sports/2025/2/6/womens-soccer-id-clinic.aspx",
-        "asOf": "2026-09-26T15:13:58Z"
+        "asOf": "2026-09-29T17:11:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3436,15 +3440,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:49Z"
+        "at": "2026-09-29T17:11:24Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:52:26Z"
       }
     ]
   }

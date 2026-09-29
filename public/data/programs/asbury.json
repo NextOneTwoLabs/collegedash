@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.asburyeagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:09:00Z"
+        "asOf": "2026-09-29T17:05:59Z"
       }
     }
   },
@@ -302,11 +302,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-1",
+      "record": "5-2-1",
       "wins": 5,
-      "losses": 1,
+      "losses": 2,
       "ties": 1,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "confRecord": "1-0-0",
       "inProgress": true,
@@ -1428,7 +1428,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.asburyeagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:09:00Z"
+      "asOf": "2026-09-29T17:05:59Z"
     }
   },
   "rosterHistory": {
@@ -2175,10 +2175,10 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 1,
+      "losses": 2,
       "ties": 1,
-      "text": "5-1-1",
-      "played": 7,
+      "text": "5-2-1",
+      "played": 8,
       "scheduled": 22,
       "confText": "1-0-0",
       "exhibitions": 0
@@ -2368,11 +2368,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Columbus, Ohio",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://www.flocollege.com/signup?redirect=%2Flive%2F266588&utm_campaign=828791asburyuniversit&utm_medium=partner&utm_source=multiple&utm_content=signup&contract_id=0063m00000n3zlaaam&coverage_id=16112087&sp=conf-partner-k7p2",
-          "live stats": "https://athletics.capital.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.asburyeagles.com/sports/womens-soccer/stats/2026/capital-university/boxscore/8081",
+          "recap": "https://www.asburyeagles.com/news/2026/9/26/womens-soccer-asbury-slips-on-the-road-at-capital-2-0.aspx",
           "history": "https://www.asburyeagles.com/sports/womens-soccer/opponent-history/capital-university/42"
         }
       },
@@ -3827,13 +3827,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.asburyeagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:09:00Z"
+      "asOf": "2026-09-29T17:05:59Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Asbury Slips on the Road at Capital, 2-0",
+        "url": "https://asburyeagles.com/news/2026/9/26/womens-soccer-asbury-slips-on-the-road-at-capital-2-0.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Asbury Defeats Franklin, 5-2; Scott Scores Twice",
         "url": "https://asburyeagles.com/news/2026/9/23/womens-soccer-asbury-defeats-franklin-5-2-scott-scores-twice.aspx",
@@ -3899,18 +3905,12 @@
         "url": "https://asburyeagles.com/news/2026/8/31/asbury-womens-soccer-tabbed-fourth-in-ccs-preseason-poll.aspx",
         "date": "2026-08-31",
         "recruiting": false
-      },
-      {
-        "title": "Title IX Celebration",
-        "url": "https://www.asburyeagles.com/news/2022/11/7/au-titleIX.aspx",
-        "date": "2022-11-07",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.asburyeagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:09:08Z"
+      "asOf": "2026-09-29T17:06:07Z"
     }
   },
   "camps": {
@@ -3924,20 +3924,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.asburyeaglecamps.com/",
-        "asOf": "2026-09-26T15:09:13Z"
+        "asOf": "2026-09-29T17:06:11Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:58Z",
+    "builtAt": "2026-09-29T17:21:18Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3950,15 +3950,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:09:00Z"
+        "at": "2026-09-29T17:05:59Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:46:22Z"
       }
     ]
   }

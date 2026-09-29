@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.rpiathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:17:19Z"
+        "asOf": "2026-09-29T17:16:05Z"
       }
     }
   },
@@ -303,12 +303,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-0-3",
+      "record": "4-1-3",
       "wins": 4,
-      "losses": 0,
+      "losses": 1,
       "ties": 3,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
+      "confRecord": "0-1-0",
       "inProgress": true,
       "headCoach": "Bre Nasypany-Cicero"
     },
@@ -1234,7 +1235,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rpiathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:17:19Z"
+      "asOf": "2026-09-29T17:16:05Z"
     }
   },
   "rosterHistory": {
@@ -1946,12 +1947,12 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 0,
+      "losses": 1,
       "ties": 3,
-      "text": "4-0-3",
-      "played": 7,
+      "text": "4-1-3",
+      "played": 8,
       "scheduled": 17,
-      "confText": "0-0-0",
+      "confText": "0-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -2091,11 +2092,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Rochester, NY",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "watch": "https://ritathletics.com/watch/?Live=1903&type=Live",
-          "live stats": "https://ritathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.rpiathletics.com/sports/womens-soccer/stats/2026/rit/boxscore/20902",
+          "recap": "https://www.rpiathletics.com/news/2026/9/26/womens-soccer-dealt-first-setback-of-season-at-rit.aspx",
           "history": "https://www.rpiathletics.com/sports/womens-soccer/opponent-history/rit/30"
         }
       },
@@ -2112,6 +2113,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.empire8network.com/russellsage/?B=4257739",
+          "live stats": "https://www.sagegators.com/sports/wsoc/2026-27/boxscores/20260929_2hnu.xml",
           "history": "https://www.rpiathletics.com/sports/womens-soccer/opponent-history/russell-sage-college/44"
         }
       },
@@ -3211,13 +3214,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.rpiathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:17:19Z"
+      "asOf": "2026-09-29T17:16:05Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Dealt First Setback of Season at RIT",
+        "url": "https://rpiathletics.com/news/2026/9/26/womens-soccer-dealt-first-setback-of-season-at-rit.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Draws with Plattsburgh",
         "url": "https://rpiathletics.com/news/2026/9/19/womens-soccer-draws-with-plattsburgh.aspx",
@@ -3283,18 +3292,12 @@
         "url": "https://www.rpiathletics.com/news/2025/12/19/general-jojo-family-contributes-historic-gift-to-rpi-athletics.aspx",
         "date": "2025-12-19",
         "recruiting": false
-      },
-      {
-        "title": "Academic & Athletic Liaison Program",
-        "url": "https://www.rpiathletics.com/news/2010/10/20/GEN_1020101108.aspx",
-        "date": "2010-10-20",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.rpiathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:17:26Z"
+      "asOf": "2026-09-29T17:16:12Z"
     }
   },
   "camps": {
@@ -3308,20 +3311,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 12,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.rpiathletics.com/sports/2024/4/10/youthcamps.aspx",
-        "asOf": "2026-09-26T15:17:28Z"
+        "asOf": "2026-09-29T17:16:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3334,15 +3337,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:17:19Z"
+        "at": "2026-09-29T17:16:05Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:37Z"
       }
     ]
   }

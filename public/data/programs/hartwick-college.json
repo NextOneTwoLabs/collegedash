@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hartwickhawks.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:44Z"
+        "asOf": "2026-09-29T17:10:03Z"
       }
     }
   },
@@ -287,11 +287,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-3-3",
+      "record": "1-4-3",
       "wins": 1,
-      "losses": 3,
+      "losses": 4,
       "ties": 3,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Brian Knapp"
@@ -1232,7 +1232,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:44Z"
+      "asOf": "2026-09-29T17:10:03Z"
     }
   },
   "rosterHistory": {
@@ -1854,10 +1854,10 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 3,
+      "losses": 4,
       "ties": 3,
-      "text": "1-3-3",
-      "played": 7,
+      "text": "1-4-3",
+      "played": 8,
       "scheduled": 19,
       "confText": null,
       "exhibitions": 0
@@ -1999,11 +1999,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Rochester, NY",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-4",
         "links": {
-          "watch": "https://www.empire8network.com/stjohnfisher/",
-          "live stats": "http://www.sidearmstats.com/sjfc/wsoc",
+          "recap": "https://www.hartwickhawks.com/news/2026/9/26/womens-soccer-weber-finds-net-as-hawks-fall-to-fisher.aspx",
+          "box score": "https://www.hartwickhawks.com/sports/womens-soccer/stats/2026/st-john-fisher-university/boxscore/7843",
           "history": "https://www.hartwickhawks.com/sports/womens-soccer/opponent-history/st-john-fisher-university/42"
         }
       },
@@ -3114,13 +3114,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:44Z"
+      "asOf": "2026-09-29T17:10:03Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Weber Finds Net as Hawks Fall to Fisher",
+        "url": "https://hartwickhawks.com/news/2026/9/26/womens-soccer-weber-finds-net-as-hawks-fall-to-fisher.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Draws with Utica in E8 Contest",
         "url": "https://hartwickhawks.com/news/2026/9/23/womens-soccer-draws-with-utica-in-e8-contest.aspx",
@@ -3191,7 +3197,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hartwickhawks.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:50Z"
+      "asOf": "2026-09-29T17:10:08Z"
     }
   },
   "camps": {
@@ -3205,20 +3211,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.hartwickhawks.com/sports/2022/3/22/test.aspx",
-        "asOf": "2026-09-26T15:12:54Z"
+        "asOf": "2026-09-29T17:10:21Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3231,15 +3237,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:44Z"
+        "at": "2026-09-29T17:10:03Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:57Z"
       }
     ]
   }

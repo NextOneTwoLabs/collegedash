@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://vikings.lawrence.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:44Z"
+        "asOf": "2026-09-29T17:11:13Z"
       }
     }
   },
@@ -302,13 +302,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-3",
-      "wins": 5,
+      "record": "6-1-3",
+      "wins": 6,
       "losses": 1,
       "ties": 3,
-      "gamesPlayed": 9,
+      "gamesPlayed": 10,
       "recordSource": "schedule",
-      "confRecord": "1-1-0",
+      "confRecord": "2-1-0",
       "inProgress": true,
       "headCoach": "Joe Sagar"
     },
@@ -1286,7 +1286,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:44Z"
+      "asOf": "2026-09-29T17:11:13Z"
     }
   },
   "rosterHistory": {
@@ -2019,13 +2019,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 1,
       "ties": 3,
-      "text": "5-1-3",
-      "played": 9,
+      "text": "6-1-3",
+      "played": 10,
       "scheduled": 18,
-      "confText": "1-1-0",
+      "confText": "2-1-0",
       "exhibitions": 1
     },
     "games": [
@@ -2217,11 +2217,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Monmouth, IL",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-0",
         "links": {
-          "watch": "https://watchmidwestsports.com/monmouthscots/?B=4438130",
-          "live stats": "https://monmouthscots.com/sidearmstats/wsoc/summary",
+          "box score": "https://vikings.lawrence.edu/sports/womens-soccer/stats/2026/monmouth-college/boxscore/6010",
           "history": "https://vikings.lawrence.edu/sports/womens-soccer/opponent-history/monmouth-college/89"
         }
       },
@@ -2238,6 +2237,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://wiacnetwork.com/stout/",
+          "live stats": "https://stoutbluedevils.com/sidearmstats/wsoc/summary",
           "history": "https://vikings.lawrence.edu/sports/womens-soccer/opponent-history/university-of-wisconsin-stout/150"
         }
       },
@@ -3530,7 +3531,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:44Z"
+      "asOf": "2026-09-29T17:11:13Z"
     }
   },
   "commitments": [],
@@ -3607,7 +3608,7 @@
     "_meta": {
       "source": "news",
       "url": "https://vikings.lawrence.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:52Z"
+      "asOf": "2026-09-29T17:11:17Z"
     }
   },
   "camps": {
@@ -3627,14 +3628,14 @@
       {
         "source": "camps",
         "url": "https://vikings.lawrence.edu/sports/2020/5/20/information-camps-clinics-index.aspx",
-        "asOf": "2026-09-26T15:13:54Z"
+        "asOf": "2026-09-29T17:11:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3647,15 +3648,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:44Z"
+        "at": "2026-09-29T17:11:13Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:52:26Z"
       }
     ]
   }

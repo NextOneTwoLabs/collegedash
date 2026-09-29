@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.whitworthpirates.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:19:42Z"
+        "asOf": "2026-09-29T17:19:25Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-3-0",
+      "record": "2-4-0",
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "recordSource": "schedule",
-      "confRecord": "1-2-0",
+      "confRecord": "1-3-0",
       "inProgress": true,
       "headCoach": "Cameron Bushéy"
     },
@@ -1014,7 +1014,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.whitworthpirates.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:19:42Z"
+      "asOf": "2026-09-29T17:19:25Z"
     }
   },
   "rosterHistory": {
@@ -1752,12 +1752,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 3,
+      "losses": 4,
       "ties": 0,
-      "text": "2-3-0",
-      "played": 5,
+      "text": "2-4-0",
+      "played": 6,
       "scheduled": 18,
-      "confText": "1-2-0",
+      "confText": "1-3-0",
       "exhibitions": 1
     },
     "games": [
@@ -1877,10 +1877,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Forest Grove, Ore.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-2",
         "links": {
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665647",
+          "box score": "https://www.whitworthpirates.com/sports/womens-soccer/stats/2026/pacific-ore-/boxscore/6951",
+          "recap": "https://www.whitworthpirates.com/news/2026/9/26/womens-soccer-pacific-ore-holds-off-whitworth-women-2-1.aspx",
           "history": "https://www.whitworthpirates.com/sports/womens-soccer/opponent-history/pacific-university/195"
         }
       },
@@ -3258,13 +3259,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.whitworthpirates.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:19:42Z"
+      "asOf": "2026-09-29T17:19:25Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Pacific (Ore.) holds off Whitworth women 2-1",
+        "url": "https://whitworthpirates.com/news/2026/9/26/womens-soccer-pacific-ore-holds-off-whitworth-women-2-1.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Blues edge Pirate women 2-1",
         "url": "https://whitworthpirates.com/news/2026/9/23/womens-soccer-blues-edge-pirate-women-2-1.aspx",
@@ -3335,7 +3342,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.whitworthpirates.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:19:50Z"
+      "asOf": "2026-09-29T17:19:36Z"
     }
   },
   "camps": {
@@ -3349,20 +3356,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://whitworthpirates.com/sports/2021/6/4/womens-soccer-camps-clinics.aspx",
-        "asOf": "2026-09-26T15:20:06Z"
+        "asOf": "2026-09-29T17:19:41Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:24Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3375,15 +3382,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:19:42Z"
+        "at": "2026-09-29T17:19:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:59:57Z"
       }
     ]
   }

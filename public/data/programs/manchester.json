@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.muspartans.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:14:33Z"
+        "asOf": "2026-09-29T17:11:56Z"
       }
     }
   },
@@ -287,12 +287,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-5-0",
+      "record": "0-5-1",
       "wins": 0,
       "losses": 5,
-      "ties": 0,
-      "gamesPlayed": 5,
+      "ties": 1,
+      "gamesPlayed": 6,
       "recordSource": "schedule",
+      "confRecord": "0-0-1",
       "inProgress": true,
       "headCoach": "Jamie Peters"
     },
@@ -861,7 +862,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.muspartans.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:14:33Z"
+      "asOf": "2026-09-29T17:11:56Z"
     }
   },
   "rosterHistory": {
@@ -1441,11 +1442,11 @@
     "record": {
       "wins": 0,
       "losses": 5,
-      "ties": 0,
-      "text": "0-5-0",
-      "played": 5,
+      "ties": 1,
+      "text": "0-5-1",
+      "played": 6,
       "scheduled": 15,
-      "confText": "0-0-0",
+      "confText": "0-0-1",
       "exhibitions": 0
     },
     "games": [
@@ -1544,11 +1545,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "North Manchester, Ind., Good Field",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://www.youtube.com/watch?v=BNeERICqi14",
-          "live stats": "https://muspartans.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.muspartans.com/sports/womens-soccer/stats/2026/earlham-college/boxscore/5381",
+          "recap": "https://www.muspartans.com/news/2026/9/27/womens-soccer-spartans-draw-with-earlham-on-senior-day.aspx",
           "history": "https://www.muspartans.com/sports/womens-soccer/opponent-history/earlham-college/74"
         }
       },
@@ -1565,6 +1566,7 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.youtube.com/watch?v=nVEgX0scDLg",
           "live stats": "https://muspartans.com/sidearmstats/wsoc/summary",
           "history": "https://www.muspartans.com/sports/womens-soccer/opponent-history/indiana-university-east/104"
         }
@@ -2611,13 +2613,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.muspartans.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:14:33Z"
+      "asOf": "2026-09-29T17:11:56Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Spartans Draw With Earlham on Senior Day",
+        "url": "https://muspartans.com/news/2026/9/27/womens-soccer-spartans-draw-with-earlham-on-senior-day.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Releases 2026 Schedule",
         "url": "https://muspartans.com/news/2026/7/22/womens-soccer-releases-2026-schedule.aspx",
@@ -2682,7 +2690,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.muspartans.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:14:37Z"
+      "asOf": "2026-09-29T17:12:15Z"
     }
   },
   "camps": {
@@ -2696,20 +2704,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://applyto.manchester.edu/portal/athletic_camps",
-        "asOf": "2026-09-26T15:14:39Z"
+        "asOf": "2026-09-29T17:12:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2722,15 +2730,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:14:33Z"
+        "at": "2026-09-29T17:11:56Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:53:12Z"
       }
     ]
   }

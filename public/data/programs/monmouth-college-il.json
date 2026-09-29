@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://monmouthscots.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:15:17Z"
+        "asOf": "2026-09-29T17:13:27Z"
       }
     }
   },
@@ -311,13 +311,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-1-0",
+      "record": "5-2-0",
       "wins": 5,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "1-0-0",
+      "confRecord": "1-1-0",
       "inProgress": true,
       "headCoach": "Rhys Lewis"
     },
@@ -1105,7 +1105,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://monmouthscots.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:15:17Z"
+      "asOf": "2026-09-29T17:13:27Z"
     }
   },
   "rosterHistory": {
@@ -1725,12 +1725,12 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 1,
+      "losses": 2,
       "ties": 0,
-      "text": "5-1-0",
-      "played": 6,
+      "text": "5-2-0",
+      "played": 7,
       "scheduled": 16,
-      "confText": "1-0-0",
+      "confText": "1-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -1868,11 +1868,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Monmouth, Ill., Peacock Memorial Athletic Park",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-4",
         "links": {
-          "watch": "https://watchmidwestsports.com/monmouthscots/?B=4437758",
-          "live stats": "https://monmouthscots.com/sidearmstats/wsoc/summary",
+          "recap": "https://monmouthscots.com/news/2026/9/26/womens-soccer-scots-fall-to-vikings-at-home.aspx",
+          "box score": "https://monmouthscots.com/sports/womens-soccer/stats/2026/lawrence-university/boxscore/10598",
           "history": "https://monmouthscots.com/sports/womens-soccer/opponent-history/lawrence-university/16"
         }
       },
@@ -1889,7 +1889,7 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://watchmidwestsports.com/monmouthscots/?B=4437758",
+          "watch": "https://watchmidwestsports.com/monmouthscots",
           "live stats": "https://monmouthscots.com/sidearmstats/wsoc/summary",
           "history": "https://monmouthscots.com/sports/womens-soccer/opponent-history/cornell-college/6"
         }
@@ -2967,13 +2967,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://monmouthscots.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:15:17Z"
+      "asOf": "2026-09-29T17:13:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Scots Fall to Vikings at Home",
+        "url": "https://monmouthscots.com/news/2026/9/26/womens-soccer-scots-fall-to-vikings-at-home.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Palazzolo, Kistler Score as Scots Win 2-0",
         "url": "https://monmouthscots.com/news/2026/9/22/womens-soccer-palazzolo-kistler-score-as-scots-win-2-0.aspx",
@@ -3038,7 +3044,7 @@
     "_meta": {
       "source": "news",
       "url": "https://monmouthscots.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:15:26Z"
+      "asOf": "2026-09-29T17:13:32Z"
     }
   },
   "camps": {
@@ -3052,20 +3058,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://monmouthscots.com/sports/2012/6/5/camps",
-        "asOf": "2026-09-26T15:15:29Z"
+        "asOf": "2026-09-29T17:13:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3078,15 +3084,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:15:17Z"
+        "at": "2026-09-29T17:13:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:17Z"
       }
     ]
   }

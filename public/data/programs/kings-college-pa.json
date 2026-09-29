@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://kingscollegeathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:48Z"
+        "asOf": "2026-09-29T17:11:14Z"
       }
     }
   },
@@ -302,11 +302,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-6-0",
+      "record": "2-6-1",
       "wins": 2,
       "losses": 6,
-      "ties": 0,
-      "gamesPlayed": 8,
+      "ties": 1,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "JESSICA LINGENFELTER"
@@ -816,11 +816,13 @@
         "clubInfo": {
           "raw": "Sporting Delaware",
           "key": "sporting delaware",
-          "clubId": null,
-          "club": null,
-          "status": "unmatched",
+          "clubId": "sporting-delaware-soccer-club",
+          "club": "Sporting Delaware Soccer Club",
+          "status": "matched",
           "source": "roster page",
-          "updated": "2026-08-01"
+          "updated": "2026-08-01",
+          "state": null,
+          "country": null
         },
         "schoolInfo": {
           "raw": "Timber Creek Regional",
@@ -1384,7 +1386,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:48Z"
+      "asOf": "2026-09-29T17:11:14Z"
     }
   },
   "rosterHistory": {
@@ -2188,9 +2190,9 @@
     "record": {
       "wins": 2,
       "losses": 6,
-      "ties": 0,
-      "text": "2-6-0",
-      "played": 8,
+      "ties": 1,
+      "text": "2-6-1",
+      "played": 9,
       "scheduled": 20,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2350,11 +2352,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Wilkes-Barre, PA, McCarthy Stadium",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "0-0",
         "links": {
-          "watch": "https://gomacsports.tv/kingscollege/",
-          "live stats": "https://kingscollegeathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://kingscollegeathletics.com/sports/womens-soccer/stats/2026/bryn-mawr-college/boxscore/11997",
+          "recap": "https://kingscollegeathletics.com/news/2026/9/26/womens-soccer-monarchs-battle-bryn-mawr-to-scoreless-draw-on-homecoming.aspx",
           "history": "https://kingscollegeathletics.com/sports/womens-soccer/opponent-history/bryn-mawr-college/42"
         }
       },
@@ -3544,13 +3546,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:48Z"
+      "asOf": "2026-09-29T17:11:14Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Monarchs Battle Bryn Mawr to Scoreless Draw on Homecoming",
+        "url": "https://kingscollegeathletics.com/news/2026/9/26/womens-soccer-monarchs-battle-bryn-mawr-to-scoreless-draw-on-homecoming.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Suffers 2-0 Road Loss At Kean",
         "url": "https://kingscollegeathletics.com/news/2026/9/23/womens-soccer-suffers-2-0-road-loss-at-kean.aspx",
@@ -3621,7 +3629,7 @@
     "_meta": {
       "source": "news",
       "url": "https://kingscollegeathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:53Z"
+      "asOf": "2026-09-29T17:11:17Z"
     }
   },
   "camps": {
@@ -3635,7 +3643,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "King's Women's Soccer ID Clinic",
@@ -3700,19 +3708,19 @@
       {
         "source": "camps",
         "url": "http://www.kings.edu/girlsbballcamp",
-        "asOf": "2026-09-26T15:14:05Z"
+        "asOf": "2026-09-29T17:11:33Z"
       },
       {
         "source": "news",
         "url": "https://kingscollegeathletics.com/sports/womens-soccer/archives",
-        "asOf": "2026-09-26T15:13:53Z"
+        "asOf": "2026-09-29T17:11:17Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3725,15 +3733,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:48Z"
+        "at": "2026-09-29T17:11:14Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:52:10Z"
       }
     ]
   }

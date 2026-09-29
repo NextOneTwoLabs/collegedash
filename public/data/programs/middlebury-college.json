@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.middlebury.edu/sports/wsoc/roster",
-        "asOf": "2026-09-26T15:14:52Z"
+        "asOf": "2026-09-29T17:13:11Z"
       }
     }
   },
@@ -310,13 +310,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-1-3",
-      "wins": 2,
+      "record": "3-1-3",
+      "wins": 3,
       "losses": 1,
       "ties": 3,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "2-1-1",
+      "confRecord": "3-1-1",
       "inProgress": true,
       "headCoach": "Peter Kim"
     },
@@ -1132,7 +1132,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.middlebury.edu/sports/wsoc/roster",
-      "asOf": "2026-09-26T15:14:52Z"
+      "asOf": "2026-09-29T17:13:11Z"
     }
   },
   "rosterHistory": {
@@ -1950,13 +1950,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 1,
       "ties": 3,
-      "text": "2-1-3",
-      "played": 6,
+      "text": "3-1-3",
+      "played": 7,
       "scheduled": 15,
-      "confText": "2-1-1",
+      "confText": "3-1-1",
       "exhibitions": 0
     },
     "games": [
@@ -2072,11 +2072,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Brunswick, ME",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-1",
         "links": {
-          "watch": "https://www.nsnsports.net/colleges/bowdoin-college/",
-          "live stats": "https://athletics.bowdoin.edu/sidearmstats/wsoc/"
+          "box score": "https://athletics.middlebury.edu/sports/womens-soccer/stats/2026/bowdoin-college/boxscore/16308",
+          "recap": "https://athletics.middlebury.edu/news/2026/9/26/womens-soccer-four-panthers-tally-goals-in-4-1-win-over-polar-bears.aspx"
         }
       },
       {
@@ -3147,13 +3147,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.middlebury.edu/sports/wsoc/schedule",
-      "asOf": "2026-09-26T15:14:52Z"
+      "asOf": "2026-09-29T17:13:11Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Four Panthers Tally Goals In 4-1 Win Over Polar Bears",
+        "url": "https://athletics.middlebury.edu/news/2026/9/26/womens-soccer-four-panthers-tally-goals-in-4-1-win-over-polar-bears.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Middlebury Shares Points In NESCAC Clash With Hamilton",
         "url": "https://athletics.middlebury.edu/news/2026/9/20/womens-soccer-middlebury-shares-points-in-nescac-clash-with-hamilton.aspx",
@@ -3218,7 +3224,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.middlebury.edu/sports/wsoc/archives",
-      "asOf": "2026-09-26T15:14:59Z"
+      "asOf": "2026-09-29T17:13:19Z"
     }
   },
   "camps": {
@@ -3232,20 +3238,20 @@
     "robotsBlocked": false,
     "fetchError": "camp host www.middleburysoccercamp.com refused us (HTTP 403, recorded 2026-09-24); not requested",
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.middleburysoccercamp.com/",
-        "asOf": "2026-09-26T15:15:00Z"
+        "asOf": "2026-09-29T17:13:19Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3258,15 +3264,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:14:52Z"
+        "at": "2026-09-29T17:13:11Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:00Z"
       }
     ]
   }

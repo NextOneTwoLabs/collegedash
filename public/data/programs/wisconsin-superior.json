@@ -368,7 +368,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.uwsyellowjackets.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:20:29Z"
+        "asOf": "2026-09-29T17:19:35Z"
       }
     }
   },
@@ -376,11 +376,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-4-2",
-      "wins": 2,
+      "record": "3-4-2",
+      "wins": 3,
       "losses": 4,
       "ties": 2,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Nick Piazza"
@@ -1357,7 +1357,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwsyellowjackets.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:20:29Z"
+      "asOf": "2026-09-29T17:19:35Z"
     }
   },
   "rosterHistory": {
@@ -2095,11 +2095,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 4,
       "ties": 2,
-      "text": "2-4-2",
-      "played": 8,
+      "text": "3-4-2",
+      "played": 9,
       "scheduled": 21,
       "confText": null,
       "exhibitions": 2
@@ -2291,11 +2291,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Morris, Minn., Cougar Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-0",
         "links": {
-          "watch": "https://linktr.ee/uwswsoc",
-          "live stats": "https://linktr.ee/uwswsoc",
+          "recap": "https://www.uwsyellowjackets.com/news/2026/9/26/womens-soccer-yellowjackets-blank-minnesota-morris-4-0.aspx",
+          "box score": "https://www.uwsyellowjackets.com/sports/womens-soccer/stats/2026/minnesota-morris/boxscore/11693",
           "history": "https://www.uwsyellowjackets.com/sports/womens-soccer/opponent-history/minnesota-morris/38"
         }
       },
@@ -3904,13 +3904,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.uwsyellowjackets.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:20:29Z"
+      "asOf": "2026-09-29T17:19:35Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Davidson and Nygard Named UMAC Athletes of the Week",
+        "url": "https://uwsyellowjackets.com/news/2026/9/29/mens-soccer-davidson-and-nygard-named-umac-athletes-of-the-week.aspx",
+        "date": "2026-09-29",
+        "recruiting": false
+      },
+      {
+        "title": "Yellowjackets Blank Minnesota Morris 4-0",
+        "url": "https://uwsyellowjackets.com/news/2026/9/26/womens-soccer-yellowjackets-blank-minnesota-morris-4-0.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Valiant Defensive Showing Falls Short in 1-0 Loss to Wildcats",
         "url": "https://uwsyellowjackets.com/news/2026/9/23/womens-soccer-valiant-defensive-showing-falls-short-in-1-0-loss-to-wildcats.aspx",
@@ -3970,18 +3982,12 @@
         "url": "https://uwsyellowjackets.com/news/2026/9/3/womens-soccer-st-olaf-adjusts-friday-non-conference-match.aspx",
         "date": "2026-09-03",
         "recruiting": false
-      },
-      {
-        "title": "Yellowjackets Lead 2026 UMAC Women’s Soccer Preseason Poll",
-        "url": "https://uwsyellowjackets.com/news/2026/8/24/womens-soccer-yellowjackets-lead-2026-umac-womens-soccer-preseason-poll.aspx",
-        "date": "2026-08-24",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.uwsyellowjackets.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:20:33Z"
+      "asOf": "2026-09-29T17:19:44Z"
     }
   },
   "camps": {
@@ -3995,20 +4001,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://uwsyellowjackets.com/sports/2025/4/21/soccer-camps.aspx",
-        "asOf": "2026-09-26T15:20:40Z"
+        "asOf": "2026-09-29T17:19:48Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:03Z",
+    "builtAt": "2026-09-29T17:21:24Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4021,15 +4027,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:20:29Z"
+        "at": "2026-09-29T17:19:35Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:50Z"
       }
     ]
   }

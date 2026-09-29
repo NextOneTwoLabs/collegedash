@@ -304,7 +304,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hussoneagles.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:55Z"
+        "asOf": "2026-09-29T17:10:20Z"
       }
     }
   },
@@ -1172,7 +1172,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:55Z"
+      "asOf": "2026-09-29T17:10:20Z"
     }
   },
   "rosterHistory": {
@@ -2063,8 +2063,6 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.nsnsports.net/colleges/tufts",
-          "live stats": "https://gotuftsjumbos.com/sidearmstats/wsoc/summary",
           "history": "https://www.hussoneagles.com/sports/womens-soccer/opponent-history/tufts-university/37"
         }
       },
@@ -2099,6 +2097,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.youtube.com/live/CVsFQ8btMwM",
+          "live stats": "https://goumfbeavers.com/sidearmstats/wsoc/summary",
           "history": "https://www.hussoneagles.com/sports/womens-soccer/opponent-history/university-of-maine-at-farmington/176"
         }
       },
@@ -3359,13 +3359,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:55Z"
+      "asOf": "2026-09-29T17:10:20Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Smith named NAC defensive player of the week",
+        "url": "https://hussoneagles.com/news/2026/9/28/womens-soccer-smith-named-nac-defensive-player-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Smith makes eight saves as women’s soccer blanks Bates in scoreless draw",
         "url": "https://hussoneagles.com/news/2026/9/22/womens-soccer-smith-makes-eight-saves-as-womens-soccer-blanks-bates-in-scoreless-draw.aspx",
@@ -3430,7 +3436,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hussoneagles.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:01Z"
+      "asOf": "2026-09-29T17:10:27Z"
     }
   },
   "camps": {
@@ -3444,20 +3450,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://hussoneaglessoccercamp.com",
-        "asOf": "2026-09-26T15:13:03Z"
+        "asOf": "2026-09-29T17:10:30Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3470,15 +3476,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:55Z"
+        "at": "2026-09-29T17:10:20Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:24Z"
       }
     ]
   }

@@ -305,7 +305,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://cnusports.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:43Z"
+        "asOf": "2026-09-29T17:07:37Z"
       }
     }
   },
@@ -1247,7 +1247,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://cnusports.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:43Z"
+      "asOf": "2026-09-29T17:07:37Z"
     }
   },
   "rosterHistory": {
@@ -3818,13 +3818,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://cnusports.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:43Z"
+      "asOf": "2026-09-29T17:07:37Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Amy Sidaway Joins Exclusive Club with Tenth Career C2C Player of the Week Selection",
+        "url": "https://cnusports.com/news/2026/9/28/womens-soccer-amy-sidaway-joins-exclusive-club-with-tenth-career-c2c-player-of-the-week-selection.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Amy Sidaway Adds to Historic Ledger in Scoreless Draw Against Marymount as CNU Women's Soccer Ties the Saints",
         "url": "https://cnusports.com/news/2026/9/23/amy-sidaway-adds-to-historic-ledger-in-scoreless-draw-against-marymount-as-cnu-womens-soccer-ties-the-saints.aspx",
@@ -3895,7 +3901,7 @@
     "_meta": {
       "source": "news",
       "url": "https://cnusports.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:10:51Z"
+      "asOf": "2026-09-29T17:07:46Z"
     }
   },
   "camps": {
@@ -3909,20 +3915,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://cnusports.com/sports/2007/9/24/camps.aspx",
-        "asOf": "2026-09-26T15:10:58Z"
+        "asOf": "2026-09-29T17:07:51Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3935,15 +3941,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:43Z"
+        "at": "2026-09-29T17:07:37Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:26Z"
       }
     ]
   }

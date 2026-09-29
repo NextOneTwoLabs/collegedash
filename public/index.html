@@ -2773,6 +2773,12 @@ function prov(meta, extra) {
   const items = Array.isArray(meta) ? meta : [meta];
   return `<div class="provenance">${items.filter(Boolean).map(m => `<span>Source: ${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.source || 'link')}</a>` : esc(m.source || '')}${m.asOf ? ` · checked ${fmtDate(m.asOf)}` : ''}</span>`).join('')}${extra ? `<span>${extra}</span>` : ''}</div>`;
 }
+/* #151: the head coach comes from the school's own staff page (source 'athletics'). Only when the school names no
+   head coach does build.py fall back to the Wikipedia infobox (source 'wikipedia'), which carries no date, so the
+   page says where that name came from wherever it shows it. Returns '' for a school-sourced coach. */
+const coachFromWiki = (hc, p) => hc?.name && hc.source === 'wikipedia'
+  ? `from ${p?.links?.wikipedia ? `<a href="${esc(p.links.wikipedia)}" target="_blank" rel="noopener">Wikipedia</a>` : 'Wikipedia'}; the school's site names no head coach`
+  : '';
 const LINK_LABELS = { athletics: 'Athletics site', roster: 'Roster', schedule: 'Schedule', news: 'News', camps: 'Camps', tds: 'TopDrawerSoccer', wikipedia: 'Wikipedia', x: 'X', instagram: 'Instagram' };
 /* A header link that is the source of a profile section follows that section's tab (issue #206, #115's
    per-program hide-empty rule): when the tab is not offered because the program has no data for it, its
@@ -2802,7 +2808,7 @@ function glanceHtml(p, row) {
   const moreFacts = [
     sch.tuitionInState != null || sch.tuitionOutOfState != null ? `<dt>Tuition (in / out)</dt><dd>${fmtUsd(sch.tuitionInState)} / ${fmtUsd(sch.tuitionOutOfState)}</dd>` : '',
     sch.netPriceAverage != null ? `<dt>Avg net price</dt><dd>${fmtUsd(sch.netPriceAverage)}</dd>` : '',
-    pr.headCoach?.name ? `<dt>Head coach</dt><dd>${esc(pr.headCoach?.name || '—')}</dd>` : '',
+    pr.headCoach?.name ? `<dt>Head coach</dt><dd>${esc(pr.headCoach?.name || '—')}${coachFromWiki(pr.headCoach, p) ? ` <span class="small muted">(${coachFromWiki(pr.headCoach, p)})</span>` : ''}</dd>` : '',
     p.roster?.count != null ? `<dt>Roster</dt><dd>${p.roster?.count ?? '—'}</dd>` : '',
     has.commitsByYear(p) ? `<dt>Commitments</dt><dd>${esc(commits)}</dd>` : '',
     has.cups(p) ? `<dt>College Cups</dt><dd>${(pr.collegeCups || []).length}</dd>` : '',
@@ -2998,6 +3004,7 @@ async function tabStaff(p) {
   return `<div class="grid g2">
     <div class="card"><h3>Head coach</h3>
       <div class="hero" style="font-size:28px;margin:6px 0">${esc(hc.name || '—')}</div>
+      ${coachFromWiki(hc, p) ? `<p class="small muted">Name ${coachFromWiki(hc, p)}, so it is not checked against the school.</p>` : ''}
       <p class="ink2">${esc(hc.title || '')}${hc.since ? ` · since ${hc.since} (${hc.seasons} seasons)` : ''}</p>
       ${hc.bioUrl ? `<p><a href="${esc(hc.bioUrl)}" target="_blank" rel="noopener">Official bio</a></p>` : ''}
       ${pr.coaches.length ? `<h4 style="margin-top:12px">Coaching staff</h4>${pr.coaches.length ? `<table>${pr.coaches.map(person).join('')}</table>` : '<div class="empty">None listed.</div>'}` : ''}
@@ -3192,7 +3199,7 @@ async function renderCompare() {
       ['Current record', p => { const s = p.seasons.find(x => x.inProgress); return s ? `${esc(s.record || '—')}${s.record ? recordNote(s) : ''} (${s.year})` : '—'; }],
       ['National titles', p => p.division === 'D1' || !p.division ? p.program.nationalTitles.length : `${p.program.nationalTitles.length} <span class="muted small">NCAA ${esc(p.division)}</span>`],
       ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],
-      ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}`],
+      ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}${coachFromWiki(p.program.headCoach, p) ? ` <span class="small muted">(${coachFromWiki(p.program.headCoach, p)})</span>` : ''}`],
       ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
       ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
     ]],

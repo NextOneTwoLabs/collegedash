@@ -320,7 +320,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.sjfathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:18:18Z"
+        "asOf": "2026-09-29T17:17:27Z"
       }
     }
   },
@@ -328,11 +328,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "6-1-0",
-      "wins": 6,
+      "record": "7-1-0",
+      "wins": 7,
       "losses": 1,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Molly Romano"
@@ -1169,7 +1169,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:18:18Z"
+      "asOf": "2026-09-29T17:17:27Z"
     }
   },
   "rosterHistory": {
@@ -1867,11 +1867,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 6,
+      "wins": 7,
       "losses": 1,
       "ties": 0,
-      "text": "6-1-0",
-      "played": 7,
+      "text": "7-1-0",
+      "played": 8,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 0
@@ -2013,11 +2013,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Pittsford, NY, Growney Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "4-1",
         "links": {
-          "watch": "https://www.empire8network.com/stjohnfisher/",
-          "live stats": "http://www.sidearmstats.com/sjfc/wsoc",
+          "recap": "https://www.sjfathletics.com/news/2026/9/26/kalil-nets-two-as-womens-soccer-beats-hartwick-4-1.aspx",
+          "box score": "https://www.sjfathletics.com/sports/womens-soccer/stats/2026/hartwick-college/boxscore/11964",
           "history": "https://www.sjfathletics.com/sports/womens-soccer/opponent-history/hartwick-college/18"
         }
       },
@@ -3209,13 +3209,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:18:18Z"
+      "asOf": "2026-09-29T17:17:27Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Four Cardinals Earn Empire 8 Weekly Accolades",
+        "url": "https://athletics.sjfc.edu/news/2026/9/28/general-four-cardinals-earn-empire-8-weekly-accolades.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "Kalil Scores Twice To Lead Women's Soccer Past Hartwick",
+        "url": "https://athletics.sjfc.edu/news/2026/9/26/kalil-nets-two-as-womens-soccer-beats-hartwick-4-1.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Kalil Nets Hat Trick; Women's Soccer Downs SUNY Poly 5-1",
         "url": "https://athletics.sjfc.edu/news/2026/9/23/kalil-nets-hat-trick-womens-soccer-downs-suny-poly-5-1.aspx",
@@ -3275,18 +3287,12 @@
         "url": "https://athletics.sjfc.edu/news/2026/9/1/womens-soccer-opens-season-with-4-2-road-win-over-clarkson.aspx",
         "date": "2026-09-01",
         "recruiting": false
-      },
-      {
-        "title": "2026 Season Preview: Women's Soccer",
-        "url": "https://athletics.sjfc.edu/news/2026/8/31/2026-season-preview-womens-soccer.aspx",
-        "date": "2026-08-31",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.sjfathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:18:24Z"
+      "asOf": "2026-09-29T17:17:36Z"
     }
   },
   "camps": {
@@ -3300,20 +3306,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://sjfwomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-26T15:18:26Z"
+        "asOf": "2026-09-29T17:17:39Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3326,15 +3332,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:18:18Z"
+        "at": "2026-09-29T17:17:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:56Z"
       }
     ]
   }

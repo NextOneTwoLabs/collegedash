@@ -292,7 +292,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:31Z"
+        "asOf": "2026-09-29T17:07:34Z"
       }
     }
   },
@@ -300,13 +300,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-3-1",
-      "wins": 2,
+      "record": "3-3-1",
+      "wins": 3,
       "losses": 3,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "2-1-0",
+      "confRecord": "3-1-0",
       "inProgress": true,
       "headCoach": "TJ Perez"
     },
@@ -1546,7 +1546,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:31Z"
+      "asOf": "2026-09-29T17:07:34Z"
     }
   },
   "rosterHistory": {
@@ -2400,13 +2400,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 3,
       "ties": 1,
-      "text": "2-3-1",
-      "played": 6,
+      "text": "3-3-1",
+      "played": 7,
       "scheduled": 16,
-      "confText": "2-1-0",
+      "confText": "3-1-0",
       "exhibitions": 3
     },
     "games": [
@@ -2574,11 +2574,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Orange, CA, Holly & David Wilson Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://flosports.link/4q94vce",
-          "live stats": "https://athletics.chapman.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.chapmanathletics.com/sports/womens-soccer/stats/2026/whittier-college/boxscore/6924",
+          "recap": "https://www.chapmanathletics.com/news/2026/9/26/womens-soccer-tsakiris-leads-womens-soccer-to-win-over-whittier.aspx",
           "history": "https://www.chapmanathletics.com/sports/womens-soccer/opponent-history/whittier-college/58"
         }
       },
@@ -3819,13 +3819,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:31Z"
+      "asOf": "2026-09-29T17:07:34Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Tsakiris leads women's soccer to win over Whittier",
+        "url": "https://athletics.chapman.edu/news/2026/9/26/womens-soccer-tsakiris-leads-womens-soccer-to-win-over-whittier.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women's soccer downs La Verne for second win in a row",
         "url": "https://athletics.chapman.edu/news/2026/9/19/womens-soccer-womens-soccer-downs-la-verne-for-second-win-in-a-row.aspx",
@@ -3896,7 +3902,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.chapmanathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:10:36Z"
+      "asOf": "2026-09-29T17:07:38Z"
     }
   },
   "camps": {
@@ -3910,20 +3916,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.chapmanathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:36Z"
+        "asOf": "2026-09-29T17:07:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3936,15 +3942,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:31Z"
+        "at": "2026-09-29T17:07:34Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:48:21Z"
       }
     ]
   }

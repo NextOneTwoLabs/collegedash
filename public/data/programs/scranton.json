@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.scranton.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:17:46Z"
+        "asOf": "2026-09-29T17:16:54Z"
       }
     }
   },
@@ -286,12 +286,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-2",
+      "record": "4-1-3",
       "wins": 4,
       "losses": 1,
-      "ties": 2,
-      "gamesPlayed": 7,
+      "ties": 3,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
+      "confRecord": "0-0-1",
       "inProgress": true,
       "headCoach": "Colleen Pivirotto"
     },
@@ -1451,7 +1452,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:17:46Z"
+      "asOf": "2026-09-29T17:16:54Z"
     }
   },
   "rosterHistory": {
@@ -2336,11 +2337,11 @@
     "record": {
       "wins": 4,
       "losses": 1,
-      "ties": 2,
-      "text": "4-1-2",
-      "played": 7,
+      "ties": 3,
+      "text": "4-1-3",
+      "played": 8,
       "scheduled": 20,
-      "confText": "0-0-0",
+      "confText": "0-0-1",
       "exhibitions": 0
     },
     "games": [
@@ -2480,11 +2481,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Scranton, PA",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://flosports.link/3S3ehQH",
-          "live stats": "https://athletics.scranton.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.scranton.edu/sports/womens-soccer/stats/2026/susquehanna-university/boxscore/6695",
+          "recap": "https://athletics.scranton.edu/news/2026/9/26/scranton-womens-soccer-battles-susquehanna-to-1-1-draw-in-landmark-conference-opener.aspx",
           "history": "https://athletics.scranton.edu/sports/womens-soccer/opponent-history/susquehanna-university/1"
         }
       },
@@ -3867,13 +3868,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:17:46Z"
+      "asOf": "2026-09-29T17:16:54Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Scranton Women's Soccer Battles Susquehanna to 1-1 Draw in Landmark Conference Opener",
+        "url": "https://athletics.scranton.edu/news/2026/9/26/scranton-womens-soccer-battles-susquehanna-to-1-1-draw-in-landmark-conference-opener.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Scranton Women's Soccer Scores Early, Holds Off Misericordia 3-1",
         "url": "https://athletics.scranton.edu/news/2026/9/23/scranton-womens-soccer-scores-early-holds-off-misericordia-3-1.aspx",
@@ -3944,7 +3951,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.scranton.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:17:56Z"
+      "asOf": "2026-09-29T17:16:58Z"
     }
   },
   "camps": {
@@ -3958,7 +3965,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "Winter ID Camp",
@@ -3994,19 +4001,19 @@
       {
         "source": "camps",
         "url": "https://athletics.scranton.edu/registrations/#!/camps/",
-        "asOf": "2026-09-26T15:18:10Z"
+        "asOf": "2026-09-29T17:17:06Z"
       },
       {
         "source": "news",
         "url": "https://athletics.scranton.edu/sports/womens-soccer/archives",
-        "asOf": "2026-09-26T15:17:56Z"
+        "asOf": "2026-09-29T17:16:58Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4019,15 +4026,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:17:46Z"
+        "at": "2026-09-29T17:16:54Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:35Z"
       }
     ]
   }

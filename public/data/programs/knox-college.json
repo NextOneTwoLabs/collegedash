@@ -279,7 +279,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://prairiefire.knox.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:39Z"
+        "asOf": "2026-09-29T17:11:28Z"
       }
     }
   },
@@ -287,13 +287,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-4-0",
-      "wins": 4,
+      "record": "5-4-0",
+      "wins": 5,
       "losses": 4,
       "ties": 0,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
-      "confRecord": "2-0-0",
+      "confRecord": "3-0-0",
       "inProgress": true,
       "headCoach": "Annie Gerdes '19"
     },
@@ -1036,7 +1036,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://prairiefire.knox.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:39Z"
+      "asOf": "2026-09-29T17:11:28Z"
     }
   },
   "rosterHistory": {
@@ -1583,13 +1583,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 4,
       "ties": 0,
-      "text": "4-4-0",
-      "played": 8,
+      "text": "5-4-0",
+      "played": 9,
       "scheduled": 17,
-      "confText": "2-0-0",
+      "confText": "3-0-0",
       "exhibitions": 1
     },
     "games": [
@@ -1763,11 +1763,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Mount Vernon, IA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://watchmidwestsports.com/cornellcollegeathletics/",
-          "live stats": "https://cornellrams.com/sidearmstats/wsoc/summary",
+          "box score": "https://prairiefire.knox.edu/sports/womens-soccer/stats/2026/cornell-college/boxscore/13329",
+          "recap": "https://prairiefire.knox.edu/news/2026/9/26/womens-soccer-knox-gains-early-lead-and-never-looks-back.aspx",
           "history": "https://prairiefire.knox.edu/sports/womens-soccer/opponent-history/cornell-college/3"
         }
       },
@@ -2882,13 +2882,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://prairiefire.knox.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:39Z"
+      "asOf": "2026-09-29T17:11:28Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Three Goal Performance Awards Rossi Midwest Conference POTW",
+        "url": "https://prairiefire.knox.edu/news/2026/9/28/womens-soccer-three-goal-performance-awards-rossi-midwest-conference-potw.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "Knox Gains Early Lead and Never Looks Back",
+        "url": "https://prairiefire.knox.edu/news/2026/9/26/womens-soccer-knox-gains-early-lead-and-never-looks-back.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Rossi Buries Two Goals in Knox Win Over Grinnell",
         "url": "https://prairiefire.knox.edu/news/2026/9/23/womens-soccer-rossi-buries-two-goals-in-knox-win-over-grinnell.aspx",
@@ -2948,18 +2960,12 @@
         "url": "https://prairiefire.knox.edu/news/2026/7/15/baseball-midwest-conference-names-academic-all-conference.aspx",
         "date": "2026-07-15",
         "recruiting": false
-      },
-      {
-        "title": "Annual Awards Presented at End-of-Year Celebration",
-        "url": "https://prairiefire.knox.edu/news/2026/5/19/baseball-annual-awards-presented-at-end-of-year-celebration.aspx",
-        "date": "2026-05-19",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://prairiefire.knox.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:46Z"
+      "asOf": "2026-09-29T17:11:34Z"
     }
   },
   "camps": {
@@ -2973,20 +2979,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://prairiefire.knox.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:47Z"
+        "asOf": "2026-09-29T17:11:34Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2999,15 +3005,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:39Z"
+        "at": "2026-09-29T17:11:28Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:52:14Z"
       }
     ]
   }

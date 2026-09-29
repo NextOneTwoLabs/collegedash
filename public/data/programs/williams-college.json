@@ -316,7 +316,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://ephsports.williams.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:20:04Z"
+        "asOf": "2026-09-29T17:19:20Z"
       }
     }
   },
@@ -324,13 +324,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-0",
-      "wins": 4,
+      "record": "5-1-0",
+      "wins": 5,
       "losses": 1,
       "ties": 0,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "recordSource": "schedule",
-      "confRecord": "4-1-0",
+      "confRecord": "5-1-0",
       "inProgress": true,
       "headCoach": "Sarah Raymond"
     },
@@ -1343,7 +1343,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:20:04Z"
+      "asOf": "2026-09-29T17:19:20Z"
     }
   },
   "rosterHistory": {
@@ -2022,13 +2022,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 0,
-      "text": "4-1-0",
-      "played": 5,
+      "text": "5-1-0",
+      "played": 6,
       "scheduled": 17,
-      "confText": "4-1-0",
+      "confText": "5-1-0",
       "exhibitions": 0
     },
     "games": [
@@ -2132,11 +2132,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Williamstown, Mass., Cole Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-1",
         "links": {
-          "watch": "https://www.nsnsports.net/colleges/williams-college/?bfplayvid=4158594",
-          "live stats": "https://ephsports.williams.edu/sidearmstats/wsoc/",
+          "box score": "https://ephsports.williams.edu/sports/womens-soccer/stats/2026/amherst-college/boxscore/16486",
+          "recap": "https://ephsports.williams.edu/news/2026/9/26/womens-soccer-no-18-ephs-celebrate-3-1-triumph-over-amherst.aspx",
           "history": "https://ephsports.williams.edu/sports/womens-soccer/opponent-history/amherst-college/55"
         }
       },
@@ -2153,7 +2153,7 @@
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.youtube.com/@skidmorecollegethoroughbre4509/streams",
+          "watch": "https://www.youtube.com/watch?v=s3kP351_99U",
           "live stats": "https://skidmoreathletics.com/sidearmstats/wsoc/summary",
           "history": "https://ephsports.williams.edu/sports/womens-soccer/opponent-history/skidmore-college/149"
         }
@@ -3341,13 +3341,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:20:04Z"
+      "asOf": "2026-09-29T17:19:20Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "No. 18 Ephs Celebrate 3-1 Triumph Over Amherst",
+        "url": "https://ephsports.williams.edu/news/2026/9/26/womens-soccer-no-18-ephs-celebrate-3-1-triumph-over-amherst.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "No. 13 Ephs Score Late in 1-0 Win at Bowdoin",
         "url": "https://ephsports.williams.edu/news/2026/9/20/womens-soccer-no-13-ephs-score-late-in-1-0-win-at-bowdoin.aspx",
@@ -3412,7 +3418,7 @@
     "_meta": {
       "source": "news",
       "url": "https://ephsports.williams.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:20:14Z"
+      "asOf": "2026-09-29T17:19:25Z"
     }
   },
   "camps": {
@@ -3426,20 +3432,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://ephswomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-26T15:20:16Z"
+        "asOf": "2026-09-29T17:19:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:24Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3452,15 +3458,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:20:04Z"
+        "at": "2026-09-29T17:19:20Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T19:00:08Z"
       }
     ]
   }

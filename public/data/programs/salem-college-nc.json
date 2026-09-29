@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://salemcollegeathletics.com/sports/wsoc/roster",
-        "asOf": "2026-09-26T15:17:45Z"
+        "asOf": "2026-09-29T17:16:59Z"
       }
     }
   },
@@ -295,13 +295,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-5-0",
+      "record": "1-7-0",
       "wins": 1,
-      "losses": 5,
+      "losses": 7,
       "ties": 0,
-      "gamesPlayed": 6,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
-      "confRecord": "0-2-0",
+      "confRecord": "0-3-0",
       "inProgress": true,
       "headCoach": "Robin Ramirez"
     },
@@ -1048,7 +1048,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://salemcollegeathletics.com/sports/wsoc/roster",
-      "asOf": "2026-09-26T15:17:45Z"
+      "asOf": "2026-09-29T17:16:59Z"
     }
   },
   "rosterHistory": {
@@ -1518,12 +1518,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 5,
+      "losses": 7,
       "ties": 0,
-      "text": "1-5-0",
-      "played": 6,
+      "text": "1-7-0",
+      "played": 8,
       "scheduled": 16,
-      "confText": "0-2-0",
+      "confText": "0-3-0",
       "exhibitions": 0
     },
     "games": [
@@ -1660,11 +1660,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Greensboro, N.C.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-8",
         "links": {
-          "watch": "https://go.flocollege.com/teams/greensboro-college?sp=conf-partner-k7p1&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=greensboro-college",
-          "live stats": "https://greensborocollegesports.com/sidearmstats/wsoc/summary",
+          "box score": "https://salemcollegeathletics.com/sports/womens-soccer/stats/2026/greensboro-college/boxscore/2582",
           "history": "https://salemcollegeathletics.com/sports/womens-soccer/opponent-history/greensboro-college/80"
         }
       },
@@ -1678,11 +1677,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Winston-Salem, N.C.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://flosports.link/3TONBU5",
-          "live stats": "https://salemcollegeathletics.com/sidearmstats/wsoc/summary",
+          "box score": "https://salemcollegeathletics.com/sports/womens-soccer/stats/2026/regent-university/boxscore/2583",
+          "recap": "https://salemcollegeathletics.com/news/2026/9/28/soccer-salem-edged-by-regent-1-0.aspx",
           "history": "https://salemcollegeathletics.com/sports/womens-soccer/opponent-history/regent-university/78"
         }
       },
@@ -2715,13 +2714,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://salemcollegeathletics.com/sports/wsoc/schedule",
-      "asOf": "2026-09-26T15:17:45Z"
+      "asOf": "2026-09-29T17:16:59Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Salem Edged by Regent, 1-0",
+        "url": "https://salemspirits.com/news/2026/9/28/soccer-salem-edged-by-regent-1-0.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Salem Falls on the Road at Brevard",
         "url": "https://salemspirits.com/news/2026/9/23/soccer-salem-falls-on-the-road-at-brevard.aspx",
@@ -2792,7 +2797,7 @@
     "_meta": {
       "source": "news",
       "url": "https://salemcollegeathletics.com/sports/wsoc/archives",
-      "asOf": "2026-09-26T15:18:00Z"
+      "asOf": "2026-09-29T17:17:07Z"
     }
   },
   "camps": {
@@ -2806,20 +2811,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://salemcollegeathletics.com/sports/wsoc/roster",
-        "asOf": "2026-09-26T15:18:00Z"
+        "asOf": "2026-09-29T17:17:07Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2832,15 +2837,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:17:45Z"
+        "at": "2026-09-29T17:16:59Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:22Z"
       }
     ]
   }

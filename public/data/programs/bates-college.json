@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gobatesbobcats.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:09:16Z"
+        "asOf": "2026-09-29T17:06:05Z"
       }
     }
   },
@@ -327,13 +327,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-2-1",
+      "record": "2-3-1",
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "recordSource": "schedule",
-      "confRecord": "0-2-0",
+      "confRecord": "0-3-0",
       "inProgress": true,
       "headCoach": "Jonny Macadam"
     },
@@ -1369,7 +1369,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gobatesbobcats.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:09:16Z"
+      "asOf": "2026-09-29T17:06:05Z"
     }
   },
   "rosterHistory": {
@@ -2123,12 +2123,12 @@
     "season": 2026,
     "record": {
       "wins": 2,
-      "losses": 2,
+      "losses": 3,
       "ties": 1,
-      "text": "2-2-1",
-      "played": 5,
+      "text": "2-3-1",
+      "played": 6,
       "scheduled": 15,
-      "confText": "0-2-0",
+      "confText": "0-3-0",
       "exhibitions": 0
     },
     "games": [
@@ -2232,10 +2232,11 @@
         "opponentRank": 7,
         "opponentSeed": null,
         "location": "Middletown, Conn. / Smith Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-3",
         "links": {
-          "live stats": "https://athletics.wesleyan.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.gobatesbobcats.com/sports/womens-soccer/stats/2026/wesleyan/boxscore/10231",
+          "recap": "https://www.gobatesbobcats.com/news/2026/9/26/womens-soccer-falls-3-1-to-no-7-wesleyan.aspx",
           "history": "https://www.gobatesbobcats.com/sports/womens-soccer/opponent-history/wesleyan-university/231"
         }
       },
@@ -3223,13 +3224,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gobatesbobcats.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:09:16Z"
+      "asOf": "2026-09-29T17:06:05Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s soccer falls 3-1 to No. 7 Wesleyan",
+        "url": "https://gobatesbobcats.com/news/2026/9/26/womens-soccer-falls-3-1-to-no-7-wesleyan.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Bates and Husson play to scoreless draw",
         "url": "https://gobatesbobcats.com/news/2026/9/22/bates-and-husson-play-to-scoreless-draw.aspx",
@@ -3295,18 +3302,12 @@
         "url": "https://gobatesbobcats.com/news/2026/3/5/general-bates-announces-stoddard-fitness-and-well-being-center-and-athletics-facilities-upgrades.aspx",
         "date": "2026-03-05",
         "recruiting": false
-      },
-      {
-        "title": "Bates Women’s Soccer Head Coach Joe Vari to Step Down",
-        "url": "https://gobatesbobcats.com/news/2026/2/23/womens-soccer-bates-womens-soccer-head-coach-joe-vari-to-step-down.aspx",
-        "date": "2026-02-23",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.gobatesbobcats.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:09:25Z"
+      "asOf": "2026-09-29T17:06:13Z"
     }
   },
   "camps": {
@@ -3320,20 +3321,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 51,
+    "newsScanned": 52,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.batessocceracademy.com/",
-        "asOf": "2026-09-26T15:09:31Z"
+        "asOf": "2026-09-29T17:06:20Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:58Z",
+    "builtAt": "2026-09-29T17:21:18Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3346,15 +3347,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:09:16Z"
+        "at": "2026-09-29T17:06:05Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:46:38Z"
       }
     ]
   }

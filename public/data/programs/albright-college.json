@@ -302,7 +302,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.albrightathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:08:50Z"
+        "asOf": "2026-09-29T17:05:31Z"
       }
     }
   },
@@ -310,11 +310,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-4-1",
-      "wins": 5,
+      "record": "6-4-1",
+      "wins": 6,
       "losses": 4,
       "ties": 1,
-      "gamesPlayed": 10,
+      "gamesPlayed": 11,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Shamus Matthews-Brady"
@@ -1364,7 +1364,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:08:50Z"
+      "asOf": "2026-09-29T17:05:31Z"
     }
   },
   "rosterHistory": {
@@ -1968,11 +1968,11 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 5,
+      "wins": 6,
       "losses": 4,
       "ties": 1,
-      "text": "5-4-1",
-      "played": 10,
+      "text": "6-4-1",
+      "played": 11,
       "scheduled": 21,
       "confText": "0-0-0",
       "exhibitions": 1
@@ -2200,10 +2200,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Gwynedd Valley, PA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "3-0",
         "links": {
-          "watch": "https://atlanticeastnetwork.com/gwynedd/",
+          "box score": "https://www.albrightathletics.com/sports/womens-soccer/stats/2026/gwynedd-mercy/boxscore/8118",
+          "recap": "https://www.albrightathletics.com/news/2026/9/28/womens-soccer-womens-soccer-remains-red-hot-against-gwynedd-mercy.aspx",
           "history": "https://www.albrightathletics.com/sports/womens-soccer/opponent-history/gwynedd-mercy-university/16"
         }
       },
@@ -2221,6 +2222,7 @@
         "score": null,
         "links": {
           "watch": "https://gomacsports.tv/albrightlions/",
+          "live stats": "https://albrightathletics.com/sidearmstats/wsoc/summary",
           "history": "https://www.albrightathletics.com/sports/womens-soccer/opponent-history/widener-university/7"
         }
       },
@@ -3448,13 +3450,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:08:50Z"
+      "asOf": "2026-09-29T17:05:31Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women’s Soccer Remains Red Hot against Gwynedd Mercy",
+        "url": "https://albrightathletics.com/news/2026/9/28/womens-soccer-womens-soccer-remains-red-hot-against-gwynedd-mercy.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
       {
         "title": "Women’s Soccer Turns in Historic Performance against Keystone",
         "url": "https://albrightathletics.com/news/2026/9/24/womens-soccer-womens-soccer-turns-in-historic-performance-against-keystone.aspx",
@@ -3525,7 +3533,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.albrightathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:08:58Z"
+      "asOf": "2026-09-29T17:05:39Z"
     }
   },
   "camps": {
@@ -3539,20 +3547,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://docs.google.com/forms/d/e/1FAIpQLSfLduOutAJziy-Ca3kPypi9Y7EKyfdxEFbuS3KPEOYpcIavog/viewform",
-        "asOf": "2026-09-26T15:08:59Z"
+        "asOf": "2026-09-29T17:05:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:58Z",
+    "builtAt": "2026-09-29T17:21:18Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3565,15 +3573,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:08:50Z"
+        "at": "2026-09-29T17:05:31Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:45:57Z"
       }
     ]
   }

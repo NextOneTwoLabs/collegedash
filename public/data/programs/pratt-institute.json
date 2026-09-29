@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:16:44Z"
+        "asOf": "2026-09-29T17:15:27Z"
       }
     }
   },
@@ -339,7 +339,7 @@
   ],
   "roster": {
     "season": 2026,
-    "count": 18,
+    "count": 19,
     "players": [
       {
         "number": "0",
@@ -658,6 +658,33 @@
         }
       },
       {
+        "number": "12",
+        "name": "Kristina Sozashvili",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "5-5",
+        "heightIn": 65,
+        "classLabel": "F.Y.",
+        "classCode": "",
+        "hometown": "Tbilisi, Georgia",
+        "highSchool": "British International School of Tbilisi",
+        "previousSchool": "",
+        "major": "Construction Management",
+        "club": "",
+        "bioUrl": "https://www.goprattgo.com/sports/womens-soccer/roster/kristina-sozashvili/2313",
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "British International School of Tbilisi",
+          "key": "british international school of tbilisi",
+          "schoolId": null,
+          "state": "GA",
+          "status": "unmatched"
+        }
+      },
+      {
         "number": "13",
         "name": "Alyssa Trujillo",
         "pos": "F",
@@ -912,7 +939,7 @@
       "JR": 5,
       "SR": 2,
       "SO": 6,
-      "?": 5
+      "?": 6
     },
     "graduatingByPos": {
       "GK": 1,
@@ -921,7 +948,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:16:44Z"
+      "asOf": "2026-09-29T17:15:27Z"
     }
   },
   "rosterHistory": {
@@ -2597,7 +2624,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goprattgo.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:16:44Z"
+      "asOf": "2026-09-29T17:15:27Z"
     }
   },
   "commitments": [],
@@ -2674,7 +2701,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goprattgo.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:16:49Z"
+      "asOf": "2026-09-29T17:15:32Z"
     }
   },
   "camps": {
@@ -2694,14 +2721,14 @@
       {
         "source": "camps",
         "url": "https://www.goprattgo.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:16:49Z"
+        "asOf": "2026-09-29T17:15:32Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2714,15 +2741,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:16:44Z"
+        "at": "2026-09-29T17:15:27Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:20Z"
       }
     ]
   }

@@ -294,7 +294,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gosmithbears.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:17:52Z"
+        "asOf": "2026-09-29T17:16:59Z"
       }
     }
   },
@@ -302,13 +302,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-6-1",
+      "record": "0-7-1",
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
-      "confRecord": "0-1-0",
+      "confRecord": "0-2-0",
       "inProgress": true,
       "headCoach": "Kathy Brawn"
     },
@@ -1148,7 +1148,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gosmithbears.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:17:52Z"
+      "asOf": "2026-09-29T17:16:59Z"
     }
   },
   "rosterHistory": {
@@ -1807,12 +1807,12 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
-      "text": "0-6-1",
-      "played": 7,
+      "text": "0-7-1",
+      "played": 8,
       "scheduled": 20,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 0
     },
     "games": [
@@ -1952,10 +1952,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Springfield, MA",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://go.flocollege.com/teams/smith-college?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=smith-college",
+          "box score": "https://www.gosmithbears.com/sports/womens-soccer/stats/2026/springfield-college/boxscore/9823",
+          "recap": "https://www.gosmithbears.com/news/2026/9/26/soccer-clipped-by-springfield-3-0.aspx",
           "history": "https://www.gosmithbears.com/sports/womens-soccer/opponent-history/springfield-college/9"
         }
       },
@@ -3158,13 +3159,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gosmithbears.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:17:52Z"
+      "asOf": "2026-09-29T17:16:59Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Bear Watch: What's Ahead in Smith Athletics (Sept. 28)",
+        "url": "https://gosmithbears.com/news/2026/9/28/soccer-bear-watch-whats-ahead-in-smith-athletics-sept-28.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "Soccer Clipped by Springfield, 3-0",
+        "url": "https://gosmithbears.com/news/2026/9/26/soccer-clipped-by-springfield-3-0.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Smith Announces Field Hockey, Soccer Changes Due to Storm",
         "url": "https://gosmithbears.com/news/2026/9/24/smith-announces-field-hockey-soccer-changes-due-to-storm.aspx",
@@ -3224,18 +3237,12 @@
         "url": "https://gosmithbears.com/news/2026/9/1/soccer-pasarkar-earns-first-shutout-in-draw-at-umass-boston.aspx",
         "date": "2026-09-01",
         "recruiting": false
-      },
-      {
-        "title": "Chloe Colquhoun Named Assistant Soccer Coach",
-        "url": "https://gosmithbears.com/news/2026/8/27/chloe-colquhoun-named-assistant-soccer-coach.aspx",
-        "date": "2026-08-27",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.gosmithbears.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:17:59Z"
+      "asOf": "2026-09-29T17:17:06Z"
     }
   },
   "camps": {
@@ -3249,20 +3256,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.gosmithbears.com/sports/2011/1/20/CANDC?id=83",
-        "asOf": "2026-09-26T15:18:05Z"
+        "asOf": "2026-09-29T17:17:13Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3275,15 +3282,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:17:52Z"
+        "at": "2026-09-29T17:16:59Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:57:42Z"
       }
     ]
   }

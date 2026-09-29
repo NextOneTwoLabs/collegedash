@@ -287,7 +287,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.carleton.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:10:10Z"
+        "asOf": "2026-09-29T17:07:10Z"
       }
     }
   },
@@ -295,13 +295,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-0",
-      "wins": 4,
+      "record": "5-1-0",
+      "wins": 5,
       "losses": 1,
       "ties": 0,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "recordSource": "schedule",
-      "confRecord": "2-0-0",
+      "confRecord": "3-0-0",
       "inProgress": true,
       "headCoach": "Jessica Mueller"
     },
@@ -1274,7 +1274,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.carleton.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:10:10Z"
+      "asOf": "2026-09-29T17:07:10Z"
     }
   },
   "rosterHistory": {
@@ -2088,13 +2088,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 0,
-      "text": "4-1-0",
-      "played": 5,
+      "text": "5-1-0",
+      "played": 6,
       "scheduled": 20,
-      "confText": "2-0-0",
+      "confText": "3-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2193,11 +2193,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Moorhead, Minn. / Jake Christiansen Athletic Complex",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-0",
         "links": {
-          "watch": "https://www.miacsportsnetwork.com/carleton/?B=4298799",
-          "live stats": "https://www.statbroadcast.com/events/statbroadcast.php?gid=ccmm"
+          "box score": "https://athletics.carleton.edu/sports/womens-soccer/stats/2026/concordia-college-minn-/boxscore/10762",
+          "recap": "https://athletics.carleton.edu/news/2026/9/26/womens-soccer-260926-knights-extend-win-streak-with-victory-at-concordia.aspx"
         }
       },
       {
@@ -3603,13 +3603,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.carleton.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:10:10Z"
+      "asOf": "2026-09-29T17:07:10Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "No. 24 Knights extend win streak with 5-0 victory at Concordia",
+        "url": "https://athletics.carleton.edu/news/2026/9/26/womens-soccer-260926-knights-extend-win-streak-with-victory-at-concordia.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Lacey named MIAC Defensive Player of the Week",
         "url": "https://athletics.carleton.edu/news/2026/9/21/womens-soccer-lacey-named-miac-defensive-player-of-the-week.aspx",
@@ -3674,7 +3680,7 @@
     "_meta": {
       "source": "news",
       "url": "https://athletics.carleton.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:10:21Z"
+      "asOf": "2026-09-29T17:07:15Z"
     }
   },
   "camps": {
@@ -3688,20 +3694,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://carletoncollegewomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-26T15:10:24Z"
+        "asOf": "2026-09-29T17:07:18Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:19Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3714,15 +3720,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:10:10Z"
+        "at": "2026-09-29T17:07:10Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:47:55Z"
       }
     ]
   }

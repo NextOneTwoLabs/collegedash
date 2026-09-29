@@ -309,7 +309,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://athletics.georgefox.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:11Z"
+        "asOf": "2026-09-29T17:09:25Z"
       }
     }
   },
@@ -317,13 +317,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "1-4-1",
+      "record": "1-5-1",
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "0-3-1",
+      "confRecord": "0-4-1",
       "inProgress": true,
       "headCoach": "Brooke Alteneder"
     },
@@ -1275,7 +1275,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.georgefox.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:11Z"
+      "asOf": "2026-09-29T17:09:25Z"
     }
   },
   "rosterHistory": {
@@ -1963,12 +1963,12 @@
     "season": 2026,
     "record": {
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "ties": 1,
-      "text": "1-4-1",
-      "played": 6,
+      "text": "1-5-1",
+      "played": 7,
       "scheduled": 18,
-      "confText": "0-3-1",
+      "confText": "0-4-1",
       "exhibitions": 2
     },
     "games": [
@@ -2123,11 +2123,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Newberg, Ore., Austin Sports Complex",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://flosports.link/4hatYQ8",
-          "live stats": "https://athletics.georgefox.edu/sidearmstats/wsoc/summary",
+          "box score": "https://athletics.georgefox.edu/sports/womens-soccer/stats/2026/linfield/boxscore/22621",
+          "recap": "https://athletics.georgefox.edu/news/2026/9/27/womens-soccer-early-corners-bested-bruins-in-2-0-loss-to-linfield.aspx",
           "history": "https://athletics.georgefox.edu/sports/womens-soccer/opponent-history/linfield-university/1"
         }
       },
@@ -3476,7 +3476,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://athletics.georgefox.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:11Z"
+      "asOf": "2026-09-29T17:09:25Z"
     }
   },
   "commitments": [],
@@ -3490,6 +3490,12 @@
       }
     ],
     "latest": [
+      {
+        "title": "Early Corners Bested Bruins in 2-0 Loss to Linfield",
+        "url": "https://athletics.georgefox.edu/news/2026/9/27/womens-soccer-early-corners-bested-bruins-in-2-0-loss-to-linfield.aspx",
+        "date": "2026-09-27",
+        "recruiting": false
+      },
       {
         "title": "Fox Stands Tall in Defensive 0-0 Draw",
         "url": "https://athletics.georgefox.edu/news/2026/9/20/womens-soccer-fox-stands-tall-in-defensive-0-0-draw.aspx",
@@ -3555,18 +3561,12 @@
         "url": "https://athletics.georgefox.edu/news/2025/6/18/welcome-weekend.aspx",
         "date": "2025-06-18",
         "recruiting": true
-      },
-      {
-        "title": "Sports Records",
-        "url": "https://athletics.georgefox.edu/news/2022/6/7/george-fox-sports-records.aspx",
-        "date": "2022-06-07",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://athletics.georgefox.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:17Z"
+      "asOf": "2026-09-29T17:09:30Z"
     }
   },
   "camps": {
@@ -3580,20 +3580,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 13,
+    "newsScanned": 14,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.bruincamps.com/index.cfm",
-        "asOf": "2026-09-26T15:12:20Z"
+        "asOf": "2026-09-29T17:09:33Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:59Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3606,15 +3606,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:11Z"
+        "at": "2026-09-29T17:09:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:16Z"
       }
     ]
   }

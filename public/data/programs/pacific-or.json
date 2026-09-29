@@ -311,7 +311,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.goboxers.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:16:32Z"
+        "asOf": "2026-09-29T17:15:01Z"
       }
     }
   },
@@ -319,13 +319,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-1",
-      "wins": 4,
-      "losses": 3,
+      "record": "5-4-1",
+      "wins": 5,
+      "losses": 4,
       "ties": 1,
-      "gamesPlayed": 8,
+      "gamesPlayed": 10,
       "recordSource": "schedule",
-      "confRecord": "2-2-0",
+      "confRecord": "3-3-0",
       "inProgress": true,
       "headCoach": "Kellan McNamara"
     },
@@ -1408,7 +1408,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goboxers.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:16:32Z"
+      "asOf": "2026-09-29T17:15:01Z"
     }
   },
   "rosterHistory": {
@@ -2213,13 +2213,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
-      "losses": 3,
+      "wins": 5,
+      "losses": 4,
       "ties": 1,
-      "text": "4-3-1",
-      "played": 8,
+      "text": "5-4-1",
+      "played": 10,
       "scheduled": 20,
-      "confText": "2-2-0",
+      "confText": "3-3-0",
       "exhibitions": 3
     },
     "games": [
@@ -2427,12 +2427,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Forest Grove, OR, Hanson Stadium",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "2-1",
         "links": {
-          "watch": "https://flosports.link/4wMmRm4",
-          "live stats": "https://stats.statbroadcast.com/broadcast/?id=665647",
-          "tickets": "https://goboxers.com/sports/2022/6/21/hometown-ticketing.aspx",
+          "box score": "https://www.goboxers.com/sports/womens-soccer/stats/2026/whitworth-university/boxscore/8195",
+          "recap": "https://www.goboxers.com/news/2026/9/26/womens-soccer-brisson-ayano-goals-lead-pacific-past-whitworth.aspx",
           "history": "https://www.goboxers.com/sports/womens-soccer/opponent-history/whitworth-university/6"
         }
       },
@@ -2446,12 +2445,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Forest Grove, OR, Hanson Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "1-3",
         "links": {
-          "watch": "https://flosports.link/4hO1D2b",
-          "live stats": "http://stats.statbroadcast.com/broadcast/?id=665648",
-          "tickets": "https://goboxers.com/sports/2022/6/21/hometown-ticketing.aspx",
+          "box score": "https://www.goboxers.com/sports/womens-soccer/stats/2026/whitman-college/boxscore/8196",
           "history": "https://www.goboxers.com/sports/womens-soccer/opponent-history/whitman-college/17"
         }
       },
@@ -3799,13 +3796,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.goboxers.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:16:32Z"
+      "asOf": "2026-09-29T17:15:01Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Brisson, Ayano goals lead Pacific past Whitworth",
+        "url": "https://goboxers.com/news/2026/9/26/womens-soccer-brisson-ayano-goals-lead-pacific-past-whitworth.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Boxers winning streak ends at Pacific Lutheran",
         "url": "https://goboxers.com/news/2026/9/19/womens-soccer-boxers-winning-streak-ends-at-pacific-lutheran.aspx",
@@ -3870,7 +3873,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.goboxers.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:16:37Z"
+      "asOf": "2026-09-29T17:15:05Z"
     }
   },
   "camps": {
@@ -3884,20 +3887,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "http://www.boxerwsoc.com",
-        "asOf": "2026-09-26T15:16:39Z"
+        "asOf": "2026-09-29T17:15:08Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3910,15 +3913,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:16:32Z"
+        "at": "2026-09-29T17:15:01Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:55:45Z"
       }
     ]
   }

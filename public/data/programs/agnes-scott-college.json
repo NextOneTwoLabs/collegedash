@@ -301,7 +301,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.ascscotties.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:08:44Z"
+        "asOf": "2026-09-29T17:05:31Z"
       }
     }
   },
@@ -309,13 +309,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "0-5-1",
+      "record": "0-6-1",
       "wins": 0,
-      "losses": 5,
+      "losses": 6,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "0-1-0",
+      "confRecord": "0-2-0",
       "inProgress": true,
       "headCoach": "Jared Rose"
     },
@@ -966,7 +966,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ascscotties.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:08:44Z"
+      "asOf": "2026-09-29T17:05:31Z"
     }
   },
   "rosterHistory": {
@@ -1479,12 +1479,12 @@
     "season": 2026,
     "record": {
       "wins": 0,
-      "losses": 5,
+      "losses": 6,
       "ties": 1,
-      "text": "0-5-1",
-      "played": 6,
+      "text": "0-6-1",
+      "played": 7,
       "scheduled": 18,
-      "confText": "0-1-0",
+      "confText": "0-2-0",
       "exhibitions": 1
     },
     "games": [
@@ -1635,11 +1635,10 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "LaGrange, Ga.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://vcloud.hudl.com/broadcast/embed/4151842",
-          "live stats": "https://lagrangepanthers.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.ascscotties.com/sports/womens-soccer/stats/2026/lagrange-college/boxscore/3273",
           "history": "https://www.ascscotties.com/sports/womens-soccer/opponent-history/lagrange-college/72"
         }
       },
@@ -1649,15 +1648,16 @@
         "exhibition": false,
         "conferenceGame": false,
         "homeAway": "A",
-        "opponent": "Trinity College (Fla.)",
+        "opponent": "Trinity College of Jacksonville",
         "opponentRank": null,
         "opponentSeed": null,
-        "location": "Jacksonville, Fla.",
+        "location": "Jacksonville, FL",
         "result": null,
         "score": null,
         "links": {
-          "watch": "https://www.youtube.com/@TrinityCollegeofFlorida",
-          "history": "https://www.ascscotties.com/sports/womens-soccer/opponent-history/trinity-college-fla-/187"
+          "watch": "https://www.youtube.com/@tcjeagles1974/streams",
+          "live stats": "https://trinityeagles.com/sports/wsoc/2026-27/boxscores/20260929_szlu.xml",
+          "history": "https://www.ascscotties.com/sports/womens-soccer/opponent-history/trinity-baptist-college/184"
         }
       },
       {
@@ -2785,7 +2785,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.ascscotties.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:08:44Z"
+      "asOf": "2026-09-29T17:05:31Z"
     }
   },
   "commitments": [],
@@ -2869,7 +2869,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.ascscotties.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:08:57Z"
+      "asOf": "2026-09-29T17:05:38Z"
     }
   },
   "camps": {
@@ -2913,14 +2913,14 @@
       {
         "source": "camps",
         "url": "https://www.ussportscamps.com/soccer/nike/nike-soccer-camp-agnes-scott-college?path=wsoc",
-        "asOf": "2026-09-26T15:08:57Z"
+        "asOf": "2026-09-29T17:05:40Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:21:58Z",
+    "builtAt": "2026-09-29T17:21:18Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2933,15 +2933,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:08:44Z"
+        "at": "2026-09-29T17:05:31Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:45:53Z"
       }
     ]
   }

@@ -319,7 +319,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.hamlineathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:28Z"
+        "asOf": "2026-09-29T17:09:51Z"
       }
     }
   },
@@ -327,13 +327,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-3-1",
+      "record": "4-4-1",
       "wins": 4,
-      "losses": 3,
+      "losses": 4,
       "ties": 1,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
-      "confRecord": "0-1-1",
+      "confRecord": "0-2-1",
       "inProgress": true,
       "headCoach": "Michael Prunty"
     },
@@ -1708,7 +1708,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:28Z"
+      "asOf": "2026-09-29T17:09:51Z"
     }
   },
   "rosterHistory": {
@@ -2616,12 +2616,12 @@
     "season": 2026,
     "record": {
       "wins": 4,
-      "losses": 3,
+      "losses": 4,
       "ties": 1,
-      "text": "4-3-1",
-      "played": 8,
+      "text": "4-4-1",
+      "played": 9,
       "scheduled": 18,
-      "confText": "0-1-1",
+      "confText": "0-2-1",
       "exhibitions": 3
     },
     "games": [
@@ -2827,11 +2827,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "St. Paul, Minn.",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-1",
         "links": {
-          "watch": "https://www.miacsportsnetwork.com/macalester/",
-          "live stats": "https://athletics.macalester.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.hamlineathletics.com/sports/womens-soccer/stats/2026/macalester-college/boxscore/9088",
+          "recap": "https://www.hamlineathletics.com/news/2026/9/26/womens-soccer-strong-defensive-effort-from-pipers-in-close-loss-to-macalester.aspx",
           "history": "https://www.hamlineathletics.com/sports/womens-soccer/opponent-history/macalester-college/6"
         }
       },
@@ -4024,13 +4024,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:28Z"
+      "asOf": "2026-09-29T17:09:51Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Strong Defensive Effort from Pipers in Close Loss To Macalester",
+        "url": "https://hamlineathletics.com/news/2026/9/26/womens-soccer-strong-defensive-effort-from-pipers-in-close-loss-to-macalester.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Hamline Narrowly Falls to UW-River Falls 1-0",
         "url": "https://hamlineathletics.com/news/2026/9/23/womens-soccer-hamline-narrowly-falls-to-uw-river-falls-1-0.aspx",
@@ -4101,7 +4107,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.hamlineathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:37Z"
+      "asOf": "2026-09-29T17:09:59Z"
     }
   },
   "camps": {
@@ -4115,20 +4121,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://womenssoccer.hamlinesportscamps.com/index.cfm#sl-scrolldownindicator",
-        "asOf": "2026-09-26T15:12:40Z"
+        "asOf": "2026-09-29T17:10:02Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -4141,15 +4147,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:28Z"
+        "at": "2026-09-29T17:09:51Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:47Z"
       }
     ]
   }

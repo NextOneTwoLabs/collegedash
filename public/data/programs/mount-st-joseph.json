@@ -336,7 +336,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.msjlions.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:15:32Z"
+        "asOf": "2026-09-29T17:13:45Z"
       }
     }
   },
@@ -344,12 +344,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-2-1",
-      "wins": 3,
+      "record": "4-2-1",
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
+      "confRecord": "1-0-0",
       "inProgress": true,
       "headCoach": "Marc Sabin"
     },
@@ -1472,7 +1473,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.msjlions.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:15:32Z"
+      "asOf": "2026-09-29T17:13:45Z"
     }
   },
   "rosterHistory": {
@@ -2302,13 +2303,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 1,
-      "text": "3-2-1",
-      "played": 6,
+      "text": "4-2-1",
+      "played": 7,
       "scheduled": 19,
-      "confText": "0-0-0",
+      "confText": "1-0-0",
       "exhibitions": 0
     },
     "games": [
@@ -2430,11 +2431,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Anderson, IN",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "5-2",
         "links": {
-          "watch": "https://athletics.anderson.edu/video/live",
-          "live stats": "https://athletics.anderson.edu/sports/wsoc/2026-27/boxscores/20260926_kmpo.xml",
+          "recap": "https://www.msjlions.com/news/2026/9/26/womens-soccer-lions-open-hcac-play-with-5-2-victory-over-anderson.aspx",
+          "box score": "https://www.msjlions.com/sports/womens-soccer/stats/2026/anderson-university-in-/boxscore/6976",
           "history": "https://www.msjlions.com/sports/womens-soccer/opponent-history/anderson-university-in-/28"
         }
       },
@@ -3845,13 +3846,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.msjlions.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:15:32Z"
+      "asOf": "2026-09-29T17:13:45Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Lions Open HCAC Play With 5-2 Victory Over Anderson",
+        "url": "https://msjlions.com/news/2026/9/26/womens-soccer-lions-open-hcac-play-with-5-2-victory-over-anderson.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Lions Fall to Sewanee, 2-0",
         "url": "https://msjlions.com/news/2026/9/20/womens-soccer-lions-fall-to-sewanee-2-0.aspx",
@@ -3916,7 +3923,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.msjlions.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:15:36Z"
+      "asOf": "2026-09-29T17:13:50Z"
     }
   },
   "camps": {
@@ -3930,20 +3937,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 10,
+    "newsScanned": 11,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.msjlions.com/documents/2026/8/13/Oct_22nd_PUMA_ELITE_ID_Camp.pdf",
-        "asOf": "2026-09-26T15:15:39Z"
+        "asOf": "2026-09-29T17:13:54Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:21Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3956,15 +3963,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:15:32Z"
+        "at": "2026-09-29T17:13:45Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:54:28Z"
       }
     ]
   }

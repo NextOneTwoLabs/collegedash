@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://coastguardathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:19:00Z"
+        "asOf": "2026-09-29T17:18:23Z"
       }
     }
   },
@@ -1239,7 +1239,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://coastguardathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:19:00Z"
+      "asOf": "2026-09-29T17:18:23Z"
     }
   },
   "rosterHistory": {
@@ -3430,13 +3430,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://coastguardathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:19:00Z"
+      "asOf": "2026-09-29T17:18:23Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Miller, Pottle named CoastGuardAthletics.com Athletes of the Week",
+        "url": "https://coastguardathletics.com/news/2026/9/29/mens-soccer-miller-pottle-named-coastguardathletics-com-athletes-of-the-week.aspx",
+        "date": "2026-09-29",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer braves elements to draw NEWMAC foes Babson",
         "url": "https://coastguardathletics.com/news/2026/9/25/womens-soccer-braves-elements-to-draw-newmac-foes-babson.aspx",
@@ -3502,18 +3508,12 @@
         "url": "https://coastguardathletics.com/news/2026/9/5/womens-soccer-bears-start-season-hot-with-1-0-win-at-moravian.aspx",
         "date": "2026-09-05",
         "recruiting": false
-      },
-      {
-        "title": "USAA Season Preview: Women's Soccer set to kick off on Friday at Moravian",
-        "url": "https://coastguardathletics.com/news/2026/9/3/usaa-season-preview-womens-soccer-set-to-kick-off-on-friday-at-moravian.aspx",
-        "date": "2026-09-03",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://coastguardathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:19:07Z"
+      "asOf": "2026-09-29T17:18:31Z"
     }
   },
   "camps": {
@@ -3527,20 +3527,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 14,
+    "newsScanned": 15,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.coastguardsportscamps.com/",
-        "asOf": "2026-09-26T15:19:09Z"
+        "asOf": "2026-09-29T17:18:33Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:02Z",
+    "builtAt": "2026-09-29T17:21:23Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3553,15 +3553,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:19:00Z"
+        "at": "2026-09-29T17:18:23Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:59:00Z"
       }
     ]
   }

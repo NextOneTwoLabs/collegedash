@@ -303,7 +303,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://bergathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:34Z"
+        "asOf": "2026-09-29T17:09:53Z"
       }
     }
   },
@@ -311,11 +311,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "3-4-0",
+      "record": "3-5-0",
       "wins": 3,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "gamesPlayed": 7,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Madalynn McLaughlin"
@@ -1327,7 +1327,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:34Z"
+      "asOf": "2026-09-29T17:09:53Z"
     }
   },
   "rosterHistory": {
@@ -2092,10 +2092,10 @@
     "season": 2026,
     "record": {
       "wins": 3,
-      "losses": 4,
+      "losses": 5,
       "ties": 0,
-      "text": "3-4-0",
-      "played": 7,
+      "text": "3-5-0",
+      "played": 8,
       "scheduled": 17,
       "confText": null,
       "exhibitions": 0
@@ -2237,11 +2237,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Hoernemann Stadium",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-2",
         "links": {
-          "watch": "https://flosports.link/4bAm1A6",
-          "live stats": "https://www.bergathletics.com/sidearmstats/wsoc/summary",
+          "recap": "https://bergathletics.com/news/2026/9/26/womens-soccer-britons-surpass-berg.aspx",
+          "box score": "https://bergathletics.com/sports/womens-soccer/stats/2026/albion/boxscore/9330",
           "history": "https://bergathletics.com/sports/womens-soccer/opponent-history/albion-college/39"
         }
       },
@@ -3379,7 +3379,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://bergathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:34Z"
+      "asOf": "2026-09-29T17:09:53Z"
     }
   },
   "commitments": [],
@@ -3393,6 +3393,18 @@
       }
     ],
     "latest": [
+      {
+        "title": "Springer Earns OAC Athlete of the Week Honors",
+        "url": "https://bergathletics.com/news/2026/9/28/general-springer-earns-oac-athlete-of-the-week-honors.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "Britons Surpass Berg",
+        "url": "https://bergathletics.com/news/2026/9/26/womens-soccer-britons-surpass-berg.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Springer Protects the Net at John Carroll",
         "url": "https://bergathletics.com/news/2026/9/23/womens-soccer-springer-protects-the-net-at-john-carroll.aspx",
@@ -3452,18 +3464,12 @@
         "url": "https://bergathletics.com/news/2026/2/6/general-womens-sports-collaborate-on-kids-camp.aspx",
         "date": "2026-02-06",
         "recruiting": false
-      },
-      {
-        "title": "First ever all girls sports, kids camp",
-        "url": "https://bergathletics.com/news/2026/1/6/general-first-ever-all-girls-sports-kids-camp.aspx",
-        "date": "2026-01-06",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://bergathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:44Z"
+      "asOf": "2026-09-29T17:10:02Z"
     }
   },
   "camps": {
@@ -3477,7 +3483,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [
       {
         "name": "ID Camp",
@@ -3507,14 +3513,14 @@
       {
         "source": "camps",
         "url": "https://www.huwscamps.com/elite-id-camp.cfm",
-        "asOf": "2026-09-26T15:12:51Z"
+        "asOf": "2026-09-29T17:10:09Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3527,15 +3533,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:34Z"
+        "at": "2026-09-29T17:09:53Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:00Z"
       }
     ]
   }

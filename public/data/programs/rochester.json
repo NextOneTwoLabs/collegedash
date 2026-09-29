@@ -282,7 +282,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://uofrathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:17:13Z"
+        "asOf": "2026-09-29T17:16:25Z"
       }
     }
   },
@@ -290,11 +290,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "7-0-0",
+      "record": "7-0-1",
       "wins": 7,
       "losses": 0,
-      "ties": 0,
-      "gamesPlayed": 7,
+      "ties": 1,
+      "gamesPlayed": 8,
       "recordSource": "schedule",
       "inProgress": true,
       "headCoach": "Ashley Van Vechten"
@@ -1301,7 +1301,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uofrathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:17:13Z"
+      "asOf": "2026-09-29T17:16:25Z"
     }
   },
   "rosterHistory": {
@@ -2046,9 +2046,9 @@
     "record": {
       "wins": 7,
       "losses": 0,
-      "ties": 0,
-      "text": "7-0-0",
-      "played": 7,
+      "ties": 1,
+      "text": "7-0-1",
+      "played": 8,
       "scheduled": 17,
       "confText": "0-0-0",
       "exhibitions": 0
@@ -2183,11 +2183,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Rochester, NY, Edwin Fauver Stadium",
-        "result": null,
-        "score": null,
+        "result": "T",
+        "score": "1-1",
         "links": {
-          "watch": "https://flosports.link/4wulzuF",
-          "live stats": "https://uofrathletics.com/sidearmstats/wsoc/summary"
+          "box score": "https://uofrathletics.com/sports/womens-soccer/stats/2026/misericordia-university/boxscore/21662",
+          "recap": "https://uofrathletics.com/news/2026/9/26/womens-soccer-rochester-draws-even-with-misericordia.aspx"
         }
       },
       {
@@ -3415,13 +3415,25 @@
     "_meta": {
       "source": "athletics",
       "url": "https://uofrathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:17:13Z"
+      "asOf": "2026-09-29T17:16:25Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "McGuire Repeats as UAA Athlete of the Week",
+        "url": "https://uofrathletics.com/news/2026/9/28/womens-soccer-mcguire-repeats-as-uaa-athlete-of-the-week.aspx",
+        "date": "2026-09-28",
+        "recruiting": false
+      },
+      {
+        "title": "Rochester Draws Even with Misericordia",
+        "url": "https://uofrathletics.com/news/2026/9/26/womens-soccer-rochester-draws-even-with-misericordia.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "#22 Rochester Wins Ranked Showdown with #17 William Smith",
         "url": "https://uofrathletics.com/news/2026/9/23/womens-soccer-22-rochester-wins-ranked-showdown-with-17-william-smith.aspx",
@@ -3481,18 +3493,12 @@
         "url": "https://uofrathletics.com/news/2026/9/1/womens-soccer-three-second-half-goals-lift-urochester-women-in-opener.aspx",
         "date": "2026-09-01",
         "recruiting": false
-      },
-      {
-        "title": "Yellowjackets Score Academic Praise from United Soccer Coaches",
-        "url": "https://uofrathletics.com/news/2026/8/7/womens-soccer-yellowjackets-score-academic-praise-from-united-soccer-coaches.aspx",
-        "date": "2026-08-07",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://uofrathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:17:22Z"
+      "asOf": "2026-09-29T17:16:33Z"
     }
   },
   "camps": {
@@ -3506,20 +3512,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 13,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://rochesterwomenssoccer.totalcamps.com/About%20Us",
-        "asOf": "2026-09-26T15:17:24Z"
+        "asOf": "2026-09-29T17:16:35Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3532,15 +3538,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:17:13Z"
+        "at": "2026-09-29T17:16:25Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:54Z"
       }
     ]
   }

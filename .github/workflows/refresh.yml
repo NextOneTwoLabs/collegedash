@@ -43,11 +43,15 @@ name: Refresh program data
 # shapes, and the annotation on each says which it is, because they need different handling:
 #   refresh-sources/<run id>-<run attempt>-<push attempt>   build or validate failed on the rebuilt data
 #     (issue 82). The commit is rebased onto main and holds the collection, with public/data exactly as
-#     main has it.
+#     main has it, and main's registry.json with this run's athletics.platform detections merged in.
 #   refresh-sources/<run id>-<run attempt>-unpublished      nothing could be published at all (issue 117):
-#     a rebase conflict this step does not resolve, the registry guard below refusing a publish that would
-#     revert a membership change merged into main, or three failed attempts. What that commit is - rebased
+#     a rebase conflict this step does not resolve, a registry change a refresh must not make or a
+#     registry merge that failed (issue 132), or three failed attempts. What that commit is - rebased
 #     or not, rebuilt or not, gated or not - differs per cause, and the error on each says which.
+# registry.json is merged, not taken from either side (issue 132): after every rebase,
+# .github/scripts/merge_registry.py writes main's registry with only this run's athletics.platform changes
+# re-applied, and only where main left that field alone. The rebase's `-X theirs` would otherwise let the
+# run's copy silently revert a registry change merged into main while the run was collecting.
 # Nothing deletes those branches: they are one commit each and are meant to be deleted by hand once the
 # failure has been triaged.
 # Pushing to main triggers the Cloudflare deploy.
@@ -298,7 +302,7 @@ jobs:
               exit 1
             fi
             if ! git commit --amend -m "data: sources only $stamp" \
-              -m "$1 on the rebuild onto $onto. Nothing here was published to main, which is still $onto. This commit holds the run's collected programs/*/sources, public/data/rpi and registry.json; everything build() writes is exactly as $onto has it, so checking this branch out and running build then validate reproduces the failure. Merge it only once you know the cause was bad code and not a bad source (issue 75)."; then
+              -m "$1 on the rebuild onto $onto. Nothing here was published to main, which is still $onto. This commit holds the run's collected programs/*/sources and public/data/rpi, and registry.json as merged onto $onto (main's, with this run's athletics.platform detections re-applied: issue 132); everything build() writes is exactly as $onto has it, so checking this branch out and running build then validate reproduces the failure. Merge it only once you know the cause was bad code and not a bad source (issue 75)."; then
               echo "::error title=refresh::$1 on the rebuild onto $onto, and the sources-only commit could not be created. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
               exit 1
             fi
@@ -306,7 +310,7 @@ jobs:
               echo "::warning title=refresh::$1 on the rebuild onto $onto, and pushing the collection to $branch was rejected. Retrying."
               return 1
             fi
-            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json, with everything build() writes (public/data/programs, commitments/index.json, camps/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
+            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json (main's registry with this run's athletics.platform detections merged in, never the run's raw copy: issue 132), with everything build() writes (public/data/programs, commitments/index.json, camps/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
             return 0
           }
           # Issue #117: -X theirs settles content conflicts but not modify/delete. Every rebuild rewrites
@@ -320,12 +324,11 @@ jobs:
           # follows every rebase writes a profile for every published program and prunes the rest (issue
           # 110), and the gates below still decide whether any of it is published.
           #
-          # What the rebuild does NOT settle is which registry it reads. `-X theirs` keeps the RUN's copy
-          # of any file both sides changed, registry.json included, so removing the file here is "let the
-          # rebuild decide", not "the deletion stands": a program main deleted comes back if the registry
-          # the rebuild reads still publishes it. Two things follow, both below: the annotations say that
-          # rather than claiming the deletion was kept, and the run fails closed when both sides edited
-          # registry.json, because there `-X theirs` would silently revert main's membership change.
+          # Removing the file here is "let the rebuild decide", not "the deletion stands": a program main
+          # deleted comes back if the registry the rebuild reads still publishes it, so the annotations say
+          # that rather than claiming the deletion was kept. Which registry the rebuild reads is settled
+          # after the rebase by the registry merge (issue 132, below): main's membership always stands, so
+          # this run's copy of the registry can no longer republish a program main removed.
           # Any other conflict - a collected source, registry.json itself, code - is not this step's to settle.
           rebase_stopped() {
             [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]
@@ -354,38 +357,50 @@ jobs:
           # Never drop a collection (issue 117). When the step cannot publish and has no gate path for the
           # reason, push the run's commit as it stands to a per-run branch and fail the run.
           #
-          # $2 says what that commit actually is, because the callers leave HEAD in three different states and
+          # $2 says what that commit actually is, because the callers leave it in three different states and
           # an operator reading this at 03:00 acts on it:
           #   unrebased  the run as it stood, never rebased onto the current main and never gated.
           #   rebased    rebased, rebuilt and past both gates; only the push to main failed.
-          #   guard      rebased, but stopped before the rebuild and the amend, because the registry it would
-          #              have built from was this run's and would have reverted main's membership change. Its
-          #              tree is therefore the raw rebase result: this run's registry.json, and without the
-          #              profiles the resolution removed. It must NOT be pushed to main as it stands - doing
-          #              that is exactly the publish the step refused - so its recovery text says to reconcile
-          #              the registry with main first, then rebuild and gate.
+          #   registry   the registry merge after the rebase failed (issue 132): the run changed something in
+          #              registry.json a refresh must not, a copy did not parse, or the merge script is
+          #              missing or crashed. The commit pushed is $3, the run's own commit from before any
+          #              rebase, so its registry.json is exactly as the run wrote it - the unexpected change
+          #              is kept for a human to inspect - and it is NOT rebased, rebuilt or gated. It must not
+          #              be merged as it stands: that registry predates main's, and taking it would revert
+          #              every registry change merged since, which is the publish this step refused.
+          # $3, when given, is the commit to push instead of HEAD.
           # Telling someone to redo work that is already done, or to redo work the step deliberately refused,
           # is how a good annotation becomes a bad night; the three say different things.
           save_collection() {
-            local pushed
+            local pushed rev short
+            rev=${3:-HEAD}
             git rebase --abort 2>/dev/null || true
             branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-unpublished"
-            base=$(git rev-parse --short HEAD~1 2>/dev/null || echo "an unknown commit")
-            if [ "$2" = "guard" ]; then
-              pushed="MAIN'S MEMBERSHIP CHANGE STANDS and the live site is unchanged; this run published nothing, on purpose. Its collection is safe on branch $branch, but that commit is NOT ready to push: it is the rebase result from BEFORE the rebuild, so its public/data/registry.json is this run's copy - the one that would have reverted main's change - and the files the rebase resolved are missing from public/data/programs. Do NOT rebase it onto main and push it as it stands; that is the publish this step just refused. To recover: git fetch origin $branch, check it out, take main's public/data/registry.json (git checkout origin/main -- public/data/registry.json) unless this run's registry change is the one you want, run python collegedash.py build and python collegedash.py validate, and push the result. Nothing needs collecting again. If in doubt, merge main's registry change first and re-dispatch this workflow with build_only=true."
+            base=$(git rev-parse --short "$rev~1" 2>/dev/null || echo "an unknown commit")
+            short=$(git rev-parse --short "$rev" 2>/dev/null || echo "$rev")
+            if [ "$2" = "registry" ]; then
+              pushed="MAIN'S REGISTRY STANDS and the live site is unchanged; this run published nothing, on purpose. Its collection is safe on branch $branch: one commit ($short) on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate - and its public/data/registry.json is this run's copy as the run wrote it, kept so the change can be inspected. Do NOT merge $branch or push it as it stands: that registry predates main's, and taking it would revert every registry change merged into main since $base. To recover: git fetch origin $branch && git checkout FETCH_HEAD, and see what the run changed with git diff $base FETCH_HEAD -- public/data/registry.json. Rebase it onto origin/main taking main's registry (git checkout origin/main -- public/data/registry.json while resolving). If the run changed only athletics.platform values (the merge script failed rather than refused), re-apply them with python .github/scripts/merge_registry.py --base $base --main origin/main --run $short; anything else is a bug in whatever wrote it, so leave it out and fix that. Then run python collegedash.py build and python collegedash.py validate, and push. Nothing needs collecting again."
             elif [ "$2" = "rebased" ]; then
               pushed="Its collection is safe on branch $branch: the run's commit on $base, rebased onto main, rebuilt from the stored sources and past both build and validate - everything except the push to main succeeded. To publish it: git fetch origin $branch, check it out, rebase it onto main (there is no conflict to resolve unless main has moved again), and push. Nothing needs collecting again."
             else
-              pushed="Its collection is safe on branch $branch: one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand, run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
+              pushed="Its collection is safe on branch $branch: one commit on $base exactly as the run made it - NOT rebased onto the current main and NOT checked by build or validate, so do not merge it as it stands. To publish it: check the branch out, rebase it onto main resolving the conflict by hand and taking main's public/data/registry.json (git checkout origin/main -- public/data/registry.json), then re-apply only this run's athletics.platform changes with python .github/scripts/merge_registry.py --base $base --main origin/main --run $short (issue 132), run python collegedash.py build and validate, and push. Or re-dispatch this workflow to collect again."
             fi
-            if git push origin "HEAD:refs/heads/$branch"; then
+            if git push origin "$rev:refs/heads/$branch"; then
               echo "::error title=refresh::$1. NOTHING WAS PUBLISHED: this run did not update main. $pushed"
             else
               echo "::error title=refresh::$1, and pushing the collection to $branch was rejected too. NOTHING WAS PUBLISHED and this run's collection was NOT saved: it exists only on this runner. Re-dispatch this workflow to collect again."
             fi
             exit 1
           }
+          # The run's own commit, captured ONCE, before any rebase, and never again inside the loop: the
+          # registry merge below needs the registry exactly as the run wrote it. An attempt that rebased and
+          # amended, then lost the push race, leaves HEAD holding a registry already merged onto an older main;
+          # re-capturing it would treat that main's edits as the run's own (issue 132, plan review condition 2).
           pre_rebase=$(git rev-parse HEAD)
+          # Set only once an attempt has rebased, rebuilt and passed both gates, i.e. HEAD is what the final
+          # save_collection may call "rebased". Three attempts can also end with no rebase at all (every
+          # git pull failing on the network), and that commit is the run's own, unrebased (issue 132).
+          gated=
           for attempt in 1 2 3; do
             resolved=
             continue_failed=
@@ -407,6 +422,23 @@ jobs:
                 exit 0
               fi
               onto=$(git rev-parse --short FETCH_HEAD)
+              gated=
+              # Issue #132: the registry is merged, not taken from the rebase. `-X theirs` kept the RUN's copy of
+              # any registry hunk both sides changed, which silently reverted a registry edit merged into main
+              # mid-run (a membership move, a hold) whenever this run's athletics.platform detection sat next to
+              # it. merge_registry.py writes main's registry with only this run's athletics.platform changes
+              # re-applied, where main left that field alone and the program is still in main's `programs`; a
+              # run that did not touch the registry gets main's bytes exactly. Any other change this run made to
+              # the registry is not a refresh's to make, and fails closed. Everything after this - the rebuild,
+              # both gates, publish_sources_only's branch - reads or carries the merged registry.
+              # Called as an `if` condition and failing closed through save_collection, never through errexit:
+              # a missing or crashing script must still leave the collection on a branch (plan review
+              # condition 1). save_collection pushes $pre_rebase, the run's commit with its registry exactly
+              # as written, so the change that was refused can be inspected (condition 3).
+              if ! merge_base=$(git merge-base "$pre_rebase" FETCH_HEAD) \
+                 || ! python .github/scripts/merge_registry.py --base "$merge_base" --main FETCH_HEAD --run "$pre_rebase"; then
+                save_collection "The registry merge after the rebase onto $onto failed (see the registry merge annotation above): this run changed public/data/registry.json in a way a refresh must not, a copy of it could not be read, or .github/scripts/merge_registry.py is missing or crashed" "registry" "$pre_rebase"
+              fi
               # Deliberate behaviour change (see the PR for #75): build and validate both gate the
               # data publish now, on every path rather than only build_only. The rebuild is what
               # first runs merged-mid-run code against the full corpus, so publishing its output
@@ -427,19 +459,14 @@ jobs:
                 if publish_sources_only "build failed" "$attempt"; then exit 1; fi
               elif ! python collegedash.py validate; then
                 if publish_sources_only "validate failed" "$attempt"; then exit 1; fi
-              elif [ -n "$resolved" ] && ! git diff --quiet "$(git merge-base "$pre_rebase" FETCH_HEAD)" FETCH_HEAD -- public/data/registry.json \
-                   && ! git diff --quiet "$(git merge-base "$pre_rebase" FETCH_HEAD)" "$pre_rebase" -- public/data/registry.json; then
-                # Both sides changed the registry and the rebase had to resolve profiles: `-X theirs` kept the
-                # RUN's registry, so main's membership change may have just been reverted and the programs it
-                # removed republished. The data is gated, not guessed at: keep the collection and fail loudly.
-                save_collection "main and this run both changed public/data/registry.json, and the rebase resolved $(echo $resolved) with the run's copy of it, which can silently revert a membership change merged into main" "guard"
               else
                 git add -A
                 # Which of the removed files the rebuild put back, if any - staged, because a recreated file is
                 # untracked until `git add` and `git diff` would not see it. Not a failure: the registry the
-                # rebuild read still publishes those programs, and the guard above has already ruled out that
-                # registry being the run's copy over main's. It is here because "main deleted it and it is
-                # back" is exactly the thing an operator should not have to infer from a green run.
+                # rebuild read still publishes those programs, and the registry merge above has already made
+                # that registry main's, never the run's copy over main's (issue 132; it replaced the PR #124
+                # guard that refused this case). It is here because "main deleted it and it is back" is
+                # exactly the thing an operator should not have to infer from a green run.
                 added=" $(git diff --cached --name-only --diff-filter=A FETCH_HEAD -- public/data/programs | tr '\n' ' ')"
                 back=
                 for f in $resolved; do
@@ -461,6 +488,7 @@ jobs:
                 # where they are.
                 git commit --amend -m "data: $verb $stamp" \
                   -m "Rebuilt from the stored sources onto $onto after rebasing, so the published data is the output of the code it is committed onto (issue 75)."
+                gated=1
                 if git push; then
                   exit 0
                 fi
@@ -479,7 +507,12 @@ jobs:
             git rebase --abort 2>/dev/null || true
             sleep 15
           done
-          save_collection "Could not publish after 3 attempts (see the attempts above for why)" "rebased"
+          # save_collection always exits. Without a gated commit, what is saved is the run's own commit as it
+          # was before any rebase, which is exactly what the "unrebased" text describes.
+          if [ -n "$gated" ]; then
+            save_collection "Could not publish after 3 attempts (see the attempts above for why)" "rebased"
+          fi
+          save_collection "Could not publish after 3 attempts, and none of them got as far as a rebased, rebuilt and gated commit (see the attempts above for why)" "unrebased" "$pre_rebase"
 
       - name: Fail if too many collectors failed
         if: steps.refresh.outputs.code != '' && steps.refresh.outputs.code != '0'

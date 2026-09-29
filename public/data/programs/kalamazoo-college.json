@@ -286,7 +286,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://hornets.kzoo.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:13:27Z"
+        "asOf": "2026-09-29T17:10:55Z"
       }
     }
   },
@@ -1233,7 +1233,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hornets.kzoo.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:13:27Z"
+      "asOf": "2026-09-29T17:10:55Z"
     }
   },
   "rosterHistory": {
@@ -2141,6 +2141,8 @@
         "result": null,
         "score": null,
         "links": {
+          "watch": "https://www.miaasportsnetwork.com/tuthunder/",
+          "live stats": "https://trinethunder.com/sidearmstats/wsoc/summary",
           "history": "https://hornets.kzoo.edu/sports/womens-soccer/opponent-history/trine-university/206"
         }
       },
@@ -2318,7 +2320,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://hornets.kzoo.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:13:27Z"
+      "asOf": "2026-09-29T17:10:55Z"
     }
   },
   "commitments": [],
@@ -2389,7 +2391,7 @@
     "_meta": {
       "source": "news",
       "url": "https://hornets.kzoo.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:13:37Z"
+      "asOf": "2026-09-29T17:10:58Z"
     }
   },
   "camps": {
@@ -2456,14 +2458,14 @@
       {
         "source": "camps",
         "url": "https://hornets.kzoo.edu/sports/2024/5/16/camps-soccer-index.aspx",
-        "asOf": "2026-09-26T15:13:40Z"
+        "asOf": "2026-09-29T17:11:03Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -2476,15 +2478,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:13:27Z"
+        "at": "2026-09-29T17:10:55Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:51:54Z"
       }
     ]
   }

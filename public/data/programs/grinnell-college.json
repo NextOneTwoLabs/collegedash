@@ -278,7 +278,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:16Z"
+        "asOf": "2026-09-29T17:09:31Z"
       }
     }
   },
@@ -286,13 +286,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "2-5-1",
-      "wins": 2,
+      "record": "3-5-1",
+      "wins": 3,
       "losses": 5,
       "ties": 1,
-      "gamesPlayed": 8,
+      "gamesPlayed": 9,
       "recordSource": "schedule",
-      "confRecord": "0-2-0",
+      "confRecord": "1-2-0",
       "inProgress": true,
       "headCoach": "Kirsten Koester"
     },
@@ -1385,7 +1385,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:12:16Z"
+      "asOf": "2026-09-29T17:09:31Z"
     }
   },
   "rosterHistory": {
@@ -2001,13 +2001,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 2,
+      "wins": 3,
       "losses": 5,
       "ties": 1,
-      "text": "2-5-1",
-      "played": 8,
+      "text": "3-5-1",
+      "played": 9,
       "scheduled": 18,
-      "confText": "0-2-0",
+      "confText": "1-2-0",
       "exhibitions": 0
     },
     "games": [
@@ -2165,11 +2165,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Grinnell, IA, Springer Field",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "1-0",
         "links": {
-          "watch": "https://watchmidwestsports.com/grinnellpioneers/?B=4295089",
-          "live stats": "https://pioneers.grinnell.edu/sidearmstats/wsoc/summary",
+          "box score": "https://pioneers.grinnell.edu/sports/womens-soccer/stats/2026/ripon-college/boxscore/20304",
+          "recap": "https://pioneers.grinnell.edu/news/2026/9/26/womens-soccer-gc-womens-soccer-team-shuts-down-ripon-for-first-mwc-victory-of-the-season.aspx",
           "history": "https://pioneers.grinnell.edu/sports/womens-soccer/opponent-history/ripon-college/8"
         }
       },
@@ -3318,13 +3318,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:12:16Z"
+      "asOf": "2026-09-29T17:09:31Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "GC women's soccer team shuts down Ripon for first MWC victory of the season",
+        "url": "https://pioneers.grinnell.edu/news/2026/9/26/womens-soccer-gc-womens-soccer-team-shuts-down-ripon-for-first-mwc-victory-of-the-season.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Grinnell rally falls short in 2-1 women's soccer loss at Knox",
         "url": "https://pioneers.grinnell.edu/news/2026/9/23/womens-soccer-grinnell-rally-falls-short-in-2-1-womens-soccer-loss-at-knox.aspx",
@@ -3395,7 +3401,7 @@
     "_meta": {
       "source": "news",
       "url": "https://pioneers.grinnell.edu/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:12:23Z"
+      "asOf": "2026-09-29T17:09:38Z"
     }
   },
   "camps": {
@@ -3409,20 +3415,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": false,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://pioneers.grinnell.edu/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:12:23Z"
+        "asOf": "2026-09-29T17:09:38Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:00Z",
+    "builtAt": "2026-09-29T17:21:20Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3435,15 +3441,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:12:16Z"
+        "at": "2026-09-29T17:09:31Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:50:35Z"
       }
     ]
   }

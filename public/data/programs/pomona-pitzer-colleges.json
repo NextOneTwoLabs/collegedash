@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.sagehens.com/sports/womens-soccer/roster",
-        "asOf": "2026-09-26T15:16:43Z"
+        "asOf": "2026-09-29T17:15:30Z"
       }
     }
   },
@@ -303,13 +303,13 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "4-1-1",
-      "wins": 4,
+      "record": "5-1-1",
+      "wins": 5,
       "losses": 1,
       "ties": 1,
-      "gamesPlayed": 6,
+      "gamesPlayed": 7,
       "recordSource": "schedule",
-      "confRecord": "2-0-1",
+      "confRecord": "3-0-1",
       "inProgress": true,
       "headCoach": "Miranda Armstrong"
     },
@@ -1408,7 +1408,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sagehens.com/sports/womens-soccer/roster",
-      "asOf": "2026-09-26T15:16:43Z"
+      "asOf": "2026-09-29T17:15:30Z"
     }
   },
   "rosterHistory": {
@@ -2138,13 +2138,13 @@
   "schedule": {
     "season": 2026,
     "record": {
-      "wins": 4,
+      "wins": 5,
       "losses": 1,
       "ties": 1,
-      "text": "4-1-1",
-      "played": 6,
+      "text": "5-1-1",
+      "played": 7,
       "scheduled": 16,
-      "confText": "2-0-1",
+      "confText": "3-0-1",
       "exhibitions": 0
     },
     "games": [
@@ -2266,11 +2266,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Pasadena, CA",
-        "result": null,
-        "score": null,
+        "result": "W",
+        "score": "7-0",
         "links": {
-          "watch": "https://go.flocollege.com/teams/pomona-pitzer-colleges?sp=conf-partner-k7p2&utm_medium=partner&utm_source=multiple&utm_content=school-landing-page&utm_term=pomona-pitzer-colleges",
-          "live stats": "https://gocaltech.com/sidearmstats/wsoc/summary",
+          "box score": "https://www.sagehens.com/sports/womens-soccer/stats/2026/california-institute-of-technology/boxscore/8367",
+          "recap": "https://www.sagehens.com/news/2026/9/26/womens-soccer-defeats-caltech-7-0-seven-different-sagehens-score.aspx",
           "history": "https://www.sagehens.com/sports/womens-soccer/opponent-history/california-institute-of-technology/2"
         }
       },
@@ -3607,13 +3607,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.sagehens.com/sports/womens-soccer/schedule",
-      "asOf": "2026-09-26T15:16:43Z"
+      "asOf": "2026-09-29T17:15:30Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Defeats Caltech 7-0, Seven Different Sagehens Score",
+        "url": "https://sagehens.com/news/2026/9/26/womens-soccer-defeats-caltech-7-0-seven-different-sagehens-score.aspx",
+        "date": "2026-09-26",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Defeats CMS 1-0, Win The Sixth Street Rivalry Game",
         "url": "https://sagehens.com/news/2026/9/23/womens-soccer-defeats-cms-1-0-win-the-sixth-street-rivalry-game.aspx",
@@ -3684,7 +3690,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.sagehens.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-26T15:16:48Z"
+      "asOf": "2026-09-29T17:15:34Z"
     }
   },
   "camps": {
@@ -3698,7 +3704,7 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 11,
+    "newsScanned": 12,
     "items": [
       {
         "name": "These clinics",
@@ -3728,14 +3734,14 @@
       {
         "source": "camps",
         "url": "https://www.sagehens.com/sports/2023/8/11/pomona-pitzer-womens-soccer-clinics.aspx",
-        "asOf": "2026-09-26T15:16:52Z"
+        "asOf": "2026-09-29T17:15:37Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-09-26T15:22:01Z",
+    "builtAt": "2026-09-29T17:21:22Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3748,15 +3754,18 @@
       "commitments": false,
       "news": true
     },
-    "stale": [
-      "wikipedia: never collected"
-    ],
+    "stale": [],
     "failed": [],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-09-26T15:16:43Z"
+        "at": "2026-09-29T17:15:30Z"
+      },
+      {
+        "collector": "wikipedia",
+        "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
+        "at": "2026-09-28T18:56:18Z"
       }
     ]
   }
