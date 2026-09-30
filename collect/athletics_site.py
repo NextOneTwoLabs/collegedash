@@ -11,6 +11,7 @@ career notes are available; pass bios=False to skip.
 
 from __future__ import annotations
 
+import json
 import re
 from urllib.parse import urljoin, urlparse
 
@@ -189,6 +190,13 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     shtml, _ = common.fetch_text(u["schedule"], max_age_hours=12)
     sched = ad.parse_schedule(shtml, base)
     common.log(f"  {sched['season']} schedule: {len(sched['games'])} games")
+    if not sched["games"]:
+        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Say, name-free,
+        # what the page holds instead, so the parser fix can be planned from evidence. Log-only; no request.
+        try:
+            common.log(zero_games_diagnostic(shtml))
+        except Exception as e:
+            common.log(f"  !! zero-games diagnostic failed ({type(e).__name__})")
     sched_hist = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
         try:
@@ -370,6 +378,50 @@ def zero_staff_diagnostic(html: str, base: str, sport_path: str) -> str:
     while len(out) > DIAG_MAX_LEN and shown:
         shown = shown[:-1]
         out = line(shown, len(links) - len(shown))
+    return out[:DIAG_MAX_LEN]
+
+
+# ---------- issue #393: a name-free line for a schedule page that yields no game ----------
+# Same rules as the #387 line above: the refresh log is public, so this line holds integers, 0/1 flags and
+# identifiers taken from the page's CODE only - the Vue data key after `data: () => ({` and the JSON keys of the
+# object it holds, each matched against a plain identifier pattern and logged only then. No text, no link, no
+# value from the page. At most DIAG_MAX_KEYS keys and DIAG_MAX_LEN characters.
+VUE_DATA_SIG = re.compile(r"new Vue\(\{\s*el:\s*(['\"])[^'\"]*\1,\s*data:\s*\(\)\s*=>\s*\(\{\s*([A-Za-z_]\w{0,29})\s*:\s*")
+_IDENT = re.compile(r"^[a-z][a-z0-9_]{0,29}$")
+DIAG_MAX_KEYS = 8
+
+
+def zero_games_diagnostic(html: str) -> str:
+    """One name-free log line describing a schedule page that yielded no game (issue #393). Makes no request."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    vue = "-"
+    lists: list[str] = []
+    m = VUE_DATA_SIG.search(html)
+    if m:
+        vue = m.group(2) if _IDENT.match(m.group(2)) else "<x>"
+        if html[m.end():m.end() + 1] in "{[":
+            try:
+                obj, _ = json.JSONDecoder().raw_decode(html, m.end())
+            except ValueError:
+                obj = None
+            if isinstance(obj, dict):
+                lists = [f"{k}={len(v)}" for k, v in obj.items() if isinstance(v, list) and _IDENT.match(k)]
+            elif isinstance(obj, list):
+                lists = [f"[]={len(obj)}"]
+    more = max(0, len(lists) - DIAG_MAX_KEYS)
+    lists = lists[:DIAG_MAX_KEYS]
+    counts = (f"bytes={len(html)} tables={len(soup.find_all('table'))} gameCards={len(soup.select('.s-game-card'))} "
+              f"legacyGames={len(soup.select('li.sidearm-schedule-game'))} nuxt={int('__NUXT_DATA__' in html)} "
+              f"opponentKeys={html.count(chr(34) + 'opponent' + chr(34))} vue={vue}")
+
+    def line(keys, extra):
+        return f"  no games found: schedule markup {counts} lists=[{', '.join(keys)}]" + (f" +{extra} more" if extra > 0 else "")
+    out = line(lists, more)
+    while len(out) > DIAG_MAX_LEN and lists:
+        lists = lists[:-1]
+        more += 1
+        out = line(lists, more)
     return out[:DIAG_MAX_LEN]
 
 
