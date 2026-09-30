@@ -30,6 +30,9 @@ import { perfBeacon, finishServer, v1Kind } from './api/perf.mjs';
 //      stays {"local":false}. When on, it answers only the owner - a Cloudflare Access token verified
 //      here, never the header's presence - and only within a $10 monthly budget kept in KV (issue #179).
 //      See the blocks above ask(), verifyAccess() and reserveBudget().
+//   7. Times "/" and /api/v1/* (Server-Timing, and one timing point per routine request) and accepts the page's speed
+//      reports at POST /api/perf (issue #394, api/perf.mjs; docs/data-api.md, "Speed measurements"). A request writes
+//      at most one Analytics Engine point across both datasets. No IP, user agent, cookie, URL or program slug.
 //
 // Nothing here echoes a submission back to the client, and nothing renders one into the site.
 const CANONICAL_HOST = 'college.nextonetwo.com';

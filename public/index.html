@@ -983,6 +983,92 @@ function apiHeld(url) {
   const e = new Error(`${url}: not sent, waiting ${secs} s after HTTP ${apiHold.status}`);
   return Object.assign(e, { status: apiHold.status, session: apiHold.session, retryAfter: String(secs), held: true });
 }
+/* ---------- speed measurements (issue #394; docs/data-api.md, "Speed measurements") ----------
+   Some page loads send a short timing report after a view appears. It holds the view, a device class worked out here
+   from pointer type and screen size (the user agent is never read), and the milliseconds and bytes that loading,
+   reading and drawing the view's data took. The rate comes from the Worker in X-CollegeDash-Perf on /api/v1 answers,
+   latched from the first one, and sampling is decided once per page load. A sampled load sends at most 3 reports, one
+   per view kind, each as soon as that view has rendered. Nothing is sent on visibilitychange or pagehide, so tab
+   switches and back-forward cache restores send nothing. Nothing from the URL, the hash, the search box or the program
+   opened is sent, and a profile's size is sent as 0 (the Worker writes 0 whatever arrives). Every failure in here is
+   swallowed: rendering never waits on it, and a report that cannot be measured is not sent. */
+const PERF_VIEWS = { list: 'programs', profile: 'program', trends: 'trends', camps: 'camps' };
+const PERF_MAX = 3;
+const PERF = { rate: null, sampled: false, sent: new Set(), routes: 0, loads: {} };
+// phone | tablet | desktop, from a coarse pointer and the screen's short side (CSS px). A touch laptop with a large
+// screen reads as a tablet; the table is pinned by tests/perf_page.test.mjs.
+function perfDevice(coarse, w, h) {
+  if (!coarse) return 'desktop';
+  return Math.min(w, h) < 600 ? 'phone' : 'tablet';
+}
+// The first /api/v1 answer that carries the rate decides it, once for this page load.
+function perfLatch(resp) {
+  try {
+    if (PERF.rate !== null) return;
+    const h = resp?.headers?.get?.('x-collegedash-perf');
+    if (h === null || h === undefined) return;
+    const v = Number(h);
+    PERF.rate = Number.isFinite(v) && v > 0 && v <= 1 ? v : 0;
+    PERF.sampled = PERF.rate > 0 && Math.random() < PERF.rate;
+  } catch { }
+}
+// The data file a view loads, or null: only these four are measured.
+function perfRes(url) {
+  return url === '/api/v1/programs' ? 'programs' : /^\/api\/v1\/programs\/[a-z0-9-]+$/.test(url) ? 'program'
+    : url === '/api/v1/trends' ? 'trends' : url === '/api/v1/camps' ? 'camps' : null;
+}
+// Called once r.json() has resolved: when the data was ready.
+function perfLoaded(url) {
+  try {
+    const res = perfRes(url);
+    if (res && typeof performance !== 'undefined') PERF.loads[res] = { url, done: performance.now() };
+  } catch { }
+}
+// The report, from the load, the browser's resource timing entry for it, and when the view was drawn. Pure: null when
+// there is nothing measured to send. The keys are exactly the Worker's FIELDS (api/perf.mjs), in the same order.
+function perfBody(view, load, painted, nav, entry, rate, device) {
+  const res = PERF_VIEWS[view];
+  if (!res || !load || !entry) return null;
+  const n = v => (Number.isFinite(v) ? Math.max(0, Math.round(v)) : 0);
+  const total = (entry.serverTiming || []).find(t => t.name === 'total');
+  const tx = entry.transferSize || 0, enc = entry.encodedBodySize || 0;
+  const profile = res === 'program';
+  return {
+    v: 1, view, res, device, nav,
+    cache: tx === 0 ? 'memory' : tx < enc ? 'revalidated' : 'network',
+    server: n(total?.duration), wait: entry.requestStart ? n(entry.responseStart - entry.requestStart) : 0,
+    download: n(entry.responseEnd - entry.responseStart), parse: n(load.done - entry.responseEnd), render: n(painted - load.done),
+    first: nav === 'landing' ? n(painted) : 0, tx: profile ? 0 : n(tx), size: profile ? 0 : n(entry.decodedBodySize), rate,
+  };
+}
+function perfSend(body) {
+  if (!body) return;
+  const text = JSON.stringify(body);
+  try { if (navigator.sendBeacon && navigator.sendBeacon('/api/perf', new Blob([text], { type: 'text/plain' }))) return; } catch { }
+  try { fetch('/api/perf', { method: 'POST', body: text, keepalive: true, headers: { 'content-type': 'text/plain' } }).catch(() => { }); } catch { }
+}
+// After the view has rendered and the next frame has run (two animation frames, a paint approximation): one report
+// per view kind, at most PERF_MAX per page load, and only for data loaded while this view was being drawn.
+function perfRendered(view, start, nav) {
+  if (!PERF.sampled || PERF.sent.has(view) || PERF.sent.size >= PERF_MAX) return;
+  const load = PERF.loads[PERF_VIEWS[view]];
+  if (!load || load.done < start) return; // the data was already in memory: nothing was loaded for this view
+  PERF.sent.add(view);
+  const frame = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : f => setTimeout(f, 16);
+  frame(() => frame(() => {
+    try {
+      const entry = performance.getEntriesByName(new URL(load.url, location.href).href).filter(e => e.entryType === 'resource').at(-1);
+      const device = perfDevice(matchMedia('(pointer: coarse)').matches, screen.width, screen.height);
+      perfSend(perfBody(view, load, performance.now(), nav, entry, PERF.rate, device));
+    } catch { }
+  }));
+}
+// route()'s wrapper for the four measured views: the render's own promise, unchanged, with the report hung off it.
+function perfView(view, rendering, nav) {
+  let start = 0;
+  try { start = typeof performance !== 'undefined' ? performance.now() : 0; } catch { }
+  return Promise.resolve(rendering).then(v => { try { perfRendered(view, start, nav); } catch { } return v; });
+}
 async function getJSON(url, opts) {
   if (apiHold && Date.now() < apiHoldUntil) throw apiHeld(url);
   const sentAt = Date.now();
@@ -990,6 +1076,7 @@ async function getJSON(url, opts) {
   try { r = await fetch(url, { cache: 'no-cache', ...(opts || {}) }); }
   catch (err) { const e = new Error(`${url}: ${err?.message || 'network error'}`); e.status = 0; throw e; } // status 0: no response at all
   noteSession(r, sentAt);
+  perfLatch(r); // #394: the sample rate, from the first /api/v1 answer
   if (!r.ok) {
     const e = new Error(`${url}: HTTP ${r.status}`);
     e.status = r.status;
@@ -1003,7 +1090,9 @@ async function getJSON(url, opts) {
     }
     throw e;
   }
-  return r.json();
+  const data = await r.json();
+  perfLoaded(url); // #394: when this view's data was ready
+  return data;
 }
 // Issue #345 (ECNL #90, #92): an answer without a session (cookie lost, blocked or over a day old) says
 // X-CollegeDash-Session: none, whether it was served on the small anonymous allowance or refused with 429. The page
@@ -1633,13 +1722,14 @@ function route() {
   });
   $('#main').scrollTop = 0;
   syncSidebarForView(view);
-  if (view === 'p' && parts[1]) return go(renderProfile(parts[1], parts[2] || 'overview'));
+  const perfNav = PERF.routes++ ? 'in-app' : 'landing'; // #394: the first view of this page load is its landing view
+  if (view === 'p' && parts[1]) return go(perfView('profile', renderProfile(parts[1], parts[2] || 'overview'), perfNav));
   if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
     // The division filter is cleared with it: a link naming a conference has to land on that
     // conference, not on an empty list because a division that excludes it happened to be selected.
     // That also keeps the conference's own pill on screen, so the visitor can see and clear it.
     const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; S.filters.division = []; saveState(); renderSidebar();
-    history.replaceState(null, '', '#/'); return go(renderList());
+    history.replaceState(null, '', '#/'); return go(perfView('list', renderList(), perfNav));
   }
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
@@ -1648,16 +1738,16 @@ function route() {
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
   // camps once should not be dropped back into them on their next visit.
-  if (view === 'camps') return go(renderCamps());
+  if (view === 'camps') return go(perfView('camps', renderCamps(), perfNav));
   // #/trends?club=<id>&school=<id>&program=<slug> (#310). The old one-selection path form (trends/club/<id>,
   // trends/school/<id>, trends/program/<slug>) is rewritten to it with replaceState, so Back does not bounce.
   if (view === 'trends') {
     if (TR_KINDS.includes(parts[1])) { let v = ''; try { v = decodeURIComponent(parts[2] || ''); } catch { } history.replaceState(null, '', trendsUrl(v ? { [parts[1]]: v } : {})); }
-    return go(renderTrends());
+    return go(perfView('trends', renderTrends(), perfNav));
   }
   if (view === 'faq') return go(renderFaq());
   if (view === 'api') return go(renderApiDocs());
-  if (view === 'list') return go(renderList());
+  if (view === 'list') return go(perfView('list', renderList(), perfNav));
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
 }
 window.addEventListener('hashchange', route);
