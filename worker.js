@@ -1,5 +1,6 @@
 import { dataApi } from './api/data-api.mjs';
 import { gate, pageCookie, decorate, sessionFault, HEADER } from './api/session.mjs';
+import { perfBeacon, finishServer, v1Kind } from './api/perf.mjs';
 
 // Entry point for the deployed Worker. The site itself is the static files in public/ (see
 // [assets] in wrangler.toml). This script does five things and runs ahead of the static assets
@@ -50,6 +51,9 @@ const SLUG = /^[a-z0-9-]{1,64}$/;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // This request's data-point counter (issue #394). The gate, the fault handler, the timing point and the speed
+    // report each write only while it is 0, so a request writes at most one point across both datasets (#345's rule).
+    const tally = { points: 0 };
 
     // /api/* is routed before the workers.dev redirect below: a 301 is downgraded to GET by most
     // clients, so redirecting a POST would silently turn a submission into a page view.
@@ -64,10 +68,12 @@ export default {
       return Response.json({ local: false });
     }
     if (url.pathname === '/api/feedback') return feedback(request, env);
+    // The page's speed reports (issue #394, api/perf.mjs): always 204, at most one point.
+    if (url.pathname === '/api/perf') return perfBeacon(request, env, tally);
     // Off: fall through to the assets below, the same path - and so the same 404 - as any unknown /api route.
     if (url.pathname === '/api/ask' && askEnabled(env)) return ask(request, env);
     if (url.pathname === '/api/ask/status' && askEnabled(env)) return askStatus(request, env);
-    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await v1(request, env);
+    if (url.pathname === '/api/v1' || url.pathname.startsWith('/api/v1/')) return await v1(request, env, tally);
 
     // Block direct access to raw data and archive files (issues #100, #240).
     if (isBlockedRawPath(url.pathname)) return notFound(request);
@@ -76,7 +82,7 @@ export default {
       url.hostname = CANONICAL_HOST;
       return Response.redirect(url.toString(), 301);
     }
-    if (url.pathname === '/' && (request.method === 'GET' || request.method === 'HEAD')) return await page(request, env);
+    if (url.pathname === '/' && (request.method === 'GET' || request.method === 'HEAD')) return await page(request, env, tally);
     return env.ASSETS.fetch(request);
   },
   // Not a handler: the ask vocabulary and pure helpers, exposed for the tests (tests/ask_*.test.mjs),
@@ -93,27 +99,41 @@ const H = { gate, pageCookie, decorate };
 // /api/v1/* behind the session gate (issue #345, api/session.mjs). The gate has its own catches: a throw there
 // is a session fault, served ungated as JSON (never the assets' HTML), and the key path answers its own faults
 // with 503 before any of this. Ported from ecnl-dashboard's worker.js (#90, #93).
-async function v1(request, env) {
+//
+// Timed for issue #394: Server-Timing gate / data / total on every answer, refusals included, and the server point
+// when nothing else was written for this request. In a Worker the clock only moves across I/O, so these are waits
+// (limiters, KV, the asset fetch), never CPU time, and the body streams after this returns.
+async function v1(request, env, tally) {
+  const t0 = Date.now();
   let verdict;
-  try { verdict = await H.gate(request, env); } catch (err) { verdict = sessionFault(request, env, err); }
-  if (verdict.response) return verdict.response;
-  const response = await dataApi(request, env);
-  try { return H.decorate(response, verdict); } catch (err) {
-    sessionFault(request, env, err);
-    try { response.headers.set(HEADER, 'error'); } catch {}
-    return response;
+  try { verdict = await H.gate(request, env, undefined, tally); } catch (err) { verdict = sessionFault(request, env, err, tally); }
+  const t1 = Date.now();
+  let out, t2 = t1;
+  if (verdict.response) out = verdict.response;
+  else {
+    const response = await dataApi(request, env);
+    t2 = Date.now();
+    try { out = H.decorate(response, verdict); } catch (err) {
+      sessionFault(request, env, err, tally);
+      try { response.headers.set(HEADER, 'error'); } catch {}
+      out = response;
+    }
   }
+  return finishServer(request, env, tally, out, { gate: t1 - t0, data: t2 - t1, total: Date.now() - t0 }, v1Kind(request), { rate: true });
 }
 
 // "/": the page, with a signed session cookie when the visitor has no usable one (or it is due for renewal).
 // A fault never takes the page down: it is served without a cookie.
-async function page(request, env) {
+async function page(request, env, tally) {
+  const t0 = Date.now();
   const response = await env.ASSETS.fetch(request);
+  const t1 = Date.now();
+  let out = response;
   try {
-    const cookie = response.status < 400 ? await H.pageCookie(request, env) : null;
-    if (cookie) return H.decorate(response, { cookie });
-  } catch (err) { sessionFault(request, env, err); }
-  return response;
+    const cookie = response.status < 400 ? await H.pageCookie(request, env, undefined, tally) : null;
+    if (cookie) out = H.decorate(response, { cookie });
+  } catch (err) { sessionFault(request, env, err, tally); }
+  return finishServer(request, env, tally, out, { data: t1 - t0, total: Date.now() - t0 }, 'page');
 }
 
 const notFound = request =>

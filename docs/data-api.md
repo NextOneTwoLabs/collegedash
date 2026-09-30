@@ -68,6 +68,7 @@ cookies, and the page stops renewing until an answer says `ok` again. A refused 
 | `RL_SESSION` | session id | 180 per 60 s | requests with a valid session cookie |
 | `RL_ANON` | IP address, or the IPv6 /64 | 60 per 60 s (30 later, only after the page work and a measured week) | requests with neither a key nor a valid cookie |
 | `RL_IP` | IP address, or the IPv6 /64 | 1,200 per 60 s | every request, on every door, keyed ones included (a ceiling sized for a shared Wi-Fi) |
+| `RL_PERF` | session id | 10 per 60 s | the page's speed reports at `POST /api/perf` only (issue #394; see "Speed measurements") |
 
 The numbers come from this site's own journeys, counted from the page code: a cold load is 2 API requests, a profile 1
 on first open, Compare up to 4 at once, Pipelines 1 plus 1 per opened "players" row, ID Camps 1; the heaviest realistic
@@ -130,7 +131,9 @@ Each non-routine request writes **one** Workers Analytics Engine data point (dat
 `API_GATE_STATS`): `blob1` the outcome, `blob2` the route kind (`programs`, `program`, `camps`, `trends`,
 `commitments`, `status`, `invalid`, `unknown`, or `page` for `/`), `blob3` the `Sec-Fetch-Site` class, `blob4`
 `production` or `preview` (from the host), `double1` 1. **No IP address, session id, user agent, key or hash.**
-Routine session requests write nothing. Outcomes:
+Routine session requests write nothing here (they get a timing point instead: "Speed measurements" below). **At most
+one point per request across both datasets** (issue #394): a request is counted once, and a fault after it was counted
+keeps its outcome rather than adding a `gate-error`. Outcomes:
 
 - `anon-missing`, `anon-invalid`, `anon-expired`, `anon-cross-site`: served on the anonymous tier.
 - `limited-session`, `limited-anon`, `limited-ip`: refused with 429.
@@ -156,12 +159,136 @@ FROM collegedash_api_gate WHERE timestamp > NOW() - INTERVAL '7' DAY AND blob1 L
 GROUP BY key_id, outcome ORDER BY requests DESC
 ```
 
+### Speed measurements (issue #394)
+
+What visitors are told (owner-approved wording, #394):
+
+> **Speed measurements.** To find out how fast the site loads, some page loads (currently about 1 in 10) send a short
+> timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether
+> the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus
+> the size of the shared list, trends and camps data. Our server also records how long it took to answer most data
+> requests. We don't record your IP address, a session or visitor id, your browser's user agent, the page address, the
+> program you opened, or anything you searched for. Reports are kept as timestamped rows in Cloudflare Analytics
+> Engine, for up to three months, and are used only to make the site faster.
+
+**The limits of that statement:**
+- **Grouping by time.** Reports from one visit arrive within seconds of each other, so they can be grouped by time. That shows a list view followed by a profile, never which profile.
+- **What the Worker sees.** It sees the IP address, user agent and cookie on every request, as it always has, and writes none of them.
+- **Retention.** Three months is Cloudflare's documented figure, unverified here.
+
+**Sampling is off (`PERF_SAMPLE = "0"`) until the owner has read the account's 7-day request volume.** Until then, only the server's own timing is recorded.
+
+**Server-Timing.**
+- Every answer to `/` and `/api/v1/*` carries `Server-Timing: gate;dur=…, data;dur=…, total;dur=…`. The answer to `/` has no `gate`.
+- Every `/api/v1/*` answer also carries `X-CollegeDash-Perf: <rate>`, the page's sample rate.
+- In a Worker the clock only moves across I/O. So these times are waits (limiters, KV, the asset fetch), never CPU time.
+- The body streams after the Worker returns, so download time is only visible from the page.
+
+**Dataset `collegedash_perf`** (binding `PERF_STATS`). It gets one point per routine request, or per accepted speed report, and never one on a request the gate already counted.
+
+- **Server point**, written while `PERF_SERVER = "on"`:
+
+  | field | value |
+  | --- | --- |
+  | `index1` | `server:<kind>` |
+  | `blob1` | `server` |
+  | `blob2` | the route kind (as above, or `page` for `/`) |
+  | `blob3` | the status class: `2xx`, `304`, `3xx`, `4xx` or `5xx` |
+  | `blob4`, `blob5` | empty |
+  | `blob6` | `production` or `preview` |
+  | `double1` | 1 |
+  | `double2` | total ms |
+  | `double3` | gate ms |
+  | `double4` | data ms |
+  | `double5` | body bytes, from `content-length`; **always 0 for a profile** (kind `program`), because a profile's length is close to unique per program |
+
+- **Page point**, from `POST /api/perf`, only while `PERF_SAMPLE` is above 0:
+
+  | field | value |
+  | --- | --- |
+  | `index1` | `page:<view>:<device>` |
+  | `blob1` | `page` |
+  | `blob2` | the view: `list`, `profile`, `trends` or `camps` |
+  | `blob3` | the file the view loads: `programs`, `program`, `trends` or `camps` |
+  | `blob4` | `phone`, `tablet` or `desktop` |
+  | `blob5` | `landing` or `in-app` |
+  | `blob6` | `production` or `preview` |
+  | `blob7` | the cache state: `network`, `revalidated` or `memory` |
+  | `double1` | 1 |
+  | `double2` | server ms, from Server-Timing |
+  | `double3` | wait ms |
+  | `double4` | download ms |
+  | `double5` | transfer bytes; **always 0 for a profile**, whatever the report says |
+  | `double6` | decoded bytes; **always 0 for a profile**, whatever the report says |
+  | `double7` | parse ms |
+  | `double8` | render ms |
+  | `double9` | first render ms (landing views only) |
+  | `double10` | how many page loads each report stands for (1 / rate, rounded) |
+
+**`POST /api/perf`** always answers 204 with no body, and writes one point or none. It refuses, in this order:
+1. everything, while `PERF_SAMPLE` is off;
+2. anything but POST;
+3. a body over 1 KB;
+4. `Sec-Fetch-Site` other than `same-origin`;
+5. no valid session cookie;
+6. over `RL_PERF` (10 per 60 s per session id) or `RL_IP`;
+7. a body that isn't exactly the page's fixed JSON (listed words and finite numbers, clamped to 0–120,000 ms and 0–50 MB), or whose `rate` isn't the current `PERF_SAMPLE`.
+
+**The numbers are indicative, not audited.**
+- One session id can add at most 14,400 points a day.
+- A script that mints fresh sessions by re-fetching `/` is bounded only by `RL_IP`.
+- Before reading any percentile, check the rows per minute for spikes a real sample can't produce.
+
+**Switches** (`[vars]` in `wrangler.toml`; changing one is a PR and the normal build):
+- `PERF_SAMPLE = "0"` stops every report. Pages latch the rate from their first API answer, so a page already open sends at most its 3.
+- `PERF_SERVER` set to anything other than `"on"` stops the server points.
+- Removing the `PERF_STATS` binding silences both.
+- Server-Timing stays either way.
+
+Report with the same read token, weighting by `_sample_interval`. The TPM runs these on demand and reports to the owner directly, never in a public workflow summary.
+
+```sql
+SELECT blob2 AS view, blob4 AS device, SUM(_sample_interval) AS reports,
+  quantileWeighted(0.50, double4, _sample_interval) AS download_p50_ms,
+  quantileWeighted(0.95, double4, _sample_interval) AS download_p95_ms,
+  quantileWeighted(0.50, double7, _sample_interval) AS parse_p50_ms,
+  quantileWeighted(0.95, double7, _sample_interval) AS parse_p95_ms,
+  quantileWeighted(0.50, double8, _sample_interval) AS render_p50_ms,
+  quantileWeighted(0.95, double8, _sample_interval) AS render_p95_ms,
+  quantileWeighted(0.50, double2, _sample_interval) AS server_p50_ms,
+  quantileWeighted(0.95, double2, _sample_interval) AS server_p95_ms
+FROM collegedash_perf
+WHERE blob1 = 'page' AND blob6 = 'production' AND timestamp > NOW() - INTERVAL '7' DAY
+GROUP BY view, device ORDER BY view, device
+```
+
+```sql
+SELECT blob2 AS route, SUM(_sample_interval) AS requests,
+  quantileWeighted(0.50, double2, _sample_interval) AS total_p50_ms,
+  quantileWeighted(0.95, double2, _sample_interval) AS total_p95_ms,
+  quantileWeighted(0.95, double4, _sample_interval) AS data_p95_ms
+FROM collegedash_perf
+WHERE blob1 = 'server' AND blob6 = 'production' AND timestamp > NOW() - INTERVAL '7' DAY
+GROUP BY route ORDER BY route
+```
+
+Rows per minute, before any percentile:
+
+```sql
+SELECT toStartOfMinute(timestamp) AS minute, SUM(_sample_interval) AS reports
+FROM collegedash_perf WHERE blob1 = 'page' AND timestamp > NOW() - INTERVAL '7' DAY
+GROUP BY minute ORDER BY reports DESC LIMIT 20
+```
+
+That the Analytics Engine SQL API offers `quantileWeighted` under that name is **unverified**. The first real query will confirm it.
+
 ### Failure modes
 
 - **No secret** (or one under 32 characters): sessions are `off`. No cookie, only `RL_IP`, each request counted
   `disabled`. **Production must never answer `off`.** Keys still work: the key path doesn't need the secret.
 - **A fault in the session code** (a limiter or crypto throw): the data is still served as JSON with
-  `X-CollegeDash-Session: error`, counted `gate-error`. Nothing in the URL or the client address can cause one.
+  `X-CollegeDash-Session: error`, counted `gate-error` (unless the request's one point was already written: #394).
+  Nothing in the URL or the client address can cause one.
 - **The key store missing or failing**: keyed requests **fail closed** with 503, counted `key-error`. Cookie and
   anonymous requests never touch it.
 - **The local Python server** (`serve.py`) runs with sessions off (`X-CollegeDash-Session: off`, no cookie, no limits)
