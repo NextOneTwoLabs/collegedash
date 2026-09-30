@@ -14,9 +14,10 @@ the games as embedded JSON (as their roster pages carry the roster, #388) cannot
 athletics_site.collect now logs one line when the current season's schedule page yields no game, describing
 what the page holds instead.
 
-The refresh log is public. The line holds integers, 0/1 flags, and identifiers from the page's code only - the
-Vue data key after `data: () => ({` and the names of the list-valued JSON keys of the object it holds - each
-logged only if it matches a plain lower-case identifier pattern. Never an opponent, a place, a date, a URL or any
+The refresh log is public. The line holds integers, 0/1 flags, and fixed words. The Vue data key after
+`data: () => ({` and the list-valued JSON keys of its object are DEFAULT DENY (Huatuo's review on #396): logged
+as a word only when exactly one of athletics_site.DIAG_SCHEDULE_WORDS, as <x> otherwise (list keys keep their
+length), because a key shaped like an identifier can still be an opponent or a person. Never an opponent, a place, a date, a URL or any
 other value. At most 8 keys and 400 characters (the literal values are pinned here). A diagnostic that fails
 logs one short line and never fails the collection.
 """
@@ -108,19 +109,65 @@ def test_vue_schedule_page():
     ok("line starts as expected", line.startswith("  no games found: schedule markup "), line)
     for part in ("vue=schedule", "opponentKeys=3", "nuxt=0", "tables=0", "gameCards=0", "legacyGames=0"):
         ok(f"line has {part}", part in line, line)
-    ok("list-valued identifier keys with their lengths", "lists=[games=3, events=0]" in line, line)
-    ok("non-identifier and non-list keys are not logged", all(k not in line for k in ("Placeholder", "has space", "UPPER", "sample_key", "season")), line)
+    ok("allowlisted list keys by name, every other list key as <x>, with lengths",
+       "lists=[games=3, events=0, <x>=2, <x>=1, <x>=1]" in line, line)
+    ok("non-allowlisted and non-list keys never appear",
+       all(k not in line for k in ("Placeholder", "has space", "UPPER", "sample_key", "season")), line)
     ok("no value from the page reaches the line", not leaks(line), leaks(line))
     e, p = camps_check.contact_hits(line)
     ok("contact scanner finds nothing", not e and not p, e + p)
     ok("the fixture really holds every value", all(v in vue_page() for v in VALUES))
 
 
+# Huatuo's review on #396: keys that pass an identifier-SHAPE test and are still names.
+HUATUO_CASES = (
+    ("schedule", {"wyoming": [1, 2], "george_mason": [], "utah_state": [3]}, ("wyoming", "george_mason", "utah_state"),
+     "vue=schedule lists=[<x>=2, <x>=0, <x>=1]"),
+    ("roster", {"jordan_quill": [1], "lee_ortiz": [2, 3]}, ("jordan_quill", "lee_ortiz"),
+     "vue=roster lists=[<x>=1, <x>=2]"),
+    ("jordanquill", {"games": []}, ("jordanquill",), "vue=<x> lists=[games=0]"),
+)
+
+
+def huatuo_leaks() -> list[str]:
+    out = []
+    for key, obj, planted, _ in HUATUO_CASES:
+        line = athletics_site.zero_games_diagnostic(page(vue_schedule(obj, key=key)))
+        out += [f"{key}: {w}" for w in planted if w in line]
+    return out
+
+
+def test_keys_are_default_deny():
+    for key, obj, planted, want in HUATUO_CASES:
+        line = athletics_site.zero_games_diagnostic(page(vue_schedule(obj, key=key)))
+        ok(f"{key}: no planted name ({', '.join(planted)}) in the line", not any(w in line for w in planted), line)
+        ok(f"{key}: logged as '{want}'", want in line, line)
+    for seg, want in (("games", "games"), ("GAMES", "games"), ("Schedule", "schedule"), ("games_list", "<x>"),
+                      ("schedule2026", "<x>"), ("past_games", "<x>"), ("wyoming", "<x>"), ("", "<x>")):
+        got = athletics_site._diag_key(seg)
+        ok(f"_diag_key({seg!r}) is {want!r} (exact match, the list's own spelling)", got == want, got)
+
+
+def test_mutation_shape_pattern_instead_of_allowlist():
+    # the pre-review filter, a key's shape, must be caught by the leak checks above
+    import re
+    shape = re.compile(r"^[a-z][a-z0-9_]{0,29}$")
+    real = athletics_site._diag_key
+    athletics_site._diag_key = lambda k: k if shape.match(k) else "<x>"
+    try:
+        leaked = huatuo_leaks()
+    finally:
+        athletics_site._diag_key = real
+    ok("a shape-pattern filter leaks Huatuo's names and is caught", len(leaked) == 6, leaked)
+    ok("filter restored, and the allowlist leaks none", athletics_site._diag_key is real and huatuo_leaks() == [],
+       huatuo_leaks())
+
+
 def test_other_shapes():
     line = athletics_site.zero_games_diagnostic(page(vue_schedule([game(1), game(2)])))
     ok("a Vue data key holding a list logs its length only", "vue=schedule" in line and "lists=[[]=2]" in line, line)
     line = athletics_site.zero_games_diagnostic(page(vue_schedule({"games": []}, key="Schedule")))
-    ok("a non-lower-case Vue key logs as <x>", "vue=<x>" in line and "lists=[games=0]" in line, line)
+    ok("an upper-case allowlisted Vue key logs in the list's spelling", "vue=schedule" in line and "lists=[games=0]" in line, line)
     line = athletics_site.zero_games_diagnostic(page("<script>new Vue({ el: '#x', data: () => ({ schedule: not json }) });</script>"))
     ok("an unparsable object logs the key and no lists", "vue=schedule" in line and "lists=[]" in line, line)
     nuxt = ('<html><head><title>Schedule</title></head><body><div class="c-schedule">Loading...</div>'
@@ -138,28 +185,23 @@ def test_caps_are_400_characters_and_8_keys():
     line = athletics_site.zero_games_diagnostic(nine)
     keys = line.split("lists=[", 1)[1].split("]", 1)[0].split(", ")
     ok("key cap: exactly 8 keys logged, the ninth counted", len(keys) == 8 and line.endswith(" +1 more"), line)
-    long = page(vue_schedule({("k" + "x" * 28 + str(i)): [0] * 1000 for i in range(8)}))  # 8 keys, 30 letters, 4 digits
-    real = athletics_site.DIAG_MAX_LEN
-    athletics_site.DIAG_MAX_LEN = 10 ** 9
+    # With today's short allowlist words the line cannot reach 400 characters, so the length cap guards a longer
+    # list later: extend the allowlist here with eight 30-letter words and check the cap still holds.
+    words = tuple("w" + chr(97 + i) * 29 for i in range(8))
+    long = page(vue_schedule({w: [0] * 1000 for w in words}))
+    real = (athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_SCHEDULE_WORDS)
+    athletics_site.DIAG_SCHEDULE_WORDS = real[1] + words
     try:
+        athletics_site.DIAG_MAX_LEN = 10 ** 9
         free = athletics_site.zero_games_diagnostic(long)
+        athletics_site.DIAG_MAX_LEN = real[0]
+        line = athletics_site.zero_games_diagnostic(long)
     finally:
-        athletics_site.DIAG_MAX_LEN = real
+        athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_SCHEDULE_WORDS = real
     ok("length fixture goes over 400 characters uncapped", len(free) > 400, len(free))
-    line = athletics_site.zero_games_diagnostic(long)
     ok("length cap: at most 400 characters", len(line) <= 400, len(line))
     ok("length cap: dropped keys are counted", " more" in line, line)
-
-
-def test_mutation_identifier_filter():
-    real = athletics_site._IDENT
-    athletics_site._IDENT = __import__("re").compile(r".*")  # a broken filter that lets any key through
-    try:
-        line = athletics_site.zero_games_diagnostic(vue_page())
-    finally:
-        athletics_site._IDENT = real
-    ok("a key filter that lets names through is caught by the leak check", bool(leaks(line)), line)
-    ok("filter restored", athletics_site._IDENT is real)
+    ok("allowlist and cap restored", (athletics_site.DIAG_MAX_LEN, athletics_site.DIAG_SCHEDULE_WORDS) == real)
 
 
 def test_no_request():
@@ -251,8 +293,8 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
-    for case in (test_vue_schedule_page, test_other_shapes, test_caps_are_400_characters_and_8_keys,
-                 test_mutation_identifier_filter, test_no_request, test_trigger,
+    for case in (test_vue_schedule_page, test_keys_are_default_deny, test_mutation_shape_pattern_instead_of_allowlist,
+                 test_other_shapes, test_caps_are_400_characters_and_8_keys, test_no_request, test_trigger,
                  test_a_failing_diagnostic_never_fails_the_collection):
         try:
             case()

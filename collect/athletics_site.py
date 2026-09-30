@@ -382,13 +382,25 @@ def zero_staff_diagnostic(html: str, base: str, sport_path: str) -> str:
 
 
 # ---------- issue #393: a name-free line for a schedule page that yields no game ----------
-# Same rules as the #387 line above: the refresh log is public, so this line holds integers, 0/1 flags and
-# identifiers taken from the page's CODE only - the Vue data key after `data: () => ({` and the JSON keys of the
-# object it holds, each matched against a plain identifier pattern and logged only then. No text, no link, no
-# value from the page. At most DIAG_MAX_KEYS keys and DIAG_MAX_LEN characters.
+# Same rules as the #387 line above: the refresh log is public, so this line holds integers, 0/1 flags and a few
+# fixed words. DEFAULT DENY (Huatuo's review on #396): the Vue data key after `data: () => ({`, and each list-valued
+# JSON key of the object it holds, is logged as a word only when it is exactly (case-insensitive) one of
+# DIAG_SCHEDULE_WORDS - written in this list's own spelling, never the page's - and as <x> otherwise. A key's shape
+# says nothing: a site can key its lists by opponent ('wyoming') or by person ('jordan_quill'). List keys keep their
+# length (<x>=3). No text, no link, no value from the page. At most DIAG_MAX_KEYS keys and DIAG_MAX_LEN characters.
 VUE_DATA_SIG = re.compile(r"new Vue\(\{\s*el:\s*(['\"])[^'\"]*\1,\s*data:\s*\(\)\s*=>\s*\(\{\s*([A-Za-z_]\w{0,29})\s*:\s*")
-_IDENT = re.compile(r"^[a-z][a-z0-9_]{0,29}$")
+DIAG_SCHEDULE_WORDS = ("games", "events", "schedule", "schedules", "items", "data", "results", "records", "entries",
+                       "rows", "list", "matches", "fixtures", "opponents", "teams", "seasons", "months", "weeks", "dates",
+                       "sports", "upcoming", "past", "completed", "roster")
 DIAG_MAX_KEYS = 8
+
+
+def _diag_key(key: str) -> str:
+    low = key.lower()
+    for word in DIAG_SCHEDULE_WORDS:
+        if low == word:
+            return word
+    return "<x>"
 
 
 def zero_games_diagnostic(html: str) -> str:
@@ -399,14 +411,14 @@ def zero_games_diagnostic(html: str) -> str:
     lists: list[str] = []
     m = VUE_DATA_SIG.search(html)
     if m:
-        vue = m.group(2) if _IDENT.match(m.group(2)) else "<x>"
+        vue = _diag_key(m.group(2))
         if html[m.end():m.end() + 1] in "{[":
             try:
                 obj, _ = json.JSONDecoder().raw_decode(html, m.end())
             except ValueError:
                 obj = None
             if isinstance(obj, dict):
-                lists = [f"{k}={len(v)}" for k, v in obj.items() if isinstance(v, list) and _IDENT.match(k)]
+                lists = [f"{_diag_key(k)}={len(v)}" for k, v in obj.items() if isinstance(v, list)]
             elif isinstance(obj, list):
                 lists = [f"[]={len(obj)}"]
     more = max(0, len(lists) - DIAG_MAX_KEYS)
