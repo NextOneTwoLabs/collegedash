@@ -564,6 +564,7 @@ def cmd_refresh(args):
     # without either, a run with player bios fetches it too, and a --no-bios run keeps the stored one
     results += collect_plan(plan, reg, bios=not args.no_bios, coach_bios=args.coach_bios or not args.no_bios,
                             workers=args.workers, deadline=deadline)
+    write_coach_bio_diag()  # issue #168 step 1: once, from this (the main) thread, after every collector thread
     if not plan and not run_rpi:
         common.log("nothing to refresh")
         return 0
@@ -577,6 +578,16 @@ def cmd_refresh(args):
         report_robots(common.robots_report(elapsed_seconds=_clock() - started, workers=args.workers))
     build.build(common.load_registry())
     return report_refresh(results, threshold=args.fail_threshold, mode=args.mode, time_budget=budget)
+
+
+def write_coach_bio_diag() -> None:
+    """The coach-bio diagnostics file (issue #168 step 1): written only when COACH_BIO_DIAG_DIR is set. A crash
+    here is one log line and never changes the refresh's exit code."""
+    try:
+        from collect import coach_bio_diag
+        coach_bio_diag.write_report()
+    except Exception as e:
+        common.log(f"!! coach-bio diag write failed: {type(e).__name__}")
 
 
 def report_robots(rep: dict) -> None:

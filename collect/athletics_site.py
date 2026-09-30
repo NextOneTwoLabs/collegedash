@@ -11,10 +11,11 @@ career notes are available; pass bios=False to skip.
 
 from __future__ import annotations
 
+import json
 import re
 from urllib.parse import urljoin, urlparse
 
-from . import adapters, coach_bio, common
+from . import adapters, coach_bio, coach_bio_diag, common
 
 NAME = "athletics"
 # Club names as they appear in bios: 1-4 capitalised words ending in a club-ish token.
@@ -189,6 +190,13 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     shtml, _ = common.fetch_text(u["schedule"], max_age_hours=12)
     sched = ad.parse_schedule(shtml, base)
     common.log(f"  {sched['season']} schedule: {len(sched['games'])} games")
+    if not sched["games"]:
+        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Say, name-free,
+        # what the page holds instead, so the parser fix can be planned from evidence. Log-only; no request.
+        try:
+            common.log(zero_games_diagnostic(shtml))
+        except Exception as e:
+            common.log(f"  !! zero-games diagnostic failed ({type(e).__name__})")
     sched_hist = {}
     for y in range(season - 1, season - 1 - seasons_back, -1):
         try:
@@ -286,7 +294,18 @@ def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
     common.log(f"  head coach bio: {head['name']} first season {parsed['firstSeason']}"
                + (" (the page contradicts itself)" if parsed["conflict"] else "")
                + f" from {len(parsed['statements'])} statement(s)")
-    return {"name": head["name"], "url": head["bioUrl"], **parsed}
+    result = {"name": head["name"], "url": head["bioUrl"], **parsed}
+    _coach_bio_diag(program, html, head["name"], bool(parsed["statements"]))
+    return result
+
+
+def _coach_bio_diag(program: dict, html: str, name: str, matched: bool) -> None:
+    """Issue #168 step 1: hand the page already in memory to coach_bio_diag, after the result above is built.
+    Plain values only, never the result; any error is one log line and changes nothing that is returned."""
+    try:
+        coach_bio_diag.observe(program.get("slug"), program.get("division"), html, name, matched)
+    except Exception as e:  # a diagnostic must never cost a collection
+        common.log(f"  coach-bio diag failed: {type(e).__name__}")
 
 
 def school_names(program: dict) -> list[str]:
@@ -370,6 +389,62 @@ def zero_staff_diagnostic(html: str, base: str, sport_path: str) -> str:
     while len(out) > DIAG_MAX_LEN and shown:
         shown = shown[:-1]
         out = line(shown, len(links) - len(shown))
+    return out[:DIAG_MAX_LEN]
+
+
+# ---------- issue #393: a name-free line for a schedule page that yields no game ----------
+# Same rules as the #387 line above: the refresh log is public, so this line holds integers, 0/1 flags and a few
+# fixed words. DEFAULT DENY (Huatuo's review on #396): the Vue data key after `data: () => ({`, and each list-valued
+# JSON key of the object it holds, is logged as a word only when it is exactly (case-insensitive) one of
+# DIAG_SCHEDULE_WORDS - written in this list's own spelling, never the page's - and as <x> otherwise. A key's shape
+# says nothing: a site can key its lists by opponent ('wyoming') or by person ('jordan_quill'). List keys keep their
+# length (<x>=3). No text, no link, no value from the page. At most DIAG_MAX_KEYS keys and DIAG_MAX_LEN characters.
+VUE_DATA_SIG = re.compile(r"new Vue\(\{\s*el:\s*(['\"])[^'\"]*\1,\s*data:\s*\(\)\s*=>\s*\(\{\s*([A-Za-z_]\w{0,29})\s*:\s*")
+DIAG_SCHEDULE_WORDS = ("games", "events", "schedule", "schedules", "items", "data", "results", "records", "entries",
+                       "rows", "list", "matches", "fixtures", "opponents", "teams", "seasons", "months", "weeks", "dates",
+                       "sports", "upcoming", "past", "completed", "roster")
+DIAG_MAX_KEYS = 8
+
+
+def _diag_key(key: str) -> str:
+    low = key.lower()
+    for word in DIAG_SCHEDULE_WORDS:
+        if low == word:
+            return word
+    return "<x>"
+
+
+def zero_games_diagnostic(html: str) -> str:
+    """One name-free log line describing a schedule page that yielded no game (issue #393). Makes no request."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    vue = "-"
+    lists: list[str] = []
+    m = VUE_DATA_SIG.search(html)
+    if m:
+        vue = _diag_key(m.group(2))
+        if html[m.end():m.end() + 1] in "{[":
+            try:
+                obj, _ = json.JSONDecoder().raw_decode(html, m.end())
+            except ValueError:
+                obj = None
+            if isinstance(obj, dict):
+                lists = [f"{_diag_key(k)}={len(v)}" for k, v in obj.items() if isinstance(v, list)]
+            elif isinstance(obj, list):
+                lists = [f"[]={len(obj)}"]
+    more = max(0, len(lists) - DIAG_MAX_KEYS)
+    lists = lists[:DIAG_MAX_KEYS]
+    counts = (f"bytes={len(html)} tables={len(soup.find_all('table'))} gameCards={len(soup.select('.s-game-card'))} "
+              f"legacyGames={len(soup.select('li.sidearm-schedule-game'))} nuxt={int('__NUXT_DATA__' in html)} "
+              f"opponentKeys={html.count(chr(34) + 'opponent' + chr(34))} vue={vue}")
+
+    def line(keys, extra):
+        return f"  no games found: schedule markup {counts} lists=[{', '.join(keys)}]" + (f" +{extra} more" if extra > 0 else "")
+    out = line(lists, more)
+    while len(out) > DIAG_MAX_LEN and lists:
+        lists = lists[:-1]
+        more += 1
+        out = line(lists, more)
     return out[:DIAG_MAX_LEN]
 
 
