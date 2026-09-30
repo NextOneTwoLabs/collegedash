@@ -100,11 +100,13 @@ async function post(env, body, { headers = {}, t } = {}) {
 
 // ---------- configuration ----------
 
-test('wrangler.toml: RL_PERF on 3465 at 10/60 s, the perf dataset, and both switches, sampling off', async () => {
+test('wrangler.toml: RL_PERF on 3465 at 10/60 s, the perf dataset, and both switches, sampling every page load', async () => {
   const toml = (await readFile(new URL('../wrangler.toml', import.meta.url), 'utf8')).replace(/\r\n/g, '\n');
   assert.match(toml, /\[\[ratelimits\]\]\nname = "RL_PERF"[^\n]*\nnamespace_id = "3465"\nsimple = \{ limit = 10, period = 60 \}/);
   assert.match(toml, /\[\[analytics_engine_datasets\]\]\nbinding = "PERF_STATS"\ndataset = "collegedash_perf"/);
-  assert.match(toml, /^PERF_SAMPLE = "0"$/m, 'PR 1 ships with sampling off (owner: the 7-day request volume comes first)');
+  // owner decision 2026-09-30 (#394): every page load, on the account's 7-day volume. The About page and
+  // docs/data-api.md say "every page load" (tests/perf_page.test.mjs), so a change here must change them too.
+  assert.match(toml, /^PERF_SAMPLE = "1"$/m, 'sampling is every page load');
   assert.match(toml, /^PERF_SERVER = "on"$/m);
   const ids = [...toml.matchAll(/namespace_id = "(\d+)"/g)].map(m => m[1]);
   assert.deepEqual(ids, [...new Set(ids)], 'every limiter has its own namespace id');
@@ -259,6 +261,22 @@ test('/api/perf: a good report writes one page point of the exact shape; always 
     blobs: ['page', 'list', 'programs', 'phone', 'landing', 'production', 'network'],
     doubles: [1, 12, 80, 310, 171000, 1900000, 120, 260, 1450, 10],
   }]);
+});
+
+test('/api/perf at the owner\'s rate of 1: each report stands for one page load (double10 = 1); an old rate is refused', async () => {
+  const { env } = await setup({ PERF_SAMPLE: '1' });
+  const t = await token();
+  const res = await run(env, req('/api/v1/programs', { headers: { cookie: cookie(t) } }));
+  assert.equal(res.headers.get('x-collegedash-perf'), '1');
+  await post(env, beacon({ rate: 1 }), { t });
+  const pagePoints = env.PERF_STATS.points.filter(p => p.blobs[0] === 'page');
+  assert.equal(pagePoints.length, 1);
+  assert.equal(pagePoints[0].doubles[9], 1, 'double10: loads per report');
+  await post(env, beacon({ rate: 0.1 }), { t });
+  await post(env, beacon({ rate: '1' }), { t });
+  assert.equal(env.PERF_STATS.points.filter(p => p.blobs[0] === 'page').length, 1, 'a page that latched 0.1, or a string rate, is refused');
+  await post(env, beacon({ rate: 1, view: 'profile', res: 'program', tx: 21437, size: 21437 }), { t });
+  assert.deepEqual(env.PERF_STATS.points.filter(p => p.blobs[0] === 'page')[1].doubles.slice(4, 6), [0, 0], 'profile sizes still 0 at rate 1');
 });
 
 test('/api/perf: every refusal is 204 and writes nothing', async () => {

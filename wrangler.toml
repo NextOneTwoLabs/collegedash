@@ -43,10 +43,11 @@ ACCESS_TEAM_DOMAIN = "https://broad-snowflake-934e.cloudflareaccess.com"
 ACCESS_AUD = "b9c9162446e83350b83b6e6cc4ee0b4d386a1cf55e3fabb6b52f4822a1e5080b"
 # Speed measurements (issue #394, api/perf.mjs), the two switches. PERF_SAMPLE is the share of page loads that send
 # timing reports to POST /api/perf, a number in (0, 1]; "0" (or anything else) is off: pages send none and every
-# report is refused. It stays "0" until the owner has read the account's 7-day Worker request volume (#394, owner
-# decision 4); the approved start is "0.1", subject to the plan's quota rule. PERF_SERVER "on" writes one timing point
+# report is refused. "1", every page load, is the owner's decision of 2026-09-30 (#394), made on the account's 7-day
+# volume (peak about 6.6k requests a day; collegedash about 25 page loads a day). The plan's quota rule still holds:
+# 3 x rate x page loads a day at most 2,000, and no reports at all while the account is above 70,000 requests a day. PERF_SERVER "on" writes one timing point
 # for a routine "/" or /api/v1 request; anything else writes none. Server-Timing headers are sent either way.
-PERF_SAMPLE = "0"
+PERF_SAMPLE = "1"
 PERF_SERVER = "on"
 
 [[kv_namespaces]]

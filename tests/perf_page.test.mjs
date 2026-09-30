@@ -97,6 +97,42 @@ test('latch: the first answer carrying a rate decides, once; sampled when random
   assert.equal(p.PERF.rate, null, 'a broken answer throws nothing');
 });
 
+test('rate 1 (the owner\'s decision, #394): every page load is sampled, whatever Math.random gives', async () => {
+  for (const random of [0, 0.5, 0.999999]) {
+    const p = load({ random, entries: () => [entry()] });
+    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    assert.equal(p.PERF.sampled, true, String(random));
+    assert.equal(p.sent.length, 1, String(random));
+    const body = await bodyOf(p.sent[0]);
+    assert.equal(body.rate, 1);
+    assert.ok(pagePoint(JSON.stringify(body), 1, new Request('https://college.nextonetwo.com/api/perf')), 'the Worker accepts it at rate 1');
+    assert.equal(pagePoint(JSON.stringify(body), 1, new Request('https://college.nextonetwo.com/api/perf')).doubles[9], 1, 'one page load per report');
+  }
+});
+
+// The wording the owner approved on #394 (round-2 plan, §6), exactly, with only the rate phrase changed by the owner's
+// decision of 2026-09-30: "some page loads (currently about 1 in 10) send" -> "every page load sends".
+const APPROVED_ROUND_2 = 'To find out how fast the site loads, some page loads (currently about 1 in 10) send a short timing report after a '
+  + 'view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or '
+  + 'desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps '
+  + 'data. Our server also records how long it took to answer most data requests. We don\'t record your IP address, a session or '
+  + 'visitor id, your browser\'s user agent, the page address, the program you opened, or anything you searched for. Reports are kept '
+  + 'as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.';
+const APPROVED_NOW = APPROVED_ROUND_2.replace('some page loads (currently about 1 in 10) send', 'every page load sends');
+
+test('the About page card and docs/data-api.md say exactly the approved wording, with "every page load"', () => {
+  assert.notEqual(APPROVED_NOW, APPROVED_ROUND_2, 'the rate phrase was found and changed');
+  const faq = fn('renderFaq');
+  const card = /<div class="card"><h3>Speed measurements<\/h3>\s*<p>([^<]*)<\/p><\/div>/.exec(faq);
+  assert.ok(card, 'the About page has the card');
+  assert.equal(card[1], APPROVED_NOW);
+  const docs = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'data-api.md'), 'utf8').replace(/\r\n/g, '\n');
+  const quote = /> \*\*Speed measurements\.\*\* ([\s\S]*?)\n\n/.exec(docs);
+  assert.ok(quote, 'docs/data-api.md quotes it');
+  assert.equal(quote[1].replace(/\n> /g, ' ').replace(/\s+/g, ' ').trim(), APPROVED_NOW);
+  assert.ok(!/1 in 10/.test(faq) && !/currently about 1 in 10/.test(docs), 'the old rate phrase is gone from both');
+});
+
 test('perfRes: only the four measured files, never a path with anything else in it', () => {
   const { perfRes } = load();
   assert.equal(perfRes('/api/v1/programs'), 'programs');
