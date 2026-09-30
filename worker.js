@@ -82,17 +82,23 @@ export default {
   // Not a handler: the ask vocabulary and pure helpers, exposed for the tests (tests/ask_*.test.mjs),
   // which pin them to public/index.html and run the eval set offline through them.
   get ask() { return ASK; },
+  // Not a handler either: the seam above, for tests/perf_worker.test.mjs only.
+  get internals() { return H; },
 };
+
+// The session functions v1() and page() call, reached through one object so the tests can make one of them throw
+// (issue #394: the fault paths that must still write at most one data point). Nothing in production replaces them.
+const H = { gate, pageCookie, decorate };
 
 // /api/v1/* behind the session gate (issue #345, api/session.mjs). The gate has its own catches: a throw there
 // is a session fault, served ungated as JSON (never the assets' HTML), and the key path answers its own faults
 // with 503 before any of this. Ported from ecnl-dashboard's worker.js (#90, #93).
 async function v1(request, env) {
   let verdict;
-  try { verdict = await gate(request, env); } catch (err) { verdict = sessionFault(request, env, err); }
+  try { verdict = await H.gate(request, env); } catch (err) { verdict = sessionFault(request, env, err); }
   if (verdict.response) return verdict.response;
   const response = await dataApi(request, env);
-  try { return decorate(response, verdict); } catch (err) {
+  try { return H.decorate(response, verdict); } catch (err) {
     sessionFault(request, env, err);
     try { response.headers.set(HEADER, 'error'); } catch {}
     return response;
@@ -104,8 +110,8 @@ async function v1(request, env) {
 async function page(request, env) {
   const response = await env.ASSETS.fetch(request);
   try {
-    const cookie = response.status < 400 ? await pageCookie(request, env) : null;
-    if (cookie) return decorate(response, { cookie });
+    const cookie = response.status < 400 ? await H.pageCookie(request, env) : null;
+    if (cookie) return H.decorate(response, { cookie });
   } catch (err) { sessionFault(request, env, err); }
   return response;
 }
