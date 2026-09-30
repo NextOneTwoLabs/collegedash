@@ -405,7 +405,8 @@ test('phase 2: wrangler.toml declares RL_KEY 3464 at 60/60 s and its own API_KEY
   const ids = [...toml.matchAll(/^namespace_id = "(\d+)"$/gm)].map(m => m[1]);
   // RL_SESSION/RL_ANON (3461/3462) may be absent: the rollback PR (claude/345-rollback-limits) removes them
   assert.equal(new Set(ids).size, ids.length, 'each limiter has its own namespace_id');
-  assert.ok(ids.includes('3463') && ids.includes('3464') && ids.every(id => /^346[1-4]$/.test(id)), 'this site\'s 3461-3464: ' + ids);
+  // 3465 is RL_PERF, the speed reports' limiter (issue #394, checked by tests/perf_worker.test.mjs)
+  assert.ok(ids.includes('3463') && ids.includes('3464') && ids.every(id => /^346[1-5]$/.test(id)), 'this site\'s 3461-3465: ' + ids);
   const { env, good } = await setup({ extra: { API_KEYS: undefined, RL_KEY: undefined } });
   const { result } = await quietly(() => gate(req('/api/v1/programs', bearer(good.key)), env, T0));
   assert.equal(result.response.status, 503, 'fails closed without a store');

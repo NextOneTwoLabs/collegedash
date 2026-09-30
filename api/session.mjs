@@ -144,11 +144,14 @@ async function keyGate(request, env, about, ip, nowMs) {
 // What is recorded about a request, and only for non-routine ones: the outcome, the route kind, the
 // Sec-Fetch-Site class and production or preview. No IP address, session id, user agent, key or hash. At most
 // one data point per request. A failed write (quota, missing binding) never changes the response.
-function describe(request) {
+// `tally` is the request's own write counter (issue #394): every point written for this request, in either dataset,
+// adds one, so the fault handler and the timing point can see that one was already written.
+function describe(request, tally) {
   const url = new URL(request.url);
   const resource = resolveResource(url.pathname);
   const header = request.headers.get('sec-fetch-site');
   return {
+    tally,
     kind: url.pathname === '/' ? 'page' : resource.kind || (resource.status === 400 ? 'invalid' : 'unknown'),
     sfs: header ? (['same-origin', 'same-site', 'cross-site', 'none'].includes(header) ? header : 'other') : 'absent',
     // Preview versions run with production's bindings and vars, so only the host tells them apart.
@@ -159,10 +162,11 @@ function describe(request) {
 // Key outcomes add blob5, the key id (never the key) or `-`, and blob6, the reason. The id is one a record
 // exists for, except for `key-in-url`, which keeps the unverified id from the URL because it tells the owner
 // which key to revoke. Points with a verified id are indexed by it, so per-key sums sample fairly.
-function count(env, outcome, { kind, sfs, site }, key) {
+function count(env, outcome, { kind, sfs, site, tally }, key) {
   const blobs = [outcome, kind, sfs, site];
   if (key) blobs.push(key.id || '-', key.reason || '');
   const index = key?.id && key.id !== '-' && outcome !== 'key-in-url' ? key.id : outcome;
+  if (tally) tally.points++; // before the write: a write that fails still counts, so it can never let a second through
   try { env.API_GATE_STATS?.writeDataPoint({ indexes: [index], blobs, doubles: [1] }); } catch {}
 }
 
@@ -171,8 +175,8 @@ const allowed = async (binding, key) => !binding || (await binding.limit({ key }
 // Called by the Worker for every /api/v1* request before the data handler.
 // -> { response } to answer now (429; for keys also 400, 401 or 503), or { session, cookie } to serve and
 // decorate.
-export async function gate(request, env, nowMs = Date.now()) {
-  const about = describe(request);
+export async function gate(request, env, nowMs = Date.now(), tally) {
+  const about = describe(request, tally);
   const ip = ipKey(request.headers.get('cf-connecting-ip'));
 
   // First, and without SESSION_SECRET: a key-shaped string anywhere in the URL is refused; an Authorization
@@ -225,19 +229,23 @@ export async function gate(request, env, nowMs = Date.now()) {
 
 // For the HTML entry ("/"): a Set-Cookie value when the visitor has no usable session or it is due for renewal;
 // null otherwise, and always null when sessions are off.
-export async function pageCookie(request, env, nowMs = Date.now()) {
+export async function pageCookie(request, env, nowMs = Date.now(), tally) {
   if (!usableSecret(env.SESSION_SECRET)) return null;
   const v = await verify(env.SESSION_SECRET, readCookie(request.headers.get('cookie')), nowMs);
   if (v.state === 'valid') return null;
-  if (v.state !== 'renew') count(env, 'minted', describe(request));
+  if (v.state !== 'renew') count(env, 'minted', describe(request, tally));
   return setCookie(await mint(env.SESSION_SECRET, nowMs));
 }
 
 // A throw anywhere in the session code: logged and counted, and the request is served ungated. Never reached
 // from the key path, which answers its own faults with 503.
-export function sessionFault(request, env, err) {
+//
+// At most one data point per request (issue #394): when the gate or pageCookie already wrote this request's point,
+// the fault is not counted over it. The request keeps its gate outcome, the refusal counts #345's reports are built
+// on, and the fault is still logged. A throw after a successful gate is a code bug, not traffic (Bianque, #394).
+export function sessionFault(request, env, err, tally) {
   console.error('session', err && err.message);
-  try { count(env, 'gate-error', describe(request)); } catch {}
+  if (!tally || tally.points === 0) { try { count(env, 'gate-error', describe(request, tally)); } catch {} }
   return { session: 'error' };
 }
 
