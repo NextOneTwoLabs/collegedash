@@ -21,17 +21,21 @@ const BLOCK = HTML.slice(START, END);
 const fn = name => { const a = HTML.indexOf(`function ${name}(`); return HTML.slice(a, HTML.indexOf('\n}\n', a)); };
 
 // A fresh copy of the block with stub globals. `now` is the clock the tests move; frames run at once.
-function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 }, hidden = false, frameWait = 0 } = {}) {
-  const sent = [], fetched = [];
+// duringFrame(n): called as the n-th animation frame is requested, before it runs (a test hides the page there).
+function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 }, hidden = false, frameWait = 0,
+  duringFrame = null } = {}) {
+  const sent = [], fetched = [], listeners = {};
+  let frames = 0;
   const clock = { now: 0 };
   const byName = entries || (() => []);
   const sandbox = {
     Promise, Math: Object.assign(Object.create(Math), { random: () => random }), Number, JSON, Set, URL, Blob, setTimeout,
     location: { href: 'https://college.nextonetwo.com/#/' },
-    document: { get visibilityState() { return sandbox.hidden ? 'hidden' : 'visible'; } }, hidden,
+    document: { get visibilityState() { return sandbox.hidden ? 'hidden' : 'visible'; },
+      addEventListener(type, f) { (listeners[type] ||= []).push(f); } }, hidden,
     performance: { now: () => clock.now, getEntriesByName: n => byName(n) },
     // frameWait: how long each frame is held (a browser holds frames while the page is hidden)
-    requestAnimationFrame: f => { clock.now += frameWait; f(); },
+    requestAnimationFrame: f => { frames++; if (duringFrame) duringFrame(frames); clock.now += frameWait; f(); },
     matchMedia: q => ({ matches: q === '(pointer: coarse)' ? coarse : false }),
     screen,
     navigator: sendBeacon === 'absent' ? {} : { sendBeacon(url, blob) { if (sendBeacon === 'throws') throw new Error('x'); sent.push({ url, blob }); return sendBeacon === 'ok'; } },
@@ -39,7 +43,9 @@ function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, sc
   };
   vm.createContext(sandbox);
   new vm.Script(BLOCK + '\n;globalThis.__perf = { PERF, PERF_VIEWS, perfDevice, perfLatch, perfRes, perfLoaded, perfBody, perfSend, perfRendered, perfView };', { filename: 'public/index.html' }).runInContext(sandbox);
-  return { ...sandbox.__perf, sent, fetched, clock, setHidden: v => { sandbox.hidden = v; } };
+  // setHidden: the page is hidden or shown, and the browser tells the page's visibilitychange listeners, as it does
+  const setHidden = v => { sandbox.hidden = v; for (const f of listeners.visibilitychange || []) f(); };
+  return { ...sandbox.__perf, sent, fetched, clock, listeners, setHidden };
 }
 const answer = rate => ({ headers: { get: k => (k === 'x-collegedash-perf' ? rate : null) } });
 const settle = () => new Promise(r => setTimeout(r, 0));
@@ -60,12 +66,30 @@ test('the block is in the page, and the page calls it where the plan says', () =
   assert.equal((route.match(/perfView\('list'/g) || []).length, 2, 'the list and a conference deep link');
 });
 
-test('never on visibilitychange, pagehide or a back-forward cache restore; never the user agent', () => {
+test('never sent on visibilitychange, pagehide or a back-forward cache restore; never the user agent', () => {
   const code = BLOCK.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, ''); // the code, not its comments
   assert.ok(code.includes('function perfSend('), 'the code is really there');
-  for (const word of ['visibilitychange', 'pagehide', 'pageshow', 'beforeunload', 'unload', 'userAgent', 'userAgentData', 'navigator.connection']) {
+  for (const word of ['pagehide', 'pageshow', 'beforeunload', 'unload', 'userAgent', 'userAgentData', 'navigator.connection']) {
     assert.ok(!code.includes(word), word);
   }
+  // exactly one visibilitychange listener, record-only (#399 review): it notes when the page was hidden
+  assert.equal((code.match(/visibilitychange/g) || []).length, 1, 'one visibilitychange listener, nothing else');
+  assert.match(code, /document\.addEventListener\('visibilitychange', \(\) => \{ if \(document\.visibilityState === 'hidden'\) PERF\.hiddenAt = performance\.now\(\); \}\)/);
+});
+
+test('the visibilitychange listener only records: hiding and showing the page sends nothing', async () => {
+  const p = load({ random: 0, entries: () => [entry()] });
+  p.perfLatch(answer('1'));
+  p.perfLoaded('/api/v1/programs');
+  assert.equal(p.listeners.visibilitychange?.length, 1, 'the block registered its one listener');
+  p.clock.now = 5000;
+  p.setHidden(true);
+  assert.equal(p.PERF.hiddenAt, 5000, 'it records when the page was hidden');
+  p.setHidden(false);
+  p.setHidden(true);
+  p.setHidden(false);
+  await settle();
+  assert.equal(p.sent.length + p.fetched.length, 0, 'and never sends');
 });
 
 test('device: phone, tablet or desktop from pointer and the short side of the screen', () => {
@@ -255,14 +279,44 @@ test('a view drawn while the page is hidden is not reported, and does not use up
   assert.equal(p.sent.length, 1, 'shown again: the next list view is reported');
 });
 
-test('frames held for over a second (hidden in between) drop the report: the time was not drawing', async () => {
-  const p = load({ random: 0, frameWait: 600, entries: () => [entry()] });
-  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
-  assert.equal(p.sent.length, 0, 'two frames of 600 ms');
+test('a slow paint on a visible page is reported, however long: that is the tail #395 needs', async () => {
+  // Bianque, #399: the landing list's first frame lays out about 1,000 rows, and on a low-end phone that alone can take
+  // seconds. Nothing but a real hide may drop it.
+  for (const frameWait of [1000, 1500, 2500]) {
+    const p = load({ random: 0, frameWait, entries: () => [entry()] });
+    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    assert.equal(p.sent.length, 1, `two frames of ${frameWait} ms, visible: reported`);
+    assert.equal((await bodyOf(p.sent[0])).render, 50 + 2 * frameWait, 'render counts to the drawn frame');
+  }
   const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
   await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
-  assert.equal(q.sent.length, 1, 'normal frames: sent');
-  assert.equal((await bodyOf(q.sent[0])).render, 82, 'render still counts to the drawn frame (50 + 2 x 16)');
+  assert.equal((await bodyOf(q.sent[0])).render, 82, 'normal frames (50 + 2 x 16)');
+});
+
+test('a hide between draw and paint drops the report and frees its view kind', async () => {
+  let p;
+  // the page is hidden as the second frame is requested, and shown again later: the browser held the frame meanwhile
+  p = load({ random: 0, frameWait: 16, entries: () => [entry()], duringFrame: n => { if (n === 2) { p.clock.now += 5; p.setHidden(true); p.clock.now += 4000; p.setHidden(false); } } });
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0, 'hidden in between: dropped');
+  assert.equal(p.PERF.sent.has('list'), false, 'and the list kind is free again');
+  assert.equal(p.PERF.sent.size, 0, 'no slot used');
+  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  assert.equal(p.sent.length, 1, 'a later list view is reported');
+  // a hide before the view was drawn (and long over) does not drop a later view's report
+  const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
+  q.clock.now = 100;
+  q.setHidden(true);
+  q.setHidden(false);
+  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(q.sent.length, 1, 'an earlier hide is not this view\'s');
+});
+
+test('a report that cannot be measured frees its view kind', async () => {
+  const p = load({ random: 0, entries: () => [] }); // no resource timing entry: perfBody gives null
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0);
+  assert.equal(p.PERF.sent.size, 0, 'nothing sent, nothing used up');
 });
 
 test('transport: sendBeacon, else fetch with keepalive; nothing throws', async () => {
