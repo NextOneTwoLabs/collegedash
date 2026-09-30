@@ -163,7 +163,7 @@ GROUP BY key_id, outcome ORDER BY requests DESC
 
 What visitors are told (owner-approved wording, #394):
 
-> **Speed measurements.** To find out how fast the site loads, some page loads (currently about 1 in 10) send a short
+> **Speed measurements.** To find out how fast the site loads, every page load sends a short
 > timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether
 > the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus
 > the size of the shared list, trends and camps data. Our server also records how long it took to answer most data
@@ -176,7 +176,11 @@ What visitors are told (owner-approved wording, #394):
 - **What the Worker sees.** It sees the IP address, user agent and cookie on every request, as it always has, and writes none of them.
 - **Retention.** Three months is Cloudflare's documented figure, unverified here.
 
-**Sampling is off (`PERF_SAMPLE = "0"`) until the owner has read the account's 7-day request volume.** Until then, only the server's own timing is recorded.
+**Sampling covers every page load (`PERF_SAMPLE = "1"`),** the owner's decision of 2026-09-30 on the account's 7-day volume (#394). The same wording is on the site's About page. **The quota rule still holds:**
+- 3 × rate × page loads a day must stay at most 2,000;
+- no reports at all while the account is above 70,000 Worker requests a day.
+
+If traffic grows past either limit, lower `PERF_SAMPLE`, and change "every page load" here and on the About page with it.
 
 **Server-Timing.**
 - Every answer to `/` and `/api/v1/*` carries `Server-Timing: gate;dur=…, data;dur=…, total;dur=…`. The answer to `/` has no `gate`.

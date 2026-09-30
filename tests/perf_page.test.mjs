@@ -21,15 +21,21 @@ const BLOCK = HTML.slice(START, END);
 const fn = name => { const a = HTML.indexOf(`function ${name}(`); return HTML.slice(a, HTML.indexOf('\n}\n', a)); };
 
 // A fresh copy of the block with stub globals. `now` is the clock the tests move; frames run at once.
-function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 } } = {}) {
-  const sent = [], fetched = [];
+// duringFrame(n): called as the n-th animation frame is requested, before it runs (a test hides the page there).
+function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 }, hidden = false, frameWait = 0,
+  duringFrame = null } = {}) {
+  const sent = [], fetched = [], listeners = {};
+  let frames = 0;
   const clock = { now: 0 };
   const byName = entries || (() => []);
   const sandbox = {
     Promise, Math: Object.assign(Object.create(Math), { random: () => random }), Number, JSON, Set, URL, Blob, setTimeout,
     location: { href: 'https://college.nextonetwo.com/#/' },
+    document: { get visibilityState() { return sandbox.hidden ? 'hidden' : 'visible'; },
+      addEventListener(type, f) { (listeners[type] ||= []).push(f); } }, hidden,
     performance: { now: () => clock.now, getEntriesByName: n => byName(n) },
-    requestAnimationFrame: f => f(),
+    // frameWait: how long each frame is held (a browser holds frames while the page is hidden)
+    requestAnimationFrame: f => { frames++; if (duringFrame) duringFrame(frames); clock.now += frameWait; f(); },
     matchMedia: q => ({ matches: q === '(pointer: coarse)' ? coarse : false }),
     screen,
     navigator: sendBeacon === 'absent' ? {} : { sendBeacon(url, blob) { if (sendBeacon === 'throws') throw new Error('x'); sent.push({ url, blob }); return sendBeacon === 'ok'; } },
@@ -37,7 +43,9 @@ function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, sc
   };
   vm.createContext(sandbox);
   new vm.Script(BLOCK + '\n;globalThis.__perf = { PERF, PERF_VIEWS, perfDevice, perfLatch, perfRes, perfLoaded, perfBody, perfSend, perfRendered, perfView };', { filename: 'public/index.html' }).runInContext(sandbox);
-  return { ...sandbox.__perf, sent, fetched, clock };
+  // setHidden: the page is hidden or shown, and the browser tells the page's visibilitychange listeners, as it does
+  const setHidden = v => { sandbox.hidden = v; for (const f of listeners.visibilitychange || []) f(); };
+  return { ...sandbox.__perf, sent, fetched, clock, listeners, setHidden };
 }
 const answer = rate => ({ headers: { get: k => (k === 'x-collegedash-perf' ? rate : null) } });
 const settle = () => new Promise(r => setTimeout(r, 0));
@@ -58,12 +66,30 @@ test('the block is in the page, and the page calls it where the plan says', () =
   assert.equal((route.match(/perfView\('list'/g) || []).length, 2, 'the list and a conference deep link');
 });
 
-test('never on visibilitychange, pagehide or a back-forward cache restore; never the user agent', () => {
+test('never sent on visibilitychange, pagehide or a back-forward cache restore; never the user agent', () => {
   const code = BLOCK.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, ''); // the code, not its comments
   assert.ok(code.includes('function perfSend('), 'the code is really there');
-  for (const word of ['visibilitychange', 'pagehide', 'pageshow', 'beforeunload', 'unload', 'userAgent', 'userAgentData', 'navigator.connection']) {
+  for (const word of ['pagehide', 'pageshow', 'beforeunload', 'unload', 'userAgent', 'userAgentData', 'navigator.connection']) {
     assert.ok(!code.includes(word), word);
   }
+  // exactly one visibilitychange listener, record-only (#399 review): it notes when the page was hidden
+  assert.equal((code.match(/visibilitychange/g) || []).length, 1, 'one visibilitychange listener, nothing else');
+  assert.match(code, /document\.addEventListener\('visibilitychange', \(\) => \{ if \(document\.visibilityState === 'hidden'\) PERF\.hiddenAt = performance\.now\(\); \}\)/);
+});
+
+test('the visibilitychange listener only records: hiding and showing the page sends nothing', async () => {
+  const p = load({ random: 0, entries: () => [entry()] });
+  p.perfLatch(answer('1'));
+  p.perfLoaded('/api/v1/programs');
+  assert.equal(p.listeners.visibilitychange?.length, 1, 'the block registered its one listener');
+  p.clock.now = 5000;
+  p.setHidden(true);
+  assert.equal(p.PERF.hiddenAt, 5000, 'it records when the page was hidden');
+  p.setHidden(false);
+  p.setHidden(true);
+  p.setHidden(false);
+  await settle();
+  assert.equal(p.sent.length + p.fetched.length, 0, 'and never sends');
 });
 
 test('device: phone, tablet or desktop from pointer and the short side of the screen', () => {
@@ -95,6 +121,42 @@ test('latch: the first answer carrying a rate decides, once; sampled when random
   p.perfLatch(null);
   p.perfLatch({ headers: { get() { throw new Error('x'); } } });
   assert.equal(p.PERF.rate, null, 'a broken answer throws nothing');
+});
+
+test('rate 1 (the owner\'s decision, #394): every page load is sampled, whatever Math.random gives', async () => {
+  for (const random of [0, 0.5, 0.999999]) {
+    const p = load({ random, entries: () => [entry()] });
+    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    assert.equal(p.PERF.sampled, true, String(random));
+    assert.equal(p.sent.length, 1, String(random));
+    const body = await bodyOf(p.sent[0]);
+    assert.equal(body.rate, 1);
+    assert.ok(pagePoint(JSON.stringify(body), 1, new Request('https://college.nextonetwo.com/api/perf')), 'the Worker accepts it at rate 1');
+    assert.equal(pagePoint(JSON.stringify(body), 1, new Request('https://college.nextonetwo.com/api/perf')).doubles[9], 1, 'one page load per report');
+  }
+});
+
+// The wording the owner approved on #394 (round-2 plan, §6), exactly, with only the rate phrase changed by the owner's
+// decision of 2026-09-30: "some page loads (currently about 1 in 10) send" -> "every page load sends".
+const APPROVED_ROUND_2 = 'To find out how fast the site loads, some page loads (currently about 1 in 10) send a short timing report after a '
+  + 'view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or '
+  + 'desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps '
+  + 'data. Our server also records how long it took to answer most data requests. We don\'t record your IP address, a session or '
+  + 'visitor id, your browser\'s user agent, the page address, the program you opened, or anything you searched for. Reports are kept '
+  + 'as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.';
+const APPROVED_NOW = APPROVED_ROUND_2.replace('some page loads (currently about 1 in 10) send', 'every page load sends');
+
+test('the About page card and docs/data-api.md say exactly the approved wording, with "every page load"', () => {
+  assert.notEqual(APPROVED_NOW, APPROVED_ROUND_2, 'the rate phrase was found and changed');
+  const faq = fn('renderFaq');
+  const card = /<div class="card"><h3>Speed measurements<\/h3>\s*<p>([^<]*)<\/p><\/div>/.exec(faq);
+  assert.ok(card, 'the About page has the card');
+  assert.equal(card[1], APPROVED_NOW);
+  const docs = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'data-api.md'), 'utf8').replace(/\r\n/g, '\n');
+  const quote = /> \*\*Speed measurements\.\*\* ([\s\S]*?)\n\n/.exec(docs);
+  assert.ok(quote, 'docs/data-api.md quotes it');
+  assert.equal(quote[1].replace(/\n> /g, ' ').replace(/\s+/g, ' ').trim(), APPROVED_NOW);
+  assert.ok(!/1 in 10/.test(faq) && !/currently about 1 in 10/.test(docs), 'the old rate phrase is gone from both');
 });
 
 test('perfRes: only the four measured files, never a path with anything else in it', () => {
@@ -203,6 +265,58 @@ test('the landing list, in boot()\'s real order: the index loads before route() 
   assert.ok(body.first > 0, 'with its first render time: ' + body.first);
   assert.equal(body.first, 420);
   assert.equal(body.render, 120, 'render runs from data ready to the drawn frame');
+});
+
+test('a view drawn while the page is hidden is not reported, and does not use up its view kind', async () => {
+  // Found on the #399 preview: in a background tab the browser holds animation frames until the tab is shown, so the
+  // render and first-render times would include the time spent hidden.
+  const p = load({ random: 0, hidden: true, entries: () => [entry()] });
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0, 'hidden when drawn: nothing sent');
+  assert.equal(p.PERF.sent.size, 0, 'and the list can still be reported later');
+  p.setHidden(false);
+  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  assert.equal(p.sent.length, 1, 'shown again: the next list view is reported');
+});
+
+test('a slow paint on a visible page is reported, however long: that is the tail #395 needs', async () => {
+  // Bianque, #399: the landing list's first frame lays out about 1,000 rows, and on a low-end phone that alone can take
+  // seconds. Nothing but a real hide may drop it.
+  for (const frameWait of [1000, 1500, 2500]) {
+    const p = load({ random: 0, frameWait, entries: () => [entry()] });
+    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    assert.equal(p.sent.length, 1, `two frames of ${frameWait} ms, visible: reported`);
+    assert.equal((await bodyOf(p.sent[0])).render, 50 + 2 * frameWait, 'render counts to the drawn frame');
+  }
+  const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
+  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal((await bodyOf(q.sent[0])).render, 82, 'normal frames (50 + 2 x 16)');
+});
+
+test('a hide between draw and paint drops the report and frees its view kind', async () => {
+  let p;
+  // the page is hidden as the second frame is requested, and shown again later: the browser held the frame meanwhile
+  p = load({ random: 0, frameWait: 16, entries: () => [entry()], duringFrame: n => { if (n === 2) { p.clock.now += 5; p.setHidden(true); p.clock.now += 4000; p.setHidden(false); } } });
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0, 'hidden in between: dropped');
+  assert.equal(p.PERF.sent.has('list'), false, 'and the list kind is free again');
+  assert.equal(p.PERF.sent.size, 0, 'no slot used');
+  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  assert.equal(p.sent.length, 1, 'a later list view is reported');
+  // a hide before the view was drawn (and long over) does not drop a later view's report
+  const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
+  q.clock.now = 100;
+  q.setHidden(true);
+  q.setHidden(false);
+  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(q.sent.length, 1, 'an earlier hide is not this view\'s');
+});
+
+test('a report that cannot be measured frees its view kind', async () => {
+  const p = load({ random: 0, entries: () => [] }); // no resource timing entry: perfBody gives null
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0);
+  assert.equal(p.PERF.sent.size, 0, 'nothing sent, nothing used up');
 });
 
 test('transport: sendBeacon, else fetch with keepalive; nothing throws', async () => {

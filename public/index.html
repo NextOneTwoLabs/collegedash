@@ -989,12 +989,15 @@ function apiHeld(url) {
    reading and drawing the view's data took. The rate comes from the Worker in X-CollegeDash-Perf on /api/v1 answers,
    latched from the first one, and sampling is decided once per page load. A sampled load sends at most 3 reports, one
    per view kind, each as soon as that view has rendered. Nothing is sent on visibilitychange or pagehide, so tab
-   switches and back-forward cache restores send nothing. Nothing from the URL, the hash, the search box or the program
+   switches and back-forward cache restores send nothing; the one visibilitychange listener only records when the page
+   was last hidden, so a view whose frames were held by a hide is not reported with the hidden time as drawing time. Nothing from the URL, the hash, the search box or the program
    opened is sent, and a profile's size is sent as 0 (the Worker writes 0 whatever arrives). Every failure in here is
    swallowed: rendering never waits on it, and a report that cannot be measured is not sent. */
 const PERF_VIEWS = { list: 'programs', profile: 'program', trends: 'trends', camps: 'camps' };
 const PERF_MAX = 3;
-const PERF = { rate: null, sampled: false, sent: new Set(), routes: 0, loads: {} };
+const PERF = { rate: null, sampled: false, sent: new Set(), routes: 0, loads: {}, hiddenAt: -1 };
+// Record-only (#399 review): when the page was last hidden. It never sends; ECNL #35's trap was sending on this event.
+try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') PERF.hiddenAt = performance.now(); }); } catch { }
 // phone | tablet | desktop, from a coarse pointer and the screen's short side (CSS px). A touch laptop with a large
 // screen reads as a tablet; the table is pinned by tests/perf_page.test.mjs.
 function perfDevice(coarse, w, h) {
@@ -1053,16 +1056,27 @@ function perfSend(body) {
 // list's /api/v1/programs has always finished before perfView() starts (#397 review).
 function perfRendered(view, start, nav) {
   if (!PERF.sampled || PERF.sent.has(view) || PERF.sent.size >= PERF_MAX) return;
+  // A page drawn while hidden (a background tab) gets no animation frames until it is shown, so its render time would
+  // be time spent hidden: not reported, and the view kind stays free for a later view (#399 preview). Read, not listened.
+  if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
   const load = PERF.loads[PERF_VIEWS[view]];
   if (!load || (nav !== 'landing' && load.done < start)) return; // in-app, data already in memory: nothing loaded for it
   PERF.sent.add(view);
+  const drawn = performance.now();
   const frame = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : f => setTimeout(f, 16);
   frame(() => frame(() => {
+    let body = null;
     try {
-      const entry = performance.getEntriesByName(new URL(load.url, location.href).href).filter(e => e.entryType === 'resource').at(-1);
-      const device = perfDevice(matchMedia('(pointer: coarse)').matches, screen.width, screen.height);
-      perfSend(perfBody(view, load, performance.now(), nav, entry, PERF.rate, device));
+      const painted = performance.now();
+      // Hidden between draw and paint: the browser held the frames, so the time was not drawing. A slow paint on a
+      // visible page is reported however long it took; that tail is what #395 needs.
+      if (PERF.hiddenAt < drawn) {
+        const entry = performance.getEntriesByName(new URL(load.url, location.href).href).filter(e => e.entryType === 'resource').at(-1);
+        const device = perfDevice(matchMedia('(pointer: coarse)').matches, screen.width, screen.height);
+        body = perfBody(view, load, painted, nav, entry, PERF.rate, device);
+      }
     } catch { }
+    if (body) perfSend(body); else PERF.sent.delete(view); // a dropped report frees its view kind for a later view
   }));
 }
 // route()'s wrapper for the four measured views: the render's own promise, unchanged, with the report hung off it.
@@ -3369,6 +3383,9 @@ async function renderFaq() {
 
     <div class="card"><h3>What about players’ privacy?</h3>
       <p>This site shows only what official rosters and public recruiting sites already publish: name, position, club, home state and class year. No contact details are collected. If you would like a record removed, email ${feedbackLink()}.</p></div>
+
+    <div class="card"><h3>Speed measurements</h3>
+      <p>To find out how fast the site loads, every page load sends a short timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps data. Our server also records how long it took to answer most data requests. We don't record your IP address, a session or visitor id, your browser's user agent, the page address, the program you opened, or anything you searched for. Reports are kept as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.</p></div>
 
     <div class="card"><h3>Found a mistake or have a suggestion?</h3>
       <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
