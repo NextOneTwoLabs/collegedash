@@ -1048,11 +1048,13 @@ function perfSend(body) {
   try { fetch('/api/perf', { method: 'POST', body: text, keepalive: true, headers: { 'content-type': 'text/plain' } }).catch(() => { }); } catch { }
 }
 // After the view has rendered and the next frame has run (two animation frames, a paint approximation): one report
-// per view kind, at most PERF_MAX per page load, and only for data loaded while this view was being drawn.
+// per view kind, at most PERF_MAX per page load. An in-app view reports only data loaded while it was being drawn. The
+// landing view reports its data whenever it loaded: boot() awaits loadIndex() before route() runs, so the landing
+// list's /api/v1/programs has always finished before perfView() starts (#397 review).
 function perfRendered(view, start, nav) {
   if (!PERF.sampled || PERF.sent.has(view) || PERF.sent.size >= PERF_MAX) return;
   const load = PERF.loads[PERF_VIEWS[view]];
-  if (!load || load.done < start) return; // the data was already in memory: nothing was loaded for this view
+  if (!load || (nav !== 'landing' && load.done < start)) return; // in-app, data already in memory: nothing loaded for it
   PERF.sent.add(view);
   const frame = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : f => setTimeout(f, 16);
   frame(() => frame(() => {
