@@ -68,7 +68,7 @@
     "_meta": {
       "source": "scorecard",
       "url": "https://api.data.gov/ed/collegescorecard/v1/schools?id=240727",
-      "asOf": "2026-09-07T06:25:16Z"
+      "asOf": "2026-09-29T19:47:17Z"
     }
   },
   "academicRank": {
@@ -228,20 +228,79 @@
     "_meta": {
       "source": "climate",
       "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00024022,USC00485435,USC00485417&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
-      "asOf": "2026-09-08T00:54:51Z"
+      "asOf": "2026-09-29T19:47:21Z"
     }
   },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Josh Purdum",
+      "source": "athletics",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Josh Purdum",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Rachael Doyle-Guetlein",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Quentin Boric",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Taylor Russow",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Austin Pfeffer",
+        "title": "Assistant Sports Performance Coach - Golf & Women's Soccer",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Emma Valainis",
+        "title": "Academic Coordinator - Soccer & Volleyball",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Madison Wooley",
+        "title": "Assistant Athletic Trainer - Soccer and Spirit Squad",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -259,7 +318,11 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://gowyo.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-30T16:41:25Z"
+      }
     }
   },
   "seasons": [
@@ -270,7 +333,7 @@
       "rpi": {
         "rank": 66,
         "record": "8-2-0",
-        "through": "2026-09-28",
+        "through": "2026-09-29",
         "prevRank": 66,
         "source": "NCAA.com weekly RPI",
         "weekly": [
@@ -301,6 +364,11 @@
           },
           {
             "through": "2026-09-28",
+            "rank": 66,
+            "record": "8-2-0"
+          },
+          {
+            "through": "2026-09-29",
             "rank": 66,
             "record": "8-2-0"
           }
@@ -578,9 +646,1604 @@
       }
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 26,
+    "players": [
+      {
+        "number": "2",
+        "name": "Kiley Ballek",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Timnath, Colorado",
+        "highSchool": "Fossil Ridge High School",
+        "previousSchool": "",
+        "major": "Pre-Nursing",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Fossil Ridge High School",
+          "key": "fossil ridge",
+          "schoolId": "ccd:080399001848",
+          "state": "CO",
+          "status": "matched",
+          "school": "Fossil Ridge High School",
+          "city": "Fort Collins",
+          "type": "public"
+        }
+      },
+      {
+        "number": "0",
+        "name": "Haley Bartel",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Prior Lake, Minnesota",
+        "highSchool": "Highland High School",
+        "previousSchool": "",
+        "major": "Professional Sales",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Highland High School",
+          "key": "highland",
+          "schoolId": null,
+          "state": "MN",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "13",
+        "name": "Alexa Berkley",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Jackson, New Jersey",
+        "highSchool": "Jackson Township High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "PDA",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "PDA",
+          "key": "pda",
+          "clubId": "pda",
+          "club": "PDA",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Jackson Township High School",
+          "key": "jackson township",
+          "schoolId": null,
+          "state": "NJ",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "9",
+        "name": "Brooke Brown",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-Fr.",
+        "classCode": "R-FR",
+        "hometown": "Palmer, Alaska",
+        "highSchool": "IMG Academy",
+        "previousSchool": "UConn",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "IMG Academy",
+          "key": "img academy",
+          "schoolId": null,
+          "state": "AK",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "11",
+        "name": "Alisa Bunn",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Jenks, Oklahoma",
+        "highSchool": "Jenks High School",
+        "previousSchool": "",
+        "major": "Design/Merchandising/Textiles",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Jenks High School",
+          "key": "jenks",
+          "schoolId": "ccd:401572000739",
+          "state": "OK",
+          "status": "matched",
+          "school": "JENKS HS",
+          "city": "Jenks",
+          "type": "public"
+        }
+      },
+      {
+        "number": "4",
+        "name": "Maddie Burr",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Fort Collins, Colorado",
+        "highSchool": "Poudre High School",
+        "previousSchool": "",
+        "major": "Physiology",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Poudre High School",
+          "key": "poudre",
+          "schoolId": "ccd:080399000541",
+          "state": "CO",
+          "status": "matched",
+          "school": "Poudre High School",
+          "city": "Fort Collins",
+          "type": "public"
+        }
+      },
+      {
+        "number": "3",
+        "name": "Erin Dahl",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lehi, Utah",
+        "highSchool": "Lehi High School",
+        "previousSchool": "",
+        "major": "Sociology",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Lehi High School",
+          "key": "lehi",
+          "schoolId": "ccd:490003000017",
+          "state": "UT",
+          "status": "matched",
+          "school": "Lehi High",
+          "city": "Lehi",
+          "type": "public"
+        }
+      },
+      {
+        "number": "7",
+        "name": "Jayla Espinosa",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Orlando, Florida",
+        "highSchool": "Lake Brantley High School",
+        "previousSchool": "Miami Dade College",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Lake Brantley High School",
+          "key": "lake brantley",
+          "schoolId": "ccd:120171001888",
+          "state": "FL",
+          "status": "matched",
+          "school": "LAKE BRANTLEY HIGH SCHOOL",
+          "city": "Altamonte Springs",
+          "type": "public"
+        }
+      },
+      {
+        "number": "12",
+        "name": "Macey Fothergill",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Falcon, Colorado",
+        "highSchool": "Falcon High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Falcon High School",
+          "key": "falcon",
+          "schoolId": "ccd:080387000507",
+          "state": "CO",
+          "status": "matched",
+          "school": "Falcon High School",
+          "city": "Peyton",
+          "type": "public"
+        }
+      },
+      {
+        "number": "14",
+        "name": "Alyssa Glover",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "5th",
+        "classCode": "GR",
+        "hometown": "Englewood, Colorado",
+        "highSchool": "Cherry Creek High School",
+        "previousSchool": "",
+        "major": "Biology",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Cherry Creek High School",
+          "key": "cherry creek",
+          "schoolId": "ccd:080291000186",
+          "state": "CO",
+          "status": "matched",
+          "school": "Cherry Creek High School",
+          "city": "Greenwood Village",
+          "type": "public"
+        }
+      },
+      {
+        "number": "23",
+        "name": "Reese Gould",
+        "pos": "M/D",
+        "posLabel": "MF/D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Poway, California",
+        "highSchool": "Poway High School",
+        "previousSchool": "",
+        "major": "Undeclared - Business",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Poway High School",
+          "key": "poway",
+          "schoolId": "ccd:063153004893",
+          "state": "CA",
+          "status": "matched",
+          "school": "Poway High",
+          "city": "Poway",
+          "type": "public"
+        }
+      },
+      {
+        "number": "15",
+        "name": "Jordan Griess",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Cheyenne, Wyoming",
+        "highSchool": "Burns High School",
+        "previousSchool": "",
+        "major": "Kinesiology & Health Promotion",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Burns High School",
+          "key": "burns",
+          "schoolId": null,
+          "state": "WY",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "18",
+        "name": "Rachel Hansen",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-So.",
+        "classCode": "R-SO",
+        "hometown": "Des Moines, Iowa",
+        "highSchool": "Valley High School",
+        "previousSchool": "",
+        "major": "Exploratory Studies",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Valley High School",
+          "key": "valley",
+          "schoolId": "ccd:193093001797",
+          "state": "IA",
+          "status": "matched",
+          "school": "Valley High School",
+          "city": "West Des Moines",
+          "type": "public"
+        }
+      },
+      {
+        "number": "1",
+        "name": "Julia Herges",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "R-Jr.",
+        "classCode": "R-JR",
+        "hometown": "Scottsdale, Arizona",
+        "highSchool": "Pinnacle High School",
+        "previousSchool": "Abilene Christian",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Pinnacle High School",
+          "key": "pinnacle",
+          "schoolId": "ccd:040593001995",
+          "state": "AZ",
+          "status": "matched",
+          "school": "Pinnacle High School",
+          "city": "Phoenix",
+          "type": "public"
+        }
+      },
+      {
+        "number": "29",
+        "name": "Addison Keen",
+        "pos": "D",
+        "posLabel": "D",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Wildwood, Missouri",
+        "highSchool": "Lafayette High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Lafayette High School",
+          "key": "lafayette",
+          "schoolId": null,
+          "state": "MO",
+          "status": "ambiguous",
+          "candidates": 2
+        }
+      },
+      {
+        "number": "24",
+        "name": "Kammie Kristufek",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "McKinney, Texas",
+        "highSchool": "McKinney High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "McKinney High School",
+          "key": "mckinney",
+          "schoolId": "ccd:482985003360",
+          "state": "TX",
+          "status": "matched",
+          "school": "MCKINNEY H S",
+          "city": "Mckinney",
+          "type": "public"
+        }
+      },
+      {
+        "number": "6",
+        "name": "Delaney Lenig",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Greenwood Village, Colorado",
+        "highSchool": "Cherry Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Cherry Creek High School",
+          "key": "cherry creek",
+          "schoolId": "ccd:080291000186",
+          "state": "CO",
+          "status": "matched",
+          "school": "Cherry Creek High School",
+          "city": "Greenwood Village",
+          "type": "public"
+        }
+      },
+      {
+        "number": "8",
+        "name": "Hadley Linder",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Highlands Ranch, Colorado",
+        "highSchool": "Mountain Vista High School",
+        "previousSchool": "",
+        "major": "Kinesiology & Health Promotion",
+        "club": "Real Colorado",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire",
+        "clubInfo": {
+          "raw": "Real Colorado",
+          "key": "real colorado",
+          "clubId": "real-colorado",
+          "club": "Real Colorado",
+          "status": "matched",
+          "source": "SoccerWire",
+          "updated": "2023-09-16",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Mountain Vista High School",
+          "key": "mountain vista",
+          "schoolId": "ccd:080345001748",
+          "state": "CO",
+          "status": "matched",
+          "school": "Mountain Vista High School",
+          "city": "Highlands Ranch",
+          "type": "public"
+        }
+      },
+      {
+        "number": "00",
+        "name": "Sophia Lipari",
+        "pos": "GK",
+        "posLabel": "GK",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Montgomery, Texas",
+        "highSchool": "Lake Creek High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Challenge SC",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Challenge SC",
+          "key": "challenge sc",
+          "clubId": "challenge-sc",
+          "club": "Challenge SC",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Lake Creek High School",
+          "key": "lake creek",
+          "schoolId": "ccd:483126013386",
+          "state": "TX",
+          "status": "matched",
+          "school": "LAKE CREEK H S",
+          "city": "Montgomery",
+          "type": "public"
+        }
+      },
+      {
+        "number": "16",
+        "name": "Raegan Richardson",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Queen Creek, Arizona",
+        "highSchool": "Queen Creek High School",
+        "previousSchool": "",
+        "major": "Finance",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Queen Creek High School",
+          "key": "queen creek",
+          "schoolId": "ccd:040681001383",
+          "state": "AZ",
+          "status": "matched",
+          "school": "Queen Creek High School",
+          "city": "Queen Creek",
+          "type": "public"
+        }
+      },
+      {
+        "number": "5",
+        "name": "Izzy Schroder",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Centennial, Colorado",
+        "highSchool": "Chaparral High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Chaparral High School",
+          "key": "chaparral",
+          "schoolId": "ccd:080345001578",
+          "state": "CO",
+          "status": "matched",
+          "school": "Chaparral High School",
+          "city": "Parker",
+          "type": "public"
+        }
+      },
+      {
+        "number": "33",
+        "name": "Kiana Sparrow",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Aurora, Colorado",
+        "highSchool": "Cherokee Trail High School",
+        "previousSchool": "UTSA",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Cherokee Trail High School",
+          "key": "cherokee trail",
+          "schoolId": "ccd:080291001951",
+          "state": "CO",
+          "status": "matched",
+          "school": "Cherokee Trail High School",
+          "city": "Aurora",
+          "type": "public"
+        }
+      },
+      {
+        "number": "17",
+        "name": "Isabel Vasco",
+        "pos": "F",
+        "posLabel": "F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Green River, Wyoming",
+        "highSchool": "Green River High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Green River High School",
+          "key": "green river",
+          "schoolId": "ccd:560576200324",
+          "state": "WY",
+          "status": "matched",
+          "school": "Green River High School",
+          "city": "Green River",
+          "type": "public"
+        }
+      },
+      {
+        "number": "10",
+        "name": "Jennah Wanner",
+        "pos": "M/F",
+        "posLabel": "MF/F",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Spokane, Washington",
+        "highSchool": "Gonzaga Preparatory School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Spokane Sounders FC",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire",
+        "clubInfo": {
+          "raw": "Spokane Sounders FC",
+          "key": "spokane sounders fc",
+          "clubId": "spokane-sounders",
+          "club": "Spokane Sounders",
+          "status": "matched",
+          "source": "SoccerWire",
+          "updated": "2024-01-30",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Gonzaga Preparatory School",
+          "key": "gonzaga prep",
+          "schoolId": "pss:02164748",
+          "state": "WA",
+          "status": "matched",
+          "school": "GONZAGA PREPARATORY SCHOOL",
+          "city": "Spokane",
+          "type": "private"
+        }
+      },
+      {
+        "number": "22",
+        "name": "Hannah Werdel",
+        "pos": "M",
+        "posLabel": "MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Tustin, California",
+        "highSchool": "Santa Ana Foothill High School",
+        "previousSchool": "",
+        "major": "",
+        "club": "Slammers FC HB Koge",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Slammers FC HB Koge",
+          "key": "slammers fc hb koge",
+          "clubId": "slammers-fc",
+          "club": "Slammers FC",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Santa Ana Foothill High School",
+          "key": "santa ana foothill",
+          "schoolId": "ccd:064015006638",
+          "state": "CA",
+          "status": "matched",
+          "school": "Foothill High",
+          "city": "Santa Ana",
+          "type": "public"
+        }
+      },
+      {
+        "number": "20",
+        "name": "Lauren Westwood",
+        "pos": "D/M",
+        "posLabel": "D/MF",
+        "height": "",
+        "heightIn": null,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Farnborough, Hampshire, England",
+        "highSchool": "John Madejski Academy",
+        "previousSchool": "St. Bonaventure",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "John Madejski Academy",
+          "key": "john madejski academy",
+          "schoolId": null,
+          "state": null,
+          "status": "outside-us"
+        }
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 1,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 1,
+        "JR": 5,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 1
+      },
+      "F": {
+        "FR": 1,
+        "R-FR": 1,
+        "SO": 0,
+        "R-SO": 0,
+        "JR": 1,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "SR": 5,
+      "FR": 7,
+      "R-FR": 1,
+      "JR": 7,
+      "SO": 3,
+      "GR": 1,
+      "R-SO": 1,
+      "R-JR": 1
+    },
+    "graduatingByPos": {
+      "F": 1,
+      "GK": 1,
+      "M": 2,
+      "D": 2
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gowyo.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-30T16:41:25Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 23,
+      "players": [
+        {
+          "number": "2",
+          "name": "Kiley Ballek",
+          "pos": "M/F",
+          "classCode": "JR",
+          "hometown": "Timnath, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "9",
+          "name": "Jazi Barela",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "0",
+          "name": "Haley Bartel",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Prior Lake, Minnesota",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "22",
+          "name": "Lily Brongo",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Spencerport, New York",
+          "highSchool": "Spencerport High School"
+        },
+        {
+          "number": "11",
+          "name": "Alisa Bunn",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Jenks, Oklahoma",
+          "highSchool": "Jenks High School"
+        },
+        {
+          "number": "4",
+          "name": "Maddie Burr",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Poudre High School"
+        },
+        {
+          "number": "32",
+          "name": "Renee Craddock",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Skyline High School"
+        },
+        {
+          "number": "3",
+          "name": "Erin Dahl",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lehi, Utah",
+          "highSchool": "Lehi High School"
+        },
+        {
+          "number": "12",
+          "name": "Macey Fothergill",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Falcon, Colorado",
+          "highSchool": "Falcon High School"
+        },
+        {
+          "number": "7",
+          "name": "Ava Furrow",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "14",
+          "name": "Alyssa Glover",
+          "pos": "M",
+          "classCode": "R-JR",
+          "hometown": "Englewood, Colorado",
+          "highSchool": "Cherry Creek High School"
+        },
+        {
+          "number": "23",
+          "name": "Reese Gould",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Poway, California",
+          "highSchool": "Poway High School"
+        },
+        {
+          "number": "15",
+          "name": "Jordan Griess",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cheyenne, Wyoming",
+          "highSchool": "Burns High School"
+        },
+        {
+          "number": "18",
+          "name": "Rachel Hansen",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Des Moines, Iowa",
+          "highSchool": "Valley High School"
+        },
+        {
+          "number": "1",
+          "name": "Julia Herges",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Scottsdale, Arizona",
+          "highSchool": "Pinnacle High School"
+        },
+        {
+          "number": "28",
+          "name": "Peyton Hunt",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "J.J. Pearce High School"
+        },
+        {
+          "number": "29",
+          "name": "Addison Keen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Wildwood, Missouri",
+          "highSchool": "Lafayette High School"
+        },
+        {
+          "number": "8",
+          "name": "Hadley Linder",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Highlands Ranch, Colorado",
+          "highSchool": "Mountain Vista High School"
+        },
+        {
+          "number": "16",
+          "name": "Raegan Richardson",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Queen Creek, Arizona",
+          "highSchool": "Queen Creek High School"
+        },
+        {
+          "number": "25",
+          "name": "Haley Robinson",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Albuquerque, New Mexico",
+          "highSchool": "El Dorado High School"
+        },
+        {
+          "number": "5",
+          "name": "Eliza-Grace Smith",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Cheyenne, Wyoming",
+          "highSchool": "Cheyenne Central High School"
+        },
+        {
+          "number": "10",
+          "name": "Jennah Wanner",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Spokane, Washington",
+          "highSchool": "Gonzaga Preparatory School"
+        },
+        {
+          "number": "20",
+          "name": "Lauren Westwood",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Farnborough, Hampshire, England",
+          "highSchool": "John Madejski Academy"
+        }
+      ],
+      "departed": [
+        "ava furrow",
+        "eliza grace smith",
+        "haley robinson",
+        "jazi barela",
+        "lily brongo",
+        "peyton hunt",
+        "renee craddock"
+      ]
+    },
+    "2024": {
+      "count": 31,
+      "players": [
+        {
+          "number": "00",
+          "name": "Bella Ayers",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Sacramento, California",
+          "highSchool": "Elk Grove High School"
+        },
+        {
+          "number": "2",
+          "name": "Kiley Ballek",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Timnath, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "9",
+          "name": "Jazi Barela",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "0",
+          "name": "Haley Bartel",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Prior Lake, Minnesota",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "4",
+          "name": "Alyssa Bedard",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Rock Springs, Wyoming",
+          "highSchool": "Rock Springs High School"
+        },
+        {
+          "number": "19",
+          "name": "Ally Boysen",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Cody, Wyoming",
+          "highSchool": "Cody High School"
+        },
+        {
+          "number": "22",
+          "name": "Lily Brongo",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Spencerport, New York",
+          "highSchool": "Spencerport High School"
+        },
+        {
+          "number": "6",
+          "name": "Taylor Brook",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Rocky Mountain High School"
+        },
+        {
+          "number": "11",
+          "name": "Alisa Bunn",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Jenks, Oklahoma",
+          "highSchool": "Jenks High School"
+        },
+        {
+          "number": "3",
+          "name": "Maddie Burr",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Poudre High School"
+        },
+        {
+          "number": "10",
+          "name": "Khari Carreno",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Broken Arrow, Oklahoma",
+          "highSchool": "Union High School"
+        },
+        {
+          "number": "23",
+          "name": "Maddi Chance",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Lander, Wyoming",
+          "highSchool": "Lander Valley High School"
+        },
+        {
+          "number": "21",
+          "name": "Gabby Clutter",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Castle Pines, Colorado",
+          "highSchool": "Rock Canyon High School"
+        },
+        {
+          "number": "32",
+          "name": "Renee Craddock",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Salt Lake City, Utah",
+          "highSchool": "Skyline High School"
+        },
+        {
+          "number": "33",
+          "name": "Erin Dahl",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lehi, Utah",
+          "highSchool": "Lehi High School"
+        },
+        {
+          "number": "7",
+          "name": "Ava Furrow",
+          "pos": "M",
+          "classCode": "R-FR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "14",
+          "name": "Alyssa Glover",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Englewood, Colorado",
+          "highSchool": "Cherry Creek High School"
+        },
+        {
+          "number": "20",
+          "name": "Reese Gould",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Poway, California",
+          "highSchool": "Poway High School"
+        },
+        {
+          "number": "15",
+          "name": "Jordan Griess",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Cheyenne, Wyoming",
+          "highSchool": "Burns High School"
+        },
+        {
+          "number": "18",
+          "name": "Rachel Hansen",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Des Moines, Iowa",
+          "highSchool": "Valley High School"
+        },
+        {
+          "number": "25",
+          "name": "Peyton Hill",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Casper, Wyoming",
+          "highSchool": "Kelly Walsh High School"
+        },
+        {
+          "number": "13",
+          "name": "Kylee Holstad",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "28",
+          "name": "Peyton Hunt",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Dallas, Texas",
+          "highSchool": "J.J. Pearce High School"
+        },
+        {
+          "number": "8",
+          "name": "Hadley Linder",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Highlands Ranch, Colorado",
+          "highSchool": "Mountain Vista High School"
+        },
+        {
+          "number": "29",
+          "name": "Alyssa Montgomery",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Snohomish, Washington",
+          "highSchool": "Glacier Peak High School"
+        },
+        {
+          "number": "1",
+          "name": "Rory Murry",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Lake Tapps, Washington",
+          "highSchool": "Auburn Riverside High School"
+        },
+        {
+          "number": "17",
+          "name": "Kylee (Bliss) Quilici Quain",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Reno, Nevada",
+          "highSchool": "Reno High School"
+        },
+        {
+          "number": "16",
+          "name": "Raegan Richardson",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Queen Creek, Arizona",
+          "highSchool": "Queen Creek High School"
+        },
+        {
+          "number": "24",
+          "name": "Bella Russell",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Powhatan, Virginia",
+          "highSchool": "Powhatan High School"
+        },
+        {
+          "number": "12",
+          "name": "Rylee Shroder",
+          "pos": "D",
+          "classCode": "R-FR",
+          "hometown": "Lebanon, Ohio",
+          "highSchool": "Lebanon High School"
+        },
+        {
+          "number": "5",
+          "name": "Eliza-Grace Smith",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Cheyenne, Wyoming",
+          "highSchool": "Cheyenne Central High School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 29,
+      "players": [
+        {
+          "number": "10",
+          "name": "Kiley Ballek",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Timnath, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "9",
+          "name": "Jazi Barela",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Fossil Ridge High School"
+        },
+        {
+          "number": "0",
+          "name": "Haley Bartel",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Prior Lake, Minnesota",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "11",
+          "name": "Ally Beavers",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Puyallup, Wash.",
+          "highSchool": "Puyallup HS"
+        },
+        {
+          "number": "4",
+          "name": "Alyssa Bedard",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Rock Springs, Wyoming",
+          "highSchool": "Rock Springs High School"
+        },
+        {
+          "number": "34",
+          "name": "Ally Boysen",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Cody, Wyoming",
+          "highSchool": "Cody High School"
+        },
+        {
+          "number": "22",
+          "name": "Lily Brongo",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Spencerport, New York",
+          "highSchool": "Spencerport High School"
+        },
+        {
+          "number": "6",
+          "name": "Taylor Brook",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Fort Collins, Colorado",
+          "highSchool": "Rocky Mountain High School"
+        },
+        {
+          "number": "26",
+          "name": "Alisa Bunn",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Jenks, Oklahoma",
+          "highSchool": "Jenks High School"
+        },
+        {
+          "number": "3",
+          "name": "Khari Carreno",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Broken Arrow, Oklahoma",
+          "highSchool": "Union High School"
+        },
+        {
+          "number": "23",
+          "name": "Maddi Chance",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Lander, Wyoming",
+          "highSchool": "Lander Valley High School"
+        },
+        {
+          "number": "21",
+          "name": "Gabby Clutter",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Castle Pines, Colorado",
+          "highSchool": "Rock Canyon High School"
+        },
+        {
+          "number": "27",
+          "name": "Allison Collinwood",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Ogden, Utah",
+          "highSchool": "Western Wyoming CC"
+        },
+        {
+          "number": "8",
+          "name": "Nikayla Copenhaver",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Renton, Wash.",
+          "highSchool": "Liberty HS"
+        },
+        {
+          "number": "20",
+          "name": "Rae Gerking",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Renton, Wash.",
+          "highSchool": "Hazen HS"
+        },
+        {
+          "number": "14",
+          "name": "Alyssa Glover",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Englewood, Colorado",
+          "highSchool": "Cherry Creek High School"
+        },
+        {
+          "number": "33",
+          "name": "Hannah Hagen",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Greenwood Village, Colo.",
+          "highSchool": "Cherry Creek HS"
+        },
+        {
+          "number": "15",
+          "name": "Camille Hawley",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Norco, Calif.",
+          "highSchool": "Norco HS"
+        },
+        {
+          "number": "18",
+          "name": "Kylee Holstad",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Highland High School"
+        },
+        {
+          "number": "7",
+          "name": "Faith Joiner",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Highland, Calif.",
+          "highSchool": "Arrowhead Christian Academy"
+        },
+        {
+          "number": "13",
+          "name": "Sydney Miller",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Cheyenne, Wyo.",
+          "highSchool": "Cheyenne East HS"
+        },
+        {
+          "number": "29",
+          "name": "Alyssa Montgomery",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Snohomish, Washington",
+          "highSchool": "Glacier Peak High School"
+        },
+        {
+          "number": "16",
+          "name": "Raegan Richardson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Queen Creek, Arizona",
+          "highSchool": "Queen Creek High School"
+        },
+        {
+          "number": "00",
+          "name": "Miyuki Schoyen",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Salisbury, Md.",
+          "highSchool": "Drexel University"
+        },
+        {
+          "number": "12",
+          "name": "Rylee Shroder",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Lebanon, Ohio",
+          "highSchool": "Lebanon High School"
+        },
+        {
+          "number": "5",
+          "name": "Eliza-Grace Smith",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Cheyenne, Wyoming",
+          "highSchool": "Cheyenne Central High School"
+        },
+        {
+          "number": "2",
+          "name": "Jamie Tatum",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Highlands Ranch, Colo.",
+          "highSchool": "Rock Canyon HS"
+        },
+        {
+          "number": "25",
+          "name": "Amber Vokoun",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Henderson, Nev.",
+          "highSchool": "Foothill HS"
+        },
+        {
+          "number": "19",
+          "name": "Keelie Wortmann",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Aurora, Colo.",
+          "highSchool": "Grandview HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://gowyo.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-30T16:41:25Z"
+    }
+  },
   "commitments": [
     {
       "id": "alexa-berkley-2026",
@@ -593,7 +2256,7 @@
       "city": "Jackson",
       "highSchool": "",
       "college": "wyoming",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -607,9 +2270,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "PDA",
@@ -626,7 +2287,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -659,7 +2320,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/brinlee-kristufek/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2025-02-14"
         }
@@ -698,7 +2359,7 @@
       "city": "Tustin",
       "highSchool": "Santa Ana Foothill",
       "college": "wyoming",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -715,7 +2376,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/hannah-werdel/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2025-04-13"
         }
@@ -771,7 +2432,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/isabelle-schroder-2/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2024-10-08"
         }
@@ -810,7 +2471,7 @@
       "city": "Montgomery",
       "highSchool": "",
       "college": "wyoming",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -824,9 +2485,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "Challenge SC",
@@ -843,7 +2502,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -869,7 +2528,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/alina-montero/pid-179103",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/wyoming/clgid-252/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -882,7 +2541,7 @@
         "club": "Ohio Premier",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -916,7 +2575,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/avalee-mcguire/pid-176076",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/wyoming/clgid-252/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -929,7 +2588,7 @@
         "club": "Hawaii Rush",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -963,7 +2622,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/bella-arroyo/pid-178369",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/wyoming/clgid-252/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -976,7 +2635,7 @@
         "club": null,
         "status": "unmatched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29"
+        "updated": "2026-09-30"
       },
       "approxDate": {
         "date": "2026-09-06",
@@ -1008,14 +2667,14 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/nicole-sacek/pid-155537",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/wyoming/clgid-252/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         },
         {
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/nicole-sacek/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2025-10-31"
         }
@@ -1029,7 +2688,7 @@
         "club": "Rockford Raptors",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -1064,7 +2723,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/shelby-aoki/pid-175552",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/wyoming/clgid-252/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -1077,7 +2736,7 @@
         "club": "Hawaii Rush",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -1170,7 +2829,7 @@
     "_meta": {
       "source": "news",
       "url": "https://gowyo.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-29T16:48:59Z"
+      "asOf": "2026-09-30T16:41:37Z"
     }
   },
   "camps": {
@@ -1190,7 +2849,7 @@
       {
         "source": "camps",
         "url": "https://cowgirlssoccercamps.com/",
-        "asOf": "2026-09-29T16:49:17Z"
+        "asOf": "2026-09-30T16:41:46Z"
       }
     ]
   },
@@ -1200,27 +2859,22 @@
     "2027": 5
   },
   "_build": {
-    "builtAt": "2026-09-29T17:21:06Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-30T17:12:37Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
       "climate": true,
-      "program": false,
+      "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
     "stale": [],
     "failed": [],
     "skipped": [
-      {
-        "collector": "athletics",
-        "reason": "athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); needs a headless browser, see athletics.note",
-        "at": "2026-09-29T16:48:52Z"
-      },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",

@@ -68,7 +68,7 @@
     "_meta": {
       "source": "scorecard",
       "url": "https://api.data.gov/ed/collegescorecard/v1/schools?id=230728",
-      "asOf": "2026-09-07T05:17:05Z"
+      "asOf": "2026-09-29T19:47:17Z"
     }
   },
   "academicRank": {
@@ -228,20 +228,87 @@
     "_meta": {
       "source": "climate",
       "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020&stations=USW00094128,USW00024151,USC00425186&dataTypes=MLY-TMAX-NORMAL,MLY-TMIN-NORMAL,MLY-PRCP-NORMAL,MLY-SNOW-NORMAL,MLY-PRCP-AVGNDS-GE010HI,MLY-TMAX-AVGNDS-GRTH090,MLY-TMIN-AVGNDS-LSTH032&format=json&units=standard",
-      "asOf": "2026-09-08T00:52:38Z"
+      "asOf": "2026-09-29T19:47:27Z"
     }
   },
   "program": {
     "headCoach": {
-      "name": null,
-      "title": null,
+      "name": "Manny Martins",
+      "source": "athletics",
+      "title": "Head Coach",
       "since": null,
       "seasons": null,
       "bioUrl": null,
       "social": {}
     },
-    "coaches": [],
-    "supportStaff": [],
+    "coaches": [
+      {
+        "name": "Manny Martins",
+        "title": "Head Coach",
+        "isHeadCoach": true,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Erin Carrillo-Bautista",
+        "title": "Associate Head Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Mealii Odum",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Brandon DeNoyer",
+        "title": "Assistant Coach",
+        "isHeadCoach": false,
+        "isCoach": true,
+        "bioUrl": null,
+        "social": {}
+      }
+    ],
+    "supportStaff": [
+      {
+        "name": "Mike Dunn",
+        "title": "Assistant Director of Olympic Sports Performance",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Reyna Hager",
+        "title": "Assistant Athletic Trainer (Soccer)",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Jeremiah Sievers",
+        "title": "Academic Coordinator",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      },
+      {
+        "name": "Natalie Norris",
+        "title": "Director of Sports Nutrition",
+        "isHeadCoach": false,
+        "isCoach": false,
+        "bioUrl": null,
+        "social": {}
+      }
+    ],
     "stadium": null,
     "founded": null,
     "nationalTitles": [],
@@ -259,7 +326,11 @@
     },
     "_meta": {
       "wikipedia": null,
-      "athletics": null
+      "athletics": {
+        "source": "athletics",
+        "url": "https://utahstateaggies.com/sports/womens-soccer/roster",
+        "asOf": "2026-09-30T16:38:16Z"
+      }
     }
   },
   "seasons": [
@@ -270,8 +341,8 @@
       "rpi": {
         "rank": 26,
         "record": "7-2-2",
-        "through": "2026-09-28",
-        "prevRank": 27,
+        "through": "2026-09-29",
+        "prevRank": 26,
         "source": "NCAA.com weekly RPI",
         "weekly": [
           {
@@ -301,6 +372,11 @@
           },
           {
             "through": "2026-09-28",
+            "rank": 26,
+            "record": "7-2-2"
+          },
+          {
+            "through": "2026-09-29",
             "rank": 26,
             "record": "7-2-2"
           }
@@ -578,9 +654,1790 @@
       }
     }
   ],
-  "roster": null,
-  "rosterHistory": {},
-  "schedule": null,
+  "roster": {
+    "season": 2026,
+    "count": 29,
+    "players": [
+      {
+        "number": "30",
+        "name": "Valeria Alcala",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "4'10\"",
+        "heightIn": 58,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Modesto, California",
+        "highSchool": "Whitmore Charter HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Silicon Valley Soccer Association",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Silicon Valley Soccer Association",
+          "key": "silicon valley soccer association",
+          "clubId": "silicon-valley-soccer-association",
+          "club": "Silicon Valley Soccer Association",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Whitmore Charter HS",
+          "key": "whitmore charter",
+          "schoolId": "ccd:060813011488",
+          "state": "CA",
+          "status": "matched",
+          "school": "Whitmore Charter High",
+          "city": "Ceres",
+          "type": "public"
+        }
+      },
+      {
+        "number": "23",
+        "name": "Bentli Barrera",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hyrum, Utah",
+        "highSchool": "Mountain Crest HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Mountain Crest HS",
+          "key": "mountain crest",
+          "schoolId": "ccd:490012000792",
+          "state": "UT",
+          "status": "matched",
+          "school": "Mountain Crest High",
+          "city": "Hyrum",
+          "type": "public"
+        }
+      },
+      {
+        "number": "25",
+        "name": "Hadli Barrera",
+        "pos": "M/F",
+        "posLabel": "Midfield/Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hyrum, Utah",
+        "highSchool": "Mountain Crest HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Mountain Crest HS",
+          "key": "mountain crest",
+          "schoolId": "ccd:490012000792",
+          "state": "UT",
+          "status": "matched",
+          "school": "Mountain Crest High",
+          "city": "Hyrum",
+          "type": "public"
+        }
+      },
+      {
+        "number": "9",
+        "name": "Kate Christian",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'8\"",
+        "heightIn": 68,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Kennewick, Washington",
+        "highSchool": "Kamiakin HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Kamiakin HS",
+          "key": "kamiakin",
+          "schoolId": "ccd:530393000604",
+          "state": "WA",
+          "status": "matched",
+          "school": "Kamiakin High School",
+          "city": "Kennewick",
+          "type": "public"
+        }
+      },
+      {
+        "number": "17",
+        "name": "Ayla De Vore",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Encinitas, California",
+        "highSchool": "San Dieguito HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "San Dieguito HS",
+          "key": "san dieguito",
+          "schoolId": null,
+          "state": "CA",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "14",
+        "name": "Summer Diamond",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Uintah, Utah",
+        "highSchool": "Bonneville HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Bonneville HS",
+          "key": "bonneville",
+          "schoolId": "ccd:490120000613",
+          "state": "UT",
+          "status": "matched",
+          "school": "Bonneville High",
+          "city": "Ogden",
+          "type": "public"
+        }
+      },
+      {
+        "number": "4",
+        "name": "Lila Emmetsberger",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Denver, Colorado",
+        "highSchool": "Northfield HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Real Colorado",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Real Colorado",
+          "key": "real colorado",
+          "clubId": "real-colorado",
+          "club": "Real Colorado",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Northfield HS",
+          "key": "northfield",
+          "schoolId": "ccd:080336006660",
+          "state": "CO",
+          "status": "matched",
+          "school": "Northfield High School",
+          "city": "Denver",
+          "type": "public"
+        }
+      },
+      {
+        "number": "21",
+        "name": "Victoria Espinoza",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Kearns, Utah",
+        "highSchool": "Kearns HS",
+        "previousSchool": "| Laramie County CC",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Kearns HS",
+          "key": "kearns",
+          "schoolId": "ccd:490036000234",
+          "state": "UT",
+          "status": "matched",
+          "school": "Kearns High",
+          "city": "Kearns",
+          "type": "public"
+        }
+      },
+      {
+        "number": "0",
+        "name": "Allee Grashoff",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Riverside, California",
+        "highSchool": "Norco HS",
+        "previousSchool": "| UC Riverside",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Norco HS",
+          "key": "norco",
+          "schoolId": "ccd:060985001061",
+          "state": "CA",
+          "status": "matched",
+          "school": "Norco High",
+          "city": "Norco",
+          "type": "public"
+        }
+      },
+      {
+        "number": "5",
+        "name": "Ellie Hendrix",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "St. George, Utah",
+        "highSchool": "Desert Hills HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Desert Hills HS",
+          "key": "desert hills",
+          "schoolId": "ccd:490114001290",
+          "state": "UT",
+          "status": "matched",
+          "school": "Desert Hills High",
+          "city": "Saint George",
+          "type": "public"
+        }
+      },
+      {
+        "number": "13",
+        "name": "Kunie Hirai",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Boise, Idaho",
+        "highSchool": "Boise HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Boise HS",
+          "key": "boise",
+          "schoolId": "ccd:160036000044",
+          "state": "ID",
+          "status": "matched",
+          "school": "BOISE SENIOR HIGH SCHOOL",
+          "city": "Boise",
+          "type": "public"
+        }
+      },
+      {
+        "number": "11",
+        "name": "Abby Hironaka",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Honolulu, Hawaii",
+        "highSchool": "Iolani School",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Iolani School",
+          "key": "iolani",
+          "schoolId": "pss:00326634",
+          "state": "HI",
+          "status": "matched",
+          "school": "IOLANI SCHOOL",
+          "city": "Honolulu",
+          "type": "private"
+        }
+      },
+      {
+        "number": "12",
+        "name": "Mia Lopez",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Logan, Utah",
+        "highSchool": "Logan HS",
+        "previousSchool": "| BYU",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Logan HS",
+          "key": "logan",
+          "schoolId": "ccd:490051000351",
+          "state": "UT",
+          "status": "matched",
+          "school": "Logan High",
+          "city": "Logan",
+          "type": "public"
+        }
+      },
+      {
+        "number": "18",
+        "name": "Shay Masters",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Fort Collins, Colorado",
+        "highSchool": "Fossil Ridge HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Colorado Rush",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Colorado Rush",
+          "key": "colorado rush",
+          "clubId": "colorado-rush",
+          "club": "Colorado Rush",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Fossil Ridge HS",
+          "key": "fossil ridge",
+          "schoolId": "ccd:080399001848",
+          "state": "CO",
+          "status": "matched",
+          "school": "Fossil Ridge High School",
+          "city": "Fort Collins",
+          "type": "public"
+        }
+      },
+      {
+        "number": "19",
+        "name": "Austin Miller",
+        "pos": "M",
+        "posLabel": "Midfielder",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Providence, Utah",
+        "highSchool": "Green Canyon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Green Canyon HS",
+          "key": "green canyon",
+          "schoolId": "ccd:490012001512",
+          "state": "UT",
+          "status": "matched",
+          "school": "Green Canyon High School",
+          "city": "North Logan",
+          "type": "public"
+        }
+      },
+      {
+        "number": "3",
+        "name": "Mia Mullenmeister",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'6\"",
+        "heightIn": 66,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Mitchell, South Dakota",
+        "highSchool": "Mitchell HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Mitchell HS",
+          "key": "mitchell",
+          "schoolId": null,
+          "state": "SD",
+          "status": "unmatched"
+        }
+      },
+      {
+        "number": "22",
+        "name": "Kya Newton",
+        "pos": "F/M",
+        "posLabel": "Forward/Midfield",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "South Jordan, Utah",
+        "highSchool": "Olympus HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Utah Celtic FC",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Utah Celtic FC",
+          "key": "utah celtic fc",
+          "clubId": "utah-celtic-fc",
+          "club": "Utah Celtic FC",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": "UT",
+          "country": "US"
+        },
+        "schoolInfo": {
+          "raw": "Olympus HS",
+          "key": "olympus",
+          "schoolId": "ccd:490036000248",
+          "state": "UT",
+          "status": "matched",
+          "school": "Olympus High",
+          "city": "Salt Lake City",
+          "type": "public"
+        }
+      },
+      {
+        "number": "1",
+        "name": "Ivy Nystrom",
+        "pos": "GK",
+        "posLabel": "Goalkeeper",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Phoenix, Arizona",
+        "highSchool": "Pinnacle HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Phoenix Rising FC",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "SoccerWire",
+        "clubInfo": {
+          "raw": "Phoenix Rising FC",
+          "key": "phoenix rising fc",
+          "clubId": "phoenix-rising-fc",
+          "club": "Phoenix Rising FC",
+          "status": "matched",
+          "source": "SoccerWire",
+          "updated": "2023-12-19",
+          "state": null,
+          "country": null
+        },
+        "schoolInfo": {
+          "raw": "Pinnacle HS",
+          "key": "pinnacle",
+          "schoolId": "ccd:040593001995",
+          "state": "AZ",
+          "status": "matched",
+          "school": "Pinnacle High School",
+          "city": "Phoenix",
+          "type": "public"
+        }
+      },
+      {
+        "number": "24",
+        "name": "Rachel Reitz",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Lynnwood, Washington",
+        "highSchool": "Meadowdale HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Meadowdale HS",
+          "key": "meadowdale",
+          "schoolId": "ccd:530240000352",
+          "state": "WA",
+          "status": "matched",
+          "school": "Meadowdale High School",
+          "city": "Lynnwood",
+          "type": "public"
+        }
+      },
+      {
+        "number": "10",
+        "name": "Samantha Sellers",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "6'0\"",
+        "heightIn": 72,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Lone Peak HS",
+          "key": "lone peak",
+          "schoolId": "ccd:490003000445",
+          "state": "UT",
+          "status": "matched",
+          "school": "Lone Peak High",
+          "city": "Highland",
+          "type": "public"
+        }
+      },
+      {
+        "number": "6",
+        "name": "Solena Sellers",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'10\"",
+        "heightIn": 70,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Highland, Utah",
+        "highSchool": "Lone Peak HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Lone Peak HS",
+          "key": "lone peak",
+          "schoolId": "ccd:490003000445",
+          "state": "UT",
+          "status": "matched",
+          "school": "Lone Peak High",
+          "city": "Highland",
+          "type": "public"
+        }
+      },
+      {
+        "number": "2",
+        "name": "Summer Sofonia",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'7\"",
+        "heightIn": 67,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "Hyrum, Utah",
+        "highSchool": "Mountain Crest HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Mountain Crest HS",
+          "key": "mountain crest",
+          "schoolId": "ccd:490012000792",
+          "state": "UT",
+          "status": "matched",
+          "school": "Mountain Crest High",
+          "city": "Hyrum",
+          "type": "public"
+        }
+      },
+      {
+        "number": "20",
+        "name": "Belle Sorensen",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'4\"",
+        "heightIn": 64,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Bountiful, Utah",
+        "highSchool": "Bountiful HS",
+        "previousSchool": "| Utah Valley",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Bountiful HS",
+          "key": "bountiful",
+          "schoolId": "ccd:490021000105",
+          "state": "UT",
+          "status": "matched",
+          "school": "Bountiful High",
+          "city": "Bountiful",
+          "type": "public"
+        }
+      },
+      {
+        "number": "16",
+        "name": "Tatum Thomas",
+        "pos": "F",
+        "posLabel": "Forward",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Fr.",
+        "classCode": "FR",
+        "hometown": "Syracuse, Utah",
+        "highSchool": "Clearfield HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "Wasatch SC",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": "TopDrawerSoccer",
+        "clubInfo": {
+          "raw": "Wasatch SC",
+          "key": "wasatch sc",
+          "clubId": "wasatch-sc",
+          "club": "Wasatch SC",
+          "status": "matched",
+          "source": "TopDrawerSoccer",
+          "updated": "2026-09-09",
+          "state": "UT",
+          "country": "US"
+        },
+        "schoolInfo": {
+          "raw": "Clearfield HS",
+          "key": "clearfield",
+          "schoolId": "ccd:490021000112",
+          "state": "UT",
+          "status": "matched",
+          "school": "Clearfield High",
+          "city": "Clearfield",
+          "type": "public"
+        }
+      },
+      {
+        "number": "7",
+        "name": "Kasie Vigil",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "Sr.",
+        "classCode": "SR",
+        "hometown": "Gilbert, Arizona",
+        "highSchool": "Perry HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Perry HS",
+          "key": "perry",
+          "schoolId": "ccd:040187002806",
+          "state": "AZ",
+          "status": "matched",
+          "school": "Perry High School",
+          "city": "Gilbert",
+          "type": "public"
+        }
+      },
+      {
+        "number": "28",
+        "name": "Kaeda Wilson",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "West Jordan, Utah",
+        "highSchool": "Copper Hills HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Copper Hills HS",
+          "key": "copper hills",
+          "schoolId": "ccd:490042000346",
+          "state": "UT",
+          "status": "matched",
+          "school": "Copper Hills High",
+          "city": "West Jordan",
+          "type": "public"
+        }
+      },
+      {
+        "number": "41",
+        "name": "Capriel Winder",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'3\"",
+        "heightIn": 63,
+        "classLabel": "So.",
+        "classCode": "SO",
+        "hometown": "North Logan, Utah",
+        "highSchool": "Green Canyon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Green Canyon HS",
+          "key": "green canyon",
+          "schoolId": "ccd:490012001512",
+          "state": "UT",
+          "status": "matched",
+          "school": "Green Canyon High School",
+          "city": "North Logan",
+          "type": "public"
+        }
+      },
+      {
+        "number": "15",
+        "name": "Talia Winder",
+        "pos": "D",
+        "posLabel": "Defender",
+        "height": "5'5\"",
+        "heightIn": 65,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Logan, Utah",
+        "highSchool": "Green Canyon HS",
+        "previousSchool": "",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Green Canyon HS",
+          "key": "green canyon",
+          "schoolId": "ccd:490012001512",
+          "state": "UT",
+          "status": "matched",
+          "school": "Green Canyon High School",
+          "city": "North Logan",
+          "type": "public"
+        }
+      },
+      {
+        "number": "26",
+        "name": "Kei Yoneda",
+        "pos": "M",
+        "posLabel": "Midfield",
+        "height": "5'2\"",
+        "heightIn": 62,
+        "classLabel": "Jr.",
+        "classCode": "JR",
+        "hometown": "Osaka, Japan",
+        "highSchool": "Osaka Gakugei HS",
+        "previousSchool": "| Arizona Western College",
+        "major": "",
+        "club": "",
+        "bioUrl": null,
+        "social": {},
+        "bio": {},
+        "clubSource": null,
+        "clubInfo": null,
+        "schoolInfo": {
+          "raw": "Osaka Gakugei HS",
+          "key": "osaka gakugei",
+          "schoolId": null,
+          "state": null,
+          "status": "outside-us"
+        }
+      }
+    ],
+    "byPosClass": {
+      "GK": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 1,
+        "R-SO": 0,
+        "JR": 0,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "D": {
+        "FR": 2,
+        "R-FR": 0,
+        "SO": 4,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "M": {
+        "FR": 1,
+        "R-FR": 0,
+        "SO": 2,
+        "R-SO": 0,
+        "JR": 3,
+        "R-JR": 0,
+        "SR": 1,
+        "R-SR": 0,
+        "GR": 0
+      },
+      "F": {
+        "FR": 3,
+        "R-FR": 0,
+        "SO": 3,
+        "R-SO": 0,
+        "JR": 2,
+        "R-JR": 0,
+        "SR": 2,
+        "R-SR": 0,
+        "GR": 0
+      }
+    },
+    "byClass": {
+      "FR": 7,
+      "SO": 10,
+      "SR": 5,
+      "JR": 7
+    },
+    "graduatingByPos": {
+      "F": 2,
+      "M": 1,
+      "GK": 1,
+      "D": 1
+    },
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utahstateaggies.com/sports/womens-soccer/roster",
+      "asOf": "2026-09-30T16:38:16Z"
+    }
+  },
+  "rosterHistory": {
+    "2025": {
+      "count": 28,
+      "players": [
+        {
+          "number": "23",
+          "name": "Bentli Barrera",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Hyrum, Utah",
+          "highSchool": "Mountain Crest HS"
+        },
+        {
+          "number": "25",
+          "name": "Hadli Barrera",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Hyrum, Utah",
+          "highSchool": "Mountain Crest HS"
+        },
+        {
+          "number": "7",
+          "name": "Kaylie Chambers",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Arvada, Colorado",
+          "highSchool": "Ralston Valley HS"
+        },
+        {
+          "number": "9",
+          "name": "Kate Christian",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Kennewick, Washington",
+          "highSchool": "Kamiakin HS"
+        },
+        {
+          "number": "55",
+          "name": "Carli Conner",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Fruita, Colorado",
+          "highSchool": "Fruita Monument HS"
+        },
+        {
+          "number": "14",
+          "name": "Summer Diamond",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Uintah, Utah",
+          "highSchool": "Bonneville HS"
+        },
+        {
+          "number": "18",
+          "name": "Ava Gotchy",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Reno, Nevada",
+          "highSchool": "Galena HS"
+        },
+        {
+          "number": "0",
+          "name": "Allee Grashoff",
+          "pos": "GK",
+          "classCode": "JR",
+          "hometown": "Riverside, California",
+          "highSchool": "Norco HS"
+        },
+        {
+          "number": "5",
+          "name": "Ellie Hendrix",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "St. George, Utah",
+          "highSchool": "Desert Hills HS"
+        },
+        {
+          "number": "13",
+          "name": "Kunie Hirai",
+          "pos": "M/F",
+          "classCode": "FR",
+          "hometown": "Boise, Idaho",
+          "highSchool": "Boise HS"
+        },
+        {
+          "number": "11",
+          "name": "Abby Hironaka",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Honolulu, Hawaii",
+          "highSchool": "Iolani School"
+        },
+        {
+          "number": "19",
+          "name": "Austin Miller",
+          "pos": "F/M",
+          "classCode": "SO",
+          "hometown": "Providence, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "3",
+          "name": "Mia Mullenmeister",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Mitchell, South Dakota",
+          "highSchool": "Mitchell HS"
+        },
+        {
+          "number": "1",
+          "name": "Ivy Nystrom",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Phoenix, Arizona",
+          "highSchool": "Pinnacle HS"
+        },
+        {
+          "number": "00",
+          "name": "Taylor Rath",
+          "pos": "GK",
+          "classCode": "SR",
+          "hometown": "Las Vegas, Nevada",
+          "highSchool": "Palo Verde HS"
+        },
+        {
+          "number": "24",
+          "name": "Rachel Reitz",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Lynnwood, Washington",
+          "highSchool": "Meadowdale HS"
+        },
+        {
+          "number": "22",
+          "name": "Hannah Roe",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton HS"
+        },
+        {
+          "number": "10",
+          "name": "Samantha Sellers",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "6",
+          "name": "Solena Sellers",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "2",
+          "name": "Summer Sofonia",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Hyrum, Utah",
+          "highSchool": "Mountain Crest HS"
+        },
+        {
+          "number": "",
+          "name": "Azra Soyer",
+          "pos": "",
+          "classCode": "",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "16",
+          "name": "Isabella Velazco",
+          "pos": "D/M",
+          "classCode": "SR",
+          "hometown": "Sylmar, California",
+          "highSchool": "Granada Hills HS"
+        },
+        {
+          "number": "21",
+          "name": "Kasie Vigil",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "12",
+          "name": "Tess Werts",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Portland, Oregon",
+          "highSchool": "Corner Canyon (UT) HS"
+        },
+        {
+          "number": "28",
+          "name": "Kaeda Wilson",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "West Jordan, Utah",
+          "highSchool": "Copper Hills HS"
+        },
+        {
+          "number": "41",
+          "name": "Capriel Winder",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "North Logan, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "15",
+          "name": "Talia Winder",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Logan, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "17",
+          "name": "Rine Yonaha",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Okinawa, Japan",
+          "highSchool": "Hinomoto Gakeun HS"
+        }
+      ],
+      "departed": [
+        "ava gotchy",
+        "azra soyer",
+        "carli conner",
+        "hannah roe",
+        "isabella velazco",
+        "kaylie chambers",
+        "rine yonaha",
+        "taylor rath",
+        "tess werts"
+      ]
+    },
+    "2024": {
+      "count": 33,
+      "players": [
+        {
+          "number": "2",
+          "name": "Bizzy Arevalo",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Davis HS"
+        },
+        {
+          "number": "0",
+          "name": "Cora Brendle",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Boiling Springs, S. C.",
+          "highSchool": "Boiling Springs HS | USC Upstate"
+        },
+        {
+          "number": "20",
+          "name": "Alysia Butters",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Ogden, Utah",
+          "highSchool": "Ogden HS"
+        },
+        {
+          "number": "7",
+          "name": "Kaylie Chambers",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Arvada, Colorado",
+          "highSchool": "Ralston Valley HS"
+        },
+        {
+          "number": "9",
+          "name": "Kate Christian",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Kennewick, Washington",
+          "highSchool": "Kamiakin HS"
+        },
+        {
+          "number": "55",
+          "name": "Addi Coon",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Pleasant Grove, Utah",
+          "highSchool": "Pleasant Grove HS"
+        },
+        {
+          "number": "26",
+          "name": "Alex Day",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Chino Hills, Calif.",
+          "highSchool": "Chino Hills HS | Arizona"
+        },
+        {
+          "number": "14",
+          "name": "Summer Diamond",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Uintah, Utah",
+          "highSchool": "Bonneville HS"
+        },
+        {
+          "number": "25",
+          "name": "Gracie East",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "South Ogden, Utah",
+          "highSchool": "Bonneville HS"
+        },
+        {
+          "number": "18",
+          "name": "Ava Gotchy",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Reno, Nevada",
+          "highSchool": "Galena HS"
+        },
+        {
+          "number": "57",
+          "name": "Natalie Hadlock",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Eagle Mountain, Utah",
+          "highSchool": "Cedar Valley HS"
+        },
+        {
+          "number": "5",
+          "name": "Ellie Hendrix",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "St. George, Utah",
+          "highSchool": "Desert Hills HS"
+        },
+        {
+          "number": "27",
+          "name": "Faith Hines",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Kapolei, Hawaii",
+          "highSchool": "Kapolei HS"
+        },
+        {
+          "number": "1",
+          "name": "Shay Kercher-Pratt",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Legacy HS"
+        },
+        {
+          "number": "10",
+          "name": "Whitney Lopez",
+          "pos": "M",
+          "classCode": "GR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Logan HS"
+        },
+        {
+          "number": "19",
+          "name": "Austin Miller",
+          "pos": "F/M",
+          "classCode": "FR",
+          "hometown": "Providence, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "3",
+          "name": "Mia Mullenmeister",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Mitchell, South Dakota",
+          "highSchool": "Mitchell HS"
+        },
+        {
+          "number": "13",
+          "name": "Kylie Olsen",
+          "pos": "D",
+          "classCode": "GR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "21",
+          "name": "Presley Ray",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "American Fork HS"
+        },
+        {
+          "number": "24",
+          "name": "Rachel Reitz",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Lynnwood, Washington",
+          "highSchool": "Meadowdale HS"
+        },
+        {
+          "number": "33",
+          "name": "Kaitlyn Richins",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton HS"
+        },
+        {
+          "number": "22",
+          "name": "Hannah Roe",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton HS"
+        },
+        {
+          "number": "37",
+          "name": "Kayla Sato",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Mililani, Hawaii",
+          "highSchool": "Mililani HS"
+        },
+        {
+          "number": "6",
+          "name": "Solena Sellers",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "11",
+          "name": "Brooklyn Smith",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "South Jordan, Utah",
+          "highSchool": "Murray HS"
+        },
+        {
+          "number": "",
+          "name": "Azra Soyer",
+          "pos": "",
+          "classCode": "",
+          "hometown": "",
+          "highSchool": ""
+        },
+        {
+          "number": "30",
+          "name": "Isabella Velazco",
+          "pos": "D/M",
+          "classCode": "JR",
+          "hometown": "Sylmar, California",
+          "highSchool": "Granada Hills HS"
+        },
+        {
+          "number": "31",
+          "name": "Kasie Vigil",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "16",
+          "name": "Addy Weichers",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "12",
+          "name": "Tess Werts",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Portland, Oregon",
+          "highSchool": "Corner Canyon (UT) HS"
+        },
+        {
+          "number": "23",
+          "name": "Kaeda Wilson",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "West Jordan, Utah",
+          "highSchool": "Copper Hills HS"
+        },
+        {
+          "number": "17",
+          "name": "Rine Yonaha",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Okinawa, Japan",
+          "highSchool": "Hinomoto Gakeun HS"
+        },
+        {
+          "number": "4",
+          "name": "Ally Yoshimura",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Honolulu, Hawaii",
+          "highSchool": "Punahou School"
+        }
+      ],
+      "departed": null
+    },
+    "2023": {
+      "count": 32,
+      "players": [
+        {
+          "number": "2",
+          "name": "Bizzy Arevalo",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Davis HS"
+        },
+        {
+          "number": "20",
+          "name": "Alysia Butters",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Ogden, Utah",
+          "highSchool": "Ogden HS"
+        },
+        {
+          "number": "37",
+          "name": "Jocelyn Bybee",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Alpine, Utah",
+          "highSchool": "Lone Peak HS / Utah Valley"
+        },
+        {
+          "number": "7",
+          "name": "Kaylie Chambers",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Arvada, Colorado",
+          "highSchool": "Ralston Valley HS"
+        },
+        {
+          "number": "35",
+          "name": "Kate Christian",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Kennewick, Washington",
+          "highSchool": "Kamiakin HS"
+        },
+        {
+          "number": "55",
+          "name": "Addi Coon",
+          "pos": "D",
+          "classCode": "SO",
+          "hometown": "Pleasant Grove, Utah",
+          "highSchool": "Pleasant Grove HS"
+        },
+        {
+          "number": "26",
+          "name": "Alex Day",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Chino Hills, Calif.",
+          "highSchool": "Chino Hills HS | Arizona"
+        },
+        {
+          "number": "14",
+          "name": "Summer Diamond",
+          "pos": "M",
+          "classCode": "FR",
+          "hometown": "Uintah, Utah",
+          "highSchool": "Bonneville HS"
+        },
+        {
+          "number": "57",
+          "name": "Gracie East",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "South Ogden, Utah",
+          "highSchool": "Bonneville HS"
+        },
+        {
+          "number": "3",
+          "name": "Emma Fry",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Orem, Utah",
+          "highSchool": "Timpanogos HS / Salt Lake CC"
+        },
+        {
+          "number": "24",
+          "name": "Nicole Hadlock-Hardy",
+          "pos": "F",
+          "classCode": "GR",
+          "hometown": "Eagle Mountain, Utah",
+          "highSchool": "Westlake HS / Snow College"
+        },
+        {
+          "number": "00",
+          "name": "McKenzie Hunninghake",
+          "pos": "GK",
+          "classCode": "SO",
+          "hometown": "Leander, Texas",
+          "highSchool": "Rouse HS"
+        },
+        {
+          "number": "23",
+          "name": "Kelsey Kaufusi",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Syracuse, Utah",
+          "highSchool": "Syracuse HS"
+        },
+        {
+          "number": "1",
+          "name": "Shay Kercher-Pratt",
+          "pos": "GK",
+          "classCode": "FR",
+          "hometown": "Broomfield, Colo.",
+          "highSchool": "Legacy HS"
+        },
+        {
+          "number": "4",
+          "name": "Tenzi Knowles",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Providence, Utah",
+          "highSchool": "Ridgeline HS"
+        },
+        {
+          "number": "10",
+          "name": "Whitney Lopez",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Logan HS"
+        },
+        {
+          "number": "9",
+          "name": "London Miller-Smith",
+          "pos": "M",
+          "classCode": "SR",
+          "hometown": "Providence, Utah",
+          "highSchool": "Ridgeline HS / Utah Valley"
+        },
+        {
+          "number": "25",
+          "name": "HalleKate Munson",
+          "pos": "F",
+          "classCode": "SR",
+          "hometown": "Holladay, Utah",
+          "highSchool": "Olympus HS"
+        },
+        {
+          "number": "13",
+          "name": "Kylie Olsen",
+          "pos": "D",
+          "classCode": "SR",
+          "hometown": "Logan, Utah",
+          "highSchool": "Green Canyon HS"
+        },
+        {
+          "number": "21",
+          "name": "Presley Ray",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Highland, Utah",
+          "highSchool": "American Fork HS"
+        },
+        {
+          "number": "33",
+          "name": "Kaitlyn Richins",
+          "pos": "M",
+          "classCode": "SO",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton HS"
+        },
+        {
+          "number": "22",
+          "name": "Hannah Roe",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Layton, Utah",
+          "highSchool": "Layton HS"
+        },
+        {
+          "number": "30",
+          "name": "Kayla Sato",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Mililani, Hawaii",
+          "highSchool": "Mililani HS"
+        },
+        {
+          "number": "27",
+          "name": "Abby Schofield",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "West Point, Utah",
+          "highSchool": "Syracuse HS"
+        },
+        {
+          "number": "6",
+          "name": "Solena Sellers",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "11",
+          "name": "Brooklyn Smith",
+          "pos": "F",
+          "classCode": "FR",
+          "hometown": "South Jordan, Utah",
+          "highSchool": "Murray HS"
+        },
+        {
+          "number": "5",
+          "name": "Heidi Smith-Wilstead",
+          "pos": "F",
+          "classCode": "JR",
+          "hometown": "Santa Clara, Utah",
+          "highSchool": "Snow Canyon HS"
+        },
+        {
+          "number": "31",
+          "name": "Kasie Vigil",
+          "pos": "D",
+          "classCode": "FR",
+          "hometown": "Gilbert, Arizona",
+          "highSchool": "Perry HS"
+        },
+        {
+          "number": "0",
+          "name": "Diera Walton",
+          "pos": "GK",
+          "classCode": "GR",
+          "hometown": "Draper, Utah",
+          "highSchool": "Jordan HS"
+        },
+        {
+          "number": "16",
+          "name": "Addy Weichers",
+          "pos": "D",
+          "classCode": "JR",
+          "hometown": "Highland, Utah",
+          "highSchool": "Lone Peak HS"
+        },
+        {
+          "number": "12",
+          "name": "Tess Werts",
+          "pos": "F",
+          "classCode": "SO",
+          "hometown": "Portland, Oregon",
+          "highSchool": "Corner Canyon (UT) HS"
+        },
+        {
+          "number": "17",
+          "name": "Rine Yonaha",
+          "pos": "M",
+          "classCode": "JR",
+          "hometown": "Okinawa, Japan",
+          "highSchool": "Hinomoto Gakeun HS"
+        }
+      ],
+      "departed": null
+    }
+  },
+  "schedule": {
+    "season": 2026,
+    "record": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "text": "0-0-0",
+      "played": 0,
+      "scheduled": 0,
+      "confText": null,
+      "exhibitions": 0
+    },
+    "games": [],
+    "history": {},
+    "_meta": {
+      "source": "athletics",
+      "url": "https://utahstateaggies.com/sports/womens-soccer/schedule",
+      "asOf": "2026-09-30T16:38:16Z"
+    }
+  },
   "commitments": [
     {
       "id": "kya-newton-2026",
@@ -593,7 +2450,7 @@
       "city": "",
       "highSchool": "",
       "college": "utah-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -610,7 +2467,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/kya-newton/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2025-05-10"
         }
@@ -649,7 +2506,7 @@
       "city": "",
       "highSchool": "",
       "college": "utah-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -663,9 +2520,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "Real Colorado",
@@ -682,7 +2537,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -698,7 +2553,7 @@
       "city": "Fort Collins",
       "highSchool": "",
       "college": "utah-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -712,9 +2567,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "Colorado Rush",
@@ -731,7 +2584,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -747,7 +2600,7 @@
       "city": "",
       "highSchool": "",
       "college": "utah-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -761,9 +2614,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "Wasatch SC",
@@ -780,7 +2631,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -796,7 +2647,7 @@
       "city": "",
       "highSchool": "",
       "college": "utah-state",
-      "status": "verbal",
+      "status": "enrolled",
       "announced": null,
       "announcedSource": null,
       "firstSeen": "2026-09-06",
@@ -810,9 +2661,7 @@
           "missingSince": "2026-09-10"
         }
       ],
-      "flags": [
-        "possibly-decommitted"
-      ],
+      "flags": [],
       "clubSource": "TopDrawerSoccer",
       "clubInfo": {
         "raw": "Silicon Valley Soccer Association",
@@ -829,7 +2678,7 @@
         "date": "2026-09-06",
         "basis": "first seen by CollegeDash"
       },
-      "confidence": "single-source",
+      "confidence": "confirmed",
       "sourceKinds": [
         "tds"
       ]
@@ -855,14 +2704,14 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/payton-fraser/pid-176158",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/utah-state/clgid-334/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         },
         {
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/payton-fraser/",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null,
           "profileCreated": "2025-03-09"
         }
@@ -876,7 +2725,7 @@
         "club": "Eagles SC (CA)",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": "CA",
         "country": "US"
       },
@@ -911,7 +2760,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/phalastine-odeh/pid-170021",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/utah-state/clgid-334/tab-commitments",
           "firstSeen": "2026-09-06",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -924,7 +2773,7 @@
         "club": "La Roca FC",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -958,7 +2807,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/lexi-vawdrey/pid-232965",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/utah-state/clgid-334/tab-commitments",
           "firstSeen": "2026-09-18",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -971,7 +2820,7 @@
         "club": "Utah Avalanche",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": null,
         "country": null
       },
@@ -1005,7 +2854,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/sydney-vessey/pid-233567",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/utah-state/clgid-334/tab-commitments",
           "firstSeen": "2026-09-23",
-          "lastSeen": "2026-09-29",
+          "lastSeen": "2026-09-30",
           "missingSince": null
         }
       ],
@@ -1018,7 +2867,7 @@
         "club": "Utah Celtic FC",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-09-29",
+        "updated": "2026-09-30",
         "state": "UT",
         "country": "US"
       },
@@ -1035,6 +2884,24 @@
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "No. 19 Aggies Open Pac-12 Play vs No. 22 Texas State on Thursday",
+        "url": "https://utahstateaggies.com/news/2026/9/29/womens-soccer-no-19-aggies-open-pac-12-play-vs-no-22-texas-state-on-thursday.aspx",
+        "date": "2026-09-29",
+        "recruiting": false
+      },
+      {
+        "title": "Utah State Soccer Ranked No. 19 in United Soccer Coaches Poll",
+        "url": "https://utahstateaggies.com/news/2026/9/29/womens-soccer-utah-state-soccer-ranked-no-19-in-united-soccer-coaches-poll.aspx",
+        "date": "2026-09-29",
+        "recruiting": false
+      },
+      {
+        "title": "Utah State Soccer to Host 2026 Pac-12 Championship",
+        "url": "https://utahstateaggies.com/news/2026/9/29/womens-soccer-utah-state-soccer-to-host-2026-pac-12-tournament.aspx",
+        "date": "2026-09-29",
+        "recruiting": false
+      },
       {
         "title": "Utah State Soccer Ranked No. 19 in United Soccer Coaches Poll",
         "url": "https://utahstateaggies.com/news/2026/9/22/womens-soccer-utah-state-soccer-ranked-no-19-in-united-soccer-coaches-poll.aspx",
@@ -1088,30 +2955,12 @@
         "url": "https://utahstateaggies.com/news/2026/9/13/womens-soccer-aggies-shut-out-south-dakota-state-in-3-0-win.aspx",
         "date": "2026-09-13",
         "recruiting": false
-      },
-      {
-        "title": "Aggies Blow Out No. 13 BYU 4-0",
-        "url": "https://utahstateaggies.com/news/2026/9/10/womens-soccer-aggies-blow-out-no-13-byu-4-0.aspx",
-        "date": "2026-09-10",
-        "recruiting": false
-      },
-      {
-        "title": "Aggies Begin Homestand vs No. 13 BYU on Thursday",
-        "url": "https://utahstateaggies.com/news/2026/9/9/womens-soccer-aggies-begin-homestand-with-no-13-byu-on-thursday.aspx",
-        "date": "2026-09-09",
-        "recruiting": false
-      },
-      {
-        "title": "Aggies Fall at No. 24 Colorado 2-0",
-        "url": "https://utahstateaggies.com/news/2026/9/6/womens-soccer-aggies-fall-at-no-24-colorado-2-0.aspx",
-        "date": "2026-09-06",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://utahstateaggies.com/sports/womens-soccer/archives",
-      "asOf": "2026-09-29T16:45:31Z"
+      "asOf": "2026-09-30T16:38:25Z"
     }
   },
   "camps": {
@@ -1125,13 +2974,13 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 22,
+    "newsScanned": 25,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://utahstateaggies.com/sports/2018/6/12/camps-ust-camps-html.aspx",
-        "asOf": "2026-09-29T16:45:35Z"
+        "asOf": "2026-09-30T16:38:28Z"
       }
     ]
   },
@@ -1142,27 +2991,22 @@
     "2028": 2
   },
   "_build": {
-    "builtAt": "2026-09-29T17:21:02Z",
-    "completeness": 0.67,
+    "builtAt": "2026-09-30T17:12:33Z",
+    "completeness": 1.0,
     "sections": {
       "school": true,
       "climate": true,
-      "program": false,
+      "program": true,
       "seasons": true,
       "rpi": true,
-      "roster": false,
-      "schedule": false,
+      "roster": true,
+      "schedule": true,
       "commitments": true,
       "news": true
     },
     "stale": [],
     "failed": [],
     "skipped": [
-      {
-        "collector": "athletics",
-        "reason": "athletics: roster is rendered in the browser (registry athletics.rosterRequiresBrowser); needs a headless browser, see athletics.note",
-        "at": "2026-09-29T16:45:22Z"
-      },
       {
         "collector": "wikipedia",
         "reason": "wikipedia: no team article in the registry (most mid-majors have none; try `registry fix-wiki`)",
