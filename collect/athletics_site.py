@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from urllib.parse import urljoin, urlparse
 
-from . import adapters, coach_bio, common
+from . import adapters, coach_bio, coach_bio_diag, common
 
 NAME = "athletics"
 # Club names as they appear in bios: 1-4 capitalised words ending in a club-ish token.
@@ -286,7 +286,18 @@ def _head_coach_bio(staff: list[dict], program: dict) -> dict | None:
     common.log(f"  head coach bio: {head['name']} first season {parsed['firstSeason']}"
                + (" (the page contradicts itself)" if parsed["conflict"] else "")
                + f" from {len(parsed['statements'])} statement(s)")
-    return {"name": head["name"], "url": head["bioUrl"], **parsed}
+    result = {"name": head["name"], "url": head["bioUrl"], **parsed}
+    _coach_bio_diag(program, html, head["name"], bool(parsed["statements"]))
+    return result
+
+
+def _coach_bio_diag(program: dict, html: str, name: str, matched: bool) -> None:
+    """Issue #168 step 1: hand the page already in memory to coach_bio_diag, after the result above is built.
+    Plain values only, never the result; any error is one log line and changes nothing that is returned."""
+    try:
+        coach_bio_diag.observe(program.get("slug"), program.get("division"), html, name, matched)
+    except Exception as e:  # a diagnostic must never cost a collection
+        common.log(f"  coach-bio diag failed: {type(e).__name__}")
 
 
 def school_names(program: dict) -> list[str]:

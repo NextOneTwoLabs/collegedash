@@ -165,6 +165,9 @@ jobs:
           COLLEGEDASH_FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
           ONLY_INPUT: ${{ inputs.only }}
           FULL_INPUT: ${{ inputs.full }}
+          # issue #168 step 1: name-free coach-bio diagnostics, written by the runs that fetch coach bios. Under
+          # runner.temp, never in the checkout (the commit step runs `git add -A`); uploaded below, not committed.
+          COACH_BIO_DIAG_DIR: ${{ runner.temp }}/coach-bio-diag
         run: |
           set +e
           if [ -n "$ONLY_INPUT" ]; then
@@ -191,6 +194,19 @@ jobs:
         if: always()
         run: cat public/archive/refresh-state.json || echo "(no state file)"
 
+      # Issue #168 step 1: the coach-bio diagnostics (per-program counts and masked patterns seen in 3 or more
+      # programs) go to one short-lived artifact and nowhere else. Its own step, and it cannot fail the job or
+      # block the publish below.
+      - name: Upload coach-bio diagnostics
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: coach-bio-diag-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/coach-bio-diag/
+          retention-days: 14
+          if-no-files-found: ignore
+
       - name: Commit changed data
         if: always()
         env:
@@ -206,6 +222,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           stamp=$(date -u +%Y-%m-%dT%H:%MZ)
           git add -A
+          # issue #168 step 1: the coach-bio diagnostics live under runner.temp and are an artifact only; a
+          # diagnostics file in this commit would publish it, so stop before committing anything.
+          if git diff --cached --name-only | grep -q 'coach-bio-diag'; then
+            echo "::error title=refresh::a coach-bio diagnostics file is staged for commit; it must stay under runner.temp (issue #168). Nothing was committed."
+            exit 1
+          fi
           git commit -m "data: $verb $stamp"
           # main may have moved while the collectors ran (a push from a developer machine, or a PR
           # merged mid-run), which makes a plain push non-fast-forward. Rebase onto upstream first;
