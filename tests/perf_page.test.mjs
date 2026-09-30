@@ -21,15 +21,17 @@ const BLOCK = HTML.slice(START, END);
 const fn = name => { const a = HTML.indexOf(`function ${name}(`); return HTML.slice(a, HTML.indexOf('\n}\n', a)); };
 
 // A fresh copy of the block with stub globals. `now` is the clock the tests move; frames run at once.
-function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 } } = {}) {
+function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, screen = { width: 390, height: 844 }, hidden = false, frameWait = 0 } = {}) {
   const sent = [], fetched = [];
   const clock = { now: 0 };
   const byName = entries || (() => []);
   const sandbox = {
     Promise, Math: Object.assign(Object.create(Math), { random: () => random }), Number, JSON, Set, URL, Blob, setTimeout,
     location: { href: 'https://college.nextonetwo.com/#/' },
+    document: { get visibilityState() { return sandbox.hidden ? 'hidden' : 'visible'; } }, hidden,
     performance: { now: () => clock.now, getEntriesByName: n => byName(n) },
-    requestAnimationFrame: f => f(),
+    // frameWait: how long each frame is held (a browser holds frames while the page is hidden)
+    requestAnimationFrame: f => { clock.now += frameWait; f(); },
     matchMedia: q => ({ matches: q === '(pointer: coarse)' ? coarse : false }),
     screen,
     navigator: sendBeacon === 'absent' ? {} : { sendBeacon(url, blob) { if (sendBeacon === 'throws') throw new Error('x'); sent.push({ url, blob }); return sendBeacon === 'ok'; } },
@@ -239,6 +241,28 @@ test('the landing list, in boot()\'s real order: the index loads before route() 
   assert.ok(body.first > 0, 'with its first render time: ' + body.first);
   assert.equal(body.first, 420);
   assert.equal(body.render, 120, 'render runs from data ready to the drawn frame');
+});
+
+test('a view drawn while the page is hidden is not reported, and does not use up its view kind', async () => {
+  // Found on the #399 preview: in a background tab the browser holds animation frames until the tab is shown, so the
+  // render and first-render times would include the time spent hidden.
+  const p = load({ random: 0, hidden: true, entries: () => [entry()] });
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0, 'hidden when drawn: nothing sent');
+  assert.equal(p.PERF.sent.size, 0, 'and the list can still be reported later');
+  p.hidden = false;
+  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  assert.equal(p.sent.length, 1, 'shown again: the next list view is reported');
+});
+
+test('frames held for over a second (hidden in between) drop the report: the time was not drawing', async () => {
+  const p = load({ random: 0, frameWait: 600, entries: () => [entry()] });
+  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(p.sent.length, 0, 'two frames of 600 ms');
+  const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
+  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  assert.equal(q.sent.length, 1, 'normal frames: sent');
+  assert.equal((await bodyOf(q.sent[0])).render, 82, 'render still counts to the drawn frame (50 + 2 x 16)');
 });
 
 test('transport: sendBeacon, else fetch with keepalive; nothing throws', async () => {
