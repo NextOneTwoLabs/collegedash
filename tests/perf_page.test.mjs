@@ -177,12 +177,32 @@ test('not sampled, rate 0, or data already in memory: nothing is sent', async ()
   p = load({ random: 0, entries: () => [entry()] });
   await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '0' });
   assert.equal(p.sent.length + p.fetched.length, 0, 'rate 0');
+  // in-app: the list's data came in with an earlier view (a profile landing loads the index too), so this list view
+  // loaded nothing and has nothing of its own to report
   p = load({ random: 0, entries: () => [entry()] });
   p.perfLatch(answer('0.1'));
-  p.perfLoaded('/api/v1/programs'); // loaded before the view started (e.g. by a profile landing)
+  p.perfLoaded('/api/v1/programs');
   p.clock.now += 100;
   await p.perfView('list', Promise.resolve(), 'in-app');
-  assert.equal(p.sent.length, 0, 'a load from before this view is not this view\'s');
+  assert.equal(p.sent.length, 0, 'an in-app view does not report a load from before it started');
+});
+
+test('the landing list, in boot()\'s real order: the index loads before route() runs, and is still reported', async () => {
+  // boot() awaits loadIndex() before route(), so /api/v1/programs has finished before perfView('list', ..., 'landing')
+  // records its start (Bianque, #397). The landing view is the one #395 needs most: it must be reported.
+  const p = load({ random: 0, entries: () => [entry()] });
+  p.clock.now = 300;
+  p.perfLatch(answer('0.1'));
+  p.perfLoaded('/api/v1/programs'); // boot(): loadIndex()
+  p.clock.now = 420;
+  await p.perfView('list', Promise.resolve(), 'landing'); // then route() -> renderList()
+  assert.equal(p.sent.length, 1, 'one report for the landing list');
+  const body = await bodyOf(p.sent[0]);
+  assert.equal(body.res, 'programs');
+  assert.equal(body.nav, 'landing');
+  assert.ok(body.first > 0, 'with its first render time: ' + body.first);
+  assert.equal(body.first, 420);
+  assert.equal(body.render, 120, 'render runs from data ready to the drawn frame');
 });
 
 test('transport: sendBeacon, else fetch with keepalive; nothing throws', async () => {
