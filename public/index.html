@@ -1053,15 +1053,21 @@ function perfSend(body) {
 // list's /api/v1/programs has always finished before perfView() starts (#397 review).
 function perfRendered(view, start, nav) {
   if (!PERF.sampled || PERF.sent.has(view) || PERF.sent.size >= PERF_MAX) return;
+  // A page drawn while hidden (a background tab) gets no animation frames until it is shown, so its render time would
+  // be time spent hidden: not reported, and the view kind stays free for a later view (#399 preview). Read, not listened.
+  if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
   const load = PERF.loads[PERF_VIEWS[view]];
   if (!load || (nav !== 'landing' && load.done < start)) return; // in-app, data already in memory: nothing loaded for it
   PERF.sent.add(view);
+  const drawn = performance.now();
   const frame = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : f => setTimeout(f, 16);
   frame(() => frame(() => {
     try {
+      const painted = performance.now();
+      if (painted - drawn > 1000) return; // two frames held over a second: hidden in between, the time was not drawing
       const entry = performance.getEntriesByName(new URL(load.url, location.href).href).filter(e => e.entryType === 'resource').at(-1);
       const device = perfDevice(matchMedia('(pointer: coarse)').matches, screen.width, screen.height);
-      perfSend(perfBody(view, load, performance.now(), nav, entry, PERF.rate, device));
+      perfSend(perfBody(view, load, painted, nav, entry, PERF.rate, device));
     } catch { }
   }));
 }

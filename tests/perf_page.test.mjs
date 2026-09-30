@@ -39,7 +39,7 @@ function load({ random = 0, sendBeacon = 'ok', entries = null, coarse = true, sc
   };
   vm.createContext(sandbox);
   new vm.Script(BLOCK + '\n;globalThis.__perf = { PERF, PERF_VIEWS, perfDevice, perfLatch, perfRes, perfLoaded, perfBody, perfSend, perfRendered, perfView };', { filename: 'public/index.html' }).runInContext(sandbox);
-  return { ...sandbox.__perf, sent, fetched, clock };
+  return { ...sandbox.__perf, sent, fetched, clock, setHidden: v => { sandbox.hidden = v; } };
 }
 const answer = rate => ({ headers: { get: k => (k === 'x-collegedash-perf' ? rate : null) } });
 const settle = () => new Promise(r => setTimeout(r, 0));
@@ -250,7 +250,7 @@ test('a view drawn while the page is hidden is not reported, and does not use up
   await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
   assert.equal(p.sent.length, 0, 'hidden when drawn: nothing sent');
   assert.equal(p.PERF.sent.size, 0, 'and the list can still be reported later');
-  p.hidden = false;
+  p.setHidden(false);
   await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
   assert.equal(p.sent.length, 1, 'shown again: the next list view is reported');
 });
