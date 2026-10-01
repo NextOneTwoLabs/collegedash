@@ -2634,7 +2634,7 @@ async function recsClearAll() {
   if (!newer) { try { localStorage.removeItem(RECS_KEY); } catch { removed = false; } }
   Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: newer ? R.doc : null, active: false, stale: [], showHidden: false,
     sharedNotice: false, hiddenDropped: 0, storage: removed ? 'ok' : R.storage, notices: newer ? R.notices : [], issues: [],
-    toast: { kind: 'cleared', removed, newer } });
+    toast: { kind: 'cleared', removed, newer, otherTab: !!R.otherTab } });  // otherTab: why this visit only (#440 follow-up)
   R.draft = recsDraftFrom(R.saved);
   syncSortControls();
   await renderList(); renderRecsToast();
@@ -2680,9 +2680,10 @@ function recsToastHtml(t) {
   } else if (t.kind === 'restored') html = `Restored: ${esc(recsName(t.slug))}.`;
   else if (t.kind === 'catalog') html = 'Recommendations need the program list, which didn’t load. <button type="button" class="btn" id="recsCatalogRetryToast">Try again</button>';
   else if (t.kind === 'usedOther') html = t.cleared ? 'Using your other tab’s choice: personalization cleared.' : 'Now using the preferences from your other tab.';
-  else if (t.kind === 'kept') html = 'Keeping this tab’s preferences. Your next save replaces the other tab’s.';
+  else if (t.kind === 'kept') html = 'Keeping this tab’s preferences. Your next change here replaces the other tab’s.';
   else if (t.kind === 'crosstab') html = `${t.cleared ? 'Your preferences were cleared in another tab.' : 'Your preferences changed in another tab.'} <button type="button" class="btn" id="recsUseOther">Use those</button> <button type="button" class="btn" id="recsKeepThis">Keep these</button>`;
   else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
+    : t.newer && t.otherTab ? 'Personalization cleared for this visit. What your other tab saved is left as it is.'
     : t.newer ? 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.'
     : 'Personalization cleared for this visit; this browser isn’t letting the page change what it saved.';
   return html;

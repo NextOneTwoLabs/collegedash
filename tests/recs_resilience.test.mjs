@@ -254,9 +254,12 @@ test('#427 review: a save or Clear while the prompt waits writes nothing; after 
   await pg.sb.recsClearAll();
   assert.equal(pg.store.get('cd.recs'), theirs, 'Clear deleted the other tab\'s preferences while the prompt waited');
   assert.ok(prompting(pg));
+  // #440 follow-up: the cause is the other tab, not a newer version of the page, and the message says so
+  assert.equal(pg.$('#recsToastMsg').innerHTML, 'Personalization cleared for this visit. What your other tab saved is left as it is.',
+    'Clear while the prompt waits blames a newer version of the page');
   pg.sb.recsKeepThisTab();
   assert.ok(!prompting(pg), 'Keep these left the prompt');
-  assert.equal(toastHtml(pg), 'Keeping this tab’s preferences. Your next save replaces the other tab’s.');
+  assert.equal(toastHtml(pg), 'Keeping this tab’s preferences. Your next change here replaces the other tab’s.');
   assert.equal(FOCUS.el?._name, '#recsToast', 'focus did not go to the toast');
   await open(pg);
   pg.sb.recsToggleValue('division', 'D2');
