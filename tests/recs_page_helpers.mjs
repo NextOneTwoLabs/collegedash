@@ -1,5 +1,10 @@
 // The page harness shared by the recommendations page suites (issue #400): tests/recs_form.test.mjs (PR 3) and
-// tests/recs_results.test.mjs (PR 4). Not a suite itself: no node:test import.
+// tests/recs_results.test.mjs (PR 4), and every page suite since. Not a suite itself: no node:test import (the suite
+// runner refuses a helper that has one, as a suite nothing runs).
+//
+// Every suite that imports it drives the whole page, so it holds the CPU lock shared (tests/timing_helpers.mjs), taken
+// once here so each page suite, present and future, is covered and never runs while a timing suite measures (#439).
+// Each suite is its own process under node --test, and the place is released when that process exits.
 //
 // Same mechanism as tests/ask_page.test.mjs: the page's inline <script> runs in a `vm` against a stub DOM, and fetch
 // is a stub that serves public/ and answers api/status as each test says. A <script src="recs.js"> the page appends
@@ -11,6 +16,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { acquireShared, lockNote } from './timing_helpers.mjs';
+
+const SUITE = path.basename(process.argv[1] || 'a recs page suite');
+const CPU = await acquireShared(SUITE, 120_000); // released on process exit (timing_helpers.mjs releaser)
+if (!CPU.held) console.log(lockNote(SUITE, CPU));
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PUBLIC = path.join(HERE, '..', 'public');
@@ -39,13 +49,15 @@ const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 're
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
   'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
   'recsEditPreference', 'renderRecsToast', 'programBySlug', 'recsOtherTab', 'recsUseOtherTab', 'recsKeepThisTab', 'showResultsLabel',
-  'renderHeaderRecs', 'recsSwitchedOn'];
+  'renderHeaderRecs', 'recsSwitchedOn', 'recsPilotReady'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
 // `fit`: 'ok', 'missing' (404), 'network' (fetch rejects), 'updating' (always another build) or 'updating-once'.
 // `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/programs answer 404.
-export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok' } = {}) {
+// `hash`: location.hash when the page loads. `session`: initial sessionStorage entries. `transform`: applied to the script.
+export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok',
+  hash = '', session = {}, transform = (x) => x } = {}) {
   const els = new Map();
   const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map(Object.entries(storage === 'throws' ? {} : storage));
@@ -53,10 +65,11 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
   const requests = [];
   let fitServed = 0;
   const windowListeners = {};
+  const sessionStore = new Map(Object.entries(session));
   const sandbox = {
     console, setTimeout, clearTimeout, Promise, Map, Set, WeakMap, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl,
-    isNaN, parseInt, parseFloat, URL, URLSearchParams, performance, encodeURIComponent, decodeURIComponent, Error, TypeError,
-    location: { hash: '', search, replace(h) { this.hash = h; } },
+    isNaN, parseInt, parseFloat, URL, URLSearchParams, performance, crypto: globalThis.crypto, TextEncoder, Uint8Array, encodeURIComponent, decodeURIComponent, Error, TypeError,
+    location: { hash, search, replace(h) { this.hash = h; } },
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: {
@@ -64,6 +77,7 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
       setItem: (k, v) => { if (throwing) throw new Error('QuotaExceededError'); store.set(k, String(v)); },
       removeItem: (k) => { if (throwing) throw new Error('SecurityError'); store.delete(k); },
     },
+    sessionStorage: { getItem: (k) => (sessionStore.has(k) ? sessionStore.get(k) : null), setItem: (k, v) => sessionStore.set(k, String(v)), removeItem: (k) => sessionStore.delete(k) },
     innerWidth: width, addEventListener(type, fn) { (windowListeners[type] = windowListeners[type] || []).push(fn); },
     fetch: async (url) => {
       requests.push(String(url));
@@ -103,11 +117,11 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
   sandbox.window = sandbox; sandbox.globalThis = sandbox; sandbox.__recsJsOk = recsJs;
   const lines = fs.readFileSync(html, 'utf8').split(/\r?\n/);
   const a = lines.findIndex((l) => l.trim() === '<script>'), b = lines.findIndex((l) => l.trim() === '</script>');
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(HANDLES)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = transform(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ${JSON.stringify(HANDLES)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const $ = (sel) => sandbox.document.querySelector(sel);
-  return { sb: sandbox, $, requests, store, windowListeners, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
+  return { sb: sandbox, $, requests, store, sessionStore, windowListeners, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
     panelHtml: () => $('#recsPanelBody').innerHTML + $('#recsStatus').textContent };
 }
 export const settle = async () => { for (let i = 0; i < 40; i++) await new Promise((r) => setTimeout(r, 0)); };
@@ -122,3 +136,6 @@ export async function ready(opts) {
 }
 export async function open(pg) { await pg.sb.recsOpen(); await settle(); assert.equal(pg.panel().hidden, false, 'the panel did not open'); }
 export const plain = (v) => JSON.parse(JSON.stringify(v));
+// #440: the toast is two persistent parts, the other-tab prompt and the message. What the reader gets is the visible
+// parts' markup, prompt first.
+export const toastHtml = (pg) => ['#recsToastPrompt', '#recsToastMsg'].map((id) => pg.$(id)).filter((p) => !p.hidden).map((p) => p.innerHTML).join('');

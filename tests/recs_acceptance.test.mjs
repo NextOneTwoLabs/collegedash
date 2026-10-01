@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { FIT, FOCUS, ON, ready, loadPage, open, settle, plain, CATALOG } from './recs_page_helpers.mjs';
+import { FIT, FOCUS, ON, ready, loadPage, open, settle, plain, CATALOG, toastHtml } from './recs_page_helpers.mjs';
 import { row, entry, tinyCatalog, prefs as mk } from './recs_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
@@ -86,7 +86,7 @@ test('A5 item vs global: hiding one large school for size hides only it; the siz
   assert.deepEqual(cardSlugs(pg.app()), oracle(pg).confirmed.slice(0, 25).map((x) => x.slug));
   assert.equal(oracle(pg).confirmed.length + 1, oracle(pg, { hidden: [] }).confirmed.length, 'more than one program left');
   assert.deepEqual(doc(pg).prefs.size, { mode: 'prefer', values: ['lt5k'] }, 'the global size preference changed');
-  assert.match(pg.$('#recsToast').innerHTML, /Edit this preference/, 'a global change is not offered as its own step');
+  assert.match(toastHtml(pg), /Edit this preference/, 'a global change is not offered as its own step');
   await pg.sb.recsUndo();
   assert.equal(pg.app(), before);
 });
