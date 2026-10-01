@@ -132,6 +132,10 @@ test('#111 "Compare my shortlist" takes four LIVE favourites', async () => {
   const btn = page.el('#cmpShortlist');
   assert.equal(typeof btn.onclick, 'function', 'the Compare my shortlist button was not wired');
   btn.onclick();
-  assert.deepEqual([...page.sandbox.S.compare], [P1.slug, P2.slug, P3.slug, P4.slug], 'removed favourites took compare places');
-  assert.equal(page.sandbox.location.hash, `#/compare/${P1.slug},${P2.slug},${P3.slug},${P4.slug}`);
+  // #406: the four are the first four the sidebar shows, i.e. the live favourites in displayed-name order.
+  const shown = n => n.shortName || n.name;
+  const four = [P1, P2, P3, P4, P5].sort((a, b) => shown(a).localeCompare(shown(b), undefined, { sensitivity: 'accent' }))
+    .slice(0, 4).map(p => p.slug);
+  assert.deepEqual([...page.sandbox.S.compare], four, 'removed favourites took compare places');
+  assert.equal(page.sandbox.location.hash, `#/compare/${four.join(',')}`);
 });
