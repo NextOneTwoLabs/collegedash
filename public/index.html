@@ -2083,11 +2083,13 @@ function recsRead(lib) {
   return { ...blank, prefs, doc, issues, hidden: h.hidden, hiddenDropped: h.dropped, notices: migrated ? ['migrated'] : [] };
 }
 // Save the preferences into cd.recs, keeping any other field already there. False when they can't be saved.
+// May this tab write cd.recs now? Not over a newer format, and not while another tab's change awaits a choice (#427 review).
+const recsMayWrite = () => S.recs.storage !== 'newer' && !S.recs.otherTab;
 function recsWrite(prefs) {
   const R = S.recs;
-  if (R.storage === 'newer') return false;
+  if (!recsMayWrite()) return false;
   const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs };
-  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; return true; }
+  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; R.migratedUnsaved = false; return true; }
   catch { if (R.storage !== 'unavailable') { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; } return false; }
 }
 // The form's working copy: per category, Skip or Choose, the chosen values and Prefer or Must have.
@@ -2128,7 +2130,8 @@ function recsClose() {
   R.open = false; R.status = ''; R.error = '';
   renderRecsPanel();
   syncRecsEntry();
-  ($(`#${recsOpener}`) || $('#recsOpen'))?.focus(); // back to the button that opened it
+  const opener = $(`#${recsOpener}`); // back to the button that opened it, if it is still on screen
+  (opener && opener.offsetParent !== null ? opener : $('#recsOpen'))?.focus();
 }
 // On a phone the sheet is modal: aria-modal, and everything behind it inert, so neither Tab nor a screen reader's
 // virtual cursor reaches the page underneath. Re-checked on resize and rotation; off again when the panel closes.
@@ -2284,7 +2287,7 @@ async function recsEnsureLoaded() {
   if (R.lib && !R.loaded) {
     const r = recsRead(R.lib);
     Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, hidden: r.hidden,
-      hiddenDropped: r.hiddenDropped, loaded: true });
+      hiddenDropped: r.hiddenDropped, migratedUnsaved: r.notices.includes('migrated'), loaded: true });
   }
   return !!R.lib;
 }
@@ -2311,7 +2314,9 @@ async function recsLoadFit() {
 function recsStamp() { return { taxonomy: S.recs.fit?.fitTaxonomy || null, ranker: S.recs.lib?.RANKER || null, catalog: S.index?.updated || null }; }
 function recsWriteApplied(stamp) {
   const R = S.recs;
-  if (R.storage !== 'ok' || !R.doc || R.doc.v !== 1) return;
+  // Not before a migrated document has been saved by the visitor (nothing is rewritten until a save), nor while
+  // another tab's change awaits a choice.
+  if (R.storage !== 'ok' || !R.doc || R.doc.v !== 1 || !recsMayWrite() || R.migratedUnsaved) return;
   const doc = { ...R.doc, applied: stamp };
   try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; } catch { /* the in-memory state is unaffected */ }
 }
@@ -2496,10 +2501,10 @@ function recsHiddenFrom(raw) {
 // Save fields into cd.recs beside the preferences. False when they can't be saved (they stay in memory).
 function recsSaveDoc(fields) {
   const R = S.recs;
-  if (R.storage !== 'ok') return false;
+  if (R.storage !== 'ok' || !recsMayWrite()) return false;
   const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs: R.saved, ...fields };
   try {
-    localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc;
+    localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; R.migratedUnsaved = false;
     if ('hidden' in fields) R.hiddenDropped = 0; // the unreadable entries were replaced by this save
     return true;
   } catch { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; return false; }
@@ -2566,7 +2571,7 @@ function recsEditPreference(cat) {
 // Clear personalization: cd.recs removed, the ordinary list back, nothing else touched (A9).
 async function recsClearAll() {
   const R = S.recs;
-  const newer = R.storage === 'newer';
+  const newer = !recsMayWrite(); // a newer format, or another tab's change awaiting a choice: clear this visit only
   let removed = !newer;
   if (!newer) { try { localStorage.removeItem(RECS_KEY); } catch { removed = false; } }
   Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: newer ? R.doc : null, active: false, stale: [], showHidden: false,
@@ -2579,7 +2584,7 @@ async function recsClearAll() {
 }
 // The toast: one persistent live node beside the list (outside #app, which every render replaces).
 function renderRecsToast() {
-  const el = $('#recsToast'), R = S.recs, t = R.toast;
+  const el = $('#recsToast'), R = S.recs, t = R.otherTab ? { kind: 'crosstab', cleared: R.otherTab.cleared } : R.toast;
   if (!el) return;
   if (!t || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
   let html = '';
@@ -2680,19 +2685,19 @@ function renderRecsTiming() {
 function recsOtherTab(newValue) {
   const R = S.recs;
   if (!R.on || !R.loaded) return; // nothing read in this tab yet: the next read sees the other tab's version anyway
-  R.toast = { kind: 'crosstab', cleared: newValue == null };
+  R.otherTab = { cleared: newValue == null };
   renderRecsToast();
 }
 async function recsUseOtherTab() {
   const R = S.recs;
-  R.loaded = false; R.toast = null;
+  R.otherTab = null; R.loaded = false; R.toast = null;
   await recsEnsureLoaded();
   if (R.open) { R.draft = recsDraftFrom(R.saved); renderRecsPanel(); }
   if (R.active && !R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); }
   renderRecsToast();
   await renderList();
 }
-function recsKeepThisTab() { S.recs.toast = null; renderRecsToast(); }
+function recsKeepThisTab() { S.recs.otherTab = null; S.recs.toast = null; renderRecsToast(); } // this tab's next save overwrites the other's
 window.addEventListener('storage', e => { if (e.key === RECS_KEY || e.key === null) recsOtherTab(e.key === null ? null : e.newValue); });
 
 /* ---------- router ---------- */

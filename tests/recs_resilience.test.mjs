@@ -188,3 +188,63 @@ test('the drawer bar reads "Show N recommendations" in Recommended mode, and the
   assert.equal(pg.sb.showResultsLabel(), `Show ${pg.sb.filteredPrograms().length} programs`);
   assert.equal(pg.$('#showResults').textContent, `Show ${pg.sb.filteredPrograms().length} programs`);
 });
+
+// ---------- #427 review: the other-tab prompt holds, and nothing is written while it waits ----------
+
+async function pendingOther() {
+  const pg = await shown();
+  const theirs = JSON.stringify({ v: 1, prefs: { v: 1, division: { mode: 'must', values: ['D1'] } }, hidden: [{ slug: 'stanford', reason: 'size', at: '2026-09-02' }] });
+  pg.store.set('cd.recs', theirs);
+  for (const fn of pg.windowListeners.storage) fn({ key: 'cd.recs', newValue: theirs });
+  return { pg, theirs };
+}
+const prompting = (pg) => /changed in another tab\./.test(pg.$('#recsToast').innerHTML) && pg.$('#recsToast').hidden === false;
+
+test('#427 review: while another tab\'s change waits, a hide writes nothing and the prompt stays', async () => {
+  const { pg, theirs } = await pendingOther();
+  await pg.sb.recsHide(oracle(pg).confirmed[0].slug, 'other');
+  assert.equal(pg.store.get('cd.recs'), theirs, 'the hide overwrote the other tab\'s preferences');
+  assert.ok(prompting(pg), 'the hide replaced the prompt');
+});
+
+test('#427 review: Name then Recommended neither dismisses the prompt nor writes', async () => {
+  const { pg, theirs } = await pendingOther();
+  pg.$('#sortSelect').onchange({ target: { value: 'name' } }); await settle();
+  assert.ok(prompting(pg), 'choosing Name dismissed the prompt');
+  pg.$('#sortSelect').onchange({ target: { value: 'recommended' } }); await settle();
+  assert.ok(prompting(pg), 'showing Recommended dismissed the prompt');
+  assert.equal(pg.store.get('cd.recs'), theirs, 'showing Recommended wrote the applied stamp over the other tab\'s');
+});
+
+test('#427 review: a save or Clear while the prompt waits writes nothing; after Keep these, the next save does', async () => {
+  const { pg, theirs } = await pendingOther();
+  await open(pg);
+  pg.sb.recsToggleValue('size', 'ge15k');
+  assert.equal(pg.sb.recsApply(), true);
+  assert.equal(pg.store.get('cd.recs'), theirs, 'the save overwrote while the prompt waited');
+  await pg.sb.recsClearAll();
+  assert.equal(pg.store.get('cd.recs'), theirs, 'Clear deleted the other tab\'s preferences while the prompt waited');
+  assert.ok(prompting(pg));
+  pg.sb.recsKeepThisTab();
+  assert.equal(pg.$('#recsToast').hidden, true);
+  await open(pg);
+  pg.sb.recsToggleValue('division', 'D2');
+  assert.equal(pg.sb.recsApply(), true);
+  assert.deepEqual(JSON.parse(pg.store.get('cd.recs')).prefs.division, { mode: 'prefer', values: ['D2'] }, 'Keep these did not let the next save write');
+});
+
+test('#427 review: Show recommended does not rewrite a migrated document before the visitor saves', async () => {
+  const v0 = JSON.stringify({ prefs: { division: { mode: 'must', values: ['D3'] } } });
+  const pg = await ready({ status: ON, storage: { 'cd.recs': v0 } });
+  await pg.sb.recsShowRecommended(); await settle();
+  assert.equal(pg.sb.S.recs.active, true);
+  assert.equal(pg.store.get('cd.recs'), v0, 'the applied stamp rewrote the migrated document');
+});
+
+test('#427 review: focus falls back to the sidebar button when the Start-strip button is no longer on screen', async () => {
+  const pg = await ready({ status: ON });
+  pg.$('#recsOpenStart').onclick(); await settle();
+  pg.$('#recsOpenStart').offsetParent = null; // e.g. the sidebar was opened at desktop width, which hides the strip
+  pg.sb.recsClose();
+  assert.equal(FOCUS.el?._name, '#recsOpen');
+});
