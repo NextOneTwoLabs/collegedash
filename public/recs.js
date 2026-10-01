@@ -415,6 +415,47 @@
              hiddenRows, excluded: { byFilter: filteredOut, byMustHave, hidden: hiddenRows.length, byMustHaveCategory }, staleHidden };
   }
 
+  /* ---------- the saved document (cd.recs) and its migrations ---------- */
+
+  const DOC_V = 1;   // the cd.recs format: {v: 1, prefs, hidden?, notices?, applied?}
+  /* One step per version: MIGRATIONS[k] turns a version-k document into version k + 1, or returns null when it can't.
+     Pure, never throws. v0 is the shape before cd.recs carried a version: a bare preference set ({region: …, …}) or
+     {prefs} with no v. A later format adds MIGRATIONS[1], and so on; nothing is ever skipped. */
+  const MIGRATIONS = Object.freeze({
+    0(doc) {
+      const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+      const isObj = x => !!x && typeof x === 'object' && !Array.isArray(x);
+      if (isObj(doc.prefs)) {
+        const rest = {};
+        for (const k of Object.keys(doc)) if (k !== 'prefs' && k !== 'v') rest[k] = doc[k];
+        return { ...rest, v: 1, prefs: { ...doc.prefs, v: 1 } };
+      }
+      if (!CATEGORIES.some(c => own(doc, c))) return null;
+      const prefs = { v: 1 };
+      for (const c of CATEGORIES) if (own(doc, c)) prefs[c] = doc[c];
+      return { v: 1, prefs };
+    },
+  });
+  /**
+   * Bring a parsed cd.recs document to the current version.
+   *   {status: 'current'|'migrated', doc, from}   doc is version DOC_V
+   *   {status: 'newer', from}                      a later page wrote it: leave it untouched
+   *   {status: 'unreadable'}                       not an object, a bad version, or a step that couldn't apply
+   */
+  function migrateDoc(doc, migrations = MIGRATIONS) {
+    if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { status: 'unreadable' };
+    const from = doc.v === undefined ? 0 : doc.v;
+    if (!Number.isInteger(from) || from < 0) return { status: 'unreadable' };
+    if (from > DOC_V) return { status: 'newer', from };
+    let d = doc;
+    for (let v = from; v < DOC_V; v++) {
+      const step = migrations[v];
+      d = typeof step === 'function' ? step(d) : null;
+      if (!d || d.v !== v + 1) return { status: 'unreadable' };
+    }
+    return { status: from === DOC_V ? 'current' : 'migrated', doc: d, from };
+  }
+
   /* ---------- staleness ---------- */
 
   /** What a saved `applied` stamp records: the versions a result was computed under. */
@@ -431,7 +472,7 @@
     RANKER, PREFS_V, TAXONOMIES, CATEGORIES, MODES, DIVISIONS, SIZES, CLIMATES, MAX_REASONS,
     enums, defaultPrefs, isActive, validatePrefs, sizeBand, project, fact, contributions, mustHave, score, reasons,
     reasonText, tradeoffText, unknownText,
-    compareRanked, nameOrder, applyFilters, applyHidden, group, evaluate, rank, stamp, staleness,
+    compareRanked, nameOrder, applyFilters, applyHidden, group, evaluate, rank, stamp, staleness, DOC_V, MIGRATIONS, migrateDoc,
   });
   if (typeof module === 'object' && module && module.exports) module.exports = API;
   else root.CDRecs = API;
