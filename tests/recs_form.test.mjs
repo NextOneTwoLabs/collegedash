@@ -28,10 +28,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import worker from '../worker.js';
 import { PUBLIC, HTML, CATALOG, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
-import { acquireShared } from './timing_helpers.mjs';
-// A heavy page suite: it holds the CPU lock shared, so it never runs while a timing suite measures (tests/timing_helpers.mjs).
-const CPU = await acquireShared('recs_form', 120_000);
-test.after(() => CPU.release());
 
 const HERE = path.join(PUBLIC, '..', 'tests');
 const saved = (pg) => JSON.parse(pg.store.get('cd.recs'));

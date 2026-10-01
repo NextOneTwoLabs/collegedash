@@ -14,7 +14,7 @@ import { join } from 'node:path';
 import { gate, mint, COOKIE } from '../api/session.mjs';
 import { checkKey, hashKey, sameDigest, looseDecode, keyInUrl, clearKeyCache, KEY, HELP_URL } from '../api/apikey.mjs';
 import worker from '../worker.js';
-import { acquireCpu, quietWindow, spin, median } from './timing_helpers.mjs';
+import { acquireCpu, lockNote, quietWindow, spin, median } from './timing_helpers.mjs';
 
 const SECRET = 's'.repeat(40);
 const T0 = Date.UTC(2026, 8, 25, 12, 0, 0);
@@ -389,6 +389,7 @@ test('R-I: refusal reasons differ in time only by microseconds and not at all in
   // five rounds of 100 calls (the same 500 calls as before), so one burst from another suite can't fail it and one
   // quiet round can't pass it. The ceiling is unchanged: 5 ms a call.
   const cpu = await acquireCpu('apikey R-I', 120_000);
+  t.diagnostic(cpu.held ? `measured holding the CPU lock (waited ${cpu.waitedMs} ms)` : lockNote('R-I', cpu));
   try {
     const out = {};
     for (const [name, k] of [['unknown', good.key.replace(good.id, 'f'.repeat(12))], ['mismatch', flip(good.key)], ['revoked', revoked.key], ['ok', good.key]]) {

@@ -97,8 +97,11 @@ export async function acquireExclusive(who, maxWaitMs) {
     } catch (e) {
       if (e.code !== 'EEXIST') return { held: false, waitedMs: Date.now() - t0, release() { }, error: e.code };
       const ex = holders('exclusive'); // removes a stale one, so the next try can take it
-      if (ex.length && Date.now() - t0 >= maxWaitMs) return { held: false, waitedMs: Date.now() - t0, release() { }, timedOut: true, holder: ex[0].who };
-      if (ex.length) await sleep(200);
+      // The bound and the pause hold on every pass, also when holders() finds no live holder but the file stays: a stale
+      // lock it couldn't remove (held open without delete sharing, another user's file) would otherwise spin a core with
+      // no bound (#439 review).
+      if (Date.now() - t0 >= maxWaitMs) return { held: false, waitedMs: Date.now() - t0, release() { }, timedOut: true, holder: ex[0]?.who ?? 'a stale exclusive.lock that could not be removed' };
+      await sleep(200);
     }
   }
   for (;;) {
@@ -108,6 +111,10 @@ export async function acquireExclusive(who, maxWaitMs) {
     await sleep(200);
   }
 }
+/** One line saying why a suite ran without its place in the lock, or '' when it held it (#439 review: a slow or odd run
+ *  explains itself). */
+export const lockNote = (who, cpu) => cpu.held ? ''
+  : `${who} ran WITHOUT the CPU lock (${cpu.timedOut ? `still held by ${cpu.holder} after ${cpu.waitedMs} ms` : cpu.error}): timings taken meanwhile may include other suites`;
 /** Before #400's shared lock this was the one mutex; a timing suite now takes the exclusive place. */
 export const acquireCpu = acquireExclusive;
 

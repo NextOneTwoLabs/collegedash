@@ -10,11 +10,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { R, CATALOG, SCENARIOS, catalogDocs, filterPredicate, independentFacts, rng, shuffle } from './recs_helpers.mjs';
-import { acquireShared } from './timing_helpers.mjs';
+import { acquireShared, lockNote } from './timing_helpers.mjs';
 
 // This suite ranks at full tilt for ~20 s, so it holds the CPU lock shared and never runs while a timing suite measures.
 // The wait is bounded; past it, this suite runs anyway - its results don't depend on time.
 const CPU = await acquireShared('recs_properties', 120_000);
+if (!CPU.held) console.log(lockNote('recs_properties', CPU));
 test.after(() => CPU.release());
 
 const RANDOM_SETS = 1000;

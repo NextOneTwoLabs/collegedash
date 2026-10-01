@@ -58,3 +58,29 @@ test('a holder whose process is gone is stale: removed, and never waited for', a
   ex.release();
   assert.deepEqual(files(), []);
 });
+
+test('#439 review: a stale exclusive.lock that cannot be removed still ends at the bound, pausing between tries', async () => {
+  const dead = 2 ** 22 + 12346;
+  const file = path.join(DIR, 'exclusive.lock');
+  fs.writeFileSync(file, JSON.stringify({ pid: dead, who: 'crashed timing' }));
+  // Held open without delete sharing (an indexer, antivirus) or another user's file: removing it fails. The helpers
+  // and this test share the node:fs module object, so the stub reaches them.
+  const real = fs.unlinkSync;
+  let tries = 0;
+  fs.unlinkSync = (p, ...rest) => {
+    if (path.resolve(String(p)) === path.resolve(file)) { tries++; throw Object.assign(new Error('EPERM: operation not permitted'), { code: 'EPERM' }); }
+    return real.call(fs, p, ...rest);
+  };
+  let ex, took;
+  try {
+    const t0 = Date.now();
+    ex = await acquireExclusive('timing', 1000);
+    took = Date.now() - t0;
+  } finally { fs.unlinkSync = real; }
+  assert.equal(ex.held, false);
+  assert.equal(ex.timedOut, true);
+  assert.ok(took >= 1000 && took < 2000, `the wait was not bounded: ${took} ms against 1000`);
+  assert.ok(tries >= 2 && tries <= 10, `${tries} tries in ${took} ms: it spun instead of pausing`);
+  fs.unlinkSync(file);
+  assert.deepEqual(files(), []);
+});
