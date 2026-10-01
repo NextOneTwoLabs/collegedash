@@ -7,8 +7,9 @@
 //   1. Where the strip shows. The page's own route() is run in a `vm` (same stub-DOM mechanism as
 //      tests/shortlist_unsave.test.mjs) to get the classes it puts on .layout for each view; the page's own <style> is
 //      then evaluated for those classes at a given width by the small cascade below, which understands exactly the
-//      selector and media forms the strip uses and FAILS on any other form that targets the strip, so a rule it cannot
-//      read can never make a check pass. Checked: shown at 375 px on #/; hidden at 1280 px with the sidebar open;
+//      selector and media forms the strip uses and FAILS LOUDLY on any other form that could show or hide the strip or
+//      its box (ID selectors, !important, compound selectors, other combinators, visibility, unknown media), so a rule
+//      it cannot read can never make a check pass; a self-test feeds it each of those forms. Checked: shown at 375 px on #/; hidden at 1280 px with the sidebar open;
 //      shown at 1280 px with the sidebar collapsed; hidden on a program page and on ID Camps.
 //   2. That it is the same search. Typing in either box goes through the page's setQuery; the other box mirrors the
 //      query only when it differs and the box being typed in is never written to; there is exactly one aria-live
@@ -42,11 +43,19 @@ test('markup: a search box sits in the Start strip, outside the sidebar and outs
   const strip = body.slice(STRIP_AT, app);
   assert.match(strip, /<input type="search"[^>]*id="qStart"/, 'no search input in the strip');
   assert.match(strip, /<label[^>]*for="qStart"/, 'the strip box has no label');
+  for (const id of ['startStrip', 'qStart']) {
+    const tag = new RegExp(`<[^<>]*id="${id}"[^<>]*>`).exec(body)?.[0] || '';
+    assert.ok(tag && !/\shidden(?=[\s>=])/.test(tag), `#${id} carries the hidden attribute: ${tag}`);
+  }
   assert.match(strip, /<div class="start-actions" id="startActions"><\/div>/, 'the #400 PR 3 slot is missing or not empty');
   assert.ok(!/id="qStart"/.test(/<aside class="sidebar"[^>]*>([\s\S]*?)<\/aside>/.exec(body)?.[1] ?? ''), 'the strip box is inside the sidebar');
 });
 
 // ---------- a cascade for the strip's display ----------
+// Huatuo on #413: the first version passed forms it did not understand (an ID selector, !important, a compound
+// selector). This one reads exactly the forms below and FAILS LOUDLY on anything else that could decide whether the
+// strip or its box is shown, so a rule it cannot evaluate can never make a check pass. The self-test further down
+// feeds it each of those forms.
 const css = [...HTML.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n').replace(/\/\*[\s\S]*?\*\//g, '');
 // Flatten into [{ media, selectors, decls, order }], one level of @media nesting (all this page uses).
 function parseCss(text) {
@@ -66,39 +75,79 @@ function parseCss(text) {
   return out;
 }
 const RULES = parseCss(css);
-const mediaMatches = (media, width) => {
+const CANNOT = 'the strip test cannot read';
+// true / false, or a loud failure for a media form it does not read (only (max-width: Npx) and (min-width: Npx), joined by "and")
+function mediaMatches(media, width) {
   if (!media) return true;
-  const conds = media.split(/\band\b/).map(s => s.trim()).filter(Boolean);
-  return conds.every(c => {
+  return media.split(/\band\b/).map(s => s.trim()).filter(Boolean).every(c => {
     const m = /^\((max|min)-width:\s*(\d+)px\)$/.exec(c);
-    if (!m) return null;  // a media form this cascade does not read
+    assert.ok(m, `${CANNOT} @media ${media}`);
     return m[1] === 'max' ? width <= +m[2] : width >= +m[2];
   });
-};
-// The strip's computed display at `width` with .layout carrying `layoutClasses`. Understood selector forms, and only
-// these: `.start-strip`, `#startStrip`, and `.layout(.x)* .start-strip`. Anything else naming the strip is an error.
-function stripDisplay(width, layoutClasses) {
+}
+const decls = text => text.split(';').map(d => d.trim()).filter(Boolean).map(d => {
+  const i = d.indexOf(':');
+  return { prop: d.slice(0, i).trim().toLowerCase(), value: d.slice(i + 1).trim() };
+});
+// The strip itself, and every hook inside it that could hide the box: a rule whose target is one of these and that
+// sets display: none or visibility: hidden is a form this test does not evaluate, so it fails loudly. The one
+// exception is the empty #400 slot, which is meant to take no space.
+const STRIP_RE = /\.start-strip(?![\w-])|#startStrip(?![\w-])/;
+const INNER_RE = /#qStart(?![\w-])|\.start-row(?![\w-])|\.start-label(?![\w-])|\.start-status(?![\w-])|#qStartStatus(?![\w-])|\.search-input(?![\w-])/;
+const HIDES = ds => ds.some(d => (d.prop === 'display' && /^none\b/.test(d.value)) || (d.prop === 'visibility' && !/^visible\b/.test(d.value)));
+// The strip's computed display at `width` with .layout carrying `layoutClasses`. The only selector forms it evaluates
+// are `.start-strip` and `.layout(.x)* .start-strip` (one descendant step); no !important, no ID, no compound on the
+// strip, no other combinator, no visibility. Anything else that names the strip, or hides something inside it, fails.
+function stripDisplay(width, layoutClasses, rules = RULES) {
   let best = null;
-  for (const r of RULES) {
+  for (const r of rules) {
+    const ds = decls(r.decls);
     for (const sel of r.selectors) {
-      if (!/(^|[\s>+~])(\.start-strip|#startStrip)(?![\w-])/.test(sel)) continue;
-      const display = /(?:^|;)\s*display\s*:\s*([^;]+)/.exec(r.decls)?.[1].trim();
-      if (!/(\.start-strip|#startStrip)$/.test(sel)) continue;  // a descendant of the strip, not the strip itself
+      const names = STRIP_RE.test(sel), inner = INNER_RE.test(sel);
+      if (!names && !inner) continue;
+      if (/[>+~]/.test(sel)) assert.fail(`${CANNOT} the combinator in "${sel}"`);
+      const parts = sel.split(/\s+/), last = parts[parts.length - 1];
+      if (last.includes('::')) continue;  // a pseudo-element (the search box's cancel button), not the box itself
+      if (!STRIP_RE.test(last)) {  // something inside the strip (or the box anywhere): it must not hide anything
+        if (HIDES(ds) && !(sel === '.start-actions:empty')) assert.fail(`${CANNOT} "${sel}", which hides part of the strip or its box`);
+        continue;
+      }
+      if (sel.includes('#startStrip')) assert.fail(`${CANNOT} the ID selector "${sel}"`);
+      if (last !== '.start-strip') assert.fail(`${CANNOT} the compound selector "${last}"`);
+      if (parts.length > 2 || (parts.length === 2 && !/^\.layout(\.[\w-]+)*$/.test(parts[0]))) assert.fail(`${CANNOT} the selector "${sel}"`);
+      for (const d of ds) {
+        if (/!\s*important/i.test(d.value)) assert.fail(`${CANNOT} !important in "${sel} { ${d.prop}: ${d.value} }"`);
+        if (d.prop === 'visibility' || d.prop === 'content-visibility') assert.fail(`${CANNOT} ${d.prop} on "${sel}"`);
+      }
+      const display = ds.filter(d => d.prop === 'display').map(d => d.value).pop();
       const mm = mediaMatches(r.media, width);
-      assert.notEqual(mm, null, `the strip test cannot read @media ${r.media}`);
-      const parts = sel.split(/\s+/);
-      let spec, applies;
-      if (parts.length === 1) { applies = true; spec = 1; }
-      else if (parts.length === 2 && /^\.layout(\.[\w-]+)*$/.test(parts[0])) {
-        const need = parts[0].split('.').filter(Boolean);
-        applies = need.every(c => layoutClasses.has(c)); spec = need.length + 1;
-      } else assert.fail(`the strip test cannot read the selector "${sel}"`);
+      const need = parts.length === 2 ? parts[0].split('.').filter(Boolean) : [];
+      const applies = need.every(c => layoutClasses.has(c)), spec = need.length + 1;
       if (!mm || !applies || !display) continue;
       if (!best || spec > best.spec || (spec === best.spec && r.order > best.order)) best = { display, spec, order: r.order };
     }
   }
   return best ? best.display : 'block';  // a div's default
 }
+
+// The cascade's own self-test: each form it does not evaluate must fail loudly, not pass. The first two are the
+// mutations Huatuo used on #413 (both hid the strip in a browser while the first version still passed).
+test('the cascade fails loudly on every form it cannot evaluate', () => {
+  const at375 = extra => () => stripDisplay(375, new Set(['layout', 'view-list']), parseCss(`${css}\n${extra}`));
+  assert.doesNotThrow(at375(''), 'the page\'s own CSS is not readable');
+  for (const [name, extra] of [
+    ['an ID selector (Huatuo)', '#startStrip { display: none; }'],
+    ['!important at <=768 px (Huatuo)', '@media (max-width: 768px) { .start-strip { display: none !important; } }'],
+    ['a compound selector on the strip', '.start-strip.x { display: block; }'],
+    ['a child combinator', '.layout > .start-strip { display: none; }'],
+    ['an unknown media form', '@media (orientation: portrait) { .start-strip { display: none; } }'],
+    ['visibility on the strip', '.start-strip { visibility: hidden; }'],
+    ['the box hidden by ID', '#qStart { display: none; }'],
+    ['the box hidden through the shared class', '@media (max-width: 768px) { .search-input { display: none; } }'],
+    ['the row hidden', '.start-row { visibility: hidden; }'],
+    ['an unknown ancestor', '.main .start-strip { display: none; }'],
+  ]) assert.throws(at375(extra), new RegExp(CANNOT), `${name}: the cascade did not fail`);
+});
 
 // ---------- the page in a vm ----------
 function makeElement(name) {
