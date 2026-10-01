@@ -426,4 +426,7 @@ test('static: one writer of list addresses; pushState only from listCommit and t
   assert.ok(!/route: location\.hash/.test(code), 'feedback still sends the raw address');
   // About the data says what a shared link carries (Bianque, non-blocking)
   assert.match(HTML, /<h3>What does a shared link include\?<\/h3>[\s\S]{0,400}anything typed in the search box and a recruiting class year/);
+  // Bianque on #456: a Compare link names the programs compared, so the card must not say comparison never travels
+  assert.match(HTML, /A link to the Compare page lists the programs you're comparing\./);
+  assert.ok(!/shortlist, comparison, residency/.test(HTML), 'the About card still says comparison is never in a link');
 });
