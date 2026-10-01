@@ -44,6 +44,7 @@ const assets = { async fetch(r) {
   if (p === '/') return new Response(r.method === 'HEAD' ? null : '<html>page</html>', { headers: { 'content-type': 'text/html', 'content-length': '17' } });
   if (p === '/data/programs/index.json') return json('{"programs":[]}', '"i"');
   if (p === '/data/list/index.json') return json('{"programs":[]}', '"l"');
+  if (p === '/data/fit/index.json') return json('{"fit":{}}', '"f"');
   if (p === '/data/programs/short-one.json') return json(PROFILE_A, '"a"');
   if (p === '/data/programs/much-longer-program.json') return json(PROFILE_B, '"b"');
   if (p === '/archive/refresh-state.json') return json('{}', '"s"');
@@ -423,4 +424,14 @@ test('#395: the list view reports the full index (programs) or the slim list (li
   await run(server.env, req('/api/v1/list', { headers: { cookie: cookie(t) } }));
   assert.deepEqual(server.env.PERF_STATS.points.map(p => p.blobs.slice(1, 3)), [['list', '2xx']], 'server points name the route kind list');
   assert.equal(server.env.PERF_STATS.points[0].doubles[4], 15, 'with the shared file\'s exact size');
+});
+
+test('#400 D6: a /api/v1/fit request is counted by route kind fit, like every data file, and carries nothing else', async () => {
+  const { env } = await setup();
+  const t = await token();
+  await run(env, req('/api/v1/fit', { headers: { cookie: cookie(t) } }));
+  assert.deepEqual(env.PERF_STATS.points.map(p => p.blobs.slice(0, 3)), [['server', 'fit', '2xx']], 'one server point, route kind fit');
+  const p = env.PERF_STATS.points[0];
+  assert.deepEqual(p.blobs.slice(3, 5), ['', ''], 'no further detail: nothing about a visitor or their choices');
+  assert.equal(p.doubles[4], 10, 'the shared file\'s size, as for every data file');
 });

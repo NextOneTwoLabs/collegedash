@@ -5,6 +5,7 @@ curated.json and commitments.reviewed.json into the published profiles under pub
   public/data/programs/<slug>.json   full profile (what the dashboard renders)
   public/data/programs/index.json    one summary row per program (list/filter views)
   public/data/list/index.json        the same rows, slimmed to what the list views read (issue #395)
+  public/data/fit/index.json         what the recommender needs that the list rows lack, by slug (issue #400)
   public/data/commitments/index.json every resolved commitment across programs
   public/data/camps/index.json       every published camp across programs, within the date window
 
@@ -19,6 +20,7 @@ import os
 import re
 import urllib.parse
 from collections import Counter, defaultdict
+from decimal import ROUND_HALF_UP, Decimal
 
 import clubs
 import schools
@@ -2059,6 +2061,100 @@ def list_index(index_doc: dict) -> dict:
     return {"updated": index_doc["updated"], "season": season, "programs": [list_row(r, rpi_season) for r in rows]}
 
 
+# ---------- public/data/fit/index.json: the recommender's fit facts (issue #400) ----------
+# "Find programs for me" loads this file when its panel opens (/api/v1/fit); ordinary visitors never do. It carries
+# only what the list rows lack: region, division and undergraduate enrollment are read from the row itself, so a card
+# and its reasons cannot show two different values. Per program: the climate label and the facts it comes from, the
+# ids the page builds its source links from, and when each source was fetched. Decisions D1-D2 on #400 (owner,
+# 2026-09-30): size bands <5,000 / 5,000-14,999 / >=15,000 undergraduates (half-open; the page applies them to the
+# row's undergradEnrollment); climate from the coldest-month mean of the NOAA 1991-2020 monthly normals - mild >=45F,
+# four-season 27-45F, cold <27F - and "unknown" when the station is more than 50 km away. Climate is Prefer-only on the
+# page, so an unknown adds a label and never excludes. A change to any constant is a new FIT_TAXONOMY.
+FIT_TAXONOMY = "fit-1"
+FIT_SIZE_BANDS = (5000, 15000)
+FIT_CLIMATE_MILD_MIN_F = 45.0
+FIT_CLIMATE_COLD_BELOW_F = 27.0
+FIT_CLIMATE_MAX_STATION_KM = 50.0
+FIT_KEYS = ("climate", "climateUnknown", "coldMonthMeanF", "stationKm", "unitId", "station", "asOf")
+
+
+def fit_path() -> str:
+    """Next to programs/, like list/ and trends/: a test that swaps PROGRAMS_OUT_DIR moves this file with it."""
+    return os.path.join(os.path.dirname(os.path.abspath(common.PROGRAMS_OUT_DIR)), "fit", "index.json")
+
+
+def coldest_month_mean_f(climate: dict | None) -> float | None:
+    """The coldest month's mean temperature, (normal high + normal low) / 2, rounded to 0.1F: the figure the label is
+    taken from and the page shows, so the two can never disagree. None unless all 12 months have both normals.
+
+    The arithmetic is decimal, on the figures as published (repr), and a tie rounds half-up (away from zero): high 36.0
+    and low 17.9 give exactly 26.95, so 27.0 and four-season. Binary floats would store 26.95 as 26.9499... and round()
+    is half-even anyway, which gave 26.9 and cold (Bianque on #403). The coldest month is chosen on the exact means
+    and only then rounded; rounding is monotonic, so it is also the month with the lowest rounded mean."""
+    means = []
+    for m in (climate or {}).get("monthly") or []:
+        hi, lo = m.get("tHighF"), m.get("tLowF")
+        if all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (hi, lo)):
+            means.append((Decimal(repr(hi)) + Decimal(repr(lo))) / 2)
+    if len(means) != 12:
+        return None
+    return float(min(means).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
+
+
+def climate_label(cold_f: float | None, station_km) -> tuple[str | None, str | None]:
+    """(label, why unknown). The thresholds apply to the rounded figure: 45.0 is mild, 27.0 four-season, 26.9 cold."""
+    if cold_f is None:
+        return None, "no-normals"
+    if not isinstance(station_km, (int, float)):
+        return None, "station-distance-unknown"
+    if station_km > FIT_CLIMATE_MAX_STATION_KM:
+        return None, "far-station"
+    if cold_f >= FIT_CLIMATE_MILD_MIN_F:
+        return "mild", None
+    if cold_f >= FIT_CLIMATE_COLD_BELOW_F:
+        return "four-season", None
+    return "cold", None
+
+
+def _date(iso) -> str | None:
+    return iso[:10] if isinstance(iso, str) and len(iso) >= 10 else None
+
+
+def fit_entry(profile: dict) -> dict:
+    """One program's fit facts, from its built profile."""
+    climate, school = profile.get("climate") or None, profile.get("school") or None
+    station = (climate or {}).get("station") or {}
+    cold = coldest_month_mean_f(climate)
+    if climate:
+        label, why = climate_label(cold, station.get("distanceKm"))
+    else:
+        label, why = None, "no-climate-source"
+    return {"climate": label, "climateUnknown": why, "coldMonthMeanF": cold, "stationKm": station.get("distanceKm"),
+            "unitId": (school or {}).get("unitId"), "station": station.get("id"),
+            "asOf": [_date(((school or {}).get("_meta") or {}).get("asOf")), _date(((climate or {}).get("_meta") or {}).get("asOf"))]}
+
+
+def fit_constants() -> dict:
+    return {"sizeBands": list(FIT_SIZE_BANDS),
+            "climate": {"mildMinF": FIT_CLIMATE_MILD_MIN_F, "coldBelowF": FIT_CLIMATE_COLD_BELOW_F,
+                        "maxStationKm": FIT_CLIMATE_MAX_STATION_KM,
+                        "measure": "coldest-month mean of the NOAA 1991-2020 monthly normals, (high + low) / 2, rounded half-up to 0.1F"},
+            "regions": {r: sorted(states) for r, states in REGIONS.items()}}
+
+
+FIT_SOURCES = {
+    "school": {"name": "College Scorecard", "field": "latest.student.size: undergraduate degree- or certificate-seeking "
+                                                     "students, online students included", "asOfIndex": 0},
+    "climate": {"name": "NOAA NCEI U.S. Climate Normals, 1991-2020 (monthly), nearest station", "asOfIndex": 1},
+}
+
+
+def fit_index(updated: str, entries: dict[str, dict]) -> dict:
+    """The fit file: same `updated` as the index and list of the same build, one entry per published slug."""
+    return {"updated": updated, "fitTaxonomy": FIT_TAXONOMY, "constants": fit_constants(), "sources": FIT_SOURCES,
+            "fit": entries}
+
+
 def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset()) -> list[dict]:
     # The prune plan is decided before the first write, so a refused prune leaves the published tree untouched.
     published = [p for p in published_programs(registry)]
@@ -2079,6 +2175,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     trends_recorder = trends.Recorder(club_table, candidates=club_candidates, same_person=same_person,  # issue #230
                                       school_table=school_table)  # #339: one school table for every state lookup
     rows, all_commits, all_camps = [], [], []
+    fit_entries: dict[str, dict] = {}  # issue #400
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
         profile = build_profile(program, registry, rpi_hist, rpi_finals, state, ranks, club_table, club_recorder,
@@ -2086,6 +2183,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
         common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json"), profile)
         trends_recorder.observe(profile, program)
         rows.append(summary_row(profile, program.get("searchAliases") or ()))
+        fit_entries[program["slug"]] = fit_entry(profile)
         for c in profile["commitments"]:
             # clubInfo is per-profile detail; the cross-program index carries only the canonical id,
             # so it stays small enough to serve to every visitor.
@@ -2103,6 +2201,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                  "programs": rows}
     common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), index_doc)
     common.write_json(list_path(), list_index(index_doc), compact=True)  # issue #395
+    common.write_json(fit_path(), fit_index(index_doc["updated"], fit_entries), compact=True)  # issue #400
     prune_profiles(prune_plan, {r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
@@ -2170,8 +2269,9 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     staged_ok = check_staged_registry(registry)
     gate_ok = check_publish_gate(registry)
     list_ok = check_list_index()
+    fit_ok = check_fit_index()
     return (ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok and gate_ok
-            and list_ok)
+            and list_ok and fit_ok)
 
 
 LIST_SCHEMA_PATH = os.path.join(os.path.dirname(common.SCHEMA_PATH), "list.schema.json")
@@ -2241,6 +2341,66 @@ def check_list_index() -> bool:
         lines += [f"schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}" for e in errs[:10]]
     for line in lines:
         print(f"LIST: {line}")
+    return not lines
+
+
+FIT_SCHEMA_PATH = os.path.join(os.path.dirname(common.SCHEMA_PATH), "fit.schema.json")
+
+
+def fit_complaints(fit_doc, index_doc, load_profile) -> list[str]:
+    """Everything wrong with the fit file against the index of the same build and the profiles it was built from
+    (issue #400): the same `updated`; this code's taxonomy and constants; exactly one entry per index slug, in the
+    index's order; and every entry exactly what fit_entry makes of that program's profile."""
+    out = []
+    if not isinstance(fit_doc, dict) or not isinstance(fit_doc.get("fit"), dict):
+        return ["the fit file is missing, or not an object with a `fit` map"]
+    if not isinstance(index_doc, dict) or not isinstance(index_doc.get("programs"), list):
+        return ["the full index is missing, so the fit file cannot be checked against it"]
+    if fit_doc.get("updated") != index_doc.get("updated"):
+        out.append(f"`updated` {fit_doc.get('updated')!r} is not the index's {index_doc.get('updated')!r}")
+    if fit_doc.get("fitTaxonomy") != FIT_TAXONOMY:
+        out.append(f"fitTaxonomy {fit_doc.get('fitTaxonomy')!r} is not this build's {FIT_TAXONOMY!r}")
+    if fit_doc.get("constants") != fit_constants():
+        out.append("constants differ from this build's")
+    slugs = [r.get("slug") for r in index_doc["programs"]]
+    if list(fit_doc["fit"]) != slugs:
+        missing, extra = sorted(set(slugs) - set(fit_doc["fit"])), sorted(set(fit_doc["fit"]) - set(slugs))
+        out.append(f"the fit entries are not one per index slug in the index's order ({len(fit_doc['fit'])} against "
+                   f"{len(slugs)}; missing {missing[:5]}, extra {extra[:5]})")
+        return out
+    for slug in slugs:
+        want = fit_entry(load_profile(slug) or {})
+        got = fit_doc["fit"][slug]
+        if got != want:
+            wrong = sorted(k for k in set(want) | set(got if isinstance(got, dict) else {})
+                           if not isinstance(got, dict) or got.get(k) != want.get(k))
+            out.append(f"{slug}: {', '.join(wrong)} differ from the profile")
+        if len(out) >= 20:
+            out.append("... (stopped after 20)")
+            break
+    return out
+
+
+def check_fit_index() -> bool:
+    """public/data/fit/index.json must be exactly what the profiles of the same build give (issue #400), and match
+    schema/fit.schema.json. Reports and does not raise, like check_list_index."""
+    path, index_path = fit_path(), os.path.join(common.PROGRAMS_OUT_DIR, "index.json")
+    try:
+        doc, index_doc = common.read_json(path), common.read_json(index_path)
+    except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
+        print(f"FIT: {path} or {index_path} is not readable JSON: {type(e).__name__}: {e}")
+        return False
+    lines = fit_complaints(doc, index_doc, lambda slug: common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")))
+    schema = common.read_json(FIT_SCHEMA_PATH)
+    try:
+        import jsonschema
+    except ImportError:
+        jsonschema = None
+    if schema and jsonschema and isinstance(doc, dict):
+        errs = sorted(jsonschema.Draft202012Validator(schema).iter_errors(doc), key=lambda e: list(e.path))
+        lines += [f"schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}" for e in errs[:10]]
+    for line in lines:
+        print(f"FIT: {line}")
     return not lines
 
 

@@ -12,6 +12,8 @@ export function assetPath(resource) {
       return '/data/camps/index.json';
     case 'list':
       return '/data/list/index.json';
+    case 'fit':
+      return '/data/fit/index.json';
     case 'trends':
       return '/data/trends/index.json';
     case 'commitments':
