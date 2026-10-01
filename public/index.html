@@ -437,11 +437,11 @@ tr:hover td { background: var(--row-hover); }
 .glance-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .glance-meta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
 .glance-follow { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-.glance-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+.glance-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
-.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }  /* #8: wraps, never clipped */
 .stat-of { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); overflow-wrap: anywhere; }
 .glance-next { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .glance-next-opp { margin-top: 4px; font-size: 16px; font-weight: 700; }
 .glance-next-opp.muted { font-weight: 500; color: var(--text-secondary); }
@@ -598,6 +598,7 @@ a.pill { text-decoration: none; }
 .feedback .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .feedback-note { margin: 8px 0 0; min-height: 1.45em; color: var(--text-secondary); }
 .feedback-note.ok { color: var(--good-text); }
+.feedback-note.error { color: var(--danger-text); }  /* #47: the site's error colour, as .cond-error and .recs-error */
 
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
@@ -4531,7 +4532,9 @@ async function tabCamps(p) {
   const today = todayLocal(), month = today.slice(0, 7);
   const asOf = c._meta?.[0]?.asOf;
   const checked = asOf ? ` (checked ${fmtDate(asOf)})` : '';
-  const isPast = it => it.precision === 'month' ? it.startDate < month : (it.endDate || it.startDate) < today;
+  // #71: a month-precision camp is past once the month it ends in is over, (endDate || startDate) - build.py's
+  // camp_in_window rule - so a camp running into next month reads the same here as in the ID Camps view.
+  const isPast = it => it.precision === 'month' ? (it.endDate || it.startDate).slice(0, 7) < month : (it.endDate || it.startDate) < today;
   const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
   const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
@@ -4758,7 +4761,13 @@ async function renderApiDocs() {
   if (!panel || !form || !note) return;
   /* Not every failure comes from the Worker — a proxy or the local server answers in its own
      words — so end the sentence before the fallback rather than assuming it was punctuated. */
-  const fail = msg => { note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`; };
+  // #47: the failure is styled as one and takes focus, as success does, so a screen-reader user is not left on <body>.
+  const fail = msg => {
+    note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`;
+    note.classList.add('error');
+    note.tabIndex = -1;
+    note.focus({ preventScroll: true });
+  };
   /* Send is type="button", not a submit control: if anything earlier in this script throws and the
      handler below is never attached, a native submit would reload the page and throw away what the
      visitor typed. requestSubmit() runs the same required/email validation a submit click would. */
@@ -4770,7 +4779,7 @@ async function renderApiDocs() {
     e.preventDefault();
     const btn = form.querySelector('button');
     btn.disabled = true;
-    note.classList.remove('ok');
+    note.classList.remove('ok', 'error');
     note.textContent = 'Sending…';
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     try {
