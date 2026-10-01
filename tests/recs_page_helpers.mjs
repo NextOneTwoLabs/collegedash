@@ -38,22 +38,25 @@ export function makeElement(name) {
 const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 'recsOpen', 'recsClose', 'recsApply', 'recsReset', 'recsToggleValue',
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
   'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
-  'recsEditPreference', 'renderRecsToast', 'programBySlug'];
+  'recsEditPreference', 'renderRecsToast', 'programBySlug', 'recsOtherTab', 'recsUseOtherTab', 'recsKeepThisTab', 'showResultsLabel',
+  'renderStartActions'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
 // `fit`: 'ok', 'missing' (404), 'network' (fetch rejects), 'updating' (always another build) or 'updating-once'.
-export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok' } = {}) {
+// `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/programs answer 404.
+export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok' } = {}) {
   const els = new Map();
   const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map(Object.entries(storage === 'throws' ? {} : storage));
   const throwing = storage === 'throws';
   const requests = [];
   let fitServed = 0;
+  const windowListeners = {};
   const sandbox = {
     console, setTimeout, clearTimeout, Promise, Map, Set, WeakMap, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl,
-    isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent, Error, TypeError,
-    location: { hash: '', search: '', replace(h) { this.hash = h; } },
+    isNaN, parseInt, parseFloat, URL, URLSearchParams, performance, encodeURIComponent, decodeURIComponent, Error, TypeError,
+    location: { hash: '', search, replace(h) { this.hash = h; } },
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: {
@@ -61,9 +64,10 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
       setItem: (k, v) => { if (throwing) throw new Error('QuotaExceededError'); store.set(k, String(v)); },
       removeItem: (k) => { if (throwing) throw new Error('SecurityError'); store.delete(k); },
     },
-    innerWidth: width, addEventListener() { },
+    innerWidth: width, addEventListener(type, fn) { (windowListeners[type] = windowListeners[type] || []).push(fn); },
     fetch: async (url) => {
       requests.push(String(url));
+      if (programs === 'missing' && url === '/api/v1/programs') return { ok: false, status: 404, async json() { return { error: 'not found' }; } };
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return JSON.parse(JSON.stringify(body)); } });
       if (url === 'api/status' || url === '/api/status') return status ? ok(status) : ok({}, 404);
       if (url === 'api/ask/status' || url === '/api/ask/status') return { ok: false, status: 0, type: 'opaqueredirect', async json() { throw new SyntaxError('opaque'); } };
@@ -103,7 +107,7 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const $ = (sel) => sandbox.document.querySelector(sel);
-  return { sb: sandbox, $, requests, store, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
+  return { sb: sandbox, $, requests, store, windowListeners, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
     panelHtml: () => $('#recsPanelBody').innerHTML + $('#recsStatus').textContent };
 }
 export const settle = async () => { for (let i = 0; i < 40; i++) await new Promise((r) => setTimeout(r, 0)); };

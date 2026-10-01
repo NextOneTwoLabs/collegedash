@@ -197,6 +197,11 @@ tr:hover td { background: var(--row-hover); }
 .recs-hidden-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .recs-toast { position: sticky; bottom: 0; z-index: 5; margin: 0 28px 12px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
 .recs-toast[hidden] { display: none; }
+/* Resilience (issue #400, PR 6): the local-only timing overlay, reasons in the Stats view, the Start-strip entry. */
+.recs-timing { position: fixed; left: 8px; bottom: 8px; z-index: 300; max-width: 360px; padding: 6px 8px; font: 11px/1.4 ui-monospace, monospace; color: var(--text-primary); background: var(--bg-surface); border: 1px dashed var(--border); border-radius: 6px; }
+.recs-timing[hidden] { display: none; }
+.recs-why-cell .recs-why { margin: 0; min-width: 220px; }
+.start-actions .recs-entry { width: auto; white-space: nowrap; }
 .recs-toast .btn { min-height: 44px; }
 @media (max-width: 768px) { .recs-toast { margin: 0 16px 12px; } }
 @media (min-width: 769px) and (max-width: 1180px) {
@@ -638,6 +643,8 @@ a.pill { text-decoration: none; }
     <div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>
     <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
     <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
+    <!-- #400: ?recs-timing=1 only. Timings measured in this browser; nothing is sent anywhere. -->
+    <div class="recs-timing" id="recsTiming" hidden></div>
     <footer class="site-notice">
       <details class="feedback" id="feedback">
         <summary>Send feedback</summary>
@@ -1768,7 +1775,7 @@ function renderSidebar() {
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   wireConditions(sb);
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
-  const ro = $('#recsOpen'); if (ro) ro.onclick = () => recsOpen(); // #400: only drawn while recs is on
+  const ro = $('#recsOpen'); if (ro) ro.onclick = () => { recsOpener = 'recsOpen'; recsOpen(); }; // #400: only drawn while recs is on
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   // #400 PR 4: Recommended is not a stored sort. Choosing it shows the saved preferences; choosing any other sort pauses
   // them, and picking the sort that was already underneath doesn't flip its direction.
@@ -1825,6 +1832,10 @@ function showResultsLabel() {
   const v = currentView();
   if (v === 'camps') return 'Show camps';
   if (v === 'trends') return 'Show results';
+  if (S.recs?.active && S.recs.fit && S.recs.lib && (v === 'list' || v === 'c')) { // #400 PR 6: Recommended mode
+    const c = recsResult().confirmed.length;
+    return `Show ${c.toLocaleString('en-US')} recommendation${c === 1 ? '' : 's'}`;
+  }
   const n = filteredPrograms().length;
   return `Show ${n} program${n === 1 ? '' : 's'}`;
 }
@@ -2025,6 +2036,7 @@ const RECS_NOTICES = {
   unavailable: 'Your preferences won’t be remembered on this device: this browser isn’t letting the page save them.',
   newer: 'Your preferences were saved by a newer version of this page, so they are left as they are. Changes here last for this visit only.',
   corrupt: 'Your saved preferences couldn’t be read, so the form starts empty. Saving replaces them.',
+  migrated: 'Your saved preferences were from an older version of this page and have been brought up to date.',
 };
 S.recs = { on: false, open: false, lib: null, loadFailed: false, loaded: false, saved: null, draft: null, doc: null,
   storage: 'ok', notices: [], issues: [], status: '', error: '' };
@@ -2033,6 +2045,7 @@ const recsConstants = () => ({ regions: Object.fromEntries(REGIONS.map(r => [r, 
 function recsSwitchedOn() {
   if (S.recs.on) return;
   S.recs.on = true;
+  renderStartActions(); // #400 PR 6: the Start strip's entry (#404 decision 3b)
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
@@ -2059,19 +2072,24 @@ function recsRead(lib) {
   if (raw == null) return blank;
   let doc;
   try { doc = JSON.parse(raw); } catch { doc = null; }
-  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { ...blank, notices: ['corrupt'] };
-  if (typeof doc.v === 'number' && doc.v > 1) return { ...blank, doc, storage: 'newer', notices: ['newer'] };
-  if (doc.v !== 1) return { ...blank, notices: ['corrupt'] };
+  // #400 PR 6: through the migration chain (recs.js), so an older format is brought up to date, not called unreadable.
+  const m = lib.migrateDoc(doc);
+  if (m.status === 'unreadable') return { ...blank, notices: ['corrupt'] };
+  if (m.status === 'newer') return { ...blank, doc, storage: 'newer', notices: ['newer'] };
+  const migrated = m.status === 'migrated';
+  doc = m.doc;
   const { prefs, issues } = lib.validatePrefs(doc.prefs === undefined ? null : doc.prefs, recsConstants());
   const h = recsHiddenFrom(doc.hidden); // #400 PR 5: the hidden list, cleaned entry by entry
-  return { ...blank, prefs, doc, issues, hidden: h.hidden, hiddenDropped: h.dropped };
+  return { ...blank, prefs, doc, issues, hidden: h.hidden, hiddenDropped: h.dropped, notices: migrated ? ['migrated'] : [] };
 }
 // Save the preferences into cd.recs, keeping any other field already there. False when they can't be saved.
+// May this tab write cd.recs now? Not over a newer format, and not while another tab's change awaits a choice (#427 review).
+const recsMayWrite = () => S.recs.storage !== 'newer' && !S.recs.otherTab;
 function recsWrite(prefs) {
   const R = S.recs;
-  if (R.storage === 'newer') return false;
+  if (!recsMayWrite()) return false;
   const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs };
-  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; return true; }
+  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; R.migratedUnsaved = false; return true; }
   catch { if (R.storage !== 'unavailable') { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; } return false; }
 }
 // The form's working copy: per category, Skip or Choose, the chosen values and Prefer or Must have.
@@ -2112,7 +2130,8 @@ function recsClose() {
   R.open = false; R.status = ''; R.error = '';
   renderRecsPanel();
   syncRecsEntry();
-  $('#recsOpen')?.focus();
+  const opener = $(`#${recsOpener}`); // back to the button that opened it, if it is still on screen
+  (opener && opener.offsetParent !== null ? opener : $('#recsOpen'))?.focus();
 }
 // On a phone the sheet is modal: aria-modal, and everything behind it inert, so neither Tab nor a screen reader's
 // virtual cursor reaches the page underneath. Re-checked on resize and rotation; off again when the panel closes.
@@ -2123,7 +2142,7 @@ function recsSheetState() {
   for (const sel of ['#main', '#sidebar', '.header']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
 }
 window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
-function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
+function syncRecsEntry() { for (const id of ['#recsOpen', '#recsOpenStart']) { const b = $(id); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); } }
 function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; }
 function recsSetImportance(cat, imp) {
   const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
@@ -2189,8 +2208,9 @@ function renderRecsPanel() {
     return;
   }
   const notes = [...R.notices.map(n => RECS_NOTICES[n]), recsIssueText(R.issues)].filter(Boolean);
+  const catalog = R.catalogError ? `<div class="recs-notice" role="alert">Recommendations need the program list, which didn’t load. <button type="button" class="btn" id="recsCatalogRetry">Try again</button></div>` : '';
   const saved = recsSummary(R.saved);
-  body.innerHTML = head
+  body.innerHTML = head + catalog
     + `<p class="recs-intro">Tell us what matters to you. Every category is optional; skip any of them.</p>`
     + notes.map(n => `<p class="recs-notice">${esc(n)}</p>`).join('')
     + (saved ? `<p class="recs-saved"><b>Saved:</b> ${esc(saved)}</p>` : '')
@@ -2205,6 +2225,7 @@ function wireRecsPanel(el) {
     const t = e.target;
     if (t.closest('#recsClose')) return recsClose();
     if (t.closest('#recsRetry')) return recsOpen();
+    if (t.closest('#recsCatalogRetry')) return recsShowRecommended({ fromPanel: true });
     if (t.closest('#recsReset')) { recsReset(); renderRecsPanel(); return $('#recsTitle')?.focus(); }
     const pill = t.closest('[data-recs-val]');
     if (pill) { recsToggleValue(pill.dataset.recsCat, pill.dataset.recsVal); renderRecsPanel(); el.querySelector(`[data-recs-cat="${pill.dataset.recsCat}"][data-recs-val="${pill.dataset.recsVal}"]`)?.focus(); }
@@ -2216,7 +2237,8 @@ function wireRecsPanel(el) {
   };
   el.onsubmit = e => {
     e.preventDefault();
-    if (recsApply()) return recsShowRecommended({ fromPanel: true }); // #400 PR 4: a save always shows Recommended
+    const t0 = recsNow();
+    if (recsApply()) return recsShowRecommended({ fromPanel: true }).then(() => recsTime('apply', recsNow() - t0)); // #400 PR 4: a save always shows Recommended
     renderRecsPanel();
     recsFocusAfterError()?.focus();
   };
@@ -2265,7 +2287,7 @@ async function recsEnsureLoaded() {
   if (R.lib && !R.loaded) {
     const r = recsRead(R.lib);
     Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, hidden: r.hidden,
-      hiddenDropped: r.hiddenDropped, loaded: true });
+      hiddenDropped: r.hiddenDropped, migratedUnsaved: r.notices.includes('migrated'), loaded: true });
   }
   return !!R.lib;
 }
@@ -2292,7 +2314,9 @@ async function recsLoadFit() {
 function recsStamp() { return { taxonomy: S.recs.fit?.fitTaxonomy || null, ranker: S.recs.lib?.RANKER || null, catalog: S.index?.updated || null }; }
 function recsWriteApplied(stamp) {
   const R = S.recs;
-  if (R.storage !== 'ok' || !R.doc || R.doc.v !== 1) return;
+  // Not before a migrated document has been saved by the visitor (nothing is rewritten until a save), nor while
+  // another tab's change awaits a choice.
+  if (R.storage !== 'ok' || !R.doc || R.doc.v !== 1 || !recsMayWrite() || R.migratedUnsaved) return;
   const doc = { ...R.doc, applied: stamp };
   try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; } catch { /* the in-memory state is unaffected */ }
 }
@@ -2302,6 +2326,16 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
   if (!R.on) return;
   if (!(await recsEnsureLoaded())) { R.fitError = 'failed'; R.active = false; syncSortControls(); return rerenderForFilters(); }
   if (!R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); return recsOpen(); }
+  // #400 PR 6 (O1): no program list, no ranking. Said where the visitor is (the panel, or the toast), with Try again.
+  if (!S.index) {
+    try { await loadIndex(); } catch {
+      R.active = false; R.catalogError = true; syncSortControls();
+      if (fromPanel || R.open) { renderRecsPanel(); $('#recsCatalogRetry')?.focus(); }
+      else { R.toast = { kind: 'catalog' }; renderRecsToast(); }
+      return;
+    }
+  }
+  R.catalogError = false;
   R.active = true; R.shown = RECS_PAGE; R.fitError = null; R.toast = null; renderRecsToast();
   if (fromPanel) { R.open = false; renderRecsPanel(); syncRecsEntry(); }
   if (currentView() !== 'list') { location.hash = '#/'; }
@@ -2386,7 +2420,9 @@ function renderRecsList(idx) {
       + `<div class="content-body"><div class="empty" role="status">Loading recommendations…</div></div>`;
     return true;
   }
+  const t0 = recsNow();
   const res = recsResult();
+  recsTime('rerank', recsNow() - t0); // ?recs-timing=1 only; nothing is sent
   if (res.error) { R.active = false; R.fitError = res.error === 'mismatch' ? 'updating' : 'failed'; syncSortControls(); return false; }
   const conf = res.confirmed, shown = conf.slice(0, R.shown);
   const answered = RECS_CATS.filter(c => R.saved[c.key].mode !== 'skip').length;
@@ -2396,13 +2432,14 @@ function renderRecsList(idx) {
   const stale = R.stale.length ? '<p class="recs-notice">Program data has been updated since you set these preferences; the results are recomputed.</p>' : '';
   const bar = `<section class="recs-bar" aria-label="Your preferences"><p id="recsBarText" tabindex="-1"><b>${recsCount(answered, 'preference')}:</b> ${esc(recsSummary(R.saved))}</p>
     <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button><button type="button" class="btn" data-recs-clear>Clear personalization</button></div>${stale}${recsBarExtrasHtml(res)}</section>`;
-  const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug)), { ranked: true }) : '')
+  const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug)), { ranked: true, why: p => recsWhyHtml(shown.find(it => it.slug === p.slug)) }) : '')
     : (shown.length ? `<div class="grid cards">${shown.map(it => cardHtml(programBySlug(it.slug), recsWhyHtml(it) + recsHideHtml(it), true)).join('')}</div>` : '');
   const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
   const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
   $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
     + `<div class="content-body">${askBanner()}${bar}${body}</div>`;
   recsAnnounce(`Showing ${shown.length} of ${conf.length} confirmed matches`);
+  syncShowResults();
   const app = $('#app');
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
@@ -2464,10 +2501,10 @@ function recsHiddenFrom(raw) {
 // Save fields into cd.recs beside the preferences. False when they can't be saved (they stay in memory).
 function recsSaveDoc(fields) {
   const R = S.recs;
-  if (R.storage !== 'ok') return false;
+  if (R.storage !== 'ok' || !recsMayWrite()) return false;
   const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs: R.saved, ...fields };
   try {
-    localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc;
+    localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; R.migratedUnsaved = false;
     if ('hidden' in fields) R.hiddenDropped = 0; // the unreadable entries were replaced by this save
     return true;
   } catch { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; return false; }
@@ -2534,7 +2571,7 @@ function recsEditPreference(cat) {
 // Clear personalization: cd.recs removed, the ordinary list back, nothing else touched (A9).
 async function recsClearAll() {
   const R = S.recs;
-  const newer = R.storage === 'newer';
+  const newer = !recsMayWrite(); // a newer format, or another tab's change awaiting a choice: clear this visit only
   let removed = !newer;
   if (!newer) { try { localStorage.removeItem(RECS_KEY); } catch { removed = false; } }
   Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: newer ? R.doc : null, active: false, stale: [], showHidden: false,
@@ -2547,7 +2584,7 @@ async function recsClearAll() {
 }
 // The toast: one persistent live node beside the list (outside #app, which every render replaces).
 function renderRecsToast() {
-  const el = $('#recsToast'), R = S.recs, t = R.toast;
+  const el = $('#recsToast'), R = S.recs, t = R.otherTab ? { kind: 'crosstab', cleared: R.otherTab.cleared } : R.toast;
   if (!el) return;
   if (!t || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
   let html = '';
@@ -2556,6 +2593,8 @@ function renderRecsToast() {
       ? ` <button type="button" class="btn" id="recsEditPref" data-recs-cat="${esc(t.reason)}">Edit this preference</button>` : '';
     html = `Hidden: ${esc(recsName(t.slug))}${t.saved ? '' : ' (for this visit only)'}. <button type="button" class="btn" id="recsUndo">Undo</button>${edit}`;
   } else if (t.kind === 'restored') html = `Restored: ${esc(recsName(t.slug))}.`;
+  else if (t.kind === 'catalog') html = 'Recommendations need the program list, which didn’t load. <button type="button" class="btn" id="recsCatalogRetryToast">Try again</button>';
+  else if (t.kind === 'crosstab') html = `${t.cleared ? 'Your preferences were cleared in another tab.' : 'Your preferences changed in another tab.'} <button type="button" class="btn" id="recsUseOther">Use those</button> <button type="button" class="btn" id="recsKeepThis">Keep these</button>`;
   else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
     : t.newer ? 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.'
     : 'Personalization cleared for this visit; this browser isn’t letting the page change what it saved.';
@@ -2563,6 +2602,9 @@ function renderRecsToast() {
   el.innerHTML = html;
   el.onclick = e => {
     if (e.target.closest('#recsUndo')) return recsUndo();
+    if (e.target.closest('#recsCatalogRetryToast')) { R.toast = null; renderRecsToast(); return recsShowRecommended(); }
+    if (e.target.closest('#recsUseOther')) return recsUseOtherTab();
+    if (e.target.closest('#recsKeepThis')) return recsKeepThisTab();
     const b = e.target.closest('#recsEditPref');
     if (b) return recsEditPreference(b.dataset.recsCat);
   };
@@ -2597,6 +2639,66 @@ function wireRecsFeedback(app) {
   app.querySelectorAll('[data-recs-shared-ok]').forEach(b => b.onclick = () => { S.recs.sharedNotice = false; renderList(); $('#recsBarText')?.focus(); });
   app.querySelectorAll('[data-recs-clear]').forEach(b => b.onclick = () => recsClearAll());
 }
+
+/* ---------- program recommendations: resilience (issue #400, PR 6) ----------
+   - Migrations: cd.recs is read through public/recs.js's migrateDoc, so an older format is brought up to date (and
+     said) instead of read as unreadable. A newer format is still left untouched. Nothing is rewritten until a save.
+   - Another tab: when a different tab changes or clears cd.recs, this tab says so and applies nothing by itself:
+     [Use those] re-reads them, [Keep these] keeps this tab's, and its next save overwrites the other.
+   - The program list failing to load (O1): Show matches says so in the panel, with Try again, and the form stays
+     usable; nothing is ranked from partial data.
+   - ?recs-timing=1: a local-only overlay with the rerank and Apply timings measured in this browser (the phone
+     targets are rerank <= 100 ms and Apply <= 300 ms at p95). Nothing is sent anywhere; it replaces the #394 marks
+     the plan first had (review change 1). Off unless the address asks for it. */
+// The button that opened the panel, so closing it returns focus there (the sidebar's, or the Start strip's).
+let recsOpener = 'recsOpen';
+// The Start strip's #startActions slot (#413): "Find programs for me" while recommendations are on, nothing otherwise.
+// The strip shows where the sidebar's search isn't on screen (a phone, or a collapsed sidebar); beside an open sidebar
+// it stays hidden, and the sidebar's own "Find programs for me" is the entry there.
+function renderStartActions() {
+  const slot = $('#startActions');
+  if (!slot) return;
+  if (!S.recs.on) { slot.innerHTML = ''; return; }
+  slot.innerHTML = `<button type="button" class="btn recs-entry" id="recsOpenStart" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}">Find programs for me</button>`;
+  const b = $('#recsOpenStart');
+  if (b) b.onclick = () => { recsOpener = 'recsOpenStart'; recsOpen(); };
+}
+const RECS_TIMING = (() => { try { return new URLSearchParams(location.search || '').get('recs-timing') === '1'; } catch { return false; } })();
+const recsTimes = { rerank: [], apply: [] };
+const recsNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now());
+function recsTime(kind, ms) {
+  if (!RECS_TIMING || !recsTimes[kind]) return;
+  recsTimes[kind].push(ms);
+  if (recsTimes[kind].length > 200) recsTimes[kind].shift();
+  renderRecsTiming();
+}
+const recsP95 = a => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y); return s[Math.ceil(s.length * 0.95) - 1]; };
+function renderRecsTiming() {
+  const el = $('#recsTiming');
+  if (!el || !RECS_TIMING) return;
+  const line = (kind, target) => { const a = recsTimes[kind];
+    return a.length ? `${kind}: n ${a.length}, last ${a[a.length - 1].toFixed(1)} ms, p95 ${recsP95(a).toFixed(1)} ms (target ≤${target} ms)` : `${kind}: no runs yet (target ≤${target} ms)`; };
+  el.hidden = false;
+  el.textContent = `Recommendations timing, measured in this browser only; nothing is sent. ${line('rerank', 100)} · ${line('apply', 300)}`;
+}
+// Another tab changed cd.recs (the storage event fires only in the OTHER tabs). Nothing is applied until asked.
+function recsOtherTab(newValue) {
+  const R = S.recs;
+  if (!R.on || !R.loaded) return; // nothing read in this tab yet: the next read sees the other tab's version anyway
+  R.otherTab = { cleared: newValue == null };
+  renderRecsToast();
+}
+async function recsUseOtherTab() {
+  const R = S.recs;
+  R.otherTab = null; R.loaded = false; R.toast = null;
+  await recsEnsureLoaded();
+  if (R.open) { R.draft = recsDraftFrom(R.saved); renderRecsPanel(); }
+  if (R.active && !R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); }
+  renderRecsToast();
+  await renderList();
+}
+function recsKeepThisTab() { S.recs.otherTab = null; S.recs.toast = null; renderRecsToast(); } // this tab's next save overwrites the other's
+window.addEventListener('storage', e => { if (e.key === RECS_KEY || e.key === null) recsOtherTab(e.key === null ? null : e.newValue); });
 
 /* ---------- router ---------- */
 function route() {
@@ -2889,6 +2991,7 @@ async function renderList() {
   const idx = await loadIndex();
   if (S.recs?.active && S.recs.lib && (S.recs.fit || S.recs.loading) && renderRecsList(idx)) return; // #400 PR 4
   if (S.recs) recsAnnounce('');
+  if (S.recs?.on) syncShowResults();
   const f = S.filters;
   const rows = filteredPrograms();
   const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
@@ -2957,6 +3060,7 @@ function tableHtml(rows, opts = {}) { // opts.ranked: Recommended mode's order, 
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
     ['star', '', '', p => starBtn(p.slug)],
     ['name', 'Program', '', p => `<div class="team-cell">${swatchesHtml(p)}<span><span class="team-name" title="${esc(p.name)}">${esc(displayName(p))}</span><br><span class="team-sub">${programLine(p)}</span></span></div>`, 'name'],
+    ...(opts.why ? [['why', 'Why', 'recs-why-cell', p => opts.why(p)]] : []), // Recommended mode's reasons (#400 PR 6)
     ['admit', 'Admit', 'num', p => fmtPct(p.admissionRate), 'admit'],
     ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
