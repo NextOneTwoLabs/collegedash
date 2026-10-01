@@ -1337,6 +1337,8 @@ async function loadIndex() {
      that is how it already behaves and changing it is not this change's business. */
   const live = new Set(S.index.divisions);
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
+  { const ok = k => { const [d, c] = splitConf(k); return !d || !!(S.index.byDivConf[d] || {})[c]; };  // #425
+    if (S.filters.conf.some(k => !ok(k))) { S.filters.conf = S.filters.conf.filter(ok); saveState(); } }
   { const c = capCompare(S.compare); if (c.join(',') !== S.compare.join(',')) { S.compare = c; saveState(); } }  // #111
   getJSON('/api/v1/status').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
   // #400: recommendations ride on this same answer ({recs: true} from the Worker's RECS_ENABLED), never on a request of their own.
@@ -1664,8 +1666,33 @@ function conferenceGroups() {
    prunes nothing, because shownDivisions() is then every division in the data. */
 function pruneConfToDivisions() {
   if (!S.index) return;
-  const visible = new Set(shownDivisions().flatMap(d => Object.keys(S.index.byDivConf[d] || {})));
-  S.filters.conf = S.filters.conf.filter(c => visible.has(c));
+  const shown = shownDivisions(), has = (d, c) => !!(S.index.byDivConf[d] || {})[c];
+  S.filters.conf = S.filters.conf.filter(k => { const [d, c] = splitConf(k); return d ? shown.includes(d) && has(d, c) : shown.some(x => has(x, c)); });
+}
+/* #425: a conference selection is one of two forms, both valid in a saved cd.filters.
+     "<division>|<conference>" - what a pill writes: that conference in that division ("D2|Independent");
+     "<conference>"            - the name in every division that has it: a save from before #425, an Ask answer, a bare
+                                 #/c/<name> link. Read exactly as before and never rewritten until a pill is tapped.
+   Only "Independent" exists in more than one division today; the form keeps any future shared name apart too. */
+const CONF_SEP = '|';
+const confKeyOf = (d, c) => `${d}${CONF_SEP}${c}`;
+const splitConf = k => { const i = k.indexOf(CONF_SEP); return i < 0 ? [null, k] : [k.slice(0, i), k.slice(i + 1)]; };
+const confPicked = (sel, d, c) => sel.some(k => k === c || k === confKeyOf(d, c));
+const confShared = c => Object.values(S.index?.byDivConf || {}).filter(m => m[c]).length > 1;
+// The ONE way a selection is printed (list and Stats titles, subtitles, camps, Pipelines, the Ask banner): a shared name
+// picked in one division names it, "Independent (D2)"; everything else reads as the plain name, as before.
+const confLabel = k => { const [d, c] = splitConf(k); return d && confShared(c) ? `${c} (${d})` : c; };
+const confLabels = (sel = S.filters.conf) => sel.map(confLabel);
+const confTitleText = (sel = S.filters.conf) => sel.length === 1 ? confLabel(sel[0]) : sel.length > 1 ? `${sel.length} conferences` : 'All programs';
+// A pill tap. A bare name that covers the tapped pill is first expanded into the keys of the divisions ON SCREEN that
+// have it (never into hidden ones, which would leave a filter with no lit pill to explain it), then the tapped key toggles.
+function toggleConf(d, c) {
+  const f = S.filters;
+  if (f.conf.includes(c)) {
+    const keys = shownDivisions().filter(x => (S.index.byDivConf[x] || {})[c]).map(x => confKeyOf(x, c));
+    f.conf = f.conf.filter(k => k !== c).concat(keys.filter(k => !f.conf.includes(k)));
+  }
+  toggleIn(f.conf, confKeyOf(d, c));
 }
 // Name first, to match the default in S.filters. The select's order is cosmetic; the default is there.
 const SORTS = [['name', 'Name'], ['rpi', 'RPI'], ['admit', 'Admission rate'], ['academicRank', 'US rank (THE)'], ['tuition', 'Tuition (out-of-state)'], ['undergrads', 'Undergrads'], ['titles', 'National titles']];
@@ -1697,7 +1724,7 @@ function renderSidebar() {
     const counts = confCounts();
     const confPill = d => ([c]) => {
       const n = counts.get(confKey(d, c)) || 0;
-      return `<button ${pillAttrs('conf', c, f.conf.includes(c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
+      return `<button ${pillAttrs('conf', c, confPicked(f.conf, d, c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
     };
     const confAll = `<button ${pillAttrs('conf', '', !f.conf.length)}>All</button>`;
     const confBlock = groups.length <= 1
@@ -1760,7 +1787,7 @@ function renderSidebar() {
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference and region are plain filters; the class buttons only highlight (#15). All update, re-render the sidebar, re-render the list in place
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { if (b.dataset.conf) toggleConf(b.dataset.confDiv, b.dataset.conf); else f.conf.length = 0; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
   // selection to what is still on screen before the sidebar is rebuilt.
@@ -1967,14 +1994,15 @@ function applyAsk(a) {
   const prev = { filters: JSON.parse(JSON.stringify({ division: f.division, conf: f.conf, region: f.region, classYear: f.classYear, cond: f.cond, sort: f.sort, sortDir: f.sortDir })), qRaw: S.qRaw };
   const years = (S.index.season?.gradYears || []).map(String);
   f.division = strs(a.division).filter(d => (S.index.divisions || []).includes(d));
-  f.conf = strs(a.conf).filter(c => Object.prototype.hasOwnProperty.call(S.index.byConf, c));
+  f.conf = strs(a.conf).filter(c => Object.prototype.hasOwnProperty.call(S.index.byConf, c))
+    .map(c => f.division.length === 1 && confShared(c) && (S.index.byDivConf[f.division[0]] || {})[c] ? confKeyOf(f.division[0], c) : c);
   f.region = strs(a.region).filter(r => REGIONS.includes(r));
   f.classYear = strs(a.classYear).filter(y => years.includes(y));
   f.cond = sanitizeConds(a.cond);
   const sort = SORTS.find(s => s[0] === a.sort);
   if (sort) { f.sort = sort[0]; f.sortDir = null; }
   pruneConfToDivisions();
-  const parts = [...f.division.map(divisionName), ...f.conf, ...f.region.map(r => `${r} region`),
+  const parts = [...f.division.map(divisionName), ...confLabels(f.conf), ...f.region.map(r => `${r} region`),
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
   S.qRaw = ''; S.q = ''; S.askMsg = ''; mirrorQuery();
   S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
@@ -2779,7 +2807,7 @@ function wireCharts(root) {
 const matchesFilters = (p, score, conds = S.filters.cond, withConf = true) => {
   const f = S.filters;
   return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q, S.qRaw)))
-    && (!withConf || !f.conf.length || f.conf.includes(p.conference))
+    && (!withConf || !f.conf.length || f.conf.some(k => k === p.conference || k === confKeyOf(p.division || 'Other', p.conference || 'Other')))
     && (!f.region.length || f.region.includes(p.region))
     && (!f.division.length || f.division.includes(p.division))
     && (!conds?.length || condStatus(p, conds) === 'pass');
@@ -2877,7 +2905,7 @@ function sortCmp(key, dir) {
 // The words for the filters and search on screen, shared by the ordinary list and Recommended mode (#400 PR 4).
 function listFilterBits(rows) { // rows: the programs on screen, which the class highlight line counts (#15)
   const f = S.filters, bits = [];
-  if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
+  if (f.conf.length > 1) bits.push(esc(confLabels(f.conf).join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   // The class buttons highlight, they do not filter (#15): the subtitle must not read like the region bit above.
   if (f.classYear.length) bits.push(classSubtitle(f.classYear, rows));
@@ -2891,7 +2919,7 @@ async function renderList() {
   if (S.recs) recsAnnounce('');
   const f = S.filters;
   const rows = filteredPrograms();
-  const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
+  const title = confTitleText(f.conf);
   // The corpus is named from the divisions actually on screen: hardcoding "Division I" was true of a
   // single-division index and becomes a plain falsehood the moment a second division is published.
   const bits = [corpusLabel(), `${rows.length} of ${idx.programs.length} program${idx.programs.length === 1 ? '' : 's'}`];
@@ -2974,7 +3002,7 @@ function tableHtml(rows, opts = {}) { // opts.ranked: Recommended mode's order, 
     return `<th class="${shown(cls, sortKey)}${sortKey ? ' sortable' : ''}${on ? ` sort-active sort-${dir}` : ''}"${sortKey ? ` data-sort="${sortKey}"` : ''}${on ? ` aria-sort="${dir === 'asc' ? 'ascending' : 'descending'}"` : ''}>${sortKey ? `<button type="button" class="th-sort"${SORT_NOTE[sortKey] ? ` title="${SORT_NOTE[sortKey]}"` : ''}>${esc(label)}</button>` : esc(label)}</th>`; }).join('');
   const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn, sortKey]) => `<td class="${shown(cls, sortKey)}">${fn(p)}</td>`).join('')}</tr>`).join('');
   return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">
-    <div class="flight-header"><div class="flight-title">${esc(f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs')}</div>
+    <div class="flight-header"><div class="flight-title">${esc(confTitleText(f.conf))}</div>
       <div class="flight-header-right"><span class="flight-team-count">${rows.length} programs</span><button type="button" class="more-stats-btn" id="moreStats" aria-expanded="${f.moreStats}">${f.moreStats ? 'Fewer statistics' : 'More statistics'}</button></div></div>
     <div class="tscroll"><table class="standings-table"><thead><tr>${head}</tr></thead><tbody>${body || `<tr><td colspan="${cols.length}"><div class="empty">No programs match.</div></td></tr>`}</tbody></table></div>
     <div class="table-footnote">${rpiSeason() == null ? 'No RPI season is in the data yet' /* #250 */ : rpiInProgress() ? `RPI is the ${rpiSeason()} season, ${IN_PROGRESS}: the NCAA's latest weekly table` : `RPI is the ${rpiSeason()} season as published by the NCAA`}${rows.some(p => !appliesTo('rpi', p)) ? ` · RPI and College Cups are shown for ${esc(divisionName('D1'))} only` : ''} · Admission rate and size are for the whole university · Select a program for details</div>
@@ -3082,7 +3110,7 @@ async function renderCamps() {
   // Conditions (#166), counted in camps: the camps whose program passed everything else but lacks the data.
   if (f.cond.length) { const hidden = condHiddenText(condTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (hidden) bits.push(esc(hidden)); }
   if (f.cond.length) { const na = condNaText(condNaTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (na) bits.push(esc(na)); }
-  if (f.conf.length) bits.push(esc(f.conf.join(', ')));
+  if (f.conf.length) bits.push(esc(confLabels(f.conf).join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names`);
@@ -3112,7 +3140,7 @@ async function renderCamps() {
   } else if (filtered && resolved.length) {
     // The common empty case, not an exceptional one: the list is small and regional coverage is thin.
     body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
-      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), f.conf.join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', f.cond.map(condText).join(' and '), S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
+      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), confLabels(f.conf).join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', f.cond.map(condText).join(' and '), S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
       ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
       <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/">All programs</a></p>
       <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
@@ -3658,7 +3686,7 @@ function trendsView(sel) {
   const bits = one && boxes === 1 ? [`${one.current} current players, ${one.past} former, ${commitsText(one.commits)}`]
     : [doc.divisions.join(', '), `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} ${doc.commitDivisions.join(', ')} commits`];
   if ((C.length || H.length) && !P.length) {
-    if (f.conf.length) bits.push(esc(f.conf.join(', ')));
+    if (f.conf.length) bits.push(esc(confLabels(f.conf).join(', ')));
     if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
     if (f.division.length) bits.push(esc(f.division.map(divisionName).join(', ')));
     if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
@@ -3876,7 +3904,7 @@ async function renderProfile(slug, tab) {
   const subtitle = [programLine(p, p.school?.city, p.school?.state), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference || '')}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference && p.division && confShared(p.conference) ? confKeyOf(p.division, p.conference) : (p.conference || ''))}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
