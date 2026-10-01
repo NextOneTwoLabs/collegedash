@@ -8,6 +8,7 @@ const routes = [
   [/^\/api\/v1\/programs\/([^/]+)$/, 'program', ['slug']],
   [/^\/api\/v1\/camps$/, 'camps', []],
   [/^\/api\/v1\/list$/, 'list', []], // the slim program list the site reads (issue #395); /programs stays the full index
+  [/^\/api\/v1\/fit$/, 'fit', []], // the recommender's fit facts, loaded only when its panel opens (issue #400)
   [/^\/api\/v1\/trends$/, 'trends', []],
   [/^\/api\/v1\/commitments$/, 'commitments', []],
 ];

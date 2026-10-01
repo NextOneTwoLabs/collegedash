@@ -21,6 +21,7 @@ scraping.
 | --- | --- |
 | `/api/v1/programs` | the program index (`public/data/programs/index.json`), every field, unchanged |
 | `/api/v1/list` | the slim program list the site reads (`public/data/list/index.json`, issue #395): the same rows cut to the fields the list views use, written compact. `season.rpiSeason` names the RPI season; each row's `rpi` is its rank in it |
+| `/api/v1/fit` | the recommender's fit facts (`public/data/fit/index.json`, issue #400): per program, by slug, the climate label and the figures it comes from, the College Scorecard and NOAA station ids its source links use, and when each source was fetched; plus the taxonomy version and its constants (size bands, climate thresholds, regions). Region, division and enrollment are on the list rows. The site loads it only when "Find programs for me" opens |
 | `/api/v1/programs/{slug}` | one program's profile (`public/data/programs/{slug}.json`); a slug is `[a-z0-9-]{1,64}` |
 | `/api/v1/commitments` | the commitments index |
 | `/api/v1/camps` | the camps index |
@@ -129,7 +130,7 @@ moving to it before phase 4 (#345), and before any key goes to anyone outside th
 ### What is recorded
 
 Each non-routine request writes **one** Workers Analytics Engine data point (dataset `collegedash_api_gate`, binding
-`API_GATE_STATS`): `blob1` the outcome, `blob2` the route kind (`programs`, `program`, `camps`, `trends`,
+`API_GATE_STATS`): `blob1` the outcome, `blob2` the route kind (`programs`, `list`, `fit`, `program`, `camps`, `trends`,
 `commitments`, `status`, `invalid`, `unknown`, or `page` for `/`), `blob3` the `Sec-Fetch-Site` class, `blob4`
 `production` or `preview` (from the host), `double1` 1. **No IP address, session id, user agent, key or hash.**
 Routine session requests write nothing here (they get a timing point instead: "Speed measurements" below). **At most
@@ -176,6 +177,11 @@ What visitors are told (owner-approved wording, #394):
 - **Grouping by time.** Reports from one visit arrive within seconds of each other, so they can be grouped by time. That shows a list view followed by a profile, never which profile.
 - **What the Worker sees.** It sees the IP address, user agent and cookie on every request, as it always has, and writes none of them.
 - **Retention.** Three months is Cloudflare's documented figure, unverified here.
+- **Recommendations (issue #400, decision D6).** The recommendations feature sends no reports of its own: no production
+  events, and nothing about the preferences a visitor sets, which stay in their browser. But the site loads its data file
+  (`/api/v1/fit`) only when "Find programs for me" opens, and like every data file its requests appear in the server's
+  aggregate counts by route kind (`fit`, in both datasets above). So those counts show how often the panel was opened.
+  They hold no preferences, no choices and no identity.
 
 **Sampling covers every page load (`PERF_SAMPLE = "1"`),** the owner's decision of 2026-09-30 on the account's 7-day volume (#394). The same wording is on the site's About page. **The quota rule still holds:**
 - 3 × rate × page loads a day must stay at most 2,000;

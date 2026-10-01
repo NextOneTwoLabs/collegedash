@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://collegedash.local/schema/fit.schema.json",
+  "title": "CollegeDash recommender fit facts (public/data/fit/index.json, /api/v1/fit; issue #400)",
+  "description": "What the recommender needs that the list rows lack, one entry per published slug. build.check_fit_index also checks it against the index and the profiles of the same build; this schema pins the shape. An entry carries exactly build.FIT_KEYS: a new one is added here and there together, with a new fitTaxonomy.",
+  "type": "object",
+  "required": ["updated", "fitTaxonomy", "constants", "sources", "fit"],
+  "additionalProperties": false,
+  "properties": {
+    "updated": {"type": "string", "minLength": 1},
+    "fitTaxonomy": {"type": "string", "pattern": "^fit-[0-9]+$"},
+    "constants": {
+      "type": "object",
+      "required": ["sizeBands", "climate", "regions"],
+      "additionalProperties": false,
+      "properties": {
+        "sizeBands": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 2, "maxItems": 2},
+        "climate": {
+          "type": "object",
+          "required": ["mildMinF", "coldBelowF", "maxStationKm", "measure"],
+          "additionalProperties": false,
+          "properties": {
+            "mildMinF": {"type": "number"},
+            "coldBelowF": {"type": "number"},
+            "maxStationKm": {"type": "number"},
+            "measure": {"type": "string"}
+          }
+        },
+        "regions": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]{2}$"}}}
+      }
+    },
+    "sources": {
+      "type": "object",
+      "required": ["school", "climate"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "asOfIndex"],
+        "properties": {"name": {"type": "string"}, "field": {"type": "string"}, "asOfIndex": {"type": "integer", "minimum": 0, "maximum": 1}}
+      }
+    },
+    "fit": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z0-9-]{1,64}$"},
+      "additionalProperties": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "date": {"type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "entry": {
+      "type": "object",
+      "required": ["climate", "climateUnknown", "coldMonthMeanF", "stationKm", "unitId", "station", "asOf"],
+      "additionalProperties": false,
+      "properties": {
+        "climate": {"enum": ["mild", "four-season", "cold", null]},
+        "climateUnknown": {"enum": ["no-normals", "station-distance-unknown", "far-station", "no-climate-source", null]},
+        "coldMonthMeanF": {"type": ["number", "null"]},
+        "stationKm": {"type": ["number", "null"], "minimum": 0},
+        "unitId": {"type": ["integer", "null"]},
+        "station": {"type": ["string", "null"]},
+        "asOf": {"type": "array", "items": {"$ref": "#/$defs/date"}, "minItems": 2, "maxItems": 2}
+      },
+      "oneOf": [
+        {"properties": {"climate": {"type": "string"}, "climateUnknown": {"type": "null"}}},
+        {"properties": {"climate": {"type": "null"}, "climateUnknown": {"type": "string"}}}
+      ]
+    }
+  }
+}

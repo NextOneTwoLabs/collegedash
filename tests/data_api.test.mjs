@@ -259,3 +259,30 @@ test('#401 R1: the "not built yet" case still answers 404 once a refresh has com
     fs.rmSync(tree, { recursive: true, force: true });
   }
 });
+
+// Issue #400: the recommender's fit facts, loaded only when "Find programs for me" opens. Built by the refresh, so the
+// committed tree may not hold it yet; this test supplies one, and tells the asset server it has none for the 404 case.
+test('/api/v1/fit serves data/fit/index.json like every v1 route, 404 (JSON) before the first build, raw path refused', async () => {
+  const FIT = JSON.stringify({ updated: 'x', fitTaxonomy: 'fit-1', fit: { ucla: { climate: 'mild' } } });
+  const env = createMockEnv({ 'data/fit/index.json': FIT });
+  const res = await worker.fetch(new Request(HOST + '/api/v1/fit'), env);
+  assert.equal(res.status, 200);
+  assert.equal(await res.text(), FIT);
+  assert.equal(res.headers.get('cache-control'), 'no-cache');
+  assert.ok(res.headers.get('etag'));
+  assert.deepEqual(env.calls, ['/data/fit/index.json'], 'read from the fit asset, nothing else');
+  const again = await worker.fetch(new Request(HOST + '/api/v1/fit', { headers: { 'if-none-match': res.headers.get('etag') } }), env);
+  assert.equal(again.status, 304);
+  const head = await worker.fetch(new Request(HOST + '/api/v1/fit', { method: 'HEAD' }), env);
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), '');
+  assert.equal((await worker.fetch(new Request(HOST + '/api/v1/fit', { method: 'POST' }), env)).status, 405);
+  const none = await worker.fetch(new Request(HOST + '/api/v1/fit'), createMockEnv({ 'data/fit/index.json': null }));
+  assert.equal(none.status, 404);
+  assert.match(none.headers.get('content-type') || '', /application\/json/);
+  assert.equal((await worker.fetch(new Request(HOST + '/data/fit/index.json'), env)).status, 404);
+  // a program slug named "fit" is still a profile
+  const prof = createMockEnv();
+  await worker.fetch(new Request(HOST + '/api/v1/programs/fit'), prof);
+  assert.deepEqual(prof.calls, ['/data/programs/fit.json']);
+});

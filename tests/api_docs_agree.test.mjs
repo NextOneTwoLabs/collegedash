@@ -94,7 +94,7 @@ test('page #/api: key required for direct use, the limits bound, a link to #api-
 
 test('every /api/v1 route the Worker serves is in docs/data-api.md and on the #/api page (#395 added /list)', async () => {
   const { resolveResource } = await import('../api/data-api.mjs');
-  const routes = ['/programs', '/programs/{slug}', '/list', '/camps', '/trends', '/commitments', '/status'];
+  const routes = ['/programs', '/programs/{slug}', '/list', '/fit', '/camps', '/trends', '/commitments', '/status'];
   for (const r of routes) {
     assert.ok(resolveResource('/api/v1' + r.replace('{slug}', 'ucla')).kind, `the Worker serves /api/v1${r}`);
     assert.ok(DOCS.includes('| `/api/v1' + r + '` |'), `docs/data-api.md lists /api/v1${r}`);
