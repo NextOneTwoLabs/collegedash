@@ -437,11 +437,11 @@ tr:hover td { background: var(--row-hover); }
 .glance-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .glance-meta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
 .glance-follow { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-.glance-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+.glance-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
-.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }  /* #8: wraps, never clipped */
 .stat-of { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); overflow-wrap: anywhere; }
 .glance-next { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .glance-next-opp { margin-top: 4px; font-size: 16px; font-weight: 700; }
 .glance-next-opp.muted { font-weight: 500; color: var(--text-secondary); }
@@ -598,6 +598,7 @@ a.pill { text-decoration: none; }
 .feedback .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .feedback-note { margin: 8px 0 0; min-height: 1.45em; color: var(--text-secondary); }
 .feedback-note.ok { color: var(--good-text); }
+.feedback-note.error { color: var(--danger-text); }  /* #47: the site's error colour, as .cond-error and .recs-error */
 
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
@@ -1855,12 +1856,20 @@ function renderSidebar() {
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference and region are plain filters; the class buttons only highlight (#15). All update, re-render the sidebar, re-render the list in place
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { if (b.dataset.conf) toggleConf(b.dataset.confDiv, b.dataset.conf); else f.conf.length = 0; saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  // #5: a pill press rebuilds the sidebar (renderSidebar replaces its markup), which used to drop keyboard focus onto
+  // <body>. pillPressed puts it back on the same pill - found again by its data-* key, a conference pill by its division
+  // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does).
+  const pillPressed = (attr, value, div) => {
+    if (isPhone()) { $('#sidebarToggle')?.focus(); return; }
+    const q = v => String(v).replace(/["\\]/g, '\\$&');
+    $('#sidebar')?.querySelector(`[data-${attr}="${q(value)}"]${div ? `[data-conf-div="${q(div)}"]` : ''}`)?.focus();
+  };
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('conf', c, d); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('region', v); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
   // selection to what is still on screen before the sidebar is rebuilt.
-  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('division', v); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('class', v); });
   wireConditions(sb);
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
@@ -1869,8 +1878,8 @@ function renderSidebar() {
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { const v = e.target.value;
     if (v === 'recommended') return recsShowRecommended();
     const was = S.recs?.active; if (S.recs) recsPause();
-    if (!(was && v === f.sort)) setSort(v); syncSortControls(); rerenderForFilters(); };
-  const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
+    if (!(was && v === f.sort)) setSort(v); syncSortControls(); listCommit(); rerenderForFilters(); };
+  const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); listCommit(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = shortlistRows().slice(0, 4).map(p => p.slug); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   updateSearchStatus();  // the header box's count follows the filters just changed (#23)
@@ -1886,10 +1895,10 @@ function condFormSubmit() {
   const input = $('#condValue'); if (input) st.text = input.value;
   const r = condFromInput(st.field, st.op, st.text);
   if (r.error) { st.error = r.error; renderSidebar(); $('#condValue')?.focus(); return false; }
-  addCond(r.cond); S.condForm = null; saveState(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer();
+  addCond(r.cond); S.condForm = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer();
   return true;
 }
-function condRemove(i) { if (!removeCond(i)) return; saveState(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer(); }
+function condRemove(i) { if (!removeCond(i)) return; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer(); }
 function wireConditions(sb) {
   sb.querySelectorAll('[data-cond-rm]').forEach(b => b.onclick = () => condRemove(Number(b.dataset.condRm)));
   const add = $('#condAdd'); if (add) add.onclick = () => (S.condForm ? condFormClose() : condFormOpen());
@@ -1948,7 +1957,7 @@ document.addEventListener('keydown', e => {
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
   if (e.key === '/') { e.preventDefault(); $('#q')?.focus(); }  // #434: the header box, on every page
-  else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); renderList(); }
+  else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); listCommit(); renderList(); }
 });
 
 /* ---------- search box ---------- */
@@ -1961,6 +1970,7 @@ function setQuery(v) {
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching PROGRAMS, never camp
   // names. On any other page it only suggests (#434 PR 2): a header box must not throw the reader off the page.
   qTimer = setTimeout(() => { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }, 80);
+  listTyping();  // #14: the list's address follows the box, replacing its entry
 }
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
@@ -2214,7 +2224,7 @@ function applyAsk(a) {
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
   S.qRaw = ''; S.q = ''; S.askMsg = ''; syncSearchBox();
   S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
-  saveState();
+  saveState(); listCommit();  // on the list a new entry; anywhere else the '#/' below is the visitor's way to it
   S.sidebarTab = 'programs'; renderSidebar();
   const v = currentView();
   if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/';
@@ -2223,7 +2233,7 @@ function undoAsk() {
   const r = S.askResult; if (!r) return;
   Object.assign(S.filters, JSON.parse(JSON.stringify(r.prev.filters)));
   S.qRaw = r.prev.qRaw; S.q = normText(r.prev.qRaw); syncSearchBox();
-  S.askResult = null; saveState(); renderSidebar(); rerenderForFilters();
+  S.askResult = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters();
 }
 // The "From your question" line. '' when there is no ask result, which is always while ask is off.
 function askBanner() {
@@ -2667,9 +2677,9 @@ function renderRecsList(idx) {
   syncShowResults();
   const app = $('#app');
   wireAskBanner();
-  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a, details')) return; location.hash = `#/p/${c.dataset.slug}`; }));
-  app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { setSort(b.closest('th').dataset.sort); syncSortControls(); await renderList(); });
+  app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { setSort(b.closest('th').dataset.sort); syncSortControls(); listCommit(); await renderList(); });
   app.querySelectorAll('[data-recs-edit]').forEach(b => b.onclick = () => recsOpen());
   app.querySelectorAll('[data-recs-unfilter]').forEach(b => b.onclick = () => recsUnfilter(b.dataset.recsUnfilter));
   wireRecsFeedback(app);
@@ -2683,7 +2693,7 @@ function recsUnfilter(which) {
   if (which === 'all') { f.conf = []; f.region = []; f.division = []; f.cond = []; }
   else if (which === 'division' || which === 'region') f[which] = [];
   else return;
-  saveState(); renderSidebar(); renderList();
+  saveState(); listCommit(); renderSidebar(); renderList();
 }
 // The line above the ordinary list when saved preferences exist but are not applied (A6), or when the data the
 // recommendations need didn't load (O1). '' otherwise, which is always while recommendations are switched off.
@@ -2994,6 +3004,129 @@ async function recsPilotStart() {
 const recsPilotReady = recsPilotStart();
 
 /* ---------- router ---------- */
+/* ---------- the list's state in the address (issue #14) ----------
+   #/?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
+   This is a public contract: people share and bookmark these links, so the format may grow but never change meaning.
+   - Nine params, always in that order, each list's values in a fixed (sorted) order, defaults left out. `sort` is
+     always written, so an address this page wrote is never a bare #/ - and a bare #/ keeps meaning "my saved filters".
+   - Every value goes through encodeURIComponent, so `+ , : & # %` inside a value are always escaped, and a space is
+     written `+`. Lists are joined with a literal `,`. A conference key "D2|Independent" is written D2:Independent
+     (a literal `|` is not a fragment character); `|` and %7C are read too. On the way in `+` becomes a space BEFORE
+     decoding, so a literal plus has to arrive as %2B, which is how it is written.
+   - A link is written by someone else, so every value that arrives is checked against what this page knows: the
+     divisions and class years in the data, REGIONS, the conference names (pruned to the divisions on screen, as a
+     division pill prunes), sanitizeConds, SORT_SPECS, asc/desc, cards/table. Anything else is dropped, never carried
+     on. Only q is free text: control characters removed, trimmed, at most LIST_Q_MAX characters.
+   - NEVER in it: recommendations (cd.recs), the pilot, compare, the shortlist, residency, "More statistics", an open
+     condition form, Ask. listHashOf reads the nine fields of listSnapshot() and nothing else.
+   History (Bianque's review on #14): arriving, Back/Forward, a bare #/, #/c/ and #/rpi only ever replaceState (to the
+   canonical form) or do nothing. pushState comes only from listCommit(), called by the visitor's own commits: a pill,
+   the sort and its direction, Cards/Stats, a condition added or removed, Ask applied or undone, a filter cleared from
+   Recommended. Typing replaces, 80 ms after the last key; a commit first writes typing still pending into the entry
+   it was typed on, so the search never lands on the wrong entry. Back and Forward arrive through hashchange only. */
+const LIST_PARAMS = ['div', 'region', 'conf', 'class', 'cond', 'q', 'sort', 'dir', 'view'];
+const LIST_Q_MAX = 100;
+const COND_OP_WORD = { '<': 'lt', '<=': 'le', '>': 'gt', '>=': 'ge', '=': 'eq' };
+const COND_WORD_OP = { lt: '<', le: '<=', gt: '>', ge: '>=', eq: '=' };
+const LIST_NUM = /^-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
+const listEnc = s => encodeURIComponent(String(s)).replace(/%20/g, '+');
+const listDec = s => { try { return decodeURIComponent(String(s).replace(/\+/g, ' ')); } catch { return null; } };
+const listQ = q => Array.from(String(q ?? '').replace(/[\u0000-\u001f\u007f-\u009f]/g, '').trim()).slice(0, LIST_Q_MAX).join('').trim();
+const listSnapshot = () => { const f = S.filters; return { division: f.division, region: f.region, conf: f.conf, classYear: f.classYear, cond: f.cond, q: S.qRaw, sort: f.sort, sortDir: f.sortDir, view: f.view }; };
+// The ONE writer of the format: a state (listSnapshot's shape) to its canonical address.
+function listHashOf(st) {
+  const out = [], put = (k, vals) => { const v = [...new Set(vals)].sort(); if (v.length) out.push(`${k}=${v.join(',')}`); };
+  put('div', (st.division || []).map(listEnc));
+  put('region', (st.region || []).map(listEnc));
+  put('conf', (st.conf || []).map(k => { const [d, c] = splitConf(k); return d ? `${listEnc(d)}:${listEnc(c)}` : listEnc(c); }));
+  put('class', (st.classYear || []).map(listEnc));
+  put('cond', (st.cond || []).map(c => [c.field, COND_OP_WORD[c.op], c.value].map(listEnc).join(':')));
+  const q = listQ(st.q); if (q) out.push(`q=${listEnc(q)}`);
+  out.push(`sort=${listEnc(st.sort || 'name')}`);
+  if (st.sortDir === 'asc' || st.sortDir === 'desc') out.push(`dir=${st.sortDir}`);
+  if (st.view === 'table') out.push('view=table');
+  return `#/?${out.join('&')}`;
+}
+// The ONE reader: the part after '?' to a checked state. Pure - it changes nothing. Unknown params, a repeated param
+// after its first, and every value the page does not know are dropped; a missing param is the page's default.
+function listStateOf(query) {
+  const raw = new Map();
+  for (const part of String(query || '').split('&')) {
+    const i = part.indexOf('='), k = i < 0 ? part : part.slice(0, i);
+    if (LIST_PARAMS.includes(k) && !raw.has(k)) raw.set(k, i < 0 ? '' : part.slice(i + 1));
+  }
+  const items = k => (raw.get(k) || '').split(',').filter(Boolean);
+  const vals = k => items(k).map(listDec).filter(Boolean);
+  const one = k => { const v = vals(k); return v.length === 1 ? v[0] : null; };
+  const own = (o, k) => !!o && typeof k === 'string' && Object.prototype.hasOwnProperty.call(o, k);
+  const uniq = a => [...new Set(a)];
+  const idx = S.index || {}, divs = idx.divisions || [], years = (idx.season?.gradYears || []).map(String);
+  const division = uniq(vals('div').filter(d => divs.includes(d)));
+  const shown = division.length ? divs.filter(d => division.includes(d)) : divs;
+  const confOf = r => {
+    const i = r.indexOf(':');
+    let d = i >= 0 ? listDec(r.slice(0, i)) : null, c = listDec(i >= 0 ? r.slice(i + 1) : r);
+    if (i < 0 && c && c.includes(CONF_SEP)) [d, c] = splitConf(c);
+    if (!c || (i >= 0 && !d)) return null;
+    if (d) return shown.includes(d) && own(idx.byDivConf?.[d], c) ? confKeyOf(d, c) : null;
+    return shown.some(x => own(idx.byDivConf?.[x], c)) ? c : null;
+  };
+  const cond = sanitizeConds(items('cond').map(r => {
+    const p = r.split(':'); if (p.length !== 3) return null;
+    const [field, word, num] = p.map(listDec);
+    return own(COND_WORD_OP, word) && LIST_NUM.test(num || '') ? { field, op: COND_WORD_OP[word], value: Number(num) } : null;
+  })).filter((c, i, a) => a.findIndex(x => x.field === c.field && x.op === c.op && x.value === c.value) === i).slice(0, 20);
+  const sort = one('sort'), dir = one('dir');
+  return {
+    division, region: uniq(vals('region').filter(r => REGIONS.includes(r))), conf: uniq(items('conf').map(confOf).filter(Boolean)),
+    classYear: uniq(vals('class').filter(y => years.includes(y))), cond, q: raw.has('q') ? listQ(listDec(raw.get('q')) ?? '') : '',
+    sort: own(SORT_SPECS, sort) ? sort : 'name', sortDir: dir === 'asc' || dir === 'desc' ? dir : null, view: one('view') === 'table' ? 'table' : 'cards',
+  };
+}
+// Writes the list's canonical address: 'push' for a commit, 'replace' otherwise. Nothing when the address already says
+// it (so no duplicate entries) or when the list is not the page on screen.
+function listUrlWrite(mode, st = listSnapshot()) {
+  const v = currentView(); if (v !== 'list' && v !== 'c') return;
+  const h = listHashOf(st);
+  if (location.hash === h) return;
+  try { history[mode === 'push' ? 'pushState' : 'replaceState'](null, '', h); } catch { /* refused (a browser's rate limit): the address stays as it was */ }
+}
+let listTypeTimer = null;
+function listTyping() { clearTimeout(listTypeTimer); listTypeTimer = setTimeout(() => { listTypeTimer = null; listUrlWrite('replace'); }, 80); }
+// A visitor's commit on the list: one new history entry.
+function listCommit() {
+  if (listTypeTimer !== null) {  // typing not yet written belongs to the entry it was typed on, not the one about to be pushed
+    clearTimeout(listTypeTimer); listTypeTimer = null;
+    const h = location.hash, i = h.indexOf('?');
+    if (i >= 0) { const was = listStateOf(h.slice(i + 1)); was.q = S.qRaw; listUrlWrite('replace', was); }
+  }
+  listUrlWrite('push');
+}
+// The list route: a state the address carries is applied (and saved, as #/c/ always did); a bare #/ keeps the saved
+// filters. Either way the address is then made canonical IN PLACE. true when the state on screen changed.
+function listArrive() {
+  clearTimeout(listTypeTimer); listTypeTimer = null;
+  if (!S.index) return false;  // nothing to check a link against: leave its address alone
+  const h = location.hash, i = h.indexOf('?');
+  let changed = false;
+  if (i >= 0) {
+    const st = listStateOf(h.slice(i + 1));
+    if (listHashOf(st) !== listHashOf(listSnapshot())) {
+      Object.assign(S.filters, { division: st.division, region: st.region, conf: st.conf, classYear: st.classYear, cond: st.cond, sort: st.sort, sortDir: st.sortDir, view: st.view });
+      if (S.qRaw !== st.q) { S.qRaw = st.q; S.q = normText(st.q); syncSearchBox(); }
+      saveState(); changed = true;
+    }
+  }
+  listUrlWrite('replace');
+  return changed;
+}
+// What the feedback form says about the page: rebuilt, NEVER location.hash, so a search, a link's leftover params or a
+// trends query never travel with a report. The list: its canonical address without q. Anything else: the path alone.
+function feedbackRoute() {
+  const v = currentView();
+  if (v === 'list' || v === 'c') return listHashOf({ ...listSnapshot(), q: '' });
+  return `#/${location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').slice(0, 200)}`;
+}
 /* ---------- focus on a route change (issue #453) ----------
    A screen reader is told nothing when this page swaps one view for another: #17's document title changes silently,
    and the link or card the reader activated is destroyed by the re-render, so focus falls to <body> and the next Tab
@@ -3054,8 +3187,11 @@ function route() {
     // The division filter is cleared with it: a link naming a conference has to land on that
     // conference, not on an empty list because a division that excludes it happened to be selected.
     // That also keeps the conference's own pill on screen, so the visitor can see and clear it.
-    const c = decodeURIComponent(parts[1] || ''); S.filters.conf = c ? [c] : []; S.filters.division = []; saveState(); renderSidebar();
-    history.replaceState(null, '', '#/'); return go(perfView('list', renderList(), perfNav));
+    // #14: the name is checked as a link's conf is (a name the data does not have is dropped), and a malformed escape
+    // no longer throws.
+    let c = ''; try { c = decodeURIComponent(parts[1] || ''); } catch { }
+    S.filters.conf = c ? listStateOf(`conf=${listEnc(c)}`).conf : []; S.filters.division = []; saveState(); renderSidebar();
+    listUrlWrite('replace'); return go(perfView('list', renderList(), perfNav));
   }
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
@@ -3073,7 +3209,7 @@ function route() {
   }
   if (view === 'faq') return go(renderFaq());
   if (view === 'api') return go(renderApiDocs());
-  if (view === 'list') return go(perfView('list', renderList(), perfNav));
+  if (view === 'list') { if (listArrive()) renderSidebar(); return go(perfView('list', renderList(), perfNav)); }
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
   routeFocus(focusPlan);
 }
@@ -3347,18 +3483,18 @@ async function renderList() {
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
-  const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
+  const crumbs = f.conf.length ? [{ label: 'All programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
   const app = $('#app');
   wireAskBanner();
   wireRecsPaused();
-  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   // The table is rebuilt on a sort, so focus goes back to the header just used: Enter, Enter again flips it back.
   app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { const k = b.closest('th').dataset.sort;
-    setSort(k); syncSortControls(); await renderList(); $('#app').querySelector(`th[data-sort="${k}"] .th-sort`)?.focus(); });
+    setSort(k); syncSortControls(); listCommit(); await renderList(); $('#app').querySelector(`th[data-sort="${k}"] .th-sort`)?.focus(); });
   const more = $('#moreStats'); if (more) more.onclick = () => { f.moreStats = !f.moreStats; saveState(); renderList(); };
 }
 // A data column is left out when no row on screen has data for it (issue #115); rows without data still show
@@ -4318,7 +4454,7 @@ async function renderProfile(slug, tab) {
   const rpiRow = (p.seasons || []).find(s => s.year === rpiSeason());
   const failed = p._build.failed || [];
   const notices = [];
-  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
+  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => collectorPhrase(f.collector)).join(', '))} - the source site could not be read.`);
   if (hiddenAsked) notices.push(`There is no ${tabNoun(hiddenAsked[0], p)} information for ${esc(displayName(p))}, so the ${esc(tabLabel(hiddenAsked[0], hiddenAsked[1], p))} tab is not shown.`);
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
@@ -4363,7 +4499,7 @@ async function tabOverview(p) {
         ${posClassMatrix(p.roster)}
         <p class="small ink2" style="margin-top:8px">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')} · <a href="#/p/${esc(p.slug)}/roster">Full roster →</a></p>` : '<div class="empty">Roster not collected yet.</div>'}</div>` : ''}
     </div>` : ''}
-    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · failing: ${esc(p._build.failed.map(f => f.collector).join(', '))}` : ''}${p._build.skipped?.length ? ` · skipped: ${esc(p._build.skipped.map(s => `${s.collector} (${s.reason.replace(/^[a-z]+: /, '').slice(0, 60)})`).join('; '))}` : ''}</div>`;
+    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · could not be updated: ${esc(p._build.failed.map(f => collectorPhrase(f.collector)).join(', '))}` : ''}${p._build.skipped?.length ? ` · not collected for this program: ${esc(p._build.skipped.map(s => collectorPhrase(s.collector)).join(', '))}` : ''}</div>`;
 }
 
 /* The note under the Cost table. Division I and II wording is unchanged. Division III awards no athletic
@@ -4551,6 +4687,12 @@ async function tabNews(p) {
     ${n.latest.length ? `<div class="card"><h3>Latest</h3><ul style="padding-left:18px">${n.latest.map(li).join('')}</ul>${prov(n._meta)}</div>` : ''}</div>`;
 }
 
+/* #10: what each collector gathers, in the reader's words. The profile's notice and its footer name failed and skipped
+   sources this way; a collector's own reason ("no team article in the registry (…try `registry fix-wiki`)") is a note for
+   maintainers, kept in the build report, never shown on the page. */
+const COLLECTOR_PHRASES = { athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)',
+  soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' };
+const collectorPhrase = c => COLLECTOR_PHRASES[c] || 'other information';
 async function tabCamps(p) {
   // p.camps: { url, hubUrl, finalUrl, host, vendor, discoveredVia, robotsBlocked, fetchError, items[], _meta[] }
   // items carry kind (camp | news | curated), startDate/endDate (YYYY-MM-DD, or YYYY-MM when precision is
@@ -4570,7 +4712,9 @@ async function tabCamps(p) {
   const today = todayLocal(), month = today.slice(0, 7);
   const asOf = c._meta?.[0]?.asOf;
   const checked = asOf ? ` (checked ${fmtDate(asOf)})` : '';
-  const isPast = it => it.precision === 'month' ? it.startDate < month : (it.endDate || it.startDate) < today;
+  // #71: a month-precision camp is past once the month it ends in is over, (endDate || startDate) - build.py's
+  // camp_in_window rule - so a camp running into next month reads the same here as in the ID Camps view.
+  const isPast = it => it.precision === 'month' ? (it.endDate || it.startDate).slice(0, 7) < month : (it.endDate || it.startDate) < today;
   const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
   const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
@@ -4739,6 +4883,9 @@ async function renderFaq() {
     <div class="card"><h3>Speed measurements</h3>
       <p>To find out how fast the site loads, every page load sends a short timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps data. Our server also records how long it took to answer most data requests. We don't record your IP address, a session or visitor id, your browser's user agent, the page address, the program you opened, or anything you searched for. Reports are kept as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.</p></div>
 
+    <div class="card"><h3>What does a shared link include?</h3>
+      <p>The address of the program list carries its filters, sort and search, so a link you copy opens the same list for whoever you send it to. That includes anything typed in the search box and a recruiting class year you highlighted. Your shortlist, residency and recommendation preferences stay in this browser and are never part of a link. A link to the Compare page lists the programs you're comparing. The feedback form says which page you were on, without the search text.</p></div>
+
     <div class="card"><h3>Found a mistake or have a suggestion?</h3>
       <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
 
@@ -4797,7 +4944,13 @@ async function renderApiDocs() {
   if (!panel || !form || !note) return;
   /* Not every failure comes from the Worker — a proxy or the local server answers in its own
      words — so end the sentence before the fallback rather than assuming it was punctuated. */
-  const fail = msg => { note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`; };
+  // #47: the failure is styled as one and takes focus, as success does, so a screen-reader user is not left on <body>.
+  const fail = msg => {
+    note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`;
+    note.classList.add('error');
+    note.tabIndex = -1;
+    note.focus({ preventScroll: true });
+  };
   /* Send is type="button", not a submit control: if anything earlier in this script throws and the
      handler below is never attached, a native submit would reload the page and throw away what the
      visitor typed. requestSubmit() runs the same required/email validation a submit click would. */
@@ -4809,7 +4962,7 @@ async function renderApiDocs() {
     e.preventDefault();
     const btn = form.querySelector('button');
     btn.disabled = true;
-    note.classList.remove('ok');
+    note.classList.remove('ok', 'error');
     note.textContent = 'Sending…';
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     try {
@@ -4820,7 +4973,7 @@ async function renderApiDocs() {
           message: form.elements.message.value,
           email: form.elements.email.value,
           website: form.elements.website.value,
-          route: location.hash,
+          route: feedbackRoute(),  // #14: rebuilt, never the raw address
           program: parts[0] === 'p' ? (parts[1] || '') : '',
         }),
       });

@@ -29,6 +29,27 @@ CLASS_CODES = [
     (re.compile(r"^(r-?|rs-?|redshirt\s*)(jr|jun)", re.I), "R-JR"), (re.compile(r"^(r-?|rs-?|redshirt\s*)(sr|sen)", re.I), "R-SR"),
     (re.compile(r"^(fr|fresh)", re.I), "FR"), (re.compile(r"^(so|soph)", re.I), "SO"), (re.compile(r"^(jr|jun)", re.I), "JR"),
     (re.compile(r"^(sr|sen)", re.I), "SR"), (re.compile(r"^(gr|grad|5th|fifth|6th)", re.I), "GR"),
+    # Issue #34: labels that reached no rule above and so stored an empty class code (643 labelled rows on the cached
+    # pages, plus 48 WMT card values that went unread as a class until these rules recognised them).
+    # APPENDED, never inserted: first match wins, so no label the rules above map today can reach one of these, and
+    # each can only turn an empty code into one. Each is anchored at BOTH ends to the label shapes seen: WMT's
+    # unlabelled cards ask class_code which of a player's values is the class, so a rule that matched only the start
+    # would take a school or club ('Second Baptist School', '1st Touch FC', 'Red Sox Academy') for one.
+    #   'RS So.' / 'RS SR' (a space after RS, which the 'rs-?' prefix above does not allow) and 'Red 5th';
+    (re.compile(r"^(?:rs\s+|red\s*)(?:fr|fresh|freshman)\.?$", re.I), "R-FR"),
+    (re.compile(r"^(?:rs\s+|red\s*)(?:so|soph|sophomore)\.?$", re.I), "R-SO"),
+    (re.compile(r"^(?:rs\s+|red\s*)(?:jr|jun|junior)\.?$", re.I), "R-JR"),
+    (re.compile(r"^(?:rs\s+|red\s*)(?:sr|sen|senior)\.?$", re.I), "R-SR"),
+    (re.compile(r"^red(?:shirt)?\s*(?:5th|fifth)(?:[\s-]*(?:yr|year))?\.?$", re.I), "GR"),
+    #   'Rf.': the page's own list view prints it as 'Redshirt Freshman' for the same player on 12 of the 14 sites
+    #   that use it (25 rows joined by bio URL, no other expansion seen). 'Rs.' is never expanded and stays empty;
+    (re.compile(r"^rf\.?$", re.I), "R-FR"),
+    #   first-year / ordinal labels: 'Fy.', 'FY', '1st', '1st YR', 'First Year', '2nd', 'Second Year', ... 'Sixth Year'.
+    (re.compile(r"^(?:fy|first[\s-]*year|1st(?:[\s-]*(?:yr|year))?)\.?$", re.I), "FR"),
+    (re.compile(r"^(?:2nd|second)(?:[\s-]*(?:yr|year))?\.?$", re.I), "SO"),
+    (re.compile(r"^(?:3rd|third)(?:[\s-]*(?:yr|year))?\.?$", re.I), "JR"),
+    (re.compile(r"^(?:4th|fourth)(?:[\s-]*(?:yr|year))?\.?$", re.I), "SR"),
+    (re.compile(r"^sixth(?:[\s-]*(?:yr|year))?\.?$", re.I), "GR"),
 ]
 HEIGHT_RE = re.compile(r"(\d)\s*[-'′’]\s*(\d{1,2})")
 TITLE_YEAR_RE = re.compile(r"(?:19|20)\d\d")

@@ -41,7 +41,9 @@ Covers, in order:
               field, a row the profiles do not hold, an item the index does not publish and any
               field of a matched row that drifted from the profile it came from are each caught by
               name - and a missing or malformed index is reported rather than raised, because a
-              validator that dies is not a validator
+              validator that dies is not a validator; so is a malformed programs index or profile (#70)
+  undated     the build log counts the undated camp items the index leaves out, so a growing number is
+              visible instead of silent (#70)
 """
 
 from __future__ import annotations
@@ -183,12 +185,11 @@ def test_window() -> None:
          {"name": "x", "startDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row in the month before is out",
          {"name": "x", "startDate": "2026-08", "precision": "month"}, False),
-        # The divergence finding 4 named, pinned as deliberate rather than left to be rediscovered:
-        # tabCamps in public/index.html calls a month row past on `startDate` alone, so it would
-        # call this one past. The emitter judges a camp by when it finishes, so a camp still
-        # running in the cutoff month stays in. Aligning the tab is PR 2's job (issue #65).
-        ("a month-precision row that began before the cutoff month but runs into it is in, which is "
-         "where this rule deliberately parts company with tabCamps",
+        # A camp is judged by when it finishes, so one still running in the cutoff month stays in.
+        # tabCamps in public/index.html uses the same rule since #71
+        # (tests/feedback_camps_glance.test.mjs pins it there).
+        ("a month-precision row that began before the cutoff month but runs into it is in, as it is "
+         "upcoming on the profile tab (#71)",
          {"name": "x", "startDate": "2026-08", "endDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row that had ended before the cutoff month is out, endDate or no endDate",
          {"name": "x", "startDate": "2026-06", "endDate": "2026-07", "precision": "month"}, False),
@@ -342,6 +343,19 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     window = doc["window"]
     ok("the window it declares is the one build would declare today",
        window == build.camps_window(), str(window))
+
+    # Issue #70: an undated item has nowhere to sit in a date-ordered index and is left out by design; the log
+    # says how many, counted here independently from the profiles build wrote.
+    undated = 0
+    for f in os.listdir(progs):
+        if f.endswith(".json") and f != "index.json":
+            p = json.load(open(os.path.join(progs, f), encoding="utf-8"))
+            for it in ((p.get("camps") or {}).get("items") or []):
+                if not (isinstance(it, dict) and isinstance(it.get("startDate"), str) and it.get("startDate")):
+                    undated += 1
+    said = [l for l in log.splitlines() if "build: camps index" in l]
+    ok("the build log counts the undated items the index leaves out (#70)",
+       len(said) == 1 and f"; {undated} undated item(s) left out" in said[0], (said or ["no camps index line"])[0][-200:])
     rows = doc["camps"]
     ok("it publishes rows at all", isinstance(rows, list) and rows, str(type(rows)))
 
@@ -516,6 +530,27 @@ def test_invariant() -> None:
 
         passed, out = check(tmp, index_doc="{not json at all", items={"clemson": [item()]})
         ok("a malformed index is reported, not raised", not passed and "readable JSON" in out, out[:300])
+
+        # Issue #70: the other two files it opens. A raise here would end the whole validate run.
+        for which in ("programs index", "profile"):
+            reg = scratch_tree(tmp, index_doc=doc([GOOD_ROW, {**GOOD_ROW, "slug": "duke", "name": "Duke ID"}]),
+                               items={"clemson": [item()], "duke": [item(name="Duke ID")]})
+            bad = os.path.join(tmp, "programs", "index.json" if which == "programs index" else "duke.json")
+            with open(bad, "w", encoding="utf-8") as f:
+                f.write('{"programs": [')
+            try:
+                with swapped(PROGRAMS_OUT_DIR=os.path.join(tmp, "programs"), CAMPS_OUT_DIR=os.path.join(tmp, "camps")):
+                    passed, out = captured(build.check_camps_index, reg)
+                raised = None
+            except Exception as e:  # noqa: BLE001 - the failure this check exists to catch
+                passed, out, raised = True, "", f"{type(e).__name__}: {e}"
+            ok(f"a malformed {which} is reported by path, not raised (#70)",
+               raised is None and not passed and "readable JSON" in out and os.path.basename(bad) in out,
+               raised or out[:300])
+            if which == "profile":
+                ok("and the unreadable profile's published row is not reported a second time as a row no profile "
+                   "holds, while the readable profile is still checked",
+                   raised is None and "no profile holds" not in out and "does not publish" not in out, raised or out[:400])
 
         passed, out = check(tmp, index_doc={"updated": "x", "camps": []}, items={"clemson": [item()]})
         ok("an index declaring no window is refused rather than judged against a guess",
