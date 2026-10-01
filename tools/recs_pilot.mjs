@@ -33,9 +33,11 @@ export const NOT_A_TERMINAL = 'Not an interactive terminal, so no link was made 
 
 /** Runs `new` or `off` against the page text. `tty`: whether the output is an interactive terminal. Returns
  *  {html, lines, code}: the page to write (null: leave it), what to print, and the exit code. */
-export function runPilot(cmd, html, { tty, token = makeToken() } = {}) {
+export function runPilot(cmd, html, { tty, token } = {}) {
   if (cmd === 'new') {
-    if (!tty) return { html: null, lines: [NOT_A_TERMINAL], code: 1 };
+    // Not a terminal: no token is even made (#433 review), and the output says why, with the warning.
+    if (!tty) return { html: null, lines: [NOT_A_TERMINAL, WARNING], code: 1 };
+    token = token ?? makeToken();
     return { html: setPilotHash(html, sha256Hex(token)), code: 0, lines: [
       WARNING,
       'Wrote the new pilot hash into public/index.html. Commit and merge that one line; then send testers this link',

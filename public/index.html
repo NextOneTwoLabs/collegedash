@@ -681,15 +681,18 @@ a.pill { text-decoration: none; }
 <script>
 'use strict';
 // #400 pilot (#433 review): a #pilot=<token> link is taken out of the address FIRST, before any other code on this page
-// runs, so nothing added later can read or send it. Only the raw value is kept, for recsPilotStart() below to check.
+// runs, so nothing added later can read or send it. ANY address that starts #pilot= is stripped - a link a chat app or
+// a mail client mangled (a tail like "&utm_source=…", "/", "%") included - and only a value of the exact shape is kept,
+// for recsPilotStart() below to check; anything else counts as no token ('').
 // Nothing here can throw past this block: if history.replaceState is refused, location.replace does it.
 const RECS_PILOT_RAW = (() => {
-  let m = null;
-  try { m = /^#pilot=([^&#/]*)$/.exec(location.hash || ''); } catch { return null; }
-  if (!m) return null;
+  let h = '';
+  try { h = String(location.hash || ''); } catch { return null; }
+  if (!h.startsWith('#pilot=')) return null;
   try { history.replaceState(null, '', '#/'); } catch { /* refused: the fallback below */ }
   try { if (location.hash !== '#/') location.replace('#/'); } catch { /* nothing else to try */ }
-  return m[1];
+  const m = /^#pilot=([^&#/]*)$/.exec(h);
+  return m ? m[1] : '';
 })();
 /* =====================================================================
    nextonetwo · College Soccer dashboard - vanilla JS, no build step.

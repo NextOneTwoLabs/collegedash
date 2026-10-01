@@ -4,6 +4,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { HTML, LOAD_REQUESTS, loadPage, settle } from './recs_page_helpers.mjs';
 import { makeToken, sha256Hex, setPilotHash, pilotLink, runPilot, WARNING, NOT_A_TERMINAL } from '../tools/recs_pilot.mjs';
 
@@ -99,9 +102,11 @@ test('#433 review: the address is stripped by the first statement of the script,
 });
 
 test('#433 review: a malformed link still leaves the address as #/, and switches nothing on', async () => {
-  for (const bad of ['%E0%A4', '%', `${TOKEN}%`]) {
+  // a bad escape, and links a chat app or a mail client mangled: a query tail, a slash, a second fragment
+  const cases = ['%E0%A4', '%', `${TOKEN}%`, `${TOKEN}&utm_source=chat`, `${TOKEN}/`, `${TOKEN}#x`, `${TOKEN}&`];
+  for (const bad of cases) {
     const pg = await page({ hash: `#pilot=${bad}`, transform: withHash(sha256Hex(TOKEN)) });
-    assert.equal(pg.sb.location.hash, '#/', `#pilot=${bad} stayed in the address`);
+    assert.equal(pg.sb.location.hash, '#/', `malformed case ${cases.indexOf(bad)} stayed in the address`); // the value is not printed: it holds the test token
     assert.equal(on(pg), false);
     assert.equal(pg.sessionStore.size, 0);
   }
@@ -117,7 +122,7 @@ test('#433 review: when history.replaceState is refused, location.replace strips
 test('#433 review: the tool makes a link only for an interactive terminal, and its output carries the warning', () => {
   const page = 'x\nconst RECS_PILOT_SHA256 = null;\ny\n';
   const piped = runPilot('new', page, { tty: false });
-  assert.deepEqual([piped.html, piped.lines, piped.code], [null, [NOT_A_TERMINAL], 1], 'a pipe or an assistant could capture the link');
+  assert.deepEqual([piped.html, piped.lines, piped.code], [null, [NOT_A_TERMINAL, WARNING], 1], 'a pipe or an assistant could capture the link');
   const t = makeToken();
   const tty = runPilot('new', page, { tty: true, token: t });
   assert.equal(tty.html, setPilotHash(page, sha256Hex(t)));
@@ -128,4 +133,18 @@ test('#433 review: the tool makes a link only for an interactive terminal, and i
   assert.match(WARNING, /assistant/);
   const off = runPilot('off', setPilotHash(page, sha256Hex(t)), { tty: false });
   assert.equal(off.html, page, 'off needs no terminal: it prints no link');
+});
+
+// The tool itself, run the way an agent or a pipe would run it: stdout is a pipe, never a terminal. It must print no
+// link, make no token, leave public/index.html byte for byte as it was, and say why - with the warning. (No real token
+// is ever made by this test: in this path the tool doesn't make one at all.)
+test('#433 review: run through a pipe, the tool itself prints no link, changes nothing, and warns', () => {
+  const tool = fileURLToPath(new URL('../tools/recs_pilot.mjs', import.meta.url));
+  const before = createHash('sha256').update(fs.readFileSync(HTML)).digest('hex');
+  const r = spawnSync(process.execPath, [tool, 'new'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  const after = createHash('sha256').update(fs.readFileSync(HTML)).digest('hex');
+  assert.equal(after, before, 'public/index.html changed');
+  assert.equal(r.status, 1);
+  assert.equal(r.stdout, `${NOT_A_TERMINAL}\n${WARNING}\n`, 'the piped output is not exactly the refusal and the warning');
+  assert.doesNotMatch(r.stdout + r.stderr, /#pilot=|[A-Za-z0-9_-]{43}/, 'something token-shaped was printed');
 });
