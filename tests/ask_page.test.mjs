@@ -226,10 +226,16 @@ test('on: with a name match, Enter still opens the profile and Shift+Enter asks 
   await settle();
   assert.equal(pg.askRequests().length, 1, 'Shift+Enter did not ask');
   assert.equal(pg.sb.location.hash, '', 'Shift+Enter opened the profile');
+  // The answer just applied ACC + South + admission under 30%. Since #23, Enter opens only a match those filters
+  // show, so the name here is one they keep (Duke); Stanford, in the West, is hidden and Enter leaves it closed.
   await type(pg, 'stanford');
   key(pg, 'Enter');
   await settle();
-  assert.equal(pg.sb.location.hash, '#/p/stanford');
+  assert.equal(pg.sb.location.hash, '', 'Enter opened Stanford, which the applied filters hide');
+  await type(pg, 'duke');
+  key(pg, 'Enter');
+  await settle();
+  assert.equal(pg.sb.location.hash, '#/p/duke');
   assert.equal(pg.askRequests().length, 1, 'Enter asked although a name matched');
 });
 

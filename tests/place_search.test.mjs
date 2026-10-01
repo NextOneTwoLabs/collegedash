@@ -46,6 +46,7 @@ function loadPage() {
   const readPublic = url => {
     let rel = url.replace(/^\//, '');
     if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    else if (rel === 'api/v1/camps') rel = 'data/camps/index.json';
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
   };
@@ -185,11 +186,13 @@ test('the three programs with no state are still found by name', async () => {
   }
 });
 
-// Enter through the sidebar box's own keydown listener.
-async function enter(raw) {
-  sb.location.hash = '#/';
-  sb.renderSidebar();
+// Enter through the sidebar box's own keydown listener. The stub box outlives each sidebar render, so its listeners are
+// cleared first: a real render draws a new box with exactly one.
+async function enter(raw, hash = '#/') {
+  sb.location.hash = hash;
   const box = sb.document.querySelector('#q');
+  box._listeners.keydown = [];
+  sb.renderSidebar();
   box.value = raw;
   sb.setQuery(raw);
   await settle();
@@ -206,4 +209,46 @@ test('Enter on a place query keeps the list (no single program opens); Enter on 
   // Stanford is also its city's name, but the only program in Stanford, CA is Stanford: nothing is listed for the place alone.
   assert.equal(INDEX.programs.find(p => p.slug === 'stanford')?.city, 'Stanford', 'fixture: Stanford is in Stanford, CA');
   assert.equal(await enter('Stanford'), '#/p/stanford', 'Enter on a school that shares its city name no longer opens it');
+});
+
+// Huatuo on #409: typing on #/camps narrows the camps to the matching programs, so a place query's Enter must stay there.
+test('on #/camps, Enter on a place query stays on the ID Camps view', async () => {
+  assert.equal(await enter('Ohio', '#/camps'), '#/camps', 'Enter on "Ohio" left the ID Camps view');
+  assert.equal(await enter('OH', '#/camps'), '#/camps');
+});
+
+// #23: the status count and Enter describe the list the filters leave, not every match in the index.
+const statusCount = () => {
+  const t = sb.document.querySelector('#qStatus').textContent;
+  const m = /^(\d+) match/.exec(t);
+  return { text: t, n: m ? Number(m[1]) : /^No match/.test(t) ? 0 : NaN };
+};
+async function withFilters(patch, fn) {
+  const f = sb.S.filters, saved = { region: f.region, division: f.division, conf: f.conf };
+  Object.assign(f, { region: [], division: [], conf: [] }, patch);
+  try { return await fn(); } finally { Object.assign(f, saved); }
+}
+
+test('#23: with a region or division filter, the status count equals the cards the list shows', async () => {
+  for (const [patch, q] of [[{ region: ['West'] }, 'Ohio'], [{ region: ['West'] }, 'Texas A&M'], [{ division: ['D3'] }, 'Ohio'],
+    [{ region: ['West'] }, 'Washington']]) {
+    await withFilters(patch, async () => {
+      const shownCards = (await search(q)).length, st = statusCount();
+      assert.equal(st.n, shownCards, `${JSON.stringify(patch)} "${q}": the status says "${st.text}" over ${shownCards} cards`);
+    });
+  }
+  await withFilters({ region: ['West'] }, async () => {
+    await search('Ohio');
+    assert.match(statusCount().text, /^No match within your filters \(\d+ without them\)$/);
+  });
+});
+
+test('#23: Enter never opens a program the filters hide', async () => {
+  assert.equal(INDEX.programs.find(p => p.slug === 'kenyon-college')?.region, 'Midwest', 'fixture: Kenyon is in the Midwest');
+  await withFilters({ region: ['West'] }, async () => {
+    assert.equal(await enter('Kenyon'), '#/', 'Enter opened Kenyon although the West filter hides it');
+  });
+  await withFilters({ region: ['Midwest'] }, async () => {
+    assert.equal(await enter('Kenyon'), '#/p/kenyon-college', 'Enter no longer opens a program the filters show');
+  });
 });

@@ -704,10 +704,10 @@ function placeMatch(p, q, raw) {
     return { score: 20, why: `${p.city}, ${p.state}`, place: true };
   return null;
 }
-// True when the query lists some program ONLY for its place (a name hit outranks and replaces a place hit): Enter
+// True when the hits include a program listed ONLY for its place (a name hit outranks and replaces a place hit): Enter
 // then shows the list rather than opening one program. "Stanford" is also a city, but the one program there is
-// Stanford itself, a name hit, so Enter still opens it.
-const placeQueryHits = (q = S.q, raw = S.qRaw) => !!(S.index && q && S.index.programs.some(p => matchScore(p, q, raw)?.place));
+// Stanford itself, a name hit, so Enter still opens it. `hits` defaults to the ones the filters let through (#23).
+const placeQueryHits = (hits = visibleMatches()) => hits.some(h => h.m.place);
 function prepareSearch(p) { // once per program, when the program list is loaded
   const short = normText(p.shortName || p.name);
   const seen = new Set(), names = [];
@@ -745,6 +745,14 @@ function matchScore(p, q, raw) {
   if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords))) return { score: 30, why: p.nickname };
   if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
   return placeMatch(p, q, raw);
+}
+/* #23: the search box's own hits, cut to what the active filters (division, conference, region, conditions) let
+   through - the same predicate the list and the ID Camps view use - so the status count and Enter describe the
+   list on screen. Enter never opens a program the filters hide, and "Ohio" under a West filter says so instead of
+   "44 matches" over an empty list. */
+function visibleMatches() {
+  const hits = searchMatches(), score = new Map(hits.map(h => [h.p.slug, h.m.score]));
+  return hits.filter(h => matchesFilters(h.p, score));
 }
 function searchMatches(q = S.q, limit = Infinity, raw = q === S.q ? S.qRaw : null) {
   if (!S.index || !q) return [];
@@ -1626,8 +1634,13 @@ function renderSidebar() {
       if (e.key === 'Enter' && S.ask && S.qRaw.trim() && (e.shiftKey || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
       // #404: a place query ("Ohio", "OH", "Columbus") is a request for a list, even when a school is also named
       // that way, so Enter shows the list - closing the drawer on a phone - instead of opening the first program.
-      else if (e.key === 'Enter' && placeQueryHits()) { e.preventDefault(); closeDrawer(); q.blur?.(); if (!['list', 'c'].includes(currentView())) location.hash = '#/'; }
-      else if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${top.p.slug}`; } }
+      // The ID Camps view is a list too: it is already narrowed to those programs, so Enter stays there.
+      // #23: both read the hits the active filters let through, so Enter never opens a program the list hides.
+      else if (e.key === 'Enter') {
+        const hits = visibleMatches();
+        if (placeQueryHits(hits)) { e.preventDefault(); closeDrawer(); q.blur?.(); if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/'; }
+        else if (hits[0]) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${hits[0].p.slug}`; }
+      }
       else if (e.key === 'Escape') { q.value = ''; setQuery(''); }
     });
     $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
@@ -1702,9 +1715,13 @@ function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
   if (S.ask) renderAskSlot();
   if (!S.q) { el.textContent = ''; return; }
-  const n = searchMatches().length;
-  if (S.ask) { el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first · Shift+Enter asks` : 'No name match · Enter asks'; return; }
-  el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · ${placeQueryHits() ? 'Enter shows the list' : 'Enter opens the first'}`
+  // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
+  const hits = visibleMatches(), n = hits.length, all = searchMatches().length;
+  const count = `${n} match${n === 1 ? '' : 'es'}${all > n ? ` · ${all - n} more outside your filters` : ''}`;
+  const enter = placeQueryHits(hits) ? 'Enter shows the list' : 'Enter opens the first';
+  const hidden = `No match within your filters (${all} without them)`;
+  if (S.ask) { el.textContent = n ? `${count} · ${enter} · Shift+Enter asks` : all ? `${hidden} · Shift+Enter asks` : 'No name match · Enter asks'; return; }
+  el.textContent = n ? `${count} · ${enter}` : all ? hidden
     : 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city';
 }
 
