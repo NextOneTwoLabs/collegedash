@@ -122,3 +122,6 @@ export async function ready(opts) {
 }
 export async function open(pg) { await pg.sb.recsOpen(); await settle(); assert.equal(pg.panel().hidden, false, 'the panel did not open'); }
 export const plain = (v) => JSON.parse(JSON.stringify(v));
+// #440: the toast is two persistent parts, the other-tab prompt and the message. What the reader gets is the visible
+// parts' markup, prompt first.
+export const toastHtml = (pg) => ['#recsToastPrompt', '#recsToastMsg'].map((id) => pg.$(id)).filter((p) => !p.hidden).map((p) => p.innerHTML).join('');

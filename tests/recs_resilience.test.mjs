@@ -10,7 +10,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
-import { FIT, HTML, FOCUS, LOAD_REQUESTS, ON, ready, loadPage, open, settle, plain } from './recs_page_helpers.mjs';
+import { FIT, HTML, FOCUS, LOAD_REQUESTS, ON, ready, loadPage, open, settle, plain, toastHtml } from './recs_page_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -77,11 +77,11 @@ test('another tab: the page listens for cd.recs changes and applies nothing unti
   const theirs = JSON.stringify({ v: 1, prefs: { v: 1, division: { mode: 'must', values: ['D1'] } } });
   pg.store.set('cd.recs', theirs);
   for (const fn of pg.windowListeners.storage) fn({ key: 'cd.recs', newValue: theirs });
-  assert.match(pg.$('#recsToast').innerHTML, /^Your preferences changed in another tab\. <button type="button" class="btn" id="recsUseOther">Use those<\/button> <button type="button" class="btn" id="recsKeepThis">Keep these<\/button>$/);
+  assert.match(toastHtml(pg), /^Your preferences changed in another tab\. <button type="button" class="btn" id="recsUseOther">Use those<\/button> <button type="button" class="btn" id="recsKeepThis">Keep these<\/button>$/);
   assert.equal(pg.app(), before, 'something was applied without asking');
   assert.deepEqual(plain(pg.sb.S.recs.saved.division), { mode: 'must', values: ['D3'] });
   for (const fn of pg.windowListeners.storage) fn({ key: 'cd.favorites', newValue: '[]' });
-  assert.match(pg.$('#recsToast').innerHTML, /changed in another tab/, 'another key replaced the prompt');
+  assert.match(toastHtml(pg), /changed in another tab/, 'another key replaced the prompt');
 });
 
 test('another tab: Use those reads them and reranks; Keep these keeps this tab\'s, and its next save overwrites', async () => {
@@ -91,7 +91,7 @@ test('another tab: Use those reads them and reranks; Keep these keeps this tab\'
   pg.sb.recsOtherTab(theirs);
   await pg.sb.recsUseOtherTab(); await settle();
   assert.deepEqual(plain(pg.sb.S.recs.saved.division), { mode: 'must', values: ['D1'] });
-  assert.equal(pg.$('#recsToast').hidden, true);
+  assert.equal(toastHtml(pg), 'Now using the preferences from your other tab.', 'the prompt is still up, or Use those said nothing');  // #440
   assert.match(pg.app(), /Division: D1 \(must have\)/);
   const keep = await shown();
   keep.store.set('cd.recs', theirs);
@@ -107,10 +107,10 @@ test('another tab cleared everything: the prompt says so; nothing happens in a t
   const pg = await shown();
   pg.store.delete('cd.recs');
   for (const fn of pg.windowListeners.storage) fn({ key: null, newValue: null });
-  assert.match(pg.$('#recsToast').innerHTML, /^Your preferences were cleared in another tab\./);
+  assert.match(toastHtml(pg), /^Your preferences were cleared in another tab\./);
   const fresh = await ready({ status: ON });
   fresh.sb.recsOtherTab('{}');
-  assert.equal(fresh.$('#recsToast').innerHTML, '', 'a tab with nothing read was prompted');
+  assert.equal(toastHtml(fresh), '', 'a tab with nothing read was prompted');
 });
 
 // ---------- the program list failing to load (O1) ----------
@@ -198,7 +198,7 @@ async function pendingOther() {
   for (const fn of pg.windowListeners.storage) fn({ key: 'cd.recs', newValue: theirs });
   return { pg, theirs };
 }
-const prompting = (pg) => /changed in another tab\./.test(pg.$('#recsToast').innerHTML) && pg.$('#recsToast').hidden === false;
+const prompting = (pg) => /changed in another tab\./.test(toastHtml(pg)) && pg.$('#recsToast').hidden === false;
 
 test('#427 review: while another tab\'s change waits, a hide writes nothing and the prompt stays', async () => {
   const { pg, theirs } = await pendingOther();
@@ -226,7 +226,9 @@ test('#427 review: a save or Clear while the prompt waits writes nothing; after 
   assert.equal(pg.store.get('cd.recs'), theirs, 'Clear deleted the other tab\'s preferences while the prompt waited');
   assert.ok(prompting(pg));
   pg.sb.recsKeepThisTab();
-  assert.equal(pg.$('#recsToast').hidden, true);
+  assert.ok(!prompting(pg), 'Keep these left the prompt');
+  assert.equal(toastHtml(pg), 'Keeping this tab’s preferences. Your next save replaces the other tab’s.');
+  assert.equal(FOCUS.el?._name, '#recsToast', 'focus did not go to the toast');
   await open(pg);
   pg.sb.recsToggleValue('division', 'D2');
   assert.equal(pg.sb.recsApply(), true);
@@ -253,13 +255,68 @@ test('#427 note: a hide while the prompt waits shows its Undo beside the prompt,
   const { pg, theirs } = await pendingOther();
   const slug = oracle(pg).confirmed[0].slug;
   await pg.sb.recsHide(slug, 'other');
-  const html = pg.$('#recsToast').innerHTML;
-  assert.match(html, /^<span class="recs-toast-part">Your preferences changed in another tab\. <button type="button" class="btn" id="recsUseOther">Use those<\/button> <button type="button" class="btn" id="recsKeepThis">Keep these<\/button><\/span><span class="recs-toast-part">Hidden: [^<]+ \(for this visit only\)\. <button type="button" class="btn" id="recsUndo">Undo<\/button><\/span>$/);
+  assert.match(pg.$('#recsToastPrompt').innerHTML, /^Your preferences changed in another tab\. <button type="button" class="btn" id="recsUseOther">Use those<\/button> <button type="button" class="btn" id="recsKeepThis">Keep these<\/button>$/);
+  assert.match(pg.$('#recsToastMsg').innerHTML, /^Hidden: [^<]+ \(for this visit only\)\. <button type="button" class="btn" id="recsUndo">Undo<\/button>$/);
+  assert.equal(pg.$('#recsToastPrompt').hidden, false); assert.equal(pg.$('#recsToastMsg').hidden, false);
   assert.equal(FOCUS.el?._name, '#recsUndo', 'focus did not land on Undo');
   assert.equal(pg.store.get('cd.recs'), theirs);
   await pg.sb.recsUndo();
   assert.ok(pg.app().includes(`data-slug="${slug}"`), 'Undo did not bring the program back');
   assert.ok(prompting(pg), 'Undo dismissed the prompt');
-  assert.ok(!/id="recsUndo"/.test(pg.$('#recsToast').innerHTML), 'the Undo outlived its use');
+  assert.ok(!/id="recsUndo"/.test(toastHtml(pg)), 'the Undo outlived its use');
   assert.equal(pg.store.get('cd.recs'), theirs, 'Undo wrote while the prompt waited');
+});
+
+// #440 review (Huatuo) 1: the toast is one polite live region, which announces what is written into it. Across a hide
+// and its Undo, the prompt part must be the same node with its content never rewritten, and the toast itself never
+// rewritten as a whole - so the hide announces "Hidden: …" alone, and Undo announces nothing new.
+function countWrites(el) {
+  let html = el.innerHTML;
+  const log = [];
+  Object.defineProperty(el, 'innerHTML', { configurable: true, get: () => html, set: (v) => { log.push(v); html = v; } });
+  return log;
+}
+test('#440 review: a hide and its Undo rewrite only the message part; the waiting prompt is never written again', async () => {
+  const { pg } = await pendingOther();
+  const prompt = pg.$('#recsToastPrompt'), msg = pg.$('#recsToastMsg');
+  assert.match(prompt.innerHTML, /^Your preferences changed in another tab\./, 'the prompt is not in its own part');
+  assert.equal(prompt.hidden, false);
+  const promptWrites = countWrites(prompt), msgWrites = countWrites(msg), toastWrites = countWrites(pg.$('#recsToast'));
+  const slug = oracle(pg).confirmed[0].slug;
+  await pg.sb.recsHide(slug, 'other');
+  await pg.sb.recsUndo();
+  assert.equal(pg.$('#recsToastPrompt'), prompt, 'the prompt part is not the same node');
+  assert.deepEqual(promptWrites, [], 'the prompt part was rewritten (re-announced) by a hide or its Undo');
+  assert.deepEqual(toastWrites, [], 'the toast was rewritten as a whole');
+  assert.equal(msgWrites.length, 2, 'the message part: one write for the hide, one for its Undo');
+  assert.match(msgWrites[0], /^Hidden: /);
+  assert.equal(msgWrites[1], '');
+  assert.equal(msg.hidden, true, 'the empty message part is still shown');
+});
+
+// #440 review 2: "Keep these" keeps a hide's Undo, and focus never drops to <body> when the prompt goes.
+test('#440 review: hide, then Keep these: the Undo stays, takes focus, and still works', async () => {
+  const { pg } = await pendingOther();
+  const slug = oracle(pg).confirmed[0].slug;
+  await pg.sb.recsHide(slug, 'other');
+  pg.sb.recsKeepThisTab();
+  assert.equal(pg.sb.S.recs.toast?.kind, 'hidden', 'Keep these threw away the Undo of a hide still in effect');
+  assert.ok(!prompting(pg), 'the prompt did not go');
+  assert.match(toastHtml(pg), /id="recsUndo"/, 'the Undo is not shown');
+  assert.equal(FOCUS.el?._name, '#recsUndo', 'focus did not go to Undo');
+  await pg.sb.recsUndo();
+  assert.ok(pg.app().includes(`data-slug="${slug}"`), 'Undo no longer brings the program back');
+  assert.ok(!pg.sb.S.recs.hidden.some((h) => h.slug === slug));
+});
+
+test('#440 review: hide, then Use those: the hide goes with this tab\'s state, and the toast says so and takes focus', async () => {
+  const { pg } = await pendingOther();
+  await pg.sb.recsHide(oracle(pg).confirmed[0].slug, 'other');
+  await pg.sb.recsUseOtherTab(); await settle();
+  assert.equal(FOCUS.el?._name, '#recsToast', 'focus did not go to the toast');
+  assert.ok(!prompting(pg), 'the prompt did not go');
+  assert.ok(!/id="recsUndo"/.test(toastHtml(pg)), 'an Undo for this tab\'s state survived Use those');
+  assert.equal(toastHtml(pg), 'Now using the preferences from your other tab.');
+  assert.equal(pg.$('#recsToast').hidden, false);
+  assert.equal(FOCUS.el?._name, '#recsToast', 'focus did not go to the toast');
 });

@@ -198,6 +198,7 @@ tr:hover td { background: var(--row-hover); }
 .recs-toast { position: sticky; bottom: 0; z-index: 5; margin: 0 28px 12px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
 .recs-toast[hidden] { display: none; }
 .recs-toast-part { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.recs-toast-part[hidden] { display: none; }  /* an empty part takes no room (#440) */
 /* Resilience (issue #400, PR 6): the local-only timing overlay, reasons in the Stats view, the Start-strip entry. */
 .recs-timing { position: fixed; left: 8px; bottom: 8px; z-index: 300; max-width: 360px; padding: 6px 8px; font: 11px/1.4 ui-monospace, monospace; color: var(--text-primary); background: var(--bg-surface); border: 1px dashed var(--border); border-radius: 6px; }
 .recs-timing[hidden] { display: none; }
@@ -653,7 +654,7 @@ a.pill { text-decoration: none; }
     </div>
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
     <!-- #400: "Hidden: X. [Undo]" and the other feedback messages, one persistent live node outside what #app redraws. -->
-    <div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>
+    <div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden><span class="recs-toast-part" id="recsToastPrompt" hidden></span><span class="recs-toast-part" id="recsToastMsg" hidden></span></div>
     <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
     <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
     <!-- #400: ?recs-timing=1 only. Timings measured in this browser; nothing is sent anywhere. -->
@@ -2626,14 +2627,24 @@ async function recsClearAll() {
 // The toast: one persistent live node beside the list (outside #app, which every render replaces). While another tab's
 // change waits for a choice, its prompt stays first, and any other message (a hide with its Undo) shows beside it, never
 // instead of it, so Undo stays reachable and has somewhere for focus to land (#427 review).
+// The toast is ONE polite live region, and a live region announces what is written into it. So it has two persistent
+// parts - the other-tab prompt (#recsToastPrompt) and the message (#recsToastMsg) - and a render writes only the part
+// whose content changed: a hide announces "Hidden: …" alone, and its Undo announces nothing new (#440 review). An empty
+// part is hidden. What each part last held is kept here, so an unchanged part is never rewritten.
+const recsToastHeld = { prompt: '', message: '' };
 function renderRecsToast() {
   const el = $('#recsToast'), R = S.recs;
   if (!el) return;
-  const prompt = R.otherTab ? recsToastHtml({ kind: 'crosstab', cleared: R.otherTab.cleared }) : '';
-  const message = R.toast ? recsToastHtml(R.toast) : '';
-  if ((!prompt && !message) || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
-  el.hidden = false;
-  el.innerHTML = prompt && message ? `<span class="recs-toast-part">${prompt}</span><span class="recs-toast-part">${message}</span>` : prompt || message;
+  const want = {
+    prompt: R.on && R.otherTab ? recsToastHtml({ kind: 'crosstab', cleared: R.otherTab.cleared }) : '',
+    message: R.on && R.toast ? recsToastHtml(R.toast) : '',
+  };
+  for (const [k, id] of [['prompt', '#recsToastPrompt'], ['message', '#recsToastMsg']]) {
+    const part = $(id); if (!part) continue;
+    if (recsToastHeld[k] !== want[k]) { part.innerHTML = want[k]; recsToastHeld[k] = want[k]; }
+    part.hidden = !want[k];
+  }
+  el.hidden = !want.prompt && !want.message;
   el.onclick = e => {
     if (e.target.closest('#recsUndo')) return recsUndo();
     if (e.target.closest('#recsCatalogRetryToast')) { R.toast = null; renderRecsToast(); return recsShowRecommended(); }
@@ -2652,6 +2663,8 @@ function recsToastHtml(t) {
     html = `Hidden: ${esc(recsName(t.slug))}${t.saved ? '' : ' (for this visit only)'}. <button type="button" class="btn" id="recsUndo">Undo</button>${edit}`;
   } else if (t.kind === 'restored') html = `Restored: ${esc(recsName(t.slug))}.`;
   else if (t.kind === 'catalog') html = 'Recommendations need the program list, which didn’t load. <button type="button" class="btn" id="recsCatalogRetryToast">Try again</button>';
+  else if (t.kind === 'usedOther') html = t.cleared ? 'Using your other tab’s choice: personalization cleared.' : 'Now using the preferences from your other tab.';
+  else if (t.kind === 'kept') html = 'Keeping this tab’s preferences. Your next save replaces the other tab’s.';
   else if (t.kind === 'crosstab') html = `${t.cleared ? 'Your preferences were cleared in another tab.' : 'Your preferences changed in another tab.'} <button type="button" class="btn" id="recsUseOther">Use those</button> <button type="button" class="btn" id="recsKeepThis">Keep these</button>`;
   else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
     : t.newer ? 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.'
@@ -2738,15 +2751,24 @@ function recsOtherTab(newValue) {
   renderRecsToast();
 }
 async function recsUseOtherTab() {
-  const R = S.recs;
-  R.otherTab = null; R.loaded = false; R.toast = null;
+  const R = S.recs, cleared = !!R.otherTab?.cleared;
+  R.otherTab = null; R.loaded = false; R.toast = { kind: 'usedOther', cleared };  // a pending hide goes with this tab's state
   await recsEnsureLoaded();
   if (R.open) { R.draft = recsDraftFrom(R.saved); renderRecsPanel(); }
   if (R.active && !R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); }
   renderRecsToast();
   await renderList();
+  $('#recsToast')?.focus();  // the button that had focus is gone; tabindex -1, never <body> (#440 review)
 }
-function recsKeepThisTab() { S.recs.otherTab = null; S.recs.toast = null; renderRecsToast(); } // this tab's next save overwrites the other's
+// Keep these: this tab's next save overwrites the other's. A hide still in effect keeps its Undo, and focus goes to it;
+// otherwise the toast says what was kept and takes focus. Either way focus never drops to <body> (#440 review).
+function recsKeepThisTab() {
+  const R = S.recs;
+  R.otherTab = null;
+  if (R.toast?.kind !== 'hidden') R.toast = { kind: 'kept' };
+  renderRecsToast();
+  (R.toast.kind === 'hidden' ? $('#recsUndo') : $('#recsToast'))?.focus();
+}
 window.addEventListener('storage', e => { if (e.key === RECS_KEY || e.key === null) recsOtherTab(e.key === null ? null : e.newValue); });
 
 /* ---------- router ---------- */
