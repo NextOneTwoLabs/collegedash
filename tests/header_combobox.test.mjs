@@ -216,15 +216,18 @@ test('Huatuo condition 1: a saved South filter, "Stanford" typed on a profile pa
   assert.deepEqual([...pg.sb.S.filters.region], ['South'], 'choosing it changed the filters');
 });
 
-test('on a profile page typing only suggests; a program picked from search takes focus to its <h1>, and only then', async () => {
+// #453 made the <h1> rule general (every route change; tests/route_focus.test.mjs), so "and only then" became: the same
+// page drawn again never takes focus, and a pick still lands on the picked program's heading.
+test('on a profile page typing only suggests; a program picked from search takes focus to its <h1>; a redraw does not', async () => {
   const pg = await ready();
   pg.sb.location.hash = '#/p/duke';
+  await pg.sb.route(); await settle(60);
   await type(pg, 'ohio');
   await settle(150);
   assert.equal(pg.sb.location.hash, '#/p/duke', 'typing on a profile page sent it to the list');
   FOCUS.el = null;
   await pg.sb.route(); await settle(60);
-  assert.notEqual(FOCUS.el, '.content-title', 'an ordinary route moved focus to the heading');
+  assert.notEqual(FOCUS.el, '.content-title', 'drawing the same page again moved focus to the heading');
   await type(pg, 'kenyon');
   key(pg, 'ArrowDown'); key(pg, 'Enter');
   assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
@@ -268,10 +271,11 @@ test('#445 follow-up: picking the profile already on screen leaves no focus flag
   key(pg, 'ArrowDown'); key(pg, 'Enter');
   assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
   assert.ok(!pg.sb.S.titleFocus, 'the focus flag was left set');
-  FOCUS.el = null;
+  // #453: the next profile's heading now takes focus anyway, as every route change does; what this pins is that no
+  // stale flag survives to do it.
   pg.sb.location.hash = '#/p/duke';
   await pg.sb.route(); await settle(60);
-  assert.notEqual(FOCUS.el, '.content-title', 'an unrelated profile took heading focus from a stale flag');
+  assert.ok(!pg.sb.S.titleFocus, 'a focus flag survived the next route');
 });
 
 test('no request while typing or moving through the suggestions', async () => {

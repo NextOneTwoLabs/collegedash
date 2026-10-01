@@ -2994,6 +2994,43 @@ async function recsPilotStart() {
 const recsPilotReady = recsPilotStart();
 
 /* ---------- router ---------- */
+/* ---------- focus on a route change (issue #453) ----------
+   A screen reader is told nothing when this page swaps one view for another: #17's document title changes silently,
+   and the link or card the reader activated is destroyed by the re-render, so focus falls to <body> and the next Tab
+   starts from the top of the page. So after a route change the new page's <h1> takes focus (tabindex -1, never a Tab
+   stop): the reader hears the page's name, and the keyboard continues from the top of the new content. This is the
+   rule #434/#445 already applies after a search pick, made general - not a live region, which screen readers announce
+   unreliably and which would talk over #qStatus, the header's one search status.
+   It never takes focus:
+   - on the first view of a page load (the reader starts at the top of the page anyway), or when the same page is drawn
+     again (a retry, the list's own address being rewritten in place);
+   - from the header search box, its list or its clear button (someone is typing: Enter on a place opens the list and
+     leaves the box focused, #409), from the open recommendations dialog, or from the feedback form;
+   - from a tab: on a profile's tab switch, or when a view tab (ID Camps, Pipelines) was the control used, the NEW
+     active tab takes focus instead, so the reader stays in the tab row they were moving along.
+   Focus is always given with preventScroll, so it never moves the page: route() puts #main at the top on every route
+   and nothing restores a scroll position on Back/Forward; if that ever changes, this does not fight it. */
+const ROUTE_FOCUS = { last: null };
+const routeFocusHeld = () => !!document.activeElement?.closest?.('.header-search, #recsPanel, #feedback');
+function routeFocusPlan(h, parts) {
+  if (parts[0] === 'rpi') return null;  // an alias that rewrites itself to the list; the list's own route decides
+  const prev = ROUTE_FOCUS.last; ROUTE_FOCUS.last = h;
+  if (prev === null || prev === h) return null;
+  if (S.titleFocus) return 'h1';  // a program picked from search (#434): its <h1>, whatever page it was picked on
+  if (routeFocusHeld()) return null;
+  const [pv, pslug] = prev.split('/');
+  if ((parts[0] === 'p' && pv === 'p' && pslug === parts[1]) || document.activeElement?.matches?.('a.view-tab')) return 'tab';
+  return 'h1';
+}
+function routeFocus(plan) {
+  try {
+    if (!plan || routeFocusHeld()) return;  // the reader went back to the search box while the page loaded
+    const el = (plan === 'tab' && $('.view-tab.active')) || $('.content-title');  // both exist only in #app's page header
+    if (!el) return;  // a load-failed card has no <h1>; its own button is the next thing to reach
+    if (el.classList?.contains('content-title')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+  } catch { /* focus is a courtesy; a page that drew must never turn into an error card over it */ }
+}
 function route() {
   const h = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
   const parts = h.split('/').filter(Boolean);
@@ -3002,8 +3039,9 @@ function route() {
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
   else if (!parts[1] && trendsInPlace()) return;
+  const focusPlan = routeFocusPlan(h, parts);  // #453: decided now, from where focus is before the page is redrawn
   // A data load that failed (an HTTP status on the error, #345) gets the try-again card; anything else is a bug and says so.
-  const go = p => p.catch(e => {
+  const go = p => p.then(() => routeFocus(focusPlan)).catch(e => {
     if (Number.isInteger(e?.status)) { app.innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; setDocTitle('Couldn’t load the data'); const b = $('#loadRetry'); if (b) b.onclick = () => route(); return; }
     setDocTitle('Something went wrong');
     app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e);
@@ -3037,6 +3075,7 @@ function route() {
   if (view === 'api') return go(renderApiDocs());
   if (view === 'list') return go(perfView('list', renderList(), perfNav));
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
+  routeFocus(focusPlan);
 }
 window.addEventListener('hashchange', route);
 // Back or forward onto an entry a trends pick pushed; trendsInPlace ignores the one hashchange also reports.
