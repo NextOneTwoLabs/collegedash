@@ -43,12 +43,13 @@ const headerHtml = (/<div class="header">([\s\S]*?)\n<\/div>\n/.exec(body.replac
 test('markup: the one search box is static in the header, labelled, outside the sidebar and outside #app', () => {
   assert.match(headerHtml, /<div class="header-search" role="search">/, 'no search box in the header');
   assert.match(headerHtml, /<label class="sr-only" for="q">Search programs<\/label>/, 'the header box has no label');
-  assert.match(headerHtml, /<input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search">/);
+  assert.match(headerHtml, /<input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search"[^>]*>/);
   assert.match(headerHtml, /<button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕<\/button>/);
   assert.match(headerHtml, /<div class="header-recs" id="headerRecs"><\/div>/, 'no (empty) slot for "Find programs for me"');
   assert.equal((body.match(/id="q"/g) || []).length, 1, 'more than one #q in the static page');
   assert.ok(!/id="(qStart|startStrip|startActions|recsOpenStart)"/.test(HTML), 'the Start strip is still in the page');
-  for (const id of ['q', 'qClear', 'qStatus', 'askSlot', 'headerRecs']) {
+  assert.ok(!/id="askSlot"/.test(HTML), 'the Ask popover is back (#434 PR 2 folded its note into #qStatus)');
+  for (const id of ['q', 'qClear', 'qStatus', 'qList', 'qHint', 'headerRecs']) {
     const tag = new RegExp(`<[^<>]*id="${id}"[^<>]*>`).exec(headerHtml)?.[0] || '';
     assert.ok(tag, `#${id} is not in the header`);
   }
@@ -59,7 +60,9 @@ test('status: #qStatus is the one aria-live search status, screen-reader only, a
   const status = /<div[^>]*id="qStatus"[^>]*>/.exec(headerHtml)?.[0] || '';
   assert.match(status, /class="sr-only"/, '#qStatus is not screen-reader only (the list subtitle carries the counts on screen)');
   assert.match(status, /aria-live="polite"/);
-  assert.ok(!/role="listbox"[\s\S]*id="qStatus"/.test(headerHtml), '#qStatus sits inside a listbox');
+  // a listbox may hold only options and groups (#434 PR 2 adds one; the status is its sibling, never inside it)
+  const listbox = /<div[^>]*role="listbox"[^>]*>([\s\S]*?)<\/div>/.exec(headerHtml)?.[1] ?? '';
+  assert.ok(!/id="qStatus"/.test(listbox), '#qStatus sits inside a listbox');
   const live = [...headerHtml.matchAll(/<[^<>]*aria-live=[^<>]*>/g)].map(m => m[0]);
   assert.equal(live.length, 1, `more than one live region in the header: ${live}`);
 });

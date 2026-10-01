@@ -136,13 +136,17 @@ tr:hover td { background: var(--row-hover); }
 .header-recs .recs-entry { width: auto; min-height: 38px; white-space: nowrap; }
 .recs-entry-short { display: none; }
 .clear-search { padding: 0; border: none; background: none; font: inherit; color: var(--accent-text); text-decoration: underline; cursor: pointer; }
-.ask-pop { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 110; padding: 6px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
-.ask-pop[hidden] { display: none; }
+/* Header suggestions (#434 PR 2): the listbox under the box. Options are at least 44 px tall (touch). */
+.qlist { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 120; max-height: min(60vh, 440px); overflow-y: auto; padding: 4px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); }
+.qlist[hidden] { display: none; }
+.qopt { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 44px; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.qopt.active, .qopt:hover { background: var(--bg-surface-alt); }
+.qopt[aria-disabled="true"] { cursor: progress; opacity: 0.7; }
+.qopt-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.qlist > [role="group"]:not(:first-child) { margin-top: 4px; border-top: 1px solid var(--border); }
+.qgroup-label { padding: 8px 10px 2px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-secondary); }
+.content-title:focus:not(:focus-visible) { outline: none; }
 /* Ask (issue #165): rendered only when /api/status reports ask enabled, so none of this is used today. */
-.ask-row { display: block; width: 100%; text-align: left; padding: 7px 10px; font-size: 13px; font-weight: 600; font-family: var(--font); color: var(--accent-text); background: var(--accent-surface); border: 1px dashed var(--accent); border-radius: var(--radius-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ask-row:hover { border-style: solid; }
-.ask-row[disabled] { opacity: 0.7; cursor: progress; }
-.ask-note { font-size: 12px; color: var(--text-secondary); padding: 6px 2px 0; }
 .ask-banner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 14px; font-size: 13px; background: var(--accent-surface); border: 1px solid var(--accent); border-radius: var(--radius-sm); }
 .ask-banner .btn { padding: 3px 10px; font-size: 12px; }
 /* Program recommendations (issue #400): drawn only while /api/status reports recs on. A side panel beside the list on
@@ -640,10 +644,11 @@ a.pill { text-decoration: none; }
   <!-- #434: the one search box (static, on every page). setQuery / searchKeydown; the status is screen-reader only. -->
   <div class="header-search" role="search">
     <label class="sr-only" for="q">Search programs</label>
-    <input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search">
+    <input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="qList" aria-describedby="qHint">
     <button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕</button>
+    <div class="qlist" id="qList" role="listbox" aria-label="Suggestions" hidden></div>
+    <span class="sr-only" id="qHint">Type a school, mascot, state or city. Down arrow for suggestions.</span>
     <div class="sr-only" id="qStatus" aria-live="polite"></div>
-    <div class="ask-pop" id="askSlot" hidden></div>
   </div>
   <!-- #434 decision 4: "Find programs for me", drawn by renderHeaderRecs while recs is on (one button, #recsOpen). -->
   <div class="header-recs" id="headerRecs"></div>
@@ -1931,15 +1936,15 @@ let qTimer = null;
 function setQuery(v) {
   S.qRaw = v; S.q = normText(v);
   syncSearchBox();
+  SUGG.active = -1; SUGG.open = !!S.q;
   clearTimeout(qTimer);
-  // Typing filters the view you are in - #/camps included, where it narrows camps to matching
-  // PROGRAMS, never camp names. From any other view a query still bounces to the programs list.
-  qTimer = setTimeout(() => { updateSearchStatus(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
+  // Typing filters the view you are in - #/camps included, where it narrows camps to matching PROGRAMS, never camp
+  // names. On any other page it only suggests (#434 PR 2): a header box must not throw the reader off the page.
+  qTimer = setTimeout(() => { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }, 80);
 }
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
-  if (S.ask) renderAskSlot();
   let text = '';
   if (S.q) {
     // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
@@ -1950,6 +1955,10 @@ function updateSearchStatus() {
     text = S.ask ? (n ? `${count} · ${enter} · Shift+Enter asks` : all ? `${hidden} · Shift+Enter asks` : 'No name match · Enter asks')
       : n ? `${count} · ${enter}` : all ? hidden : 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city';
   }
+  // Ask's own news (#165; owner only) goes into this same line - Huatuo on #434 PR 2: one live region, not a second
+  // popover with its own role=status. The Ask option in the list shows the note on screen.
+  if (S.ask && S.askPending) text = 'Asking…';
+  else if (S.ask && S.askMsg) text = text ? `${S.askMsg} · ${text}` : S.askMsg;
   el.textContent = text;
 }
 /* The header box's keydown handler (#434; the one search box since the sidebar's and the Start strip's retired).
@@ -1959,14 +1968,104 @@ function updateSearchStatus() {
    is a list too: it is already narrowed to those programs, so Enter stays there.
    #23: both read the hits the active filters let through, so Enter never opens a program the list hides. */
 function searchKeydown(e, box) {
-  if (e.key === 'Enter' && S.ask && S.qRaw.trim() && (e.shiftKey || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
+  const open = SUGG.open && SUGG.items.length > 0;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    if (!S.q) return;
+    e.preventDefault();
+    const wasOpen = open;
+    SUGG.open = true;
+    SUGG.items = suggestionItems();
+    const m = SUGG.items.length;
+    if (m && !e.altKey && (wasOpen || e.key === 'ArrowDown'))
+      SUGG.active = e.key === 'ArrowDown' ? (SUGG.active + 1) % m : (SUGG.active <= 0 ? m - 1 : SUGG.active - 1);
+    return renderSuggestions();
+  }
+  if (e.key === 'Enter' && S.ask && S.qRaw.trim() && e.shiftKey) { e.preventDefault(); closeSuggestions(); return askQuestion(S.qRaw); }
+  if (e.key === 'Enter' && open && SUGG.active >= 0) { e.preventDefault(); return chooseSuggestion(SUGG.active); }
+  if (e.key === 'Enter' && S.ask && S.qRaw.trim() && !searchMatches()[0]) { e.preventDefault(); closeSuggestions(); askQuestion(S.qRaw); }
   else if (e.key === 'Enter') {
     const hits = visibleMatches();
-    if (placeQueryHits(hits)) { e.preventDefault(); closeDrawer(); box.blur?.(); if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/'; }
-    // a name: the profile opens and the box blurs, so a phone's keyboard drops (Huatuo on #441; the strip did too)
-    else if (hits[0]) { box.value = ''; setQuery(''); closeDrawer(); box.blur?.(); location.hash = `#/p/${hits[0].p.slug}`; }
+    closeSuggestions();
+    if (placeQueryHits(hits)) { e.preventDefault(); showPlaceList(); }
+    else if (hits[0]) openFromSearch(hits[0].p.slug);
   }
-  else if (e.key === 'Escape') { box.value = ''; setQuery(''); }
+  else if (e.key === 'Escape') { if (open) { e.preventDefault(); closeSuggestions(); } else { box.value = ''; setQuery(''); } }
+  else if (e.key === 'Tab') closeSuggestions();
+}
+/* ---------- header suggestions (#434 PR 2): ARIA 1.2 editable combobox, list autocomplete ----------
+   The box (#q, role=combobox) owns a listbox (#qList). Typing opens it once there is an option; no option is active
+   until the arrows move, and the active one is named by aria-activedescendant. Options, in order:
+     1. up to 6 programs matched by NAME that the active filters let through (#23) - shortName || name and the
+        program line, which starts with its D1/D2/D3 tag;
+     2. "Outside your filters" (Huatuo's condition 1): up to 3 programs matched by name that the filters hide, in a
+        labelled group, so a name search from the header can never fail silently behind saved filters. Choosing one
+        opens it and leaves the filters alone; Enter with no active option still never opens one (#23);
+     3. the place line, when the query lists any program only for its place (#409): every match the list will show;
+     4. Ask (owner only, #165): "✦ Ask: …".
+   Keys: Down/Up move and wrap (Down opens a closed list), Alt+Down opens without moving, Enter on an active option
+   chooses it, Esc closes an open list (then, closed, clears the box), Tab closes it. Without an active option Enter
+   keeps #409/#23's rules. A program chosen from search moves focus to its page's <h1>; a place keeps the box's focus on
+   a desktop and drops a phone's keyboard. Nothing here fetches: everything comes from S.index. */
+const SUGGEST_MAX = 6, OUTSIDE_MAX = 3;
+const SUGG = { items: [], active: -1, open: false };
+function suggestionItems() {
+  if (!S.index || !S.q) return [];
+  const visible = visibleMatches(), all = searchMatches(), shown = new Set(visible.map(h => h.p.slug));
+  const items = visible.filter(h => !h.m.place).slice(0, SUGGEST_MAX).map(h => ({ kind: 'program', p: h.p }));
+  items.push(...all.filter(h => !h.m.place && !shown.has(h.p.slug)).slice(0, OUTSIDE_MAX).map(h => ({ kind: 'program', p: h.p, outside: true })));
+  if (placeQueryHits(visible)) {
+    const where = [...new Set(visible.filter(h => h.m.place).map(h => h.m.why))];
+    items.push({ kind: 'place', n: visible.length, hidden: all.length - visible.length, where: where.length === 1 ? where[0] : null });
+  }
+  if (S.ask && S.qRaw.trim()) items.push({ kind: 'ask' });
+  return items;
+}
+const suggestionId = it => it.kind === 'program' ? `qOpt-${it.outside ? 'out-' : ''}${it.p.slug}` : `qOpt-${it.kind}`;
+function suggestionHtml(it, i) {
+  const on = i === SUGG.active, wait = it.kind === 'ask' && S.askPending;
+  const body = it.kind === 'program' ? `<span class="qopt-name">${esc(displayName(it.p))}</span><span class="team-sub">${programLine(it.p)}</span>`
+    : it.kind === 'place' ? `<span class="qopt-name">All ${it.n} matching program${it.n === 1 ? '' : 's'} →</span><span class="team-sub">${esc([
+      it.where ? `including every program ${/^in /.test(it.where) ? it.where : `in ${it.where}`}` : 'including programs by place',
+      it.hidden ? `${it.hidden} more outside your filters` : ''].filter(Boolean).join(' · '))}</span>`
+    : `<span class="qopt-name">${wait ? 'Asking…' : `✦ Ask: “${esc(S.qRaw.trim())}”`}</span>${!wait && S.askMsg ? `<span class="team-sub">${esc(S.askMsg)}</span>` : ''}`;
+  return `<div role="option" id="${suggestionId(it)}" class="qopt${on ? ' active' : ''}" aria-selected="${on}"${wait ? ' aria-disabled="true"' : ''} data-i="${i}">${body}</div>`;
+}
+function renderSuggestions() {
+  const list = $('#qList'), box = $('#q'); if (!list || !box) return;
+  const items = SUGG.items = suggestionItems();
+  if (SUGG.active >= items.length) SUGG.active = -1;
+  const html = []; let group = false;
+  items.forEach((it, i) => {
+    if (it.outside && !group) { html.push('<div role="group" aria-label="Outside your filters"><div class="qgroup-label" aria-hidden="true">Outside your filters</div>'); group = true; }
+    if (!it.outside && group) { html.push('</div>'); group = false; }
+    html.push(suggestionHtml(it, i));
+  });
+  if (group) html.push('</div>');
+  list.innerHTML = html.join('');
+  const show = SUGG.open && items.length > 0;
+  list.hidden = !show;
+  box.setAttribute('aria-expanded', String(show));
+  if (show && SUGG.active >= 0) box.setAttribute('aria-activedescendant', suggestionId(items[SUGG.active]));
+  else box.removeAttribute?.('aria-activedescendant');
+}
+function closeSuggestions() { SUGG.open = false; SUGG.active = -1; renderSuggestions(); }
+// A program opened from search: the box empties, and its page's <h1> takes focus once drawn (a phone's keyboard drops).
+function openFromSearch(slug) {
+  const box = $('#q'); if (box) { box.value = ''; box.blur?.(); }  // a phone's keyboard drops at once (Huatuo on #441)
+  setQuery(''); closeDrawer(); S.titleFocus = true;
+  location.hash = `#/p/${slug}`;
+}
+// A place: the list, filtered by the query (#409); ID Camps is a list too, so it stays there.
+function showPlaceList() {
+  closeDrawer();
+  if (isPhone()) $('#q')?.blur?.();
+  if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/';
+}
+function chooseSuggestion(i) {
+  const it = SUGG.items[i]; if (!it) return;
+  if (it.kind === 'ask') { if (!S.askPending) askQuestion(S.qRaw); return; }
+  closeSuggestions();
+  if (it.kind === 'program') openFromSearch(it.p.slug); else showPlaceList();
 }
 // The box shows S.qRaw. Written only when it differs, so typing never writes back into the box (on a phone that moves
 // the caret); Ask's apply and undo and the camps "clear" change the query in code and land here.
@@ -1982,7 +2081,13 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
   if (box) {
     box.addEventListener('input', e => setQuery(e.target.value));
     box.addEventListener('keydown', e => searchKeydown(e, box));
+    box.addEventListener('blur', () => { if (SUGG.open) closeSuggestions(); });
     const clr = $('#qClear'); if (clr) clr.onclick = () => { setQuery(''); box.focus(); };
+    const list = $('#qList');
+    if (list) {
+      list.addEventListener('mousedown', e => e.preventDefault());  // the box keeps focus while an option is pressed
+      list.addEventListener('click', e => { const o = e.target.closest?.('[role="option"]'); if (o) chooseSuggestion(+o.dataset.i); });
+    }
   }
 }
 // "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
@@ -2003,13 +2108,10 @@ function askSwitchedOn() {
   if (typing) $('#q')?.focus();
 }
 const askKey = () => { const f = S.filters; return JSON.stringify([f.division, f.conf, f.region, f.classYear, f.cond, f.sort, f.sortDir]); };
+// Ask's state changed (asking, answered, refused): the status line says so, and the Ask option shows it (#434 PR 2).
 function renderAskSlot() {
-  const slot = $('#askSlot'); if (!slot) return;
-  const text = S.qRaw.trim();
-  const row = text ? `<button type="button" class="ask-row" id="askRow"${S.askPending ? ' disabled' : ''}>${S.askPending ? 'Asking…' : `✦ Ask: “${esc(text)}”`}</button>` : '';
-  slot.innerHTML = row + (S.askMsg ? `<div class="ask-note" role="status">${esc(S.askMsg)}</div>` : '');
-  slot.hidden = !slot.innerHTML;  // #434: a popover under the header box, shown only while it has something
-  const b = $('#askRow'); if (b) b.onclick = () => askQuestion(S.qRaw);
+  updateSearchStatus();
+  if (SUGG.open) renderSuggestions();
 }
 async function askQuestion(text) {
   const question = String(text || '').trim();
@@ -4111,6 +4213,7 @@ async function renderProfile(slug, tab) {
   const el = $('#tab');
   el.innerHTML = await fn(p);
   wireCharts(el);
+  if (S.titleFocus) { S.titleFocus = false; const h = $('.content-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus(); } }  // #434: after a search pick only
 }
 
 function tile(label, value, sub) { return `<div class="tile"><div class="label">${esc(label)}</div><div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`; }

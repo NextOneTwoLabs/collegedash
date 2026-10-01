@@ -138,7 +138,7 @@ for (const [name, status, probe] of OFF_CASES) {
     assert.ok(PAGE.includes('id="q" placeholder="School, mascot, state or city…"'), 'the header box placeholder changed');
     assert.equal(pg.$('#q').placeholder ?? '', '', 'the placeholder was rewritten while Ask is off');
     assert.ok(!/ask/i.test(pg.sidebar().replace(/aria-label="[^"]*"/g, '')), 'ask markup in the sidebar');
-    assert.equal(pg.$('#askSlot').innerHTML, '', 'the Ask popover has content while Ask is off');
+    assert.ok(!PAGE.includes('id="askSlot"'), 'an Ask popover is still in the page (#434 PR 2: its note is in #qStatus)');
     await type(pg, NO_MATCH);
     assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
     assert.equal(key(pg, 'Enter'), false);
@@ -198,10 +198,11 @@ test('on: the ask row appears; Enter with no name match asks, applies the answer
   const { S } = pg.sb;
   assert.equal(S.ask, true);
   assert.equal(pg.$('#q').placeholder, 'School, mascot, or a question…', 'the header box placeholder does not follow Ask');  // #434
-  assert.ok(PAGE.includes('id="askSlot"'), 'no Ask popover under the header box');
+  assert.ok(!PAGE.includes('id="askSlot"'), 'an Ask popover is still in the page (#434 PR 2: its note is in #qStatus)');
   S.filters.region = ['West']; S.filters.sort = 'rpi'; pg.sb.saveState();
   await type(pg, NO_MATCH);
-  assert.equal(pg.$('#askSlot').innerHTML, `<button type="button" class="ask-row" id="askRow">✦ Ask: “${NO_MATCH}”</button>`);
+  // #434 PR 2: the Ask row is the header suggestions' last option (here the only one: nothing matches by name)
+  assert.equal(pg.$('#qList').innerHTML, `<div role="option" id="qOpt-ask" class="qopt" aria-selected="false" data-i="0"><span class="qopt-name">✦ Ask: “${NO_MATCH}”</span></div>`);
   assert.equal(pg.$('#qStatus').textContent, 'No name match · Enter asks');
   assert.equal(key(pg, 'Enter'), true);
   await settle();
@@ -250,7 +251,14 @@ test('on: an unsupported answer changes no filter and says why; a value the page
   await type(pg, 'who coaches stanford');
   await pg.sb.askQuestion(S.qRaw);
   assert.deepEqual(plain(S.filters), before);
-  assert.ok(pg.$('#askSlot').innerHTML.includes('That needs the full Q&amp;A: a coach is not a filter'), `the ask slot does not say why: "${pg.$('#askSlot').innerHTML}"`);
+  // Huatuo on #434 PR 2: Ask's note is announced by the one live region, #qStatus, and shown on the Ask option
+  assert.match(pg.$('#qStatus').textContent, /^That needs the full Q&A: a coach is not a filter( · |$)/, `#qStatus does not say why: "${pg.$('#qStatus').textContent}"`);
+  const live = [...PAGE.slice(PAGE.indexOf('<body')).matchAll(/aria-live="[^"]*"/g)].length, header = /<div class="header">[\s\S]*?\n<\/div>/.exec(PAGE.replace(/\r\n/g, '\n'))?.[0] ?? '';
+  assert.equal((header.match(/aria-live=/g) || []).length, 1, 'the header has more than one live region');
+  assert.ok(live >= 1);
+  assert.ok(!/role="status"/.test(header), 'a second status region in the header');
+  pg.$('#q')._listeners.input?.forEach(fn => fn({ target: pg.$('#q') })); await settle(100);
+  assert.match(pg.$('#qList').innerHTML, /id="qOpt-ask"[\s\S]*<span class="team-sub">That needs the full Q&amp;A: a coach is not a filter<\/span>/, 'the Ask option does not show the note');
   const pg2 = await ready(loadPage({ probe: { ask: true, spend: { month: '2026-09', usd: 0.0123, capUsd: 10 } }, answer: { body: { ...ANSWER, conf: ['ACC', 'Gulf South'], region: ['Moon'], classYear: ['2035'],
     cond: [{ field: 'coachSince', op: '<', value: 1 }, { field: 'rpiRank', op: '<=', value: 25 }], sort: 'nope' } } }));
   await type(pg2, NO_MATCH);
