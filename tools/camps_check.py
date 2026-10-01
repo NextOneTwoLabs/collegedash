@@ -426,7 +426,7 @@ def fixtures(args) -> int:
     rows = spec.get("rows") or {}
     named = rows.get("sections") or {}
     for name, sec, want in rows.get("cases") or []:
-        got = _row_allowed(name, named.get(sec) if sec else None) if _row_allowed else None
+        got = _row_allowed(name, named.get(sec) if sec else None, is_hub=True) if _row_allowed else None  # #76: was the default
         ok(f"{name!r} under {sec or 'no section'} -> {'keep' if want else 'drop'}",
            _row_allowed is not None and got is want,
            missing("_row_allowed") if _row_allowed is None else f"got {got}")
@@ -445,7 +445,7 @@ def fixtures(args) -> int:
     for fx in (spec.get("rowsEvidence") or {}).get("cases") or []:
         want = fx["expect"]
         try:
-            got = _row_allowed(fx["name"], None, named=fx.get("named", "row"), evidence=fx.get("evidence"),
+            got = _row_allowed(fx["name"], None, is_hub=True, named=fx.get("named", "row"), evidence=fx.get("evidence"),
                                page_is_soccer=bool(fx.get("pageIsSoccer"))) if _row_allowed else None
         except TypeError as e:  # a parser whose _row_allowed has no evidence parameter
             got, e = None, e
