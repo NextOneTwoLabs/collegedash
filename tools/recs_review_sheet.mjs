@@ -30,6 +30,9 @@ const cell = (s) => String(s).replace(/\|/g, '\\|');
 export function sheet() {
   const cat = read('tests/fixtures/recs/catalog.json');
   const sc = read('tests/fixtures/recs/scenarios.json');
+  // The Reviewer's held-out cases (HU1-HU6, Huatuo on #429), committed exactly as posted.
+  const hu = readFileSync(path.join(ROOT, 'tests', 'fixtures', 'recs', 'heldout_reviewer.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean)
+    .map((l) => ({ ...JSON.parse(l), split: 'heldout', author: 'a Reviewer (Huatuo)' }));
   const list = { updated: cat.updated, programs: cat.programs };
   const fit = { updated: cat.updated, fitTaxonomy: cat.fitTaxonomy, constants: cat.constants, sources: cat.sources, fit: cat.fit };
   const bySlug = new Map(cat.programs.map((p) => [p.slug, p]));
@@ -40,6 +43,10 @@ export function sheet() {
     '',
     'For each held-out scenario: the preferences, the counts, and the top 10 confirmed programs with every reason, tradeoff and unknown exactly as a card shows them. **Reviewer:** tick each box only if it holds for all ten rows, and note any row that reads wrong.',
     '',
+    '**Who wrote the held-out cases.** H01-H08: the ranker\'s author, from the plan and the PRD, with expectations from an independent re-implementation of the plan\'s rules, committed before they were run against `recs.js`. HU1-HU6: a Reviewer (Huatuo), from the plan and the PRD, posted with a sha256 on #429 before being run, committed exactly as posted. 14 of 37 scenarios are held out; all 14 pass.',
+    '',
+    '**Plan note: name order ignores case.** The plan said "displayed name, then slug" without saying whether case counts. The ranker compares names the way the list\'s Name sort does: case-insensitive first (accents still count), then the exact text, then the slug. So "Boise State" comes before "BYU". A8 pins this.',
+    '',
     'Check each scenario for:',
     '- every ✓ reason is true of that program and names where it came from;',
     '- the ↔ tradeoff names a real miss against a stated preference, and nothing else;',
@@ -48,13 +55,14 @@ export function sheet() {
     '- nothing reads as an admission, recruiting or "fit" claim.',
     '',
   ];
-  for (const s of sc.scenarios.filter((x) => x.split === 'heldout')) {
+  for (const s of [...sc.scenarios.filter((x) => x.split === 'heldout'), ...hu]) {
     const res = R.rank({ list, fit, prefs: s.prefs, filter: predicate(s.filters || {}), hidden: s.hidden || [] });
     const ex = res.excluded;
-    out.push(`## ${s.id}`, '', `*${s.why}*`, '',
-      `- **Preferences:** ${prefsText(res.prefs)}`,
+    out.push(`## ${s.id}`, '', `*${s.why}*`, '', `- **Written by:** ${s.author || 'the ranker\'s author'}`,
+      `- **Preferences:** ${prefsText(res.prefs) || 'none left after cleaning'}${res.issues.length ? ` (dropped: ${res.issues.map((i) => `${i.kind}${i.category ? ` on ${i.category}` : ''}${i.value != null ? ` "${i.value}"` : ''}`).join(', ')})` : ''}`,
+      ...(res.active ? [] : ['- **Result:** not active: nothing is recommended, and the ordinary list stays (A4)']),
       `- **Filters:** ${filterText(s.filters || {})}${s.hidden?.length ? ` · **Hidden:** ${s.hidden.join(', ')}` : ''}`,
-      `- **Result:** ${res.confirmed.length} confirmed · ${res.needVerification.length} need verification · filtered out ${ex.byFilter} · ruled out by must-haves ${ex.byMustHave} · hidden ${ex.hidden}${res.staleHidden.length ? ` · no longer listed: ${res.staleHidden.join(', ')}` : ''}`,
+      ...(res.active ? [`- **Result:** ${res.confirmed.length} confirmed · ${res.needVerification.length} need verification · filtered out ${ex.byFilter} · ruled out by must-haves ${ex.byMustHave} · hidden ${ex.hidden}${res.staleHidden.length ? ` · no longer listed: ${res.staleHidden.join(', ')}` : ''}`] : []),
       '');
     if (res.confirmed.length) {
       out.push('| # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |', '|---|---|---|---|---|---|---|');

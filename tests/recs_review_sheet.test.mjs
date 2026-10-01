@@ -13,8 +13,12 @@ test('docs/recs-heldout-review.md is current: node tools/recs_review_sheet.mjs r
 
 test('the sheet covers every held-out scenario with a checklist, and names programs and schools only', () => {
   const scenarios = JSON.parse(readFileSync(new URL('./fixtures/recs/scenarios.json', import.meta.url), 'utf8')).scenarios;
-  const held = scenarios.filter((s) => s.split === 'heldout').map((s) => s.id);
-  assert.ok(held.length >= 8, `held-out scenarios: ${held.length}`);
+  const reviewer = readFileSync(new URL('./fixtures/recs/heldout_reviewer.jsonl', import.meta.url), 'utf8').split(/\r?\n/).filter(Boolean)
+    .map((l) => JSON.parse(l).id);
+  const held = [...scenarios.filter((s) => s.split === 'heldout').map((s) => s.id), ...reviewer];
+  assert.equal(held.length, 14, `held-out scenarios: ${held.length}`);
+  assert.match(sheet(), /\*\*Who wrote the held-out cases\.\*\* H01-H08: the ranker's author[^]*HU1-HU6: a Reviewer \(Huatuo\)/);
+  assert.equal((sheet().match(/- \*\*Written by:\*\* a Reviewer \(Huatuo\)/g) || []).length, reviewer.length);
   const text = sheet();
   for (const id of held) assert.ok(text.includes(`\n## ${id}\n`), id);
   assert.equal((text.match(/- \[ \] Reasons true and sourced/g) || []).length, held.length);

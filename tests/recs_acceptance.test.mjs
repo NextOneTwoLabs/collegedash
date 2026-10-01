@@ -79,8 +79,9 @@ test('A5 item vs global: hiding one large school for size hides only it; the siz
   const prefs = { v: 1, size: { mode: 'prefer', values: ['lt5k'] }, division: { mode: 'must', values: ['D1'] } };
   const pg = await recommend(saved(prefs));
   const before = pg.app();
-  const big = oracle(pg).confirmed.find((x) => x.reasons.every((r) => r.category !== 'size'));
-  assert.ok(big, 'a confirmed program that does not match the size preference');
+  // A 15,000+ school, as the plan's A5 says (Huatuo on #429).
+  const big = oracle(pg).confirmed.find((x) => (CATALOG.programs.find((p) => p.slug === x.slug).undergradEnrollment ?? 0) >= 15000);
+  assert.ok(big, 'a confirmed 15,000+ program to hide');
   await pg.sb.recsHide(big.slug, 'size');
   assert.deepEqual(cardSlugs(pg.app()), oracle(pg).confirmed.slice(0, 25).map((x) => x.slug));
   assert.equal(oracle(pg).confirmed.length + 1, oracle(pg, { hidden: [] }).confirmed.length, 'more than one program left');
@@ -92,10 +93,14 @@ test('A5 item vs global: hiding one large school for size hides only it; the siz
 
 test('A6 sort switch: Recommended, then Name, then Recommended; ordinary browsing between, with a clear paused state', async () => {
   const pg = await recommend(saved({ v: 1, division: { mode: 'must', values: ['D3'] } }));
+  const hidden = oracle(pg).confirmed[0].slug;
+  await pg.sb.recsHide(hidden, 'other');
   const first = pg.app();
+  assert.ok(!cardSlugs(first).includes(hidden));
   pg.$('#sortSelect').onchange({ target: { value: 'name' } }); await settle();
   const browse = pg.app();
   assert.deepEqual(cardSlugs(browse), pg.sb.filteredPrograms().map((p) => p.slug));
+  assert.ok(cardSlugs(browse).includes(hidden), 'a hidden program did not reappear under the Name sort (Huatuo on #429)');
   assert.ok(cardSlugs(browse).some((s) => CATALOG.programs.find((p) => p.slug === s).division !== 'D3'), 'must-haves still applied');
   assert.match(browse, /Personalization paused \(sorted by Name\)/);
   pg.$('#sortSelect').onchange({ target: { value: 'recommended' } }); await settle();
