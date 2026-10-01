@@ -251,7 +251,9 @@ test('the table header, the sidebar select and the sidebar direction button stay
   // and every control writes through setSort, the one writer, then brings the sidebar controls up to date
   const src = pg.source;
   assert.match(src, /th\[data-sort\] \.th-sort'\)\.forEach\(b => b\.onclick = async \(\) => \{ const k = b\.closest\('th'\)\.dataset\.sort;\s*setSort\(k\); syncSortControls\(\);/, 'the header click does not go through setSort and syncSortControls');
-  assert.match(src, /sortSel\.onchange = e => \{ setSort\(e\.target\.value\); syncSortControls\(\);/, 'the sidebar select does not go through setSort and syncSortControls');
+  // #400 PR 4: the select's one extra option, Recommended, is not a stored sort (it shows the saved preferences);
+  // every other value still goes through setSort, then syncSortControls.
+  assert.match(src, /sortSel\.onchange = e => \{ const v = e\.target\.value;\n\s+if \(v === 'recommended'\) return recsShowRecommended\(\);\n[^\n]*\n\s+if \(!\(was && v === f\.sort\)\) setSort\(v\); syncSortControls\(\);/, 'the sidebar select does not go through setSort and syncSortControls');
   assert.match(src, /dirBtn\.onclick = \(\) => \{ setSort\(f\.sort\); syncSortControls\(\);/, 'the direction button does not go through setSort and syncSortControls');
 });
 

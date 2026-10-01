@@ -8,7 +8,7 @@
 // people), one each from D1, D2 and D3. For every place a fixture program's name is shown, the text between that
 // name and the next program's name (or 700 characters, whichever is sooner) must carry that program's division tag.
 //
-// Views rendered: Table, Cards, Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Pipelines
+// Views rendered: Table, Cards, Recommended for you (cards with reasons, and Need verification; #400), Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Pipelines
 // (a club's programs; a D1 program's page, whose subtitle carries the line while the "Clubs feeding X" /
 // "High schools feeding X" headings stay short; a club and a program together; the Program box's suggestions),
 // Compare column headers, Compare "Add a school" results, program profile (subtitle and glance panel), not-found
@@ -31,6 +31,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const PAGE = process.env.DIVISION_EVERYWHERE_HTML || path.join(PUBLIC, 'index.html');
 const readJSON = f => JSON.parse(fs.readFileSync(path.join(PUBLIC, f), 'utf8'));
+const RECS_CATALOG = JSON.parse(fs.readFileSync(path.join(HERE, 'fixtures', 'recs', 'catalog.json'), 'utf8')); // taxonomy constants only
 const clone = v => JSON.parse(JSON.stringify(v));
 
 // ---------- the fixture: one made-up program per division ----------
@@ -111,6 +112,19 @@ async function renderAll(transform) {
   };
   out.push(['Table', await list('table'), short, PROGS]);
   out.push(['Cards', await list('cards'), short, PROGS]);
+  // Recommended for you (#400 PR 4): the ranked cards with their reasons, and the Need verification group. The
+  // fixture's programs have no enrollment, so a must-have on size puts all three in Need verification.
+  vm.runInContext(fs.readFileSync(path.join(PUBLIC, 'recs.js'), 'utf8'), sb);
+  const lib = sb.CDRecs;
+  const fit = { updated: INDEX.updated, fitTaxonomy: RECS_CATALOG.fitTaxonomy, constants: RECS_CATALOG.constants, sources: RECS_CATALOG.sources, fit: {} };
+  const recommended = async prefs => {
+    Object.assign(sb.S.filters, { conf: [], region: [], division: [], classYear: [], cond: [], sort: 'name', sortDir: null, view: 'cards', moreStats: false });
+    Object.assign(sb.S.recs, { on: true, lib, loaded: true, saved: lib.validatePrefs(prefs, fit.constants).prefs, fit, active: true, loading: false, shown: 25 });
+    await sb.renderList(); return app();
+  };
+  out.push(['Recommended cards', await recommended({ v: 1, division: { mode: 'prefer', values: ['D1'] } }), short, PROGS]);
+  out.push(['Need verification', await recommended({ v: 1, size: { mode: 'must', values: ['lt5k'] } }), short, PROGS]);
+  sb.S.recs.active = false;
   sb.S.favorites = new Set(SLUGS);
   await sb.renderShortlist(); out.push(['Shortlist page', app(), short, PROGS]);
   sb.S.sidebarTab = 'shortlist'; sb.renderSidebar(); out.push(['Sidebar shortlist', $('#sidebar').innerHTML, short, PROGS]);
@@ -169,7 +183,10 @@ test('every program-listing view shows each program with its division (D1, D2, D
   REAL = await renderAll();
   for (const v of REAL) checkView(v);
   const names = REAL.map(v => v[0]);
-  for (const need of ['Table', 'ID Camps', 'Pipelines (a club\'s programs)', 'Pipelines (D1 program page)', 'Pipelines Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
+  const view = name => REAL.find(v => v[0] === name)[1];
+  assert.match(view('Recommended cards'), /Recommended for you[^]*class="recs-why"/, 'the Recommended view was not drawn');
+  assert.match(view('Need verification'), /<details class="recs-nv card"><summary>Need verification \(3\)/, 'the Need verification group was not drawn');
+  for (const need of ['Table', 'Recommended cards', 'Need verification', 'ID Camps', 'Pipelines (a club\'s programs)', 'Pipelines (D1 program page)', 'Pipelines Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
 });
 
 test('the program line reads "D1 · Conference · City, ST", the Table\'s form', async () => {
