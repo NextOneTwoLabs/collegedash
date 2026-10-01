@@ -35,7 +35,8 @@ export function makeElement(name) {
 }
 const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 'recsOpen', 'recsClose', 'recsApply', 'recsReset', 'recsToggleValue',
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
-  'displayName', 'matchesFilters', 'recsSheetState'];
+  'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
+  'recsEditPreference', 'renderRecsToast', 'programBySlug'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.

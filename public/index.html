@@ -188,6 +188,17 @@ tr:hover td { background: var(--row-hover); }
 .recs-nv summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 .recs-nv-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .recs-nv-row { display: flex; flex-direction: column; gap: 2px; }
+/* Feedback (issue #400, PR 5): the hide menu on a card, the hidden list, and the toast with Undo. */
+.recs-hide { margin-top: 8px; font-size: 12px; }
+.recs-hide summary { cursor: pointer; color: var(--text-secondary); min-height: 44px; display: inline-flex; align-items: center; }
+.recs-hide-menu { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px; }
+.recs-hide-menu .btn { min-height: 44px; font-size: 12px; }
+.recs-hidden-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.recs-hidden-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.recs-toast { position: sticky; bottom: 0; z-index: 5; margin: 0 28px 12px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
+.recs-toast[hidden] { display: none; }
+.recs-toast .btn { min-height: 44px; }
+@media (max-width: 768px) { .recs-toast { margin: 0 16px 12px; } }
 @media (min-width: 769px) and (max-width: 1180px) {
   .recs-panel { position: fixed; top: var(--header-height); right: 0; bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }
 }
@@ -617,6 +628,8 @@ a.pill { text-decoration: none; }
       <div class="start-status" id="qStartStatus" aria-live="polite"></div>
     </div>
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
+    <!-- #400: "Hidden: X. [Undo]" and the other feedback messages, one persistent live node outside what #app redraws. -->
+    <div class="recs-toast" id="recsToast" role="status" aria-live="polite" hidden></div>
     <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
     <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
     <footer class="site-notice">
@@ -2002,7 +2015,7 @@ function recsLib() {
 }
 // What cd.recs holds, read once per page load: {prefs, doc, storage, notices, issues}. Pure apart from the one read.
 function recsRead(lib) {
-  const blank = { prefs: lib.defaultPrefs(), doc: null, storage: 'ok', notices: [], issues: [] };
+  const blank = { prefs: lib.defaultPrefs(), doc: null, storage: 'ok', notices: [], issues: [], hidden: [], hiddenDropped: 0 };
   let raw;
   try { raw = localStorage.getItem(RECS_KEY); } catch { return { ...blank, storage: 'unavailable', notices: ['unavailable'] }; }
   if (raw == null) return blank;
@@ -2012,7 +2025,8 @@ function recsRead(lib) {
   if (typeof doc.v === 'number' && doc.v > 1) return { ...blank, doc, storage: 'newer', notices: ['newer'] };
   if (doc.v !== 1) return { ...blank, notices: ['corrupt'] };
   const { prefs, issues } = lib.validatePrefs(doc.prefs === undefined ? null : doc.prefs, recsConstants());
-  return { ...blank, prefs, doc, issues };
+  const h = recsHiddenFrom(doc.hidden); // #400 PR 5: the hidden list, cleaned entry by entry
+  return { ...blank, prefs, doc, issues, hidden: h.hidden, hiddenDropped: h.dropped };
 }
 // Save the preferences into cd.recs, keeping any other field already there. False when they can't be saved.
 function recsWrite(prefs) {
@@ -2104,7 +2118,9 @@ function recsApply() {
   R.saved = prefs;
   R.issues = [];
   R.error = '';
-  R.status = recsWrite(prefs) ? 'Preferences saved.' : 'Preferences set for this visit only.';
+  const stored = recsWrite(prefs);
+  R.status = stored ? 'Preferences saved.' : 'Preferences set for this visit only.';
+  recsAfterSave(stored); // #400 PR 5: the shared-device notice, once
   return true;
 }
 
@@ -2210,7 +2226,8 @@ async function recsEnsureLoaded() {
   }
   if (R.lib && !R.loaded) {
     const r = recsRead(R.lib);
-    Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, loaded: true });
+    Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, hidden: r.hidden,
+      hiddenDropped: r.hiddenDropped, loaded: true });
   }
   return !!R.lib;
 }
@@ -2247,7 +2264,7 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
   if (!R.on) return;
   if (!(await recsEnsureLoaded())) { R.fitError = 'failed'; R.active = false; syncSortControls(); return rerenderForFilters(); }
   if (!R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); return recsOpen(); }
-  R.active = true; R.shown = RECS_PAGE; R.fitError = null;
+  R.active = true; R.shown = RECS_PAGE; R.fitError = null; R.toast = null; renderRecsToast();
   if (fromPanel) { R.open = false; renderRecsPanel(); syncRecsEntry(); }
   if (currentView() !== 'list') { location.hash = '#/'; }
   syncSortControls();
@@ -2265,7 +2282,7 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
 }
 // The count line, written only when it changes, so a screen reader hears each new count once.
 function recsAnnounce(text) { const el = $('#recsCount'); if (el && el.textContent !== text) el.textContent = text; }
-function recsPause() { S.recs.active = false; S.recs.stale = []; }
+function recsPause() { S.recs.active = false; S.recs.stale = []; S.recs.toast = null; renderRecsToast(); }
 
 // The search hits and the sidebar's filters, as rank()'s filter layer: the same predicate the ordinary list uses.
 function recsFilter() {
@@ -2276,7 +2293,7 @@ function recsFilter() {
 }
 function recsResult() {
   const R = S.recs;
-  return R.lib.rank({ list: { updated: S.index.updated, programs: S.index.programs }, fit: R.fit, prefs: R.saved, filter: recsFilter(), hidden: [] });
+  return R.lib.rank({ list: { updated: S.index.updated, programs: S.index.programs }, fit: R.fit, prefs: R.saved, filter: recsFilter(), hidden: R.hidden });
 }
 const recsCount = (n, one, many = `${one}s`) => `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
 const recsSource = s => (s ? `${s.name}${s.asOf ? `, fetched ${s.asOf}` : ''}` : '');
@@ -2313,7 +2330,7 @@ function recsEmptyHtml(res) {
   if (res.needVerification.length) parts.push(`${recsCount(res.needVerification.length, 'program')} need${res.needVerification.length === 1 ? 's' : ''} verification (below)`);
   const text = parts.length ? `${parts.join('; ')}.` : 'nothing in the program list matched.';
   return `<div class="recs-empty card" role="status"><p><b>No confirmed matches.</b> ${esc(text[0].toUpperCase() + text.slice(1))}</p>
-    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button>${ex.byFilter ? '<button type="button" class="btn" data-recs-unfilter="all">Clear filters</button>' : ''}</div></div>`;
+    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button>${ex.byFilter ? '<button type="button" class="btn" data-recs-unfilter="all">Clear filters</button>' : ''}${ex.hidden ? '<button type="button" class="btn" data-recs-show-hidden>Show hidden</button>' : ''}</div></div>`;
 }
 function recsNvHtml(res) {
   const nv = res.needVerification;
@@ -2340,9 +2357,9 @@ function renderRecsList(idx) {
     ...listFilterBits(conf.map(it => programBySlug(it.slug))), 'sorted by Recommended'];
   const stale = R.stale.length ? '<p class="recs-notice">Program data has been updated since you set these preferences; the results are recomputed.</p>' : '';
   const bar = `<section class="recs-bar" aria-label="Your preferences"><p id="recsBarText" tabindex="-1"><b>${recsCount(answered, 'preference')}:</b> ${esc(recsSummary(R.saved))}</p>
-    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button></div>${stale}</section>`;
+    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button><button type="button" class="btn" data-recs-clear>Clear personalization</button></div>${stale}${recsBarExtrasHtml(res)}</section>`;
   const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug)), { ranked: true }) : '')
-    : (shown.length ? `<div class="grid cards">${shown.map(it => cardHtml(programBySlug(it.slug), recsWhyHtml(it), true)).join('')}</div>` : '');
+    : (shown.length ? `<div class="grid cards">${shown.map(it => cardHtml(programBySlug(it.slug), recsWhyHtml(it) + recsHideHtml(it), true)).join('')}</div>` : '');
   const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
   const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
   $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
@@ -2351,10 +2368,11 @@ function renderRecsList(idx) {
   const app = $('#app');
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
-  app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
+  app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a, details')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { setSort(b.closest('th').dataset.sort); syncSortControls(); await renderList(); });
   app.querySelectorAll('[data-recs-edit]').forEach(b => b.onclick = () => recsOpen());
   app.querySelectorAll('[data-recs-unfilter]').forEach(b => b.onclick = () => recsUnfilter(b.dataset.recsUnfilter));
+  wireRecsFeedback(app);
   const m = $('#recsMore');
   if (m) m.onclick = async () => { const from = R.shown; R.shown += RECS_PAGE; await renderList(); $('#app').querySelectorAll('.pcard, tr.team-row')[from]?.focus(); };
   return true;
@@ -2380,6 +2398,151 @@ function recsPausedLine() {
   return `<div class="recs-paused" role="status">Personalization paused (sorted by ${esc(sortLabel(S.filters.sort) || 'Name')}) · <button type="button" class="btn" id="recsResume">Show recommended</button></div>`;
 }
 function wireRecsPaused() { const b = $('#recsResume'); if (b) b.onclick = () => recsShowRecommended(); }
+
+/* ---------- program recommendations: feedback (issue #400, PR 5) ----------
+   "Not a good fit" hides ONE program, locally, and nothing else: no preference changes, nothing inferred from the
+   reason, from saves, clicks or time on page. A reason that names an answered category only OFFERS "Edit this
+   preference", which opens the form; a global change still needs the visitor's own Show matches (A5, the PRD's
+   feedback-narrows-discovery risk). Undo restores the exact list there was. Hidden programs are listed with Restore;
+   hidden slugs no longer in the list get one line with Remove, never a silent drop (A10). Clear personalization removes
+   cd.recs and nothing else: Shortlist, Compare, filters and residency are untouched (A9). The first time preferences
+   are saved to this browser, the shared-device notice says what that means; it is shown once (cd.recs.notices). */
+const RECS_REASONS = [['region', 'Wrong region'], ['division', 'Wrong division'], ['size', 'Wrong size'], ['climate', 'Wrong climate'], ['other', 'Not for me']];
+const RECS_SHARED = 'Your preferences and hidden programs are saved in this browser only. Anyone using this device can see them.';
+Object.assign(S.recs, { hidden: [], toast: null, showHidden: false, sharedNotice: false });
+// cd.recs.hidden, cleaned entry by entry: {slug, reason, at}. Returns {hidden, dropped}; a dropped entry is counted.
+function recsHiddenFrom(raw) {
+  if (raw === undefined) return { hidden: [], dropped: 0 };
+  if (!Array.isArray(raw)) return { hidden: [], dropped: 1 };
+  const seen = new Set(), hidden = [];
+  let dropped = 0;
+  for (const h of raw) {
+    if (!h || typeof h !== 'object' || typeof h.slug !== 'string' || !/^[a-z0-9-]{1,64}$/.test(h.slug) || seen.has(h.slug)) { dropped += 1; continue; }
+    seen.add(h.slug);
+    hidden.push({ slug: h.slug, reason: RECS_REASONS.some(([k]) => k === h.reason) ? h.reason : 'other', at: typeof h.at === 'string' ? h.at : null });
+  }
+  return { hidden, dropped };
+}
+// Save fields into cd.recs beside the preferences. False when they can't be saved (they stay in memory).
+function recsSaveDoc(fields) {
+  const R = S.recs;
+  if (R.storage !== 'ok') return false;
+  const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs: R.saved, ...fields };
+  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; return true; }
+  catch { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; return false; }
+}
+// After a save from the form: the shared-device notice, once per browser.
+function recsAfterSave(saved) {
+  const R = S.recs;
+  if (!saved || R.doc?.notices?.sharedDevice) return;
+  R.sharedNotice = true;
+  recsSaveDoc({ notices: { ...(R.doc?.notices || {}), sharedDevice: true } });
+}
+const recsName = slug => { const p = programBySlug(slug); return p ? displayName(p) : slug; };
+function recsHide(slug, reason) {
+  const R = S.recs;
+  if (!R.active || !programBySlug(slug) || R.hidden.some(h => h.slug === slug)) return false;
+  const before = R.hidden.slice();
+  R.hidden = [...R.hidden, { slug, reason: RECS_REASONS.some(([k]) => k === reason) ? reason : 'other', at: todayLocal() }];
+  const saved = recsSaveDoc({ hidden: R.hidden });
+  R.toast = { kind: 'hidden', slug, reason, before, saved };
+  renderList(); renderRecsToast();
+  $('#recsUndo')?.focus();
+  return true;
+}
+function recsUndo() {
+  const R = S.recs, t = R.toast;
+  if (!t || t.kind !== 'hidden') return false;
+  R.hidden = t.before;
+  recsSaveDoc({ hidden: R.hidden });
+  R.toast = null;
+  renderList(); renderRecsToast();
+  $('#app').querySelector(`.pcard[data-slug="${t.slug}"]`)?.focus();
+  return true;
+}
+function recsRestore(slug) {
+  const R = S.recs;
+  if (!R.hidden.some(h => h.slug === slug)) return false;
+  R.hidden = R.hidden.filter(h => h.slug !== slug);
+  recsSaveDoc({ hidden: R.hidden });
+  R.toast = { kind: 'restored', slug };
+  renderList(); renderRecsToast();
+  return true;
+}
+// Hidden slugs that are no longer in the program list: removed only when the visitor says so (A10).
+function recsRemoveStale() {
+  const R = S.recs;
+  R.hidden = R.hidden.filter(h => programBySlug(h.slug));
+  recsSaveDoc({ hidden: R.hidden });
+  renderList();
+}
+function recsEditPreference(cat) {
+  S.recs.toast = null; renderRecsToast();
+  recsOpen().then(() => { $(`#recs-${cat}`)?.querySelector('input')?.focus(); });
+}
+// Clear personalization: cd.recs removed, the ordinary list back, nothing else touched (A9).
+function recsClearAll() {
+  const R = S.recs;
+  let removed = true;
+  try { localStorage.removeItem(RECS_KEY); } catch { removed = false; }
+  Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: null, active: false, stale: [], showHidden: false, sharedNotice: false,
+    storage: removed ? 'ok' : R.storage, notices: [], issues: [], toast: { kind: 'cleared', removed } });
+  R.draft = recsDraftFrom(R.saved);
+  syncSortControls();
+  renderList(); renderRecsToast();
+  $('#recsToast')?.focus();
+}
+// The toast: one persistent live node beside the list (outside #app, which every render replaces).
+function renderRecsToast() {
+  const el = $('#recsToast'), R = S.recs, t = R.toast;
+  if (!el) return;
+  if (!t || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
+  let html = '';
+  if (t.kind === 'hidden') {
+    const edit = t.reason !== 'other' && R.saved?.[t.reason] && R.saved[t.reason].mode !== 'skip'
+      ? ` <button type="button" class="btn" id="recsEditPref" data-recs-cat="${esc(t.reason)}">Edit this preference</button>` : '';
+    html = `Hidden: ${esc(recsName(t.slug))}${t.saved ? '' : ' (for this visit only)'}. <button type="button" class="btn" id="recsUndo">Undo</button>${edit}`;
+  } else if (t.kind === 'restored') html = `Restored: ${esc(recsName(t.slug))}.`;
+  else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
+    : 'Personalization cleared for this visit; this browser isn’t letting the page change what it saved.';
+  el.hidden = false;
+  el.innerHTML = html;
+  el.onclick = e => {
+    if (e.target.closest('#recsUndo')) return recsUndo();
+    const b = e.target.closest('#recsEditPref');
+    if (b) return recsEditPreference(b.dataset.recsCat);
+  };
+}
+// The hide menu on a Recommended card: a disclosure whose summary is labelled with the program's displayed name.
+function recsHideHtml(it) {
+  return `<details class="recs-hide"><summary>Not a good fit<span class="sr-only">: ${esc(it.displayName)}</span></summary>
+    <div class="recs-hide-menu" role="group" aria-label="Why ${esc(it.displayName)} is not a good fit">${RECS_REASONS.map(([k, l]) =>
+      `<button type="button" class="btn" data-recs-hide="${esc(it.slug)}" data-recs-reason="${k}">${l}</button>`).join('')}</div></details>`;
+}
+// The bar's hidden list, the stale line, the shared-device notice and Clear personalization.
+function recsBarExtrasHtml(res) {
+  const R = S.recs;
+  const listed = R.hidden.filter(h => programBySlug(h.slug));
+  const label = k => (RECS_REASONS.find(([x]) => x === k) || [, 'Not for me'])[1];
+  const rows = listed.map(h => { const p = programBySlug(h.slug);
+    return `<li class="recs-hidden-row"><span class="prog-stack"><span class="name">${esc(displayName(p))}</span><span class="team-sub">${programLine(p)}</span></span>
+      <span class="muted small">${esc(label(h.reason))}</span><button type="button" class="btn" data-recs-restore="${esc(h.slug)}">Restore<span class="sr-only"> ${esc(displayName(p))}</span></button></li>`; }).join('');
+  const hidden = listed.length ? `<p>${recsCount(listed.length, 'hidden program')} · <button type="button" class="btn" data-recs-toggle-hidden aria-expanded="${R.showHidden}" aria-controls="recsHiddenList">${R.showHidden ? 'Hide the list' : 'Show'}</button></p>`
+    + (R.showHidden ? `<ul class="recs-hidden-list" id="recsHiddenList">${rows}</ul>` : '') : '';
+  const stale = res.staleHidden.length ? `<p>${recsCount(res.staleHidden.length, 'hidden program')} ${res.staleHidden.length === 1 ? 'is' : 'are'} no longer listed · <button type="button" class="btn" data-recs-remove-stale>Remove</button></p>` : '';
+  const shared = R.sharedNotice ? `<p class="recs-notice">${RECS_SHARED} <button type="button" class="btn" data-recs-shared-ok>OK</button></p>` : '';
+  const dropped = R.hiddenDropped ? `<p class="recs-notice">${recsCount(R.hiddenDropped, 'saved hidden program')} couldn’t be read and ${R.hiddenDropped === 1 ? 'is' : 'are'} left out; saving replaces ${R.hiddenDropped === 1 ? 'it' : 'them'}.</p>` : '';
+  return hidden + stale + dropped + shared;
+}
+function wireRecsFeedback(app) {
+  app.querySelectorAll('[data-recs-hide]').forEach(b => b.onclick = () => recsHide(b.dataset.recsHide, b.dataset.recsReason));
+  app.querySelectorAll('[data-recs-restore]').forEach(b => b.onclick = () => recsRestore(b.dataset.recsRestore));
+  app.querySelectorAll('[data-recs-toggle-hidden], [data-recs-show-hidden]').forEach(b => b.onclick = () => {
+    S.recs.showHidden = b.hasAttribute('data-recs-show-hidden') ? true : !S.recs.showHidden; renderList(); });
+  app.querySelectorAll('[data-recs-remove-stale]').forEach(b => b.onclick = () => recsRemoveStale());
+  app.querySelectorAll('[data-recs-shared-ok]').forEach(b => b.onclick = () => { S.recs.sharedNotice = false; renderList(); $('#recsBarText')?.focus(); });
+  app.querySelectorAll('[data-recs-clear]').forEach(b => b.onclick = () => recsClearAll());
+}
 
 /* ---------- router ---------- */
 function route() {
