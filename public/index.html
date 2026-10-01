@@ -1692,6 +1692,11 @@ function confCounts() {
   return out;
 }
 const confTitle = n => `${n} program${n === 1 ? '' : 's'} with your other filters`;
+/* #9: a pill's accessible name. Its content alone reads "ACC17", and its title ("17 programs") is a description, so
+   screen readers announced the count and not the conference. The name starts with what the pill shows (WCAG 2.5.3,
+   label in name), names the division where a conference name is shared (#431: "Independent (D2)"), then the count. */
+const programsPhrase = n => `${n} program${n === 1 ? '' : 's'}`;
+const confPillName = (d, c, n) => `${confShared(c) ? `${c} (${d})` : c}, ${programsPhrase(n)}`;
 // Typing a search changes the counts without rebuilding the drawer (focus stays in the search box, as for #18).
 function syncConfCounts() {
   const sb = $('#sidebar'); if (!sb || !S.index) return;
@@ -1700,6 +1705,7 @@ function syncConfCounts() {
     const n = counts.get(confKey(b.dataset.confDiv, b.dataset.conf)) || 0;
     const sub = b.querySelector('.pill-sub'); if (sub) sub.textContent = String(n);
     b.title = confTitle(n);
+    b.setAttribute('aria-label', confPillName(b.dataset.confDiv, b.dataset.conf, n));
     b.classList.toggle('pill-zero', n === 0);
   });
 }
@@ -1764,14 +1770,14 @@ function renderSidebar() {
     const divisionBlock = divs.length > 1 ? `<div class="browse-label">Division</div>
       <div class="pill-row" role="group" aria-label="Division"><button ${pillAttrs('division', '', !f.division.length)}>All</button>${divs.map(d => {
         const n = S.index.byDiv[d] || 0;
-        return `<button ${pillAttrs('division', d, f.division.includes(d))} title="${esc(divisionName(d))} · ${n} programs">${esc(d)}<span class="pill-sub">${n}</span></button>`;
+        return `<button ${pillAttrs('division', d, f.division.includes(d))} title="${esc(divisionName(d))} · ${programsPhrase(n)}" aria-label="${esc(`${d} (${divisionName(d)}), ${programsPhrase(n)}`)}">${esc(d)}<span class="pill-sub">${n}</span></button>`;
       }).join('')}</div>` : '';
     // Conference, grouped under the divisions on screen. One group -> the flat row this page has always had.
     const groups = conferenceGroups();
     const counts = confCounts();
     const confPill = d => ([c]) => {
       const n = counts.get(confKey(d, c)) || 0;
-      return `<button ${pillAttrs('conf', c, confPicked(f.conf, d, c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
+      return `<button ${pillAttrs('conf', c, confPicked(f.conf, d, c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}" aria-label="${esc(confPillName(d, c, n))}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
     };
     const confAll = `<button ${pillAttrs('conf', '', !f.conf.length)}>All</button>`;
     const confBlock = groups.length <= 1

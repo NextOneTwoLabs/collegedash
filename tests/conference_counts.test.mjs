@@ -44,7 +44,9 @@ function pillStubs(html) {
   return [...html.matchAll(/<button ([^>]*\bdata-conf-div="([^"]*)"[^>]*)>[^<]*<span class="pill-sub">(\d+)<\/span><\/button>/g)].map(m => {
     const classes = new Set((/class="([^"]*)"/.exec(m[1])?.[1] || '').split(/\s+/));
     const sub = { textContent: m[3] };
-    return { dataset: { conf: unesc(/data-conf="([^"]*)"/.exec(m[1])[1]), confDiv: unesc(m[2]) }, title: '', sub,
+    const attrs = {};
+    return { dataset: { conf: unesc(/data-conf="([^"]*)"/.exec(m[1])[1]), confDiv: unesc(m[2]) }, title: '', sub, attrs,
+      setAttribute: (k, v) => { attrs[k] = String(v); },
       querySelector: sel => (sel === '.pill-sub' ? sub : null),
       classList: { toggle: (c, on) => (on ? classes.add(c) : classes.delete(c)), contains: c => classes.has(c) } };
   });
