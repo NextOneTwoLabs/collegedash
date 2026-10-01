@@ -426,7 +426,7 @@ def _parse_block_layout(soup: BeautifulSoup, base_url: str, season: int | None) 
                 links[label] = urljoin(base_url, a["href"])
         if not opponent:
             continue
-        games.append({
+        games.append(common.with_game_status({
             "date": date, "datetime": None,
             "exhibition": bool(re.search(r"exhibition", str(blk), re.I)),
             "conferenceGame": bool(blk.select_one(".schedule-item-team__conference")),
@@ -434,7 +434,7 @@ def _parse_block_layout(soup: BeautifulSoup, base_url: str, season: int | None) 
             "opponent": opponent, "opponentRank": rank,
             "location": common.clean(loc_el.get_text(" ")) if loc_el else None,
             "result": result, "score": score, "links": links,
-        })
+        }, res_el.get_text(" ") if res_el else None))  # #24
     return games
 
 
@@ -500,7 +500,7 @@ def _parse_schedule_original(html: str, base_url: str) -> dict:
             if a.get("href") and label:
                 links[label] = urljoin(base_url, a["href"])
         raw = str(it)
-        games.append({
+        games.append(common.with_game_status({
             "date": dt[:10] if dt else None,
             "datetime": dt,
             # WMT marks nothing explicitly; the recap title/URL is the only exhibition signal.
@@ -513,7 +513,7 @@ def _parse_schedule_original(html: str, base_url: str) -> dict:
             "result": result,
             "score": score,
             "links": links,
-        })
+        }, res_el.get_text(" ") if res_el else None))  # #24
     games = [g for g in games if g["opponent"]]
     return {"season": _season_from_title(soup), "games": games}
 
@@ -685,7 +685,7 @@ def _parse_redesign_cards(soup: BeautifulSoup, base_url: str, season: int | None
         res_el = card.select_one(".schedule-event-item-result, .schedule-event-grid-result")
         result, score = _result_score(res_el.get_text(" ")) if res_el else (None, None)
         loc_el = card.select_one(".schedule-event-location")
-        games.append({
+        games.append(common.with_game_status({
             "date": _date_from_text(date_el.get_text(" ") if date_el else "", season), "datetime": None,
             "exhibition": bool(EXHIBITION_RE.search(card.get_text(" "))),
             "conferenceGame": bool(card.select_one("[class*='conference-image']")
@@ -693,7 +693,7 @@ def _parse_redesign_cards(soup: BeautifulSoup, base_url: str, season: int | None
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
             "location": common.clean(loc_el.get_text(" ")) if loc_el else None,
             "result": result, "score": score, "links": _links(card, base_url),
-        })
+        }, res_el.get_text(" ") if res_el else None))  # #24
     return games
 
 
@@ -718,14 +718,14 @@ def _parse_wordpress_rows(soup: BeautifulSoup, base_url: str, season: int | None
         res = row.select_one(".schedule-list__result")
         result, score = _result_score(res.get_text(" ")) if res else (None, None)
         t = row.select_one("time")
-        games.append({
+        games.append(common.with_game_status({
             "date": _date_from_text(t.get_text(" ") if t else "", season), "datetime": None,
             "exhibition": bool(EXHIBITION_RE.search(row.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": common.clean(opp.get_text(" ")),
             "opponentRank": int(rank_el.get_text().strip("# ").split("/")[0]) if rank_el and rank_el.get_text().strip("# ").split("/")[0].isdigit() else None,
             "location": common.clean(loc_name.get_text(" ")) if loc_name else None,
             "result": result, "score": score, "links": _links(row, base_url),
-        })
+        }, res.get_text(" ") if res else None))  # #24
     for row in soup.select(".schedule-item"):
         team = row.select_one(".schedule-item__team")
         opp = team.select_one("h3") if team else None
@@ -745,13 +745,13 @@ def _parse_wordpress_rows(soup: BeautifulSoup, base_url: str, season: int | None
         res = row.select_one(".schedule-item__result")
         result, score = _result_score(res.get_text(" ")) if res else (None, None)
         d = row.select_one(".schedule-item__date")
-        games.append({
+        games.append(common.with_game_status({
             "date": _date_from_text(d.get_text(" ") if d else "", season), "datetime": None,
             "exhibition": bool(EXHIBITION_RE.search(row.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
             "location": common.clean(loc.get_text(" ")) if loc else None,
             "result": result, "score": score, "links": _links(row, base_url),
-        })
+        }, res.get_text(" ") if res else None))  # #24
     return games
 
 
@@ -782,13 +782,13 @@ def _parse_bordeaux(soup: BeautifulSoup, base_url: str, season: int | None) -> l
         links = {}
         for a in block.select(".results-container a[href]"):
             links["results"] = urljoin(base_url, a["href"])
-        games.append({
+        games.append(common.with_game_status({
             "date": _date_from_text(date.get_text(" ") if date else "", season), "datetime": None,
             "exhibition": bool(EXHIBITION_RE.search(block.get_text(" "))), "conferenceGame": False,
             "homeAway": home_away, "opponent": label, "opponentRank": rank,
             "location": common.clean(place.get_text(" ")) if place else None,
             "result": result, "score": score, "links": links,
-        })
+        }, res.get_text(" ") if res else None))  # #24
     return games
 
 

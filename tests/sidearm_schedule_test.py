@@ -225,6 +225,11 @@ def test_not_played_has_no_result() -> None:
     ok("canceled: the fixture really does say so", "Canceled" in raw)
     ok("canceled: 'Canceled' did not become the result letter",
        bool(wf) and wf["result"] != "C")
+    ok("FIX #24 canceled: the row carries status 'canceled'", bool(wf) and wf.get("status") == "canceled",
+       str(wf.get("status") if wf else None))
+    others = [x for x in g.values() if x is not wf]
+    ok("#24 canceled: no other row of the fixture carries a status key", all("status" not in x for x in others),
+       str([(x["opponent"], x.get("status")) for x in others if "status" in x]))
 
 
 def test_a_score_needs_a_result() -> None:
@@ -380,6 +385,9 @@ def test_both_branches_agree_on_the_contract() -> None:
     build.py reads `result`, `exhibition` and `conferenceGame` off these dicts to compute a
     season record, so a key present in one branch and absent in the other is a silent data bug
     rather than a cosmetic one. Fails the moment either branch grows or drops a key.
+
+    `status` (#24) is the one optional key: present, as 'canceled' or 'postponed', only on a game the school
+    marks as not played and that has no result; absent on every other game in both branches.
     """
     print("output contract")
     legacy = parse("schedule-legacy")["games"]
@@ -388,11 +396,14 @@ def test_both_branches_agree_on_the_contract() -> None:
     expected = {"date", "datetime", "exhibition", "conferenceGame", "homeAway",
                 "opponent", "opponentRank", "opponentSeed", "location", "result", "score", "links"}
     ok("contract: current-theme keys are the documented set",
-       set(current[0]) == expected, str(sorted(set(current[0]) ^ expected)))
+       set(current[0]) - {"status"} == expected, str(sorted((set(current[0]) - {"status"}) ^ expected)))
     for game in legacy:
         if not ok(f"contract: legacy row '{game['opponent']}' has the same keys",
-                  set(game) == expected, str(sorted(set(game) ^ expected))):
+                  set(game) - {"status"} == expected, str(sorted((set(game) - {"status"}) ^ expected))):
             break
+    ok("contract (#24): a status is canceled or postponed, and only on a game with no result",
+       all(g["status"] in ("canceled", "postponed") and g["result"] is None for g in legacy + current if "status" in g),
+       str([(g["opponent"], g.get("status"), g["result"]) for g in legacy + current if "status" in g]))
     ok("contract: every legacy result is W, L, T or None",
        all(x["result"] in ("W", "L", "T", None) for x in legacy),
        str(sorted({str(x["result"]) for x in legacy})))
