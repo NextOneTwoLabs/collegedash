@@ -10,7 +10,7 @@ request and is not checked. The robots.txt request itself is exempt, and each ho
 | Mode | What happens | Where |
 | --- | --- | --- |
 | `off` | no check in the hook (the code default; local runs) | |
-| `report` | **nothing is blocked and no delay changes.** Each request robots.txt would disallow is counted per collector, per call site (`athletics.bio`, `athletics.historyRoster`, `athletics.historySchedule`, `athletics.coachesPage`, `athletics.coachBio`, `camps.page`, `camps.newsArticle`, `camps.roster`, `news.page`, `news.rss`, `rpi.history`, or the collector's name) and per host | `refresh.yml` since #101 PR A |
+| `report` | **nothing is blocked and no delay changes.** Each request robots.txt would disallow is counted per collector, per call site (`athletics.bio`, `athletics.historyRoster`, `athletics.historySchedule`, `athletics.coachesPage`, `athletics.staffDirectoryProbe`, `athletics.coachBio`, `camps.page`, `camps.newsArticle`, `camps.roster`, `news.page`, `news.rss`, `rpi.history`, or the collector's name) and per host | `refresh.yml` since #101 PR A |
 | `enforce` | a disallowed request raises `RobotsDisallowed` before anything is sent, and every host's `Crawl-delay` applies | after the owner's bar below |
 
 The report is written to `public/archive/refresh-state.json` under `robots` (and the run's step summary). It holds

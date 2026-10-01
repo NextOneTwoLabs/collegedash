@@ -15,7 +15,7 @@ import json
 import re
 from urllib.parse import urljoin, urlparse
 
-from . import adapters, coach_bio, coach_bio_diag, common
+from . import adapters, coach_bio, coach_bio_diag, common, staff_dir_probe
 
 NAME = "athletics"
 # Club names as they appear in bios: 1-4 capitalised words ending in a club-ish token.
@@ -146,6 +146,16 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
             common.log(zero_staff_diagnostic(html, base, program["athletics"]["sportPath"]))
         except Exception as e:  # log-only: it must never fail a roster that was collected
             common.log(f"  !! zero-staff diagnostic failed ({type(e).__name__})")
+        # Issue #387 step 1: on a run that fetches the head coach's bio (weekly, full, onboard - never daily), probe
+        # the staff directory the roster page links, once per program per process, and log one name-free line.
+        # Nothing it reads is stored; `staff` stays empty. See collect/staff_dir_probe.py.
+        if (bios if coach_bios is None else coach_bios):
+            try:
+                line = staff_dir_probe.probe_once(slug, html, base)
+                if line:
+                    common.log(line)
+            except Exception as e:  # log-only, like the diagnostic above
+                common.log(f"  !! staff-directory probe failed ({type(e).__name__})")
 
     if bios:
         stored_bios = {p.get("bioUrl"): p for p in ((stored.get("roster") or {}).get("players") or []) if p.get("bioUrl")}

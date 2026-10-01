@@ -1010,6 +1010,26 @@ def fetch_json(url: str, **kw):
     return json.loads(body.decode("utf-8", "replace")), meta
 
 
+def fetch_no_redirect(url: str, *, timeout: int = 30) -> tuple[int, str | None, str]:
+    """One live GET of `url` that does NOT follow a redirect (issue #387): (status, Location or None, text).
+
+    fetch() follows redirects inside requests, so by the time its final URL names another host a request to that
+    host has already gone out. A caller that must never contact a host it has not checked - the staff-directory
+    probe - takes the 3xx back from here, checks the Location itself, and asks again only if it may. The one request
+    still goes through the polite transport (per-host gate, honest User-Agent, the #101 robots hook). No cache is
+    read or written, so nothing fetched here is kept, and there is no retry. A network error, or COLLEGEDASH_OFFLINE,
+    raises FetchError."""
+    if os.environ.get("COLLEGEDASH_OFFLINE"):
+        raise FetchError(f"offline: {redact(url)}")
+    try:
+        with _session() as s:
+            resp = s.get(url, headers=DEFAULT_HEADERS, timeout=timeout, allow_redirects=False)
+    except requests.RequestException as e:
+        raise FetchError(f"{type(e).__name__} for {redact(url)}", final_url=url) from e
+    location = resp.headers.get("Location") if resp.is_redirect else None
+    return resp.status_code, location, resp.text
+
+
 # ---------- registry ----------
 
 def load_registry() -> dict:
