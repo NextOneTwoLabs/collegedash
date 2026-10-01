@@ -187,7 +187,7 @@ def rebuild(tmp: str, rpi_dir: str | None = None) -> tuple[str, str]:
 def complaints(log: str) -> str:
     """The lines build's own validate pass prints when an invariant fails."""
     return "\n".join(l for l in log.splitlines()
-                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING", "STALE ", "MEMBERSHIP")))
+                     if l.startswith(("SEASONS ", "SCHEMA ", "RANK ", "TITLES ", "CAMPS", "MISSING", "STALE ", "MEMBERSHIP", "LIST")))
 
 
 def program(registry: dict, slug: str) -> dict:

@@ -103,6 +103,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             rel_file = os.path.join("data", "programs", f"{slug}.json")
         elif sub == "camps":
             rel_file = os.path.join("data", "camps", "index.json")
+        elif sub == "list":  # the slim list the site reads (issue #395)
+            rel_file = os.path.join("data", "list", "index.json")
         elif sub == "trends":
             rel_file = os.path.join("data", "trends", "index.json")
         elif sub == "commitments":

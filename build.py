@@ -4,6 +4,7 @@ curated.json and commitments.reviewed.json into the published profiles under pub
 
   public/data/programs/<slug>.json   full profile (what the dashboard renders)
   public/data/programs/index.json    one summary row per program (list/filter views)
+  public/data/list/index.json        the same rows, slimmed to what the list views read (issue #395)
   public/data/commitments/index.json every resolved commitment across programs
   public/data/camps/index.json       every published camp across programs, within the date window
 
@@ -2005,6 +2006,59 @@ def index_season(registry: dict, rpi_hist: dict, rpi_finals: dict, rpi_final: di
     return {**registry["season"], "finished": finished, "rpiFinal": rpi_final}
 
 
+# ---------- public/data/list/index.json: the slim list (issue #395) ----------
+# The rows of programs/index.json cut to what the list views read (the field inventory on #395, checked by Huatuo):
+# cards, Stats, search, filters, sorts, condition chips, Shortlist, ID Camps, Pipelines, the Compare chips and add-box,
+# and a profile page's row reads. /api/v1/programs keeps serving the full index, unchanged. Written compact: it is
+# downloaded and parsed on every visit, and on a phone the parse cost scales with the raw size.
+LIST_KEEP = ("slug", "name", "shortName", "nickname", "searchNames", "conference", "division", "colors", "city", "state",
+             "region", "ownership", "undergradEnrollment", "admissionRate", "sat25", "academicRank", "academicRankTied",
+             "tuitionInState", "tuitionOutOfState", "nationalTitles", "collegeCups", "rosterSize", "commitmentsByYear",
+             "completeness")
+# Three index fields are carried changed: rpiHistory -> rpi (the ranking season's rank only), lastSeason -> the three
+# fields the Record sort reads, fallClimate -> fallAvgHighF (the Fall-high condition). Everything else is dropped:
+# nothing reads it from a list row (the profile page and Compare read it from the profile).
+LIST_LAST_SEASON = ("year", "record", "gamesPlayed")
+LIST_DROPPED = ("currentSeason", "headCoach", "coachSince", "sat75", "stale", "failed", "builtAt", "tags",
+                "rpiHistory", "fallClimate")
+# #400's recommender reads these from list rows (agreed on #400, revision 2 §A); they must never be slimmed away.
+LIST_RECOMMENDER_FIELDS = ("slug", "name", "shortName", "division", "conference", "city", "state", "region",
+                           "undergradEnrollment")
+
+
+def list_path() -> str:
+    """Next to programs/, like trends/: a test that swaps PROGRAMS_OUT_DIR moves this file with it."""
+    return os.path.join(os.path.dirname(os.path.abspath(common.PROGRAMS_OUT_DIR)), "list", "index.json")
+
+
+def rpi_ranking_season(rows: list[dict]) -> int | None:
+    """The season the page's RPI figures mean: the newest year any row has a ranked season for (the page's
+    rpiSeasons() works out the same from rpiHistory; the slim list names it once instead)."""
+    return max((h["year"] for r in rows for h in (r.get("rpiHistory") or []) if h.get("year") is not None), default=None)
+
+
+def list_row(row: dict, rpi_season: int | None) -> dict:
+    out = {k: row.get(k) for k in LIST_KEEP}
+    if isinstance(out["completeness"], float):
+        out["completeness"] = round(out["completeness"], 2)
+    out["rpi"] = next((h.get("rank") for h in (row.get("rpiHistory") or []) if h.get("year") == rpi_season), None)
+    ls = row.get("lastSeason")
+    out["lastSeason"] = {k: ls.get(k) for k in LIST_LAST_SEASON} if ls else None
+    out["fallAvgHighF"] = (row.get("fallClimate") or {}).get("avgHighF")
+    return out
+
+
+def list_index(index_doc: dict) -> dict:
+    """The slim list, from the index document the same build wrote: same `updated`, same rows in the same order.
+    `season` is the index's without its _comment notes, plus rpiSeason; `finished` is always there (#249)."""
+    rows = index_doc["programs"]
+    rpi_season = rpi_ranking_season(rows)
+    season = {k: ({kk: vv for kk, vv in v.items() if not kk.startswith("_")} if isinstance(v, dict) else v)
+              for k, v in (index_doc.get("season") or {}).items() if not k.startswith("_")}
+    season["rpiSeason"] = rpi_season
+    return {"updated": index_doc["updated"], "season": season, "programs": [list_row(r, rpi_season) for r in rows]}
+
+
 def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset()) -> list[dict]:
     # The prune plan is decided before the first write, so a refused prune leaves the published tree untouched.
     published = [p for p in published_programs(registry)]
@@ -2045,9 +2099,10 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
         common.log(f"build: {program['slug']} completeness {profile['_build']['completeness']} "
                    f"({len(profile['commitments'])} commits, {len(profile['seasons'])} seasons)"
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
-    common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "season": index_season(registry, rpi_hist, rpi_finals, rpi_final),
-                       "programs": rows})
+    index_doc = {"updated": common.now_iso(), "season": index_season(registry, rpi_hist, rpi_finals, rpi_final),
+                 "programs": rows}
+    common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), index_doc)
+    common.write_json(list_path(), list_index(index_doc), compact=True)  # issue #395
     prune_profiles(prune_plan, {r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
@@ -2114,7 +2169,79 @@ def validate(registry: dict, verbose: bool = False) -> bool:
     membership_ok = check_membership_anchor(registry)
     staged_ok = check_staged_registry(registry)
     gate_ok = check_publish_gate(registry)
-    return ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok and gate_ok
+    list_ok = check_list_index()
+    return (ok and titles_ok and ranks_ok and seasons_ok and camps_ok and stale_ok and membership_ok and staged_ok and gate_ok
+            and list_ok)
+
+
+LIST_SCHEMA_PATH = os.path.join(os.path.dirname(common.SCHEMA_PATH), "list.schema.json")
+
+
+def list_complaints(list_doc, index_doc) -> list[str]:
+    """Everything wrong with the slim list against the full index it was built from (issue #395), as lines to print.
+
+    Same `updated`; the same slugs in the same order; every kept field equal (completeness to 2 places); each changed
+    field equal to what it is derived from; no dropped key on any row, so the list cannot silently grow back; the
+    fields #400's recommender reads present on every row; and season.rpiSeason and season.finished present."""
+    out = []
+    if not isinstance(list_doc, dict) or not isinstance(list_doc.get("programs"), list):
+        return ["the list is missing, or not an object with a `programs` list"]
+    if not isinstance(index_doc, dict) or not isinstance(index_doc.get("programs"), list):
+        return ["the full index is missing, so the list cannot be checked against it"]
+    if list_doc.get("updated") != index_doc.get("updated"):
+        out.append(f"`updated` {list_doc.get('updated')!r} is not the index's {index_doc.get('updated')!r}")
+    season = list_doc.get("season") or {}
+    rpi_season = rpi_ranking_season(index_doc["programs"])
+    if "rpiSeason" not in season or season.get("rpiSeason") != rpi_season:
+        out.append(f"season.rpiSeason is {season.get('rpiSeason')!r}, not the index's ranking season {rpi_season!r}")
+    if season.get("finished") != (index_doc.get("season") or {}).get("finished"):
+        out.append(f"season.finished is {season.get('finished')!r}, not the index's")
+    rows, full = list_doc["programs"], index_doc["programs"]
+    if [r.get("slug") if isinstance(r, dict) else None for r in rows] != [r.get("slug") for r in full]:
+        out.append(f"the list's slugs are not the index's, in the index's order ({len(rows)} rows against {len(full)})")
+        return out
+    for r, f in zip(rows, full):
+        slug = f["slug"]
+        want = list_row(f, rpi_season)
+        extra = sorted(set(r) - set(want))
+        dropped = sorted(set(r) & set(LIST_DROPPED))
+        if dropped:
+            out.append(f"{slug}: carries dropped field(s) {', '.join(dropped)}")
+        elif extra:
+            out.append(f"{slug}: carries field(s) the list does not define: {', '.join(extra)}")
+        missing = [k for k in LIST_RECOMMENDER_FIELDS if k not in r]
+        if missing:
+            out.append(f"{slug}: lacks {', '.join(missing)}, which #400's recommender reads")
+        wrong = [k for k in want if k in r and r[k] != want[k]]
+        if wrong:
+            out.append(f"{slug}: {', '.join(wrong)} differ from the index")
+        if len(out) >= 20:
+            out.append("... (stopped after 20)")
+            break
+    return out
+
+
+def check_list_index() -> bool:
+    """public/data/list/index.json must be exactly the slim cut of public/data/programs/index.json (issue #395), and
+    match schema/list.schema.json. Reports and does not raise, like check_camps_index."""
+    path, index_path = list_path(), os.path.join(common.PROGRAMS_OUT_DIR, "index.json")
+    try:
+        doc, index_doc = common.read_json(path), common.read_json(index_path)
+    except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
+        print(f"LIST: {path} or {index_path} is not readable JSON: {type(e).__name__}: {e}")
+        return False
+    lines = list_complaints(doc, index_doc)
+    schema = common.read_json(LIST_SCHEMA_PATH)
+    try:
+        import jsonschema
+    except ImportError:
+        jsonschema = None
+    if schema and jsonschema and isinstance(doc, dict):
+        errs = sorted(jsonschema.Draft202012Validator(schema).iter_errors(doc), key=lambda e: list(e.path))
+        lines += [f"schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}" for e in errs[:10]]
+    for line in lines:
+        print(f"LIST: {line}")
+    return not lines
 
 
 def check_camps_index(registry: dict) -> bool:

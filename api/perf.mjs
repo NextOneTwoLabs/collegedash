@@ -68,8 +68,10 @@ export function finishServer(request, env, tally, response, parts, kind, { rate 
 
 // ---- POST /api/perf: the page's timing report ----
 
-// The view each report is about, and the data file that view loads.
-export const VIEWS = { list: 'programs', profile: 'program', trends: 'trends', camps: 'camps' };
+// The view each report is about, and the data file(s) that view may load. The list view loads the full index
+// (/api/v1/programs, `programs`) until the page switches to the slim list (/api/v1/list, `list`; issue #395), and both
+// stay accepted so an open tab running the old page still reports, and before and after stay apart by `res`.
+export const VIEWS = { list: ['programs', 'list'], profile: ['program'], trends: ['trends'], camps: ['camps'] };
 const DEVICES = ['phone', 'tablet', 'desktop'];
 const NAVS = ['landing', 'in-app'];
 const CACHES = ['network', 'revalidated', 'memory'];
@@ -86,7 +88,7 @@ export function pagePoint(text, rate, request) {
   if (!b || typeof b !== 'object' || Array.isArray(b)) return null;
   const keys = Object.keys(b);
   if (keys.length !== FIELDS.length || !FIELDS.every(k => Object.hasOwn(b, k))) return null;
-  if (b.v !== 1 || !Object.hasOwn(VIEWS, b.view) || VIEWS[b.view] !== b.res) return null;
+  if (b.v !== 1 || !Object.hasOwn(VIEWS, b.view) || !VIEWS[b.view].includes(b.res)) return null;
   if (!DEVICES.includes(b.device) || !NAVS.includes(b.nav) || !CACHES.includes(b.cache)) return null;
   if (typeof b.rate !== 'number' || b.rate !== rate) return null;
   for (const k of [...TIMES, ...SIZES]) if (typeof b[k] !== 'number' || !Number.isFinite(b[k])) return null;

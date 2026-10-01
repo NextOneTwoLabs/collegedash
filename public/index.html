@@ -3401,7 +3401,8 @@ async function renderApiDocs() {
   const base = 'https://college.nextonetwo.com/api/v1';
   const docs = 'https://github.com/NextOneTwoLabs/collegedash/blob/main/docs/data-api.md';
   const routes = [
-    ['/programs', 'Every published program: the index the list, Stats and search read (name, division, conference, RPI, admission, tuition, commitments by class and more).'],
+    ['/programs', 'Every published program, every field: name, division, conference, RPI history, admission, tuition, commitments by class and more.'],
+    ['/list', 'The same programs, cut to the fields the site’s list, Stats and search read. Smaller and faster than /programs.'],
     ['/programs/{slug}', 'One program’s full profile: seasons, roster, schedule, staff, commitments, camps and each section’s sources. Slugs are the ones in /programs.'],
     ['/commitments', 'Recruiting commitments by graduating class, with their sources and status.'],
     ['/camps', 'Published ID camps and clinics, with dates and links.'],

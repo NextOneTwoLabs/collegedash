@@ -93,6 +93,11 @@ Issue #132, the registry merge after the rebase (the four conditions are Huatuo'
   registry-gates          build, then validate, fail after a merge: the sources branch carries the merged registry,
                           not the run's (condition 3).
   rebased-label           every attempt's fetch fails, so nothing was ever rebased: the final save says unrebased.
+
+Issue #395:
+  list-restore            the slim list (public/data/list/index.json) is a build output, restored tolerantly by
+                          publish_sources_only: a gated run leaves it exactly as main has it, or absent when main has
+                          none. A control without the restore line shows the fifth-output assertion stopping the step.
 """
 
 from __future__ import annotations
@@ -254,6 +259,9 @@ print(" ".join(p["slug"] for p in reg["programs"] if p["slug"] not in skip))' | 
     printf '{"programs": "%s", "builtAt": "%s"}\n' "$slugs" "$stamp" > public/data/programs/index.json
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/commitments/index.json
     printf '{"builtAt": "%s"}\n' "$stamp" > public/data/camps/index.json
+    # the slim program list (issue #395), a build output outside public/data/programs
+    mkdir -p public/data/list
+    printf '{"programs": "%s", "builtAt": "%s"}\n' "$slugs" "$stamp" > public/data/list/index.json
     if [ -f FIFTH_OUTPUT ]; then mkdir -p public/data/extra; printf '{"x": 1}\n' > public/data/extra/x.json; fi
     # the two review reports build() writes outside public/data (issues #228, #229), on every build.
     # The clubs report keeps just enough of clubs.Recorder's contract to see which copy the build read as
@@ -1158,6 +1166,62 @@ def test_rebased_label(tmp):
        and "everything except the push to main succeeded" not in out, out[-1500:])
 
 
+# ---------- issue #395: the slim list, a build output publish_sources_only must restore ----------
+
+LIST = "public/data/list/index.json"
+LIST_RESTORE = "git checkout FETCH_HEAD -- public/data/list/index.json 2>/dev/null || rm -f public/data/list/index.json\n"
+
+
+def without_list_restore(yml: str) -> tuple[str, int]:
+    """The workflow minus publish_sources_only's tolerant restore of the slim list: #395's control."""
+    return re.subn(r"[ ]*" + re.escape(LIST_RESTORE), "", yml)
+
+
+def test_list_restore(tmp):
+    print("list-restore (#395): publish_sources_only restores the slim list like every other build output")
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    # control: without the restore line, the run's own list survives the restore and the fifth-output assertion stops
+    # the step before anything is pushed - the assertion is what catches a build output nobody restores
+    text, n = without_list_restore(open(YML, encoding="utf-8").read())
+    ok("control: the list's restore line is found exactly once", n == 1, n)
+    code, out, origin, c1, _ = run_case(tmp, "list-restore-control", upstream=readme, run_markers=("VALIDATE_FAILS",), yml_text=text)
+    ok("control: the step fails", code != 0, out[-800:])
+    ok("control: nothing is pushed anywhere", branches(origin) == [] and git(origin, "rev-parse", "refs/heads/main") == c1, branches(origin))
+    ok("control: it is the fifth-output assertion that stopped it", "does not match" in out, out[-1200:])
+
+    # main has no list yet (before the first refresh with #395's build): the branch has none either
+    code, out, origin, c1, _ = run_case(tmp, "list-restore-absent", upstream=readme, run_markers=("VALIDATE_FAILS",))
+    bs = branches(origin)
+    ok("absent on main: the collection is on a sources branch", code != 0 and len(bs) == 1, (code, bs, out[-800:]))
+    if len(bs) == 1:
+        files = tree_files(origin, bs[0])
+        ok("FIX absent on main: the branch has no list either", LIST not in files, sorted(k for k in files if "list" in k))
+        ok("absent on main: public/data is exactly main's", data_view(files) == data_view(tree_files(origin, c1)))
+
+    # main has a list: a build failure after the rebase leaves exactly main's on the branch
+    main_list = b'{"programs": "alpha beta ghost", "builtAt": "main-list"}\n'
+    def with_list(files):
+        files = readme(files)
+        files[LIST] = main_list
+        return files
+    for marker in ("BUILD_FAILS", "VALIDATE_FAILS"):
+        code, out, origin, c1, _ = run_case(tmp, f"list-restore-main-{marker.lower()}", upstream=with_list, run_markers=(marker,))
+        bs = branches(origin)
+        ok(f"{marker}: the collection is on a sources branch", code != 0 and len(bs) == 1, (code, bs, out[-800:]))
+        if len(bs) == 1:
+            ok(f"FIX {marker}: the branch's list is main's, byte for byte", tree_files(origin, bs[0]).get(LIST) == main_list,
+               tree_files(origin, bs[0]).get(LIST))
+
+    # and when nothing fails, the rebuilt list is published with the rest of the build
+    code, out, origin, c1, _ = run_case(tmp, "list-published", upstream=with_list)
+    files = tree_files(origin, "refs/heads/main")
+    ok("published: the step succeeds", code == 0, out[-1200:])
+    ok("published: main gets the rebuilt list, not the one it had", files.get(LIST, b"") != main_list
+       and b'"builtAt": "built-' in files.get(LIST, b""), files.get(LIST))
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1174,7 +1238,7 @@ def main(argv=None) -> int:
              test_refused_hosts_file, test_stray_locks, test_review_reports_previous,
              test_registry_only_revert, test_registry_same_field, test_registry_identical, test_registry_untouched,
              test_registry_unexpected, test_registry_held, test_registry_script_fails, test_registry_retry,
-             test_registry_gates, test_rebased_label]
+             test_registry_gates, test_rebased_label, test_list_restore]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):

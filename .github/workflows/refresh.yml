@@ -267,7 +267,7 @@ jobs:
           # public/data is still restored before the commit, so that what lands on the branch is a
           # clean "sources ahead of data" snapshot rather than a half-written build. Only what
           # build() writes is restored: public/data/programs/**, commitments/index.json,
-          # camps/index.json. public/data/rpi/** and registry.json look derived but are *collected* -
+          # camps/index.json, trends/index.json and list/index.json (#395). public/data/rpi/** and registry.json look derived but are *collected* -
           # collect/rpi.py writes current.json and the weekly snapshots, and the site fetches
           # rpi/current.json directly - so restoring all of public/data would discard part of the
           # very collection this exists to save, and would leave a later build_only joining fresh
@@ -310,13 +310,16 @@ jobs:
             # The clubs & schools index (issue #230) is restored the same tolerant way, for the same
             # reason: upstream has none until the first refresh after that build lands.
             git checkout FETCH_HEAD -- public/data/trends/index.json 2>/dev/null || rm -f public/data/trends/index.json
+            # So is the slim program list (issue #395), which upstream has none of until the first refresh after its
+            # build lands. The fifth-output assertion below is what catches a build output missing from these lines.
+            git checkout FETCH_HEAD -- public/data/list/index.json 2>/dev/null || rm -f public/data/list/index.json
             if ! git checkout FETCH_HEAD -- public/data/programs public/data/commitments/index.json public/data/camps/index.json; then
               echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data could not then be restored to what $onto holds. Nothing was pushed anywhere: main is still $onto and the live site is unchanged - but this run's collection was NOT saved either, it exists only on this runner. Re-dispatch this workflow to collect again."
               exit 1
             fi
             git add -A
             if ! git diff --quiet FETCH_HEAD -- public/data data/clubs-review.json data/schools-review.json ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
-              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json, trends/index.json, data/clubs-review.json and data/schools-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json, trends/index.json, list/index.json, data/clubs-review.json and data/schools-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
               exit 1
             fi
             if git diff --quiet FETCH_HEAD --; then
@@ -332,7 +335,7 @@ jobs:
               echo "::warning title=refresh::$1 on the rebuild onto $onto, and pushing the collection to $branch was rejected. Retrying."
               return 1
             fi
-            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json (main's registry with this run's athletics.platform detections merged in, never the run's raw copy: issue 132), with everything build() writes (public/data/programs, commitments/index.json, camps/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
+            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json (main's registry with this run's athletics.platform detections merged in, never the run's raw copy: issue 132), with everything build() writes (public/data/programs, commitments/index.json, camps/index.json, trends/index.json, list/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
             return 0
           }
           # Issue #117: -X theirs settles content conflicts but not modify/delete. Every rebuild rewrites

@@ -91,3 +91,14 @@ test('page #/api: key required for direct use, the limits bound, a link to #api-
   assert.deepEqual(codes, ['200 / 304', '400', '401', '429', '503'], 'no 403: every bad key is 401');
   assert.doesNotMatch(PAGE, /Light use without a key is fine/);
 });
+
+test('every /api/v1 route the Worker serves is in docs/data-api.md and on the #/api page (#395 added /list)', async () => {
+  const { resolveResource } = await import('../api/data-api.mjs');
+  const routes = ['/programs', '/programs/{slug}', '/list', '/camps', '/trends', '/commitments', '/status'];
+  for (const r of routes) {
+    assert.ok(resolveResource('/api/v1' + r.replace('{slug}', 'ucla')).kind, `the Worker serves /api/v1${r}`);
+    assert.ok(DOCS.includes('| `/api/v1' + r + '` |'), `docs/data-api.md lists /api/v1${r}`);
+    assert.ok(PAGE.includes(`['${r}', `), `the #/api page lists ${r}`);
+  }
+  assert.equal(resolveResource('/api/v1/nope').status, 404, 'and nothing else resolves');
+});
