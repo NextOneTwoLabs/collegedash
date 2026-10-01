@@ -20,6 +20,7 @@ import os
 import re
 import urllib.parse
 from collections import Counter, defaultdict
+from decimal import ROUND_HALF_UP, Decimal
 
 import clubs
 import schools
@@ -2084,13 +2085,20 @@ def fit_path() -> str:
 
 def coldest_month_mean_f(climate: dict | None) -> float | None:
     """The coldest month's mean temperature, (normal high + normal low) / 2, rounded to 0.1F: the figure the label is
-    taken from and the page shows, so the two can never disagree. None unless all 12 months have both normals."""
+    taken from and the page shows, so the two can never disagree. None unless all 12 months have both normals.
+
+    The arithmetic is decimal, on the figures as published (repr), and a tie rounds half-up (away from zero): high 36.0
+    and low 17.9 give exactly 26.95, so 27.0 and four-season. Binary floats would store 26.95 as 26.9499... and round()
+    is half-even anyway, which gave 26.9 and cold (Bianque on #403). The coldest month is chosen on the exact means
+    and only then rounded; rounding is monotonic, so it is also the month with the lowest rounded mean."""
     means = []
     for m in (climate or {}).get("monthly") or []:
         hi, lo = m.get("tHighF"), m.get("tLowF")
-        if isinstance(hi, (int, float)) and isinstance(lo, (int, float)):
-            means.append((hi + lo) / 2)
-    return round(min(means), 1) if len(means) == 12 else None
+        if all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (hi, lo)):
+            means.append((Decimal(repr(hi)) + Decimal(repr(lo))) / 2)
+    if len(means) != 12:
+        return None
+    return float(min(means).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
 
 
 def climate_label(cold_f: float | None, station_km) -> tuple[str | None, str | None]:
@@ -2130,7 +2138,7 @@ def fit_constants() -> dict:
     return {"sizeBands": list(FIT_SIZE_BANDS),
             "climate": {"mildMinF": FIT_CLIMATE_MILD_MIN_F, "coldBelowF": FIT_CLIMATE_COLD_BELOW_F,
                         "maxStationKm": FIT_CLIMATE_MAX_STATION_KM,
-                        "measure": "coldest-month mean of the NOAA 1991-2020 monthly normals, (high + low) / 2, rounded to 0.1F"},
+                        "measure": "coldest-month mean of the NOAA 1991-2020 monthly normals, (high + low) / 2, rounded half-up to 0.1F"},
             "regions": {r: sorted(states) for r, states in REGIONS.items()}}
 
 

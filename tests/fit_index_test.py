@@ -9,9 +9,9 @@ the writer and build.validate's FIT checks end to end). Unit cases use made-up p
 public/; a local serve.py on a loopback port serves a scratch copy. Offline, under tests/netguard.
 
 Cases:
-  rules        the owner's D2 rule exactly: coldest-month mean of 12 monthly normals, rounded to 0.1F, then mild >=45,
-               four-season 27-45, cold <27, "unknown" past 50 km; the thresholds and 50 km on both sides; fewer than 12
-               months, no distance, no climate source.
+  rules        the owner's D2 rule exactly: coldest-month mean of 12 monthly normals, rounded half-up to 0.1F in decimal,
+               then mild >=45, four-season 27-45, cold <27, "unknown" past 50 km; the thresholds and 50 km on both sides;
+               exact .x5 ties (26.95, 44.95) and just below them; fewer than 12 months, no distance, no climate source.
   constants    the size bands (D1) and climate thresholds (D2) as approved, the regions as build.REGIONS, the taxonomy.
   committed    one entry per published slug in the index's order, exactly build.FIT_KEYS, the schema accepts it, the
                climate counts per division (printed), the 3 programs with no school or climate source, and the size.
@@ -37,6 +37,7 @@ import sys
 import tempfile
 import threading
 from collections import Counter
+from decimal import Decimal
 from functools import partial
 from http.server import ThreadingHTTPServer
 
@@ -105,6 +106,14 @@ def months(cold_mean: float, warm_mean: float = 70.0, spread: float = 20.0) -> l
     return out
 
 
+def months_hl(cold_high: float, cold_low: float) -> list[dict]:
+    """Twelve made-up monthly normals whose coldest month has exactly this normal high and low, as the profile would
+    publish them: the coldest-month mean then arises from (high + low) / 2 the way it does in real data."""
+    out = months(70.0)
+    out[0] = {"month": 1, "tHighF": cold_high, "tLowF": cold_low}
+    return out
+
+
 def profile(cold_mean=None, km=11.0, *, monthly=None, climate=True, school=True) -> dict:
     p = {}
     if climate:
@@ -129,6 +138,21 @@ def test_rules():
     ok("the label is taken from the rounded figure it shows: 26.96F rounds to 27.0, four-season",
        build.fit_entry(profile(26.96))["coldMonthMeanF"] == 27.0 and label(profile(26.96)) == ("four-season", None),
        build.fit_entry(profile(26.96)))
+    # Exact .x5 ties round half-up in decimal (Bianque on #403). Binary floats hold 26.95 as 26.9499..., and round() is
+    # half-even, so the old round(float, 1) gave 26.9 / 44.9 on the three tie inputs below; each was picked because it
+    # does (64.1/25.8 for 44.95: most pairs that give 44.95 happened to round up in float). The just-below cases guard
+    # the other side, and pass on the old code too: a fix must not round 26.94, 26.945 or 44.94 up.
+    for (hi, lo), want_f, want in (((26.95, 26.95), 27.0, "four-season"),
+                                   ((36.0, 17.9), 27.0, "four-season"),
+                                   ((64.1, 25.8), 45.0, "mild"),
+                                   ((26.94, 26.94), 26.9, "cold"),
+                                   ((36.0, 17.89), 26.9, "cold"),  # 26.945: one rounding, not two via 26.95
+                                   ((44.94, 44.94), 44.9, "four-season")):
+        e = build.fit_entry(profile(monthly=months_hl(hi, lo)))
+        real = " (montana-state-billings' real coldest month)" if (hi, lo) == (36.0, 17.9) else ""
+        ok(f"coldest month high {hi} low {lo}{real}, mean {(Decimal(repr(hi)) + Decimal(repr(lo))) / 2}F -> {want_f}F {want}",
+           (e["coldMonthMeanF"], e["climate"], e["climateUnknown"]) == (want_f, want, None),
+           (e["coldMonthMeanF"], e["climate"]))
     ok("the coldest month is the minimum of the 12 means, whichever month it is",
        build.coldest_month_mean_f({"monthly": list(reversed(months(31.0)))}) == 31.0)
     ok("a station exactly 50 km away is labelled", label(profile(30.0, km=50.0)) == ("four-season", None))
