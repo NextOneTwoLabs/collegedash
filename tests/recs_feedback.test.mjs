@@ -12,7 +12,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
-import { FIT, HTML, FOCUS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
+import { FIT, HTML, FOCUS, ON, ready, open, settle, plain, toastHtml } from './recs_page_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -22,7 +22,7 @@ const cardSlugs = (html) => [...html.matchAll(/class="card pcard[^"]*" data-slug
 const oracle = (pg, hidden = []) => R.rank({ list: { updated: pg.sb.S.index.updated, programs: pg.sb.S.index.programs }, fit: FIT, prefs: pg.sb.S.recs.saved,
   filter: (p) => pg.sb.matchesFilters(p, null), hidden });
 const doc = (pg) => JSON.parse(pg.store.get('cd.recs'));
-const toast = (pg) => pg.$('#recsToast');
+const toast = (pg) => ({ get hidden() { return pg.$('#recsToast').hidden; }, get innerHTML() { return toastHtml(pg); } });  // #440: two parts
 const OTHER = { 'cd.favorites': '["stanford"]', 'cd.compare': '["stanford","ucla"]', 'cd.filters': '{"conf":[],"region":[],"division":[],"sort":"name"}', 'cd.residency': '"CA"' };
 async function shown(storage = stored({}), page = {}) {
   const pg = await ready({ status: ON, storage, ...page });
@@ -210,7 +210,7 @@ test('the toast is cleared by the next action: choosing another sort, or showing
 test('the toast is a static node after #app, focusable by script (tabindex -1), so Clear never drops focus to <body>', async () => {
   const page = fs.readFileSync(HTML, 'utf8');
   const appLineEnd = page.indexOf('\n', page.indexOf('<div id="app">')), script = page.indexOf('<script>');
-  const at = page.indexOf('<div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>');
+  const at = page.indexOf('<div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden><span class="recs-toast-part" id="recsToastPrompt" hidden></span><span class="recs-toast-part" id="recsToastMsg" hidden></span></div>');
   assert.ok(appLineEnd > 0 && at > appLineEnd && at < script, 'the toast is not a focusable static node after #app');
   const pg = await shown();
   await pg.sb.recsClearAll();
