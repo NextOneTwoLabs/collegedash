@@ -714,10 +714,10 @@ def test_timezones() -> None:
     except ImportError as e:
         ok("timezonefinder is installed (requirements-registry.txt)", False, str(e))
     ok("no coordinates, no timezone", rb.timezone_at(None, -87.2) is None and rb.timezone_at(30.5, None) is None)
-    # F6: the refresh installs requirements.txt only, so the lookup must not be in it, and the extra must be capped
-    req = open(os.path.join(ROOT, "requirements.txt"), encoding="utf-8").read()
+    # F6: the refresh installs requirements.txt only, and the extra must be capped
     extra = open(os.path.join(ROOT, "requirements-registry.txt"), encoding="utf-8").read()
-    ok("timezonefinder is not in requirements.txt, which the data refresh installs", "timezonefinder" not in req)
+    # Whether the refresh can run without timezonefinder is no longer a string match on requirements.txt (issue #121):
+    # tests/refresh_imports_test.py runs the refresh's own code paths with the import refused and fails on any attempt.
     ok("requirements-registry.txt pins timezonefinder below 10", "timezonefinder>=6.5,<10" in extra, extra)
     refresh = open(os.path.join(ROOT, ".github", "workflows", "refresh.yml"), encoding="utf-8").read()
     tests_yml = open(os.path.join(ROOT, ".github", "workflows", "tests.yml"), encoding="utf-8").read()

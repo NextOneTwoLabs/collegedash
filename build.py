@@ -89,7 +89,7 @@ def _age_days(iso: str | None) -> float | None:
 
 # ---------- the published set ----------
 
-KNOWN_DIVISIONS = {"D1", "D2", "D3"}
+KNOWN_DIVISIONS = frozenset(common.DIVISIONS)  # derived, never listed again here (issue #121)
 _PROFILE_FILE = re.compile(r"([a-z0-9][a-z0-9-]*)\.json")
 
 
@@ -219,13 +219,29 @@ def check_membership_anchor(registry: dict) -> bool:
     return ok
 
 
-def check_no_stale_profiles(registry: dict) -> bool:
+def stray_profile_entries(out_dir: str) -> list[str]:
+    """Names in out_dir shaped like a profile (`<slug>.json`) that are NOT a regular file: a directory, or a symlink
+    to anything. profile_slugs_on_disk skips them and prune_profiles refuses to touch them, so nothing else ever
+    reports one, yet the deploy serves whatever sits there (issue #121)."""
+    if not os.path.isdir(out_dir):
+        return []
+    with os.scandir(out_dir) as it:
+        return sorted(e.name for e in it if _PROFILE_FILE.fullmatch(e.name) and not e.is_file(follow_symlinks=False))
+
+
+def check_no_stale_profiles(registry: dict, out_dir: str | None = None) -> bool:
     """Every profile on disk belongs to a published program (issue #110: a program that leaves the
-    published set must not stay reachable by URL)."""
-    stale = sorted(profile_slugs_on_disk(common.PROGRAMS_OUT_DIR) - {p["slug"] for p in published_programs(registry)})
+    published set must not stay reachable by URL), and nothing named like a profile is anything but a
+    regular file (issue #121)."""
+    out_dir = out_dir or common.PROGRAMS_OUT_DIR
+    stale = sorted(profile_slugs_on_disk(out_dir) - {p["slug"] for p in published_programs(registry)})
     for slug in stale:
         print(f"STALE {slug}: public/data/programs/{slug}.json is not a published program")
-    return not stale
+    stray = stray_profile_entries(out_dir)
+    for name in stray:
+        print(f"STRAY public/data/programs/{name}: named like a profile but not a regular file (a directory or a "
+              f"symlink); build never writes one and prune never removes one - delete it by hand")
+    return not stale and not stray
 
 
 # The publish gate's reviewed list (#94; Bianque's review of #252, plan revision 1 on #94): a published program

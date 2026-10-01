@@ -109,7 +109,7 @@ except ImportError:  # pragma: no cover - the data-before-#229 path
     _schools = None
 
 COMMIT_STATUSES = ("verbal", "signed")
-DIVISIONS = ("D1", "D2", "D3")
+DIVISIONS = tuple(common.DIVISIONS)  # common.DIVISIONS is the one list (issue #121)
 COMMIT_DIVISIONS = ("D1",)  # the owner's decision on #315: D2/D3 commits read "Not collected"
 COLUMNS = ("current", "past", "commits")
 KNOWN_CLUB = ("matched", "unmatched")

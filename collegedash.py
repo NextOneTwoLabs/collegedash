@@ -213,6 +213,19 @@ def hold_phrase(p: dict) -> str:
     return f"collectionHold {hold.get('reason') or '(no reason given)'}{since}"
 
 
+def hold_refusal(command: str, p: dict) -> list[str]:
+    """The lines a command logs when it refuses one explicitly named program under a collectionHold (issues #216,
+    #219): the slug, the hold's reason and date, its evidence, and what lifting it means. Never silently skipped."""
+    hold = collection_hold(p)
+    evidence = hold.get("evidence") if isinstance(hold, dict) else None
+    lines = [f"!! {command} refuses {p['slug']}: it is under a {hold_phrase(p)}. Nothing was collected."]
+    if evidence:
+        lines.append(f"   {evidence}")
+    lines.append("   A collection hold is a decision that this program is not to be collected; lift it in the "
+                 "registry first if that decision has changed.")
+    return lines
+
+
 def cmd_onboard(args):
     reg = common.load_registry()
     if (args.slug == "--all" or args.all) and (args.more_slugs or args.slugs_file):
@@ -245,14 +258,8 @@ def cmd_onboard(args):
         if held_slugs and len(slugs) == 1:
             # one program, named explicitly: refused, never silently skipped (issue #216). Overriding a
             # hold is a decision of its own and would need its own flag; there is none.
-            p = known[slugs[0]]
-            hold = collection_hold(p)
-            evidence = hold.get("evidence") if isinstance(hold, dict) else None
-            common.log(f"!! onboard refuses {p['slug']}: it is under a {hold_phrase(p)}. Nothing was collected.")
-            if evidence:
-                common.log(f"   {evidence}")
-            common.log("   A collection hold is a decision that this program is not to be collected; lift it in the "
-                       "registry first if that decision has changed.")
+            for line in hold_refusal("onboard", known[slugs[0]]):
+                common.log(line)
             return 2
         for s in held_slugs:
             common.log(f"onboard skips {s}: {hold_phrase(known[s])}")
@@ -525,6 +532,14 @@ def cmd_refresh(args):
     if unknown:
         common.log(f"!! unknown collector(s) in --only: {', '.join(unknown)} (known: {', '.join(COLLECTORS)}, rpi)")
         return 2
+    if args.slug:
+        program = common.get_program(args.slug, reg)
+        if collection_hold(program):
+            # a normal refresh never reaches a held entry (it is not onboarded), but --slug names one directly:
+            # refused the way onboard refuses it, before any request (issue #219)
+            for line in hold_refusal("refresh", program):
+                common.log(line)
+            return 2
     programs = [common.get_program(args.slug, reg)] if args.slug else list(common.iter_programs(reg))
     state = common.load_refresh_state() if args.failed else {}
 

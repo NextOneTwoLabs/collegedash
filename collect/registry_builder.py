@@ -69,7 +69,7 @@ from . import common
 from .wikipedia import MENS_TITLE_RE
 
 DIRECTORY_URL = "https://web3.ncaa.org/directory/api/directory/memberList?type=12&division={roman}&sportCode=WSO"
-DIVISION_ROMAN = {"D1": "I", "D2": "II", "D3": "III"}
+DIVISION_ROMAN = dict(common.DIVISIONS)  # common.DIVISIONS is the one list (issue #121)
 # Issue #99: every Wikipedia request here is a /wiki/ page, which en.wikipedia.org/robots.txt allows. It disallows
 # /api/ and /w/ for every agent, and this builder used both (the REST html and summary endpoints, the search API,
 # and index.php?action=raw), without ever asking robots_allowed(). Each request now goes through _wiki_fetch, which

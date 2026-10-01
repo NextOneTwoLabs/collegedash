@@ -42,6 +42,10 @@ CAMPS_OUT_DIR = os.path.join(PUBLIC_DATA_DIR, "camps")
 REGISTRY_PATH = os.path.join(PUBLIC_DATA_DIR, "registry.json")
 ARCHIVE_DIR = os.path.join(PUBLIC_DIR, "archive")
 REFRESH_STATE_PATH = os.path.join(ARCHIVE_DIR, "refresh-state.json")
+# The NCAA divisions, in order, with the NCAA Directory's roman numeral for each: the one list every other is derived
+# from (build.KNOWN_DIVISIONS, registry_builder.DIVISION_ROMAN, trends.DIVISIONS), so no two copies can drift apart
+# (issue #121).
+DIVISIONS: dict[str, str] = {"D1": "I", "D2": "II", "D3": "III"}
 
 PROGRAMS_DIR = os.path.join(ROOT, "programs")
 DATA_DIR = os.path.join(ROOT, "data")
