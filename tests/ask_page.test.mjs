@@ -133,7 +133,7 @@ for (const [name, status, probe] of OFF_CASES) {
     const { S } = pg.sb;
     assert.notEqual(S.ask, true, 'ask switched itself on'); // the page from before #165 has no S.ask at all
     pg.sb.renderSidebar();
-    assert.ok(pg.sidebar().includes('placeholder="School or mascot…"'));
+    assert.ok(pg.sidebar().includes('placeholder="School, mascot, state or city…"'));
     assert.ok(!/ask/i.test(pg.sidebar().replace(/aria-label="[^"]*"/g, '')), 'ask markup in the sidebar');
     await type(pg, NO_MATCH);
     assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
