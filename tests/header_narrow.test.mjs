@@ -22,6 +22,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseCss as parseRules, decls, exactLayout, LAYOUT } from './lib/css_cascade.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const HTML = process.env.HEADER_NARROW_TEST_HTML || path.join(HERE, '..', 'public', 'index.html');
@@ -43,31 +44,28 @@ const ROOTS = [{ tag: 'body', classes: [], attrs: [] }, { tag: 'html', classes: 
 const above = target => [...ELEMENTS[target].ancestors.map(t => ELEMENTS[t]), ...ROOTS];
 const READ = /^(display|visibility|content-visibility|font-size|font|gap|column-gap)$/;
 
-// Flatten a stylesheet into [{ media: [prelude, ...], selectors, decls, order }]; at-rules nest, comments go.
-function parseCss(text) {
-  const src = text.replace(/\/\*[\s\S]*?\*\//g, '');
-  const out = [];
-  let order = 0;
-  const walk = (chunk, media) => {
-    let i = 0;
-    while (i < chunk.length) {
-      const open = chunk.indexOf('{', i);
-      if (open < 0) break;
-      let depth = 1, j = open + 1;
-      while (j < chunk.length && depth) { if (chunk[j] === '{') depth++; else if (chunk[j] === '}') depth--; j++; }
-      const prelude = chunk.slice(i, open).trim(), body = chunk.slice(open + 1, j - 1);
-      if (prelude.startsWith('@')) walk(body, [...media, prelude]);
-      else out.push({ media, selectors: prelude.split(',').map(s => s.trim()).filter(Boolean), decls: body, order: order++ });
-      i = j;
-    }
-  };
-  walk(src, []);
-  return out;
-}
-const decls = text => text.split(';').map(d => d.trim()).filter(Boolean).map(d => {
-  const i = d.indexOf(':');
-  return { prop: d.slice(0, i).trim().toLowerCase(), value: d.slice(i + 1).trim() };
-});
+// [{ media: [prelude, ...], selectors, decls, order }], from the shared parser (tests/lib/css_cascade.mjs, #430).
+const parseCss = text => parseRules(text).map((r, order) => ({ media: r.at, selectors: r.selectors, decls: r.body, order }));
+
+// #430: the exact layout of the five header elements' own rules. resolve() below reads only display, font-size and gap;
+// a layout property it does not read (position, order, transform, margin, ...) added to one of these selectors, or a
+// changed value, fails here instead of passing silently.
+const EXACT = {
+  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100' },
+  '|.header-left': { display: 'flex', 'align-items': 'center', gap: '14px', 'min-width': '0' },
+  '|.wordmark': { 'font-size': '21px', 'letter-spacing': '-0.6px', 'line-height': '1', 'white-space': 'nowrap' },
+  '|.header-divider': { width: '1px', height: '24px' },
+  '|.section-label': { 'font-size': '14px', 'white-space': 'nowrap' },
+  '@media (max-width: 460px)|.header': { padding: '0 12px' },
+  '@media (max-width: 460px)|.header-left': { gap: '8px' },
+  '@media (max-width: 400px)|.header-left': { gap: '6px' },
+  '@media (max-width: 400px)|.wordmark': { 'font-size': '18px' },
+  '@media (max-width: 400px)|.section-label': { 'font-size': '13px' },
+  '@media (max-width: 359px)|.header-divider': { display: 'none' },
+  '@media (max-width: 359px)|.section-label': { display: 'none' },
+  '@media print|.header': { display: 'none' },
+};
+const exactHeader = text => exactLayout(parseRules(text), { watched: sel => sel in ELEMENTS, expected: EXACT, cannot: CANNOT });
 
 // true / false for a screen of `width`, or a loud failure for any form other than (max-width: Npx) / (min-width: Npx)
 // joined by "and", and `print` (never a screen).
@@ -104,20 +102,20 @@ function resolve(target, prop, width, rules) {
   const el = ELEMENTS[target];
   let value;
   for (const r of rules) {
-    const read = decls(r.decls).filter(d => READ.test(d.prop));
-    if (!read.length) continue;
+    const lay = decls(r.decls).filter(d => LAYOUT.test(d.prop) || READ.test(d.prop)), read = lay.filter(d => READ.test(d.prop));
+    if (!lay.length) continue;
     for (const sel of r.selectors) {
       const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop();
       // Anything that names the element's own class other than the bare class itself (`.section-label.x`,
       // `.section-label:hover`, `.header .section-label`) is a form this cascade does not evaluate.
       const names = el.classes.some(c => new RegExp(`\\.${c}(?![\\w-])`).test(last));
-      if (names && sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${read.map(d => d.prop).join('/')} on ${target}`);
+      if (names && sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${lay.map(d => d.prop).join('/')} on ${target}`);
       if (!mayMatch(last, el)) continue;
       // A context compound no element above it could match (`.trend-table a`) rules the selector out; one that could
       // (`.header .section-label`, `[data-theme] a`) leaves a selector this cascade does not evaluate: it fails below.
       if (!parts.every(p => above(target).some(a => mayMatch(p, a)))) continue;
-      if (sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${read.map(d => d.prop).join('/')} on ${target}`);
-      for (const d of read) {
+      if (sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${lay.map(d => d.prop).join('/')} on ${target}`);
+      for (const d of lay) {
         if (/!\s*important/i.test(d.value)) assert.fail(`${CANNOT} !important in "${sel} { ${d.prop}: ${d.value} }"`);
         if (/visibility$/.test(d.prop)) assert.fail(`${CANNOT} ${d.prop} on "${sel}"`);
         if (d.prop === 'font') assert.fail(`${CANNOT} the font shorthand on "${sel}"`);
@@ -136,6 +134,7 @@ const at = (target, prop, width) => resolve(target, prop, width, RULES);
 test('the cascade fails loudly on every form it cannot evaluate', () => {
   const run = extra => () => {
     const rules = parseCss(`${CSS}\n${extra}`);
+    exactHeader(`${CSS}\n${extra}`);
     for (const t of Object.keys(ELEMENTS)) for (const w of [320, 375, 1280]) { drawn(t, w, rules); resolve(t, 'font-size', w, rules); resolve(t, 'gap', w, rules); }
   };
   assert.doesNotThrow(run(''), 'the page\'s own CSS is not readable');
@@ -153,10 +152,21 @@ test('the cascade fails loudly on every form it cannot evaluate', () => {
     ['the font shorthand', '.wordmark { font: 800 30px sans-serif; }'],
     ['another at-rule', '@supports (display: grid) { .section-label { display: none; } }'],
     ['an ancestor hidden by a descendant rule', 'body .header-left { display: none; }'],
+    // #430: a layout property the resolver does not read, on a selector it knows, or in a form it does not evaluate
+    ['position on the label', '.section-label { position: absolute; }'],
+    ['order on the wordmark', '.wordmark { order: 2; }'],
+    ['a margin on the left group at <=400 px', '@media (max-width: 400px) { .header-left { margin-left: 4px; } }'],
+    ['a transform on the header', '.header { transform: translateX(10px); }'],
+    ['a changed value on a known selector', '@media (max-width: 400px) { .header-left { gap: 9px; } }'],
+    ['position in a descendant form', '.header .section-label { position: absolute; }'],
   ]) assert.throws(run(extra), new RegExp(CANNOT), `${name}: the cascade did not fail`);
   // and forms it does read change the answer, as they should
   assert.equal(drawn('.section-label', 1280, parseCss(`${CSS}\n.section-label { display: none; }`)), false);
   assert.equal(drawn('.section-label', 1280, parseCss(`${CSS}\n.header-left { display: none; }`)), false, 'an ancestor hiding it');
+});
+
+test('#430: the five header elements\' own rules set exactly the layout they did', () => {
+  assert.doesNotThrow(() => exactHeader(CSS));
 });
 
 test('the header markup still carries the section label and divider (only CSS hides them)', () => {

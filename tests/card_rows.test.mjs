@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { parseCss, decls, exactLayout } from './lib/css_cascade.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -29,48 +30,27 @@ const INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', '
 const CANNOT = 'the card-rows test cannot read';
 
 // ---------- (2) the CSS ----------
-function parseCss(text) {
-  const src = text.replace(/\/\*[\s\S]*?\*\//g, '');
-  const out = [];
-  const walk = (chunk, at) => {
-    let i = 0;
-    while (i < chunk.length) {
-      const open = chunk.indexOf('{', i);
-      if (open < 0) break;
-      let depth = 1, j = open + 1;
-      while (j < chunk.length && depth) { if (chunk[j] === '{') depth++; else if (chunk[j] === '}') depth--; j++; }
-      const prelude = chunk.slice(i, open).trim(), body = chunk.slice(open + 1, j - 1);
-      if (prelude.startsWith('@')) walk(body, [...at, prelude.replace(/\s+/g, ' ')]);
-      else out.push({ at, selectors: prelude.split(',').map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean), body });
-      i = j;
-    }
-  };
-  walk(src, []);
-  return out;
-}
-const decls = body => body.split(';').map(d => d.trim()).filter(Boolean).map(d => {
-  const i = d.indexOf(':');
-  return { prop: d.slice(0, i).trim().toLowerCase(), value: d.slice(i + 1).trim() };
-});
-// What can move a card part between rows or change how a part lays out its own children.
-const LAYOUT = /^(display|grid-row|grid-row-start|grid-row-end|grid-area|grid-template-rows|grid-template|grid|order|position|float|flex-direction|align-items|row-gap|gap)$/;
 // A selector "targets a card part" when its LAST compound carries one of the card's own classes, or a generic part
 // class (.body .meta .foot) under .pcard, or no class at all (a tag, `*`, a pseudo-class) under .pcard - so
-// `.band .nick` (inside the band) is not a part, but `.pcard > *:last-child` is.
+// `.band .nick` (inside the band) is not a part, but `.pcard > *:last-child` and `.pcard .band h3` are.
 const OWN = /\.(pcard|band|stripe|card-detail|titles|facts)(?![\w-])/, GENERIC = /\.(body|meta|foot)(?![\w-])/;
-const PART = {
-  test(sel) {
-    const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop(), under = /\.pcard(?![\w-])/.test(parts.join(' '));
-    return OWN.test(last) || (under && GENERIC.test(last)) || (under && !/\./.test(last.replace(/:[\w-]+(\([^)]*\))?/g, '')) && !/\./.test(last));
-  },
+const isPart = sel => {
+  const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop(), under = /\.pcard(?![\w-])/.test(parts.join(' '));
+  return OWN.test(last) || (under && GENERIC.test(last)) || (under && !/\./.test(last.replace(/:[\w-]+(\([^)]*\))?/g, '')) && !/\./.test(last));
 };
 const SUBGRID_AT = '@supports (grid-template-rows: subgrid)';
-// The forms read, and where: [at-rule or '', selector] -> the layout declarations expected there (exactly).
+// Every rule that sets a layout property (tests/lib/css_cascade.mjs LAYOUT) on a card part, with EXACTLY the layout
+// properties it sets (#430: a property added to a known selector - `.pcard .foot { order: -1 }` - must fail too).
 const EXPECTED = {
-  [`|.pcard`]: { display: 'flex' },  // the fallback card: a flex column, as before
-  [`|.band`]: { display: 'flex', 'flex-direction': 'column', 'align-items': 'flex-start', gap: '6px' },
-  [`|.facts`]: { display: 'grid', gap: '12px 16px' },
-  [`|.pcard .foot`]: { display: 'flex', 'align-items': 'center', gap: '8px' },
+  [`|.pcard`]: { display: 'flex', 'flex-direction': 'column', padding: '0', overflow: 'hidden' },  // the fallback card
+  [`|.band`]: { display: 'flex', 'flex-direction': 'column', 'align-items': 'flex-start', 'justify-content': 'flex-start', gap: '6px', padding: '14px 16px 12px' },
+  [`|.band .titles`]: { 'font-size': '11px', padding: '2px 8px', 'white-space': 'nowrap' },
+  [`|.stripe`]: { height: '5px' },
+  [`|.pcard .band h3`]: { 'font-size': '17px', 'line-height': '1.2' },
+  [`|.pcard .body`]: { flex: '1', padding: '14px 16px 12px' },
+  [`|.pcard .meta`]: { 'font-size': '12px', 'margin-bottom': '12px' },
+  [`|.facts`]: { display: 'grid', 'grid-template-columns': '1fr 1fr', gap: '12px 16px' },
+  [`|.pcard .foot`]: { display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', gap: '8px', padding: '6px 8px 6px 16px', 'font-size': '12px' },
   [`${SUBGRID_AT}|.grid.cards > .pcard`]: { display: 'grid', 'grid-row': 'span 5', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .band`]: { 'grid-row': '1' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .stripe`]: { 'grid-row': '2' },
@@ -79,22 +59,9 @@ const EXPECTED = {
   [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-detail`]: { 'grid-row': '2' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .foot`]: { 'grid-row': '5' },
 };
-// Every layout declaration on a card part, keyed as in EXPECTED; fails loudly on anything it does not read.
+// The card parts' layout, exactly as EXPECTED; fails loudly on anything else, and on a subgrid outside @supports.
 function cardLayout(rules) {
-  const got = {};
-  for (const r of rules) {
-    const ds = decls(r.body).filter(d => LAYOUT.test(d.prop));
-    if (!ds.length) continue;
-    for (const sel of r.selectors) {
-      if (!PART.test(sel)) continue;
-      const key = `${r.at.join(' ')}|${sel}`;
-      if (!(key in EXPECTED)) assert.fail(`${CANNOT} "${key}", which sets ${ds.map(d => d.prop).join('/')} on a card part`);
-      for (const d of ds) {
-        if (/!\s*important/i.test(d.value)) assert.fail(`${CANNOT} !important in "${key} { ${d.prop}: ${d.value} }"`);
-        (got[key] = got[key] || {})[d.prop] = d.value;
-      }
-    }
-  }
+  const got = exactLayout(rules, { watched: isPart, expected: EXPECTED, cannot: CANNOT });
   for (const r of rules) for (const d of decls(r.body))
     if (/subgrid/.test(d.value) && r.at.join(' ') !== SUBGRID_AT) assert.fail(`${CANNOT} subgrid outside ${SUBGRID_AT}: "${r.selectors.join(', ')}"`);
   return got;
@@ -114,14 +81,19 @@ test('the cascade check fails loudly on every form it cannot read', () => {
     ['the badge taken out of flow', '.band .titles { position: absolute; }'],
     ['subgrid outside @supports', '.grid.cards > .pcard { grid-template-rows: subgrid; }'],
     ['the band back to a row', '.pcard .band { flex-direction: row; }'],
+    // #430: a layout property added to, or changed on, a selector the check already knows (Bianque's three first)
+    ['order on the foot (Bianque)', '.pcard .foot { order: -1; }'],
+    ['order on the band (Bianque)', '.band { order: 1; }'],
+    ['position on the card (Bianque)', '.pcard { position: absolute; }'],
+    ['a changed value on a known selector', '.pcard .meta { margin-bottom: 40px; }'],
+    ['a transform on a subgrid part', `${SUBGRID_AT} { .grid.cards > .pcard > .stripe { transform: translateY(-20px); } }`],
   ]) assert.throws(run(extra), new RegExp(CANNOT), `${name}: the check did not fail`);
 });
 
-test('inside @supports subgrid: the card spans five tracks and every part names its own', () => {
+test('inside @supports subgrid: the card spans five tracks and every part names its own (exactly)', () => {
   const got = cardLayout(parseCss(CSS));
-  for (const [key, want] of Object.entries(EXPECTED)) {
-    for (const [prop, value] of Object.entries(want)) assert.equal(got[key]?.[prop], value, `${key} { ${prop} }`);
-  }
+  assert.deepEqual(Object.keys(got).sort(), Object.keys(EXPECTED).sort());
+  for (const [key, want] of Object.entries(EXPECTED)) assert.deepEqual({ ...got[key] }, want, key);
 });
 
 test('(c) the band is a column with the badge pill at its own width (align-items: flex-start)', () => {
