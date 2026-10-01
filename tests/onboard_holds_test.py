@@ -27,6 +27,10 @@ Cases:
                          held slug with its reason; a list of only held slugs is refused, exit 2
   single-held-refused    one held slug, typed or as the only line of a --slugs-file, is refused, exit 2,
                          naming the hold's reason and evidence, before rpi or any request
+  refresh-slug-held-refused
+                         `refresh --slug <held>` (issue #219) is refused the same way, exit 2, with or without
+                         --dry-run, before any collector, rpi or request; a slug with no hold still plans, and
+                         onboard's own refusal reads exactly as before (both now share hold_refusal)
   guards-kept            the #142/#172 guards still hold with holds present: a staged division is still
                          refused without --collect-staged-divisions (for --all, a list and a single slug),
                          and the MAX_BATCH limit still refuses a batch over 25 programs it can take - while
@@ -131,8 +135,8 @@ class Run:
         return next((l for l in self.out.splitlines() if slug in l and "skips" in l), "")
 
 
-def run_onboard(reg: dict, argv: list[str]) -> Run:
-    """`python collegedash.py onboard <argv>` in process, against a copy of `reg`."""
+def run_onboard(reg: dict, argv: list[str], command: str = "onboard") -> Run:
+    """`python collegedash.py <command> <argv>` in process (onboard, or refresh for #219), against a copy of `reg`."""
     r = Run()
     r.reg = copy.deepcopy(reg)
 
@@ -183,7 +187,7 @@ def run_onboard(reg: dict, argv: list[str]) -> Run:
         collect.rpi = fake_rpi
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            r.code = collegedash.main(["onboard"] + argv)
+            r.code = collegedash.main([command] + argv)
         r.out = buf.getvalue()
     finally:
         common.load_registry = saved["load_registry"]
@@ -305,6 +309,30 @@ def test_single_held_refused():
        r.code == 2 and r.slugs == [] and "refuses gulf-held" in r.out and "no-athletics-source" in r.out, r.out)
 
 
+def test_refresh_slug_held_refused():
+    print("refresh-slug-held-refused: refresh --slug <held> is refused the way onboard refuses it (issue #219)")
+    reg = mixed()
+    r = run_onboard(reg, ["--slug", "psac-held-1"], command="refresh")
+    ok("refresh: exit 2", r.code == 2, r.out[-400:])
+    ok("refresh: nothing collected", r.slugs == [], r.slugs)
+    ok("refresh: rpi was not asked", r.rpi == [], r.rpi)
+    ok("refresh: no socket was opened", r.connects == 0)
+    ok("refresh: the refusal names the slug and the hold's reason",
+       "refresh refuses psac-held-1" in r.out and "merged-scorecard-row" in r.out, r.out)
+    ok("refresh: the refusal quotes the hold's evidence", "Owner decision on #94: a test hold." in r.out, r.out)
+    r = run_onboard(reg, ["--slug", "gulf-held", "--dry-run"], command="refresh")
+    ok("refresh --dry-run: a held slug is refused too, and no plan is printed",
+       r.code == 2 and "refresh refuses gulf-held" in r.out
+       and not any(l.startswith("gulf-held:") for l in r.out.splitlines()), r.out)
+    r = run_onboard(reg, ["--slug", "d1-done", "--dry-run"], command="refresh")
+    ok("CONTROL refresh --slug of a program with no hold still plans it",
+       r.code == 0 and any(l.startswith("d1-done:") for l in r.out.splitlines()) and "refuses" not in r.out, r.out)
+    r = run_onboard(reg, ["psac-held-1"])
+    ok("CONTROL onboard's refusal reads as before",
+       r.code == 2 and "!! onboard refuses psac-held-1: it is under a collectionHold merged-scorecard-row, since 2026-09-16. "
+                       "Nothing was collected." in r.out, r.out)
+
+
 def test_guards_kept():
     print("guards-kept: the staged-division flag, the batch limit and the single-slug rule still hold")
     staged = registry([program("d1-done", "D1", "ACC", onboarded=True), program("psac-a"), program("psac-held-1", held=hold()),
@@ -348,7 +376,7 @@ def main(argv=None) -> int:
     global VERBOSE
     VERBOSE = "--verbose" in (argv if argv is not None else sys.argv[1:])
     for case in (test_all_skips_held, test_all_only_held, test_list_skips_held, test_single_held_refused,
-                 test_guards_kept, test_shipped_registry):
+                 test_refresh_slug_held_refused, test_guards_kept, test_shipped_registry):
         try:
             case()
         except Exception as e:  # a crash is a failure of that case, not the end of the suite
