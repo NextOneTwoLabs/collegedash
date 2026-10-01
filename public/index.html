@@ -437,11 +437,11 @@ tr:hover td { background: var(--row-hover); }
 .glance-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .glance-meta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
 .glance-follow { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-.glance-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+.glance-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
-.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-value { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }  /* #8: wraps, never clipped */
 .stat-of { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-sub { margin-top: 2px; font-size: 11px; color: var(--text-secondary); overflow-wrap: anywhere; }
 .glance-next { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
 .glance-next-opp { margin-top: 4px; font-size: 16px; font-weight: 700; }
 .glance-next-opp.muted { font-weight: 500; color: var(--text-secondary); }
@@ -598,6 +598,7 @@ a.pill { text-decoration: none; }
 .feedback .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .feedback-note { margin: 8px 0 0; min-height: 1.45em; color: var(--text-secondary); }
 .feedback-note.ok { color: var(--good-text); }
+.feedback-note.error { color: var(--danger-text); }  /* #47: the site's error colour, as .cond-error and .recs-error */
 
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
@@ -1855,12 +1856,20 @@ function renderSidebar() {
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference and region are plain filters; the class buttons only highlight (#15). All update, re-render the sidebar, re-render the list in place
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { if (b.dataset.conf) toggleConf(b.dataset.confDiv, b.dataset.conf); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  // #5: a pill press rebuilds the sidebar (renderSidebar replaces its markup), which used to drop keyboard focus onto
+  // <body>. pillPressed puts it back on the same pill - found again by its data-* key, a conference pill by its division
+  // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does).
+  const pillPressed = (attr, value, div) => {
+    if (isPhone()) { $('#sidebarToggle')?.focus(); return; }
+    const q = v => String(v).replace(/["\\]/g, '\\$&');
+    $('#sidebar')?.querySelector(`[data-${attr}="${q(value)}"]${div ? `[data-conf-div="${q(div)}"]` : ''}`)?.focus();
+  };
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('conf', c, d); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('region', v); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
   // selection to what is still on screen before the sidebar is rebuilt.
-  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
+  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('division', v); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('class', v); });
   wireConditions(sb);
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
@@ -4406,7 +4415,7 @@ async function renderProfile(slug, tab) {
   const rpiRow = (p.seasons || []).find(s => s.year === rpiSeason());
   const failed = p._build.failed || [];
   const notices = [];
-  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => ({ athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)', soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' }[f.collector] || f.collector)).join(', '))} - the source site could not be read.`);
+  if (failed.length) notices.push(`Some information could not be updated: ${esc(failed.map(f => collectorPhrase(f.collector)).join(', '))} - the source site could not be read.`);
   if (hiddenAsked) notices.push(`There is no ${tabNoun(hiddenAsked[0], p)} information for ${esc(displayName(p))}, so the ${esc(tabLabel(hiddenAsked[0], hiddenAsked[1], p))} tab is not shown.`);
   if (p._build.stale?.length) notices.push(`Some data has not been refreshed recently: ${esc(p._build.stale.map(s => s.replace(/:.*$/, '')).join(', '))}.`);
   const notice = notices.length ? `<div class="notice-bar">${notices.join(' ')}</div>` : '';
@@ -4451,7 +4460,7 @@ async function tabOverview(p) {
         ${posClassMatrix(p.roster)}
         <p class="small ink2" style="margin-top:8px">By class: ${Object.entries(p.roster.byClass).map(([k, v]) => `${k} ${v}`).join(' · ')} · <a href="#/p/${esc(p.slug)}/roster">Full roster →</a></p>` : '<div class="empty">Roster not collected yet.</div>'}</div>` : ''}
     </div>` : ''}
-    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · failing: ${esc(p._build.failed.map(f => f.collector).join(', '))}` : ''}${p._build.skipped?.length ? ` · skipped: ${esc(p._build.skipped.map(s => `${s.collector} (${s.reason.replace(/^[a-z]+: /, '').slice(0, 60)})`).join('; '))}` : ''}</div>`;
+    <div class="provenance">Profile built ${fmtDate(p._build.builtAt)} · completeness ${Math.round(p._build.completeness * 100)}% · missing: ${esc(Object.entries(p._build.sections).filter(([, v]) => !v).map(([k]) => k).join(', ') || 'nothing')}${p._build.failed?.length ? ` · could not be updated: ${esc(p._build.failed.map(f => collectorPhrase(f.collector)).join(', '))}` : ''}${p._build.skipped?.length ? ` · not collected for this program: ${esc(p._build.skipped.map(s => collectorPhrase(s.collector)).join(', '))}` : ''}</div>`;
 }
 
 /* The note under the Cost table. Division I and II wording is unchanged. Division III awards no athletic
@@ -4639,6 +4648,12 @@ async function tabNews(p) {
     ${n.latest.length ? `<div class="card"><h3>Latest</h3><ul style="padding-left:18px">${n.latest.map(li).join('')}</ul>${prov(n._meta)}</div>` : ''}</div>`;
 }
 
+/* #10: what each collector gathers, in the reader's words. The profile's notice and its footer name failed and skipped
+   sources this way; a collector's own reason ("no team article in the registry (…try `registry fix-wiki`)") is a note for
+   maintainers, kept in the build report, never shown on the page. */
+const COLLECTOR_PHRASES = { athletics: 'roster and schedule', news: 'news', camps: 'ID camps', tds: 'commitments (TopDrawerSoccer)',
+  soccerwire: 'commitments (SoccerWire)', wikipedia: 'history', climate: 'climate', scorecard: 'school facts' };
+const collectorPhrase = c => COLLECTOR_PHRASES[c] || 'other information';
 async function tabCamps(p) {
   // p.camps: { url, hubUrl, finalUrl, host, vendor, discoveredVia, robotsBlocked, fetchError, items[], _meta[] }
   // items carry kind (camp | news | curated), startDate/endDate (YYYY-MM-DD, or YYYY-MM when precision is
@@ -4658,7 +4673,9 @@ async function tabCamps(p) {
   const today = todayLocal(), month = today.slice(0, 7);
   const asOf = c._meta?.[0]?.asOf;
   const checked = asOf ? ` (checked ${fmtDate(asOf)})` : '';
-  const isPast = it => it.precision === 'month' ? it.startDate < month : (it.endDate || it.startDate) < today;
+  // #71: a month-precision camp is past once the month it ends in is over, (endDate || startDate) - build.py's
+  // camp_in_window rule - so a camp running into next month reads the same here as in the ID Camps view.
+  const isPast = it => it.precision === 'month' ? (it.endDate || it.startDate).slice(0, 7) < month : (it.endDate || it.startDate) < today;
   const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
   const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
@@ -4888,7 +4905,13 @@ async function renderApiDocs() {
   if (!panel || !form || !note) return;
   /* Not every failure comes from the Worker — a proxy or the local server answers in its own
      words — so end the sentence before the fallback rather than assuming it was punctuated. */
-  const fail = msg => { note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`; };
+  // #47: the failure is styled as one and takes focus, as success does, so a screen-reader user is not left on <body>.
+  const fail = msg => {
+    note.innerHTML = esc(/[.!?]$/.test(msg) ? msg : msg + '.') + ` Or email ${feedbackLink('us directly')}.`;
+    note.classList.add('error');
+    note.tabIndex = -1;
+    note.focus({ preventScroll: true });
+  };
   /* Send is type="button", not a submit control: if anything earlier in this script throws and the
      handler below is never attached, a native submit would reload the page and throw away what the
      visitor typed. requestSubmit() runs the same required/email validation a submit click would. */
@@ -4900,7 +4923,7 @@ async function renderApiDocs() {
     e.preventDefault();
     const btn = form.querySelector('button');
     btn.disabled = true;
-    note.classList.remove('ok');
+    note.classList.remove('ok', 'error');
     note.textContent = 'Sending…';
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     try {
