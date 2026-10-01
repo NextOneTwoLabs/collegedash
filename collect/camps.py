@@ -97,6 +97,59 @@ OTHER_SPORT_RE = re.compile(
 OTHER_SPORT_LOOSE_RE = re.compile(
     r"baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim|wrestling|gymnastics|hockey|rowing|"
     r"cheer|fencing|water-?polo|bowling|rifle|equestrian|esports|runningcamp|throwers|tumbling|rugby", re.I)
+# #76: the row-NAME sport rule. OTHER_SPORT_RE rejected 'Goalkeeper Dive Clinic' on 'dive' and 'Fast Track ID Camp'
+# on 'track'. A name now names another sport when it has
+#   * a strong sport word (NAME_SPORT_RE: OTHER_SPORT_RE minus #293's everyday words), as before; or
+#   * an everyday word as the camp's SUBJECT - right before camp/clinic/academy/school ('Dive Camp', 'Big Man Camp') -
+#     or in a fixed sport phrase ('track and field', 'swim & dive', 'spirit squad', 'dance team');
+# and a goalkeeper word outranks an everyday word, never a strong one: 'Goalkeeper Dive Clinic' and 'Keeper Diving
+# Clinic' are keeper drills, 'Field Hockey Goalkeeper Clinic' is not soccer. Every word is bounded, so 'Trackside',
+# 'Divers' or 'GKs' neither trip nor excuse anything. Only the name test uses these: sport-section headings, link
+# scoring and #80's evidence rule keep OTHER_SPORT_RE.
+NAME_SPORT_RE = re.compile(
+    r"\b(?:baseball|basketball|football|golf|lacrosse|tennis|volleyball|softball|swim(?:ming)?|"
+    r"cross[ -]country|wrestling|gymnastics|hockey|rowing|cheer(?:leading)?|fencing|squash|water[ -]polo|"
+    r"bowling|skiing|equestrian|sailing|esports|"
+    r"throwers?|pole[ -]vault|tumbling|acrobatics|powerlifting|rugby|pickleball|triathlon)\b", re.I)
+EVERYDAY_AS_SPORT_RE = re.compile(
+    r"\b(?:running|spirit|track|crew|dance|dive|diving|stunt|fantasy|rifle|big[ -]man|ski)\s+"
+    r"(?:camps?|clinics?|academy|school)\b"
+    r"|\btrack\s*(?:&|and)\s*field\b|\bswim(?:ming)?\s*(?:&|and)\s*div(?:e|ing)\b|\bspirit\s+squad\b|\bdance\s+team\b", re.I)
+KEEPER_RE = re.compile(r"\b(?:goal\s?keep(?:er|ers|ing)|keepers?|gk)\b", re.I)
+
+
+# #76 shadow line, for ONE Monday refresh after the change: collect() logs, per program, the rows the old rules would
+# have dropped (rule 1), the register links they would have skipped (rule 2) and the sessions they would have merged
+# (rule 3). Camp titles and rule numbers only - titles are already published - never a URL. Re-runs the old tests on
+# HTML already fetched, so it makes no request. Removal: issue #460.
+SHADOW_76 = True
+_shadow76_local = threading.local()  # per thread: programs are collected in parallel
+
+
+def _shadow76(rule: int, title: str | None) -> None:
+    if SHADOW_76:
+        if not hasattr(_shadow76_local, "rows"):
+            _shadow76_local.rows = []
+        _shadow76_local.rows.append(f"{title!r} (rule {rule})" if title else f"a register link (rule {rule})")
+
+
+def shadow76_line() -> str | None:
+    """The #76 shadow line for the rows this thread recorded since the last call, or None; clears the record."""
+    rows = collections.Counter(getattr(_shadow76_local, "rows", []))
+    _shadow76_local.rows = []
+    if not (SHADOW_76 and rows):
+        return None
+    return (f"camps: #76 kept {sum(rows.values())} the old rules dropped or merged: "
+            + "; ".join(r + (f" x{n}" if n > 1 else "") for r, n in rows.items()))
+
+
+def name_other_sport(name: str) -> bool:
+    """#76: whether a camp row's own name names a sport other than soccer (see NAME_SPORT_RE)."""
+    if NAME_SPORT_RE.search(name):
+        return True
+    return bool(EVERYDAY_AS_SPORT_RE.search(name)) and not KEEPER_RE.search(name)
+
+
 # #293: does a page's own text name another sport, making it an all-sport page? OTHER_SPORT_RE minus
 # its everyday words ('running', 'team spirit', 'track record', 'crew', 'dance', 'dive', 'stunt',
 # 'fantasy', 'rifle', 'big man', 'ski'): a coach's soccer-only site uses those in prose, and calling
@@ -823,6 +876,11 @@ REGISTER_TEXT_RE = re.compile(r"regist|sign[- ]?up|enroll|book|reserve", re.I)
 OTHER_SPORT_HOST_RE = re.compile(
     r"basketball|hoops|football|gridiron|softball|baseball|volleyball|tennis|lacrosse|golf|wrestl|"
     r"swim|dive|hockey|cheer|dance|spirit|track|gymnastics|rowing|crew|fencing|water-?polo|equestrian", re.I)
+# #76: English words that merely contain one of those tokens ('/camp-attendance/' is not a dance camp), removed before
+# OTHER_SPORT_HOST_RE is read - the NOT_CAMP_RE treatment ('campus', 'campaign'). The tokens stay unbounded for
+# joined-up hosts. None of the 2,299 stored camp URLs contains one of these words today.
+NOT_SPORT_HOST_RE = re.compile(r"attendance|guidance|abundance|accordance|divers(?:e|ity)|tracking|tracker|crewneck|"
+                               r"growing|throwing|borrowing|narrowing", re.I)
 # Button labels that a table's cost column yields instead of an amount ('See Prices' x14).
 PRICE_LABEL_RE = re.compile(r"^(?:see|view|check|click|more)?\s*(?:prices?|pricing|costs?|fees?|details?|info(?:rmation)?|"
                             r"here|below|register|registration|sign[- ]?up|tb[ad]|varies|n/?a|-|—|–)\s*$", re.I)
@@ -949,11 +1007,14 @@ def _sport_section(line: str) -> dict | None:
             "token": (ms or mo).group(0).lower()}
 
 
-def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named: str = "row",
+def _row_allowed(name: str, section: dict | None, *, is_hub: bool, named: str = "row",
                  evidence: str | None = None, page_is_soccer: bool = False) -> bool:
     """False when a row is another sport's or another gender's. The name is checked on its own
     (safe anywhere: 'Rod Ray Tennis Camp', "ORU Winter College Men's ID Camp I"); the enclosing
     section applies only on a page that is actually an all-sport hub (see HUB_SPORT_COUNT).
+
+    `is_hub` has no default (#76): it used to default to True, so a caller that forgot it got the stricter hub path,
+    and a rule whose failure is a silently missing camp must not default toward rejection. Every caller says which.
 
     `named` says where the row's name came from, and it is what issue #80 turns on. A name that is
     page chrome ('Camp/Clinic Information') or that was taken from the page title names no sport
@@ -998,7 +1059,7 @@ def _row_allowed(name: str, section: dict | None, *, is_hub: bool = True, named:
     evidence."""
     t = common.clean(name or "")
     soccer_name = bool(SOCCER_RE.search(t))
-    if OTHER_SPORT_RE.search(t) and not soccer_name:
+    if name_other_sport(t) and not soccer_name:  # #76: was OTHER_SPORT_RE, which read 'dive' and 'track' anywhere
         return False
     if MALE_RE.search(t) and not FEMALE_RE.search(t):  # MALE_RE does not fire inside "Women's"
         return False
@@ -1164,7 +1225,7 @@ def _page_camp_name(lines: list[tuple[str, object, list]]) -> str | None:
         for m in CAMP_PHRASE_RE.finditer(NOT_CAMP_RE.sub(" ", text)):
             cand = _clean_name(m.group(1))
             if 4 <= len(cand) <= 80 and len(cand.split()) >= 2 and not _is_chrome_name(cand) \
-                    and _row_allowed(cand, None):
+                    and _row_allowed(cand, None, is_hub=False):  # no section, so is_hub is never read (#76)
                 if best is None or len(cand) > len(best):
                     best = cand
         if best:
@@ -1216,8 +1277,10 @@ def _register_url(anchors, page_url: str, fallback=()) -> str | None:
                 continue
             if not (REGISTER_HREF_RE.search(url) or REGISTER_TEXT_RE.search(a.get_text(" ", strip=True) or "")):
                 continue
-            if OTHER_SPORT_HOST_RE.search(url) and not SOCCER_RE.search(url):
+            if OTHER_SPORT_HOST_RE.search(NOT_SPORT_HOST_RE.sub(" ", url)) and not SOCCER_RE.search(url):
                 continue
+            if OTHER_SPORT_HOST_RE.search(url) and not SOCCER_RE.search(url):
+                _shadow76(2, None)  # #76 shadow: the old rule skipped this link
             return url
         return None
 
@@ -1377,7 +1440,7 @@ def _dated_line_name(lines, i: int, published: str | None, section) -> str | Non
             return None
         cand = _clean_name(_camp_phrase(t, None))
         if cand and cand != "Camp" and len(cand.split()) >= 2 and not _is_chrome_name(cand) \
-                and _row_allowed(cand, section):
+                and _row_allowed(cand, section, is_hub=True):  # #76: today's value; it only picks a name, the final gate uses the real is_hub
             return cand
         return None
     return None
@@ -1506,6 +1569,25 @@ def _dedupe(entries: list[dict]) -> list[dict]:
     return [{k: v for k, v in e.items() if not k.startswith("_")} for e in out]
 
 
+# #76: tokens that make two nested camp names two SESSIONS rather than one camp seen twice.
+SESSION_WORD_RE = re.compile(r"^(?:sessions?|week|wk|part)$")
+SESSION_NUM_RE = re.compile(r"^(?:[1-9]|1[0-9]|i{1,3}|iv|vi{0,3}|ix|x)$")
+
+
+def _distinct_sessions(diff: set[str]) -> bool:
+    """#76: whether the tokens two nested names differ by mark separate sessions: a session word (session, week,
+    wk, part) with at most one number or Roman numeral ('Session 2', 'Week III', 'Part'), or a single bare number
+    1-19 or Roman numeral alone ('ID Camp 2', 'ID Camp II'). Anything else - 'Day 1', 'Ages 8-12', 'U12', '2-Day',
+    a year - is the same camp described more fully, and still merges."""
+    words = {t for t in diff if SESSION_WORD_RE.match(t)}
+    nums = {t for t in diff if SESSION_NUM_RE.match(t)}
+    if diff - words - nums:
+        return False
+    if words:
+        return len(words) == 1 and len(nums) <= 1
+    return len(nums) == 1
+
+
 def _merge_overlaps(entries: list[dict]) -> list[dict]:
     """Collapse one camp emitted as several overlapping rows into a single row spanning all of them.
 
@@ -1513,7 +1595,8 @@ def _merge_overlaps(entries: list[dict]) -> list[dict]:
     Jun 13-16, 15-19 and 17-20 for one camp series, all three named after the page. The rows share a
     name (equal, or one nesting inside the other) and their date ranges touch, so they are the same
     camp seen twice. Rows with the same name on dates that do NOT overlap are left alone - a real ID
-    camp series keeps every session."""
+    camp series keeps every session. Nor are rows whose names differ by a session token (#76,
+    _distinct_sessions): 'ID Camp' 06-10..12 and 'ID Camp Session 2' 06-12..14 used to collapse into one."""
     out: list[dict] = []
     for e in entries:
         if e.get("precision") != "day":
@@ -1529,6 +1612,9 @@ def _merge_overlaps(entries: list[dict]) -> list[dict]:
                 continue
             if e["startDate"] > o["endDate"] or o["startDate"] > e["endDate"]:
                 continue  # disjoint: two real sessions of the same camp
+            if _distinct_sessions(toks ^ otoks):
+                _shadow76(3, e["name"])  # #76 shadow: the old rule merged this session into its neighbour
+                continue  # #76: 'ID Camp' and 'ID Camp Session 2' are two sessions, even on touching dates
             o["startDate"] = min(o["startDate"], e["startDate"])
             o["endDate"] = max(o["endDate"], e["endDate"])
             if len(e["name"]) > len(o["name"]):
@@ -1692,6 +1778,10 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
                if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
                                evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)
                and (page_soccer is not False or _row_names_soccer(e))]
+    for e in entries:  # #76 shadow: a kept row the old name rule (OTHER_SPORT_RE anywhere in the name) dropped
+        t = common.clean(e["name"] or "")
+        if OTHER_SPORT_RE.search(t) and not SOCCER_RE.search(t):
+            _shadow76(1, t)
     if page_name and not _is_chrome_name(page_name):
         for e in entries:
             if _is_chrome_name(e["name"]):
@@ -1925,6 +2015,7 @@ def _news_camps(slug: str, base_host: str) -> tuple[list[dict], int]:
 # ---------- collector ----------
 
 def collect(program: dict, registry: dict) -> dict:
+    shadow76_line()  # #76: start this program's shadow record empty
     slug = program["slug"]
     a = program["athletics"]
     base = a.get("baseUrl")
@@ -2027,6 +2118,9 @@ def collect(program: dict, registry: dict) -> dict:
     data["newsCamps"], data["newsScanned"] = _news_camps(slug, base_host)
     if data["newsCamps"]:
         common.log(f"camps: {len(data['newsCamps'])} camp entries from {data['newsScanned']} archived news items")
+    shadow = shadow76_line()  # #76: titles and rule numbers only; this program's page and news rows
+    if shadow:
+        common.log(shadow)
     _sanitize_urls(data)
     data = common.unwrap_links(data)  # any wrapper outside the URL fields _sanitize_urls knows (#160)
     common.save_source(slug, NAME, data, url=_http_url(source_url) or roster_url, collector=NAME)
