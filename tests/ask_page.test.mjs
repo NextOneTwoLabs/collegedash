@@ -136,7 +136,7 @@ for (const [name, status, probe] of OFF_CASES) {
     assert.ok(pg.sidebar().includes('placeholder="School or mascot…"'));
     assert.ok(!/ask/i.test(pg.sidebar().replace(/aria-label="[^"]*"/g, '')), 'ask markup in the sidebar');
     await type(pg, NO_MATCH);
-    assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss) or the mascot');
+    assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
     assert.equal(key(pg, 'Enter'), false);
     await settle();
     assert.equal(pg.sb.location.hash, '', 'Enter with no match did something');
@@ -226,10 +226,16 @@ test('on: with a name match, Enter still opens the profile and Shift+Enter asks 
   await settle();
   assert.equal(pg.askRequests().length, 1, 'Shift+Enter did not ask');
   assert.equal(pg.sb.location.hash, '', 'Shift+Enter opened the profile');
+  // The answer just applied ACC + South + admission under 30%. Since #23, Enter opens only a match those filters
+  // show, so the name here is one they keep (Duke); Stanford, in the West, is hidden and Enter leaves it closed.
   await type(pg, 'stanford');
   key(pg, 'Enter');
   await settle();
-  assert.equal(pg.sb.location.hash, '#/p/stanford');
+  assert.equal(pg.sb.location.hash, '', 'Enter opened Stanford, which the applied filters hide');
+  await type(pg, 'duke');
+  key(pg, 'Enter');
+  await settle();
+  assert.equal(pg.sb.location.hash, '#/p/duke');
   assert.equal(pg.askRequests().length, 1, 'Enter asked although a name matched');
 });
 

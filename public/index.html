@@ -654,6 +654,60 @@ function tokensPrefixWords(qToks, words) {
   const used = new Set();
   return qToks.every(t => { const i = words.findIndex((w, k) => !used.has(k) && w.startsWith(t)); if (i < 0) return false; used.add(i); return true; });
 }
+/* ---------- search by place (#404 phase 1) ----------
+   A query that names a place also lists the programs there: a full state name ("Ohio", "new york"), a two-letter
+   state code typed in capitals ("OH"), a city ("Columbus"), or a city and its state ("Columbus OH", "Columbus,
+   Ohio"). The query must be the whole place - "Ohi" lists the schools whose names start that way, not Ohio's
+   programs - so typing never floods the list on the way to a name.
+   - Place hits rank BELOW every name hit: they score 20, under the weakest name hit (a mascot, 30). "Georgia" and
+     "Washington" therefore still list those schools first, then the programs in the state (and, for Washington,
+     the city: Washington, DC).
+   - A code counts only in capitals, because nearly every two-letter start of a school name is also a code: "pa" on
+     the way to "Pacific" must not add every Pennsylvania program. After a city the state is unambiguous, so
+     "columbus oh" works in any case.
+   - The card's "why" line says what matched ("in Ohio", "Columbus, OH").
+   - A program with no state or city (emmanuel-ga, simon-fraser and claremont-mudd-scripps today) never matches a
+     place; it is still found by name.
+   `raw` is the query as typed, needed only for the capitals rule; callers without one (a URL segment) get no code
+   match. */
+const STATE_NAMES = { AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado',
+  CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho',
+  IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland',
+  MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana', NE: 'Nebraska',
+  NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina',
+  ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina',
+  SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
+  WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming' };
+const STATE_BY_NAME = new Map(Object.entries(STATE_NAMES).map(([code, name]) => [normText(name), code]));
+let placeMemo = null;  // the last query's place; matchScore asks once per program, the answer is per query
+function placeQuery(q, raw) {
+  const key = `${q}\u0000${raw ?? ''}`;
+  if (placeMemo?.key === key) return placeMemo.place;
+  let place = null;
+  if (q) {
+    const typed = String(raw ?? '').trim(), toks = wordsOf(q);
+    place = { state: STATE_BY_NAME.get(q) || (/^[A-Z]{2}$/.test(typed) && STATE_NAMES[typed] ? typed : null), city: q, cityIn: null };
+    for (let k = toks.length - 1; k >= 1; k--) {  // "columbus oh", "rochester new york": a city, then its state
+      const tail = toks.slice(k).join(' ');
+      const code = STATE_BY_NAME.get(tail) || (tail.length === 2 && STATE_NAMES[tail.toUpperCase()] ? tail.toUpperCase() : null);
+      if (code) { place.cityIn = [toks.slice(0, k).join(' '), code]; break; }
+    }
+  }
+  placeMemo = { key, place };
+  return place;
+}
+function placeMatch(p, q, raw) {
+  const s = p._search, pl = placeQuery(q, raw);
+  if (!s || !pl || !p.state) return null;
+  if (pl.state === p.state) return { score: 20, why: `in ${STATE_NAMES[p.state] || p.state}`, place: true };
+  if (s.city && (s.city === pl.city || (pl.cityIn && s.city === pl.cityIn[0] && p.state === pl.cityIn[1])))
+    return { score: 20, why: `${p.city}, ${p.state}`, place: true };
+  return null;
+}
+// True when the hits include a program listed ONLY for its place (a name hit outranks and replaces a place hit): Enter
+// then shows the list rather than opening one program. "Stanford" is also a city, but the one program there is
+// Stanford itself, a name hit, so Enter still opens it. `hits` defaults to the ones the filters let through (#23).
+const placeQueryHits = (hits = visibleMatches()) => hits.some(h => h.m.place);
 function prepareSearch(p) { // once per program, when the program list is loaded
   const short = normText(p.shortName || p.name);
   const seen = new Set(), names = [];
@@ -664,10 +718,11 @@ function prepareSearch(p) { // once per program, when the program list is loaded
     names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
   }
   p._search = { short, shortWords: wordsOf(short), initials: wordsOf(short).map(w => w[0]).join(''), names,
-    nick: normText(p.nickname), nickWords: wordsOf(normText(p.nickname)) };
+    nick: normText(p.nickname), nickWords: wordsOf(normText(p.nickname)), city: normText(p.city) };
 }
 // returns {score, why} or null. Higher score = better match; `why` names the matched text when it is not the short name.
-function matchScore(p, q) {
+// `raw` is the query as typed (for the place match's capitals rule); a place hit comes last, below every name hit.
+function matchScore(p, q, raw) {
   const s = p._search, toks = wordsOf(q), joined = q.replace(/ /g, '');
   if (!s || !toks.length) return null;
   if (s.short === q) return { score: 100 };
@@ -689,11 +744,19 @@ function matchScore(p, q) {
   if (best) return best;
   if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords))) return { score: 30, why: p.nickname };
   if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
-  return null;
+  return placeMatch(p, q, raw);
 }
-function searchMatches(q = S.q, limit = Infinity) {
+/* #23: the search box's own hits, cut to what the active filters (division, conference, region, conditions) let
+   through - the same predicate the list and the ID Camps view use - so the status count and Enter describe the
+   list on screen. Enter never opens a program the filters hide, and "Ohio" under a West filter says so instead of
+   "44 matches" over an empty list. */
+function visibleMatches() {
+  const hits = searchMatches(), score = new Map(hits.map(h => [h.p.slug, h.m.score]));
+  return hits.filter(h => matchesFilters(h.p, score));
+}
+function searchMatches(q = S.q, limit = Infinity, raw = q === S.q ? S.qRaw : null) {
   if (!S.index || !q) return [];
-  return S.index.programs.map(p => ({ p, m: matchScore(p, q) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score).slice(0, limit);
+  return S.index.programs.map(p => ({ p, m: matchScore(p, q, raw) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score).slice(0, limit);
 }
 
 /* ---------- condition chips: the field registry (issue #166) ----------
@@ -1569,7 +1632,15 @@ function renderSidebar() {
     q.addEventListener('keydown', e => {
       // Ask (#165), only when switched on: Shift+Enter always asks; Enter asks when no name matches.
       if (e.key === 'Enter' && S.ask && S.qRaw.trim() && (e.shiftKey || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
-      else if (e.key === 'Enter') { const top = searchMatches()[0]; if (top) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${top.p.slug}`; } }
+      // #404: a place query ("Ohio", "OH", "Columbus") is a request for a list, even when a school is also named
+      // that way, so Enter shows the list - closing the drawer on a phone - instead of opening the first program.
+      // The ID Camps view is a list too: it is already narrowed to those programs, so Enter stays there.
+      // #23: both read the hits the active filters let through, so Enter never opens a program the list hides.
+      else if (e.key === 'Enter') {
+        const hits = visibleMatches();
+        if (placeQueryHits(hits)) { e.preventDefault(); closeDrawer(); q.blur?.(); if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/'; }
+        else if (hits[0]) { q.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${hits[0].p.slug}`; }
+      }
       else if (e.key === 'Escape') { q.value = ''; setQuery(''); }
     });
     $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
@@ -1644,9 +1715,14 @@ function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
   if (S.ask) renderAskSlot();
   if (!S.q) { el.textContent = ''; return; }
-  const n = searchMatches().length;
-  if (S.ask) { el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first · Shift+Enter asks` : 'No name match · Enter asks'; return; }
-  el.textContent = n ? `${n} match${n === 1 ? '' : 'es'} · Enter opens the first` : 'No match - try the short name (UCLA, Ole Miss) or the mascot';
+  // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
+  const hits = visibleMatches(), n = hits.length, all = searchMatches().length;
+  const count = `${n} match${n === 1 ? '' : 'es'}${all > n ? ` · ${all - n} more outside your filters` : ''}`;
+  const enter = placeQueryHits(hits) ? 'Enter shows the list' : 'Enter opens the first';
+  const hidden = `No match within your filters (${all} without them)`;
+  if (S.ask) { el.textContent = n ? `${count} · ${enter} · Shift+Enter asks` : all ? `${hidden} · Shift+Enter asks` : 'No name match · Enter asks'; return; }
+  el.textContent = n ? `${count} · ${enter}` : all ? hidden
+    : 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city';
 }
 
 /* ---------- ask (issue #165, AI prototype 1) ----------
@@ -1902,7 +1978,7 @@ function wireCharts(root) {
    everything EXCEPT the chips, which is the set the hidden-for-missing-data count is taken over. */
 const matchesFilters = (p, score, conds = S.filters.cond) => {
   const f = S.filters;
-  return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q)))
+  return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q, S.qRaw)))
     && (!f.conf.length || f.conf.includes(p.conference))
     && (!f.region.length || f.region.includes(p.region))
     && (!f.division.length || f.division.includes(p.division))
@@ -1911,7 +1987,7 @@ const matchesFilters = (p, score, conds = S.filters.cond) => {
 function filteredPrograms() {
   const idx = S.index, f = S.filters;
   const score = new Map();
-  idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
+  idx.programs.forEach(p => { const m = S.q ? matchScore(p, S.q, S.qRaw) : null; p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
   let rows = idx.programs.filter(p => matchesFilters(p, score));
   const cmp = sortCmp(f.sort, sortDir());
   rows.sort((a, b) => (S.q ? (score.get(b.slug) - score.get(a.slug)) : 0) || cmp(a, b));
@@ -2008,7 +2084,7 @@ async function renderList() {
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
-  const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State) or the mascot (Gauchos).</div>` : '<div class="empty">No programs match these filters.</div>';
+  const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
   const app = $('#app');
@@ -2611,7 +2687,7 @@ function trendsOptions(kind, q) {
     let list;
     if (nq) {
       const n2 = normText(q), exact = x => normText(x.m.why) === n2; // "cardinal": the Cardinal before the Cardinals
-      list = TR.progs.map(p => ({ p, m: matchScore(p, n2) })).filter(x => x.m)
+      list = TR.progs.map(p => ({ p, m: matchScore(p, n2, q) })).filter(x => x.m)
         .sort((a, b) => b.m.score - a.m.score || exact(b) - exact(a) || players(b.p) - players(a.p)).map(x => ({ p: x.p, sub: `${line(x.p)}${x.m.why ? ` · ${esc(x.m.why)}` : ''}` }));
     } else if (following) {
       list = trendsQuery(doc, others).filter(r => TR.progSet.has(r.slug)).map(r => ({ ...r, label: displayName(TR.byProgram.get(r.slug)) })).sort(order)
@@ -3331,7 +3407,7 @@ async function renderCompare() {
   const add = $('#cmpAdd'), res = $('#cmpResults');
   if (add) {
     add.addEventListener('input', () => {
-      const hits = searchMatches(normText(add.value), 8).filter(h => !S.compare.includes(h.p.slug));
+      const hits = searchMatches(normText(add.value), 8, add.value).filter(h => !S.compare.includes(h.p.slug));
       res.hidden = !add.value || !hits.length;
       res.innerHTML = hits.map(h => `<button type="button" data-add="${esc(h.p.slug)}">${swatchesHtml(h.p)}<span class="prog-stack"><span>${esc(displayName(h.p))}</span><span class="team-sub">${programLine(h.p)}</span></span></button>`).join('');
       res.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { if (toggleCompare(b.dataset.add)) location.hash = compareUrl(S.compare); });
