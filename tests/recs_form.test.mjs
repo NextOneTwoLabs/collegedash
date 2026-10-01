@@ -251,7 +251,7 @@ test('a saved set comes back into the form on the next page load', async () => {
 // ---------- storage that is missing, corrupt, unavailable or from another version ----------
 
 test('A10: corrupt JSON or the wrong shape starts the form empty, says so once, and rewrites nothing until a save', async () => {
-  for (const raw of ['{"v":1,"prefs":', '[1,2]', '"text"', '{"prefs":{}}', '{"v":"1"}']) {
+  for (const raw of ['{"v":1,"prefs":', '[1,2]', '"text"', '{"v":-1}', '{"v":"1"}', '{"other":1}'] /* {"prefs":{}} is v0 now: migrated (PR 6) */) {
     const pg = await ready({ status: ON, storage: { 'cd.recs': raw } });
     await open(pg);
     assert.deepEqual(plain(pg.sb.S.recs.notices), ['corrupt'], raw);
