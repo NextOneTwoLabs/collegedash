@@ -210,6 +210,7 @@ tr:hover td { background: var(--row-hover); }
 .pill.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
 .pill .pill-sub { font-size: 10px; font-weight: 500; opacity: 0.65; margin-left: 5px; }
 .pill.active .pill-sub { opacity: 0.85; }
+.pill.pill-zero:not(.active) { color: var(--text-secondary); border-style: dashed; }  /* #16: 0 with the other filters */
 /* Condition chips (issue #166): a pill that carries its own remove button, and the add form under the row. */
 .cond-chip { display: inline-flex; align-items: center; gap: 2px; padding: 2px 2px 2px 12px; cursor: default; background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); text-align: left; }
 .cond-chip:hover { color: var(--accent-text); }
@@ -1607,6 +1608,34 @@ function corpusLabel() {
 /* The conference pills, grouped under the divisions currently on screen, every group and every count
    read off the loaded rows. ONE group renders flat with no heading - a lone heading is chrome that
    tells the visitor nothing - which is why today's D1-only sidebar is unchanged by this. */
+/* #16: each conference pill counts the programs it would list together with every OTHER active filter - region,
+   division, search and conditions; the conference selection itself is left out, so a pill says what choosing it
+   gives. Keyed by division and conference, as the pills are grouped (Independent exists in all three divisions).
+   A 0 stays a normal, clickable pill, drawn quieter (.pill-zero): hiding it would move the pills under the reader's
+   finger, and a selected conference must stay reachable to clear. */
+const confKey = (d, c) => `${d}\u0000${c}`;
+function confCounts() {
+  const score = S.q ? new Set(S.index.programs.filter(p => matchScore(p, S.q, S.qRaw)).map(p => p.slug)) : null;
+  const out = new Map();
+  for (const p of S.index.programs) {
+    if (!matchesFilters(p, score, S.filters.cond, false)) continue;
+    const k = confKey(p.division || 'Other', p.conference || 'Other');
+    out.set(k, (out.get(k) || 0) + 1);
+  }
+  return out;
+}
+const confTitle = n => `${n} program${n === 1 ? '' : 's'} with your other filters`;
+// Typing a search changes the counts without rebuilding the drawer (focus stays in the search box, as for #18).
+function syncConfCounts() {
+  const sb = $('#sidebar'); if (!sb || !S.index) return;
+  const counts = confCounts();
+  sb.querySelectorAll('[data-conf-div]').forEach(b => {
+    const n = counts.get(confKey(b.dataset.confDiv, b.dataset.conf)) || 0;
+    const sub = b.querySelector('.pill-sub'); if (sub) sub.textContent = String(n);
+    b.title = confTitle(n);
+    b.classList.toggle('pill-zero', n === 0);
+  });
+}
 function conferenceGroups() {
   return shownDivisions().map(d => [d, Object.entries(S.index.byDivConf[d] || {}).sort((a, b) => a[0].localeCompare(b[0]))]);
 }
@@ -1647,13 +1676,17 @@ function renderSidebar() {
       }).join('')}</div>` : '';
     // Conference, grouped under the divisions on screen. One group -> the flat row this page has always had.
     const groups = conferenceGroups();
-    const confPill = ([c, n]) => `<button ${pillAttrs('conf', c, f.conf.includes(c))} title="${n} programs">${esc(c)}<span class="pill-sub">${n}</span></button>`;
+    const counts = confCounts();
+    const confPill = d => ([c]) => {
+      const n = counts.get(confKey(d, c)) || 0;
+      return `<button ${pillAttrs('conf', c, f.conf.includes(c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
+    };
     const confAll = `<button ${pillAttrs('conf', '', !f.conf.length)}>All</button>`;
     const confBlock = groups.length <= 1
-      ? `<div class="pill-row" role="group" aria-label="Conference">${confAll}${(groups[0]?.[1] || []).map(confPill).join('')}</div>`
+      ? `<div class="pill-row" role="group" aria-label="Conference">${confAll}${(groups[0]?.[1] || []).map(confPill(groups[0]?.[0])).join('')}</div>`
       : `<div class="pill-row pill-row-all" role="group" aria-label="Conference">${confAll}</div>`
         + groups.map(([d, list]) => `<div class="pill-group-label">${esc(divisionName(d))}</div>
-          <div class="pill-row" role="group" aria-label="${esc(divisionName(d))} conferences">${list.map(confPill).join('')}</div>`).join('');
+          <div class="pill-row" role="group" aria-label="${esc(divisionName(d))} conferences">${list.map(confPill(d)).join('')}</div>`).join('');
     /* The ID Camp View is filtered by region and conference only (issue #65). Sort is a program
        attribute and does not survive one program contributing several camps; the recruiting-class
        pills filter nothing anywhere today (#15), so leaving them here would be a second silent
@@ -1817,7 +1850,7 @@ function setQuery(v, from = null) {
   clearTimeout(qTimer);
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching
   // PROGRAMS, never camp names. From any other view a query still bounces to the programs list.
-  qTimer = setTimeout(() => { updateSearchStatus(); syncShowResults(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
+  qTimer = setTimeout(() => { updateSearchStatus(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
 }
 // The same words go under both boxes (#404). Only the strip's line is aria-live; #qStatus is not, because the closed
 // drawer is only moved off screen and two live regions would announce every count twice (Huatuo's condition 3).
@@ -2559,10 +2592,10 @@ function wireCharts(root) {
    Condition chips (#166) are the fifth clause, here for the same reason. It is vacuous while the list is
    empty. `conds` defaults to the chips in S.filters; the views pass [] to get the programs that pass
    everything EXCEPT the chips, which is the set the hidden-for-missing-data count is taken over. */
-const matchesFilters = (p, score, conds = S.filters.cond) => {
+const matchesFilters = (p, score, conds = S.filters.cond, withConf = true) => {
   const f = S.filters;
   return (!S.q || (score ? score.has(p.slug) : !!matchScore(p, S.q, S.qRaw)))
-    && (!f.conf.length || f.conf.includes(p.conference))
+    && (!withConf || !f.conf.length || f.conf.includes(p.conference))
     && (!f.region.length || f.region.includes(p.region))
     && (!f.division.length || f.division.includes(p.division))
     && (!conds?.length || condStatus(p, conds) === 'pass');
