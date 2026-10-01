@@ -197,6 +197,7 @@ tr:hover td { background: var(--row-hover); }
 .recs-hidden-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .recs-toast { position: sticky; bottom: 0; z-index: 5; margin: 0 28px 12px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
 .recs-toast[hidden] { display: none; }
+.recs-toast-part { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 /* Resilience (issue #400, PR 6): the local-only timing overlay, reasons in the Stats view, the Start-strip entry. */
 .recs-timing { position: fixed; left: 8px; bottom: 8px; z-index: 300; max-width: 360px; padding: 6px 8px; font: 11px/1.4 ui-monospace, monospace; color: var(--text-primary); background: var(--bg-surface); border: 1px dashed var(--border); border-radius: 6px; }
 .recs-timing[hidden] { display: none; }
@@ -2622,11 +2623,28 @@ async function recsClearAll() {
   await renderList(); renderRecsToast();
   $('#recsToast')?.focus(); // tabindex -1: the toast takes focus, so it isn't lost to <body> (#417 review)
 }
-// The toast: one persistent live node beside the list (outside #app, which every render replaces).
+// The toast: one persistent live node beside the list (outside #app, which every render replaces). While another tab's
+// change waits for a choice, its prompt stays first, and any other message (a hide with its Undo) shows beside it, never
+// instead of it, so Undo stays reachable and has somewhere for focus to land (#427 review).
 function renderRecsToast() {
-  const el = $('#recsToast'), R = S.recs, t = R.otherTab ? { kind: 'crosstab', cleared: R.otherTab.cleared } : R.toast;
+  const el = $('#recsToast'), R = S.recs;
   if (!el) return;
-  if (!t || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
+  const prompt = R.otherTab ? recsToastHtml({ kind: 'crosstab', cleared: R.otherTab.cleared }) : '';
+  const message = R.toast ? recsToastHtml(R.toast) : '';
+  if ((!prompt && !message) || !R.on) { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  el.innerHTML = prompt && message ? `<span class="recs-toast-part">${prompt}</span><span class="recs-toast-part">${message}</span>` : prompt || message;
+  el.onclick = e => {
+    if (e.target.closest('#recsUndo')) return recsUndo();
+    if (e.target.closest('#recsCatalogRetryToast')) { R.toast = null; renderRecsToast(); return recsShowRecommended(); }
+    if (e.target.closest('#recsUseOther')) return recsUseOtherTab();
+    if (e.target.closest('#recsKeepThis')) return recsKeepThisTab();
+    const b = e.target.closest('#recsEditPref');
+    if (b) return recsEditPreference(b.dataset.recsCat);
+  };
+}
+function recsToastHtml(t) {
+  const R = S.recs;
   let html = '';
   if (t.kind === 'hidden') {
     const edit = t.reason !== 'other' && R.saved?.[t.reason] && R.saved[t.reason].mode !== 'skip'
@@ -2638,16 +2656,7 @@ function renderRecsToast() {
   else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
     : t.newer ? 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.'
     : 'Personalization cleared for this visit; this browser isn’t letting the page change what it saved.';
-  el.hidden = false;
-  el.innerHTML = html;
-  el.onclick = e => {
-    if (e.target.closest('#recsUndo')) return recsUndo();
-    if (e.target.closest('#recsCatalogRetryToast')) { R.toast = null; renderRecsToast(); return recsShowRecommended(); }
-    if (e.target.closest('#recsUseOther')) return recsUseOtherTab();
-    if (e.target.closest('#recsKeepThis')) return recsKeepThisTab();
-    const b = e.target.closest('#recsEditPref');
-    if (b) return recsEditPreference(b.dataset.recsCat);
-  };
+  return html;
 }
 // The hide menu on a Recommended card: a disclosure whose summary is labelled with the program's displayed name.
 function recsHideHtml(it) {

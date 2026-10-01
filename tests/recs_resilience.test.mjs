@@ -248,3 +248,18 @@ test('#427 review: focus falls back to the sidebar button when the Start-strip b
   pg.sb.recsClose();
   assert.equal(FOCUS.el?._name, '#recsOpen');
 });
+
+test('#427 note: a hide while the prompt waits shows its Undo beside the prompt, focus lands on Undo, and still nothing is written', async () => {
+  const { pg, theirs } = await pendingOther();
+  const slug = oracle(pg).confirmed[0].slug;
+  await pg.sb.recsHide(slug, 'other');
+  const html = pg.$('#recsToast').innerHTML;
+  assert.match(html, /^<span class="recs-toast-part">Your preferences changed in another tab\. <button type="button" class="btn" id="recsUseOther">Use those<\/button> <button type="button" class="btn" id="recsKeepThis">Keep these<\/button><\/span><span class="recs-toast-part">Hidden: [^<]+ \(for this visit only\)\. <button type="button" class="btn" id="recsUndo">Undo<\/button><\/span>$/);
+  assert.equal(FOCUS.el?._name, '#recsUndo', 'focus did not land on Undo');
+  assert.equal(pg.store.get('cd.recs'), theirs);
+  await pg.sb.recsUndo();
+  assert.ok(pg.app().includes(`data-slug="${slug}"`), 'Undo did not bring the program back');
+  assert.ok(prompting(pg), 'Undo dismissed the prompt');
+  assert.ok(!/id="recsUndo"/.test(pg.$('#recsToast').innerHTML), 'the Undo outlived its use');
+  assert.equal(pg.store.get('cd.recs'), theirs, 'Undo wrote while the prompt waited');
+});
