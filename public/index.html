@@ -133,6 +133,38 @@ tr:hover td { background: var(--row-hover); }
 .ask-note { font-size: 12px; color: var(--text-secondary); padding: 6px 2px 0; }
 .ask-banner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 14px; font-size: 13px; background: var(--accent-surface); border: 1px solid var(--accent); border-radius: var(--radius-sm); }
 .ask-banner .btn { padding: 3px 10px; font-size: 12px; }
+/* Program recommendations (issue #400): drawn only while /api/status reports recs on. A side panel beside the list on
+   a desktop, a full-screen sheet on a phone. Every control is at least 44 px tall. */
+.recs-entry-slot { padding: 0 16px 10px; }
+.recs-entry { width: 100%; justify-content: center; min-height: 44px; }
+.recs-panel { width: 380px; min-width: 380px; background: var(--bg-surface); border-left: 1px solid var(--border); overflow-y: auto; padding: 16px 18px 0; }
+.recs-panel[hidden] { display: none; }
+.recs-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.recs-head h2 { font-size: 18px; margin: 0; }
+.recs-close { min-width: 44px; min-height: 44px; border: none; background: none; font-size: 18px; cursor: pointer; color: var(--text-secondary); border-radius: 8px; }
+.recs-close:hover { background: var(--bg-surface-alt); color: var(--text-primary); }
+.recs-intro { font-size: 13px; color: var(--text-secondary); margin: 6px 0 0; }
+.recs-notice, .recs-saved { font-size: 13px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--bg-surface-alt); border: 1px solid var(--border); margin: 10px 0 0; }
+.recs-field { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px 10px; margin: 12px 0 0; }
+.recs-field legend { font-weight: 700; font-size: 14px; padding: 0 4px; }
+.recs-field .pill { min-height: 44px; }
+.recs-skipped .pill-row, .recs-skipped .recs-imp-row { opacity: 0.6; }
+.recs-choice { display: flex; flex-wrap: wrap; gap: 0 16px; align-items: center; font-size: 13px; }
+.recs-choice label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; cursor: pointer; }
+.recs-choice input { width: 18px; height: 18px; margin: 0; }
+.recs-choice label.recs-disabled { color: var(--text-secondary); cursor: not-allowed; }
+.recs-ask { color: var(--text-secondary); }
+.recs-note { font-size: 12px; color: var(--text-secondary); margin: 4px 0 0; }
+.recs-error { color: var(--danger-text); font-size: 13px; min-height: 18px; margin-top: 10px; }
+.recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px; }
+.recs-actions .btn { min-height: 44px; }
+.recs-status { font-size: 13px; color: var(--text-secondary); min-height: 18px; padding-bottom: 16px; }
+@media (min-width: 769px) and (max-width: 1180px) {
+  .recs-panel { position: fixed; top: var(--header-height); right: 0; bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }
+}
+@media (max-width: 768px) {
+  .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0; }
+}
 .browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
 .browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
 .browse-row .browse-label { padding: 0; min-width: 52px; }
@@ -553,6 +585,8 @@ a.pill { text-decoration: none; }
       <div>Collected automatically from public sources; not owned or verified by nextonetwo. Check with the school before acting on it. <a href="#/faq">Read the FAQ</a></div>
     </footer>
   </div>
+  <!-- Program recommendations (issue #400): filled by renderRecsPanel only while /api/status reports recs on. -->
+  <div class="recs-panel" id="recsPanel" role="dialog" aria-labelledby="recsTitle" hidden><div id="recsPanelBody"></div><div class="recs-status" id="recsStatus" role="status" aria-live="polite"></div></div>
 </div>
 
 <script>
@@ -1235,7 +1269,8 @@ async function loadIndex() {
   if (S.filters.division.some(d => !live.has(d))) { S.filters.division = S.filters.division.filter(d => live.has(d)); saveState(); }
   { const c = capCompare(S.compare); if (c.join(',') !== S.compare.join(',')) { S.compare = c; saveState(); } }  // #111
   getJSON('/api/v1/status').then(r => { S.refresh = r; renderObserved(); }).catch(() => { });
-  getJSON('api/status').then(r => { S.local = !!r.local; }).catch(() => { });
+  // #400: recommendations ride on this same answer ({recs: true} from the Worker's RECS_ENABLED), never on a request of their own.
+  getJSON('api/status').then(r => { S.local = !!r.local; if (r.recs === true) recsSwitchedOn(); }).catch(() => { });
   // Ask is owner-only (#179): only Cloudflare Access's /api/ask* app can say so. redirect:'manual' means a visitor's probe ends as an unfollowed redirect to the login page - never loaded, and read as off like any error.
   getJSON('api/ask/status', { redirect: 'manual' }).then(r => { if (r.ask === true && !S.ask) askSwitchedOn(); }).catch(() => { });
   return S.index;
@@ -1593,6 +1628,7 @@ function renderSidebar() {
       <div class="sidebar-section-title">Find a program</div>
       <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="${S.ask ? 'School, mascot, or a question…' : 'School or mascot…'}" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
       <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
+      ${S.recs.on ? `<div class="recs-entry-slot"><button type="button" class="btn recs-entry" id="recsOpen" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}">Find programs for me</button></div>` : ''}
       <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
       ${divisionBlock}
@@ -1628,6 +1664,7 @@ function renderSidebar() {
   sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   wireConditions(sb);
+  const ro = $('#recsOpen'); if (ro) ro.onclick = () => recsOpen(); // #400: only drawn while recs is on
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
   const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
@@ -1700,7 +1737,7 @@ function syncSidebarForView(view) {
   if (S.index) renderSidebar();
 }
 document.addEventListener('keydown', e => {
-  if (e.target.matches('input, select, textarea')) return;
+  if (e.target.matches('input, select, textarea') || e.target.closest?.('#recsPanel')) return; // #400: not from the panel
   // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
@@ -1805,6 +1842,255 @@ function askBanner() {
   return `<div class="ask-banner" role="status"${r.reading ? ` title="${esc(r.reading)}"` : ''}><span>From your question: ${esc(r.parts.join(' · ') || 'no filters')}</span><button type="button" class="btn" id="askUndo">Undo</button></div>`;
 }
 function wireAskBanner() { const u = $('#askUndo'); if (u && S.askResult) u.onclick = undoAsk; }
+
+/* ---------- program recommendations: the switch, the form and cd.recs (issue #400, PR 3) ----------
+   "Find programs for me". Nothing in this block runs, and nothing renders, unless /api/status says {recs: true}
+   (the Worker's RECS_ENABLED; off in production). The answer rides on the api/status request the page already
+   makes, so the switch adds no request to a page load, on or off. Nothing is ranked yet: this PR is the entry
+   button, the panel (a side panel beside the list on a desktop, a full-screen sheet on a phone), the form and
+   the saved preferences. Ranking and results are PR 4.
+   - The ranker's own rules are the only definition of a valid preference set: public/recs.js (window.CDRecs) is
+     loaded the first time the panel opens, never on page load, and validatePrefs cleans what is read and saved.
+   - cd.recs is its own key, never Shortlist, Compare or filters: {v: 1, prefs}. Missing means the default
+     (everything skipped). Storage that throws runs in memory and says so. JSON that doesn't parse, or the
+     wrong shape, starts the form empty and says so. A newer v is left untouched: the page runs in memory and
+     never writes over it. Values a taxonomy change removed are dropped and named. Nothing is rewritten until
+     the visitor saves. Fields this version doesn't know (later PRs' hidden list) are kept on save.
+   - Region choices are REGIONS, the same five the sidebar pills use; a test holds them equal to the fit file's. */
+const RECS_KEY = 'cd.recs';
+const RECS_CATS = [
+  { key: 'region', legend: 'Region', values: () => REGIONS.map(r => [r, r]) },
+  { key: 'division', legend: 'Division', values: () => ['D1', 'D2', 'D3'].map(d => [d, d, divisionName(d)]) },
+  { key: 'size', legend: 'School size', values: () => [['lt5k', 'Under 5,000'], ['5k-15k', '5,000–14,999'], ['ge15k', '15,000+']],
+    note: 'Undergraduates, from College Scorecard.' },
+  { key: 'climate', legend: 'Climate', values: () => [['mild', 'Mild winters'], ['four-season', 'Four seasons'], ['cold', 'Cold winters']],
+    preferOnly: 'Prefer only: climate labels are estimates from the nearest weather station.' },
+];
+const RECS_WORDS = { lt5k: 'under 5,000 undergraduates', '5k-15k': '5,000–14,999 undergraduates', ge15k: '15,000+ undergraduates',
+  mild: 'mild winters', 'four-season': 'four seasons', cold: 'cold winters' };
+const RECS_NOTICES = {
+  unavailable: 'Your preferences won’t be remembered on this device: this browser isn’t letting the page save them.',
+  newer: 'Your preferences were saved by a newer version of this page, so they are left as they are. Changes here last for this visit only.',
+  corrupt: 'Your saved preferences couldn’t be read, so the form starts empty. Saving replaces them.',
+};
+S.recs = { on: false, open: false, lib: null, loadFailed: false, loaded: false, saved: null, draft: null, doc: null,
+  storage: 'ok', notices: [], issues: [], status: '', error: '' };
+const recsConstants = () => ({ regions: Object.fromEntries(REGIONS.map(r => [r, []])), sizeBands: [5000, 15000] });
+
+function recsSwitchedOn() {
+  if (S.recs.on) return;
+  S.recs.on = true;
+  if (!S.index || S.sidebarTab !== 'programs') return;
+  const typing = document.activeElement && document.activeElement.id === 'q';
+  renderSidebar();
+  if (typing) $('#q')?.focus();
+}
+// public/recs.js, once, the first time the panel opens. Rejects if it can't be loaded.
+let recsLibLoading = null;
+function recsLib() {
+  if (window.CDRecs) return Promise.resolve(window.CDRecs);
+  recsLibLoading ||= new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'recs.js';
+    s.onload = () => (window.CDRecs ? resolve(window.CDRecs) : reject(new Error('recs.js loaded without CDRecs')));
+    s.onerror = () => reject(new Error('recs.js did not load'));
+    document.head.appendChild(s);
+  }).catch(e => { recsLibLoading = null; throw e; });
+  return recsLibLoading;
+}
+// What cd.recs holds, read once per page load: {prefs, doc, storage, notices, issues}. Pure apart from the one read.
+function recsRead(lib) {
+  const blank = { prefs: lib.defaultPrefs(), doc: null, storage: 'ok', notices: [], issues: [] };
+  let raw;
+  try { raw = localStorage.getItem(RECS_KEY); } catch { return { ...blank, storage: 'unavailable', notices: ['unavailable'] }; }
+  if (raw == null) return blank;
+  let doc;
+  try { doc = JSON.parse(raw); } catch { doc = null; }
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { ...blank, notices: ['corrupt'] };
+  if (typeof doc.v === 'number' && doc.v > 1) return { ...blank, doc, storage: 'newer', notices: ['newer'] };
+  if (doc.v !== 1) return { ...blank, notices: ['corrupt'] };
+  const { prefs, issues } = lib.validatePrefs(doc.prefs === undefined ? null : doc.prefs, recsConstants());
+  return { ...blank, prefs, doc, issues };
+}
+// Save the preferences into cd.recs, keeping any other field already there. False when they can't be saved.
+function recsWrite(prefs) {
+  const R = S.recs;
+  if (R.storage === 'newer') return false;
+  const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs };
+  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; return true; }
+  catch { if (R.storage !== 'unavailable') { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; } return false; }
+}
+// The form's working copy: per category, Skip or Choose, the chosen values and Prefer or Must have.
+const recsDraftFrom = prefs => Object.fromEntries(RECS_CATS.map(c => {
+  const q = prefs[c.key];
+  return [c.key, { use: q.mode === 'skip' ? 'skip' : 'choose', values: q.values.slice(), importance: q.mode === 'must' ? 'must' : 'prefer' }];
+}));
+const recsList = words => words.length > 1 ? `${words.slice(0, -1).join(', ')} or ${words[words.length - 1]}` : words[0] || '';
+// "Region: West or Midwest (prefer) · Division: D3 (must have)": the saved set in words, '' when nothing is answered.
+function recsSummary(prefs) {
+  if (!prefs) return '';
+  return RECS_CATS.filter(c => prefs[c.key] && prefs[c.key].mode !== 'skip').map(c => {
+    const q = prefs[c.key];
+    return `${c.legend}: ${recsList(q.values.map(v => RECS_WORDS[v] || v))} (${q.mode === 'must' ? 'must have' : 'prefer'})`;
+  }).join(' · ');
+}
+function recsIssueText(issues) {
+  const legend = k => (RECS_CATS.find(c => c.key === k) || {}).legend || k;
+  const parts = issues.map(i => i.kind === 'value' ? `${legend(i.category)} “${i.value}”`
+    : i.kind === 'mode' ? `${legend(i.category)} “${i.value === 'must' ? 'Must have' : i.value}”`
+    : i.kind === 'empty' ? `${legend(i.category)} (no choice left)` : 'a part that couldn’t be read');
+  return parts.length ? `Some saved choices are no longer offered and were left out: ${[...new Set(parts)].join(', ')}.` : '';
+}
+
+async function recsOpen() {
+  const R = S.recs;
+  if (!R.on) return;
+  R.open = true; R.status = ''; R.error = '';
+  if (!R.lib) {
+    try { R.lib = await recsLib(); R.loadFailed = false; } catch { R.loadFailed = true; }
+  }
+  if (R.lib && !R.loaded) {
+    const r = recsRead(R.lib);
+    Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, loaded: true });
+  }
+  if (R.lib) R.draft = recsDraftFrom(R.saved);
+  renderRecsPanel();
+  syncRecsEntry();
+  $('#recsTitle')?.focus();
+}
+function recsClose() {
+  const R = S.recs;
+  if (!R.open) return;
+  R.open = false; R.status = ''; R.error = '';
+  renderRecsPanel();
+  syncRecsEntry();
+  $('#recsOpen')?.focus();
+}
+// On a phone the sheet is modal: aria-modal, and everything behind it inert, so neither Tab nor a screen reader's
+// virtual cursor reaches the page underneath. Re-checked on resize and rotation; off again when the panel closes.
+function recsSheetState() {
+  const modal = !!(S.recs.on && S.recs.open && isPhone());
+  const el = $('#recsPanel');
+  if (el && S.recs.open) el.setAttribute('aria-modal', String(modal));
+  for (const sel of ['#main', '#sidebar', '.header']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+}
+window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
+function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
+function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; }
+function recsSetImportance(cat, imp) {
+  const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
+  if (!d || !['prefer', 'must'].includes(imp) || (imp === 'must' && c.preferOnly)) return;
+  d.importance = imp;
+}
+// A pill: toggles the value and, since picking something means the category matters, sets it to Choose.
+function recsToggleValue(cat, value) {
+  const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
+  if (!d || !c.values().some(([v]) => v === value)) return;
+  d.values = d.values.includes(value) ? d.values.filter(v => v !== value) : [...d.values, value];
+  if (d.values.length) d.use = 'choose';
+  S.recs.error = '';
+}
+function recsReset() { S.recs.draft = recsDraftFrom(S.recs.lib.defaultPrefs()); S.recs.status = 'Form cleared. Nothing is saved until you press Save preferences.'; S.recs.error = ''; }
+// Save. Returns true when a preference set was accepted. Nothing is ranked yet (PR 4).
+function recsApply() {
+  const R = S.recs;
+  if (!R.lib || !R.draft) return false;
+  const raw = { v: 1 }, missing = [];
+  for (const c of RECS_CATS) {
+    const d = R.draft[c.key];
+    if (d.use !== 'choose') { raw[c.key] = { mode: 'skip', values: [] }; continue; }
+    if (!d.values.length) missing.push(c.legend);
+    raw[c.key] = { mode: c.preferOnly ? 'prefer' : d.importance, values: d.values };
+  }
+  if (missing.length) { R.error = `Choose at least one option for ${recsList(missing)}, or set ${missing.length > 1 ? 'them' : 'it'} to Skip.`; R.status = ''; return false; }
+  const { prefs } = R.lib.validatePrefs(raw, recsConstants());
+  if (!R.lib.isActive(prefs)) { R.error = ''; R.status = 'Choose at least one preference to get recommendations.'; return false; }
+  R.saved = prefs;
+  R.issues = [];
+  R.error = '';
+  R.status = recsWrite(prefs) ? 'Preferences saved. Matching programs will appear here in a later update.'
+    : 'Preferences set for this visit only. Matching programs will appear here in a later update.';
+  return true;
+}
+
+function recsFieldHtml(c, d) {
+  const id = `recs-${c.key}`;
+  const radio = (name, value, label, checked, extra = '') =>
+    `<label${extra.includes('disabled') ? ' class="recs-disabled"' : ''}><input type="radio" name="${name}" value="${value}" data-recs-${name.endsWith('-use') ? 'use' : 'imp'}="${c.key}"${checked ? ' checked' : ''}${extra}> ${label}</label>`;
+  const pills = c.values().map(([v, label, title]) => `<button type="button" class="pill${d.values.includes(v) ? ' active' : ''}" data-recs-cat="${c.key}" data-recs-val="${esc(v)}" aria-pressed="${d.values.includes(v)}"${title ? ` title="${esc(title)}"` : ''}>${esc(label)}</button>`).join('');
+  return `<fieldset class="recs-field${d.use === 'skip' ? ' recs-skipped' : ''}" id="${id}"><legend>${c.legend}</legend>
+    <div class="recs-choice">${radio(`${id}-use`, 'skip', 'Skip', d.use === 'skip')}${radio(`${id}-use`, 'choose', 'Choose', d.use === 'choose')}</div>
+    <div class="pill-row" role="group" aria-label="${c.legend} choices">${pills}</div>${c.note ? `<p class="recs-note">${c.note}</p>` : ''}
+    <div class="recs-choice recs-imp-row" role="radiogroup" aria-label="How much does ${c.legend.toLowerCase()} matter?"><span class="recs-ask">How much does it matter?</span>${radio(`${id}-imp`, 'prefer', 'Prefer', c.preferOnly || d.importance === 'prefer')}${radio(`${id}-imp`, 'must', 'Must have', !c.preferOnly && d.importance === 'must', c.preferOnly ? ` disabled aria-describedby="${id}-why"` : '')}</div>
+    ${c.preferOnly ? `<p class="recs-note" id="${id}-why">${c.preferOnly}</p>` : ''}</fieldset>`;
+}
+function renderRecsPanel() {
+  const el = $('#recsPanel'), R = S.recs;
+  if (!el) return;
+  const body = $('#recsPanelBody'), status = $('#recsStatus');
+  if (!R.on || !R.open) { el.hidden = true; body.innerHTML = ''; status.textContent = ''; recsSheetState(); return; }
+  el.hidden = false;
+  recsSheetState();
+  // The status line is one persistent live node, outside what is redrawn, so "saved" and the A4 message are announced.
+  if (status.textContent !== R.status) status.textContent = R.status;
+  const head = `<div class="recs-head"><h2 id="recsTitle" tabindex="-1">Find programs for me</h2><button type="button" class="recs-close" id="recsClose" aria-label="Close">✕</button></div>`;
+  if (!R.lib) {
+    body.innerHTML = head + `<div class="recs-notice" role="alert">The preferences form didn’t load. <button type="button" class="btn" id="recsRetry">Try again</button></div>`;
+    wireRecsPanel(el);
+    return;
+  }
+  const notes = [...R.notices.map(n => RECS_NOTICES[n]), recsIssueText(R.issues)].filter(Boolean);
+  const saved = recsSummary(R.saved);
+  body.innerHTML = head
+    + `<p class="recs-intro">Tell us what matters to you. Every category is optional; skip any of them.</p>`
+    + notes.map(n => `<p class="recs-notice">${esc(n)}</p>`).join('')
+    + (saved ? `<p class="recs-saved"><b>Saved:</b> ${esc(saved)}</p>` : '')
+    + `<form id="recsForm" novalidate>${RECS_CATS.map(c => recsFieldHtml(c, R.draft[c.key])).join('')}
+      <div class="recs-error" id="recsError" role="alert">${esc(R.error)}</div>
+      <div class="recs-actions"><button type="button" class="btn" id="recsReset">Clear</button><button type="submit" class="btn primary" id="recsSave">Save preferences</button></div></form>`;
+  wireRecsPanel(el);
+}
+// One set of handlers on the panel itself (event delegation), so a re-render never leaves a control unwired.
+function wireRecsPanel(el) {
+  el.onclick = e => {
+    const t = e.target;
+    if (t.closest('#recsClose')) return recsClose();
+    if (t.closest('#recsRetry')) return recsOpen();
+    if (t.closest('#recsReset')) { recsReset(); renderRecsPanel(); return $('#recsTitle')?.focus(); }
+    const pill = t.closest('[data-recs-val]');
+    if (pill) { recsToggleValue(pill.dataset.recsCat, pill.dataset.recsVal); renderRecsPanel(); el.querySelector(`[data-recs-cat="${pill.dataset.recsCat}"][data-recs-val="${pill.dataset.recsVal}"]`)?.focus(); }
+  };
+  el.onchange = e => {
+    const t = e.target;
+    if (t.dataset.recsUse) { recsSetUse(t.dataset.recsUse, t.value); renderRecsPanel(); el.querySelector(`input[name="${t.name}"][value="${t.value}"]`)?.focus(); }
+    else if (t.dataset.recsImp) recsSetImportance(t.dataset.recsImp, t.value);
+  };
+  el.onsubmit = e => {
+    e.preventDefault();
+    const ok = recsApply();
+    renderRecsPanel();
+    (ok ? $("#recsSave") : recsFocusAfterError())?.focus();
+  };
+  el.onkeydown = e => {
+    if (e.key === 'Escape') { e.preventDefault(); return recsClose(); }
+    // A phone's sheet is modal: Tab and Shift+Tab stay inside it. The desktop panel is not, so Tab leaves it.
+    // Only the controls are Tab stops: the heading (tabindex -1) is where focus lands on open, so Shift+Tab from it, or
+    // from the first control (Close), wraps to the last one, and Tab from the last wraps to Close (#412 review).
+    if (e.key === 'Tab' && isPhone()) {
+      const items = [...el.querySelectorAll('button:not([disabled]), input:not([disabled])')];
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1], at = document.activeElement;
+      if (e.shiftKey && (at === first || at === $('#recsTitle'))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
+    }
+  };
+}
+// After a refused save: the first category that still needs a choice, or else the Save button.
+function recsFocusAfterError() {
+  const R = S.recs;
+  const c = RECS_CATS.find(x => R.draft[x.key].use === 'choose' && !R.draft[x.key].values.length);
+  return (c && $(`#recs-${c.key}`)?.querySelector("input")) || $("#recsSave");
+}
 
 /* ---------- router ---------- */
 function route() {

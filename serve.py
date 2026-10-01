@@ -4,7 +4,8 @@ locally so the dashboard's "My Notes" and (phase 2) "Review" tabs can save to th
 source files and trigger a rebuild.
 
   GET  /...                        static files under public/
-  GET  /api/status                 {"local": true}
+  GET  /api/status                 {"local": true}, plus "recs": true when the RECS_ENABLED environment
+                                   variable is "true" (issue #400; the Worker reads its own RECS_ENABLED)
   GET  /api/curated/<slug>         programs/<slug>/curated.json
   PUT  /api/curated/<slug>         replace curated.json (JSON body), rebuild that program
   GET  /api/review/<slug>          programs/<slug>/commitments.reviewed.json
@@ -180,7 +181,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self._handle_blocked():
             return
         if self.path == "/api/status":
-            return self._json(200, {"local": True, "root": common.ROOT})
+            body = {"local": True, "root": common.ROOT}
+            if os.environ.get("RECS_ENABLED") == "true":  # issue #400: "Find programs for me", for local checks
+                body["recs"] = True
+            return self._json(200, body)
         m = re.match(r"^/api/(curated|review)/([^/?]+)$", self.path)
         if m:
             path = self._file_for(m.group(1), m.group(2))
