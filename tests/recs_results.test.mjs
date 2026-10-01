@@ -254,9 +254,10 @@ test('filters and search narrow the recommendations as their own layer', async (
 test('the count line is one persistent live node in the page markup, cleared when the ordinary list returns', async () => {
   const page = fs.readFileSync(HTML, 'utf8');
   // Static markup after #app (other persistent nodes may sit between them), never drawn by a render.
-  const app = page.indexOf('<div id="app">'), script = page.indexOf('<script>');
+  // After the END of #app's own line: inside #app it would be wiped by the next render (#417 review re-anchor).
+  const appLineEnd = page.indexOf('\n', page.indexOf('<div id="app">')), script = page.indexOf('<script>');
   const at = page.indexOf('<p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>');
-  assert.ok(app > 0 && at > app && at < script, 'not a static node beside #app');
+  assert.ok(appLineEnd > 0 && at > appLineEnd && at < script, 'not a static node after #app');
   assert.equal(page.split('id="recsCount"').length, 2, 'the count node is also drawn by a render');
   const pg = await showSaved();
   assert.match(pg.$('#recsCount').textContent, /^Showing 25 of \d+ confirmed matches$/);

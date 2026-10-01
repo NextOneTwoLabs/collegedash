@@ -629,7 +629,7 @@ a.pill { text-decoration: none; }
     </div>
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
     <!-- #400: "Hidden: X. [Undo]" and the other feedback messages, one persistent live node outside what #app redraws. -->
-    <div class="recs-toast" id="recsToast" role="status" aria-live="polite" hidden></div>
+    <div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>
     <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
     <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
     <footer class="site-notice">
@@ -2428,8 +2428,11 @@ function recsSaveDoc(fields) {
   const R = S.recs;
   if (R.storage !== 'ok') return false;
   const doc = { ...(R.doc && R.doc.v === 1 ? R.doc : {}), v: 1, prefs: R.saved, ...fields };
-  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; return true; }
-  catch { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; return false; }
+  try {
+    localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc;
+    if ('hidden' in fields) R.hiddenDropped = 0; // the unreadable entries were replaced by this save
+    return true;
+  } catch { R.storage = 'unavailable'; R.notices = [...R.notices, 'unavailable']; return false; }
 }
 // After a save from the form: the shared-device notice, once per browser.
 function recsAfterSave(saved) {
@@ -2439,58 +2442,70 @@ function recsAfterSave(saved) {
   recsSaveDoc({ notices: { ...(R.doc?.notices || {}), sharedDevice: true } });
 }
 const recsName = slug => { const p = programBySlug(slug); return p ? displayName(p) : slug; };
-function recsHide(slug, reason) {
+async function recsHide(slug, reason) {
   const R = S.recs;
   if (!R.active || !programBySlug(slug) || R.hidden.some(h => h.slug === slug)) return false;
   const before = R.hidden.slice();
   R.hidden = [...R.hidden, { slug, reason: RECS_REASONS.some(([k]) => k === reason) ? reason : 'other', at: todayLocal() }];
   const saved = recsSaveDoc({ hidden: R.hidden });
   R.toast = { kind: 'hidden', slug, reason, before, saved };
-  renderList(); renderRecsToast();
+  await renderList(); renderRecsToast();
   $('#recsUndo')?.focus();
   return true;
 }
-function recsUndo() {
+async function recsUndo() {
   const R = S.recs, t = R.toast;
   if (!t || t.kind !== 'hidden') return false;
   R.hidden = t.before;
   recsSaveDoc({ hidden: R.hidden });
   R.toast = null;
-  renderList(); renderRecsToast();
+  await renderList(); renderRecsToast();
   $('#app').querySelector(`.pcard[data-slug="${t.slug}"]`)?.focus();
   return true;
 }
-function recsRestore(slug) {
+// Restore removes its own button, so focus moves to the next Restore in the list (or the one before it), then to the
+// list's Show/Hide toggle, then to the preferences line when nothing is hidden any more (#417 review).
+async function recsRestore(slug) {
   const R = S.recs;
   if (!R.hidden.some(h => h.slug === slug)) return false;
+  const listed = R.hidden.filter(h => programBySlug(h.slug)).map(h => h.slug);
+  const at = listed.indexOf(slug), rest = listed.filter(s => s !== slug);
+  const next = rest[at] ?? rest[at - 1] ?? null;
   R.hidden = R.hidden.filter(h => h.slug !== slug);
   recsSaveDoc({ hidden: R.hidden });
   R.toast = { kind: 'restored', slug };
-  renderList(); renderRecsToast();
+  await renderList(); renderRecsToast();
+  const app = $('#app');
+  const target = (next && R.showHidden ? app.querySelector(`[data-recs-restore="${next}"]`) : null)
+    || (rest.length ? app.querySelector('[data-recs-toggle-hidden]') : null) || $('#recsBarText');
+  target?.focus();
   return true;
 }
 // Hidden slugs that are no longer in the program list: removed only when the visitor says so (A10).
-function recsRemoveStale() {
+async function recsRemoveStale() {
   const R = S.recs;
   R.hidden = R.hidden.filter(h => programBySlug(h.slug));
   recsSaveDoc({ hidden: R.hidden });
-  renderList();
+  await renderList();
+  $('#recsBarText')?.focus();
 }
 function recsEditPreference(cat) {
   S.recs.toast = null; renderRecsToast();
   recsOpen().then(() => { $(`#recs-${cat}`)?.querySelector('input')?.focus(); });
 }
 // Clear personalization: cd.recs removed, the ordinary list back, nothing else touched (A9).
-function recsClearAll() {
+async function recsClearAll() {
   const R = S.recs;
-  let removed = true;
-  try { localStorage.removeItem(RECS_KEY); } catch { removed = false; }
-  Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: null, active: false, stale: [], showHidden: false, sharedNotice: false,
-    storage: removed ? 'ok' : R.storage, notices: [], issues: [], toast: { kind: 'cleared', removed } });
+  const newer = R.storage === 'newer';
+  let removed = !newer;
+  if (!newer) { try { localStorage.removeItem(RECS_KEY); } catch { removed = false; } }
+  Object.assign(R, { saved: R.lib.defaultPrefs(), hidden: [], doc: newer ? R.doc : null, active: false, stale: [], showHidden: false,
+    sharedNotice: false, hiddenDropped: 0, storage: removed ? 'ok' : R.storage, notices: newer ? R.notices : [], issues: [],
+    toast: { kind: 'cleared', removed, newer } });
   R.draft = recsDraftFrom(R.saved);
   syncSortControls();
-  renderList(); renderRecsToast();
-  $('#recsToast')?.focus();
+  await renderList(); renderRecsToast();
+  $('#recsToast')?.focus(); // tabindex -1: the toast takes focus, so it isn't lost to <body> (#417 review)
 }
 // The toast: one persistent live node beside the list (outside #app, which every render replaces).
 function renderRecsToast() {
@@ -2504,6 +2519,7 @@ function renderRecsToast() {
     html = `Hidden: ${esc(recsName(t.slug))}${t.saved ? '' : ' (for this visit only)'}. <button type="button" class="btn" id="recsUndo">Undo</button>${edit}`;
   } else if (t.kind === 'restored') html = `Restored: ${esc(recsName(t.slug))}.`;
   else html = t.removed ? 'Personalization cleared. Your Shortlist, Compare and filters are unchanged.'
+    : t.newer ? 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.'
     : 'Personalization cleared for this visit; this browser isn’t letting the page change what it saved.';
   el.hidden = false;
   el.innerHTML = html;

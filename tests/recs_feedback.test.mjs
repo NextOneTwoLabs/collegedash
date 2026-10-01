@@ -11,7 +11,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { FIT, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
+import fs from 'node:fs';
+import { FIT, HTML, FOCUS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -202,4 +203,61 @@ test('the toast is cleared by the next action: choosing another sort, or showing
   assert.equal(toast(pg).hidden, false);
   pg.$('#sortSelect').onchange({ target: { value: 'name' } }); await settle();
   assert.equal(toast(pg).hidden, true);
+});
+
+// ---------- #417 review: focus, the newer version, the dropped-entries notice ----------
+
+test('the toast is a static node after #app, focusable by script (tabindex -1), so Clear never drops focus to <body>', async () => {
+  const page = fs.readFileSync(HTML, 'utf8');
+  const appLineEnd = page.indexOf('\n', page.indexOf('<div id="app">')), script = page.indexOf('<script>');
+  const at = page.indexOf('<div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>');
+  assert.ok(appLineEnd > 0 && at > appLineEnd && at < script, 'the toast is not a focusable static node after #app');
+  const pg = await shown();
+  await pg.sb.recsClearAll();
+  assert.equal(FOCUS.el?._name, '#recsToast');
+});
+
+test('after Restore, focus moves to the next Restore, then the one before, then the preferences line', async () => {
+  const pg = await shown();
+  const [a, b, c] = oracle(pg).confirmed;
+  for (const x of [a, b, c]) await pg.sb.recsHide(x.slug, 'other');
+  pg.sb.S.recs.showHidden = true; await pg.sb.renderList();
+  await pg.sb.recsRestore(b.slug);
+  assert.equal(FOCUS.el?._name, `[data-recs-restore="${c.slug}"]`);
+  assert.ok(pg.app().includes(`data-recs-restore="${c.slug}"`), 'focused a Restore that is not on the page');
+  await pg.sb.recsRestore(c.slug);
+  assert.equal(FOCUS.el?._name, `[data-recs-restore="${a.slug}"]`);
+  assert.ok(pg.app().includes(`data-recs-restore="${a.slug}"`));
+  await pg.sb.recsRestore(a.slug);
+  assert.equal(FOCUS.el?._name, '#recsBarText');
+  assert.ok(pg.app().includes('id="recsBarText" tabindex="-1"'));
+});
+
+test('with the list collapsed, Restore focuses the Show toggle while programs stay hidden', async () => {
+  const pg = await shown();
+  const [a, b] = oracle(pg).confirmed;
+  await pg.sb.recsHide(a.slug, 'other'); await pg.sb.recsHide(b.slug, 'other');
+  await pg.sb.recsRestore(a.slug);
+  assert.equal(FOCUS.el?._name, '[data-recs-toggle-hidden]');
+  assert.ok(pg.app().includes('data-recs-toggle-hidden'));
+});
+
+test('Clear personalization never deletes a newer version: it clears this visit and says so', async () => {
+  const newer = JSON.stringify({ v: 2, prefs: {}, hidden: [] });
+  const pg = await ready({ status: ON, storage: { 'cd.recs': newer } });
+  await open(pg);
+  pg.sb.recsToggleValue('division', 'D3');
+  pg.panel().onsubmit({ preventDefault() { } }); await settle();
+  await pg.sb.recsClearAll();
+  assert.equal(pg.store.get('cd.recs'), newer);
+  assert.equal(toast(pg).innerHTML, 'Personalization cleared for this visit. What a newer version of this page saved is left as it is.');
+  assert.equal(pg.sb.S.recs.active, false);
+});
+
+test('the "couldn\'t be read" notice goes once the hidden list has been saved again', async () => {
+  const pg = await shown(stored({ hidden: [7, { slug: 'stanford', reason: 'size', at: '2026-09-01' }] }));
+  assert.match(pg.app(), /1 saved hidden program couldn’t be read/);
+  await pg.sb.recsHide(oracle(pg).confirmed[0].slug, 'other');
+  assert.ok(!/couldn’t be read/.test(pg.app()), 'the notice outlived the rewrite');
+  assert.equal(doc(pg).hidden.length, 2);
 });
