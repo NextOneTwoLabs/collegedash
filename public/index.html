@@ -3004,7 +3004,8 @@ function route() {
   else if (!parts[1] && trendsInPlace()) return;
   // A data load that failed (an HTTP status on the error, #345) gets the try-again card; anything else is a bug and says so.
   const go = p => p.catch(e => {
-    if (Number.isInteger(e?.status)) { app.innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; const b = $('#loadRetry'); if (b) b.onclick = () => route(); return; }
+    if (Number.isInteger(e?.status)) { app.innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; setDocTitle('Couldn’t load the data'); const b = $('#loadRetry'); if (b) b.onclick = () => route(); return; }
+    setDocTitle('Something went wrong');
     app.innerHTML = `<div class="content-body"><div class="card"><h2>Something went wrong</h2><p class="muted">${esc(e.message)}</p></div></div>`; console.error(e);
   });
   $('#main').scrollTop = 0;
@@ -3042,7 +3043,15 @@ window.addEventListener('hashchange', route);
 window.addEventListener('popstate', () => { if (currentView() === 'trends') trendsInPlace(); });
 
 /* ---------- page header (breadcrumb › title › subtitle, right-side facts, view tabs) ---------- */
+/* #17: each page has its own document title, "<page> · College Soccer", so browser tabs, history, bookmarks and screen
+   readers can tell pages apart; the unfiltered program list keeps the site's own title. pageHeader sets it from the last
+   breadcrumb, which every view writes as plain text with what the reader sees there - a program by shortName || name
+   (displayName), a conference by its label (#425), "Upcoming ID camps", "Pipelines", "Compare", "Not found" - so a new
+   view that draws a header gets a title without anything else to remember. */
+const SITE_TITLE = 'College Soccer · nextonetwo';
+function setDocTitle(page) { document.title = page && page !== 'All programs' ? `${page} · College Soccer` : SITE_TITLE; }
 function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', tabs = '' }) {
+  setDocTitle(crumbs.length ? crumbs[crumbs.length - 1].label : null);
   const crumb = crumbs.map((c, i) => i === crumbs.length - 1
     ? `<span class="breadcrumb-current">${esc(c.label)}</span>`
     : `${c.href ? `<a href="${esc(c.href)}">${esc(c.label)}</a>` : `<span${c.title ? ` title="${esc(c.title)}"` : ''}>${esc(c.label)}</span>`}<span class="breadcrumb-sep">›</span>`).join('');
@@ -4797,6 +4806,7 @@ async function renderApiDocs() {
 // First load. A failure shows the try-again card (#345), whose button runs this same start again.
 function boot() {
   return loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => {
+    setDocTitle('Couldn’t load the data');
     $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`;
     const b = $('#loadRetry'); if (b) b.onclick = () => boot();
   });
