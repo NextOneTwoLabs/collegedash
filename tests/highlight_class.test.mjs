@@ -137,15 +137,16 @@ test('the class buttons keep a toggle state that matches the selection: All pres
 });
 
 // The visible text "'27" is read by some screen readers as "apostrophe 27", so each year button carries a full
-// accessible name built from its year. "All" keeps its text as its name, and aria-pressed is untouched.
-test('each year button\'s accessible name is "Class of <year>"; All keeps its text', () => {
+// accessible name built from its year. It starts with the visible text (WCAG 2.5.3, label in name: a voice-control
+// user saying "click '27" must still hit it). "All" keeps its text as its name, and aria-pressed is untouched.
+test('each year button\'s accessible name is "\'27, class of 2027" (visible text first); All keeps its text', () => {
   const years = (INDEX.season.gradYears || []).map(String);
   reset({ classYear: ['2027'] });
   sb.renderSidebar();
   const html = classGroup(sidebar());
   const raw = [...sidebar().matchAll(/<button ([^>]*data-class="[^"]*"[^>]*)>/g)].map(m => m[1]);
   const names = raw.map(a => /aria-label="([^"]*)"/.exec(a)?.[1] ?? null);
-  assert.deepEqual(names, [null, ...years.map(y => `Class of ${y}`)], 'aria-label per button (All has none)');
+  assert.deepEqual(names, [null, ...years.map(y => `'${y.slice(2)}, class of ${y}`)], 'aria-label per button (All has none)');
   assert.deepEqual(html.buttons.map(b => b.pressed), ['false', ...years.map(y => String(y === '2027'))], 'aria-pressed changed');
 });
 
