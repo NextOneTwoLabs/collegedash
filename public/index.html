@@ -208,6 +208,8 @@ tr:hover td { background: var(--row-hover); }
 .side-item .rm:hover { color: var(--danger-text); background: var(--bg-surface-alt); }
 .side-actions { display: flex; gap: 8px; padding: 6px 16px 12px; flex-wrap: wrap; }
 .side-empty { padding: 8px 20px 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+/* #18: the drawer's "Show N programs" bar - phones only (see the 768px block), sticky at the foot of the drawer. */
+.drawer-show { display: none; }
 .shortcut-hint { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--text-secondary); padding: 10px 16px; border-top: 1px solid var(--border); margin-top: auto; background: var(--bg-surface-alt); }
 .shortcut-hint span { white-space: nowrap; }
 .shortcut-hint kbd { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-family: var(--font); }
@@ -532,6 +534,8 @@ a.pill { text-decoration: none; }
   .observed-top, .header-link { display: none; }
   .sidebar { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: 280px; min-width: 280px; transform: translateX(-100%); box-shadow: none; }
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .drawer-show { display: block; position: sticky; bottom: 0; z-index: 1; padding: 10px 16px; background: var(--bg-surface); border-top: 1px solid var(--border); }
+  .drawer-show .btn { width: 100%; justify-content: center; padding: 10px 12px; font-size: 14px; }
   .content-header { padding: 14px 16px 0; }
   .content-header-row { flex-direction: column; align-items: flex-start; }
   .content-header-right { align-items: flex-start; }
@@ -1063,7 +1067,7 @@ function toggleSidebar() {
   btn.setAttribute('aria-expanded', String(!collapsed));
   lsSet('cd.sidebar', collapsed ? 'collapsed' : 'open');
 }
-function closeDrawer() { if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); } }
+function closeDrawer() { if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); } }
 $('#sidebarToggle').onclick = toggleSidebar;
 $('#sidebarOverlay').onclick = toggleSidebar;
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
@@ -1638,7 +1642,8 @@ function renderSidebar() {
       ${onCamps ? '' : `<div class="browse-label">Highlight class</div>
       <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))} aria-label="'${String(y).slice(2)}, class of ${esc(String(y))}">'${String(y).slice(2)}</button>`).join('')}</div>`}
       <div class="browse-label">Conference</div>
-      ${confBlock}`;
+      ${confBlock}
+      <div class="drawer-show"><button type="button" class="btn primary" id="showResults">${esc(showResultsLabel())}</button></div>`;
   } else if (tab === 'shortlist') {
     const rows = shortlistRows();
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
@@ -1664,6 +1669,7 @@ function renderSidebar() {
   sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { toggleIn(f.division, b.dataset.division); pruneConfToDivisions(); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   wireConditions(sb);
+  const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   const ro = $('#recsOpen'); if (ro) ro.onclick = () => recsOpen(); // #400: only drawn while recs is on
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
@@ -1721,6 +1727,24 @@ function wireConditions(sb) {
   $('#condValue').oninput = e => { st.text = e.target.value; };
 }
 function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
+/* #18: the phone drawer covers the page, so its foot carries a button that closes it on what the filters and the
+   search select. Pills and conditions already close it; this is for a reader who typed a search or wants to look
+   before choosing. It counts what the Program View would list (filteredPrograms: search, pills and conditions);
+   the camp and Pipelines views list camps and pipelines, so there it names the view instead of a count. */
+function showResultsLabel() {
+  const v = currentView();
+  if (v === 'camps') return 'Show camps';
+  if (v === 'trends') return 'Show results';
+  const n = filteredPrograms().length;
+  return `Show ${n} program${n === 1 ? '' : 's'}`;
+}
+function syncShowResults() { const b = $('#showResults'); if (b) b.textContent = showResultsLabel(); }
+function showResults() {
+  const v = currentView();
+  closeDrawer();
+  if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/';  // from a profile etc., to the list
+  $('#sidebarToggle')?.focus();
+}
 function currentView() { return location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0] || 'list'; }
 // Views that the sidebar's pills narrow but its sort select and recruiting-class pills cannot: the camp
 // list (issue #65) and the Pipelines view (#230, #322), where a sort of programs has no row to sort.
@@ -1753,7 +1777,7 @@ function setQuery(v) {
   clearTimeout(qTimer);
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching
   // PROGRAMS, never camp names. From any other view a query still bounces to the programs list.
-  qTimer = setTimeout(() => { updateSearchStatus(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
+  qTimer = setTimeout(() => { updateSearchStatus(); syncShowResults(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
 }
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
