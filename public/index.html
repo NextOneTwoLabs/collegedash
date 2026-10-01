@@ -1246,6 +1246,10 @@ const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
    if the program is published again - but it is never counted, linked or named. Before the index loads,
    every saved slug counts, as before. */
 const presentSlugs = list => (S.index ? [...list].filter(s => programBySlug(s)) : [...list]);
+// The saved programs in the order every shortlist surface shows them (#406): the list's Name sort, by the name the
+// reader sees (shortName, else name). Not RPI: it ranks within a division, so saved D2/D3 programs always sank below
+// every D1. The sidebar, the #/shortlist page and both "Compare 4" controls all take this order.
+const shortlistRows = () => [...S.favorites].map(programBySlug).filter(Boolean).sort(sortCmp('name', 'asc'));
 /* #111 (Huatuo R1): the compare list cut to at most four LIVE programs, repeats dropped, order kept. A removed
    slug is kept (it takes no place) so it comes back if the program does; every compare URL is built from the
    live slugs only. Before the index loads every slug counts as live. */
@@ -1295,9 +1299,6 @@ const rpiLabel = () => rpiSeason() == null ? 'RPI' : `RPI ${rpiSeason()}${rpiInP
 // the one in progress included). The page no longer reads the tables themselves, and the site no longer
 // serves them (issue #100).
 const rpiOf = p => (p.rpiHistory || []).find(r => r.year === rpiSeason())?.rank ?? null;
-// The RPI sort's key: ranked programs by rank, then unranked Division I programs (999, as before), then programs
-// whose division RPI does not apply to (#198) - after them, and never shown as missing.
-const rpiSortKey = p => appliesTo('rpi', p) ? (rpiOf(p) ?? 999) : 1999;
 // Titles sort within division (#198): one division's counts are never interleaved with another's.
 const divisionOrder = p => { const i = (S.index?.divisions || []).indexOf(p.division); return i < 0 ? 1e6 : i; };
 const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };
@@ -1533,7 +1534,7 @@ function renderSidebar() {
       <div class="browse-label">Conference</div>
       ${confBlock}`;
   } else if (tab === 'shortlist') {
-    const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort((a, b) => rpiSortKey(a) - rpiSortKey(b));
+    const rows = shortlistRows();
     body = `<div class="sidebar-section-title">My shortlist</div>` + (rows.length
       ? `<ul class="side-list">${rows.map(p => `<li class="side-item" data-open="${esc(p.slug)}">${swatchesHtml(p)}<span class="prog-stack"><span class="name">${esc(displayName(p))}</span><span class="team-sub">${programLine(p)}</span></span><span class="meta">${appliesTo('rpi', p) ? rpiCell(p) : ''}</span><button class="rm" data-fav="${esc(p.slug)}" title="Remove">✕</button></li>`).join('')}</ul>
          <div class="side-actions"><a class="btn" href="#/shortlist">Open shortlist</a>${rows.length >= 2 ? `<button class="btn primary" id="cmpShortlist">Compare ${Math.min(rows.length, 4)}</button>` : ''}</div>`
@@ -1560,7 +1561,7 @@ function renderSidebar() {
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
   const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
-  const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = presentSlugs(S.favorites).slice(0, 4); saveState(); location.hash = compareUrl(S.compare); };
+  const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = shortlistRows().slice(0, 4).map(p => p.slug); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   const q = $('#q');
   if (q) {
@@ -2084,7 +2085,7 @@ function tableHtml(rows) {
 /* ---------- shortlist view ---------- */
 async function renderShortlist() {
   await loadIndex();
-  const rows = [...S.favorites].map(programBySlug).filter(Boolean).sort(sortCmp('rpi'));
+  const rows = shortlistRows();
   const right = rows.length >= 2 ? `<a class="open-external" href="#/compare/${rows.slice(0, 4).map(p => esc(p.slug)).join(',')}">⇄ Compare ${Math.min(rows.length, 4)}</a>` : '';
   $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
     + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card shortlist-empty" tabindex="-1"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
@@ -3318,7 +3319,7 @@ async function renderCompare() {
       ['Fall avg high / low', p => p.climate ? `${p.climate.fallSeason.avgHighF}° / ${p.climate.fallSeason.avgLowF}°F` : '—'], ['Annual rain', p => p.climate ? `${p.climate.annualPrecipIn} in` : '—'],
     ]],
   ];
-  const chips = picked.map(s => { const p = programBySlug(s); return `<span class="chip">${esc(p?.shortName || s)} <button class="chip-x" data-cmp="${esc(s)}" title="Remove">✕</button></span>`; }).join('');
+  const chips = picked.map(s => { const p = programBySlug(s); return `<span class="chip">${esc((p && displayName(p)) || s)} <button class="chip-x" data-cmp="${esc(s)}" title="Remove">✕</button></span>`; }).join('');
   const bar = `<div class="cmp-bar">${chips}
       ${picked.length < 4 ? `<div class="cmp-add"><input type="search" class="search-input" id="cmpAdd" placeholder="Add a school…" aria-label="Add a school to compare" autocomplete="off"><div class="cmp-results" id="cmpResults" hidden></div></div>` : ''}
       <label class="small muted">I live in <select class="season-select" id="residency" style="flex:none;width:auto"><option value="">(not set)</option>${US_STATES.map(s => `<option ${home === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label></div>`;
