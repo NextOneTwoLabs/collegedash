@@ -395,11 +395,12 @@ def _home_col(idx: dict) -> int | None:
 
 
 def _player_record(*, number, name, pos_label, height, class_label, hometown, high_school,
-                   previous_school="", club="", major="", bio_url=None, social=None) -> dict:
+                   previous_school="", club="", major="", bio_url=None, social=None, club_source="") -> dict:
     # #224: a cell the site filled with 'null' / 'None' (or ending ' / null') is absent, never shown as a word
     d = common.drop_placeholders
     number, pos_label, height, class_label = d(number), d(pos_label), d(height), d(class_label)
     hometown, high_school, previous_school, club, major = d(hometown), d(high_school), d(previous_school), d(club), d(major)
+    club = common.club_value(club, club_source)  # #337: a pronoun set ('She/Her') is never a club
     ht = height or ""
     return {
         "number": number or "", "name": name, "pos": common.norm_pos(pos_label), "posLabel": pos_label or "",
@@ -446,6 +447,7 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                   # no explicit High School column, no splittable combined one on this row, and no
                   # real Previous School column either - so there is nothing better on offer.
                   "hs_fallback": _col(idx, "high school", "previous", "last school")}
+            club_source = next((f"table header '{h}'" for h, i in idx.items() if i == ci["club"]), "")
             for tr in rows:
                 cells = tr.find_all(["td", "th"])
                 if len(cells) < 4:
@@ -498,7 +500,7 @@ def parse_roster_tables(soup: BeautifulSoup, base_url: str, social_by_url: dict 
                 players.append(_player_record(
                     number=cell("num"), name=name, pos_label=cell("pos"), height=cell("ht"), class_label=cell("yr"),
                     hometown=hometown, high_school=hs, previous_school=prev, club=cell("club"), major=cell("major"),
-                    bio_url=bio_url, social=social_by_url.get(bio_url, {})))
+                    bio_url=bio_url, social=social_by_url.get(bio_url, {}), club_source=club_source))
         elif "name" in idx and is_staff:
             is_coaching = "coach" in keys
             title_col = idx.get("title", idx.get("pos"))
@@ -559,11 +561,14 @@ def _parse_person_cards(soup: BeautifulSoup, base_url: str, social_by_url: dict)
         hs_el = card.select_one("[data-test-id$='person-high-school'], .s-person-card__content__person__high-school-item")
         hometown = _sr_labelled(home_el)[1] if home_el else ""
         high_school = _sr_labelled(hs_el)[1] if hs_el else ""
-        club = next((v for k, v in stats.items() if k.startswith("custom field") or "club" in k), "")
+        # #337: a stat labelled as the club wins over a custom field, and a label that says "pronoun" is never one
+        club_label = (next((k for k in stats if "club" in k and "pronoun" not in k), None)
+                      or next((k for k in stats if k.startswith("custom field") and "pronoun" not in k), None))
+        club = stats[club_label] if club_label else ""
         players.append(_player_record(
             number=number, name=name, pos_label=stats.get("position", ""), height=stats.get("height", ""),
             class_label=stats.get("academic year", stats.get("class", stats.get("year", ""))),
-            hometown=hometown, high_school=high_school, club=club, bio_url=bio_url,
+            hometown=hometown, high_school=high_school, club=club, club_source=f"card label '{club_label}'", bio_url=bio_url,
             social=social_by_url.get(bio_url, {})))
     return players
 

@@ -370,6 +370,41 @@ test('T3 the order follows what is shown: with 2+ boxes past 1 and past 2 are on
   assert.deepEqual(cellsOf(page.results()).map(r => [r.name, r.nums[2]]), [[disp(hi), '2'], [disp(A), '0'], [disp(lo), '1']], 'one box: exact values, exact order');
 });
 
+/* ---------- #448: each suggestion's accessible name ---------- */
+// An option's content - the label, then an inline pill-sub - read as "Stanford12 players". Each option now carries an
+// aria-label: the visible label first (label in name, WCAG 2.5.3), then the pill-sub's text, its " · " read as commas.
+const optionsOf = (html) => [...html.matchAll(/<div class="pill trend-hit" role="option" ([^>]*)>([^<]*)<span class="pill-sub">([\s\S]*?)<\/span><\/div>/g)]
+  .map(m => ({ name: /aria-label="([^"]*)"/.exec(m[1])?.[1] ?? null, label: m[2], sub: m[3] }));
+const textOf = h => h.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n)).replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+const attrText = a => a.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+function checkNames(html, what) {
+  const opts = optionsOf(html);
+  assert.ok(opts.length, `${what}: no options drawn`);
+  for (const o of opts) {
+    assert.notEqual(o.name, null, `${what}: "${textOf(o.label)}" has no accessible name (it reads "${textOf(o.label)}${textOf(o.sub)}")`);
+    const name = attrText(o.name), label = textOf(o.label);
+    assert.ok(name.startsWith(`${label}, `), `${what}: "${name}" does not start with its visible label "${label}"`);
+    assert.equal(name, [label, ...textOf(o.sub).split(' · ')].map(x => x.trim()).filter(Boolean).join(', '), `${what}: ${label}`);
+    assert.doesNotMatch(name, /\b1 players\b/, `${what}: "1 players"`);
+  }
+  return opts;
+}
+test('#448: every suggestion is named by its visible label, then what it says - clubs, high schools and programs', async () => {
+  const page = await open('#/trends', fixture({ schools: true }));
+  for (const kind of ['club', 'school', 'program']) {
+    if (!page.el(`#trIn-${kind}`).oninput) continue;
+    const opts = checkNames(type(page, kind, ''), `${kind}, empty box`);
+    if (kind !== 'program') assert.ok(opts.every(o => / players?$/.test(attrText(o.name))), `${kind}: the count ends the name`);
+  }
+  assert.ok(page.el('#trIn-school').oninput, 'fixture: the high-school box is on the page');
+  checkNames(type(page, 'program', disp(A).slice(0, 4)), 'program, typed');
+  // following another box: the counts are the players behind the selection, and "1 player" is singular
+  const f = await open('#/trends?club=mvla', fixture({ schools: true }));
+  const opts = checkNames(type(f, 'program', ''), 'program, following a club');
+  assert.ok(opts.some(o => / players?$/.test(attrText(o.name))), 'following: the names carry the count');
+  checkNames(type(f, 'school', ''), 'school, following a club');
+});
+
 /* ---------- the states ---------- */
 test('nothing selected: three boxes, the how-to card and the coverage; the live region is on the page from the start', async () => {
   const page = await open('#/trends');

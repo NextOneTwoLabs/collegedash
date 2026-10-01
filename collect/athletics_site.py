@@ -48,6 +48,17 @@ def _extract_club(sections: dict) -> str:
     return ""
 
 
+def _log_club_guard(where: str) -> None:
+    """Issue #337: one name-free '!!' line when the parse just run dropped pronoun-shaped club values, naming the
+    label or header they came from, so a refresh's own fetch shows which column held them. Log-only, no request."""
+    try:
+        line = common.club_guard_line(where)
+        if line:
+            common.log(line)
+    except Exception as e:  # log-only: it must never fail a roster that was collected
+        common.log(f"  !! club-guard diagnostic failed ({type(e).__name__})")
+
+
 SIDEARM_MARKERS = ("s-person-card", "c-rosterpage", "sidearm-roster")
 WMT_MARKERS = ("roster-card-item", "roster-list-item", "roster-card__", "player-list-item", "roster-table-cell",
                "itemprop=\"athlete\"", "roster-item__name", "person__name", "wmt-dfp-component", "wmt.digital")
@@ -105,6 +116,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     u = ad.urls(program, registry)
 
     html, meta = common.fetch_text(u["roster"], max_age_hours=24)
+    common.club_guard_line("")  # #337: start this program's count from zero (a previous one on this thread may have raised)
     roster = ad.parse_roster(html, base)
     if not roster["players"]:
         # the registry platform may be wrong (detected from a generic marker); trust the markup
@@ -125,6 +137,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
         raise common.FetchError(f"athletics: roster parse found 0 players at {u['roster']}")
     season = roster["season"] or registry["season"]["current"]
     common.log(f"athletics[{platform}]: {season} roster {len(roster['players'])} players, {len(roster['staff'])} staff")
+    _log_club_guard(f"{season} roster")
     # Issue #101: a page robots.txt disallows (RobotsDisallowed, enforce mode only) never erases what is stored. Each
     # catch site below keeps the stored value, matched by a stable key: bioUrl for a player, the season year for
     # history, the stored staff for the coaches page.
@@ -168,7 +181,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
                     bhtml, _ = common.fetch_text(p["bioUrl"], max_age_hours=24 * 7)
                 b = ad.parse_bio(bhtml)
                 p["bio"] = {"sections": b.get("sections", {})}
-                p["club"] = _extract_club(b.get("sections", {}))
+                p["club"] = common.club_value(_extract_club(b.get("sections", {})), "bio text")  # #337
             except common.RobotsDisallowed:
                 old = stored_bios.get(p.get("bioUrl")) or {}
                 p["bio"], p["club"] = old.get("bio") or {}, old.get("club") or ""
@@ -176,6 +189,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
             except common.FetchError as e:
                 common.log(f"  bio failed for {p['name']}: {e}")
                 p["bio"], p["club"] = {}, ""
+        _log_club_guard(f"{season} roster bios")
     # The head coach's bio is its own switch (issue #168): `onboard` and the weekly/full refresh fetch it even with
     # player bios off; coach_bios=None follows `bios`. A run that does not fetch it keeps the stored one.
     head_coach_bio = _coach_bio_for_run(slug, staff, program, bios if coach_bios is None else coach_bios)
@@ -186,6 +200,7 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
             with common.fetch_site("athletics.historyRoster"):
                 h, _ = common.fetch_text(u["rosterSeason"](y), max_age_hours=24 * 30)
             r = ad.parse_roster(h, base)
+            _log_club_guard(f"{y} roster")
             if r["players"]:
                 history[str(y)] = [{k: v for k, v in p.items() if k not in ("bio", "social")} for p in r["players"]]
                 common.log(f"  {y} roster: {len(r['players'])} players")
