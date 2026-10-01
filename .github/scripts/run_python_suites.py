@@ -45,14 +45,14 @@ every discovered path really is under `tests/` rather than leaving that to be re
 
 That is on purpose. `tools/roster_check.py` and `tools/camps_check.py`'s discovery sweep both read
 roster pages from a local HTTP cache (.cache/http) that a fresh checkout - i.e. every CI runner -
-does not have. Absent the cache they skip every program and still exit 0: roster_check.py prints
-`summary: not-cached 350 (of 350)` and succeeds. That is issue #81, and running them here would
-paint a green tick over zero coverage, which is worse than not running them at all because it turns
-an absence of testing into a positive signal. If discovery swept `tools/` it would pick both up and
-do precisely that. `tools/camps_check.py --fixtures` is a different mode, is genuinely cacheless -
-390 real checks against tests/fixtures/camps - and keeps its own named step in tests.yml with its
-own floor. When #81 makes "checked nothing" a non-zero outcome inside the tools themselves, the
-sweep can be added there too; it does not belong in a `tests/` discovery either way.
+does not have. Until issue #81 they skipped every program and still exited 0 (roster_check.py
+printed `summary: not-cached 350 (of 350)` and succeeded); since #81 they say "checked nothing" and
+exit 2. Either way there is nothing for them to check on a runner, so they are not run here: before
+#81 they would have painted a green tick over zero coverage, and now they would only fail. If
+discovery swept `tools/` it would pick both up. `tools/camps_check.py --fixtures` is a different
+mode, is genuinely cacheless - 390 real checks against tests/fixtures/camps - and keeps its own
+named step in tests.yml with its own floor. The sweeps need a populated cache, which a runner does
+not have; they do not belong in a `tests/` discovery either way.
 
 Why one step and not one step per suite
 ----------------------------------------
@@ -233,9 +233,9 @@ def main() -> int:
             STEP_NAME,
             f"{DISCOVERY} matched {', '.join(relative(p) for p in escaped)}, which "
             f"{'is' if len(escaped) == 1 else 'are'} outside tests/. This step runs only what is "
-            f"under tests/: tools/roster_check.py and tools/camps_check.py's sweep exit 0 having "
-            f"checked nothing without an HTTP cache, which is a runner's state (issue #81), so "
-            f"sweeping them in would be a green tick over no coverage.",
+            f"under tests/: tools/roster_check.py and tools/camps_check.py's sweep need an HTTP "
+            f"cache a runner does not have, and without one they check nothing and exit 2 "
+            f"(issue #81), so sweeping them in would only fail.",
         )
         summarise(f"| {STEP_NAME} | FAIL (discovery left tests/) | ? | 0.0s |")
         return 1

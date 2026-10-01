@@ -13,6 +13,11 @@ own: run the sweep from the main checkout, or point --cache-dir at its cache (re
 
 Sweep outcomes: found-external | found-hub (internal Sidearm /sports/YYYY/M/D/ page, followed live) |
 found-internal | none | skipped (registry skipReason, no campsUrl) | not-cached
+
+Sweep exit codes (issue #81): 0 ok; 1 fewer than --min-found programs got a link; 2 CHECKED NOTHING - no roster page
+was read from the cache (the directory is missing, or every selected program is not-cached, registry or skipped; a
+registry campsUrl or a skipReason is not a check of the discovery). A partial cache still runs and exits by
+--min-found, with a `!!` line naming how many programs were not checked. --fixtures and --titles never read the cache.
 """
 
 from __future__ import annotations
@@ -103,6 +108,19 @@ def sweep(args) -> int:
     print("top external hosts:", ", ".join(f"{h} {n}" for h, n in hosts.most_common(12)))
     if args.json:
         common.write_json(args.json, results)
+    # Issue #81: only a roster page read from the cache is a check of discovery; registry and skipped are not.
+    checked = [r for r in results if r["outcome"] not in ("not-cached", "registry", "skipped")]
+    not_cached = [r["slug"] for r in results if r["outcome"] == "not-cached"]
+    if results and not checked:
+        where = common.CACHE_DIR if os.path.isdir(common.CACHE_DIR) else f"{common.CACHE_DIR} (the directory does not exist)"
+        print(f"!! camps_check sweep checked nothing: no roster page was read from the HTTP cache at {where} "
+              f"({len(not_cached)} not-cached, {len(results) - len(not_cached)} registry or skipped, of {len(results)}). "
+              "A fresh checkout or a git worktree has no cache: run from the main checkout, or pass "
+              "--cache-dir <main checkout>/.cache/http (read only). Exit 2 (issue #81).")
+        return 2
+    if not_cached:
+        print(f"!! not checked: {len(not_cached)} of {len(results)} programs have no cached roster page: "
+              f"{', '.join(not_cached[:20])}{' …' if len(not_cached) > 20 else ''}")
     return 0 if found >= args.min_found else 1
 
 

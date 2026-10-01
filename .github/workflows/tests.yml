@@ -54,13 +54,12 @@ name: Tests
 # -----------------------------------------------------------------
 # `tools/roster_check.py` and `tools/camps_check.py`'s discovery sweep both read roster pages from
 # a local HTTP cache (.cache/http) that a fresh checkout - i.e. every CI runner - does not have.
-# Absent the cache they skip every program and still exit 0: roster_check.py prints
-# `summary: not-cached 350 (of 350)` and succeeds. That is issue #81. Wiring either in as it stands
-# would paint a green tick over zero coverage, which is worse than not running them, because it
-# turns an absence of testing into a positive signal. `camps_check.py --fixtures` is a different
-# mode and is genuinely cacheless - 390 real checks against tests/fixtures/camps - so that is the
-# one that runs. When #81 makes "checked nothing" a non-zero outcome in the tools themselves, the
-# sweep can be added here with a --min-ok floor.
+# Until issue #81 they skipped every program and still exited 0 (roster_check.py printed
+# `summary: not-cached 350 (of 350)` and succeeded), a green tick over zero coverage. Since #81 they
+# say "checked nothing" and exit 2 instead, so wiring either in here would now fail rather than
+# pass - but a runner still has no cache for them to read, so they are still not run. `camps_check.py
+# --fixtures` is a different mode and is genuinely cacheless - 390 real checks against
+# tests/fixtures/camps - so that is the one that runs.
 #
 # Discovery is what keeps that exclusion honest rather than accidental: it is rooted at `tests/` and
 # cannot reach `tools/`, and run_python_suites.py asserts that of every path it matches instead of
@@ -160,8 +159,8 @@ jobs:
         run: python .github/scripts/run_python_suites.py --min-checks 396
 
       # Named, not discovered, and the one Python step that is meant to be. --fixtures is a mode
-      # rather than a file: the default sweep needs an HTTP cache this runner does not have and
-      # would exit 0 having checked nothing. Discovery above is rooted at tests/ and never reaches
+      # rather than a file: the default sweep needs an HTTP cache this runner does not have, and
+      # without one it checks nothing and exits 2 (#81). Discovery above is rooted at tests/ and never reaches
       # tools/, which is what keeps that sweep - and tools/roster_check.py - out of this job by
       # construction rather than by omission. See the note at the top of this file and issue #81.
       - name: camps fixtures (tools/camps_check.py --fixtures)
