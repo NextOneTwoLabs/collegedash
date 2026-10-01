@@ -172,6 +172,22 @@ tr:hover td { background: var(--row-hover); }
 .recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px; }
 .recs-actions .btn { min-height: 44px; }
 .recs-status { font-size: 13px; color: var(--text-secondary); min-height: 18px; padding-bottom: 16px; }
+/* Results mode (issue #400, PR 4). Each chip pairs its icon with words, so nothing is said by colour alone. */
+.recs-bar { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 13px; background: var(--accent-surface); border: 1px solid var(--accent); border-radius: var(--radius-sm); }
+.recs-bar p { margin: 0; }
+.recs-bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.recs-bar-actions .btn, .recs-more, .recs-paused .btn { min-height: 44px; }
+.recs-paused { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 13px; color: var(--text-secondary); }
+.recs-why { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.recs-chip { line-height: 1.35; }
+.recs-chip.ok > span:first-child { color: var(--accent-text); font-weight: 700; }
+.recs-chip.trade, .recs-chip.unknown { color: var(--text-secondary); }
+.recs-more { margin: 16px auto 0; display: flex; }
+.recs-empty p { margin: 0 0 10px; font-size: 14px; }
+.recs-nv { margin-top: 16px; }
+.recs-nv summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.recs-nv-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.recs-nv-row { display: flex; flex-direction: column; gap: 2px; }
 @media (min-width: 769px) and (max-width: 1180px) {
   .recs-panel { position: fixed; top: var(--header-height); right: 0; bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }
 }
@@ -601,6 +617,8 @@ a.pill { text-decoration: none; }
       <div class="start-status" id="qStartStatus" aria-live="polite"></div>
     </div>
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
+    <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
+    <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
     <footer class="site-notice">
       <details class="feedback" id="feedback">
         <summary>Send feedback</summary>
@@ -1607,8 +1625,8 @@ const SORTS = [['name', 'Name'], ['rpi', 'RPI'], ['admit', 'Admission rate'], ['
 // The RPI option's label names the season it sorts by, read from the data (issue #62), so it is not stored above.
 // Sorts reached only from a table header (#285) are not in SORTS - SORTS is also the Ask Worker's contract - so the
 // sidebar select lists the active one as an extra option while it is active, and the two never disagree.
-const sortLabel = k => k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1] ?? SORT_SPECS[k]?.label();
-const sortOptions = () => SORTS.map(s => s[0]).concat(SORTS.some(s => s[0] === S.filters.sort) || !SORT_SPECS[S.filters.sort] ? [] : [S.filters.sort]);
+const sortLabel = k => k === 'recommended' ? 'Recommended' : k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1] ?? SORT_SPECS[k]?.label();
+const sortOptions = () => (S.recs?.on ? ['recommended'] : []).concat(SORTS.map(s => s[0])).concat(SORTS.some(s => s[0] === S.filters.sort) || !SORT_SPECS[S.filters.sort] ? [] : [S.filters.sort]);
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
@@ -1663,7 +1681,7 @@ function renderSidebar() {
       <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
       ${S.recs.on ? `<div class="recs-entry-slot"><button type="button" class="btn recs-entry" id="recsOpen" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}">Find programs for me</button></div>` : ''}
       <div class="sidebar-section-title">Browse</div>
-      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${f.sort === k ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
+      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${(k === 'recommended' ? S.recs?.active : !S.recs?.active && f.sort === k) ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
       ${divisionBlock}
       ${condBlock}
       <div class="browse-label">Region</div>
@@ -1701,7 +1719,12 @@ function renderSidebar() {
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   const ro = $('#recsOpen'); if (ro) ro.onclick = () => recsOpen(); // #400: only drawn while recs is on
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
-  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { setSort(e.target.value); syncSortControls(); rerenderForFilters(); };
+  // #400 PR 4: Recommended is not a stored sort. Choosing it shows the saved preferences; choosing any other sort pauses
+  // them, and picking the sort that was already underneath doesn't flip its direction.
+  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { const v = e.target.value;
+    if (v === 'recommended') return recsShowRecommended();
+    const was = S.recs?.active; if (S.recs) recsPause();
+    if (!(was && v === f.sort)) setSort(v); syncSortControls(); rerenderForFilters(); };
   const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = shortlistRows().slice(0, 4).map(p => p.slug); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
@@ -2025,13 +2048,7 @@ async function recsOpen() {
   const R = S.recs;
   if (!R.on) return;
   R.open = true; R.status = ''; R.error = '';
-  if (!R.lib) {
-    try { R.lib = await recsLib(); R.loadFailed = false; } catch { R.loadFailed = true; }
-  }
-  if (R.lib && !R.loaded) {
-    const r = recsRead(R.lib);
-    Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, loaded: true });
-  }
+  await recsEnsureLoaded();
   if (R.lib) R.draft = recsDraftFrom(R.saved);
   renderRecsPanel();
   syncRecsEntry();
@@ -2087,8 +2104,7 @@ function recsApply() {
   R.saved = prefs;
   R.issues = [];
   R.error = '';
-  R.status = recsWrite(prefs) ? 'Preferences saved. Matching programs will appear here in a later update.'
-    : 'Preferences set for this visit only. Matching programs will appear here in a later update.';
+  R.status = recsWrite(prefs) ? 'Preferences saved.' : 'Preferences set for this visit only.';
   return true;
 }
 
@@ -2126,7 +2142,7 @@ function renderRecsPanel() {
     + (saved ? `<p class="recs-saved"><b>Saved:</b> ${esc(saved)}</p>` : '')
     + `<form id="recsForm" novalidate>${RECS_CATS.map(c => recsFieldHtml(c, R.draft[c.key])).join('')}
       <div class="recs-error" id="recsError" role="alert">${esc(R.error)}</div>
-      <div class="recs-actions"><button type="button" class="btn" id="recsReset">Clear</button><button type="submit" class="btn primary" id="recsSave">Save preferences</button></div></form>`;
+      <div class="recs-actions"><button type="button" class="btn" id="recsReset">Clear</button><button type="submit" class="btn primary" id="recsSave">Show matches</button></div></form>`;
   wireRecsPanel(el);
 }
 // One set of handlers on the panel itself (event delegation), so a re-render never leaves a control unwired.
@@ -2146,9 +2162,9 @@ function wireRecsPanel(el) {
   };
   el.onsubmit = e => {
     e.preventDefault();
-    const ok = recsApply();
+    if (recsApply()) return recsShowRecommended({ fromPanel: true }); // #400 PR 4: a save always shows Recommended
     renderRecsPanel();
-    (ok ? $("#recsSave") : recsFocusAfterError())?.focus();
+    recsFocusAfterError()?.focus();
   };
   el.onkeydown = e => {
     if (e.key === 'Escape') { e.preventDefault(); return recsClose(); }
@@ -2170,6 +2186,200 @@ function recsFocusAfterError() {
   const c = RECS_CATS.find(x => R.draft[x.key].use === 'choose' && !R.draft[x.key].values.length);
   return (c && $(`#recs-${c.key}`)?.querySelector("input")) || $("#recsSave");
 }
+
+/* ---------- program recommendations: results mode (issue #400, PR 4) ----------
+   "Recommended for you" is the list's mode only while the sort is Recommended AND a saved preference set answers at
+   least one category (A4, A6). Then must-haves exclude, Need verification is its own collapsed group, and each card
+   carries its reasons. Any other sort is the ordinary browse list, with a "Personalization paused" line; choosing
+   Recommended again reapplies the saved preferences unchanged. Saving the form always switches to Recommended.
+   - /api/v1/fit is fetched the first time recommendations are shown (a save, or choosing Recommended), never on page
+     load. Its `updated` must equal the list's: a mismatch is fetched once more, and if it persists nothing is ranked
+     ("Program data is updating"). A failed load is said, with Try again, and the ordinary list stays (O1).
+   - The ranking is public/recs.js's rank(), over the list the page has, with the sidebar's own filters (and search)
+     passed in as its filter layer. It is recomputed on every render (a few ms); nothing ranked is stored.
+   - Every number on screen comes from the result. byMustHaveCategory counts a program once per must-have it fails,
+     so the categories are listed one by one and never added up (#408 review, note 3); the total is byMustHave.
+   - cd.recs gains `applied`, the versions (taxonomy, ranker, catalog) the last results were computed under. When they
+     differ on a later visit the page says the data changed and the results were recomputed; it never shows old ones. */
+const RECS_PAGE = 25;
+Object.assign(S.recs, { active: false, fit: null, fitError: null, loading: false, shown: RECS_PAGE, stale: [] });
+async function recsEnsureLoaded() {
+  const R = S.recs;
+  if (!R.lib) {
+    try { R.lib = await recsLib(); R.loadFailed = false; } catch { R.loadFailed = true; }
+  }
+  if (R.lib && !R.loaded) {
+    const r = recsRead(R.lib);
+    Object.assign(R, { saved: r.prefs, doc: r.doc, storage: r.storage, notices: r.notices, issues: r.issues, loaded: true });
+  }
+  return !!R.lib;
+}
+// Is there a saved set worth offering, before recs.js is loaded? A raw look at cd.recs (no request, nothing parsed
+// into state); the real validation happens when the visitor asks for the recommendations.
+function recsHasSaved() {
+  const R = S.recs;
+  if (R.loaded) return !!(R.lib && R.lib.isActive(R.saved));
+  try {
+    const doc = JSON.parse(localStorage.getItem(RECS_KEY) || 'null');
+    return !!(doc && doc.v === 1 && doc.prefs && ['region', 'division', 'size', 'climate']
+      .some(k => doc.prefs[k] && doc.prefs[k].mode !== 'skip' && Array.isArray(doc.prefs[k].values) && doc.prefs[k].values.length));
+  } catch { return false; }
+}
+// The fit file, once per page load. Rejects with .code 'failed' or 'updating'.
+async function recsLoadFit() {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let doc;
+    try { doc = await getJSON('/api/v1/fit'); } catch { throw Object.assign(new Error('fit'), { code: 'failed' }); }
+    if (doc && doc.updated === S.index.updated) return doc;
+  }
+  throw Object.assign(new Error('fit'), { code: 'updating' });
+}
+function recsStamp() { return { taxonomy: S.recs.fit?.fitTaxonomy || null, ranker: S.recs.lib?.RANKER || null, catalog: S.index?.updated || null }; }
+function recsWriteApplied(stamp) {
+  const R = S.recs;
+  if (R.storage !== 'ok' || !R.doc || R.doc.v !== 1) return;
+  const doc = { ...R.doc, applied: stamp };
+  try { localStorage.setItem(RECS_KEY, JSON.stringify(doc)); R.doc = doc; } catch { /* the in-memory state is unaffected */ }
+}
+// Show the recommendations: from a save (fromPanel), the sort select or the "Show recommended" button.
+async function recsShowRecommended({ fromPanel = false } = {}) {
+  const R = S.recs;
+  if (!R.on) return;
+  if (!(await recsEnsureLoaded())) { R.fitError = 'failed'; R.active = false; syncSortControls(); return rerenderForFilters(); }
+  if (!R.lib.isActive(R.saved)) { R.active = false; syncSortControls(); return recsOpen(); }
+  R.active = true; R.shown = RECS_PAGE; R.fitError = null;
+  if (fromPanel) { R.open = false; renderRecsPanel(); syncRecsEntry(); }
+  if (currentView() !== 'list') { location.hash = '#/'; }
+  syncSortControls();
+  if (!R.fit) {
+    R.loading = true; await renderList();
+    try { R.fit = await recsLoadFit(); }
+    catch (e) { R.loading = false; R.active = false; R.fitError = e.code || 'failed'; syncSortControls(); return renderList(); }
+    R.loading = false;
+  }
+  const stamp = recsStamp();
+  R.stale = !fromPanel && R.doc && R.doc.applied ? R.lib.staleness(R.doc.applied, stamp) : [];
+  recsWriteApplied(stamp);
+  await renderList();
+  $('#recsBarText')?.focus();
+}
+// The count line, written only when it changes, so a screen reader hears each new count once.
+function recsAnnounce(text) { const el = $('#recsCount'); if (el && el.textContent !== text) el.textContent = text; }
+function recsPause() { S.recs.active = false; S.recs.stale = []; }
+
+// The search hits and the sidebar's filters, as rank()'s filter layer: the same predicate the ordinary list uses.
+function recsFilter() {
+  const score = new Map();
+  if (S.q) S.index.programs.forEach(p => { const m = matchScore(p, S.q); p._why = m?.why || null; if (m) score.set(p.slug, m.score); });
+  else S.index.programs.forEach(p => { p._why = null; });
+  return p => matchesFilters(p, score);
+}
+function recsResult() {
+  const R = S.recs;
+  return R.lib.rank({ list: { updated: S.index.updated, programs: S.index.programs }, fit: R.fit, prefs: R.saved, filter: recsFilter(), hidden: [] });
+}
+const recsCount = (n, one, many = `${one}s`) => `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
+const recsSource = s => (s ? `${s.name}${s.asOf ? `, fetched ${s.asOf}` : ''}` : '');
+function recsChip(cls, icon, label, text, source) {
+  return `<li class="recs-chip ${cls}"${source ? ` title="${esc(`Source: ${source}`)}"` : ''}><span aria-hidden="true">${icon}</span> <span class="sr-only">${label}: </span>${esc(text)}${source ? `<span class="sr-only"> (source: ${esc(source)})</span>` : ''}</li>`;
+}
+// At most three reasons, one tradeoff and every unknown, each built only from its own contribution (recs.js).
+function recsWhyHtml(it) {
+  const L = S.recs.lib;
+  const chips = it.reasons.map(r => recsChip('ok', '✓', 'Matches', L.reasonText(r), recsSource(r.source)))
+    .concat(it.tradeoff ? [recsChip('trade', '↔', 'Tradeoff', `Tradeoff: ${L.tradeoffText(it.tradeoff)}`, recsSource(it.tradeoff.source))] : [])
+    .concat(it.unknowns.map(u => recsChip('unknown', '?', 'Unknown', L.unknownText(u), '')));
+  const low = it.coverage.known <= 1 ? `<li class="recs-chip unknown"><span aria-hidden="true">?</span> Limited data: ${it.coverage.known} of ${it.coverage.of} facts known</li>` : '';
+  return chips.length || low ? `<ul class="recs-why" aria-label="Why ${esc(it.displayName)} is listed">${chips.join('')}${low}</ul>` : '';
+}
+const recsMustWords = (cat, q) => `${(RECS_CATS.find(c => c.key === cat) || {}).legend || cat}: ${recsList(q.values.map(v => RECS_WORDS[v] || v))}`;
+// No confirmed programs: say exactly why, with a control for each cause; never relax anything (A1, A7).
+function recsEmptyHtml(res) {
+  const f = S.filters, p = S.recs.saved, ex = res.excluded;
+  const conflicts = [['division', f.division], ['region', f.region]]
+    .filter(([cat, fv]) => p[cat].mode === 'must' && fv.length && !fv.some(v => p[cat].values.includes(v)));
+  if (conflicts.length) {
+    const [cat, fv] = conflicts[0];
+    return `<div class="recs-empty card" role="status"><p><b>No programs can match:</b> your filter keeps only ${esc(recsList(fv))}, and your must-have keeps only ${esc(recsList(p[cat].values.map(v => RECS_WORDS[v] || v)))}.</p>
+      <div class="recs-bar-actions"><button type="button" class="btn" data-recs-unfilter="${cat}">Remove the ${esc(recsList(fv))} filter</button><button type="button" class="btn" data-recs-edit>Edit preferences</button></div></div>`;
+  }
+  const parts = [];
+  if (ex.byFilter) parts.push(`your filters${S.q ? ' and search' : ''} leave ${recsCount(res.total - ex.byFilter, 'program')} of ${res.total.toLocaleString('en-US')}`);
+  if (ex.byMustHave) {
+    const per = Object.entries(ex.byMustHaveCategory).filter(([, n]) => n > 0).map(([c, n]) => `“${recsMustWords(c, p[c])}” rules out ${n.toLocaleString('en-US')}`);
+    parts.push(`your must-haves rule out ${recsCount(ex.byMustHave, 'program')}${per.length > 1 ? ` (${per.join(', ')}; a program can fail more than one)` : per.length ? ` (${per[0]})` : ''}`);
+  }
+  if (ex.hidden) parts.push(`${recsCount(ex.hidden, 'program')} ${ex.hidden === 1 ? 'is' : 'are'} hidden`);
+  if (res.needVerification.length) parts.push(`${recsCount(res.needVerification.length, 'program')} need${res.needVerification.length === 1 ? 's' : ''} verification (below)`);
+  const text = parts.length ? `${parts.join('; ')}.` : 'nothing in the program list matched.';
+  return `<div class="recs-empty card" role="status"><p><b>No confirmed matches.</b> ${esc(text[0].toUpperCase() + text.slice(1))}</p>
+    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button>${ex.byFilter ? '<button type="button" class="btn" data-recs-unfilter="all">Clear filters</button>' : ''}</div></div>`;
+}
+function recsNvHtml(res) {
+  const nv = res.needVerification;
+  if (!nv.length) return '';
+  const rows = nv.map(it => { const p = programBySlug(it.slug);
+    return `<li class="recs-nv-row"><a href="#/p/${esc(it.slug)}" class="team-name">${esc(displayName(p))}</a><span class="team-sub">${programLine(p)}</span>${recsWhyHtml(it)}</li>`; }).join('');
+  return `<details class="recs-nv card"><summary>Need verification (${nv.length}): we can’t confirm ${nv.length === 1 ? 'this program meets' : 'these programs meet'} your must-haves</summary><ul class="recs-nv-list">${rows}</ul></details>`;
+}
+// The list in Recommended mode. Called by renderList; returns true when it drew the page.
+function renderRecsList(idx) {
+  const R = S.recs, f = S.filters;
+  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Recommended for you' }];
+  if (R.loading) {
+    $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: 'Loading recommendations…', tabs: listTabs(f.view) })
+      + `<div class="content-body"><div class="empty" role="status">Loading recommendations…</div></div>`;
+    return true;
+  }
+  const res = recsResult();
+  if (res.error) { R.active = false; R.fitError = res.error === 'mismatch' ? 'updating' : 'failed'; syncSortControls(); return false; }
+  const conf = res.confirmed, shown = conf.slice(0, R.shown);
+  const answered = RECS_CATS.filter(c => R.saved[c.key].mode !== 'skip').length;
+  const bits = [corpusLabel(), `${recsCount(conf.length, 'confirmed match', 'confirmed matches')}`,
+    ...(res.needVerification.length ? [`${res.needVerification.length.toLocaleString('en-US')} need verification`] : []),
+    ...listFilterBits(conf.map(it => programBySlug(it.slug))), 'sorted by Recommended'];
+  const stale = R.stale.length ? '<p class="recs-notice">Program data has been updated since you set these preferences; the results are recomputed.</p>' : '';
+  const bar = `<section class="recs-bar" aria-label="Your preferences"><p id="recsBarText" tabindex="-1"><b>${recsCount(answered, 'preference')}:</b> ${esc(recsSummary(R.saved))}</p>
+    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button></div>${stale}</section>`;
+  const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug)), { ranked: true }) : '')
+    : (shown.length ? `<div class="grid cards">${shown.map(it => cardHtml(programBySlug(it.slug), recsWhyHtml(it), true)).join('')}</div>` : '');
+  const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
+  const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
+  $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
+    + `<div class="content-body">${askBanner()}${bar}${body}</div>`;
+  recsAnnounce(`Showing ${shown.length} of ${conf.length} confirmed matches`);
+  const app = $('#app');
+  wireAskBanner();
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
+  app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
+  app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { setSort(b.closest('th').dataset.sort); syncSortControls(); await renderList(); });
+  app.querySelectorAll('[data-recs-edit]').forEach(b => b.onclick = () => recsOpen());
+  app.querySelectorAll('[data-recs-unfilter]').forEach(b => b.onclick = () => recsUnfilter(b.dataset.recsUnfilter));
+  const m = $('#recsMore');
+  if (m) m.onclick = async () => { const from = R.shown; R.shown += RECS_PAGE; await renderList(); $('#app').querySelectorAll('.pcard, tr.team-row')[from]?.focus(); };
+  return true;
+}
+// Removing a filter is always the visitor's explicit action (A1): one group, or every filter group.
+function recsUnfilter(which) {
+  const f = S.filters;
+  if (which === 'all') { f.conf = []; f.region = []; f.division = []; f.cond = []; }
+  else if (which === 'division' || which === 'region') f[which] = [];
+  else return;
+  saveState(); renderSidebar(); renderList();
+}
+// The line above the ordinary list when saved preferences exist but are not applied (A6), or when the data the
+// recommendations need didn't load (O1). '' otherwise, which is always while recommendations are switched off.
+function recsPausedLine() {
+  const R = S.recs;
+  if (!R.on) return '';
+  if (R.fitError) {
+    const why = R.fitError === 'updating' ? 'Program data is updating; try again in a minute.' : 'Recommendations need school and climate data, which didn’t load.';
+    return `<div class="recs-paused recs-notice" role="alert">${why} <button type="button" class="btn" id="recsResume">Try again</button></div>`;
+  }
+  if (R.active || !recsHasSaved()) return '';
+  return `<div class="recs-paused" role="status">Personalization paused (sorted by ${esc(sortLabel(S.filters.sort) || 'Name')}) · <button type="button" class="btn" id="recsResume">Show recommended</button></div>`;
+}
+function wireRecsPaused() { const b = $('#recsResume'); if (b) b.onclick = () => recsShowRecommended(); }
 
 /* ---------- router ---------- */
 function route() {
@@ -2421,18 +2631,20 @@ const sortDir = () => S.filters.sortDir || SORT_SPECS[S.filters.sort]?.dir || 'a
 function setSort(key) {
   const f = S.filters;
   if (!SORT_SPECS[key]) return;
+  if (S.recs?.active) recsPause(); // #400: any ordinary sort pauses the recommendations
   f.sortDir = key === f.sort ? (sortDir() === 'asc' ? 'desc' : 'asc') : null;
   f.sort = key;
   saveState();
 }
 const sortDirLabel = () => `Sort direction: ${sortDir() === 'asc' ? 'ascending' : 'descending'}`;
 const sortDirArrow = () => sortDir() === 'asc' ? '▴' : '▾';
-const sortDirBtn = () => `<button type="button" class="sort-dir" id="sortDir" title="${sortDirLabel()}" aria-label="${sortDirLabel()}">${sortDirArrow()}</button>`;
+const sortDirBtn = () => `<button type="button" class="sort-dir" id="sortDir" title="${sortDirLabel()}" aria-label="${sortDirLabel()}"${S.recs?.active ? ' disabled' : ''}>${sortDirArrow()}</button>`;
 // After any sort change, the sidebar's select and direction button are brought up to date IN PLACE - rebuilding the
 // sidebar would take focus out of whichever control the visitor is on (and out of the search box).
 function syncSortControls() {
   const sel = $('#sortSelect'), btn = $('#sortDir');
-  if (sel) { sel.innerHTML = sortOptions().map(k => `<option value="${k}">${esc(sortLabel(k))}</option>`).join(''); sel.value = S.filters.sort; }
+  if (sel) { sel.innerHTML = sortOptions().map(k => `<option value="${k}">${esc(sortLabel(k))}</option>`).join(''); sel.value = S.recs?.active ? 'recommended' : S.filters.sort; }
+  if (btn) btn.disabled = !!S.recs?.active; // Recommended has no direction
   if (btn) { btn.title = sortDirLabel(); btn.setAttribute('aria-label', sortDirLabel()); btn.textContent = sortDirArrow(); }
 }
 function sortCmp(key, dir) {
@@ -2445,8 +2657,21 @@ function sortCmp(key, dir) {
     return (spec.group ? spec.group(a) - spec.group(b) : 0) || sign * cmp(x, y) || byDisplayName(a, b);
   };
 }
+// The words for the filters and search on screen, shared by the ordinary list and Recommended mode (#400 PR 4).
+function listFilterBits(rows) { // rows: the programs on screen, which the class highlight line counts (#15)
+  const f = S.filters, bits = [];
+  if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
+  if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
+  // The class buttons highlight, they do not filter (#15): the subtitle must not read like the region bit above.
+  if (f.classYear.length) bits.push(classSubtitle(f.classYear, rows));
+  if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
+  if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
+  return bits;
+}
 async function renderList() {
   const idx = await loadIndex();
+  if (S.recs?.active && S.recs.lib && (S.recs.fit || S.recs.loading) && renderRecsList(idx)) return; // #400 PR 4
+  if (S.recs) recsAnnounce('');
   const f = S.filters;
   const rows = filteredPrograms();
   const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
@@ -2457,12 +2682,7 @@ async function renderList() {
   if (f.cond.length) { const hidden = condHiddenText(condTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (hidden) bits.push(esc(hidden)); }
   // And, apart from those, how many a chip excluded because its measure does not apply to their division (#198).
   if (f.cond.length) { const na = condNaText(condNaTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (na) bits.push(esc(na)); }
-  if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
-  if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
-  // The class buttons highlight, they do not filter (#15): the subtitle must not read like the region bit above.
-  if (f.classYear.length) bits.push(classSubtitle(f.classYear, rows));
-  if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
-  if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
+  bits.push(...listFilterBits(rows));
   bits.push(`sorted by ${sortLabel(f.sort) || 'RPI'}${f.sortDir && f.sortDir !== SORT_SPECS[f.sort]?.dir ? `, ${f.sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`);
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
@@ -2470,9 +2690,10 @@ async function renderList() {
   const crumbs = f.conf.length ? [{ label: 'All programs', href: '#/' }, { label: title }] : [{ label: 'All programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
   const app = $('#app');
   wireAskBanner();
+  wireRecsPaused();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   // The table is rebuilt on a sort, so focus goes back to the header just used: Enter, Enter again flips it back.
@@ -2488,7 +2709,7 @@ const TABLE_COL_HAS = {
   commits: (p, cy) => commitsFor(p, cy) > 0, titles: p => has.rowTitles(p), cups: p => has.rowCups(p),
   region: p => !!p.region, type: p => !!p.ownership,
 };
-function cardHtml(p) {
+function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); anything but a string is ignored (map's index)
   const tc = teamColors(p), cy = S.filters.classYear;
   const years = Object.entries(p.commitmentsByYear || {});
   const commits = years.length ? years.map(([y, n]) => cy.includes(y) ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
@@ -2497,7 +2718,8 @@ function cardHtml(p) {
     p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
   const foot = [has.rowCommits(p) ? `Commits ${commits}` : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
   const meta = [programLine(p), esc((p.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))].filter(Boolean).join(' · ');
-  return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}">
+  const recs = typeof why === 'string';
+  return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}"${recs ? ' tabindex="-1"' : ''}>
     <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
       ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
     ${stripeHtml(tc)}
@@ -2507,12 +2729,12 @@ function cardHtml(p) {
         ${facts[1]}
         ${facts[2]}
         ${facts[3]}
-      </div>` : ''}</div>
+      </div>` : ''}${recs ? why : ''}</div>
     <div class="foot"><span>${foot}${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
       <span class="foot-actions">${cmpBtn(p.slug)}${starBtn(p.slug)}</span></div>
   </div>`;
 }
-function tableHtml(rows) {
+function tableHtml(rows, opts = {}) { // opts.ranked: Recommended mode's order, so no column claims the sort (#400)
   const f = S.filters, cy = f.classYear;
   const cols = [
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
@@ -2531,7 +2753,7 @@ function tableHtml(rows) {
   ].filter(([k]) => !rows.length || !TABLE_COL_HAS[k] || rows.some(p => TABLE_COL_HAS[k](p, cy)));
   const dir = sortDir(), shown = (cls, sortKey) => sortKey && sortKey === f.sort ? cls.replace('col-extra', '').trim() : cls;
   const SORT_NOTE = { tuition: 'Sorts by out-of-state tuition' };
-  const head = cols.map(([k, label, cls, , sortKey]) => { const on = sortKey && f.sort === sortKey;
+  const head = cols.map(([k, label, cls, , sortKey]) => { const on = !opts.ranked && sortKey && f.sort === sortKey;
     return `<th class="${shown(cls, sortKey)}${sortKey ? ' sortable' : ''}${on ? ` sort-active sort-${dir}` : ''}"${sortKey ? ` data-sort="${sortKey}"` : ''}${on ? ` aria-sort="${dir === 'asc' ? 'ascending' : 'descending'}"` : ''}>${sortKey ? `<button type="button" class="th-sort"${SORT_NOTE[sortKey] ? ` title="${SORT_NOTE[sortKey]}"` : ''}>${esc(label)}</button>` : esc(label)}</th>`; }).join('');
   const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn, sortKey]) => `<td class="${shown(cls, sortKey)}">${fn(p)}</td>`).join('')}</tr>`).join('');
   return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">

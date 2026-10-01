@@ -171,7 +171,7 @@ test('reasons: at most three, matched prefers before passed musts, shown in cate
   assert.deepEqual(r2.reasons.map(x => [x.category, x.mode]), [['region', 'must'], ['division', 'must'], ['size', 'prefer']]);
   assert.equal(r2.tradeoff.category, 'climate');
   assert.equal(r2.tradeoff.outcome, 'miss');
-  assert.equal(R.tradeoffText(r2.tradeoff), 'Mild winters: coldest month averages 50.1°F; you preferred four seasons or cold winters', 'values in taxonomy order');
+  assert.equal(R.tradeoffText(r2.tradeoff), 'Mild winters: coldest month averages 50.1°F (weather station 10.2 km away); you preferred four seasons or cold winters', 'values in taxonomy order');
   // Zero positive soft contributions: no reason, not claimed as a match.
   const none = R.validatePrefs(prefs({ region: { mode: 'prefer', values: ['South'] } }), C).prefs;
   const r3 = R.reasons(R.contributions(p, none, S));
@@ -190,11 +190,16 @@ test('reason, tradeoff and unknown text is built only from the object, locale-fr
   const r = R.reasons(R.contributions(p, q, S));
   assert.deepEqual(r.reasons.map(R.reasonText), ['Midwest region (OH)', 'D3', '163,164 undergraduates']);
   const c = R.validatePrefs(prefs({ climate: { mode: 'prefer', values: ['four-season'] } }), C).prefs;
-  assert.equal(R.reasonText(R.reasons(R.contributions(p, c, S)).reasons[0]), 'Four seasons: coldest month averages 27°F');
-  const u = proj(row('u', { region: null, undergradEnrollment: null }), entry({ climate: null, climateUnknown: 'far-station' }));
+  assert.equal(R.reasonText(R.reasons(R.contributions(p, c, S)).reasons[0]), 'Four seasons: coldest month averages 27°F (weather station 10.2 km away)', 'D2: the figure and the station distance');
+  const u = proj(row('u', { region: null, undergradEnrollment: null }), entry({ climate: null, climateUnknown: 'far-station', stationKm: 63.4 }));
   const all = R.validatePrefs(prefs({ region: { mode: 'must', values: ['West'] }, climate: { mode: 'prefer', values: ['mild'] } }), C).prefs;
   assert.deepEqual(R.reasons(R.contributions(u, all, S)).unknowns.map(R.unknownText),
-                   ['Region unknown: no College Scorecard record', 'Climate unknown: the nearest weather station is too far away']);
+                   ['Region unknown: no College Scorecard record', 'Climate unknown: the nearest weather station is 63.4 km away, too far to label']);
+  // With no distance on record the words still say why, without a number.
+  const noKm = R.reasons(R.contributions(proj(row('n'), entry({ climate: null, climateUnknown: 'far-station', stationKm: null })), all, S)).unknowns;
+  assert.equal(R.unknownText(noKm.find(x => x.category === 'climate')), 'Climate unknown: the nearest weather station is too far away');
+  const noKmReason = R.reasons(R.contributions(proj(row('k'), entry({ climate: 'mild', stationKm: null })), R.validatePrefs(prefs({ climate: { mode: 'prefer', values: ['mild'] } }), C).prefs, S)).reasons[0];
+  assert.equal(R.reasonText(noKmReason), 'Mild winters: coldest month averages 50.1°F');
 });
 
 test('A8 (unit) equal scores order by displayed name, then slug, and the fast path agrees with compareRanked', () => {

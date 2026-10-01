@@ -3,9 +3,8 @@
 //     node --test tests/recs_form.test.mjs
 //     RECS_PAGE_HTML=<a copy of main's index.html> node --test tests/recs_form.test.mjs   # the behavioural cases fail
 //
-// Same mechanism as tests/ask_page.test.mjs: the page's inline <script> runs in a `vm` against a stub DOM, and fetch
-// is a stub that serves public/ and answers api/status as each test says. A <script src="recs.js"> the page appends
-// is run from public/recs.js in the same context and recorded as a request. Nothing leaves the process.
+// The page harness is tests/recs_page_helpers.mjs (shared with tests/recs_results.test.mjs): the page's inline <script>
+// runs in a `vm` against a stub DOM, fetch is a stub, and recs.js is run when the page appends it. Nothing leaves the process.
 //
 // What this proves:
 //   - the switch: only api/status {recs: true} shows the entry button. Off ({"local":false}, serve.py's
@@ -27,102 +26,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import vm from 'node:vm';
-import { fileURLToPath } from 'node:url';
 import worker from '../worker.js';
+import { PUBLIC, HTML, CATALOG, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
 
-const HERE = path.dirname(fileURLToPath(import.meta.url));
-const PUBLIC = path.join(HERE, '..', 'public');
-const HTML = process.env.RECS_PAGE_HTML || path.join(PUBLIC, 'index.html');
-const RECS_JS = fs.readFileSync(path.join(PUBLIC, 'recs.js'), 'utf8');
-const CATALOG = JSON.parse(fs.readFileSync(path.join(HERE, 'fixtures', 'recs', 'catalog.json'), 'utf8'));
-
-function makeElement(name) {
-  const listeners = {}, attrs = {};
-  return {
-    _name: name, _listeners: listeners, _attrs: attrs, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0,
-    dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
-    setAttribute(k, v) { attrs[k] = String(v); }, getAttribute: (k) => attrs[k] ?? null,
-    addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
-    removeEventListener() { }, querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null,
-    matches: () => false, focus() { }, contains: () => false,
-  };
-}
-const HANDLES = ['S', 'renderSidebar', 'loadIndex', 'REGIONS', 'recsOpen', 'recsClose', 'recsApply', 'recsReset', 'recsToggleValue',
-  'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsSheetState'];
-
-// `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
-// `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
-function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true } = {}) {
-  const els = new Map();
-  const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
-  const store = new Map(Object.entries(storage === 'throws' ? {} : storage));
-  const throwing = storage === 'throws';
-  const requests = [];
-  const sandbox = {
-    console, setTimeout, clearTimeout, Promise, Map, Set, WeakMap, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl,
-    isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent, Error, TypeError,
-    location: { hash: '', search: '', replace(h) { this.hash = h; } },
-    history: { replaceState() { } },
-    matchMedia: () => ({ matches: false }),
-    localStorage: {
-      getItem: (k) => { if (throwing) throw new Error('SecurityError'); return store.has(k) ? store.get(k) : null; },
-      setItem: (k, v) => { if (throwing) throw new Error('QuotaExceededError'); store.set(k, String(v)); },
-      removeItem: (k) => { if (throwing) throw new Error('SecurityError'); store.delete(k); },
-    },
-    innerWidth: width, addEventListener() { },
-    fetch: async (url, init) => {
-      requests.push(String(url));
-      const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return JSON.parse(JSON.stringify(body)); } });
-      if (url === 'api/status' || url === '/api/status') return status ? ok(status) : ok({}, 404);
-      if (url === 'api/ask/status' || url === '/api/ask/status') return { ok: false, status: 0, type: 'opaqueredirect', async json() { throw new SyntaxError('opaque'); } };
-      let u = String(url).replace(/^\//, '');
-      if (u.startsWith('api/v1/')) {
-        const sub = u.slice('api/v1/'.length);
-        if (sub === 'programs') u = 'data/programs/index.json';
-        else if (sub === 'status') u = 'archive/refresh-state.json';
-        else u = `missing/${sub}`;
-      }
-      const p = path.join(PUBLIC, u);
-      return fs.existsSync(p) ? ok(JSON.parse(fs.readFileSync(p, 'utf8'))) : ok({}, 404);
-    },
-  };
-  const head = makeElement('head');
-  head.appendChild = (el) => {
-    requests.push(el.src);
-    setTimeout(() => {
-      if (el.src !== 'recs.js' || !sandbox.__recsJsOk) return el.onerror && el.onerror(new Error('load failed'));
-      vm.runInContext(RECS_JS, sandbox, { filename: 'public/recs.js' });
-      el.onload && el.onload();
-    }, 0);
-  };
-  sandbox.document = { documentElement: makeElement('html'), body: makeElement('body'), head, querySelector: bySelector, querySelectorAll: () => [],
-    addEventListener() { }, createElement: makeElement, activeElement: null };
-  sandbox.window = sandbox; sandbox.globalThis = sandbox; sandbox.__recsJsOk = recsJs;
-  const lines = fs.readFileSync(html, 'utf8').split(/\r?\n/);
-  const a = lines.findIndex((l) => l.trim() === '<script>'), b = lines.findIndex((l) => l.trim() === '</script>');
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(HANDLES)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
-  vm.createContext(sandbox);
-  new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  const $ = (sel) => sandbox.document.querySelector(sel);
-  return { sb: sandbox, $, requests, store, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'),
-    panelHtml: () => $('#recsPanelBody').innerHTML + $('#recsStatus').textContent };
-}
-const settle = async () => { for (let i = 0; i < 40; i++) await new Promise((r) => setTimeout(r, 0)); };
-async function ready(opts) {
-  const pg = loadPage(opts);
-  await settle();
-  if (!pg.sb.S.index) await pg.sb.loadIndex(); // the page's own first route loads it; this only waits for it
-  await settle();
-  assert.ok(pg.sb.S.index?.divisions, 'the index never loaded');
-  pg.sb.renderSidebar();
-  return pg;
-}
-async function open(pg) { await pg.sb.recsOpen(); await settle(); assert.equal(pg.panel().hidden, false, 'the panel did not open'); }
-const ON = { local: false, recs: true };
+const HERE = path.join(PUBLIC, '..', 'tests');
 const saved = (pg) => JSON.parse(pg.store.get('cd.recs'));
-const plain = (v) => JSON.parse(JSON.stringify(v));
-const LOAD_REQUESTS = ['/api/v1/programs', '/api/v1/status', 'api/status', 'api/ask/status'];
 
 // ---------- the switch ----------
 
@@ -250,7 +158,7 @@ test('the panel: a dialog that is modal only at phone width, four labelled field
     assert.match(html, /value="must" data-recs-imp="climate" disabled aria-describedby="recs-climate-why"/);
     assert.match(html, /id="recs-climate-why">Prefer only: climate labels are estimates from the nearest weather station\./);
     assert.ok(!/value="must" data-recs-imp="(region|division|size)"[^>]*disabled/.test(html), 'must disabled outside climate');
-    assert.match(html, /<button type="submit" class="btn primary" id="recsSave">Save preferences<\/button>/);
+    assert.match(html, /<button type="submit" class="btn primary" id="recsSave">Show matches<\/button>/);
     assert.ok(!/match %|% match|admission|recruit/i.test(html), 'no match percentage or admission or recruiting claim');
   }
 });
