@@ -192,7 +192,8 @@ function subtitleBefore(sb, rows) {
   if (f.conf.length > 1) bits.push(escFor(f.conf.join(', ')));
   if (f.region.length) bits.push(`${escFor(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${escFor(f.classYear.join(', '))}`);
-  if (S.q) bits.push(`matching “${escFor(S.qRaw)}”`);
+  // #434: the search moved to the header, so the subtitle carries its own Clear search after the query.
+  if (S.q) bits.push(`matching “${escFor(S.qRaw)}” <button type="button" class="clear-search" data-clear-search>Clear search</button>`);
   // The RPI option names its season, in progress or not, since issue #62; every other label is as it shipped,
   // except that the header-only sorts name themselves since #285 (they used to fall back to "RPI", which was wrong).
   const headerOnly = { record: `Record ${expectedRpi(SHIPPED).finished}`, commits: 'Commits', conference: 'Conference' };

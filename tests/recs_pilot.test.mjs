@@ -24,7 +24,8 @@ async function page(opts) {
   pg.sb.renderSidebar();
   return pg;
 }
-const on = (pg) => pg.sb.S.recs.on === true && /id="recsOpen"/.test(pg.sidebar());
+// #434: the one entry is the header button (#recsOpen inside #headerRecs); the sidebar has none.
+const on = (pg) => pg.sb.S.recs.on === true && /id="recsOpen"/.test(pg.$('#headerRecs').innerHTML) && !/id="recsOpen"/.test(pg.sidebar());
 
 test('the page ships with no pilot: RECS_PILOT_SHA256 is null, so every #pilot= link does nothing', async () => {
   assert.match(fs.readFileSync(HTML, 'utf8'), /^const RECS_PILOT_SHA256 = null;$/m);

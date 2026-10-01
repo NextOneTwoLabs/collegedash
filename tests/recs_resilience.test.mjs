@@ -11,6 +11,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import { FIT, HTML, FOCUS, LOAD_REQUESTS, ON, ready, loadPage, open, settle, plain, toastHtml } from './recs_page_helpers.mjs';
+import { parseCss, decls } from './lib/css_cascade.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -160,21 +161,49 @@ test('the Stats view in Recommended mode has a Why column with each row\'s reaso
   assert.ok(!/recs-why-cell/.test(pg.app()), 'the Why column outlived Recommended mode');
 });
 
-// ---------- the Start strip's entry ----------
+// ---------- the header's entry (#434 decision 4; it replaced the Start strip's #startActions, #427) ----------
 
-test('the Start strip: "Find programs for me" in #startActions while on, nothing while off; focus returns to it', async () => {
+const HEADER_BUTTON = '<button type="button" class="btn recs-entry" id="recsOpen" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="false" aria-label="Find programs for me" title="Find programs for me"><span class="recs-entry-full">Find programs for me</span><span class="recs-entry-short" aria-hidden="true">For me</span></button>';
+
+test('#434: "Find programs for me" is the one header button while on, nothing while off; focus returns to it', async () => {
   const off = await ready({ status: { local: false } });
-  assert.equal(off.$('#startActions').innerHTML, '');
+  assert.equal(off.$('#headerRecs').innerHTML, '');
   const pg = await ready({ status: ON });
-  assert.equal(pg.$('#startActions').innerHTML,
-    '<button type="button" class="btn recs-entry" id="recsOpenStart" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="false">Find programs for me</button>');
-  pg.$('#recsOpenStart').onclick(); await settle();
+  assert.equal(pg.$('#headerRecs').innerHTML, HEADER_BUTTON);
+  assert.ok(!/Find programs for me|recsOpen/.test(pg.sidebar()), 'a second entry is still in the sidebar');
+  pg.$('#recsOpen').onclick(); await settle();
   assert.equal(pg.panel().hidden, false);
-  assert.equal(pg.$('#recsOpenStart')._attrs['aria-expanded'], 'true');
+  assert.equal(pg.$('#recsOpen')._attrs['aria-expanded'], 'true');
   pg.sb.recsClose();
-  assert.equal(FOCUS.el?._name, '#recsOpenStart', 'focus did not return to the Start strip button');
-  pg.$('#recsOpen').onclick(); await settle(); pg.sb.recsClose();
-  assert.equal(FOCUS.el?._name, '#recsOpen', 'focus did not return to the sidebar button');
+  assert.equal(FOCUS.el?._name, '#recsOpen', 'focus did not return to the header button');
+});
+
+test('#434 condition 4: switched on before the index loads (the #433 pilot), the header button is already there', async () => {
+  const pg = loadPage({ status: { local: false } });
+  assert.ok(!pg.sb.S.index, 'fixture: the index had already loaded');
+  pg.sb.recsSwitchedOn();
+  assert.equal(pg.$('#headerRecs').innerHTML, HEADER_BUTTON, 'no header button before the index loaded');
+  await settle();
+});
+
+test('#434 condition 6: on a phone the open sheet covers the two-row header - it starts at 0 and the header is inert', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  await open(pg);
+  pg.sb.recsSheetState();
+  assert.equal(pg.$('.header').inert, true, 'the header is not inert under the open sheet');
+  assert.equal(pg.$('#main').inert, true);
+  assert.equal(pg.$('#sidebar').inert, true);
+  pg.sb.recsClose();
+  assert.equal(pg.$('.header').inert, false, 'the header stayed inert after the sheet closed');
+  assert.equal(FOCUS.el?._name, '#recsOpen');
+  // the sheet's own phone rule: fixed, inset 0 - it never takes its top from --header-height, which #434 changes
+  const css = fs.readFileSync(HTML, 'utf8');
+  const phone = parseCss([...css.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n'))
+    .filter(r => r.selectors.includes('.recs-panel') && r.at.join(' ') === '@media (max-width: 768px)');
+  const d = Object.fromEntries(phone.flatMap(r => decls(r.body)).map(x => [x.prop, x.value]));
+  assert.equal(d.position, 'fixed');
+  assert.equal(d.inset, '0', 'the phone sheet does not start at 0');
+  assert.ok(!phone.some(r => /header-height/.test(r.body)), 'the phone sheet depends on --header-height');
 });
 
 // ---------- the phone drawer's bar ----------
@@ -244,14 +273,6 @@ test('#427 review: Show recommended does not rewrite a migrated document before 
   await pg.sb.recsShowRecommended(); await settle();
   assert.equal(pg.sb.S.recs.active, true);
   assert.equal(pg.store.get('cd.recs'), v0, 'the applied stamp rewrote the migrated document');
-});
-
-test('#427 review: focus falls back to the sidebar button when the Start-strip button is no longer on screen', async () => {
-  const pg = await ready({ status: ON });
-  pg.$('#recsOpenStart').onclick(); await settle();
-  pg.$('#recsOpenStart').offsetParent = null; // e.g. the sidebar was opened at desktop width, which hides the strip
-  pg.sb.recsClose();
-  assert.equal(FOCUS.el?._name, '#recsOpen');
 });
 
 test('#427 note: a hide while the prompt waits shows its Undo beside the prompt, focus lands on Undo, and still nothing is written', async () => {

@@ -49,7 +49,7 @@ const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 're
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
   'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
   'recsEditPreference', 'renderRecsToast', 'programBySlug', 'recsOtherTab', 'recsUseOtherTab', 'recsKeepThisTab', 'showResultsLabel',
-  'renderStartActions', 'recsPilotReady'];
+  'renderHeaderRecs', 'recsSwitchedOn', 'recsPilotReady'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.

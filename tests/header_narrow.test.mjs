@@ -56,6 +56,8 @@ const EXACT = {
   '|.wordmark': { 'font-size': '21px', 'letter-spacing': '-0.6px', 'line-height': '1', 'white-space': 'nowrap' },
   '|.header-divider': { width: '1px', height: '24px' },
   '|.section-label': { 'font-size': '14px', 'white-space': 'nowrap' },
+  // #434: at <=768 px the header is two rows - this brand row (left cell, the toggle beside it), then the search box
+  '@media (max-width: 768px)|.header': { display: 'grid', 'grid-template-columns': 'minmax(0, 1fr) auto', 'grid-template-rows': '52px 52px', 'column-gap': '8px', 'align-items': 'center' },
   '@media (max-width: 460px)|.header': { padding: '0 12px' },
   '@media (max-width: 460px)|.header-left': { gap: '8px' },
   '@media (max-width: 400px)|.header-left': { gap: '6px' },
@@ -167,6 +169,20 @@ test('the cascade fails loudly on every form it cannot evaluate', () => {
 
 test('#430: the five header elements\' own rules set exactly the layout they did', () => {
   assert.doesNotThrow(() => exactHeader(CSS));
+});
+
+// #434 (Huatuo, change 2): the header gained a search row on phones. Row 1 is still exactly this brand row, in a cell of
+// its own (minmax(0, 1fr)) beside the toggle's (auto), so the label can only be clipped by its own cell, never drawn
+// under the toggle; the #51 widths below were re-measured in both themes at 320, 360 and 375 px (PR body).
+test('#434: at <=768 px the header is two rows, and the brand row keeps its own cell beside the toggle', () => {
+  const got = exactHeader(CSS);
+  for (const w of [320, 375, 768]) assert.equal(at('.header', 'display', w), 'grid', `the header is not the two-row grid at ${w}px`);
+  assert.equal(at('.header', 'display', 769), 'flex', 'the desktop header is not one row');
+  const phone = got['@media (max-width: 768px)|.header'];
+  assert.equal(phone['grid-template-rows'], '52px 52px');
+  assert.equal(phone['grid-template-columns'], 'minmax(0, 1fr) auto');
+  for (const w of [320, 340, 359]) assert.equal(drawn('.section-label', w, RULES), false, `the label is drawn at ${w}px`);
+  for (const w of [360, 375]) assert.equal(drawn('.section-label', w, RULES), true, `the label is not drawn at ${w}px`);
 });
 
 test('the header markup still carries the section label and divider (only CSS hides them)', () => {
