@@ -22,6 +22,8 @@ export const FIT = { updated: INDEX_UPDATED, fitTaxonomy: CATALOG.fitTaxonomy, c
 export const LOAD_REQUESTS = ['/api/v1/programs', '/api/v1/status', 'api/status', 'api/ask/status'];
 export const ON = { local: false, recs: true };
 
+// The element the page last focused (the stub DOM has no focus of its own). Its _name is the selector it was found by.
+export const FOCUS = { el: null };
 export function makeElement(name) {
   const listeners = {}, attrs = {};
   return {
@@ -29,13 +31,14 @@ export function makeElement(name) {
     dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
     setAttribute(k, v) { attrs[k] = String(v); }, getAttribute: (k) => attrs[k] ?? null,
     addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
-    removeEventListener() { }, querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null,
-    matches: () => false, focus() { }, contains: () => false,
+    removeEventListener() { }, querySelector: (sel) => makeElement(sel), querySelectorAll: () => [], closest: () => null,
+    matches: () => false, focus() { FOCUS.el = this; }, contains: () => false,
   };
 }
 const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 'recsOpen', 'recsClose', 'recsApply', 'recsReset', 'recsToggleValue',
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
-  'displayName', 'matchesFilters', 'recsSheetState'];
+  'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
+  'recsEditPreference', 'renderRecsToast', 'programBySlug'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.

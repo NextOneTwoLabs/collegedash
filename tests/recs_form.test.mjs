@@ -184,7 +184,7 @@ test('saving: cd.recs v1 holds the ranker-validated prefs; Shortlist, Compare, f
   S.recsToggleValue('climate', 'cold');
   assert.equal(S.recsApply(), true);
   assert.deepEqual(saved(pg), { v: 1, prefs: { v: 1, region: { mode: 'prefer', values: ['West', 'Northeast'] }, division: { mode: 'must', values: ['D3'] },
-    size: { mode: 'skip', values: [] }, climate: { mode: 'prefer', values: ['cold'] } } });
+    size: { mode: 'skip', values: [] }, climate: { mode: 'prefer', values: ['cold'] } }, notices: { sharedDevice: true } }); // PR 5: shown once
   const after = Object.fromEntries([...pg.store].filter(([k]) => k !== 'cd.recs'));
   assert.deepEqual(after, before, 'another key changed');
   S.renderRecsPanel();

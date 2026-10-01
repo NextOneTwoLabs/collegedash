@@ -8,7 +8,7 @@
 // people), one each from D1, D2 and D3. For every place a fixture program's name is shown, the text between that
 // name and the next program's name (or 700 characters, whichever is sooner) must carry that program's division tag.
 //
-// Views rendered: Table, Cards, Recommended for you (cards with reasons, and Need verification; #400), Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Pipelines
+// Views rendered: Table, Cards, Recommended for you (cards with reasons, Need verification, the hidden list; #400), Shortlist page, sidebar Shortlist, sidebar Compare, ID Camps, Pipelines
 // (a club's programs; a D1 program's page, whose subtitle carries the line while the "Clubs feeding X" /
 // "High schools feeding X" headings stay short; a club and a program together; the Program box's suggestions),
 // Compare column headers, Compare "Add a school" results, program profile (subtitle and glance panel), not-found
@@ -124,7 +124,10 @@ async function renderAll(transform) {
   };
   out.push(['Recommended cards', await recommended({ v: 1, division: { mode: 'prefer', values: ['D1'] } }), short, PROGS]);
   out.push(['Need verification', await recommended({ v: 1, size: { mode: 'must', values: ['lt5k'] } }), short, PROGS]);
-  sb.S.recs.active = false;
+  // The hidden list (#400 PR 5): every fixture program hidden, the list shown.
+  Object.assign(sb.S.recs, { hidden: SLUGS.map(slug => ({ slug, reason: 'other', at: null })), showHidden: true });
+  out.push(['Hidden list', await recommended({ v: 1, division: { mode: 'prefer', values: ['D1'] } }), short, PROGS]);
+  Object.assign(sb.S.recs, { hidden: [], showHidden: false, active: false });
   sb.S.favorites = new Set(SLUGS);
   await sb.renderShortlist(); out.push(['Shortlist page', app(), short, PROGS]);
   sb.S.sidebarTab = 'shortlist'; sb.renderSidebar(); out.push(['Sidebar shortlist', $('#sidebar').innerHTML, short, PROGS]);
@@ -186,7 +189,7 @@ test('every program-listing view shows each program with its division (D1, D2, D
   const view = name => REAL.find(v => v[0] === name)[1];
   assert.match(view('Recommended cards'), /Recommended for you[^]*class="recs-why"/, 'the Recommended view was not drawn');
   assert.match(view('Need verification'), /<details class="recs-nv card"><summary>Need verification \(3\)/, 'the Need verification group was not drawn');
-  for (const need of ['Table', 'Recommended cards', 'Need verification', 'ID Camps', 'Pipelines (a club\'s programs)', 'Pipelines (D1 program page)', 'Pipelines Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
+  for (const need of ['Table', 'Recommended cards', 'Need verification', 'Hidden list', 'ID Camps', 'Pipelines (a club\'s programs)', 'Pipelines (D1 program page)', 'Pipelines Program box suggestions', 'Shortlist page', 'Compare column headers']) assert.ok(names.includes(need), need);
 });
 
 test('the program line reads "D1 · Conference · City, ST", the Table\'s form', async () => {
