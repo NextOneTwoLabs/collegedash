@@ -768,6 +768,13 @@ const d1Count = (p, v) => (p.division === 'D1' || v > 0) ? v : null;
    is "not collected". This list must name exactly the divisions CHAMPION_TABLES does. has.titles (the profile's
    titles tile and glance figure) reads the same list (#214). */
 const TITLE_TABLE_DIVISIONS = ['D1', 'D2', 'D3'];
+/* Commitments are collected for these divisions only: trends.py COMMIT_DIVISIONS, the owner's decision on #315, which
+   Pipelines reads from trends.json `commitDivisions`. Anywhere else a program's commit count is "not collected", never
+   0 (#411) - including the few D2/D3 programs that carry an incidental count from SoccerWire, exactly as Pipelines
+   shows them. tests/commits_not_collected.test.mjs fails if this list and trends.py differ. */
+const COMMIT_DIVISIONS = ['D1'];
+const commitsCollected = p => COMMIT_DIVISIONS.includes(p.division);
+const COMMITS_NOT_COLLECTED = `<span class="muted" title="Commits are collected for ${COMMIT_DIVISIONS.join(', ')} programs only"><span aria-hidden="true">—</span><span class="sr-only">Not collected</span></span>`;
 const titleCount = (p, v) => (TITLE_TABLE_DIVISIONS.includes(p.division) || v > 0) ? v : null;
 const COND_FIELDS = [
   { key: 'admissionRate', label: 'Admission rate', chip: 'Admission', missing: 'no admission rate', unit: 'percent', ops: ORDER_OPS,
@@ -1948,7 +1955,7 @@ const SORT_SPECS = {
   academicRank: { dir: 'asc', label: () => 'US rank (THE)', key: p => p.academicRank ?? null },
   tuition: { dir: 'asc', label: () => 'Tuition (out-of-state)', key: p => p.tuitionOutOfState ?? p.tuitionInState ?? null },
   undergrads: { dir: 'desc', label: () => 'Undergrads', key: p => p.undergradEnrollment ?? null },
-  commits: { dir: 'desc', label: () => classLabel(S.filters.classYear), key: p => commitsFor(p, S.filters.classYear) },
+  commits: { dir: 'desc', label: () => classLabel(S.filters.classYear), key: p => commitsCollected(p) ? commitsFor(p, S.filters.classYear) : null },  // not collected: last, both ways (#411)
   titles: { dir: 'desc', label: () => 'National titles', key: p => p.nationalTitles || null, group: divisionOrder, miss: divisionOrder },
   cups: { dir: 'desc', label: () => 'College Cups', key: p => appliesTo('collegeCups', p) ? p.collegeCups || null : null, miss: p => appliesTo('collegeCups', p) ? 1 : 2 },
   region: { dir: 'asc', label: () => 'Region', key: p => p.region || null, cmp: byText },
@@ -2062,7 +2069,7 @@ function tableHtml(rows) {
     ['usrank', 'US rank (THE)', 'num col-extra', p => `<span title="${esc(rankTitle(p))}">${p.academicRank == null ? '—' : '#' + p.academicRank}</span>`, 'academicRank'],
     ['ug', 'Undergrads', 'num', p => fmtNum(p.undergradEnrollment), 'undergrads'],
     ['tuition', 'Tuition / yr', 'num', p => tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state), 'tuition'],
-    ['commits', classLabel(cy), 'num', p => `<span class="num-strong">${commitsFor(p, cy)}</span>`, 'commits'],
+    ['commits', classLabel(cy), 'num', p => commitsCollected(p) ? `<span class="num-strong">${commitsFor(p, cy)}</span>` : COMMITS_NOT_COLLECTED, 'commits'],
     ['titles', 'Titles', 'num col-extra', p => p.division === 'D1' || !p.division ? p.nationalTitles || '—' : p.nationalTitles ? `<span title="${esc(titlesPhrase(p.nationalTitles, p.division))}">${p.nationalTitles} ${esc(p.division)}</span>` : '—', 'titles'],
     ['cups', 'College Cups', 'num col-extra', p => appliesTo('collegeCups', p) ? p.collegeCups || '—' : '', 'cups'],
     ['region', 'Region', 'col-extra', p => esc(p.region || '—'), 'region'],
