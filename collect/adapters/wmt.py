@@ -312,7 +312,8 @@ def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, s
             "classLabel": class_label, "classCode": class_code(class_label),
             "hometown": fields.get("hometown", hometown), "highSchool": fields.get("high school", ""),
             "previousSchool": fields.get("previous school", ""), "major": fields.get("major", ""),
-            "club": fields.get("club team", fields.get("club", "")),
+            "club": common.club_value(fields.get("club team", fields.get("club", "")),  # #337: never a pronoun set
+                                      "WMT card field 'club team'" if "club team" in fields else "WMT card field 'club'"),
             "bioUrl": href, "social": _social(card),
         })
     for item in soup.select("li.player-list-item"):
@@ -336,7 +337,8 @@ def _parse_redesign_layouts(soup: BeautifulSoup, base_url: str, players: list, s
             "classLabel": class_label, "classCode": class_code(class_label),
             "hometown": f.get("hometown", ""), "highSchool": f.get("high school", ""),
             "previousSchool": f.get("previous school", ""), "major": f.get("major", ""),
-            "club": f.get("club team", f.get("club", "")),
+            "club": common.club_value(f.get("club team", f.get("club", "")),  # #337: never a pronoun set
+                                      "WMT list field 'club team'" if "club team" in f else "WMT list field 'club'"),
             "bioUrl": urljoin(base_url, link["href"]), "social": _social(item),
         })
     _parse_staff_list_items(soup, base_url, staff)
