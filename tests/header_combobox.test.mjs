@@ -29,8 +29,9 @@ const escHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '
 const FOCUS = { el: null };
 function makeElement(name) {
   const listeners = {}, attrs = {}, classes = new Set();
-  return {
-    _name: name, _listeners: listeners, _attrs: attrs, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0,
+  let txt = '';
+  const el = {
+    _name: name, _listeners: listeners, _attrs: attrs, _textWrites: 0, innerHTML: '', value: '', title: '', hidden: false, scrollTop: 0,
     placeholder: '', dataset: {}, style: {},
     setAttribute(k, v) { attrs[k] = String(v); }, getAttribute: k => attrs[k] ?? null, removeAttribute(k) { delete attrs[k]; },
     classList: { add: c => classes.add(c), remove: c => classes.delete(c), contains: c => classes.has(c),
@@ -39,6 +40,8 @@ function makeElement(name) {
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null,
     matches: () => false, focus() { FOCUS.el = name; }, blur() { }, contains: () => false,
   };
+  Object.defineProperty(el, 'textContent', { get: () => txt, set: v => { txt = String(v); el._textWrites++; }, enumerable: true });
+  return el;
 }
 function loadPage() {
   const els = new Map(), requests = [];
@@ -73,7 +76,7 @@ function loadPage() {
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'index.html: could not find the inline <script>');
   const src = lines.slice(a + 1, b).join('\n')
-    + `\n;for (const k of ['S', 'route', 'setQuery', 'renderList', 'loadIndex']) { try { globalThis[k] = eval(k); } catch { } }\n`;
+    + `\n;for (const k of ['S', 'route', 'setQuery', 'renderList', 'renderSidebar', 'loadIndex']) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return { sb: sandbox, $: bySelector, requests };
@@ -243,6 +246,32 @@ test('mouse: pressing an option keeps the box focused, and a click chooses it', 
   const optEl = { dataset: { i: '0' } };
   for (const fn of list._listeners.click || []) fn({ target: { closest: sel => (sel === '[role="option"]' ? optEl : null) } });
   assert.equal(pg.sb.location.hash, `#/p/${first.id.replace(/^qOpt-/, '')}`);
+});
+
+// Huatuo's two follow-ups on #445, folded into #447.
+test('#445 follow-up: #qStatus is rewritten only when its words change (a filter tap with a query typed is not re-announced)', async () => {
+  const pg = await ready();
+  pg.sb.location.hash = '#/';
+  await type(pg, 'Ohio');
+  const st = pg.$('#qStatus'), said = st.textContent, before = st._textWrites;
+  assert.ok(said, 'fixture: the status is empty');
+  pg.sb.renderSidebar(); pg.sb.renderSidebar();  // what a pill tap does: the sidebar redraws and the status is refreshed
+  assert.equal(st.textContent, said);
+  assert.equal(st._textWrites, before, 'the same status was written again, so a screen reader announces it again');
+});
+
+test('#445 follow-up: picking the profile already on screen leaves no focus flag for the next profile', async () => {
+  const pg = await ready();
+  pg.sb.location.hash = '#/p/kenyon-college';
+  await pg.sb.route(); await settle(60);
+  await type(pg, 'kenyon');
+  key(pg, 'ArrowDown'); key(pg, 'Enter');
+  assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
+  assert.ok(!pg.sb.S.titleFocus, 'the focus flag was left set');
+  FOCUS.el = null;
+  pg.sb.location.hash = '#/p/duke';
+  await pg.sb.route(); await settle(60);
+  assert.notEqual(FOCUS.el, '.content-title', 'an unrelated profile took heading focus from a stale flag');
 });
 
 test('no request while typing or moving through the suggestions', async () => {
