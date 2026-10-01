@@ -541,12 +541,28 @@ jobs:
           fi
           save_collection "Could not publish after 3 attempts, and none of them got as far as a rebased, rebuilt and gated commit (see the attempts above for why)" "unrebased" "$pre_rebase"
 
+      # Issue #86: the run's colour says whether the collectors did their job. `continue-on-error` on the collector
+      # step keeps a failure there from stopping the publish, so this step reports it, after the commit step:
+      #   code 1 (over the threshold) or 2 (the command crashed): red.
+      #   no code at all: the step never reached `echo "code=..."` - killed at its 300-minute limit, or crashed before
+      #     reporting - red, whatever outcome GitHub gives a timeout. The code is this workflow's own output, so its
+      #     absence is observable without relying on that mapping.
+      #   code 0: green. build_only skips the collector step and stays green: `code != '0'` alone is true for a skipped
+      #     step (the #82 trap), hence the `outcome != 'skipped'` guard. A run someone cancelled stays cancelled.
+      # !cancelled() rather than the implicit success(), so a run the commit step already failed (a gate stopped the
+      # publish) still gets the collector verdict. The expression is inside ${{ }} because a bare leading `!` is a YAML
+      # tag. This step only echoes and exits: it stays the job's last step and has no side effects
+      # (tests/refresh_fail_step_test.py checks all three).
       - name: Fail if too many collectors failed
-        if: steps.refresh.outputs.code != '' && steps.refresh.outputs.code != '0'
+        if: ${{ !cancelled() && steps.refresh.outcome != 'skipped' && steps.refresh.outputs.code != '0' }}
         env:
           REFRESH_CODE: ${{ steps.refresh.outputs.code }}
           FAIL_THRESHOLD: ${{ inputs.fail_threshold || '0.05' }}
         run: |
+          if [ -z "$REFRESH_CODE" ]; then
+            echo "::error title=refresh::the collector step did not finish (killed at its 300-minute limit, or crashed before reporting); what it collected was published or saved above."
+            exit 1
+          fi
           echo "refresh exited with code $REFRESH_CODE: 1 = more than $FAIL_THRESHOLD of collector runs failed, 2 = the command crashed."
-          echo "See the Summary tab for the failure table. The data that was collected has already been committed."
+          echo "See the Summary tab for the failure table. What was collected was published or saved above."
           exit 1
