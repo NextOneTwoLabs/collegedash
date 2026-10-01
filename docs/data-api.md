@@ -19,7 +19,8 @@ scraping.
 
 | GET / HEAD route | Response |
 | --- | --- |
-| `/api/v1/programs` | the program index (`public/data/programs/index.json`) |
+| `/api/v1/programs` | the program index (`public/data/programs/index.json`), every field, unchanged |
+| `/api/v1/list` | the slim program list the site reads (`public/data/list/index.json`, issue #395): the same rows cut to the fields the list views use, written compact. `season.rpiSeason` names the RPI season; each row's `rpi` is its rank in it |
 | `/api/v1/programs/{slug}` | one program's profile (`public/data/programs/{slug}.json`); a slug is `[a-z0-9-]{1,64}` |
 | `/api/v1/commitments` | the commitments index |
 | `/api/v1/camps` | the camps index |

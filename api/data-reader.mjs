@@ -10,6 +10,8 @@ export function assetPath(resource) {
       return `/data/programs/${slug}.json`;
     case 'camps':
       return '/data/camps/index.json';
+    case 'list':
+      return '/data/list/index.json';
     case 'trends':
       return '/data/trends/index.json';
     case 'commitments':

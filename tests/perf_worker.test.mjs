@@ -43,6 +43,7 @@ const assets = { async fetch(r) {
     { headers: { 'content-type': 'application/json', 'content-length': String(new TextEncoder().encode(body).length), etag } });
   if (p === '/') return new Response(r.method === 'HEAD' ? null : '<html>page</html>', { headers: { 'content-type': 'text/html', 'content-length': '17' } });
   if (p === '/data/programs/index.json') return json('{"programs":[]}', '"i"');
+  if (p === '/data/list/index.json') return json('{"programs":[]}', '"l"');
   if (p === '/data/programs/short-one.json') return json(PROFILE_A, '"a"');
   if (p === '/data/programs/much-longer-program.json') return json(PROFILE_B, '"b"');
   if (p === '/archive/refresh-state.json') return json('{}', '"s"');
@@ -405,5 +406,21 @@ test('privacy: no IP, user agent, cookie, session id, query or slug in any point
 
 test('FIELDS and VIEWS: the wire format the page sends, nothing more', () => {
   assert.deepEqual(FIELDS, ['v', 'view', 'res', 'device', 'nav', 'cache', 'server', 'wait', 'download', 'parse', 'render', 'first', 'tx', 'size', 'rate']);
-  assert.deepEqual(VIEWS, { list: 'programs', profile: 'program', trends: 'trends', camps: 'camps' });
+  assert.deepEqual(VIEWS, { list: ['programs', 'list'], profile: ['program'], trends: ['trends'], camps: ['camps'] });
+});
+
+test('#395: the list view reports the full index (programs) or the slim list (list); nothing else, and apart', async () => {
+  const { env } = await setup();
+  const t = await token();
+  await post(env, beacon({ view: 'list', res: 'programs' }), { t });
+  await post(env, beacon({ view: 'list', res: 'list' }), { t });
+  await post(env, beacon({ view: 'list', res: 'program' }), { t });
+  await post(env, beacon({ view: 'profile', res: 'list' }), { t });
+  const pages = env.PERF_STATS.points.filter(p => p.blobs[0] === 'page');
+  assert.deepEqual(pages.map(p => p.blobs[2]), ['programs', 'list'], 'blob3 keeps the two files apart; a mismatched pair is refused');
+  assert.deepEqual(pages[1].doubles.slice(4, 6), [171000, 1900000], 'the slim list is a shared file: its sizes are kept');
+  const server = await setup();
+  await run(server.env, req('/api/v1/list', { headers: { cookie: cookie(t) } }));
+  assert.deepEqual(server.env.PERF_STATS.points.map(p => p.blobs.slice(1, 3)), [['list', '2xx']], 'server points name the route kind list');
+  assert.equal(server.env.PERF_STATS.points[0].doubles[4], 15, 'with the shared file\'s exact size');
 });

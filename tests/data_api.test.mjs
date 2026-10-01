@@ -21,7 +21,8 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC = path.join(ROOT, 'public');
 const HOST = 'https://college.nextonetwo.com';
 
-function createMockEnv() {
+// extra: { 'data/list/index.json': '<json>' } - files a test supplies that the committed tree may not hold yet
+function createMockEnv(extra = {}) {
   const calls = [];
   return {
     calls,
@@ -32,10 +33,11 @@ function createMockEnv() {
         calls.push(u.pathname);
         let rel = decodeURIComponent(u.pathname).replace(/^\//, '');
         const file = path.join(PUBLIC, rel);
-        if (!file.startsWith(PUBLIC) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+        const supplied = Object.hasOwn(extra, rel) ? Buffer.from(extra[rel]) : null;
+        if (!supplied && (!file.startsWith(PUBLIC) || !fs.existsSync(file) || !fs.statSync(file).isFile())) {
           return new Response(null, { status: 404 });
         }
-        const content = fs.readFileSync(file);
+        const content = supplied || fs.readFileSync(file);
         // Compute SHA-256 for ETag test
         const hash = await crypto.subtle.digest('SHA-256', content);
         const etag = '"' + Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('') + '"';
@@ -206,4 +208,33 @@ test('encoded and traversal attempts to /data/* and /archive/* are refused', asy
     assert.deepEqual(await res.json(), { ok: false, error: 'Not found' });
   }
   assert.deepEqual(env.calls, [], 'Asset server should never be called for evasion attempts');
+});
+
+// Issue #395: the slim list the site reads. The daily refresh's build writes the file, so the committed tree may not
+// hold it yet; this test supplies one.
+test('/api/v1/list serves data/list/index.json like every v1 route; /api/v1/programs/list stays a profile route', async () => {
+  const LIST = JSON.stringify({ updated: 'x', season: { rpiSeason: 2026 }, programs: [{ slug: 'ucla' }] });
+  const env = createMockEnv({ 'data/list/index.json': LIST });
+  const res = await worker.fetch(new Request(HOST + '/api/v1/list'), env);
+  assert.equal(res.status, 200);
+  assert.equal(await res.text(), LIST);
+  assert.equal(res.headers.get('cache-control'), 'no-cache');
+  assert.ok(res.headers.get('etag'));
+  assert.deepEqual(env.calls, ['/data/list/index.json'], 'read from the list asset, nothing else');
+  const again = await worker.fetch(new Request(HOST + '/api/v1/list', { headers: { 'if-none-match': res.headers.get('etag') } }), env);
+  assert.equal(again.status, 304);
+  const head = await worker.fetch(new Request(HOST + '/api/v1/list', { method: 'HEAD' }), env);
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), '');
+  assert.equal((await worker.fetch(new Request(HOST + '/api/v1/list', { method: 'POST' }), env)).status, 405);
+  // a program slug named "list" is still a profile: the reason the list is /api/v1/list
+  const prof = createMockEnv();
+  await worker.fetch(new Request(HOST + '/api/v1/programs/list'), prof);
+  assert.deepEqual(prof.calls, ['/data/programs/list.json']);
+  // before the first build writes it: a JSON 404, never the assets' HTML
+  const none = await worker.fetch(new Request(HOST + '/api/v1/list'), createMockEnv());
+  assert.equal(none.status, 404);
+  assert.match(none.headers.get('content-type') || '', /application\/json/);
+  // and the raw file is refused like every /data path
+  assert.equal((await worker.fetch(new Request(HOST + '/data/list/index.json'), env)).status, 404);
 });

@@ -210,15 +210,19 @@ def read_json(path: str, default=None):
         return json.load(f)
 
 
-def write_json(path: str, obj, *, sort_keys: bool = False) -> str:
+def write_json(path: str, obj, *, sort_keys: bool = False, compact: bool = False) -> str:
     """Atomically write pretty JSON (UTF-8, trailing newline). The temp file name is unique per
-    writer so two processes (serve + refresh, onboard --all + refresh) never share one."""
+    writer so two processes (serve + refresh, onboard --all + refresh) never share one. `compact`
+    writes no whitespace at all, for a file every visitor downloads and parses (the slim list, #395)."""
     d = os.path.dirname(path)
     os.makedirs(d, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=d, prefix=os.path.basename(path) + ".", suffix=".tmp")
     try:
         with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
-            json.dump(obj, f, indent=2, ensure_ascii=False, sort_keys=sort_keys)
+            if compact:
+                json.dump(obj, f, ensure_ascii=False, sort_keys=sort_keys, separators=(",", ":"))
+            else:
+                json.dump(obj, f, indent=2, ensure_ascii=False, sort_keys=sort_keys)
             f.write("\n")
         os.replace(tmp, path)
     except BaseException:

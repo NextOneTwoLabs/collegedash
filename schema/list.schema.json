@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://collegedash.local/schema/list.schema.json",
+  "title": "CollegeDash slim program list (public/data/list/index.json, /api/v1/list; issue #395)",
+  "description": "The rows of public/data/programs/index.json cut to what the site's list views read. build.check_list_index checks it against the full index as well; this schema pins the shape. A row carries exactly these fields: a new one is added here and to build.LIST_KEEP together.",
+  "type": "object",
+  "required": ["updated", "season", "programs"],
+  "additionalProperties": false,
+  "properties": {
+    "updated": {"type": "string", "minLength": 1},
+    "season": {
+      "type": "object",
+      "required": ["current", "gradYears", "finished", "rpiFinal", "rpiSeason"],
+      "properties": {
+        "current": {"type": "integer"},
+        "gradYears": {"type": "array", "items": {"type": "integer"}},
+        "finished": {"type": "integer"},
+        "rpiFinal": {"type": ["object", "null"]},
+        "rpiSeason": {"type": ["integer", "null"]}
+      },
+      "propertyNames": {"not": {"pattern": "^_"}}
+    },
+    "programs": {"type": "array", "items": {"$ref": "#/$defs/row"}}
+  },
+  "$defs": {
+    "count": {"type": ["integer", "null"], "minimum": 0},
+    "text": {"type": ["string", "null"]},
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "name", "shortName", "nickname", "searchNames", "conference", "division", "colors", "city", "state",
+                   "region", "ownership", "undergradEnrollment", "admissionRate", "sat25", "academicRank", "academicRankTied",
+                   "tuitionInState", "tuitionOutOfState", "nationalTitles", "collegeCups", "rosterSize", "commitmentsByYear",
+                   "completeness", "rpi", "lastSeason", "fallAvgHighF"],
+      "properties": {
+        "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "shortName": {"$ref": "#/$defs/text"},
+        "nickname": {"$ref": "#/$defs/text"},
+        "searchNames": {"type": "array", "items": {"type": "string"}},
+        "conference": {"type": "string"},
+        "division": {"type": "string"},
+        "colors": {"type": ["array", "null"], "items": {"type": "string"}},
+        "city": {"$ref": "#/$defs/text"},
+        "state": {"$ref": "#/$defs/text"},
+        "region": {"$ref": "#/$defs/text"},
+        "ownership": {"$ref": "#/$defs/text"},
+        "undergradEnrollment": {"$ref": "#/$defs/count"},
+        "admissionRate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "sat25": {"$ref": "#/$defs/count"},
+        "academicRank": {"$ref": "#/$defs/count"},
+        "academicRankTied": {"type": "boolean"},
+        "tuitionInState": {"$ref": "#/$defs/count"},
+        "tuitionOutOfState": {"$ref": "#/$defs/count"},
+        "nationalTitles": {"type": "integer", "minimum": 0},
+        "collegeCups": {"type": "integer", "minimum": 0},
+        "rosterSize": {"$ref": "#/$defs/count"},
+        "commitmentsByYear": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "rpi": {"type": ["integer", "null"], "minimum": 1},
+        "lastSeason": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["year", "record", "gamesPlayed"],
+          "properties": {
+            "year": {"type": "integer"},
+            "record": {"$ref": "#/$defs/text"},
+            "gamesPlayed": {"$ref": "#/$defs/count"}
+          }
+        },
+        "fallAvgHighF": {"type": ["number", "null"]}
+      }
+    }
+  }
+}
