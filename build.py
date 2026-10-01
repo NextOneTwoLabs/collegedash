@@ -2173,6 +2173,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     trends_recorder = trends.Recorder(club_table, candidates=club_candidates, same_person=same_person,  # issue #230
                                       school_table=school_table)  # #339: one school table for every state lookup
     rows, all_commits, all_camps = [], [], []
+    camps_undated = 0  # issue #70: camp items with no date, left out of the index; counted, never silent
     fit_entries: dict[str, dict] = {}  # issue #400
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
@@ -2192,6 +2193,8 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
         for it in ((profile.get("camps") or {}).get("items") or []):
             if camp_in_window(it, window):
                 all_camps.append(camp_row(program["slug"], it))
+            elif not (isinstance(it, dict) and isinstance(it.get("startDate"), str) and it.get("startDate")):
+                camps_undated += 1  # no date to place it by (camp_in_window); its program page lists it undated
         common.log(f"build: {program['slug']} completeness {profile['_build']['completeness']} "
                    f"({len(profile['commitments'])} commits, {len(profile['seasons'])} seasons)"
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
@@ -2209,7 +2212,8 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
                f"window from {window['from']}; "
                f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
-               f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view)")
+               f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view); "
+               f"{camps_undated} undated item(s) left out (each still listed on its program page)")
     common.log("build: " + trends.summary_line(trends_recorder.write()) + f" -> {trends.out_path()}")
     publishing = publishing_run()
     club_report = (club_recorder.write() if publishing
@@ -2416,7 +2420,8 @@ def check_camps_index(registry: dict) -> bool:
     `updated` and the declared `from` are for; this check is about internal consistency.
 
     Like check_seasons it reports and does not raise: everything it reads is a file on disk that a
-    hand-edit or a half-written build can have left any shape at all.
+    hand-edit or a half-written build can have left any shape at all. That holds for all three kinds
+    of file it opens (issue #70): the camps index, the programs index and each profile.
 
     Two of the checks below exist because the camp view hides rows (issue #78). `counts` must equal
     the tally of the rows actually published, so the number the view reports as hidden cannot drift
@@ -2466,8 +2471,12 @@ def check_camps_index(registry: dict) -> bool:
         return False
 
     index_path = os.path.join(common.PROGRAMS_OUT_DIR, "index.json")
-    idx = common.read_json(index_path)
-    known = {r.get("slug") for r in ((idx or {}).get("programs") or []) if isinstance(r, dict)}
+    try:
+        idx = common.read_json(index_path)
+    except Exception as e:  # noqa: BLE001 - issue #70: reported like the camps file above, never raised
+        print(f"CAMPS: {index_path} is not readable JSON: {type(e).__name__}: {e}")
+        return False
+    known = {r.get("slug") for r in ((idx if isinstance(idx, dict) else {}).get("programs") or []) if isinstance(r, dict)}
     if not known:
         print(f"CAMPS: cannot read program slugs from {index_path}, so no row's slug can be resolved")
         return False
@@ -2495,9 +2504,17 @@ def check_camps_index(registry: dict) -> bool:
 
     expected: list[dict] = []
     item_fields: set = set()
+    unreadable: set = set()
     for program in published_programs(registry):
         slug = program.get("slug")
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        path = os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")
+        try:
+            p = common.read_json(path) or {}
+        except Exception as e:  # noqa: BLE001 - issue #70: one bad profile is named, and the rest still checked
+            print(f"CAMPS: {path} is not readable JSON: {type(e).__name__}: {e}; its camps cannot be checked")
+            ok = False
+            unreadable.add(slug)
+            continue
         camps = p.get("camps") if isinstance(p, dict) else None
         items = (camps or {}).get("items") if isinstance(camps, dict) else None
         for it in items if isinstance(items, list) else []:
@@ -2515,6 +2532,9 @@ def check_camps_index(registry: dict) -> bool:
               f"row; add them to CAMP_INDEX_FIELDS, or to CAMP_ITEM_UNPUBLISHED if withholding them "
               f"is deliberate")
         ok = False
+    # A profile that could not be read is reported above; its published rows are left out of the comparison
+    # rather than reported a second time as rows "no profile holds".
+    published = [r for r in published if not (isinstance(r, dict) and r.get("slug") in unreadable)]
     if len(published) != len(expected):
         print(f"CAMPS: the index publishes {len(published)} rows, but the profiles hold {len(expected)} "
               f"items inside the declared window")
