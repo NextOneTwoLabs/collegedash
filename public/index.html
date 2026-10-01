@@ -961,6 +961,13 @@ const TITLE_TABLE_DIVISIONS = ['D1', 'D2', 'D3'];
 const COMMIT_DIVISIONS = ['D1'];
 const commitsCollected = p => COMMIT_DIVISIONS.includes(p.division);
 const COMMITS_NOT_COLLECTED = `<span class="muted" title="Commits are collected for ${COMMIT_DIVISIONS.join(', ')} programs only"><span aria-hidden="true">—</span><span class="sr-only">Not collected</span></span>`;
+/* #416: outside COMMIT_DIVISIONS a program can still carry a count - the one or two commits SoccerWire happened to list -
+   and its card and profile show it (sections are decided per program, never by division: #94). Wherever they do, the
+   count carries this note, decided by the same commitsCollected as the Commits column, so the two cannot disagree.
+   `short` is the card's: the word "partial" on screen, the rest for screen readers and in the tooltip. */
+const COMMITS_PARTIAL = 'partial: not systematically collected';
+const commitsPartial = (p, short = false) => commitsCollected(p) ? ''
+  : `<span class="commits-partial muted small" title="Commits are collected for ${COMMIT_DIVISIONS.join(', ')} programs only; this count was picked up incidentally">(${short ? 'partial<span class="sr-only">: not systematically collected</span>' : COMMITS_PARTIAL})</span>`;
 const titleCount = (p, v) => (TITLE_TABLE_DIVISIONS.includes(p.division) || v > 0) ? v : null;
 const COND_FIELDS = [
   { key: 'admissionRate', label: 'Admission rate', chip: 'Admission', missing: 'no admission rate', unit: 'percent', ops: ORDER_OPS,
@@ -3076,7 +3083,7 @@ function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); an
   const facts = [has.rowRpi(p) ? fact(rpiLabel(), rpiCell(p)) : '', has.rowAcademicRank(p) ? fact('US rank (THE)', rankHtml(p), rankTitle(p)) : '',
     p.undergradEnrollment != null ? fact('Undergrads', fmtNum(p.undergradEnrollment)) : '',
     p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
-  const foot = [has.rowCommits(p) ? `Commits ${commits}` : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
+  const foot = [has.rowCommits(p) ? `Commits ${commits} ${commitsPartial(p, true)}`.trim() : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
   const meta = [programLine(p), esc((p.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))].filter(Boolean).join(' · ');
   const recs = typeof why === 'string';
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}"${recs ? ' tabindex="-1"' : ''}>
@@ -3960,7 +3967,7 @@ function glanceHtml(p, row) {
     sch.netPriceAverage != null ? `<dt>Avg net price</dt><dd>${fmtUsd(sch.netPriceAverage)}</dd>` : '',
     pr.headCoach?.name ? `<dt>Head coach</dt><dd>${esc(pr.headCoach?.name || '—')}${coachFromWiki(pr.headCoach, p) ? ` <span class="small muted">(${coachFromWiki(pr.headCoach, p)})</span>` : ''}</dd>` : '',
     p.roster?.count != null ? `<dt>Roster</dt><dd>${p.roster?.count ?? '—'}</dd>` : '',
-    has.commitsByYear(p) ? `<dt>Commitments</dt><dd>${esc(commits)}</dd>` : '',
+    has.commitsByYear(p) ? `<dt>Commitments</dt><dd>${esc(commits)} ${commitsPartial(p)}</dd>` : '',
     has.cups(p) ? `<dt>College Cups</dt><dd>${(pr.collegeCups || []).length}</dd>` : '',
   ];
   return `<div class="glance-head">
@@ -4045,7 +4052,7 @@ async function tabOverview(p) {
       ${sch.tuitionInState != null || sch.tuitionOutOfState != null ? (() => { const tin = sch.tuitionInState, tout = sch.tuitionOutOfState, same = tin == null || tout == null || tin === tout;
         return tile('Tuition / yr', fmtUsd(same ? (tout ?? tin) : tin),
           same ? (sch.netPriceAverage ? `avg net price ${fmtUsd(sch.netPriceAverage)} after aid` : '') : `in-state · ${fmtUsd(tout)} out-of-state`); })() : ''}
-      ${commits.length ? tile('Commitments', commits.reduce((a, [, n]) => a + n, 0), commits.map(([y, n]) => `${y}: ${n}`).join(' · ')) : ''}
+      ${commits.length ? tile('Commitments', commits.reduce((a, [, n]) => a + n, 0), `${commits.map(([y, n]) => `${y}: ${n}`).join(' · ')} ${commitsPartial(p)}`.trim()) : ''}
     </div>
     ${rpiPts.length || has.roster(p) ? `<div class="grid g2">
       ${rpiPts.length ? `<div class="card"><h3>RPI, recent seasons</h3>
@@ -4206,7 +4213,8 @@ async function tabCommitments(p) {
   // roster need: graduating by position vs next class commits
   const r = p.roster, next = r ? String(r.season + 1) : years[0];
   const need = r ? ['GK', 'D', 'M', 'F'].map(pos => { const g = r.graduatingByPos[pos] || 0; const cm = (byYear[next] || []).filter(c => (c.pos || '').split('/')[0] === pos).length; return `<tr><td class="pos">${pos}</td><td class="num">${g}</td><td class="num">${cm}</td><td class="num ${cm - g < 0 ? 'neg' : ''}">${cm - g > 0 ? '+' : ''}${cm - g}</td></tr>`; }).join('') : '';
-  return `<div class="grid g2 section">
+  const partial = years.length && !commitsCollected(p) ? `<p class="small muted section">${commitsPartial(p)} Commitments are collected for ${COMMIT_DIVISIONS.map(divisionName).join(', ')} programs only; the ones below were picked up incidentally and are not a full list.</p>` : '';  // #416
+  return `${partial}<div class="grid g2 section">
       ${r ? `<div class="card"><h3>Roster need · seniors leaving after ${r?.season ?? ''} vs class of ${next ?? '—'}</h3>${r ? `<table class="need"><tr><th>Pos</th><th class="num">Graduating (SR/GR)</th><th class="num">Commits ${next ?? ''}</th><th class="num">Net</th></tr>${need}</table><p class="small muted" style="margin-top:6px">A rough read of where the next class fills holes. Transfers, early departures and redshirts are not modeled.</p>` : '<div class="empty">Roster not collected.</div>'}</div>` : ''}
       <div class="card"><h3>How to read this</h3><p class="small ink2"><b>confirmed</b> = listed by two independent sources, an official release, or already on the roster. <b>single source</b> = one recruiting site only. Dates marked ≈ are approximations (when a SoccerWire profile was created, or when this tool first saw the record), not announcement dates; approving a dated social post in the Review queue sets the real date. ⚠ on a source means the recruit dropped off that site's list — a possible decommit.</p>
         ${p.curated?.recruitingNotes ? `<h4 style="margin-top:8px">My recruiting notes</h4><p class="prose">${esc(p.curated.recruitingNotes)}</p>` : ''}</div>
@@ -4351,7 +4359,7 @@ async function renderCompare() {
       ['College Cups', p => appliesTo('collegeCups', p) ? p.program.collegeCups.length : notApplicableCell(p)],
       ['Head coach', p => `${esc(p.program.headCoach.name || '—')}${p.program.headCoach.since ? ` (since ${p.program.headCoach.since})` : ''}${coachFromWiki(p.program.headCoach, p) ? ` <span class="small muted">(${coachFromWiki(p.program.headCoach, p)})</span>` : ''}`],
       ['Roster size', p => p.roster?.count ?? '—'], ['Graduating (SR/GR)', p => p.roster ? Object.entries(p.roster.graduatingByPos).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : '—'],
-      ['Commitments by class', p => Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · ') || '—'],
+      ['Commitments by class', p => { const t = Object.entries(p.commitmentsByYear || {}).map(([y, n]) => `${y}: ${n}`).join(' · '); return t ? `${t} ${commitsPartial(p)}`.trim() : '—'; }],
     ]],
     ['Cost', [
       ['Tuition / yr', tuitionRow], ['Cost of attendance', p => coaCell(p.school, home)],
