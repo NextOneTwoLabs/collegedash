@@ -133,7 +133,7 @@ def test_empty_list_position_stays_blank():
 
 def test_is_position_label():
     for label, want in (("Goalkeeper", True), ("MF/F", True), ("Midfield", True), ("D", True),
-                        ("Manager", False), ("Forward/Outside Defense", False), ("", False), ("Team Impact", False)):
+                        ("Manager", False), ("Forward/Outside Defense", True), ("Forward/Team Manager", False), ("", False), ("Team Impact", False)):
         ok(f"_is_position_label({label!r}) is {want}", sidearm._is_position_label(label) is want)
 
 

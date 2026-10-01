@@ -115,7 +115,7 @@ def test_is_position_label_gate():
                         ("Manager", False), ("Team Manager", False), ("Student Intern", False),
                         ("Student Manager", False), ("FC Dallas", False), ("Attendance", False),
                         ("Camden FC", False), ("Wings Academy", False),
-                        ("Forward/Outside Defense", False), ("Team Impact", False), ("Util", False),
+                        ("Forward/Outside Defense", True), ("Forward/Team Manager", False), ("Team Impact", False), ("Util", False),
                         ("", False)):
         ok(f"_is_position_label({label!r}) is {want}", sidearm._is_position_label(label) is want)
 
