@@ -223,9 +223,11 @@
     if (k.category === 'region') return `${k.value} region${k.detail.state ? ` (${k.detail.state})` : ''}`;
     if (k.category === 'division') return k.value;
     if (k.category === 'size') return `${fmtInt(k.detail.undergrad)} undergraduates`;
+    // D2 (owner): the label always comes with the figure it was taken from AND the station distance.
     const w = ENUM_WORDS.climate[k.value];
-    return `${w[0].toUpperCase()}${w.slice(1)}: coldest month averages ${k.detail.coldMonthMeanF}°F`;
+    return `${w[0].toUpperCase()}${w.slice(1)}: coldest month averages ${k.detail.coldMonthMeanF}°F${stationText(k.detail.stationKm)}`;
   }
+  const stationText = km => (typeof km === 'number' ? ` (weather station ${km} km away)` : '');
   function wantedText(k) {
     const words = k.wanted.map(v => (ENUM_WORDS[k.category] && ENUM_WORDS[k.category][v]) || v);
     return words.length > 1 ? `${words.slice(0, -1).join(', ')} or ${words[words.length - 1]}` : words[0];
@@ -263,7 +265,9 @@
      was most of the ranker's time), and only from the reason, tradeoff or unknown object itself. */
   const reasonText = r => valueText(r);
   const tradeoffText = t => `${valueText(t)}; you preferred ${wantedText(t)}`;
-  const unknownText = u => `${CATEGORY_WORDS[u.category]} unknown: ${UNKNOWN_WHY[u.why] || 'no data'}`;
+  const unknownText = u => (u.why === 'far-station' && typeof u.detail?.stationKm === 'number'
+    ? `Climate unknown: the nearest weather station is ${u.detail.stationKm} km away, too far to label`
+    : `${CATEGORY_WORDS[u.category]} unknown: ${UNKNOWN_WHY[u.why] || 'no data'}`);
 
   /* ---------- order ---------- */
 

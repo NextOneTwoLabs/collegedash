@@ -13,7 +13,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { FIT, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
+import fs from 'node:fs';
+import { FIT, HTML, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -75,7 +76,8 @@ test('Show matches ranks: the fit file is fetched once, then the list is Recomme
   assert.match(html, new RegExp(`${res.confirmed.length} confirmed matches`));
   assert.match(html, /<b>4 preferences:<\/b> Region: West or Midwest \(prefer\) · Division: D3 \(must have\) · School size: under 5,000 undergraduates \(prefer\) · Climate: mild winters \(prefer\)/);
   assert.deepEqual(cardSlugs(html), res.confirmed.slice(0, 25).map((x) => x.slug));
-  assert.match(html, new RegExp(`Showing 25 of ${res.confirmed.length} confirmed matches`));
+  assert.equal(pg.$('#recsCount').textContent, `Showing 25 of ${res.confirmed.length} confirmed matches`);
+  assert.ok(!html.includes('id="recsCount"'), 'the count is redrawn inside #app');
   assert.match(html, /id="recsMore">Show 25 more<\/button>/);
   assert.equal(pg.$('#sortSelect').value, 'recommended', 'the sort select does not show Recommended');
   pg.sb.renderSidebar();
@@ -99,6 +101,10 @@ test('the chips: reasons, a tradeoff and unknowns from the ranker, each with its
   assert.ok(html.includes(`Tradeoff: ${R.tradeoffText(withTrade.tradeoff)}`));
   const withUnknown = res.confirmed.slice(0, 25).find((x) => x.unknowns.length) || res.needVerification[0];
   if (withUnknown) assert.ok(html.includes(R.unknownText(withUnknown.unknowns[0])), 'unknown chip');
+  // D2 (owner, #415 review): a climate chip gives the figure AND the station distance.
+  const mild = res.confirmed.slice(0, 25).flatMap((x) => x.reasons).find((r) => r.category === 'climate');
+  assert.ok(mild, 'the first page has a climate reason to check');
+  assert.ok(html.includes(`coldest month averages ${mild.detail.coldMonthMeanF}°F (weather station ${mild.detail.stationKm} km away)`), 'the climate chip leaves out the station distance');
   assert.ok(!/\d\s?%/.test(html.replace(/<[^>]+>/g, ' ').replace(/admission rate[^<]*/gi, '')), 'a percentage is shown');
 });
 
@@ -108,7 +114,7 @@ test('Show 25 more adds the next 25 in order and says how many are showing', asy
   await pg.$('#recsMore').onclick();
   await settle();
   assert.deepEqual(cardSlugs(pg.app()), res.confirmed.slice(0, 50).map((x) => x.slug));
-  assert.match(pg.app(), new RegExp(`Showing 50 of ${res.confirmed.length} confirmed matches`));
+  assert.equal(pg.$('#recsCount').textContent, `Showing 50 of ${res.confirmed.length} confirmed matches`);
 });
 
 test('A2: Need verification is its own collapsed group, with the ranker\'s programs and their division tags', async () => {
@@ -243,4 +249,19 @@ test('filters and search narrow the recommendations as their own layer', async (
   assert.ok(res.excluded.byFilter > 0);
   assert.deepEqual(cardSlugs(pg.app()), res.confirmed.slice(0, 25).map((x) => x.slug));
   assert.match(pg.app(), /West region/);
+});
+
+test('the count line is one persistent live node in the page markup, cleared when the ordinary list returns', async () => {
+  const page = fs.readFileSync(HTML, 'utf8');
+  assert.match(page, /<div id="app">.*<\/div>\r?\n\s*<!--[^\n]*-->\r?\n\s*<p class="sr-only" id="recsCount" role="status" aria-live="polite"><\/p>\r?\n/, 'not a static node beside #app');
+  const pg = await showSaved();
+  assert.match(pg.$('#recsCount').textContent, /^Showing 25 of \d+ confirmed matches$/);
+  pg.$('#sortSelect').onchange({ target: { value: 'name' } }); await settle();
+  assert.equal(pg.$('#recsCount').textContent, '');
+});
+
+test('the Stats view in Recommended mode claims no column sort (no aria-sort, no active header)', async () => {
+  const pg = await ready({ status: ON, storage: { ...stored(PREFS), 'cd.filters': JSON.stringify({ view: 'table', sort: 'name' }) } });
+  await pg.sb.recsShowRecommended(); await settle();
+  assert.ok(!/aria-sort=|sort-active/.test(pg.app()), 'a column claims to sort the ranked rows');
 });

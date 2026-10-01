@@ -584,6 +584,8 @@ a.pill { text-decoration: none; }
   <aside class="sidebar" id="sidebar" aria-label="Navigation"></aside>
   <div class="main" id="main">
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
+    <!-- #400: "Showing 50 of 411 confirmed matches", one persistent live node outside what #app redraws. -->
+    <p class="sr-only" id="recsCount" role="status" aria-live="polite"></p>
     <footer class="site-notice">
       <details class="feedback" id="feedback">
         <summary>Send feedback</summary>
@@ -2182,6 +2184,8 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
   await renderList();
   $('#recsBarText')?.focus();
 }
+// The count line, written only when it changes, so a screen reader hears each new count once.
+function recsAnnounce(text) { const el = $('#recsCount'); if (el && el.textContent !== text) el.textContent = text; }
 function recsPause() { S.recs.active = false; S.recs.stale = []; }
 
 // The search hits and the sidebar's filters, as rank()'s filter layer: the same predicate the ordinary list uses.
@@ -2257,14 +2261,14 @@ function renderRecsList(idx) {
     ...listFilterBits(conf.map(it => programBySlug(it.slug))), 'sorted by Recommended'];
   const stale = R.stale.length ? '<p class="recs-notice">Program data has been updated since you set these preferences; the results are recomputed.</p>' : '';
   const bar = `<section class="recs-bar" aria-label="Your preferences"><p id="recsBarText" tabindex="-1"><b>${recsCount(answered, 'preference')}:</b> ${esc(recsSummary(R.saved))}</p>
-    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button></div>${stale}
-    <p class="sr-only" role="status" id="recsCount">Showing ${shown.length} of ${conf.length} confirmed matches</p></section>`;
-  const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug))) : '')
+    <div class="recs-bar-actions"><button type="button" class="btn" data-recs-edit>Edit preferences</button></div>${stale}</section>`;
+  const cards = f.view === 'table' ? (conf.length ? tableHtml(shown.map(it => programBySlug(it.slug)), { ranked: true }) : '')
     : (shown.length ? `<div class="grid cards">${shown.map(it => cardHtml(programBySlug(it.slug), recsWhyHtml(it), true)).join('')}</div>` : '');
   const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
   const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
   $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
     + `<div class="content-body">${askBanner()}${bar}${body}</div>`;
+  recsAnnounce(`Showing ${shown.length} of ${conf.length} confirmed matches`);
   const app = $('#app');
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); renderList(); });
@@ -2273,7 +2277,7 @@ function renderRecsList(idx) {
   app.querySelectorAll('[data-recs-edit]').forEach(b => b.onclick = () => recsOpen());
   app.querySelectorAll('[data-recs-unfilter]').forEach(b => b.onclick = () => recsUnfilter(b.dataset.recsUnfilter));
   const m = $('#recsMore');
-  if (m) m.onclick = async () => { const from = R.shown; R.shown += RECS_PAGE; await renderList(); $('#app').querySelectorAll('.pcard')[from]?.focus(); };
+  if (m) m.onclick = async () => { const from = R.shown; R.shown += RECS_PAGE; await renderList(); $('#app').querySelectorAll('.pcard, tr.team-row')[from]?.focus(); };
   return true;
 }
 // Removing a filter is always the visitor's explicit action (A1): one group, or every filter group.
@@ -2587,6 +2591,7 @@ function listFilterBits(rows) { // rows: the programs on screen, which the class
 async function renderList() {
   const idx = await loadIndex();
   if (S.recs?.active && S.recs.lib && (S.recs.fit || S.recs.loading) && renderRecsList(idx)) return; // #400 PR 4
+  if (S.recs) recsAnnounce('');
   const f = S.filters;
   const rows = filteredPrograms();
   const title = f.conf.length === 1 ? f.conf[0] : f.conf.length > 1 ? `${f.conf.length} conferences` : 'All programs';
@@ -2649,7 +2654,7 @@ function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); an
       <span class="foot-actions">${cmpBtn(p.slug)}${starBtn(p.slug)}</span></div>
   </div>`;
 }
-function tableHtml(rows) {
+function tableHtml(rows, opts = {}) { // opts.ranked: Recommended mode's order, so no column claims the sort (#400)
   const f = S.filters, cy = f.classYear;
   const cols = [
     ['rank', rpiLabel(), 'num', p => { if (!appliesTo('rpi', p)) return ''; const r = rpiOf(p); return `<span class="rank-num${r != null && r <= 3 ? ' rank-top' : ''}">${r ?? '—'}</span>`; }, 'rpi'],
@@ -2668,7 +2673,7 @@ function tableHtml(rows) {
   ].filter(([k]) => !rows.length || !TABLE_COL_HAS[k] || rows.some(p => TABLE_COL_HAS[k](p, cy)));
   const dir = sortDir(), shown = (cls, sortKey) => sortKey && sortKey === f.sort ? cls.replace('col-extra', '').trim() : cls;
   const SORT_NOTE = { tuition: 'Sorts by out-of-state tuition' };
-  const head = cols.map(([k, label, cls, , sortKey]) => { const on = sortKey && f.sort === sortKey;
+  const head = cols.map(([k, label, cls, , sortKey]) => { const on = !opts.ranked && sortKey && f.sort === sortKey;
     return `<th class="${shown(cls, sortKey)}${sortKey ? ' sortable' : ''}${on ? ` sort-active sort-${dir}` : ''}"${sortKey ? ` data-sort="${sortKey}"` : ''}${on ? ` aria-sort="${dir === 'asc' ? 'ascending' : 'descending'}"` : ''}>${sortKey ? `<button type="button" class="th-sort"${SORT_NOTE[sortKey] ? ` title="${SORT_NOTE[sortKey]}"` : ''}>${esc(label)}</button>` : esc(label)}</th>`; }).join('');
   const body = rows.map(p => `<tr class="team-row${S.compare.includes(p.slug) ? ' team-row-highlight' : ''}" data-slug="${esc(p.slug)}" tabindex="0">${cols.map(([k, , cls, fn, sortKey]) => `<td class="${shown(cls, sortKey)}">${fn(p)}</td>`).join('')}</tr>`).join('');
   return `<div class="flight-panel standings-panel${f.moreStats ? ' show-more' : ''}">
