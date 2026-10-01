@@ -49,13 +49,15 @@ const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 're
   'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsShowRecommended', 'recsUnfilter', 'setSort', 'filteredPrograms',
   'displayName', 'matchesFilters', 'recsSheetState', 'recsHide', 'recsUndo', 'recsRestore', 'recsRemoveStale', 'recsClearAll',
   'recsEditPreference', 'renderRecsToast', 'programBySlug', 'recsOtherTab', 'recsUseOtherTab', 'recsKeepThisTab', 'showResultsLabel',
-  'renderStartActions'];
+  'renderStartActions', 'recsPilotReady'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
 // `fit`: 'ok', 'missing' (404), 'network' (fetch rejects), 'updating' (always another build) or 'updating-once'.
 // `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/programs answer 404.
-export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok' } = {}) {
+// `hash`: location.hash when the page loads. `session`: initial sessionStorage entries. `transform`: applied to the script.
+export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok',
+  hash = '', session = {}, transform = (x) => x } = {}) {
   const els = new Map();
   const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map(Object.entries(storage === 'throws' ? {} : storage));
@@ -63,10 +65,11 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
   const requests = [];
   let fitServed = 0;
   const windowListeners = {};
+  const sessionStore = new Map(Object.entries(session));
   const sandbox = {
     console, setTimeout, clearTimeout, Promise, Map, Set, WeakMap, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl,
-    isNaN, parseInt, parseFloat, URL, URLSearchParams, performance, encodeURIComponent, decodeURIComponent, Error, TypeError,
-    location: { hash: '', search, replace(h) { this.hash = h; } },
+    isNaN, parseInt, parseFloat, URL, URLSearchParams, performance, crypto: globalThis.crypto, TextEncoder, Uint8Array, encodeURIComponent, decodeURIComponent, Error, TypeError,
+    location: { hash, search, replace(h) { this.hash = h; } },
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: {
@@ -74,6 +77,7 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
       setItem: (k, v) => { if (throwing) throw new Error('QuotaExceededError'); store.set(k, String(v)); },
       removeItem: (k) => { if (throwing) throw new Error('SecurityError'); store.delete(k); },
     },
+    sessionStorage: { getItem: (k) => (sessionStore.has(k) ? sessionStore.get(k) : null), setItem: (k, v) => sessionStore.set(k, String(v)), removeItem: (k) => sessionStore.delete(k) },
     innerWidth: width, addEventListener(type, fn) { (windowListeners[type] = windowListeners[type] || []).push(fn); },
     fetch: async (url) => {
       requests.push(String(url));
@@ -113,11 +117,11 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
   sandbox.window = sandbox; sandbox.globalThis = sandbox; sandbox.__recsJsOk = recsJs;
   const lines = fs.readFileSync(html, 'utf8').split(/\r?\n/);
   const a = lines.findIndex((l) => l.trim() === '<script>'), b = lines.findIndex((l) => l.trim() === '</script>');
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(HANDLES)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = transform(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ${JSON.stringify(HANDLES)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const $ = (sel) => sandbox.document.querySelector(sel);
-  return { sb: sandbox, $, requests, store, windowListeners, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
+  return { sb: sandbox, $, requests, store, sessionStore, windowListeners, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'), app: () => $('#app').innerHTML,
     panelHtml: () => $('#recsPanelBody').innerHTML + $('#recsStatus').textContent };
 }
 export const settle = async () => { for (let i = 0; i < 40; i++) await new Promise((r) => setTimeout(r, 0)); };

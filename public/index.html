@@ -682,6 +682,20 @@ a.pill { text-decoration: none; }
 
 <script>
 'use strict';
+// #400 pilot (#433 review): a #pilot=<token> link is taken out of the address FIRST, before any other code on this page
+// runs, so nothing added later can read or send it. ANY address that starts #pilot= is stripped - a link a chat app or
+// a mail client mangled (a tail like "&utm_source=…", "/", "%") included - and only a value of the exact shape is kept,
+// for recsPilotStart() below to check; anything else counts as no token ('').
+// Nothing here can throw past this block: if history.replaceState is refused, location.replace does it.
+const RECS_PILOT_RAW = (() => {
+  let h = '';
+  try { h = String(location.hash || ''); } catch { return null; }
+  if (!h.startsWith('#pilot=')) return null;
+  try { history.replaceState(null, '', '#/'); } catch { /* refused: the fallback below */ }
+  try { if (location.hash !== '#/') location.replace('#/'); } catch { /* nothing else to try */ }
+  const m = /^#pilot=([^&#/]*)$/.exec(h);
+  return m ? m[1] : '';
+})();
 /* =====================================================================
    nextonetwo · College Soccer dashboard - vanilla JS, no build step.
    Reads the JSON that build.py writes under data/:
@@ -2261,6 +2275,7 @@ function renderRecsPanel() {
   const saved = recsSummary(R.saved);
   body.innerHTML = head + catalog
     + `<p class="recs-intro">Tell us what matters to you. Every category is optional; skip any of them.</p>`
+    + (R.pilot ? '<p class="recs-notice">Pilot: you are trying recommendations before they are released. Tell us what worked and what didn’t with “Send feedback” at the bottom of the page.</p>' : '')
     + notes.map(n => `<p class="recs-notice">${esc(n)}</p>`).join('')
     + (saved ? `<p class="recs-saved"><b>Saved:</b> ${esc(saved)}</p>` : '')
     + `<form id="recsForm" novalidate>${RECS_CATS.map(c => recsFieldHtml(c, R.draft[c.key])).join('')}
@@ -2777,6 +2792,44 @@ function recsKeepThisTab() {
   (R.toast.kind === 'hidden' ? $('#recsUndo') : $('#recsToast'))?.focus();
 }
 window.addEventListener('storage', e => { if (e.key === RECS_KEY || e.key === null) recsOtherTab(e.key === null ? null : e.newValue); });
+
+/* ---------- program recommendations: pilot access for testers (issue #400, PR 8 part 1) ----------
+   While RECS_ENABLED is off in production, testers get in with a link the owner sends: <site>/#pilot=<token>.
+   - The token is a long random value the owner makes with tools/recs_pilot.mjs. Only its SHA-256 is in this page
+     (RECS_PILOT_SHA256); null means there is no pilot, and every #pilot= link does nothing.
+   - It is in the URL fragment, so it is never sent to the server: not to the Worker, not to any log or count.
+   - The page hashes what the link carries (Web Crypto, no request) and, on a match, switches recommendations on for
+     this browser tab's session (sessionStorage). The address is rewritten to #/ first of all, at the top of this
+     script (RECS_PILOT_RAW), so the token leaves the address bar and the tab's back/forward history. The browser's
+     own global history may still record the visit; on a shared device, open the link in a private window.
+     A plain ?recs=1, or any wrong or malformed token, does nothing.
+   - #pilot=off ends it for the session. A new hash here (a one-line change) revokes every old link.
+   This is a gate against a casual or shared parameter, not a security boundary: the feature shows only public data,
+   and anyone reading this page's source can switch it on from the console. No production event, no new request. */
+const RECS_PILOT_SHA256 = null;
+const RECS_PILOT_KEY = 'cd.recs.pilot';
+S.recs.pilot = false;
+async function recsSha256(text) {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function recsPilotOn() { S.recs.pilot = true; recsSwitchedOn(); }
+async function recsPilotStart() {
+  let token = null; // the address was already stripped at the top of the script; a malformed value counts as none
+  if (RECS_PILOT_RAW !== null) { try { token = decodeURIComponent(RECS_PILOT_RAW); } catch { token = null; } }
+  if (!RECS_PILOT_SHA256) return false;
+  if (token === 'off') { try { sessionStorage.removeItem(RECS_PILOT_KEY); } catch { } return false; }
+  let ok = false;
+  try {
+    if (token && typeof crypto !== 'undefined' && crypto.subtle) ok = (await recsSha256(token)) === RECS_PILOT_SHA256;
+    if (ok) { try { sessionStorage.setItem(RECS_PILOT_KEY, RECS_PILOT_SHA256); } catch { } }
+    else if (!token) { try { ok = sessionStorage.getItem(RECS_PILOT_KEY) === RECS_PILOT_SHA256; } catch { ok = false; } }
+  } catch { ok = false; }
+  if (ok) recsPilotOn();
+  return ok;
+}
+const recsPilotReady = recsPilotStart();
 
 /* ---------- router ---------- */
 function route() {
