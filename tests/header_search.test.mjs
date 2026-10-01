@@ -174,10 +174,11 @@ function makeElement(name) {
       toggle: (c, f) => { const on = f === undefined ? !classes.has(c) : !!f; on ? classes.add(c) : classes.delete(c); return on; } },
     addEventListener(type, fn) { (listeners[type] ||= []).push(fn); },
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null,
-    matches: () => false, focus() { FOCUS.el = name; }, blur() { }, contains: () => false,
+    matches: () => false, focus() { FOCUS.el = name; }, blur() { BLURRED.add(name); }, contains: () => false,
   };
 }
 const FOCUS = { el: null };
+const BLURRED = new Set();
 function loadPage({ width = 375, ask = false } = {}) {
   const els = new Map(), docListeners = {}, requests = [];
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
@@ -273,6 +274,16 @@ test('Enter keeps #409/#23\'s rules: a name opens it, a place keeps the list, a 
   assert.equal(pg.sb.location.hash, '#/', 'Enter opened Kenyon under a West filter');
   assert.match(pg.$('#qStatus').textContent, /^No match within your filters \(\d+ without them\)$/);
   pg.sb.S.filters.region = [];
+});
+
+test('Huatuo on #441: on a phone, Enter on a school name opens it and blurs the box, so the keyboard drops', async () => {
+  const pg = await ready({ width: 375 });
+  pg.sb.location.hash = '#/';
+  await typeIn(pg, 'kenyon');
+  BLURRED.clear();
+  key(pg, 'Enter'); await settle(20);
+  assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
+  assert.ok(BLURRED.has('#q'), 'the box kept focus (and the phone its keyboard) after Enter opened a program');
 });
 
 test('"/" focuses the header box on any page, without opening the drawer', async () => {

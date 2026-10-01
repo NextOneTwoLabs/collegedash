@@ -1940,7 +1940,8 @@ function searchKeydown(e, box) {
   else if (e.key === 'Enter') {
     const hits = visibleMatches();
     if (placeQueryHits(hits)) { e.preventDefault(); closeDrawer(); box.blur?.(); if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/'; }
-    else if (hits[0]) { box.value = ''; setQuery(''); closeDrawer(); location.hash = `#/p/${hits[0].p.slug}`; }
+    // a name: the profile opens and the box blurs, so a phone's keyboard drops (Huatuo on #441; the strip did too)
+    else if (hits[0]) { box.value = ''; setQuery(''); closeDrawer(); box.blur?.(); location.hash = `#/p/${hits[0].p.slug}`; }
   }
   else if (e.key === 'Escape') { box.value = ''; setQuery(''); }
 }
