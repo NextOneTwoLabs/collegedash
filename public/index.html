@@ -211,6 +211,7 @@ tr:hover td { background: var(--row-hover); }
 .pill .pill-sub { font-size: 10px; font-weight: 500; opacity: 0.65; margin-left: 5px; }
 .pill.active .pill-sub { opacity: 0.85; }
 .pill.pill-zero:not(.active) { color: var(--text-secondary); border-style: dashed; }  /* #16: 0 with the other filters */
+.pill.pill-zero:not(.active) .pill-sub { opacity: 1; }  /* #16 review: the 0 is the message; full contrast (AA 4.5:1) */
 /* Condition chips (issue #166): a pill that carries its own remove button, and the add form under the row. */
 .cond-chip { display: inline-flex; align-items: center; gap: 2px; padding: 2px 2px 2px 12px; cursor: default; background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); text-align: left; }
 .cond-chip:hover { color: var(--accent-text); }

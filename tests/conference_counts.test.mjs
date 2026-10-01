@@ -216,6 +216,44 @@ test('typing a search updates the counts in place, without rebuilding the drawer
   await settle(150);
 });
 
+// Huatuo's review of #423: the "0" kept .pill-sub's 0.65 opacity on a quiet pill, 2.83:1 (light) and 3.64:1 (dark) at
+// 10 px. The count's colour is resolved here from the page's own CSS - the theme variables, the zero pill's colour,
+// and the opacity of every `<pill context> .pill-sub` rule that can apply to an inactive zero pill, by specificity
+// then order - blended over the pill's background, and must reach WCAG AA's 4.5:1 in both themes.
+test('the 0 on a quiet pill keeps AA contrast (4.5:1) in both themes', () => {
+  const css = (/<style>([\s\S]*?)<\/style>/.exec(fs.readFileSync(HTML, 'utf8')) || [])[1].replace(/\/\*[\s\S]*?\*\//g, '');
+  const vars = sel => Object.fromEntries([...(new RegExp(`(?:^|\\n)${sel.replace(/[[\]"]/g, '\\$&')} \\{([^}]*)\\}`).exec(css)?.[1] || '')
+    .matchAll(/(--[\w-]+):\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]));
+  const light = { ...vars(':root'), ...vars('[data-theme="light"]') }, dark = { ...vars(':root'), ...vars('[data-theme="dark"]') };
+  const rgb = hex => { const h = hex.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  const lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  // the opacity on the count: rules `<context> .pill-sub` whose context fits an inactive .pill.pill-zero
+  let best = { spec: -1, order: -1, opacity: 1 }, order = 0;
+  for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    order++;
+    for (const sel of m[1].split(',').map(s => s.trim())) {
+      const parts = sel.split(/\s+/);
+      if (parts.length !== 2 || parts[1] !== '.pill-sub') continue;
+      const ctx = parts[0];
+      if (!/^\.pill(\.pill-zero)?(:not\(\.active\))?$/.test(ctx)) continue;  // .pill.active, .trend-hit, ... do not apply
+      const op = /(?:^|;)\s*opacity:\s*([\d.]+)/.exec(m[2])?.[1];
+      if (op == null) continue;
+      const spec = (ctx.match(/\./g) || []).length + 1;
+      if (spec > best.spec || (spec === best.spec && order > best.order)) best = { spec, order, opacity: Number(op) };
+    }
+  }
+  const zeroRule = /\.pill\.pill-zero:not\(\.active\) \{([^}]*)\}/.exec(css)?.[1] || '';
+  const fgVar = /color:\s*var\((--[\w-]+)\)/.exec(zeroRule)?.[1];
+  assert.ok(fgVar, 'the zero pill sets no colour');
+  for (const [name, theme] of [['light', light], ['dark', dark]]) {
+    const fg = rgb(theme[fgVar]), bg = rgb(theme['--bg-surface']);
+    const shown = fg.map((v, i) => Math.round(best.opacity * v + (1 - best.opacity) * bg[i]));
+    const r = ratio(shown, bg);
+    assert.ok(r >= 4.5, `${name}: the 0 is ${r.toFixed(2)}:1 at opacity ${best.opacity} (AA needs 4.5:1)`);
+  }
+});
+
 test('a 0 pill is drawn quieter by colour and border, not opacity, and is never hidden', () => {
   const css = (/<style>([\s\S]*?)<\/style>/.exec(fs.readFileSync(HTML, 'utf8')) || [])[1] || '';
   const rule = /\.pill\.pill-zero:not\(\.active\) \{([^}]*)\}/.exec(css)?.[1] || '';
