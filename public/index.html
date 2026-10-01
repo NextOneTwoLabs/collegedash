@@ -576,7 +576,11 @@ a.pill { text-decoration: none; }
   .team-name { max-width: 150px; }
 }
 @media (max-width: 460px) { .header { padding: 0 12px; } .header-left { gap: 8px; } .wordmark img { width: 26px; height: 26px; margin-right: 8px; } }
-@media (max-width: 400px) { .cards { grid-template-columns: 1fr; } }
+/* Issue #51: at 320-375 px the header row is wider than the screen and "College Soccer" ran under the theme toggle
+   (44 px of overlap at 320, measured). Below 400 px the wordmark and label shrink and the left gaps tighten, which
+   clears the toggle from 360 px (15 px to spare); below that the divider and label go, as .header-link already does below 768. */
+@media (max-width: 400px) { .cards { grid-template-columns: 1fr; } .header-left { gap: 6px; } .wordmark { font-size: 18px; } .section-label { font-size: 13px; } }
+@media (max-width: 359px) { .header-divider, .section-label { display: none; } }
 @media print { .header, .sidebar, .view-tabs { display: none; } body { overflow: auto; height: auto; } .layout { height: auto; margin: 0; } }
 </style>
 </head>
