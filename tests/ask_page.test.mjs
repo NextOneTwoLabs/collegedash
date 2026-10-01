@@ -33,6 +33,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const HTML = process.env.ASK_PAGE_HTML || path.join(PUBLIC, 'index.html');
+const PAGE = fs.readFileSync(HTML, 'utf8');
 
 function makeElement(name) {
   const listeners = {};
@@ -107,7 +108,7 @@ async function ready(pg) {
 }
 // Type into the search box the way the input handler does, and wait out its 80 ms debounce.
 async function type(pg, text) { pg.$('#q').value = text; pg.sb.setQuery(text); await settle(100); }
-// Fire the search box's real keydown handler (the one renderSidebar attached last).
+// Fire the header search box's real keydown handler (#434: wired once, at load).
 function key(pg, k, shiftKey = false) {
   const fns = pg.$('#q')._listeners.keydown || [];
   assert.ok(fns.length, 'no keydown handler on #q');
@@ -133,8 +134,11 @@ for (const [name, status, probe] of OFF_CASES) {
     const { S } = pg.sb;
     assert.notEqual(S.ask, true, 'ask switched itself on'); // the page from before #165 has no S.ask at all
     pg.sb.renderSidebar();
-    assert.ok(pg.sidebar().includes('placeholder="School, mascot, state or city…"'));
+    // #434: the one search box is static in the header; off, its placeholder is the markup's and the Ask popover is empty.
+    assert.ok(PAGE.includes('id="q" placeholder="School, mascot, state or city…"'), 'the header box placeholder changed');
+    assert.equal(pg.$('#q').placeholder ?? '', '', 'the placeholder was rewritten while Ask is off');
     assert.ok(!/ask/i.test(pg.sidebar().replace(/aria-label="[^"]*"/g, '')), 'ask markup in the sidebar');
+    assert.equal(pg.$('#askSlot').innerHTML, '', 'the Ask popover has content while Ask is off');
     await type(pg, NO_MATCH);
     assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
     assert.equal(key(pg, 'Enter'), false);
@@ -193,8 +197,8 @@ test('on: the ask row appears; Enter with no name match asks, applies the answer
   const pg = await ready(loadPage({ probe: { ask: true, spend: { month: '2026-09', usd: 0.0123, capUsd: 10 } }, answer: { body: ANSWER } }));
   const { S } = pg.sb;
   assert.equal(S.ask, true);
-  assert.ok(pg.sidebar().includes('placeholder="School, mascot, or a question…"'));
-  assert.ok(pg.sidebar().includes('id="askSlot"'));
+  assert.equal(pg.$('#q').placeholder, 'School, mascot, or a question…', 'the header box placeholder does not follow Ask');  // #434
+  assert.ok(PAGE.includes('id="askSlot"'), 'no Ask popover under the header box');
   S.filters.region = ['West']; S.filters.sort = 'rpi'; pg.sb.saveState();
   await type(pg, NO_MATCH);
   assert.equal(pg.$('#askSlot').innerHTML, `<button type="button" class="ask-row" id="askRow">✦ Ask: “${NO_MATCH}”</button>`);

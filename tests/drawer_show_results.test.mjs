@@ -38,7 +38,7 @@ function makeElement(name) {
       contains: c => classes.has(c),
     },
     setAttribute: (k, v) => attrs.set(k, String(v)), getAttribute: k => (attrs.has(k) ? attrs.get(k) : null),
-    addEventListener() { }, removeEventListener() { },
+    _listeners: {}, addEventListener(type, fn) { (this._listeners[type] ||= []).push(fn); }, removeEventListener() { },
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null, matches: () => false,
     focus() { focused = name; }, contains: () => false,
   };
@@ -129,13 +129,18 @@ test('N follows a typed search, without rebuilding the drawer, and equals the ca
   sb.location.hash = '#/';
   sb.renderSidebar();
   const html = $('#sidebar').innerHTML;
-  sb.setQuery('state');
+  // #434: typed into the header box, through its own input listener (the drawer has no search box any more)
+  const box = $('#q');
+  assert.equal((box._listeners.input || []).length, 1, 'the header box has no input handler');
+  box.value = 'state';
+  box._listeners.input[0]({ target: box });
   await settle(150);
   await sb.renderList();
   const n = cardCount();
   assert.ok(n > 0 && n < INDEX.programs.length, `fixture: "state" should narrow the list (${n})`);
   assert.equal($('#showResults').textContent, `Show ${n} program${n === 1 ? '' : 's'}`, 'the bar did not update while typing');
-  assert.equal($('#sidebar').innerHTML, html, 'typing rebuilt the drawer (focus would leave the search box)');
+  assert.equal($('#sidebar').innerHTML, html, 'typing rebuilt the drawer');
+  assert.ok(!/id="q"/.test(html), 'a search box is still in the drawer');
   sb.setQuery('');
   await settle(150);
 });

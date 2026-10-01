@@ -40,6 +40,7 @@ for (const [name, status] of OFF) {
   test(`off (${name}): no recommendation markup, and opening does nothing`, async () => {
     const pg = await ready({ status });
     assert.ok(!/recs|Find programs for me/i.test(pg.sidebar()), 'recommendation markup in the sidebar');
+    assert.equal(pg.$('#headerRecs').innerHTML, '', 'a header entry while recommendations are off');  // #434
     assert.notEqual(pg.sb.S.recs?.on, true);
     if (pg.sb.recsOpen) await pg.sb.recsOpen();
     await settle();
@@ -51,9 +52,12 @@ for (const [name, status] of OFF) {
 test('on (api/status {recs: true}): the entry button, labelled and wired as a dialog opener', async () => {
   const pg = await ready({ status: ON });
   assert.equal(pg.sb.S.recs.on, true);
-  const m = /<button[^>]*id="recsOpen"[^>]*>Find programs for me<\/button>/.exec(pg.sidebar());
-  assert.ok(m, 'no entry button in the sidebar');
-  for (const attr of ['type="button"', 'aria-haspopup="dialog"', 'aria-controls="recsPanel"', 'aria-expanded="false"']) assert.ok(m[0].includes(attr), attr);
+  // #434 decision 4: the one entry is in the header now, not the sidebar; its accessible name is the aria-label, which
+  // stays "Find programs for me" while the visible words shorten on a phone.
+  assert.ok(!/Find programs for me/.test(pg.sidebar()), 'an entry button is still in the sidebar');
+  const m = /<button[^>]*id="recsOpen"[^>]*>/.exec(pg.$('#headerRecs').innerHTML);
+  assert.ok(m, 'no entry button in the header');
+  for (const attr of ['type="button"', 'aria-haspopup="dialog"', 'aria-controls="recsPanel"', 'aria-expanded="false"', 'aria-label="Find programs for me"']) assert.ok(m[0].includes(attr), attr);
 });
 
 test('no extra request: a page load asks for exactly the same things with the switch on and off', async () => {

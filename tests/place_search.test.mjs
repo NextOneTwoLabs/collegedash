@@ -5,7 +5,7 @@
 //
 // Same mechanism as tests/shortlist_unsave.test.mjs: the inline <script> of public/index.html runs in a `vm` against
 // a stub DOM that records innerHTML, and fetches are answered from the committed public/data (nothing leaves the
-// machine). The query goes in through the page's own setQuery and the sidebar box's own keydown listener; the list
+// machine). The query goes in through the page's own setQuery and the header box's own keydown listener (#434); the list
 // is the page's own renderList. Every expected set is counted from the shipped index here (state and city fields),
 // never from the page's search code.
 //
@@ -87,7 +87,7 @@ await sb.loadIndex();
 sb.S.filters.view = 'cards';
 const settle = () => new Promise(r => setTimeout(r, 120));  // setQuery re-renders after an 80 ms pause
 
-// Type a query the way the sidebar box does, and return the cards the list shows, in order, with their division tags.
+// Type a query the way the header box does, and return the cards the list shows, in order, with their division tags.
 async function search(raw) {
   sb.location.hash = '#/';
   sb.setQuery(raw);
@@ -186,13 +186,11 @@ test('the three programs with no state are still found by name', async () => {
   }
 });
 
-// Enter through the sidebar box's own keydown listener. The stub box outlives each sidebar render, so its listeners are
-// cleared first: a real render draws a new box with exactly one.
+// Enter through the header box's own keydown listener (#434: the box is static and wired once, at load).
 async function enter(raw, hash = '#/') {
   sb.location.hash = hash;
-  const box = sb.document.querySelector('#q');
-  box._listeners.keydown = [];
-  sb.renderSidebar();
+  const box = sb.document.querySelector('#q');  // #434: the header box, wired once at load
+  assert.equal((box._listeners.keydown || []).length, 1, 'the header box should have exactly one keydown handler');
   box.value = raw;
   sb.setQuery(raw);
   await settle();

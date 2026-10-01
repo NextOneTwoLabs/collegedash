@@ -116,7 +116,6 @@ tr:hover td { background: var(--row-hover); }
 .sidebar-tab { flex: 1; padding: 12px 6px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); transition: all var(--transition-fast); font-family: var(--font); background: none; white-space: nowrap; }
 .sidebar-tab:hover { color: var(--text-primary); }
 .sidebar-tab.active { color: var(--accent-text); border-bottom-color: var(--accent); }
-.sidebar-search { padding: 4px 16px 8px; position: relative; }
 .search-input { width: 100%; height: 40px; padding: 8px 32px 8px 34px; font-size: 13px; font-family: var(--font); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary);
   background: var(--bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat; transition: all var(--transition-fast); -webkit-appearance: none; appearance: none; }
 .search-input::-webkit-search-cancel-button { display: none; }
@@ -124,22 +123,22 @@ tr:hover td { background: var(--row-hover); }
 .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
 .search-clear { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); border: none; background: none; color: var(--text-secondary); font-size: 16px; line-height: 1; padding: 4px 6px; border-radius: 999px; cursor: pointer; }
 .search-clear:hover { color: var(--text-primary); background: var(--bg-surface-alt); }
-.search-status { padding: 0 20px 6px; font-size: 12px; color: var(--text-secondary); min-height: 18px; }
-/* The Start strip (#404 phase 1, decision 2a): a search box above the cards on the list views, shown by CSS alone
-   (Huatuo's condition 1, no JS width check) wherever the sidebar's own box is NOT on screen - at <=768 px, where the
-   sidebar is a closed drawer, and on a wider screen whose sidebar is collapsed. route() puts .view-list on .layout
-   for #/ (and #/c/<conf>, which lands there); everywhere else the strip stays hidden. It sits inside #main, so the
-   #400 phone sheet (fixed, z-index 200, #main inert while it is open) covers it and takes it out of the tab order. */
-.start-strip { display: none; padding: 14px 16px 0; }
-.start-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-.start-row { display: flex; gap: 8px; align-items: center; }
-.start-row .search-input { flex: 1; min-width: 0; padding-right: 12px; font-size: 16px; } /* 16 px: iOS does not zoom on focus */
-.start-actions:empty { display: none; }
-.start-status { font-size: 12px; color: var(--text-secondary); min-height: 18px; padding-top: 4px; }
-@media (max-width: 768px) { .layout.view-list .start-strip { display: block; } }
-@media (min-width: 769px) { .layout.sidebar-collapsed.view-list .start-strip { display: block; padding: 18px 28px 0; } }
+/* Header search (#434, PR 1). One static box in the header on every page, outside #app, so a render never takes focus
+   (or a phone's keyboard) out of it. Desktop: one row - brand, the box, "Find programs for me" (while recs is on), then
+   the right-hand links. <=768 px: two fixed rows (below), so the box is on screen without opening the menu (#404 phase 1).
+   The status line (#qStatus) is the page's one aria-live search status and is screen-reader only: on screen, the list
+   subtitle carries the counts ("44 of 1011 programs · matching …") and its Clear search. */
+.header-search { position: relative; flex: 1 1 auto; min-width: 0; max-width: 520px; margin: 0 16px; }
+.header-search .search-input { height: 38px; }
+.header-search .search-clear { right: 6px; }
+.header-recs { flex: 0 0 auto; margin-right: 14px; }
+.header-recs:empty { display: none; }
+.header-recs .recs-entry { width: auto; min-height: 38px; white-space: nowrap; }
+.recs-entry-short { display: none; }
+.clear-search { padding: 0; border: none; background: none; font: inherit; color: var(--accent-text); text-decoration: underline; cursor: pointer; }
+.ask-pop { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 110; padding: 6px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
+.ask-pop[hidden] { display: none; }
 /* Ask (issue #165): rendered only when /api/status reports ask enabled, so none of this is used today. */
-.ask-slot { padding: 0 16px 8px; }
 .ask-row { display: block; width: 100%; text-align: left; padding: 7px 10px; font-size: 13px; font-weight: 600; font-family: var(--font); color: var(--accent-text); background: var(--accent-surface); border: 1px dashed var(--accent); border-radius: var(--radius-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ask-row:hover { border-style: solid; }
 .ask-row[disabled] { opacity: 0.7; cursor: progress; }
@@ -148,7 +147,6 @@ tr:hover td { background: var(--row-hover); }
 .ask-banner .btn { padding: 3px 10px; font-size: 12px; }
 /* Program recommendations (issue #400): drawn only while /api/status reports recs on. A side panel beside the list on
    a desktop, a full-screen sheet on a phone. Every control is at least 44 px tall. */
-.recs-entry-slot { padding: 0 16px 10px; }
 .recs-entry { width: 100%; justify-content: center; min-height: 44px; }
 .recs-panel { width: 380px; min-width: 380px; background: var(--bg-surface); border-left: 1px solid var(--border); overflow-y: auto; padding: 16px 18px 0; }
 .recs-panel[hidden] { display: none; }
@@ -197,11 +195,10 @@ tr:hover td { background: var(--row-hover); }
 .recs-hidden-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .recs-toast { position: sticky; bottom: 0; z-index: 5; margin: 0 28px 12px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
 .recs-toast[hidden] { display: none; }
-/* Resilience (issue #400, PR 6): the local-only timing overlay, reasons in the Stats view, the Start-strip entry. */
+/* Resilience (issue #400, PR 6): the local-only timing overlay and reasons in the Stats view. */
 .recs-timing { position: fixed; left: 8px; bottom: 8px; z-index: 300; max-width: 360px; padding: 6px 8px; font: 11px/1.4 ui-monospace, monospace; color: var(--text-primary); background: var(--bg-surface); border: 1px dashed var(--border); border-radius: 6px; }
 .recs-timing[hidden] { display: none; }
 .recs-why-cell .recs-why { margin: 0; min-width: 220px; }
-.start-actions .recs-entry { width: auto; white-space: nowrap; }
 .recs-toast .btn { min-height: 44px; }
 @media (max-width: 768px) { .recs-toast { margin: 0 16px 12px; } }
 @media (min-width: 769px) and (max-width: 1180px) {
@@ -605,6 +602,20 @@ a.pill { text-decoration: none; }
   .view-tabs { gap: 16px; overflow-x: auto; flex-wrap: nowrap; }
   .team-name { max-width: 150px; }
 }
+/* #434: at <=768 px the header is two fixed rows - brand (menu button, wordmark, label) and theme toggle, then the search
+   box with "Find programs for me" beside it while recs is on - and --header-height is both rows, so .layout, the drawer
+   and the #400 sheet all move down with it. The sheet itself stays position: fixed; inset: 0 over the whole header. */
+@media (max-width: 768px) {
+  :root { --header-height: 112px; }
+  .header { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 52px 52px; column-gap: 8px; align-items: center; }
+  .header-search { grid-row: 2; grid-column: 1 / -1; max-width: none; margin: 0; }
+  .header.has-recs .header-search { grid-column: 1; }
+  .header-recs { grid-row: 2; grid-column: 2; margin-right: 0; }
+  .header-right { grid-row: 1; grid-column: 2; }
+  .header-search .search-input { font-size: 16px; } /* 16 px: iOS does not zoom on focus */
+}
+/* Below 480 px the button's visible words shorten; its accessible name stays "Find programs for me" (aria-label). */
+@media (max-width: 479px) { .recs-entry-full { display: none; } .recs-entry-short { display: inline; } }
 @media (max-width: 460px) { .header { padding: 0 12px; } .header-left { gap: 8px; } .wordmark img { width: 26px; height: 26px; margin-right: 8px; } }
 /* Issue #51: at 320-375 px the header row is wider than the screen and "College Soccer" ran under the theme toggle
    (44 px of overlap at 320, measured). Below 400 px the wordmark and label shrink and the left gaps tighten, which
@@ -624,6 +635,16 @@ a.pill { text-decoration: none; }
     <div class="header-divider"></div>
     <a class="section-label" href="https://college.nextonetwo.com/">College Soccer</a>
   </div>
+  <!-- #434: the one search box (static, on every page). setQuery / searchKeydown; the status is screen-reader only. -->
+  <div class="header-search" role="search">
+    <label class="sr-only" for="q">Search programs</label>
+    <input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search">
+    <button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕</button>
+    <div class="sr-only" id="qStatus" aria-live="polite"></div>
+    <div class="ask-pop" id="askSlot" hidden></div>
+  </div>
+  <!-- #434 decision 4: "Find programs for me", drawn by renderHeaderRecs while recs is on (one button, #recsOpen). -->
+  <div class="header-recs" id="headerRecs"></div>
   <div class="header-right">
     <span class="observed-top" id="observedTop" title="When the data was last collected"></span>
     <a class="header-link" href="#/faq">About the data</a>
@@ -634,22 +655,6 @@ a.pill { text-decoration: none; }
 <div class="layout" id="layout">
   <aside class="sidebar" id="sidebar" aria-label="Navigation"></aside>
   <div class="main" id="main">
-    <!-- The Start strip (#404 phase 1). Static and outside #app, so renderList - which rewrites #app on every keystroke -
-         never takes focus (or a phone's keyboard) out of its box. When it shows is CSS only: see .start-strip.
-         Its box is the same search as the sidebar's #q: setQuery and searchKeydown, one query in S.qRaw.
-         Its status line is the page's one aria-live search status (#qStatus has none). -->
-    <div class="start-strip" id="startStrip" role="search">
-      <label class="start-label" for="qStart">Find a program</label>
-      <div class="start-row">
-        <input type="search" class="search-input" id="qStart" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search">
-        <!-- #startActions: the hook for #400 PR 3 (decision 3b). While the #400 switch is on, PR 3 puts the "Find programs
-             for me" button here, one button; nothing else writes this slot. Empty, it takes no space (.start-actions:empty).
-             To show the button on a wide screen with the sidebar open, where the strip is hidden today, PR 3 adds a rule that
-             shows .start-strip there and hides its label, box and status. -->
-        <div class="start-actions" id="startActions"></div>
-      </div>
-      <div class="start-status" id="qStartStatus" aria-live="polite"></div>
-    </div>
     <div id="app"><div class="content-body"><div class="empty">Loading…</div></div></div>
     <!-- #400: "Hidden: X. [Undo]" and the other feedback messages, one persistent live node outside what #app redraws. -->
     <div class="recs-toast" id="recsToast" role="status" aria-live="polite" tabindex="-1" hidden></div>
@@ -1773,10 +1778,6 @@ function renderSidebar() {
         <div class="cond-actions"><button type="submit" class="btn primary" id="condSubmit">Add condition</button><button type="button" class="btn" id="condCancel">Cancel</button></div>
       </form>` : ''}`;
     body = `
-      <div class="sidebar-section-title">Find a program</div>
-      <div class="sidebar-search" role="search"><input type="search" class="search-input" id="q" placeholder="${searchPlaceholder()}" aria-label="Search programs" autocomplete="off" value="${esc(S.qRaw)}"><button type="button" class="search-clear" id="qClear" aria-label="Clear search" ${S.qRaw ? '' : 'hidden'}>✕</button></div>
-      <div class="search-status" id="qStatus"></div>${S.ask ? '<div class="ask-slot" id="askSlot" aria-live="polite"></div>' : ''}
-      ${S.recs.on ? `<div class="recs-entry-slot"><button type="button" class="btn recs-entry" id="recsOpen" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}">Find programs for me</button></div>` : ''}
       <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${(k === 'recommended' ? S.recs?.active : !S.recs?.active && f.sort === k) ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
       ${divisionBlock}
@@ -1814,7 +1815,6 @@ function renderSidebar() {
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { toggleIn(f.classYear, b.dataset.class); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   wireConditions(sb);
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
-  const ro = $('#recsOpen'); if (ro) ro.onclick = () => { recsOpener = 'recsOpen'; recsOpen(); }; // #400: only drawn while recs is on
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   // #400 PR 4: Recommended is not a stored sort. Choosing it shows the saved preferences; choosing any other sort pauses
   // them, and picking the sort that was already underneath doesn't flip its direction.
@@ -1825,13 +1825,7 @@ function renderSidebar() {
   const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); rerenderForFilters(); };
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = shortlistRows().slice(0, 4).map(p => p.slug); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
-  const q = $('#q');
-  if (q) {
-    q.addEventListener('input', e => setQuery(e.target.value, q));
-    q.addEventListener('keydown', e => searchKeydown(e, q));
-    $('#qClear').onclick = () => { q.value = ''; setQuery(''); q.focus(); };
-    updateSearchStatus();
-  }
+  updateSearchStatus();  // the header box's count follows the filters just changed (#23)
 }
 /* The condition controls. Every handler ends the way a pill click does (save, rebuild the sidebar,
    re-render the view in place) and then puts focus back somewhere sensible, because rebuilding the
@@ -1905,49 +1899,44 @@ document.addEventListener('keydown', e => {
   // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
-  if (e.key === '/') { e.preventDefault(); S.sidebarTab = 'programs'; renderSidebar(); if (isPhone()) toggleSidebar(); $('#q')?.focus(); }
+  if (e.key === '/') { e.preventDefault(); $('#q')?.focus(); }  // #434: the header box, on every page
   else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); renderList(); }
 });
 
 /* ---------- search box ---------- */
 let qTimer = null;
-function setQuery(v, from = null) {
+function setQuery(v) {
   S.qRaw = v; S.q = normText(v);
-  mirrorQuery(from);
-  const clr = $('#qClear'); if (clr) clr.hidden = !v;
+  syncSearchBox();
   clearTimeout(qTimer);
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching
   // PROGRAMS, never camp names. From any other view a query still bounces to the programs list.
   qTimer = setTimeout(() => { updateSearchStatus(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); else if (S.q) location.hash = '#/'; }, 80);
 }
-// The same words go under both boxes (#404). Only the strip's line is aria-live; #qStatus is not, because the closed
-// drawer is only moved off screen and two live regions would announce every count twice (Huatuo's condition 3).
+// The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
-  const side = $('#qStatus'), strip = $('#qStartStatus'); if (!side && !strip) return;
-  if (S.ask && side) renderAskSlot();
-  let text = () => '';
+  const el = $('#qStatus'); if (!el) return;
+  if (S.ask) renderAskSlot();
+  let text = '';
   if (S.q) {
     // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
     const hits = visibleMatches(), n = hits.length, all = searchMatches().length;
     const count = `${n} match${n === 1 ? '' : 'es'}${all > n ? ` · ${all - n} more outside your filters` : ''}`;
     const enter = placeQueryHits(hits) ? 'Enter shows the list' : 'Enter opens the first';
     const hidden = `No match within your filters (${all} without them)`;
-    // The strip box has no Shift+Enter Ask (searchKeydown's shiftAsk), so its line never offers it.
-    text = shift => S.ask ? (n ? `${count} · ${enter}${shift ? ' · Shift+Enter asks' : ''}` : all ? `${hidden}${shift ? ' · Shift+Enter asks' : ''}` : 'No name match · Enter asks')
+    text = S.ask ? (n ? `${count} · ${enter} · Shift+Enter asks` : all ? `${hidden} · Shift+Enter asks` : 'No name match · Enter asks')
       : n ? `${count} · ${enter}` : all ? hidden : 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city';
   }
-  if (side) side.textContent = text(true);
-  if (strip) strip.textContent = text(false);
+  el.textContent = text;
 }
-/* The one keydown handler for both search boxes (#404): the sidebar's #q and the Start strip's #qStart.
-   Ask (#165), only when switched on: Shift+Enter always asks; Enter asks when no name matches. `shiftAsk: false`
-   (the strip) skips the Shift+Enter path: Ask's answer is drawn in the sidebar's #askSlot, which a phone cannot see.
+/* The header box's keydown handler (#434; the one search box since the sidebar's and the Start strip's retired).
+   Ask (#165), only when switched on: Shift+Enter always asks; Enter asks when no name matches.
    #404: a place query ("Ohio", "OH", "Columbus") is a request for a list, even when a school is also named that way,
    so Enter shows the list - closing the drawer on a phone - instead of opening the first program. The ID Camps view
    is a list too: it is already narrowed to those programs, so Enter stays there.
    #23: both read the hits the active filters let through, so Enter never opens a program the list hides. */
-function searchKeydown(e, box, { shiftAsk = true } = {}) {
-  if (e.key === 'Enter' && S.ask && S.qRaw.trim() && ((shiftAsk && e.shiftKey) || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
+function searchKeydown(e, box) {
+  if (e.key === 'Enter' && S.ask && S.qRaw.trim() && (e.shiftKey || !searchMatches()[0])) { e.preventDefault(); askQuestion(S.qRaw); }
   else if (e.key === 'Enter') {
     const hits = visibleMatches();
     if (placeQueryHits(hits)) { e.preventDefault(); closeDrawer(); box.blur?.(); if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/'; }
@@ -1955,21 +1944,25 @@ function searchKeydown(e, box, { shiftAsk = true } = {}) {
   }
   else if (e.key === 'Escape') { box.value = ''; setQuery(''); }
 }
-// Both boxes hold the one query (S.qRaw). The other box is written only when its value differs, and the box being
-// typed in never is: on a phone, writing back into it moves the caret (Huatuo's condition 2).
-function mirrorQuery(from = null) {
-  for (const box of [$('#q'), $('#qStart')]) if (box && box !== from && box.value !== S.qRaw) box.value = S.qRaw;
+// The box shows S.qRaw. Written only when it differs, so typing never writes back into the box (on a phone that moves
+// the caret); Ask's apply and undo and the camps "clear" change the query in code and land here.
+function syncSearchBox() {
+  const box = $('#q'); if (box && box.value !== S.qRaw) box.value = S.qRaw;
+  const clr = $('#qClear'); if (clr) clr.hidden = !S.qRaw;
 }
-// The placeholder follows Ask the way #q's does (Huatuo's condition 4).
+// The placeholder follows Ask.
 const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'School, mascot, state or city…';
-// The strip's box is static markup, so it is wired once, here.
+// The header box is static markup, so it is wired once, here.
 {
-  const box = $('#qStart');
+  const box = $('#q');
   if (box) {
-    box.addEventListener('input', e => setQuery(e.target.value, box));
-    box.addEventListener('keydown', e => { searchKeydown(e, box, { shiftAsk: false }); if (e.key === 'Enter') box.blur?.(); });  // Enter drops a phone's keyboard
+    box.addEventListener('input', e => setQuery(e.target.value));
+    box.addEventListener('keydown', e => searchKeydown(e, box));
+    const clr = $('#qClear'); if (clr) clr.onclick = () => { setQuery(''); box.focus(); };
   }
 }
+// "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
+document.addEventListener('click', e => { if (e.target.closest?.('[data-clear-search]')) { setQuery(''); $('#q')?.focus(); } });
 
 /* ---------- ask (issue #165, AI prototype 1) ----------
    A question becomes the page's own filter state. The Worker's /api/ask returns only pills, condition chips
@@ -1979,7 +1972,7 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
    still only searches names. */
 function askSwitchedOn() {
   S.ask = true;
-  const strip = $('#qStart'); if (strip) strip.placeholder = searchPlaceholder();
+  const box = $('#q'); if (box) box.placeholder = searchPlaceholder();
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
@@ -1991,6 +1984,7 @@ function renderAskSlot() {
   const text = S.qRaw.trim();
   const row = text ? `<button type="button" class="ask-row" id="askRow"${S.askPending ? ' disabled' : ''}>${S.askPending ? 'Asking…' : `✦ Ask: “${esc(text)}”`}</button>` : '';
   slot.innerHTML = row + (S.askMsg ? `<div class="ask-note" role="status">${esc(S.askMsg)}</div>` : '');
+  slot.hidden = !slot.innerHTML;  // #434: a popover under the header box, shown only while it has something
   const b = $('#askRow'); if (b) b.onclick = () => askQuestion(S.qRaw);
 }
 async function askQuestion(text) {
@@ -2027,7 +2021,7 @@ function applyAsk(a) {
   pruneConfToDivisions();
   const parts = [...f.division.map(divisionName), ...confLabels(f.conf), ...f.region.map(r => `${r} region`),
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
-  S.qRaw = ''; S.q = ''; S.askMsg = ''; mirrorQuery();
+  S.qRaw = ''; S.q = ''; S.askMsg = ''; syncSearchBox();
   S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
   saveState();
   S.sidebarTab = 'programs'; renderSidebar();
@@ -2037,7 +2031,7 @@ function applyAsk(a) {
 function undoAsk() {
   const r = S.askResult; if (!r) return;
   Object.assign(S.filters, JSON.parse(JSON.stringify(r.prev.filters)));
-  S.qRaw = r.prev.qRaw; S.q = normText(r.prev.qRaw); mirrorQuery();
+  S.qRaw = r.prev.qRaw; S.q = normText(r.prev.qRaw); syncSearchBox();
   S.askResult = null; saveState(); renderSidebar(); rerenderForFilters();
 }
 // The "From your question" line. '' when there is no ask result, which is always while ask is off.
@@ -2085,7 +2079,7 @@ const recsConstants = () => ({ regions: Object.fromEntries(REGIONS.map(r => [r, 
 function recsSwitchedOn() {
   if (S.recs.on) return;
   S.recs.on = true;
-  renderStartActions(); // #400 PR 6: the Start strip's entry (#404 decision 3b)
+  renderHeaderRecs(); // #434: the header's entry, drawn before the index is needed (the #433 pilot switches recs on at start)
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
@@ -2170,8 +2164,7 @@ function recsClose() {
   R.open = false; R.status = ''; R.error = '';
   renderRecsPanel();
   syncRecsEntry();
-  const opener = $(`#${recsOpener}`); // back to the button that opened it, if it is still on screen
-  (opener && opener.offsetParent !== null ? opener : $('#recsOpen'))?.focus();
+  $('#recsOpen')?.focus(); // back to the header button, the one entry (#434)
 }
 // On a phone the sheet is modal: aria-modal, and everything behind it inert, so neither Tab nor a screen reader's
 // virtual cursor reaches the page underneath. Re-checked on resize and rotation; off again when the panel closes.
@@ -2182,7 +2175,7 @@ function recsSheetState() {
   for (const sel of ['#main', '#sidebar', '.header']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
 }
 window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
-function syncRecsEntry() { for (const id of ['#recsOpen', '#recsOpenStart']) { const b = $(id); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); } }
+function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
 function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; }
 function recsSetImportance(cat, imp) {
   const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
@@ -2690,18 +2683,18 @@ function wireRecsFeedback(app) {
    - ?recs-timing=1: a local-only overlay with the rerank and Apply timings measured in this browser (the phone
      targets are rerank <= 100 ms and Apply <= 300 ms at p95). Nothing is sent anywhere; it replaces the #394 marks
      the plan first had (review change 1). Off unless the address asks for it. */
-// The button that opened the panel, so closing it returns focus there (the sidebar's, or the Start strip's).
-let recsOpener = 'recsOpen';
-// The Start strip's #startActions slot (#413): "Find programs for me" while recommendations are on, nothing otherwise.
-// The strip shows where the sidebar's search isn't on screen (a phone, or a collapsed sidebar); beside an open sidebar
-// it stays hidden, and the sidebar's own "Find programs for me" is the entry there.
-function renderStartActions() {
-  const slot = $('#startActions');
+/* "Find programs for me" (#434 decision 4): one button, #recsOpen, in the header beside the search box, drawn while
+   recommendations are on and nothing otherwise. Its accessible name is always "Find programs for me"; below 480 px its
+   visible words shorten to "For me" (CSS). The sheet returns focus to it when it closes. */
+function renderHeaderRecs() {
+  const slot = $('#headerRecs');
   if (!slot) return;
-  if (!S.recs.on) { slot.innerHTML = ''; return; }
-  slot.innerHTML = `<button type="button" class="btn recs-entry" id="recsOpenStart" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}">Find programs for me</button>`;
-  const b = $('#recsOpenStart');
-  if (b) b.onclick = () => { recsOpener = 'recsOpenStart'; recsOpen(); };
+  const on = !!S.recs.on;
+  $('.header')?.classList.toggle('has-recs', on);
+  if (!on) { slot.innerHTML = ''; return; }
+  slot.innerHTML = `<button type="button" class="btn recs-entry" id="recsOpen" aria-haspopup="dialog" aria-controls="recsPanel" aria-expanded="${S.recs.open}" aria-label="Find programs for me" title="Find programs for me"><span class="recs-entry-full">Find programs for me</span><span class="recs-entry-short" aria-hidden="true">For me</span></button>`;
+  const b = $('#recsOpen');
+  if (b) b.onclick = () => recsOpen();
 }
 const RECS_TIMING = (() => { try { return new URLSearchParams(location.search || '').get('recs-timing') === '1'; } catch { return false; } })();
 const recsTimes = { rerank: [], apply: [] };
@@ -2756,7 +2749,6 @@ function route() {
   });
   $('#main').scrollTop = 0;
   syncSidebarForView(view);
-  $('#layout').classList.toggle('view-list', view === 'list' || view === 'c');  // the Start strip's CSS reads this (#404)
   const perfNav = PERF.routes++ ? 'in-app' : 'landing'; // #394: the first view of this page load is its landing view
   if (view === 'p' && parts[1]) return go(perfView('profile', renderProfile(parts[1], parts[2] || 'overview'), perfNav));
   if (view === 'c') { // incoming deep link: select the conference once, then behave like the normal list
@@ -3024,7 +3016,7 @@ function listFilterBits(rows) { // rows: the programs on screen, which the class
   // The class buttons highlight, they do not filter (#15): the subtitle must not read like the region bit above.
   if (f.classYear.length) bits.push(classSubtitle(f.classYear, rows));
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
-  if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
+  if (S.q) bits.push(`matching “${esc(S.qRaw)}” <button type="button" class="clear-search" data-clear-search>Clear search</button>`);
   return bits;
 }
 async function renderList() {
@@ -3229,7 +3221,7 @@ async function renderCamps() {
   if (f.conf.length) bits.push(esc(confLabels(f.conf).join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
-  if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names`);
+  if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names <button type="button" class="clear-search" data-clear-search>Clear search</button>`);
   bits.push('soonest first');
 
   // The hidden count, site-wide and not narrowed by the filters. A number that collapsed to "0 of 0"
@@ -3279,7 +3271,7 @@ async function renderCamps() {
   app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
   const clr = $('#campsClear');
   // Clears everything that narrowed the list, search and condition chips included - otherwise "clear filters" leaves one on.
-  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; f.cond = []; S.condForm = null; S.q = ''; S.qRaw = ''; mirrorQuery(); saveState(); renderSidebar(); renderCamps(); };
+  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; f.cond = []; S.condForm = null; S.q = ''; S.qRaw = ''; syncSearchBox(); saveState(); renderSidebar(); renderCamps(); };
 }
 
 /* ---------- trends: where players come from (#/trends, issues #230, #327) ----------
