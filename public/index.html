@@ -680,6 +680,17 @@ a.pill { text-decoration: none; }
 
 <script>
 'use strict';
+// #400 pilot (#433 review): a #pilot=<token> link is taken out of the address FIRST, before any other code on this page
+// runs, so nothing added later can read or send it. Only the raw value is kept, for recsPilotStart() below to check.
+// Nothing here can throw past this block: if history.replaceState is refused, location.replace does it.
+const RECS_PILOT_RAW = (() => {
+  let m = null;
+  try { m = /^#pilot=([^&#/]*)$/.exec(location.hash || ''); } catch { return null; }
+  if (!m) return null;
+  try { history.replaceState(null, '', '#/'); } catch { /* refused: the fallback below */ }
+  try { if (location.hash !== '#/') location.replace('#/'); } catch { /* nothing else to try */ }
+  return m[1];
+})();
 /* =====================================================================
    nextonetwo · College Soccer dashboard - vanilla JS, no build step.
    Reads the JSON that build.py writes under data/:
@@ -2747,8 +2758,10 @@ window.addEventListener('storage', e => { if (e.key === RECS_KEY || e.key === nu
      (RECS_PILOT_SHA256); null means there is no pilot, and every #pilot= link does nothing.
    - It is in the URL fragment, so it is never sent to the server: not to the Worker, not to any log or count.
    - The page hashes what the link carries (Web Crypto, no request) and, on a match, switches recommendations on for
-     this browser tab's session (sessionStorage), then rewrites the address to #/ so the token doesn't sit in the
-     address bar, history or a screenshot. A plain ?recs=1, or any wrong token, does nothing.
+     this browser tab's session (sessionStorage). The address is rewritten to #/ first of all, at the top of this
+     script (RECS_PILOT_RAW), so the token leaves the address bar and the tab's back/forward history. The browser's
+     own global history may still record the visit; on a shared device, open the link in a private window.
+     A plain ?recs=1, or any wrong or malformed token, does nothing.
    - #pilot=off ends it for the session. A new hash here (a one-line change) revokes every old link.
    This is a gate against a casual or shared parameter, not a security boundary: the feature shows only public data,
    and anyone reading this page's source can switch it on from the console. No production event, no new request. */
@@ -2762,13 +2775,8 @@ async function recsSha256(text) {
 }
 function recsPilotOn() { S.recs.pilot = true; recsSwitchedOn(); }
 async function recsPilotStart() {
-  let token = null;
-  const m = /^#pilot=([^&#/]*)$/.exec(location.hash || '');
-  if (m) {
-    token = decodeURIComponent(m[1]);
-    history.replaceState(null, '', '#/'); // the token leaves the address bar before anything else happens
-    if (location.hash !== '#/') location.hash = '#/';
-  }
+  let token = null; // the address was already stripped at the top of the script; a malformed value counts as none
+  if (RECS_PILOT_RAW !== null) { try { token = decodeURIComponent(RECS_PILOT_RAW); } catch { token = null; } }
   if (!RECS_PILOT_SHA256) return false;
   if (token === 'off') { try { sessionStorage.removeItem(RECS_PILOT_KEY); } catch { } return false; }
   let ok = false;

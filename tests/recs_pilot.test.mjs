@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { HTML, LOAD_REQUESTS, loadPage, settle } from './recs_page_helpers.mjs';
-import { makeToken, sha256Hex, setPilotHash, pilotLink } from '../tools/recs_pilot.mjs';
+import { makeToken, sha256Hex, setPilotHash, pilotLink, runPilot, WARNING, NOT_A_TERMINAL } from '../tools/recs_pilot.mjs';
 
 const TOKEN = makeToken(); // a fresh one per run: no token is ever stored in the repository
 const withHash = (hash) => (src) => {
@@ -86,4 +86,46 @@ test('tools/recs_pilot.mjs: a 256-bit base64url token, its SHA-256, one exact li
   assert.throws(() => setPilotHash(page + page, null), /found 2/);
   assert.equal(pilotLink('T'), 'https://college.nextonetwo.com/#pilot=T');
   assert.ok(!fs.readFileSync(new URL('../tools/recs_pilot.mjs', import.meta.url), 'utf8').includes('writeFileSync(PAGE, token'), 'the tool writes the token');
+});
+
+// ---------- #433 review: strip first, never throw; the tool's own output warns, and only a terminal sees a link ----------
+
+test('#433 review: the address is stripped by the first statement of the script, before any other code runs', () => {
+  const lines = fs.readFileSync(HTML, 'utf8').split(/\r?\n/);
+  const a = lines.findIndex((l) => l.trim() === '<script>');
+  const code = lines.slice(a + 1).filter((l) => l.trim() && !/^\s*(\/\/|\/\*|\*)/.test(l));
+  assert.equal(code[0], "'use strict';");
+  assert.equal(code[1], 'const RECS_PILOT_RAW = (() => {', 'something runs before the pilot token leaves the address');
+});
+
+test('#433 review: a malformed link still leaves the address as #/, and switches nothing on', async () => {
+  for (const bad of ['%E0%A4', '%', `${TOKEN}%`]) {
+    const pg = await page({ hash: `#pilot=${bad}`, transform: withHash(sha256Hex(TOKEN)) });
+    assert.equal(pg.sb.location.hash, '#/', `#pilot=${bad} stayed in the address`);
+    assert.equal(on(pg), false);
+    assert.equal(pg.sessionStore.size, 0);
+  }
+});
+
+test('#433 review: when history.replaceState is refused, location.replace strips the address and the right token still works', async () => {
+  const refuse = (src) => "history.replaceState = () => { throw new Error('SecurityError'); };\n" + withHash(sha256Hex(TOKEN))(src);
+  const pg = await page({ hash: `#pilot=${TOKEN}`, transform: refuse });
+  assert.equal(pg.sb.location.hash, '#/', 'the token stayed in the address');
+  assert.equal(on(pg), true);
+});
+
+test('#433 review: the tool makes a link only for an interactive terminal, and its output carries the warning', () => {
+  const page = 'x\nconst RECS_PILOT_SHA256 = null;\ny\n';
+  const piped = runPilot('new', page, { tty: false });
+  assert.deepEqual([piped.html, piped.lines, piped.code], [null, [NOT_A_TERMINAL], 1], 'a pipe or an assistant could capture the link');
+  const t = makeToken();
+  const tty = runPilot('new', page, { tty: true, token: t });
+  assert.equal(tty.html, setPilotHash(page, sha256Hex(t)));
+  assert.equal(tty.lines.filter((l) => l.includes(t)).length, 1, 'the link is not printed exactly once');
+  assert.equal(tty.lines[0], WARNING);
+  assert.equal(tty.lines.at(-1), WARNING);
+  assert.match(WARNING, /chat, an issue or a PR/);
+  assert.match(WARNING, /assistant/);
+  const off = runPilot('off', setPilotHash(page, sha256Hex(t)), { tty: false });
+  assert.equal(off.html, page, 'off needs no terminal: it prints no link');
 });
