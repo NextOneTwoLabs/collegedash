@@ -1320,6 +1320,8 @@ POS_MAP = {
     "goalkeeper": "GK", "keeper": "GK", "goalie": "GK", "backup goalkeeper": "GK", "backup keeper": "GK",
     "defender": "D", "def": "D", "back": "D", "center back": "D", "centre back": "D", "centerback": "D",
     "outside back": "D", "full back": "D", "fullback": "D", "right back": "D", "left back": "D",
+    # #263 (Huatuo's plan review): chicago-state's list view prints 'Forward/Outside Defense'
+    "outside defense": "D", "outside defender": "D",
     "wing back": "D", "wingback": "D", "sweeper": "D",
     "midfielder": "M", "mid": "M", "midfield": "M", "center mid": "M", "centre mid": "M",
     "central mid": "M", "attacking mid": "M", "defensive mid": "M",
