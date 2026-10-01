@@ -136,6 +136,19 @@ test('the class buttons keep a toggle state that matches the selection: All pres
   assert.deepEqual(g.buttons.filter(b => b.pressed === 'true').map(b => b.value), ['2027'], 'only the highlighted class is pressed');
 });
 
+// The visible text "'27" is read by some screen readers as "apostrophe 27", so each year button carries a full
+// accessible name built from its year. "All" keeps its text as its name, and aria-pressed is untouched.
+test('each year button\'s accessible name is "Class of <year>"; All keeps its text', () => {
+  const years = (INDEX.season.gradYears || []).map(String);
+  reset({ classYear: ['2027'] });
+  sb.renderSidebar();
+  const html = classGroup(sidebar());
+  const raw = [...sidebar().matchAll(/<button ([^>]*data-class="[^"]*"[^>]*)>/g)].map(m => m[1]);
+  const names = raw.map(a => /aria-label="([^"]*)"/.exec(a)?.[1] ?? null);
+  assert.deepEqual(names, [null, ...years.map(y => `Class of ${y}`)], 'aria-label per button (All has none)');
+  assert.deepEqual(html.buttons.map(b => b.pressed), ['false', ...years.map(y => String(y === '2027'))], 'aria-pressed changed');
+});
+
 // No subtitle bit may open with "class of" / "classes of": that is the shape of a filter bit ("South region").
 const filterLike = sub => sub.split(' · ').filter(bit => /^class(es)? of\b/i.test(bit.trim()));
 

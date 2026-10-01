@@ -1530,7 +1530,7 @@ function renderSidebar() {
       <div class="browse-label">Region</div>
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
       ${onCamps ? '' : `<div class="browse-label">Highlight class</div>
-      <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>`}
+      <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))} aria-label="Class of ${esc(String(y))}">'${String(y).slice(2)}</button>`).join('')}</div>`}
       <div class="browse-label">Conference</div>
       ${confBlock}`;
   } else if (tab === 'shortlist') {
