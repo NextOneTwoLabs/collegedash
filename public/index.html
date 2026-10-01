@@ -3888,6 +3888,12 @@ function trendsBoxSync(kind) {
 // The suggestions an empty box offers: 6 on a phone (≤480px) so the picker stays short, 12 elsewhere; a typed query shows 12.
 const trendsHitLimit = q => !String(q || '').trim() && matchMedia('(max-width: 480px)').matches ? 6 : 12;
 const trendsPlayers = n => `${n} player${n === 1 ? '' : 's'}`;
+/* #448: an option's accessible name. Its content - the label, then an inline pill-sub - read as "Stanford12 players" (the
+   problem #9 fixed for the sidebar pills). The name is the visible label first (WCAG 2.5.3, label in name), then what the
+   pill-sub says as plain text, its " · " separators read as commas: "Stanford, D1, ACC, Stanford, CA, 12 players". */
+const htmlText = h => String(h ?? '').replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
+  .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+const trendsOptionName = o => [o.label, ...htmlText(o.sub).split(' · ')].map(x => x.trim()).filter(Boolean).join(', ');
 // The selection of the boxes other than `kind`, known values only: what an empty box's suggestions follow.
 const trendsOthers = (sel, kind) => Object.fromEntries(TR_KINDS.filter(k => k !== kind).map(k => [k, trendsKnownVals(sel, k)]).filter(([, v]) => v.length));
 // A box's options for what is typed in it. A typed query searches everything of that kind; an empty box follows
@@ -3931,7 +3937,7 @@ function trendsOptions(kind, q) {
 function trendsFillList(kind) {
   const input = $(`#trIn-${kind}`), list = $(`#trList-${kind}`), msg = $(`#trMsg-${kind}`);
   const q = input.value, opts = TR.opts[kind] = trendsOptions(kind, q), full = trendsVals(TR.sel[kind]).length >= TR_MAX;
-  list.innerHTML = opts.map((o, i) => `<div class="pill trend-hit" role="option" id="trOpt-${kind}-${i}" aria-selected="false" data-i="${i}">${esc(o.label)}<span class="pill-sub">${o.sub}</span></div>`).join('');
+  list.innerHTML = opts.map((o, i) => `<div class="pill trend-hit" role="option" id="trOpt-${kind}-${i}" aria-selected="false" aria-label="${esc(trendsOptionName(o))}" data-i="${i}">${esc(o.label)}<span class="pill-sub">${o.sub}</span></div>`).join('');
   TR.at[kind] = -1; input.removeAttribute('aria-activedescendant');
   list.hidden = !opts.length; input.setAttribute('aria-expanded', opts.length ? 'true' : 'false');
   // Shown under the box, never announced: the live region speaks only when a value is added, removed or cleared.
