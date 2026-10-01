@@ -78,8 +78,9 @@ const EXPECTED = {
   // out-of-state: D 5000 (in-state only), C 25000, A 30000, B 40000, F 50000; E, G none. In-state would put A before C.
   tuition: ['asc', [D, C, A, B, F, E, G], [F, B, A, C, D, E, G]],
   undergrads: ['desc', [E, F, D, A, B, C, G], [B, A, D, F, E, C, G]],
-  // 0 commits is a count, not a blank
-  commits: ['desc', [C, F, G, B, D, A, E], [E, A, D, B, C, F, G]],
+  // 0 commits is a count, not a blank, for D1, where commits are collected (C, G). #411: D2 and D3 are not collected,
+  // whatever count a row carries (D 2, E 5), so they sort last in both directions, by name
+  commits: ['desc', [C, G, B, A, D, E, F], [A, B, C, G, D, E, F]],
   // with titles, by division (D1 C1 A2 | D2 D3 | D3 F4), then without: B, G (D1), E (D3)
   titles: ['desc', [C, A, D, F, B, G, E], [A, C, D, F, B, G, E]],
   // College Cups: A 5, C 2; B and G are D1 '—'; D, E, F are D2/D3 where it does not apply
