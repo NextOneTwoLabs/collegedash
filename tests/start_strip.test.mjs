@@ -287,6 +287,29 @@ test('Enter in the strip box opens the top name hit, like the sidebar box', asyn
   assert.equal(sb.location.hash, '#/p/kenyon-college');
 });
 
+// #409 behaviour, through the strip box: the same shared handlers, so the same results as the sidebar box.
+test('the strip box has #409\'s search: a place query\'s Enter keeps the list, and the count follows the filters (#23)', async () => {
+  const { sb, $ } = loadPage(375);
+  await sb.loadIndex();
+  sb.location.hash = '#/';
+  const strip = $('#qStart');
+  await typeIn(sb, strip, 'Ohio');
+  assert.match($('#qStartStatus').textContent, /^\d+ matches · Enter shows the list$/);
+  for (const fn of strip._listeners.keydown || []) fn({ key: 'Enter', shiftKey: false, preventDefault() { } });
+  await settle();
+  assert.equal(sb.location.hash, '#/', 'Enter on "Ohio" in the strip opened a single program');
+  sb.S.filters.region = ['West'];
+  await typeIn(sb, strip, 'Ohio');
+  assert.match($('#qStartStatus').textContent, /^No match within your filters \(\d+ without them\)$/);
+  sb.S.filters.region = [];
+});
+
+test('on a phone the #400 sheet covers the strip: the strip is inside #main, which the sheet makes inert', () => {
+  const main = body.indexOf('id="main"');
+  assert.ok(main >= 0 && STRIP_AT > main, 'the strip is not inside #main');
+  assert.match(HTML, /for \(const sel of \[[^\]]*'#main'[^\]]*\]\)[^\n]*\.inert = modal/, 'the #400 sheet no longer makes #main inert');
+});
+
 test('one live region: the strip status is aria-live, the sidebar #qStatus is not', async () => {
   assert.match(body.slice(STRIP_AT), /id="qStartStatus" aria-live="polite"/);
   const { sb, $ } = loadPage(375);
@@ -301,7 +324,7 @@ test('Ask on: the strip placeholder follows it, and the strip box skips Shift+En
   const { sb, $ } = loadPage(375);
   await sb.loadIndex();
   sb.location.hash = '#/';
-  assert.equal($('#qStart').placeholder || /id="qStart"[^>]*placeholder="([^"]*)"/.exec(body)?.[1], 'School or mascot…');
+  assert.equal($('#qStart').placeholder || /id="qStart"[^>]*placeholder="([^"]*)"/.exec(body)?.[1], 'School, mascot, state or city…');
   sb.askSwitchedOn();
   assert.equal($('#qStart').placeholder, 'School, mascot, or a question…');
   let asked = 0;
