@@ -13,6 +13,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import worker from '../worker.js';
@@ -21,8 +22,10 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC = path.join(ROOT, 'public');
 const HOST = 'https://college.nextonetwo.com';
 
-// extra: { 'data/list/index.json': '<json>' } - files a test supplies that the committed tree may not hold yet
-function createMockEnv(extra = {}) {
+// extra: { 'data/list/index.json': '<json>' } - files a test supplies whatever the tree holds; a null value is a file
+// the asset server does NOT have, even when one is on disk (so a "not built yet" case never depends on the checkout).
+// root: the directory standing in for public/ (a test can point it at a scratch tree).
+function createMockEnv(extra = {}, root = PUBLIC) {
   const calls = [];
   return {
     calls,
@@ -32,9 +35,10 @@ function createMockEnv(extra = {}) {
         const u = new URL(req.url);
         calls.push(u.pathname);
         let rel = decodeURIComponent(u.pathname).replace(/^\//, '');
-        const file = path.join(PUBLIC, rel);
+        const file = path.join(root, rel);
+        if (Object.hasOwn(extra, rel) && extra[rel] === null) return new Response(null, { status: 404 });
         const supplied = Object.hasOwn(extra, rel) ? Buffer.from(extra[rel]) : null;
-        if (!supplied && (!file.startsWith(PUBLIC) || !fs.existsSync(file) || !fs.statSync(file).isFile())) {
+        if (!supplied && (!file.startsWith(root) || !fs.existsSync(file) || !fs.statSync(file).isFile())) {
           return new Response(null, { status: 404 });
         }
         const content = supplied || fs.readFileSync(file);
@@ -231,10 +235,27 @@ test('/api/v1/list serves data/list/index.json like every v1 route; /api/v1/prog
   const prof = createMockEnv();
   await worker.fetch(new Request(HOST + '/api/v1/programs/list'), prof);
   assert.deepEqual(prof.calls, ['/data/programs/list.json']);
-  // before the first build writes it: a JSON 404, never the assets' HTML
-  const none = await worker.fetch(new Request(HOST + '/api/v1/list'), createMockEnv());
+  // before the first build writes it: a JSON 404, never the assets' HTML. The asset server is told it has no list,
+  // whatever the checkout holds (Huatuo, #401 R1: after the first refresh commits the file, a disk read would get 200).
+  const none = await worker.fetch(new Request(HOST + '/api/v1/list'), createMockEnv({ 'data/list/index.json': null }));
   assert.equal(none.status, 404);
   assert.match(none.headers.get('content-type') || '', /application\/json/);
   // and the raw file is refused like every /data path
   assert.equal((await worker.fetch(new Request(HOST + '/data/list/index.json'), env)).status, 404);
+});
+
+test('#401 R1: the "not built yet" case still answers 404 once a refresh has committed the list', async () => {
+  // a scratch tree standing in for a checkout after the first refresh: it holds data/list/index.json
+  const tree = fs.mkdtempSync(path.join(os.tmpdir(), 'list-built-'));
+  try {
+    fs.mkdirSync(path.join(tree, 'data', 'list'), { recursive: true });
+    fs.writeFileSync(path.join(tree, 'data', 'list', 'index.json'), '{"programs":[]}');
+    const fromDisk = await worker.fetch(new Request(HOST + '/api/v1/list'), createMockEnv({}, tree));
+    assert.equal(fromDisk.status, 200, 'the file really is there: read from disk, it is served');
+    const notBuilt = await worker.fetch(new Request(HOST + '/api/v1/list'), createMockEnv({ 'data/list/index.json': null }, tree));
+    assert.equal(notBuilt.status, 404, 'the not-built case does not depend on what the checkout holds');
+    assert.match(notBuilt.headers.get('content-type') || '', /application\/json/);
+  } finally {
+    fs.rmSync(tree, { recursive: true, force: true });
+  }
 });
