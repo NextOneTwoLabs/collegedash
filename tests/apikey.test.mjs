@@ -14,6 +14,7 @@ import { join } from 'node:path';
 import { gate, mint, COOKIE } from '../api/session.mjs';
 import { checkKey, hashKey, sameDigest, looseDecode, keyInUrl, clearKeyCache, KEY, HELP_URL } from '../api/apikey.mjs';
 import worker from '../worker.js';
+import { acquireCpu, quietWindow, spin, median } from './timing_helpers.mjs';
 
 const SECRET = 's'.repeat(40);
 const T0 = Date.UTC(2026, 8, 25, 12, 0, 0);
@@ -381,18 +382,34 @@ test('R-F: odd Authorization headers', async () => {
   }
 });
 
-test('R-I: refusal reasons differ in time only by microseconds and not at all in the answer', async () => {
+test('R-I: refusal reasons differ in time only by microseconds and not at all in the answer', async (t) => {
   const { env, good, revoked } = await setup();
-  const out = {};
-  for (const [name, k] of [['unknown', good.key.replace(good.id, 'f'.repeat(12))], ['mismatch', flip(good.key)], ['revoked', revoked.key], ['ok', good.key]]) {
-    const first = await checkKey('Bearer ' + k, env, T0);
-    assert.equal(first.state === 'ok', name === 'ok');
-    const t = process.hrtime.bigint();
-    for (let i = 0; i < 500; i++) await checkKey('Bearer ' + k, env, T0);
-    out[name] = Number(process.hrtime.bigint() - t) / 500 / 1000;
+  // Timed under tests/timing_helpers.mjs's rules (issue #400's de-flake): the CPU lock keeps the heavy suite away,
+  // each round starts in a quiet moment, rounds are separated by a spin, and the per-call average is the MEDIAN of
+  // five rounds of 100 calls (the same 500 calls as before), so one burst from another suite can't fail it and one
+  // quiet round can't pass it. The ceiling is unchanged: 5 ms a call.
+  const cpu = await acquireCpu('apikey R-I', 120_000);
+  try {
+    const out = {};
+    for (const [name, k] of [['unknown', good.key.replace(good.id, 'f'.repeat(12))], ['mismatch', flip(good.key)], ['revoked', revoked.key], ['ok', good.key]]) {
+      const first = await checkKey('Bearer ' + k, env, T0);
+      assert.equal(first.state === 'ok', name === 'ok');
+      const rounds = [];
+      for (let r = 0; r < 5; r++) {
+        quietWindow(4_000);
+        const t0 = process.hrtime.bigint();
+        for (let i = 0; i < 100; i++) await checkKey('Bearer ' + k, env, T0);
+        rounds.push(Number(process.hrtime.bigint() - t0) / 100 / 1000);
+        if (r < 4) spin(50);
+      }
+      out[name] = median(rounds);
+      t.diagnostic(`R-I ${name}: rounds ${rounds.map(us => us.toFixed(0)).join(', ')} us a call; median ${out[name].toFixed(0)} us`);
+    }
+    // Ids are not secret, and the bodies are identical (tested above), so this is recorded, not bounded.
+    assert.ok(Object.values(out).every(us => us > 0 && us < 5000), JSON.stringify(out));
+  } finally {
+    cpu.release();
   }
-  // Ids are not secret, and the bodies are identical (tested above), so this is recorded, not bounded.
-  assert.ok(Object.values(out).every(us => us > 0 && us < 5000), JSON.stringify(out));
 });
 
 test('phase 2: wrangler.toml declares RL_KEY 3464 at 60/60 s and its own API_KEYS store; namespace ids are unique; no store answers 503', async () => {
