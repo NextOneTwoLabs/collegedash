@@ -51,7 +51,11 @@ UNCHANGED = {
     "Senior": "SR", "Gr.": "GR", "Graduate": "GR", "5th": "GR", "Fifth Year": "GR", "6th": "GR",
     "R-Fr.": "R-FR", "RS-So": "R-SO", "Redshirt Sophomore": "R-SO", "R-Jr.": "R-JR", "Redshirt Senior": "R-SR",
 }
-STAY_EMPTY = ["", "Rs.", "8th", "Redshirt", "Secondary", "Thirdly", "Firstly"]
+STAY_EMPTY = ["", "Rs.", "8th", "Redshirt", "Secondary", "Thirdly", "Firstly",
+              # #458 review: WMT asks class_code which of a card's values is the class, so a rule anchored only at the
+              # start took school and club names for one. Every appended rule now matches the whole label.
+              "Second Baptist School", "1st Touch FC", "Third Coast Soccer", "Fourth Presbyterian", "Sixth Form College",
+              "FY Academy", "Red Sox Academy", "Red Senators FC", "RS Soccer Club", "2nd Street Academy"]
 
 
 def test_class_code() -> None:
@@ -102,8 +106,25 @@ def test_wmt_list() -> None:
        (got.get("Gil Madeup"), got.get("Hal Example")) == ("FR", "SR"), got)
 
 
+def test_wmt_unlabelled_card() -> None:
+    """#458 review: on a WMT card whose values carry no labels, a school named like an ordinal is not the class."""
+    def card(name, *vals):
+        items = "".join(f'<span class="roster-players-cards-item__info-item">{v}</span>' for v in vals)
+        return (f'<div class="roster-card"><a class="roster-card__title-link" href="/sports/womens-soccer/roster/'
+                f'{name.lower().replace(" ", "-")}/1">{name}</a><span class="roster-card__position">D</span>'
+                f'<div class="roster-card__body">{items}</div></div>')
+    html = ("<html><body>" + card("Ivy Sample", "5'6\"", "Houston, TX", "Second Baptist School")
+            + card("Jo Example", "5'8\"", "Second Year", "Lakeview, B.C.") + "</body></html>")
+    got = {p["name"]: p for p in wmt.parse_roster(html, BASE)["players"]}
+    ivy, jo = got.get("Ivy Sample", {}), got.get("Jo Example", {})
+    ok("GUARD a WMT card with no class value and the school 'Second Baptist School': no class, hometown 'Houston, TX'",
+       (ivy.get("classLabel"), ivy.get("classCode"), ivy.get("hometown")) == ("", "", "Houston, TX"), ivy)
+    ok("FIX a WMT card whose unlabelled value is 'Second Year' reads it as the class",
+       (jo.get("classLabel"), jo.get("classCode"), jo.get("hometown")) == ("Second Year", "SO", "Lakeview, B.C."), jo)
+
+
 def main() -> int:
-    for fn in (test_class_code, test_wmt_falls_back, test_sidearm_table, test_wmt_list):
+    for fn in (test_class_code, test_wmt_falls_back, test_sidearm_table, test_wmt_list, test_wmt_unlabelled_card):
         print(fn.__name__)
         fn()
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed" + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
