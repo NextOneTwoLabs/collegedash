@@ -15,6 +15,10 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import { FIT, HTML, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
+import { acquireShared } from './timing_helpers.mjs';
+// A heavy page suite: it holds the CPU lock shared, so it never runs while a timing suite measures (tests/timing_helpers.mjs).
+const CPU = await acquireShared('recs_results', 120_000);
+test.after(() => CPU.release());
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
