@@ -52,7 +52,8 @@ def test_list_theme() -> None:
     ok("FIX heights", [pick(p, "height", "heightIn") for p in pl] == [("5'9\"", 69), ("5'4\"", 64), ("5'6\"", 66)],
        [pick(p, "height", "heightIn") for p in pl])
     ok("FIX class labels and codes", [pick(p, "classLabel", "classCode") for p in pl]
-       == [("Redshirt Senior", "R-SR"), ("Sophomore", "SO"), ("Sixth Year", "")], [pick(p, "classLabel", "classCode") for p in pl])
+       == [("Redshirt Senior", "R-SR"), ("Sophomore", "SO"), ("Sixth Year", "GR")],  # 'Sixth Year' has a code since #34
+       [pick(p, "classLabel", "classCode") for p in pl])
     ok("FIX hometowns", [p["hometown"] for p in pl] == ["Springfield, Ore.", "Lakeview, B.C., Canada", ""], [p["hometown"] for p in pl])
     ok("GUARD a school with no comma is never taken for a hometown", pl[2]["hometown"] == "")
     ok("GUARD unlabelled school spans are left out, never guessed", all(not p["highSchool"] and not p["previousSchool"] for p in pl))
