@@ -14,7 +14,8 @@ import { perfBeacon, finishServer, v1Kind } from './api/perf.mjs';
 //      without testing production (issue #345, round-4 plan change 1).
 //   2. Answers GET /api/status with {"local":false}. The local dev server (serve.py) answers true;
 //      the front end uses it to decide whether write actions are available. Before this existed
-//      the request 404'd and logged a console error on every page load (issue #11).
+//      the request 404'd and logged a console error on every page load (issue #11). While RECS_ENABLED is
+//      "true" the answer also carries recs: true, which shows "Find programs for me" (issue #400).
 //   3. Answers /api/v1/* versioned read requests from the published dataset (issue #240), behind the session
 //      cookie and rate limits of issue #345 (api/session.mjs): "/" sets a signed session cookie, and every
 //      /api/v1* request is served on its API key, its session, or a small per-IP allowance, each rate-limited.
@@ -68,7 +69,9 @@ export default {
       }
       // The same for every visitor, whether or not ask is on: whether ask is available is an owner-only
       // question, answered by GET /api/ask/status behind Cloudflare Access (issue #179), never here.
-      return Response.json({ local: false });
+      // Recommendations (issue #400) ride on this answer, so their switch costs no request of its own: RECS_ENABLED
+      // "true" adds recs: true (the same for every visitor too). Off, the body stays exactly {"local":false}.
+      return Response.json(recsEnabled(env) ? { local: false, recs: true } : { local: false });
     }
     if (url.pathname === '/api/feedback') return feedback(request, env);
     // The page's speed reports (issue #394, api/perf.mjs): always 204, at most one point.
@@ -287,6 +290,8 @@ const UNSUPPORTED_DEFAULT = 'That question needs more than the filters on this p
 function askEnabled(env) {
   return env?.ASK_ENABLED === 'true' && typeof env.ANTHROPIC_API_KEY === 'string' && env.ANTHROPIC_API_KEY.length > 0;
 }
+// "Find programs for me" (issue #400): on only while RECS_ENABLED is exactly "true". Read by GET /api/status.
+function recsEnabled(env) { return env?.RECS_ENABLED === 'true'; }
 
 // The values a filter may take, read from the published index so a conference or class the site does not
 // carry cannot be applied. Cached per isolate for ten minutes: the index changes once a day at most.

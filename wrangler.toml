@@ -49,6 +49,10 @@ ACCESS_AUD = "b9c9162446e83350b83b6e6cc4ee0b4d386a1cf55e3fabb6b52f4822a1e5080b"
 # for a routine "/" or /api/v1 request; anything else writes none. Server-Timing headers are sent either way.
 PERF_SAMPLE = "1"
 PERF_SERVER = "on"
+# Program recommendations, "Find programs for me" (issue #400). "true" adds recs: true to GET /api/status, which is
+# the only thing that makes the page draw the entry button, the panel and the form; anything else is off. Off in
+# production until the owner's release decision (#400 PR 8). Rolling back is setting it back to "false".
+RECS_ENABLED = "false"
 
 [[kv_namespaces]]
 binding = "FEEDBACK"
