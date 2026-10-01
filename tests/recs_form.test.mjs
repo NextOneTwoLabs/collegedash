@@ -49,7 +49,7 @@ function makeElement(name) {
   };
 }
 const HANDLES = ['S', 'renderSidebar', 'loadIndex', 'REGIONS', 'recsOpen', 'recsClose', 'recsApply', 'recsReset', 'recsToggleValue',
-  'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel'];
+  'recsSetUse', 'recsSetImportance', 'recsSummary', 'renderRecsPanel', 'recsSheetState'];
 
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
@@ -105,7 +105,8 @@ function loadPage({ html = HTML, status = { local: false }, storage = {}, width 
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   const $ = (sel) => sandbox.document.querySelector(sel);
-  return { sb: sandbox, $, requests, store, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel') };
+  return { sb: sandbox, $, requests, store, sidebar: () => $('#sidebar').innerHTML, panel: () => $('#recsPanel'),
+    panelHtml: () => $('#recsPanelBody').innerHTML + $('#recsStatus').textContent };
 }
 const settle = async () => { for (let i = 0; i < 40; i++) await new Promise((r) => setTimeout(r, 0)); };
 async function ready(opts) {
@@ -134,7 +135,7 @@ for (const [name, status] of OFF) {
     assert.notEqual(pg.sb.S.recs?.on, true);
     if (pg.sb.recsOpen) await pg.sb.recsOpen();
     await settle();
-    assert.equal(pg.panel().innerHTML, '', 'the panel was drawn');
+    assert.equal(pg.panelHtml(), '', 'the panel was drawn');
     assert.deepEqual(pg.requests.filter((u) => !LOAD_REQUESTS.includes(u)), [], 'a request beyond the page load');
   });
 }
@@ -177,12 +178,69 @@ test('the Worker answers {"local":false} byte for byte unless RECS_ENABLED is ex
 
 // ---------- the panel and form ----------
 
+test('the status line is one persistent live node in the page markup, outside what the panel redraws', () => {
+  const page = fs.readFileSync(HTML, 'utf8');
+  assert.match(page, /<div class="recs-panel" id="recsPanel" role="dialog" aria-labelledby="recsTitle" hidden><div id="recsPanelBody"><\/div><div class="recs-status" id="recsStatus" role="status" aria-live="polite"><\/div><\/div>/);
+});
+
+// The stub DOM has no focus order, so the sheet's controls are stood in for: the heading (tabindex -1, where focus
+// lands on open), Close, a radio and Save, in document order. querySelectorAll matches the heading only when the
+// selector names it, as a real DOM would for the two selectors in question.
+function focusables(pg) {
+  const doc = pg.sb.document;
+  const el = (id, tag) => Object.assign(pg.$(id), { id: id.slice(1), tag, focus() { doc.activeElement = this; } });
+  const items = [el('#recsTitle', 'h2'), el('#recsClose', 'button'), el('#fakeRadio', 'input'), el('#recsSave', 'button')];
+  pg.panel().querySelectorAll = (sel) => items.filter((x) => x.tag !== 'h2' || sel.includes('#recsTitle'));
+  return items;
+}
+const tab = (pg, shiftKey) => { let prevented = false; pg.panel().onkeydown({ key: 'Tab', shiftKey, preventDefault() { prevented = true; } }); return prevented; };
+
+test('phone sheet focus trap: Shift+Tab from Close or the heading wraps to the last control, Tab from the last to Close', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  await open(pg);
+  const [title, close, , save] = focusables(pg);
+  pg.sb.document.activeElement = close;
+  assert.equal(tab(pg, true), true, 'Shift+Tab from Close left the sheet');
+  assert.equal(pg.sb.document.activeElement, save);
+  pg.sb.document.activeElement = title;
+  assert.equal(tab(pg, true), true, 'Shift+Tab from the heading left the sheet');
+  assert.equal(pg.sb.document.activeElement, save);
+  pg.sb.document.activeElement = save;
+  assert.equal(tab(pg, false), true, 'Tab from the last control left the sheet');
+  assert.equal(pg.sb.document.activeElement, close, 'Tab from the last control did not wrap to Close');
+});
+
+test('desktop panel: no focus trap; Tab and Shift+Tab leave it normally', async () => {
+  const pg = await ready({ status: ON, width: 1400 });
+  await open(pg);
+  const [, close, , save] = focusables(pg);
+  pg.sb.document.activeElement = close;
+  assert.equal(tab(pg, true), false);
+  pg.sb.document.activeElement = save;
+  assert.equal(tab(pg, false), false);
+});
+
+test('the sheet is modal and the page behind it inert only at phone width, re-checked on resize, released on close', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  await open(pg);
+  const behind = ['#main', '#sidebar', '.header'].map((sel) => pg.$(sel));
+  assert.equal(pg.panel()._attrs['aria-modal'], 'true');
+  assert.ok(behind.every((e) => e.inert === true), 'the page behind the sheet is not inert');
+  pg.sb.innerWidth = 1200; pg.sb.recsSheetState(); // rotated to landscape on a tablet, or resized
+  assert.equal(pg.panel()._attrs['aria-modal'], 'false');
+  assert.ok(behind.every((e) => e.inert === false));
+  pg.sb.innerWidth = 375; pg.sb.recsSheetState();
+  assert.ok(behind.every((e) => e.inert === true));
+  pg.sb.recsClose();
+  assert.ok(behind.every((e) => e.inert === false), 'the page stayed inert after the sheet closed');
+});
+
 test('the panel: a dialog that is modal only at phone width, four labelled fieldsets, climate prefer-only', async () => {
   for (const [width, modal] of [[1400, 'false'], [375, 'true']]) {
     const pg = await ready({ status: ON, width });
     await open(pg);
     assert.equal(pg.panel()._attrs['aria-modal'], modal, `aria-modal at ${width}px`);
-    const html = pg.panel().innerHTML;
+    const html = pg.panelHtml();
     assert.match(html, /<h2 id="recsTitle" tabindex="-1">Find programs for me<\/h2>/);
     assert.match(html, /<button type="button" class="recs-close" id="recsClose" aria-label="Close">/);
     assert.deepEqual([...html.matchAll(/<legend>([^<]+)<\/legend>/g)].map((x) => x[1]), ['Region', 'Division', 'School size', 'Climate']);
@@ -192,7 +250,6 @@ test('the panel: a dialog that is modal only at phone width, four labelled field
     assert.match(html, /value="must" data-recs-imp="climate" disabled aria-describedby="recs-climate-why"/);
     assert.match(html, /id="recs-climate-why">Prefer only: climate labels are estimates from the nearest weather station\./);
     assert.ok(!/value="must" data-recs-imp="(region|division|size)"[^>]*disabled/.test(html), 'must disabled outside climate');
-    assert.match(html, /id="recsStatus" role="status" aria-live="polite"/);
     assert.match(html, /<button type="submit" class="btn primary" id="recsSave">Save preferences<\/button>/);
     assert.ok(!/match %|% match|admission|recruit/i.test(html), 'no match percentage or admission or recruiting claim');
   }
@@ -204,7 +261,7 @@ test('the entry button reports the panel open and closed (aria-expanded)', async
   assert.equal(pg.$('#recsOpen')._attrs['aria-expanded'], 'true');
   pg.sb.recsClose();
   assert.equal(pg.panel().hidden, true);
-  assert.equal(pg.panel().innerHTML, '');
+  assert.equal(pg.panelHtml(), '');
   assert.equal(pg.$('#recsOpen')._attrs['aria-expanded'], 'false');
 });
 
@@ -223,8 +280,8 @@ test('saving: cd.recs v1 holds the ranker-validated prefs; Shortlist, Compare, f
   const after = Object.fromEntries([...pg.store].filter(([k]) => k !== 'cd.recs'));
   assert.deepEqual(after, before, 'another key changed');
   S.renderRecsPanel();
-  assert.match(pg.panel().innerHTML, /<b>Saved:<\/b> Region: West or Northeast \(prefer\) · Division: D3 \(must have\) · Climate: cold winters \(prefer\)/);
-  assert.match(pg.panel().innerHTML, /Preferences saved\./);
+  assert.match(pg.panelHtml(), /<b>Saved:<\/b> Region: West or Northeast \(prefer\) · Division: D3 \(must have\) · Climate: cold winters \(prefer\)/);
+  assert.match(pg.panelHtml(), /Preferences saved\./);
 });
 
 test('A4: saving with every category skipped is refused with the plan\'s message, and nothing is written', async () => {
@@ -234,7 +291,7 @@ test('A4: saving with every category skipped is refused with the plan\'s message
   assert.equal(pg.sb.S.recs.status, 'Choose at least one preference to get recommendations.');
   assert.equal(pg.store.has('cd.recs'), false);
   assert.equal(pg.store.get('cd.filters'), '{"conf":["SEC"]}');
-  assert.ok(!/for you/i.test(pg.sidebar() + pg.panel().innerHTML));
+  assert.ok(!/for you/i.test(pg.sidebar() + pg.panelHtml()));
 });
 
 test('Choose with nothing chosen is refused and names the category; Skip keeps chosen values out of the save', async () => {
@@ -275,7 +332,7 @@ test('a saved set comes back into the form on the next page load', async () => {
   await open(pg);
   assert.deepEqual(plain(pg.sb.S.recs.draft.region), { use: 'choose', values: ['Midwest'], importance: 'must' });
   assert.deepEqual(plain(pg.sb.S.recs.draft.size), { use: 'choose', values: ['lt5k', 'ge15k'], importance: 'prefer' });
-  assert.match(pg.panel().innerHTML, /data-recs-val="Midwest" aria-pressed="true"/);
+  assert.match(pg.panelHtml(), /data-recs-val="Midwest" aria-pressed="true"/);
   assert.equal(pg.sb.S.recs.notices.length, 0);
 });
 
@@ -286,7 +343,7 @@ test('A10: corrupt JSON or the wrong shape starts the form empty, says so once, 
     const pg = await ready({ status: ON, storage: { 'cd.recs': raw } });
     await open(pg);
     assert.deepEqual(plain(pg.sb.S.recs.notices), ['corrupt'], raw);
-    assert.match(pg.panel().innerHTML, /couldn’t be read, so the form starts empty/);
+    assert.match(pg.panelHtml(), /couldn’t be read, so the form starts empty/);
     assert.equal(pg.store.get('cd.recs'), raw, 'rewritten before a save');
     pg.sb.recsToggleValue('division', 'D1');
     assert.equal(pg.sb.recsApply(), true);
@@ -303,7 +360,7 @@ test('A10: storage that throws runs in memory and says the preferences won\'t be
   assert.match(pg.sb.S.recs.status, /^Preferences set for this visit only\./);
   assert.deepEqual(plain(pg.sb.S.recs.saved.size), { mode: 'prefer', values: ['lt5k'] });
   pg.sb.renderRecsPanel();
-  assert.match(pg.panel().innerHTML, /won’t be remembered on this device/);
+  assert.match(pg.panelHtml(), /won’t be remembered on this device/);
 });
 
 test('A10: a newer version is left untouched, the page says so, and saving never overwrites it', async () => {
@@ -322,7 +379,7 @@ test('A10: a removed value or a climate must is named, not silently dropped; unk
     hidden: [{ slug: 'stanford', reason: 'size', at: '2026-10-01' }] };
   const pg = await ready({ status: ON, storage: { 'cd.recs': JSON.stringify(doc) } });
   await open(pg);
-  assert.match(pg.panel().innerHTML, /no longer offered and were left out: Region “Pacific”, Climate “Must have”\./);
+  assert.match(pg.panelHtml(), /no longer offered and were left out: Region “Pacific”, Climate “Must have”\./);
   assert.deepEqual(plain(pg.sb.S.recs.draft.region), { use: 'choose', values: ['West'], importance: 'prefer' });
   assert.equal(pg.sb.S.recs.draft.climate.use, 'skip');
   assert.equal(pg.store.get('cd.recs'), JSON.stringify(doc), 'cleaned before the visitor saved');
@@ -334,12 +391,12 @@ test('A10: a removed value or a climate must is named, not silently dropped; unk
 test('recs.js failing to load shows a load-failed message with Try again, and Try again recovers', async () => {
   const pg = await ready({ status: ON, recsJs: false });
   await open(pg);
-  assert.match(pg.panel().innerHTML, /The preferences form didn’t load\. <button type="button" class="btn" id="recsRetry">Try again<\/button>/);
+  assert.match(pg.panelHtml(), /The preferences form didn’t load\. <button type="button" class="btn" id="recsRetry">Try again<\/button>/);
   assert.equal(pg.store.has('cd.recs'), false);
   pg.sb.__recsJsOk = true;
   await pg.sb.recsOpen();
   await settle();
-  assert.match(pg.panel().innerHTML, /<legend>Region<\/legend>/, 'Try again did not recover');
+  assert.match(pg.panelHtml(), /<legend>Region<\/legend>/, 'Try again did not recover');
   assert.equal(pg.requests.filter((u) => u === 'recs.js').length, 2);
 });
 

@@ -586,7 +586,7 @@ a.pill { text-decoration: none; }
     </footer>
   </div>
   <!-- Program recommendations (issue #400): filled by renderRecsPanel only while /api/status reports recs on. -->
-  <div class="recs-panel" id="recsPanel" role="dialog" aria-labelledby="recsTitle" hidden></div>
+  <div class="recs-panel" id="recsPanel" role="dialog" aria-labelledby="recsTitle" hidden><div id="recsPanelBody"></div><div class="recs-status" id="recsStatus" role="status" aria-live="polite"></div></div>
 </div>
 
 <script>
@@ -1883,6 +1883,15 @@ function recsClose() {
   syncRecsEntry();
   $('#recsOpen')?.focus();
 }
+// On a phone the sheet is modal: aria-modal, and everything behind it inert, so neither Tab nor a screen reader's
+// virtual cursor reaches the page underneath. Re-checked on resize and rotation; off again when the panel closes.
+function recsSheetState() {
+  const modal = !!(S.recs.on && S.recs.open && isPhone());
+  const el = $('#recsPanel');
+  if (el && S.recs.open) el.setAttribute('aria-modal', String(modal));
+  for (const sel of ['#main', '#sidebar', '.header']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+}
+window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
 function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
 function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; }
 function recsSetImportance(cat, imp) {
@@ -1935,25 +1944,27 @@ function recsFieldHtml(c, d) {
 function renderRecsPanel() {
   const el = $('#recsPanel'), R = S.recs;
   if (!el) return;
-  if (!R.on || !R.open) { el.hidden = true; el.innerHTML = ''; return; }
+  const body = $('#recsPanelBody'), status = $('#recsStatus');
+  if (!R.on || !R.open) { el.hidden = true; body.innerHTML = ''; status.textContent = ''; recsSheetState(); return; }
   el.hidden = false;
-  el.setAttribute('aria-modal', String(isPhone()));
+  recsSheetState();
+  // The status line is one persistent live node, outside what is redrawn, so "saved" and the A4 message are announced.
+  if (status.textContent !== R.status) status.textContent = R.status;
   const head = `<div class="recs-head"><h2 id="recsTitle" tabindex="-1">Find programs for me</h2><button type="button" class="recs-close" id="recsClose" aria-label="Close">✕</button></div>`;
   if (!R.lib) {
-    el.innerHTML = head + `<div class="recs-notice" role="alert">The preferences form didn’t load. <button type="button" class="btn" id="recsRetry">Try again</button></div>`;
+    body.innerHTML = head + `<div class="recs-notice" role="alert">The preferences form didn’t load. <button type="button" class="btn" id="recsRetry">Try again</button></div>`;
     wireRecsPanel(el);
     return;
   }
   const notes = [...R.notices.map(n => RECS_NOTICES[n]), recsIssueText(R.issues)].filter(Boolean);
   const saved = recsSummary(R.saved);
-  el.innerHTML = head
+  body.innerHTML = head
     + `<p class="recs-intro">Tell us what matters to you. Every category is optional; skip any of them.</p>`
     + notes.map(n => `<p class="recs-notice">${esc(n)}</p>`).join('')
     + (saved ? `<p class="recs-saved"><b>Saved:</b> ${esc(saved)}</p>` : '')
     + `<form id="recsForm" novalidate>${RECS_CATS.map(c => recsFieldHtml(c, R.draft[c.key])).join('')}
       <div class="recs-error" id="recsError" role="alert">${esc(R.error)}</div>
-      <div class="recs-actions"><button type="button" class="btn" id="recsReset">Clear</button><button type="submit" class="btn primary" id="recsSave">Save preferences</button></div></form>
-      <div class="recs-status" id="recsStatus" role="status" aria-live="polite">${esc(R.status)}</div>`;
+      <div class="recs-actions"><button type="button" class="btn" id="recsReset">Clear</button><button type="submit" class="btn primary" id="recsSave">Save preferences</button></div></form>`;
   wireRecsPanel(el);
 }
 // One set of handlers on the panel itself (event delegation), so a re-render never leaves a control unwired.
@@ -1980,12 +1991,14 @@ function wireRecsPanel(el) {
   el.onkeydown = e => {
     if (e.key === 'Escape') { e.preventDefault(); return recsClose(); }
     // A phone's sheet is modal: Tab and Shift+Tab stay inside it. The desktop panel is not, so Tab leaves it.
+    // Only the controls are Tab stops: the heading (tabindex -1) is where focus lands on open, so Shift+Tab from it, or
+    // from the first control (Close), wraps to the last one, and Tab from the last wraps to Close (#412 review).
     if (e.key === 'Tab' && isPhone()) {
-      const items = [...el.querySelectorAll('button:not([disabled]), input:not([disabled]), [tabindex="-1"]#recsTitle')];
+      const items = [...el.querySelectorAll('button:not([disabled]), input:not([disabled])')];
       if (!items.length) return;
-      const first = items[0], last = items[items.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      const first = items[0], last = items[items.length - 1], at = document.activeElement;
+      if (e.shiftKey && (at === first || at === $('#recsTitle'))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
     }
   };
 }
