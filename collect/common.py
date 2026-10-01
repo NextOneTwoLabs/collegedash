@@ -794,10 +794,16 @@ def current_site() -> str:
 
 def reset_robots_report() -> None:
     with _robots_lock:
-        _robots_counts.clear()
-        _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
-                              by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
-                              loaded=collections.Counter(), failed=collections.Counter())
+        _reset_counts_locked()
+
+
+def _reset_counts_locked() -> None:
+    """Empty the counters. The caller holds _robots_lock (issue #419): _robots_lock is a plain Lock, so the hook's
+    first-use initialisation below must not go through reset_robots_report(), which takes it again."""
+    _robots_counts.clear()
+    _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
+                          by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
+                          loaded=collections.Counter(), failed=collections.Counter())
 
 
 def _robots_check(url: str) -> str | None:
@@ -815,7 +821,7 @@ def _robots_check(url: str) -> str | None:
     site = current_site()
     with _robots_lock:
         if not _robots_counts:
-            reset_robots_report()
+            _reset_counts_locked()
         c = _robots_counts
         c["requests"][host] += 1
         if not allowed:
@@ -836,7 +842,7 @@ def _robots_note_answer(host: str | None, status: int | None) -> None:
         return
     with _robots_lock:
         if not _robots_counts:
-            reset_robots_report()
+            _reset_counts_locked()
         (_robots_counts["loaded"] if status is not None and status < 400 else _robots_counts["failed"])[host] += 1
 
 
