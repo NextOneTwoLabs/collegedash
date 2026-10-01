@@ -6,8 +6,9 @@
 //                 the frozen 1,011-program catalog and a 5x synthetic one (5,055), p95 <= 10 ms each.
 //   cold          the FIRST rank() of a list it has never seen (a new array, so the remembered name order is rebuilt),
 //                 which is what Apply does once the data has loaded: the 1,011 catalog within the same 10 ms, the 5x
-//                 catalog within 30 ms, the Apply target / 10 (300 ms on a phone). Cold is part of Apply, never of a
-//                 rerank, so it is held to the Apply ratio, not the rerank one; the rerank budget is unchanged.
+//                 catalog within 20 ms (Bianque's ruling on #424: tighter than the Apply target / 10 = 30 ms, so a
+//                 cold path that doubles is caught; measured 9-13 ms). Cold is part of Apply, never of a rerank; the
+//                 rerank budget is unchanged.
 //
 // Why it no longer flakes (#415's CI went red at a 18.9 ms median while the property suite ran beside it):
 //   - it measures only while it holds the CPU lock (tests/timing_helpers.mjs), which recs_properties.test.mjs also takes,
@@ -25,7 +26,7 @@ import { R, CATALOG, catalogDocs } from './recs_helpers.mjs';
 import { acquireCpu, quietWindow, spin, median } from './timing_helpers.mjs';
 
 const RERANK_BUDGET_MS = 10;     // 100 ms phone rerank target / 10
-const APPLY_BUDGET_MS = 30;      // 300 ms phone Apply target / 10
+const APPLY_BUDGET_MS = 20;      // the 5x cold first rank (Bianque, #424): under the 300 ms phone Apply target / 10
 const RUNS = 200, COLD_RUNS = 30, WARMUP = 20, ATTEMPTS = 5, SPIN_MS = 250;
 const LOCK_WAIT_MS = 150_000, QUIET_WAIT_MS = 8_000;
 
