@@ -323,7 +323,7 @@ tr:hover td { background: var(--row-hover); }
 .hero { font-size: 48px; font-weight: 600; line-height: 1; }
 
 /* ===== PROGRAM CARDS (kept; tokens updated) ===== */
-.band { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 14px 16px 12px; }
+.band { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 6px; padding: 14px 16px 12px; }  /* #426 (c): badge under the name */
 .band.neutral { background: var(--bg-surface-alt); color: var(--text-primary); }
 .band h3 { color: inherit; }
 .band .nick { display: block; font-size: 12px; font-weight: 500; opacity: .85; margin-top: 2px; }
@@ -345,6 +345,18 @@ tr:hover td { background: var(--row-hover); }
 .pcard .foot .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-left: 6px; vertical-align: middle; }
 .pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-size: 11px; }
 .foot-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+/* #426 (a): every card in a row of the grid takes the tallest band, meta line, detail block and foot in that row.
+   Tracks: 1 band, 2 stripe, 3 meta, 4 detail (facts + Recommended reasons, one wrapper), 5 foot. Names never truncate:
+   a long one makes its row's band track taller for every card in the row. Phones in one column: one card per row. */
+@supports (grid-template-rows: subgrid) {
+  .grid.cards > .pcard { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
+  .grid.cards > .pcard > .band { grid-row: 1; }
+  .grid.cards > .pcard > .stripe { grid-row: 2; }
+  .grid.cards > .pcard > .body { grid-row: 3 / span 2; display: grid; grid-template-rows: subgrid; row-gap: 0; }
+  .grid.cards > .pcard > .body > .meta { grid-row: 1; }
+  .grid.cards > .pcard > .body > .card-detail { grid-row: 2; }
+  .grid.cards > .pcard > .foot { grid-row: 5; }
+}
 .star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.35; transition: all var(--transition-fast); line-height: 1; color: var(--text-primary); }
 .star-btn:hover { opacity: 0.8; transform: scale(1.15); }
 .star-btn.starred { opacity: 1; color: var(--star-color); }
@@ -2941,12 +2953,12 @@ function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); an
       ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
     ${stripeHtml(tc)}
     <div class="body"><div class="meta">${meta}</div>
-      ${facts.some(Boolean) ? `<div class="facts">
+      <div class="card-detail">${facts.some(Boolean) ? `<div class="facts">
         ${facts[0]}
         ${facts[1]}
         ${facts[2]}
         ${facts[3]}
-      </div>` : ''}${recs ? why : ''}</div>
+      </div>` : ''}${recs ? why : ''}</div></div>
     <div class="foot"><span>${foot}${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
       <span class="foot-actions">${cmpBtn(p.slug)}${starBtn(p.slug)}</span></div>
   </div>`;
