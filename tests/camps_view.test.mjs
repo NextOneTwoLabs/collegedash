@@ -273,7 +273,7 @@ test('the sidebar drops sort and recruiting class in the camp view and hands the
   sandbox.renderSidebar();
   const onCamps = sidebar();
   assert.ok(!onCamps.includes('id="sortSelect"'), 'the sort select is still there');
-  assert.ok(!onCamps.includes('Recruiting class'), 'the recruiting-class pills are still there');
+  assert.ok(!onCamps.includes('Highlight class'), 'the recruiting-class pills are still there');
   assert.ok(!onCamps.includes('cards / stats'), 'the c shortcut hint, inert here, is still there');
   assert.ok(onCamps.includes('aria-label="Region"') && onCamps.includes('aria-label="Conference"'),
     'region or conference went missing');
@@ -282,7 +282,7 @@ test('the sidebar drops sort and recruiting class in the camp view and hands the
   sandbox.renderSidebar();
   const onList = sidebar();
   assert.ok(onList.includes('id="sortSelect"'), 'the sort select did not come back');
-  assert.ok(onList.includes('Recruiting class'), 'the recruiting-class pills did not come back');
+  assert.ok(onList.includes('Highlight class'), 'the recruiting-class pills did not come back');
   assert.ok(onList.includes('cards / stats'), 'the c shortcut hint did not come back');
   assert.equal(S.filters.sort, 'rpi', 'f.sort was written while the camp view was open');
   assert.deepEqual(S.filters.classYear, ['2027'], 'f.classYear was written while the camp view was open');

@@ -1592,8 +1592,8 @@ function renderSidebar() {
       ${condBlock}
       <div class="browse-label">Region</div>
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
-      ${onCamps ? '' : `<div class="browse-label">Recruiting class</div>
-      <div class="pill-row" role="group" aria-label="Recruiting class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))}>'${String(y).slice(2)}</button>`).join('')}</div>`}
+      ${onCamps ? '' : `<div class="browse-label">Highlight class</div>
+      <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))} aria-label="'${String(y).slice(2)}, class of ${esc(String(y))}">'${String(y).slice(2)}</button>`).join('')}</div>`}
       <div class="browse-label">Conference</div>
       ${confBlock}`;
   } else if (tab === 'shortlist') {
@@ -1613,7 +1613,7 @@ function renderSidebar() {
     ${body}
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
-  // conference, region and recruiting class are all plain filters: update, re-render the sidebar, re-render the list in place
+  // conference and region are plain filters; the class buttons only highlight (#15). All update, re-render the sidebar, re-render the list in place
   sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { toggleIn(f.conf, b.dataset.conf); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { toggleIn(f.region, b.dataset.region); saveState(); renderSidebar(); rerenderForFilters(); closeDrawer(); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
@@ -1997,6 +1997,16 @@ const tuitionOf = p => p.tuitionOutOfState ?? p.tuitionInState ?? 1e12; // missi
 // commits for the selected recruiting classes (all classes when none is selected)
 const commitsFor = (p, years) => Object.entries(p.commitmentsByYear || {}).filter(([y]) => !years.length || years.includes(y)).reduce((a, [, n]) => a + n, 0);
 const classLabel = years => years.length ? `Commits ${years.map(y => `'${String(y).slice(2)}`).join('+')}` : 'Commits';
+// The list subtitle's class bit (#15): "highlighting commits for the class of 2027", plus "(D2 and D3 commits rarely
+// collected)" naming each division on screen where fewer than half the programs have any commit data.
+function classSubtitle(years, rows) {
+  const tally = {};
+  rows.forEach(p => { const d = p.division || 'D1', t = tally[d] || (tally[d] = [0, 0]); t[1]++; if (has.rowCommits(p)) t[0]++; });
+  const thin = Object.keys(tally).sort().filter(d => tally[d][0] * 2 < tally[d][1]);
+  const and = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs.join('');
+  return `highlighting commits for the class${years.length > 1 ? 'es' : ''} of ${esc(and([...years].sort()))}`
+    + (thin.length ? ` (${esc(and(thin))} commits rarely collected)` : '');
+}
 /* ---------- sorting (#285) ----------
    One spec per sortable column. key(p) is the value the column shows, or null when it shows '—' or nothing;
    miss(p) orders the rows without one (1 = no value, 2 = the measure does not apply to the division, #198).
@@ -2076,7 +2086,8 @@ async function renderList() {
   if (f.cond.length) { const na = condNaText(condNaTally(idx.programs.filter(p => matchesFilters(p, null, [])), f.cond), f.cond); if (na) bits.push(esc(na)); }
   if (f.conf.length > 1) bits.push(esc(f.conf.join(', ')));
   if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
-  if (f.classYear.length) bits.push(`class${f.classYear.length > 1 ? 'es' : ''} of ${esc(f.classYear.join(', '))}`);
+  // The class buttons highlight, they do not filter (#15): the subtitle must not read like the region bit above.
+  if (f.classYear.length) bits.push(classSubtitle(f.classYear, rows));
   if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
   if (S.q) bits.push(`matching “${esc(S.qRaw)}”`);
   bits.push(`sorted by ${sortLabel(f.sort) || 'RPI'}${f.sortDir && f.sortDir !== SORT_SPECS[f.sort]?.dir ? `, ${f.sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`);
