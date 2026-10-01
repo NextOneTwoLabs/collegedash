@@ -1298,6 +1298,61 @@ def drop_placeholders(s: str | None) -> str:
     return " / ".join(p for p in parts if p and p.lower() not in PLACEHOLDER_WORDS)
 
 
+# A pronoun set is never a club (issue #337). Amherst's 2023 roster stored 'She/Her' as the club of 26 players: some
+# column or card label that season held pronouns where other seasons held the club. Whatever the source, a club value
+# that is a pronoun set is dropped where the parser sets `club`. Every word must be on the list below, there must be
+# two or more, and at least one must be a personal pronoun, so 'All/Any' or 'ALL / ASK' (no pronoun) is not a set and
+# no real club name ('Her Majesty FC', 'NEFC/ECNL', 'H.E. United') can match.
+PRONOUNS_CORE = frozenset({
+    "she", "her", "hers", "herself", "he", "him", "his", "himself", "they", "them", "their", "theirs", "themself",
+    "themselves", "ze", "zir", "zirs", "hir", "hirs", "xe", "xem", "xyr", "xyrs", "ey", "em", "eir", "fae", "faer"})
+PRONOUNS_EXTRA = frozenset({"any", "all", "ask"})  # count only beside a core pronoun: 'she/any', 'they/all'
+_PRONOUN_PREFIX = re.compile(r"^\s*pronouns?\s*:\s*", re.I)
+_PRONOUN_SPLIT = re.compile(r"\s*[/,]\s*")
+
+
+def is_pronouns(text: str | None) -> bool:
+    """True for a pronoun set ('She/Her', 'they / them', '(he/him/his)', 'Pronouns: she/they'), else False."""
+    t = clean(text)
+    if t.startswith("(") and t.endswith(")"):
+        t = t[1:-1]
+    t = _PRONOUN_PREFIX.sub("", t).strip().lower()
+    words = [w for w in _PRONOUN_SPLIT.split(t)] if t else []
+    if len(words) < 2 or not all(w in PRONOUNS_CORE or w in PRONOUNS_EXTRA for w in words):
+        return False
+    return any(w in PRONOUNS_CORE for w in words)
+
+
+# Pronoun values dropped from `club`, counted per source label on this thread (refresh --workers N runs programs on
+# threads), so the collector can log one name-free line per parse: which label or header held them (#337).
+_club_guard = threading.local()
+
+
+def club_value(text, source: str = ""):
+    """`text` unchanged, unless it is a pronoun set: then '' (and counted against `source`, e.g. "card label
+    'custom field 1'", "table header 'club'")."""
+    if text and is_pronouns(text):
+        counts = getattr(_club_guard, "counts", None)
+        if counts is None:
+            counts = _club_guard.counts = {}
+        key = source or "unknown source"
+        counts[key] = counts.get(key, 0) + 1
+        return ""
+    return text
+
+
+def club_guard_line(where: str) -> str | None:
+    """The '!!' line for what `club_value` dropped on this thread since the last call (None when nothing was), and
+    reset. Name-free: counts and source labels only. `where` says which parse it was, e.g. '2023 roster'."""
+    counts = getattr(_club_guard, "counts", None) or {}
+    _club_guard.counts = {}
+    if not counts:
+        return None
+    n = sum(counts.values())
+    sources = ", ".join(f"{s}: {k}" if len(counts) > 1 else s for s, k in counts.items())
+    return f"  !! {where} club: {n} pronoun-shaped value{'s' if n != 1 else ''} not stored as club (source: {sources})"
+
+
 # Position labels, in two dicts (#263). POS_EXACT keys match a whole label part only: every 1-2
 # letter abbreviation lives here, so 'Manager' is not M, 'Fullback' is not F and 'Student Intern'
 # is nothing. POS_MAP keys also match as a prefix ('Midfielders', 'Center Backs'), longest key
