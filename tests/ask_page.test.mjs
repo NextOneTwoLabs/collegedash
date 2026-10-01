@@ -136,7 +136,7 @@ for (const [name, status, probe] of OFF_CASES) {
     assert.ok(pg.sidebar().includes('placeholder="School or mascot…"'));
     assert.ok(!/ask/i.test(pg.sidebar().replace(/aria-label="[^"]*"/g, '')), 'ask markup in the sidebar');
     await type(pg, NO_MATCH);
-    assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss) or the mascot');
+    assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
     assert.equal(key(pg, 'Enter'), false);
     await settle();
     assert.equal(pg.sb.location.hash, '', 'Enter with no match did something');
