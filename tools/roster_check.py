@@ -8,8 +8,14 @@ anything under programs/ or public/. Use it before and after touching an adapter
     python tools/roster_check.py --slug duke,byu # a few
     python tools/roster_check.py --min-ok 155    # exit 1 when fewer than 155 parse
     python tools/roster_check.py --json report.json --verbose
+    python tools/roster_check.py --cache-dir "D:/Projects/CollegeDash/.cache/http"   # read another checkout's cache
 
 Outcome classes: ok:<players>/<staff> | 0-players | client-rendered | parked-stub | not-cached
+
+Exit codes (issue #81): 0 ok; 1 fewer than --min-ok parsed; 2 CHECKED NOTHING - no roster page was read from the
+cache (the directory is missing, or every selected program is not-cached). A fresh checkout and a git worktree have
+no cache of their own: run from the main checkout, or point --cache-dir at its cache (read only). A partial cache
+still runs and exits by --min-ok, with a `!!` line naming how many programs were not checked.
 """
 
 from __future__ import annotations
@@ -83,7 +89,10 @@ def main(argv=None) -> int:
     ap.add_argument("--min-ok", type=int, default=0, help="exit 1 when fewer programs parse ok")
     ap.add_argument("--json", help="write the per-program report here")
     ap.add_argument("--verbose", action="store_true", help="print the first player of every ok program")
+    ap.add_argument("--cache-dir", help="read roster pages from this .cache/http directory (e.g. the main checkout's)")
     args = ap.parse_args(argv)
+    if args.cache_dir:
+        common.CACHE_DIR = args.cache_dir
 
     reg = common.load_registry()
     if args.slug:
@@ -115,7 +124,23 @@ def main(argv=None) -> int:
         print(f"  platform mismatches: {', '.join(mism)}")
     if args.json:
         common.write_json(args.json, results)
+    not_cached = [r["slug"] for r in results if r["outcome"] == "not-cached"]
+    if results and len(not_cached) == len(results):
+        return checked_nothing(len(results))
+    if not_cached:
+        print(f"!! not checked: {len(not_cached)} of {len(results)} programs have no cached roster page: "
+              f"{', '.join(not_cached[:20])}{' …' if len(not_cached) > 20 else ''}")
     return 0 if by_outcome.get("ok", 0) >= args.min_ok else 1
+
+
+def checked_nothing(n: int) -> int:
+    """Issue #81: a run that read no roster page has checked nothing, and says so with its own exit code (2), never 0."""
+    where = common.CACHE_DIR if os.path.isdir(common.CACHE_DIR) else f"{common.CACHE_DIR} (the directory does not exist)"
+    msg = (f"!! roster_check checked nothing: none of the {n} programs' roster pages is in the HTTP cache at {where}. "
+           "A fresh checkout or a git worktree has no cache: run from the main checkout, or pass "
+           "--cache-dir <main checkout>/.cache/http (read only). Exit 2 (issue #81).")
+    print(msg)
+    return 2
 
 
 if __name__ == "__main__":

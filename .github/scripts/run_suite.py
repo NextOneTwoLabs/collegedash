@@ -14,9 +14,10 @@ output formats, same annotations, same Summary row - as a named one.
 
 Why this wrapper exists rather than the bare command in the workflow
 --------------------------------------------------------------------
-Issue #81. Two of this repository's check tools exit 0 having checked nothing when the local HTTP
-cache is absent, which is exactly a CI runner's state: `tools/roster_check.py` reports
-`not-cached 350 (of 350)` and exits 0. Six always-passing checks have shipped or been caught on
+Issue #81. Two of this repository's check tools used to exit 0 having checked nothing when the local
+HTTP cache was absent, which is exactly a CI runner's state: `tools/roster_check.py` reported
+`not-cached 350 (of 350)` and exited 0. They now say "checked nothing" and exit 2, but the lesson
+stands for every suite: six always-passing checks have shipped or been caught on
 this project in a single week. So the exit code on its own is not evidence that anything ran, and
 a workflow that treats it as evidence converts an absence of testing into a positive signal -
 worse than not running the suite at all.

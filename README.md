@@ -35,7 +35,7 @@ python collegedash.py onboard stanford          # every collector for one progra
 python collegedash.py refresh                   # refresh all onboarded programs (what CI runs)
 python collegedash.py refresh --only tds,news   # a subset: scorecard climate wikipedia athletics tds soccerwire news rpi
 python collegedash.py refresh --failed --dry-run # re-run only collectors whose last run failed (drop --dry-run to run)
-python tools/roster_check.py                    # offline: parse every cached roster page, report per-program outcome
+python tools/roster_check.py                    # offline: parse every cached roster page, report per-program outcome (exit 2: no cache, checked nothing; --cache-dir)
 python tools/the_rank_check.py                  # offline: audit the Times Higher Education rank asset against its alias table
 python collegedash.py build                     # re-merge sources -> public/data (after editing curated.json)
 python collegedash.py validate                  # schema + completeness report
