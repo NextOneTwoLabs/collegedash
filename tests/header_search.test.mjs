@@ -264,6 +264,20 @@ test('typing in the header box filters the list through the shared search; the s
   assert.ok(!/id="q"|Find a program|id="qStatus"|id="askSlot"/.test(pg.$('#sidebar').innerHTML), 'the sidebar still has a search box');
 });
 
+test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, no search, no repeated heading', async () => {
+  const pg = await ready();
+  pg.sb.location.hash = '#/';
+  pg.sb.S.sidebarTab = 'programs';
+  pg.sb.renderSidebar();
+  const side = pg.$('#sidebar').innerHTML;
+  const tabs = [...side.matchAll(/<button class="sidebar-tab[^"]*" role="tab" aria-selected="(true|false)" data-tab="([^"]+)">([^<]*)<\/button>/g)].map(m => [m[2], m[3], m[1]]);
+  assert.deepEqual(tabs[0], ['programs', 'Browse', 'true'], `the first tab is ${JSON.stringify(tabs[0])}`);
+  assert.ok(!tabs.some(t => t[1] === 'Programs'), 'a tab still reads "Programs"');
+  assert.ok(!/<div class="sidebar-section-title">Browse<\/div>/.test(side), 'the Browse tab repeats "Browse" as a heading');
+  assert.match(side, /id="sortSelect"/, 'the Browse tab lost its sort');
+  assert.ok(!/id="q"/.test(side), 'a search box is back in the sidebar');
+});
+
 test('Enter keeps #409/#23\'s rules: a name opens it, a place keeps the list, a filtered-out program never opens', async () => {
   const pg = await ready();
   pg.sb.location.hash = '#/';

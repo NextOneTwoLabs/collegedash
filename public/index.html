@@ -1763,7 +1763,8 @@ function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
   const f = S.filters, tab = S.sidebarTab;
   const nFav = presentSlugs(S.favorites).length, nCmp = presentSlugs(S.compare).length;  // #111: live programs only
-  const tabs = [['programs', 'Programs'], ['shortlist', `★ Shortlist${nFav ? ` (${nFav})` : ''}`], ['compare', `⇄ Compare${nCmp ? ` (${nCmp})` : ''}`]];
+  // #434 decision 3: the tab only browses now (sort and filters); search is the header box. The key stays `programs`.
+  const tabs = [['programs', 'Browse'], ['shortlist', `★ Shortlist${nFav ? ` (${nFav})` : ''}`], ['compare', `⇄ Compare${nCmp ? ` (${nCmp})` : ''}`]];
   let body = '';
   if (tab === 'programs') {
     const years = S.index.season?.gradYears || [];
@@ -1812,7 +1813,6 @@ function renderSidebar() {
         <div class="cond-actions"><button type="submit" class="btn primary" id="condSubmit">Add condition</button><button type="button" class="btn" id="condCancel">Cancel</button></div>
       </form>` : ''}`;
     body = `
-      <div class="sidebar-section-title">Browse</div>
       ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${(k === 'recommended' ? S.recs?.active : !S.recs?.active && f.sort === k) ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
       ${divisionBlock}
       ${condBlock}
