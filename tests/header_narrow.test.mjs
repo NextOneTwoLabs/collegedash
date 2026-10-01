@@ -1,18 +1,22 @@
-// Issue #51: at 320-375 px "College Soccer" ran under the theme toggle (44 px of overlap at 320, 0 px of room at 375).
+// Issue #51: at 320-375 px "College Soccer" ran under the theme toggle (41 px of overlap at 320, none to spare at 375).
 //
 //     node --test tests/header_narrow.test.mjs
 //
-// Node has no layout engine, so this pins the CSS that fixes it: the page's <style> is parsed and the cascade for a
-// handful of header selectors is resolved at a given viewport width (top-level rules and @media max-width/min-width
-// blocks, in source order; the selectors compared are single classes, so source order decides). The widths the
-// rules were chosen from were measured in a browser against local serve.py, in both themes (see PR #51's body):
-// the label now clears the toggle by at least 14 px wherever it shows, and the page never scrolls sideways.
+// Node has no layout engine, so this pins the CSS that fixes it. The page's <style> is parsed and, for the five header
+// elements below, the properties the checks read (display, font-size, gap) are resolved at a given viewport width by a
+// small cascade that understands exactly the forms the header uses and FAILS LOUDLY on anything else that could set
+// one of those properties on one of those elements: a descendant, child or compound selector, a bare tag or `*`, an
+// attribute selector, a pseudo-class, !important, visibility, an unknown @media form or another at-rule (Huatuo's
+// review of #421, after #413). So a rule it cannot evaluate can never make a check pass; the self-test feeds it each
+// of those forms, including the three mutations that passed the first version.
 //
+// The widths the rules were chosen from were measured in a browser against local serve.py, in both themes (PR body):
+// the label clears the toggle by at least 14 px wherever it shows, and the page never scrolls sideways.
 // What it CANNOT prove, and a human must check: the rendered gap on a real phone, and fonts that differ from the
 // measuring browser's.
 //
-// HEADER_NARROW_TEST_HTML (optional) points at another copy of index.html, so the page from before this change can
-// be run through these same checks to show them failing.
+// HEADER_NARROW_TEST_HTML (optional) points at another copy of index.html, so the page from before this change (or a
+// deliberately broken one) can be run through these same checks to show them failing.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -22,74 +26,167 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const HTML = process.env.HEADER_NARROW_TEST_HTML || path.join(HERE, '..', 'public', 'index.html');
 const page = fs.readFileSync(HTML, 'utf8');
-const css = (/<style>([\s\S]*?)<\/style>/.exec(page) || [])[1] || '';
+const CSS = [...page.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
+const CANNOT = 'the header test cannot read';
 
-// Top-level blocks of a stylesheet: [{ prelude, body }], comments removed, braces matched.
-function blocks(text) {
+// The elements, as the markup has them (pinned by the markup test below): tag, classes, attributes, and the ancestors
+// whose display decides whether they are drawn.
+const ELEMENTS = {
+  '.header': { tag: 'div', classes: ['header'], attrs: ['class'], ancestors: [] },
+  '.header-left': { tag: 'div', classes: ['header-left'], attrs: ['class'], ancestors: ['.header'] },
+  '.wordmark': { tag: 'a', classes: ['wordmark'], attrs: ['class', 'href'], ancestors: ['.header-left', '.header'] },
+  '.header-divider': { tag: 'div', classes: ['header-divider'], attrs: ['class'], ancestors: ['.header-left', '.header'] },
+  '.section-label': { tag: 'a', classes: ['section-label'], attrs: ['class', 'href'], ancestors: ['.header-left', '.header'] },
+};
+// Everything above them in the document: their header ancestors, <body> (no class) and <html lang data-theme>.
+const ROOTS = [{ tag: 'body', classes: [], attrs: [] }, { tag: 'html', classes: [], attrs: ['lang', 'data-theme'] }];
+const above = target => [...ELEMENTS[target].ancestors.map(t => ELEMENTS[t]), ...ROOTS];
+const READ = /^(display|visibility|content-visibility|font-size|font|gap|column-gap)$/;
+
+// Flatten a stylesheet into [{ media: [prelude, ...], selectors, decls, order }]; at-rules nest, comments go.
+function parseCss(text) {
   const src = text.replace(/\/\*[\s\S]*?\*\//g, '');
   const out = [];
-  let i = 0;
-  while (i < src.length) {
-    const open = src.indexOf('{', i);
-    if (open < 0) break;
-    let depth = 1, j = open + 1;
-    while (j < src.length && depth) { if (src[j] === '{') depth++; else if (src[j] === '}') depth--; j++; }
-    out.push({ prelude: src.slice(i, open).trim(), body: src.slice(open + 1, j - 1) });
-    i = j;
-  }
-  return out;
-}
-const mediaMatches = (prelude, width) => {
-  if (!prelude.startsWith('@media')) return false;
-  if (/\bprint\b/.test(prelude)) return false;
-  const max = /max-width:\s*(\d+)px/.exec(prelude), min = /min-width:\s*(\d+)px/.exec(prelude);
-  return (!max || width <= Number(max[1])) && (!min || width >= Number(min[1]));
-};
-// The declarations that apply to `selector` at `width`, later rules winning.
-function resolve(selector, width) {
-  const decl = {};
-  const apply = rules => {
-    for (const r of rules) {
-      if (r.prelude.startsWith('@')) continue;
-      if (!r.prelude.split(',').map(s => s.trim()).includes(selector)) continue;
-      for (const d of r.body.split(';')) {
-        const k = d.indexOf(':');
-        if (k > 0) decl[d.slice(0, k).trim()] = d.slice(k + 1).trim();
-      }
+  let order = 0;
+  const walk = (chunk, media) => {
+    let i = 0;
+    while (i < chunk.length) {
+      const open = chunk.indexOf('{', i);
+      if (open < 0) break;
+      let depth = 1, j = open + 1;
+      while (j < chunk.length && depth) { if (chunk[j] === '{') depth++; else if (chunk[j] === '}') depth--; j++; }
+      const prelude = chunk.slice(i, open).trim(), body = chunk.slice(open + 1, j - 1);
+      if (prelude.startsWith('@')) walk(body, [...media, prelude]);
+      else out.push({ media, selectors: prelude.split(',').map(s => s.trim()).filter(Boolean), decls: body, order: order++ });
+      i = j;
     }
   };
-  for (const b of blocks(css)) {
-    if (b.prelude.startsWith('@media')) { if (mediaMatches(b.prelude, width)) apply(blocks(b.body)); } else apply([b]);
-  }
-  return decl;
+  walk(src, []);
+  return out;
+}
+const decls = text => text.split(';').map(d => d.trim()).filter(Boolean).map(d => {
+  const i = d.indexOf(':');
+  return { prop: d.slice(0, i).trim().toLowerCase(), value: d.slice(i + 1).trim() };
+});
+
+// true / false for a screen of `width`, or a loud failure for any form other than (max-width: Npx) / (min-width: Npx)
+// joined by "and", and `print` (never a screen).
+function mediaMatches(media, width) {
+  return media.every(prelude => {
+    const m = /^@media\s+(.*)$/.exec(prelude);
+    assert.ok(m, `${CANNOT} the at-rule "${prelude}"`);
+    if (/^print$/.test(m[1].trim())) return false;
+    return m[1].split(/\band\b/).map(s => s.trim()).filter(Boolean).every(c => {
+      const q = /^\((max|min)-width:\s*(\d+)px\)$/.exec(c);
+      assert.ok(q, `${CANNOT} the media form "${prelude}"`);
+      return q[1] === 'max' ? width <= +q[2] : width >= +q[2];
+    });
+  });
 }
 
+// Could the last compound of a selector match `el`? Conservative: pseudo-classes, and attributes the element carries,
+// are treated as possibly matching (and then fail loudly below); an ID, an attribute the element lacks ([hidden]), or
+// a class it lacks rules it out.
+function mayMatch(compound, el) {
+  if (compound.includes('::')) return false;  // a pseudo-element is another box
+  const attrs = [...compound.matchAll(/\[\s*([\w-]+)/g)].map(m => m[1].toLowerCase());
+  if (!attrs.every(a => el.attrs.includes(a))) return false;
+  const bare = compound.replace(/:not\([^)]*\)/g, '').replace(/:[\w-]+(\([^)]*\))?/g, '').replace(/\[[^\]]*\]/g, '');
+  if (bare.includes('#')) return false;  // none of these elements carries an id
+  const tag = /^[a-z*][\w-]*/i.exec(bare)?.[0];
+  if (tag && tag !== '*' && tag.toLowerCase() !== el.tag) return false;
+  const classes = [...bare.matchAll(/\.([\w-]+)/g)].map(m => m[1]);
+  return classes.every(c => el.classes.includes(c));
+}
+
+// The value of `prop` on `target` at `width`, or undefined; fails loudly on any rule it cannot evaluate.
+function resolve(target, prop, width, rules) {
+  const el = ELEMENTS[target];
+  let value;
+  for (const r of rules) {
+    const read = decls(r.decls).filter(d => READ.test(d.prop));
+    if (!read.length) continue;
+    for (const sel of r.selectors) {
+      const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop();
+      // Anything that names the element's own class other than the bare class itself (`.section-label.x`,
+      // `.section-label:hover`, `.header .section-label`) is a form this cascade does not evaluate.
+      const names = el.classes.some(c => new RegExp(`\\.${c}(?![\\w-])`).test(last));
+      if (names && sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${read.map(d => d.prop).join('/')} on ${target}`);
+      if (!mayMatch(last, el)) continue;
+      // A context compound no element above it could match (`.trend-table a`) rules the selector out; one that could
+      // (`.header .section-label`, `[data-theme] a`) leaves a selector this cascade does not evaluate: it fails below.
+      if (!parts.every(p => above(target).some(a => mayMatch(p, a)))) continue;
+      if (sel !== target) assert.fail(`${CANNOT} "${sel}", which may set ${read.map(d => d.prop).join('/')} on ${target}`);
+      for (const d of read) {
+        if (/!\s*important/i.test(d.value)) assert.fail(`${CANNOT} !important in "${sel} { ${d.prop}: ${d.value} }"`);
+        if (/visibility$/.test(d.prop)) assert.fail(`${CANNOT} ${d.prop} on "${sel}"`);
+        if (d.prop === 'font') assert.fail(`${CANNOT} the font shorthand on "${sel}"`);
+      }
+      if (!mediaMatches(r.media, width)) continue;
+      for (const d of read) if (d.prop === prop || (prop === 'gap' && d.prop === 'column-gap')) value = d.value;
+    }
+  }
+  return value;
+}
+// Drawn = neither it nor an ancestor resolves to display: none.
+const drawn = (target, width, rules) => [target, ...ELEMENTS[target].ancestors].every(t => resolve(t, 'display', width, rules) !== 'none');
+const RULES = parseCss(CSS);
+const at = (target, prop, width) => resolve(target, prop, width, RULES);
+
+test('the cascade fails loudly on every form it cannot evaluate', () => {
+  const run = extra => () => {
+    const rules = parseCss(`${CSS}\n${extra}`);
+    for (const t of Object.keys(ELEMENTS)) for (const w of [320, 375, 1280]) { drawn(t, w, rules); resolve(t, 'font-size', w, rules); resolve(t, 'gap', w, rules); }
+  };
+  assert.doesNotThrow(run(''), 'the page\'s own CSS is not readable');
+  for (const [name, extra] of [
+    ['a descendant selector hiding the label at every width (Huatuo)', '.header .section-label { display: none; }'],
+    ['!important hiding the label at 360-400 px (Huatuo)', '@media (min-width: 360px) and (max-width: 400px) { .section-label { display: none !important; } }'],
+    ['a media form without a px width (Huatuo)', '@media (prefers-reduced-motion: reduce) { .section-label { display: none; } }'],
+    ['a child combinator', '.header-left > .section-label { display: none; }'],
+    ['a compound selector', '.section-label.x { display: none; }'],
+    ['a bare tag', '@media (max-width: 400px) { a { font-size: 30px; } }'],
+    ['the universal selector', '.header-left > * { display: none; }'],
+    ['an attribute selector', 'a[href] { display: none; }'],
+    ['a pseudo-class', '.section-label:hover { font-size: 30px; }'],
+    ['visibility', '.section-label { visibility: hidden; }'],
+    ['the font shorthand', '.wordmark { font: 800 30px sans-serif; }'],
+    ['another at-rule', '@supports (display: grid) { .section-label { display: none; } }'],
+    ['an ancestor hidden by a descendant rule', 'body .header-left { display: none; }'],
+  ]) assert.throws(run(extra), new RegExp(CANNOT), `${name}: the cascade did not fail`);
+  // and forms it does read change the answer, as they should
+  assert.equal(drawn('.section-label', 1280, parseCss(`${CSS}\n.section-label { display: none; }`)), false);
+  assert.equal(drawn('.section-label', 1280, parseCss(`${CSS}\n.header-left { display: none; }`)), false, 'an ancestor hiding it');
+});
+
 test('the header markup still carries the section label and divider (only CSS hides them)', () => {
-  assert.match(page, /<div class="header-divider"><\/div>\s*<a class="section-label" href="https:\/\/college\.nextonetwo\.com\/">College Soccer<\/a>/);
+  assert.match(page, /<div class="header">\s*<div class="header-left">[\s\S]*?<a class="wordmark" [^>]*>[\s\S]*?<\/a>\s*<div class="header-divider"><\/div>\s*<a class="section-label" href="https:\/\/college\.nextonetwo\.com\/">College Soccer<\/a>\s*<\/div>/);
 });
 
 test('below 360 px the divider and the "College Soccer" label are not drawn', () => {
   for (const w of [320, 340, 359]) {
-    assert.equal(resolve('.section-label', w).display, 'none', `.section-label is drawn at ${w}px`);
-    assert.equal(resolve('.header-divider', w).display, 'none', `.header-divider is drawn at ${w}px`);
+    assert.equal(drawn('.section-label', w, RULES), false, `.section-label is drawn at ${w}px`);
+    assert.equal(drawn('.header-divider', w, RULES), false, `.header-divider is drawn at ${w}px`);
+    assert.equal(drawn('.wordmark', w, RULES), true, `the wordmark is not drawn at ${w}px`);
   }
 });
 
 test('from 360 to 400 px the label shows, smaller, with the wordmark smaller and the left gaps tighter', () => {
   for (const w of [360, 375, 390, 400]) {
-    assert.notEqual(resolve('.section-label', w).display, 'none', `.section-label hidden at ${w}px`);
-    assert.equal(resolve('.section-label', w)['font-size'], '13px', `label size at ${w}px`);
-    assert.equal(resolve('.wordmark', w)['font-size'], '18px', `wordmark size at ${w}px`);
-    assert.equal(resolve('.header-left', w).gap, '6px', `left gap at ${w}px`);
+    assert.equal(drawn('.section-label', w, RULES), true, `.section-label hidden at ${w}px`);
+    assert.equal(drawn('.header-divider', w, RULES), true, `.header-divider hidden at ${w}px`);
+    assert.equal(at('.section-label', 'font-size', w), '13px', `label size at ${w}px`);
+    assert.equal(at('.wordmark', 'font-size', w), '18px', `wordmark size at ${w}px`);
+    assert.equal(at('.header-left', 'gap', w), '6px', `left gap at ${w}px`);
   }
 });
 
 test('above 400 px the header is as it was', () => {
   for (const w of [401, 460, 768, 1280]) {
-    assert.notEqual(resolve('.section-label', w).display, 'none');
-    assert.equal(resolve('.section-label', w)['font-size'], '14px', `label size at ${w}px`);
-    assert.equal(resolve('.wordmark', w)['font-size'], '21px', `wordmark size at ${w}px`);
+    assert.equal(drawn('.section-label', w, RULES), true, `.section-label hidden at ${w}px`);
+    assert.equal(at('.section-label', 'font-size', w), '14px', `label size at ${w}px`);
+    assert.equal(at('.wordmark', 'font-size', w), '21px', `wordmark size at ${w}px`);
   }
-  assert.equal(resolve('.header-left', 1280).gap, '14px');
-  assert.equal(resolve('.header-left', 460).gap, '8px');
+  assert.equal(at('.header-left', 'gap', 1280), '14px');
+  assert.equal(at('.header-left', 'gap', 460), '8px');
 });
