@@ -1534,13 +1534,11 @@ def camp_in_window(item, window: dict) -> bool:
     `endDate or startDate`, so a camp that is running right now is not past. Month-precision rows
     compare at month granularity, everything else by day.
 
-    This is close to, but not the same as, the profile tab's past/future rule (public/index.html,
-    tabCamps), which compares a month-precision row on `startDate` alone. A month row running
-    2026-08 to 2026-09 is therefore past to the tab and in-window here. The rule here is the
-    deliberate one - a camp still running has not happened yet - and no row in today's corpus falls
-    in the gap (one item of 250 is month-precision and it ends in the month it starts). Reconciling
-    the tab is issue #65's second PR, which is where the difference would first become visible to a
-    visitor; tests/camps_index_test.py pins the case so it cannot be silently "fixed" either way.
+    The profile tab's past/future rule (public/index.html, tabCamps) is the same one since #71: a
+    month-precision row is past once the month it ends in, `endDate or startDate`, is over. So a month
+    row running 2026-08 to 2026-09 is in-window here and upcoming on the tab - a camp still running has
+    not happened yet. tests/camps_index_test.py pins the case here and
+    tests/feedback_camps_glance.test.mjs on the tab, so neither side can drift alone.
 
     An undated row is dropped: it cannot be placed in the window, and a date-ordered view has
     nowhere to put it. Anything malformed is dropped rather than raised - this reads a profile a

@@ -183,12 +183,11 @@ def test_window() -> None:
          {"name": "x", "startDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row in the month before is out",
          {"name": "x", "startDate": "2026-08", "precision": "month"}, False),
-        # The divergence finding 4 named, pinned as deliberate rather than left to be rediscovered:
-        # tabCamps in public/index.html calls a month row past on `startDate` alone, so it would
-        # call this one past. The emitter judges a camp by when it finishes, so a camp still
-        # running in the cutoff month stays in. Aligning the tab is PR 2's job (issue #65).
-        ("a month-precision row that began before the cutoff month but runs into it is in, which is "
-         "where this rule deliberately parts company with tabCamps",
+        # A camp is judged by when it finishes, so one still running in the cutoff month stays in.
+        # tabCamps in public/index.html uses the same rule since #71
+        # (tests/feedback_camps_glance.test.mjs pins it there).
+        ("a month-precision row that began before the cutoff month but runs into it is in, as it is "
+         "upcoming on the profile tab (#71)",
          {"name": "x", "startDate": "2026-08", "endDate": "2026-09", "precision": "month"}, True),
         ("a month-precision row that had ended before the cutoff month is out, endDate or no endDate",
          {"name": "x", "startDate": "2026-06", "endDate": "2026-07", "precision": "month"}, False),
