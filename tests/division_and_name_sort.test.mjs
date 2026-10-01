@@ -275,8 +275,9 @@ test('with one division there is no Division pill row and no conference grouping
   // the strongest form of "unchanged": the rendered markup, character for character - apart from the two things #16
   // added on purpose, each pill's data-conf-div and a title saying the count follows the other filters (with no
   // filter on, the counts themselves are the ones that shipped)
-  const after16 = confRowBefore(S, escFor, pillAttrsFor).replace(/ title="(\d+) programs">/g,
-    (_, n) => ` data-conf-div="${SINGLE}" title="${n} program${n === '1' ? '' : 's'} with your other filters">`);
+  // ... and #9's accessible name ("ACC, 17 programs")
+  const after16 = confRowBefore(S, escFor, pillAttrsFor).replace(/ data-conf="([^"]*)" aria-pressed="(true|false)" title="(\d+) programs">/g,
+    (_, c, on, n) => ` data-conf="${c}" aria-pressed="${on}" data-conf-div="${SINGLE}" title="${n} program${n === '1' ? '' : 's'} with your other filters" aria-label="${c}, ${n} program${n === '1' ? '' : 's'}">`);
   assert.ok(html.includes(after16),
     'the conference pill row is not character-identical to the row that shipped before #94 (plus #16\'s attributes)');
 });
