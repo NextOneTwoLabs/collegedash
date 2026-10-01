@@ -272,9 +272,13 @@ test('with one division there is no Division pill row and no conference grouping
   assert.ok(!html.includes('>Division</div>'), 'a Division browse label rendered against single-division data');
   assert.ok(!html.includes('pill-group-label'), 'a group heading rendered over a single group');
   assert.ok(!html.includes('pill-row-all'), 'the conference All pill was split onto its own row');
-  // the strongest form of "unchanged": the rendered markup, character for character
-  assert.ok(html.includes(confRowBefore(S, escFor, pillAttrsFor)),
-    'the conference pill row is not character-identical to the row that shipped before #94');
+  // the strongest form of "unchanged": the rendered markup, character for character - apart from the two things #16
+  // added on purpose, each pill's data-conf-div and a title saying the count follows the other filters (with no
+  // filter on, the counts themselves are the ones that shipped)
+  const after16 = confRowBefore(S, escFor, pillAttrsFor).replace(/ title="(\d+) programs">/g,
+    (_, n) => ` data-conf-div="${SINGLE}" title="${n} program${n === '1' ? '' : 's'} with your other filters">`);
+  assert.ok(html.includes(after16),
+    'the conference pill row is not character-identical to the row that shipped before #94 (plus #16\'s attributes)');
 });
 
 test('with one division the list still calls itself NCAA Division I women\'s soccer', async () => {
