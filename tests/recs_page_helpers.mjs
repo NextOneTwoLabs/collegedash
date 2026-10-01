@@ -1,5 +1,10 @@
 // The page harness shared by the recommendations page suites (issue #400): tests/recs_form.test.mjs (PR 3) and
-// tests/recs_results.test.mjs (PR 4). Not a suite itself: no node:test import.
+// tests/recs_results.test.mjs (PR 4), and every page suite since. Not a suite itself: no node:test import (the suite
+// runner refuses a helper that has one, as a suite nothing runs).
+//
+// Every suite that imports it drives the whole page, so it holds the CPU lock shared (tests/timing_helpers.mjs), taken
+// once here so each page suite, present and future, is covered and never runs while a timing suite measures (#439).
+// Each suite is its own process under node --test, and the place is released when that process exits.
 //
 // Same mechanism as tests/ask_page.test.mjs: the page's inline <script> runs in a `vm` against a stub DOM, and fetch
 // is a stub that serves public/ and answers api/status as each test says. A <script src="recs.js"> the page appends
@@ -11,6 +16,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { acquireShared, lockNote } from './timing_helpers.mjs';
+
+const SUITE = path.basename(process.argv[1] || 'a recs page suite');
+const CPU = await acquireShared(SUITE, 120_000); // released on process exit (timing_helpers.mjs releaser)
+if (!CPU.held) console.log(lockNote(SUITE, CPU));
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PUBLIC = path.join(HERE, '..', 'public');
