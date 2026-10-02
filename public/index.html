@@ -4287,12 +4287,14 @@ function trendsStartFill() {
   list.hidden = !opts.length; input.setAttribute('aria-expanded', opts.length ? 'true' : 'false');
   msg.textContent = !opts.length && trendsKey(q) ? `No ${TR_WHAT[kind]} matches “${q.trim()}”.` : '';
 }
-// A pick from the start field (or the example): a new selection of that one value, one history entry.
-function trendsStart(kind, id) {
+// A pick from the start field (or the example): a new selection of that one value, one history entry. Focus returns to
+// the field only when the pick came from it; the example keeps focus on its own button, so a phone neither opens the
+// field's suggestions nor raises the keyboard over the first result (#467, Bianque).
+function trendsStart(kind, id, from = 'field') {
   TR.dropped = {}; trendsCut = { hash: null, dropped: {} };
   const sel = { [kind]: [id] };
   for (const k of [...TR_KINDS, 'start']) { const i = $(`#trIn-${k}`); if (i) i.value = ''; trendsCloseList(k); }
-  return trendsPush(sel, { say: `${trendsLabel(kind, id).spoken}.`, focus: { start: true } });
+  return trendsPush(sel, { say: `${trendsLabel(kind, id).spoken}.`, focus: from === 'field' ? { start: true } : { example: true } });
 }
 function trendsWireStart() {
   const input = $('#trIn-start'), list = $('#trList-start'), kinds = $('#trKinds'), ex = $('#trExample');
@@ -4312,7 +4314,7 @@ function trendsWireStart() {
   input.onblur = () => setTimeout(() => { if (TR && document.activeElement !== input) trendsCloseList('start'); }, 150);
   list.onmousedown = e => e.preventDefault();
   list.onclick = e => { const o = e.target?.closest?.('[role="option"]'); if (o) { const opt = (TR.opts.start || [])[+o.dataset.i]; if (opt) trendsStart(TR.startKind, opt.id); } };
-  if (ex) ex.onclick = () => trendsStart('club', ex.dataset.trId);
+  if (ex) ex.onclick = () => trendsStart('club', ex.dataset.trId, 'example');
 }
 
 /* ---------- the three boxes: ARIA 1.2 combobox, picked values as a list of chips (#327) ---------- */
@@ -4489,6 +4491,7 @@ function trendsApply(sel, { say, focus } = {}) {
   const done = v.names ? trendsLoadNames(v.names) : Promise.resolve();
   if (say) trendsSay(`${say} ${v.say}`);
   if (focus?.start) $('#trIn-start')?.focus();
+  else if (focus?.example) { const b = $('#trExample'); (b && !b.hidden ? b : $('#trHead'))?.focus(); }
   else if (focus) {
     const vals = trendsVals(sel[focus.kind]);
     (focus.chip != null && focus.chip >= 0 && vals.length ? $(`#trX-${focus.kind}-${focus.chip}`) : $(`#trIn-${focus.kind}`))?.focus();
@@ -4615,7 +4618,7 @@ function trendsView(sel) {
     const commitsLine = t.commits != null ? ` Separately, ${tf(t.commits)} ${doc.commitDivisions.map(divisionName).join(', ')} commit${t.commits === 1 ? '' : 's'}, not added to the player totals.`
       : sch ? ' Commits are not available for high schools yet.' : ' Commits are not collected for these programs.';
     const clip = shown.length > 12;
-    const html = `${noteHtml}<div class="card"><h3>${heading}${one1 && where(one1) ? ` <span class="muted" style="font-weight:400">· ${esc(where(one1))}</span>` : ''} ${one1?.unmatched ? unmatchedBadge : ''}</h3>
+    const html = `${noteHtml}<div class="card"><h3 id="trHead" tabindex="-1">${heading}${one1 && where(one1) ? ` <span class="muted" style="font-weight:400">· ${esc(where(one1))}</span>` : ''} ${one1?.unmatched ? unmatchedBadge : ''}</h3>
       ${rows.length ? `<p class="tr-summary"><b>${pl(t.current, t.past)} player${t.current + t.past === 1 ? '' : 's'}</b> at <b>${rows.length} program${rows.length === 1 ? '' : 's'}</b>: ${fmtNum(t.current)} on current rosters and ${tf(t.past)} former.${commitsLine}</p>` : ''}
       <p class="small muted">Programs with players from ${esc(what)}, most players first. Players = current + former. ${commitsNote} ${smallNote}</p>
       <div class="tscroll${clip ? ' tr-clip' : ''}" id="trClip"><table class="trend-table">${head('Program', sch)}<tbody>${trs || `<tr><td colspan="5"><div class="empty">No players in the index are from ${esc(what)}.</div></td></tr>`}</tbody></table></div>

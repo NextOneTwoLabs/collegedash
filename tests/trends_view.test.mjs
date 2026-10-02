@@ -762,9 +762,22 @@ test('#465 D5: MVLA is offered as a labelled example, not a recommendation, and 
   assert.ok(html.includes('<span class="tr-example-tag">Example</span> <button type="button" class="btn" id="trExample" data-tr-id="mvla">Try MVLA</button>'), 'labelled Example');
   assert.ok(html.includes('An example to show how results read, not a recommendation.'));
   page.el('#trExample').dataset.trId = 'mvla';
+  page.el('#trExample').focus(); // a click focuses the button it lands on
   page.el('#trExample').onclick(); await tick();
   assert.equal(page.sandbox.location.hash, '#/trends?club=mvla');
   assert.equal(cellsOf(page.results()).length, 3);
+  // #467 (Bianque): the example must not send focus into the start field - on a phone that opens its suggestions and
+  // raises the keyboard over the first result.
+  const active = page.sandbox.document.activeElement?._name;
+  assert.notEqual(active, '#trIn-start', 'focus went into the start field after the example');
+  assert.equal(active, '#trExample', 'focus stays on the example button');
+  assert.equal(page.el('#trList-start').hidden, true, 'the start field suggestions are closed');
+  assert.equal(page.el('#trIn-start').getAttribute('aria-expanded'), 'false');
+  assert.ok(!page.sandbox.document.body.classList.contains('kbd-open'), 'no on-screen keyboard state');
+  // and a pick from the field itself still returns focus to the field
+  startType(page, 'surf');
+  page.el('#trList-start').onclick({ target: { closest: () => ({ dataset: { i: '0' } }) } }); await tick();
+  assert.equal(page.sandbox.document.activeElement?._name, '#trIn-start', 'a pick from the field keeps focus in it');
   const none = await open('#/trends', { ...fixture(), clubs: { ...fixture().clubs, aka: {} } });
   assert.ok(!none.app().includes('id="trExample"'), 'no MVLA in the index: no example is offered');
 });
