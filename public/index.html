@@ -662,7 +662,7 @@ body.no-search .header-right { margin-left: auto; }
 .camps-range input, .camps-side select { min-height: 36px; width: 100%; font: inherit; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; }
 .camps-saved label { display: flex; align-items: center; gap: 6px; min-height: 36px; }
 .camps-more-btn, .camps-sheet-close, .camps-sheet-foot { display: none; }
-.camps-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 60; }
+.camps-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 110; }  /* above the header (100), as the sheet is */
 .camps-backdrop[hidden] { display: none; }
 .camps-active { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
 .camps-active:empty { display: none; }
@@ -688,10 +688,10 @@ body.no-search .header-right { margin-left: auto; }
 .camps-empty h2 { font-size: 16px; margin: 0 0 6px; }
 @media (max-width: 1100px) { .camp-row { grid-template-columns: 150px minmax(0, 1fr) auto; } .camp-facts { grid-column: 2 / -1; } }
 @media (max-width: 1024px) { .camps-layout { grid-template-columns: 220px minmax(0, 1fr); } }
-/* A phone: the sidebar becomes a bottom sheet (a modal dialog, opened by "Filters (n)"), over the page and the bottom bar. */
+/* A phone: the sidebar becomes a bottom sheet (a modal dialog, opened by "Filters (n)"), over the page, the header and the bottom bar. */
 @media (max-width: 768px) {
   .camps-layout { grid-template-columns: minmax(0, 1fr); }
-  .camps-side { display: none; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 61; max-height: 85vh; max-height: 85dvh;
+  .camps-side { display: none; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 111; max-height: 85vh; max-height: 85dvh;
     border-radius: 16px 16px 0 0; border-bottom: none; padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); box-shadow: var(--shadow-lg); }
   .camps-side.open { display: flex; }
   .camps-side-title { font-size: 16px; }
@@ -3399,6 +3399,7 @@ function route() {
   const parts = h.split('/').filter(Boolean);
   const view = parts[0] === 'programs' ? 'list' : parts[0] || 'home';
   syncNav(view);  // #465 B: aria-current on the destinations, and the filter rail only where it applies
+  campsInert(false);  // #465: leaving the page with the camps sheet open (Back, a link) must not leave the page inert
   const app = $('#app');
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
@@ -4091,10 +4092,25 @@ function campsSheet(open, { focus } = {}) {
   if (back) back.hidden = !open;
   if (open) { side.setAttribute('role', 'dialog'); side.setAttribute('aria-modal', 'true'); }
   else { side.removeAttribute('role'); side.removeAttribute('aria-modal'); }
+  campsInert(open);  // Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader
   btn?.setAttribute('aria-expanded', String(open));
   if (open) $('#campsSideTitle')?.focus();
   else if (focus === 'list') { const t = $('#campsResults h2'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else btn?.focus(); }
   else btn?.focus();
+}
+/* While the phone sheet is open, everything else on the page is inert: the header (z-index 100, which the sheet now
+   draws above), the bottom bar, the Programs rail, and every other part of the page - the list, the page heading,
+   the footer. The sheet sits inside #main, so #main itself cannot be inerted: from the sheet up to <body>, every
+   sibling of each ancestor is, except the sheet's own backdrop (the tap that closes it). Only elements this set
+   inert are cleared, so an element already inert for another reason stays that way. */
+let CAMPS_INERT = [];
+function campsInert(on) {
+  CAMPS_INERT.forEach(e => { e.inert = false; });
+  CAMPS_INERT = [];
+  const side = $('#campsBar'), back = $('#campsBackdrop');
+  if (!on || !side) return;
+  for (let el = side; el?.parentElement && el !== document.body; el = el.parentElement)
+    for (const sib of el.parentElement.children) if (sib !== el && sib !== back && !sib.inert) { sib.inert = true; CAMPS_INERT.push(sib); }
 }
 // Where focus goes when the control it was on is gone (a removed chip): the sidebar's first When pill, or on a phone
 // with the sheet closed, the Filters button - never <body>.

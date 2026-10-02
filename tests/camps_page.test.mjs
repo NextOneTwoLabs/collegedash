@@ -268,7 +268,7 @@ test('#465 the filters are a sidebar beside the list, in the decided order, with
   assert.match(html, /<div class="camps-backdrop" id="campsBackdrop" hidden><\/div>/);
 });
 
-test('#465 CSS: a left column on desktop, sticky; on a phone a bottom sheet over the page and the bottom bar', () => {
+test('#465 CSS: a left column on desktop, sticky; on a phone a bottom sheet over the page, the header and the bottom bar', () => {
   assert.equal(css('', '.camps-layout', 'grid-template-columns'), '260px minmax(0, 1fr)');
   assert.equal(css('', '.camps-side', 'position'), 'sticky');
   assert.equal(css(PHONE, '.camps-layout', 'grid-template-columns'), 'minmax(0, 1fr)');
@@ -277,6 +277,9 @@ test('#465 CSS: a left column on desktop, sticky; on a phone a bottom sheet over
   assert.equal(css(PHONE, '.camps-side.open', 'display'), 'flex');
   assert.ok(Number(css(PHONE, '.camps-side', 'z-index')) > Number(css('', '.camps-backdrop', 'z-index')), 'the sheet is under its own backdrop');
   assert.ok(Number(css('', '.camps-backdrop', 'z-index')) >= 60, 'the backdrop must cover the bottom bar (#470 keeps the bar under 60)');
+  // Huatuo on #471: the fixed header (z-index 100) drew over the sheet and stayed tappable
+  const headerZ = Number(css('', '.header', 'z-index'));
+  assert.ok(headerZ >= 100 && Number(css('', '.camps-backdrop', 'z-index')) > headerZ, 'the header draws over the backdrop');
   assert.equal(css(PHONE, '.camps-more-btn', 'display'), 'inline-flex', 'no Filters button on a phone');
   for (const sel of ['.camps-more-btn', '.camps-sheet-close', '.camps-sheet-foot']) assert.equal(css('', sel, 'display'), 'none', `${sel} shows on desktop`);
   assert.equal(css(PHONE, '.camps-sheet-close', 'min-height'), '44px');
@@ -301,4 +304,76 @@ test('#465 the phone sheet: a modal dialog that takes focus, and gives it back t
   const ev = { key: 'Escape', shiftKey: false, prevented: false, preventDefault() { this.prevented = true; } };
   for (const fn of side._listeners.keydown || []) fn(ev);
   assert.ok(!side.classList.contains('open') && ev.prevented, 'Escape did not close the sheet');
+});
+
+/* Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader, so while the sheet is open
+   everything else is inert. The stub DOM gets the page's real shape (index.html's body > header, bottom bar, layout >
+   [rail, #main > [#app, the recs elements, the footer]]), so the walk from the sheet up to <body> meets the same
+   siblings it meets in a browser. */
+function pageTree() {
+  const kids = (parent, children) => { parent.children = children; for (const c of children) c.parentElement = parent; };
+  const body = sb.document.body, layout = makeElement('div.layout#layout'), content = makeElement('div.content-body'), campsLayout = makeElement('div.camps-layout');
+  const R = {
+    header: el('.header'), bottomNav: el('.bottom-nav'), sidebar: el('#sidebar'),
+    pageHead: makeElement('div.page-header'), lead: makeElement('p.camps-lead'), campsMain: el('#campsMain'),
+    recsToast: el('#recsToast'), recsCount: el('#recsCount'), recsTiming: el('#recsTiming'), footer: makeElement('footer.site-notice'),
+  };
+  const keep = { side: el('#campsBar'), back: el('#campsBackdrop'), main: el('#main'), app: el('#app'), layout, content, campsLayout };
+  kids(body, [R.header, R.bottomNav, layout]);
+  kids(layout, [R.sidebar, keep.main]);
+  kids(keep.main, [keep.app, R.recsToast, R.recsCount, R.recsTiming, R.footer]);
+  kids(keep.app, [R.pageHead, content]);
+  kids(content, [R.lead, campsLayout, keep.back]);
+  kids(campsLayout, [keep.side, R.campsMain]);
+  for (const e of [body, ...Object.values(keep), ...Object.values(R)]) e.inert = false;
+  return { R, keep };
+}
+const noneInert = (R, keep, how) => {
+  for (const [k, e] of Object.entries({ ...R, ...keep })) assert.equal(e.inert, false, `${how}: ${k} is still inert`);
+};
+
+test('#465 the phone sheet is modal: the header, the bottom bar, the Programs rail and the rest of the page are inert while it is open, and none is after any close', async () => {
+  await open('#/camps');
+  const { R, keep } = pageTree();
+  const side = keep.side, btn = el('#campsMoreBtn');
+  const tap = sel => ({ target: { closest: s => (s === sel ? {} : null) } });
+  const fire = (node, type, ev) => { for (const fn of node._listeners[type] || []) fn(ev); };
+  const closes = {
+    '✕': () => fire(side, 'click', tap('#campsSheetClose')),
+    'Show N camps': () => fire(side, 'click', tap('#campsShow')),
+    'Escape': () => fire(side, 'keydown', { key: 'Escape', shiftKey: false, preventDefault() { } }),
+    'the backdrop': () => keep.back.onclick(),
+  };
+  for (const [how, close] of Object.entries(closes)) {
+    fire(R.campsMain, 'click', tap('#campsMoreBtn'));  // the Filters button
+    assert.ok(side.classList.contains('open'), `fixture: Filters did not open the sheet (${how})`);
+    for (const [k, e] of Object.entries(R)) assert.equal(e.inert, true, `open: ${k} is not inert`);
+    // the sheet, its backdrop (the tap that closes it) and every ancestor of the sheet stay live, or the sheet is dead too
+    for (const [k, e] of Object.entries(keep)) assert.equal(e.inert, false, `open: ${k} is inert, so the sheet is too`);
+    close();
+    assert.ok(!side.classList.contains('open'), `${how} did not close the sheet`);
+    noneInert(R, keep, `closed by ${how}`);
+    assert.equal(FOCUSED.el, how === 'Show N camps' ? el('#campsResults h2') : btn, `${how}: focus did not go back`);
+  }
+  // an element that was inert before the sheet opened (for its own reason) is still inert after it closes
+  R.recsTiming.inert = true;
+  sb.campsSheet(true); sb.campsSheet(false);
+  assert.equal(R.recsTiming.inert, true, 'closing the sheet cleared an inert it did not set');
+  R.recsTiming.inert = false;
+  // leaving with the sheet open (Back, a link) does not leave the page inert
+  sb.campsSheet(true);
+  assert.equal(R.header.inert, true, 'fixture: the sheet did not open');
+  sb.location.hash = '#/camps?div=D3';
+  sb.route();
+  await settle(50);
+  noneInert(R, keep, 'a route change');
+});
+
+test('#465 planted text in the camps address is dropped by the allowlists, never drawn (#14)', async () => {
+  const html = await open('#/camps?program=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E&state=%22%3E%3Csvg%20onload%3Dalert(1)%3E'
+    + '&region=%3Cscript%3Ealert(1)%3C%2Fscript%3E&div=%3Cb%3ED1&when=%22%3E30d&from=%3Cimg%3E&to=2030-01-01%22%3E');
+  assert.deepEqual(history, [['replace', '#/camps']], 'a planted value survived into the canonical address');
+  const st = sb.campsNow().st;
+  assert.equal(JSON.stringify([st.when, st.from, st.to, st.region, st.state, st.div, st.program]), '[null,null,null,[],[],[],null]');  // vm arrays: compare as JSON
+  assert.doesNotMatch(html, /<img|<svg|<script|onerror|onload|alert\(1\)/i, 'planted markup reached the page');
 });
