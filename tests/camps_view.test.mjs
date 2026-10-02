@@ -70,7 +70,9 @@ function makeEnv(fetchLog) {
       // #93: document-level listeners are kept, so a test can hand them an event the way the browser would
       _handlers: {}, addEventListener(type, fn) { (this._handlers[type] ||= []).push(fn); },
     },
-    location: { hash: '', replace(h) { this.hash = h; } },
+    // #465: the page loads on Programs. Home asks for the camps for its preview (owner decision D2, home_camps.test.mjs);
+    // every other page leaves them until ID Camps is opened, which the first test below pins.
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },
     history: { replaceState() { }, pushState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: {

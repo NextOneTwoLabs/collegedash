@@ -29,7 +29,9 @@ export const RECS_JS = fs.readFileSync(path.join(PUBLIC, 'recs.js'), 'utf8');
 export const CATALOG = JSON.parse(fs.readFileSync(path.join(HERE, 'fixtures', 'recs', 'catalog.json'), 'utf8'));
 const INDEX_UPDATED = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8')).updated;
 export const FIT = { updated: INDEX_UPDATED, fitTaxonomy: CATALOG.fitTaxonomy, constants: CATALOG.constants, sources: CATALOG.sources, fit: CATALOG.fit };
-export const LOAD_REQUESTS = ['/api/v1/programs', '/api/v1/status', 'api/status', 'api/ask/status'];
+// A page load on Home (#/, these suites' default): since #465 Home also asks for the camps document, after it has drawn,
+// for its camp preview - the one extra request the owner allowed on Home (decision D2), never on another page.
+export const LOAD_REQUESTS = ['/api/v1/programs', '/api/v1/status', 'api/status', 'api/ask/status', '/api/v1/camps'];
 export const ON = { local: false, recs: true };
 
 // The element the page last focused (the stub DOM has no focus of its own). Its _name is the selector it was found by.

@@ -635,6 +635,19 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
 .home-entry-title { display: block; font-size: 18px; font-weight: 700; }
 .home-entry-desc { display: block; color: var(--text-secondary); }
 .home-entry-fact { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary); }
+.home-entry-fact:has(#homeCampsCount:empty) { display: none; }  /* the camp count arrives with the preview (#465) */
+/* Home's camp preview (#465): the next three upcoming ID camps, under the destinations. */
+.home-camps { max-width: 1160px; margin-top: 22px; }
+.home-camps-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.home-camps-head h2 { font-size: 16px; margin: 0; }
+.home-camps-head a { font-weight: 600; min-height: 44px; display: inline-flex; align-items: center; }
+.home-camps-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface); }
+.home-camps-list li { display: grid; grid-template-columns: 180px minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border-light); }
+.home-camps-list li:first-child { border-top: none; }
+.home-camp-date { font-weight: 700; }
+.home-camp-what { min-width: 0; overflow-wrap: anywhere; }
+.home-camps-list a { font-weight: 600; white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; }
+@media (max-width: 768px) { .home-camps-list li { grid-template-columns: 1fr; } }
 
 /* #465 B: viewport-fit=cover lets the page draw under a notch or a rounded corner, so the fixed header keeps its content
    inside the safe area: it grows by the top inset (portrait) and pads by the side insets (landscape). The 460 px rule
@@ -3349,6 +3362,34 @@ function homeContinue() {
     nFav ? `<a href="#/shortlist">☆ Shortlist (${nFav}) →</a>` : ''].filter(Boolean);
   return links.length ? `<div class="home-continue">${links.join('')}</div>` : '';
 }
+/* #465: Home's camp preview - the next three upcoming ID camps and the live count, from /api/v1/camps (5-7 KB gzipped,
+   the document the ID Camps page loads and caches). Each row is named from its `program` block (#468); until the first
+   refresh after #468 a row without one is named from the program index, when Home has it (campProgram, PR F). The past
+   rule and the order are the ID Camps page's own (campIsPast, campCmp). Nothing is written once the visitor has left
+   Home, and the count is computed from the document every time, never written into the page. */
+async function homeCampsLoad() {
+  const body = () => (currentView() === 'home' ? $('#homeCampsBody') : null);
+  if (!body()) return;
+  let doc;
+  try { doc = await loadCamps(); } catch {
+    const b = body(); if (b) b.innerHTML = '<p class="muted small">Upcoming camps couldn’t be loaded just now. The full list is one click away.</p>';
+    return;
+  }
+  const b = body(); if (!b) return;
+  const byProgram = new Map((S.index?.programs || []).map(p => [p.slug, p]));
+  const today = todayLocal();
+  const rows = doc.camps.filter(c => c.campType === 'id' && c.startDate && !campIsPast(c, today))
+    .map(c => ({ c, info: campProgram(c, byProgram) })).filter(x => x.info).sort((x, y) => campCmp(x.c, y.c));
+  const nProg = new Set(rows.map(x => x.c.slug)).size;
+  const count = $('#homeCampsCount');
+  if (count) count.textContent = rows.length ? `${fmtNum(rows.length)} upcoming ID camp${rows.length === 1 ? '' : 's'} at ${fmtNum(nProg)} program${nProg === 1 ? '' : 's'}` : '';
+  b.innerHTML = rows.length
+    ? `<ul class="home-camps-list">${rows.slice(0, 3).map(({ c, info }) => `<li>
+        <span class="home-camp-date">${esc(campDate(c))}</span>
+        <span class="home-camp-what"><b>${esc(info.name)}</b> · ${esc(c.name || 'Camp')}${c.location ? ` · <span class="muted">${esc(c.location)}</span>` : ''}</span>
+        <a href="#/p/${esc(c.slug)}/camps">Camp details<span class="sr-only"> for ${esc(c.name || 'this camp')}, ${esc(info.name)}</span> <span aria-hidden="true">→</span></a></li>`).join('')}</ul>`
+    : '<p class="muted small">No upcoming ID camp found in our sources right now. Many camps are announced in the spring.</p>';
+}
 function renderHome(failed = '') {
   const idx = S.index;
   const chips = (isPhone() ? PHONE_CHIPS : HELP_CHIPS).map(t => `<button type="button" class="home-chip" data-home-chip="${esc(t)}">${esc(t)}</button>`).join('');
@@ -3361,8 +3402,16 @@ function renderHome(failed = '') {
       <div class="home-find"><button type="button" class="btn primary" id="homeFind">Find a program <span aria-hidden="true">↑</span></button><span class="muted">Search by school, mascot, city or state in the box at the top.</span></div>
       <div class="home-try"><span class="muted">Try:</span>${chips}</div>
       ${homeContinue()}
-      <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Browse Programs', 'Explore and compare schools that interest you.', idx ? `${fmtNum(idx.programs.length)} programs${divs ? ` · ${divs}` : ''}` : '')}${entry('camps', '#/camps', 'Find ID Camps', 'Upcoming dates and details from camp sources.', '')}${entry('trends', '#/trends', 'Explore Pipelines', 'See where players from a club or high school have gone to college.', 'Clubs and high schools behind college rosters')}</nav>
+      <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Browse Programs', 'Explore and compare schools that interest you.', idx ? `${fmtNum(idx.programs.length)} programs${divs ? ` · ${divs}` : ''}` : '')}${entry('camps', '#/camps', 'Find ID Camps', 'Upcoming dates and details from camp sources.', '<span id="homeCampsCount"></span>')}${entry('trends', '#/trends', 'Explore Pipelines', 'See where players from a club or high school have gone to college.', 'Clubs and high schools behind college rosters')}</nav>
+      <section class="home-camps" aria-labelledby="homeCampsTitle"><div class="home-camps-head"><h2 id="homeCampsTitle">Upcoming ID camps</h2><a href="#/camps">View all camps <span aria-hidden="true">→</span></a></div>
+        <div id="homeCampsBody"><p class="muted small">Loading the next camps…</p></div></section>
     </div>`;
+  // #465 (owner's D2): the camp preview is the one extra request Home makes, sent only after the page has drawn, so
+  // the three destinations and the search never wait on it; a failure only replaces the preview with a sentence.
+  // After the next frame - or 300 ms, since a tab in the background draws no frames - whichever comes first, once.
+  let previewQueued = false;
+  const queuePreview = () => { if (!previewQueued) { previewQueued = true; setTimeout(homeCampsLoad, 0); } };
+  if (window.requestAnimationFrame) { window.requestAnimationFrame(queuePreview); setTimeout(queuePreview, 300); } else queuePreview();
   const box = $('#q');
   const find = $('#homeFind'); if (find) find.onclick = () => box?.focus();
   $('#app').querySelectorAll('[data-home-chip]').forEach(b => b.onclick = () => {  // #447's chip, from Home
