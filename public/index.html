@@ -1329,6 +1329,10 @@ function closeDrawer() {
   if (isProgramsView()) return closeMoreFilters({ focus: false });  // #465 D: the sheet; its caller places focus
   $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false');
 }
+// #465 D (Huatuo on #472): a pick inside the drawer closes it, except on Programs, where the drawer is More filters'
+// sheet and closes only on Show N, its X, Escape or the overlay - a class pill or a condition keeps it open, as a
+// conference toggle does.
+function closeDrawerOnPick() { if (!isProgramsView()) closeDrawer(); }
 $('#sidebarToggle').onclick = toggleSidebar;
 $('#sidebarOverlay').onclick = () => (isProgramsView() ? closeMoreFilters() : toggleSidebar());
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
@@ -2005,16 +2009,16 @@ function renderSidebar() {
   // <body>. pillPressed puts it back on the same pill - found again by its data-* key, a conference pill by its division
   // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does).
   const pillPressed = (attr, value, div) => {
-    if (isPhone()) { $(isProgramsView() ? '#moreFilters' : '#sidebarToggle')?.focus(); return; }
+    if (isPhone() && !isProgramsView()) { $('#sidebarToggle')?.focus(); return; }  // the drawer closed; on Programs the sheet stays open
     const q = v => String(v).replace(/["\\]/g, '\\$&');
     $('#sidebar')?.querySelector(`[data-${attr}="${q(value)}"]${div ? `[data-conf-div="${q(div)}"]` : ''}`)?.focus();
   };
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('conf', c, d); });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('region', v); });
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('conf', c, d); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('region', v); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
   // selection to what is still on screen before the sidebar is rebuilt.
-  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('division', v); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('class', v); });
+  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('division', v); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('class', v); });
   wireConditions(sb);
   const mfc = $('#mfClose'); if (mfc) mfc.onclick = () => closeMoreFilters();
   if (panel) wireConfCombo();
@@ -2224,10 +2228,10 @@ function condFormSubmit() {
   const input = $('#condValue'); if (input) st.text = input.value;
   const r = condFromInput(st.field, st.op, st.text);
   if (r.error) { st.error = r.error; renderSidebar(); $('#condValue')?.focus(); return false; }
-  addCond(r.cond); S.condForm = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer();
+  addCond(r.cond); S.condForm = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawerOnPick();
   return true;
 }
-function condRemove(i) { if (!removeCond(i)) return; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer(); }
+function condRemove(i) { if (!removeCond(i)) return; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawerOnPick(); }
 function wireConditions(sb) {
   sb.querySelectorAll('[data-cond-rm]').forEach(b => b.onclick = () => condRemove(Number(b.dataset.condRm)));
   const add = $('#condAdd'); if (add) add.onclick = () => (S.condForm ? condFormClose() : condFormOpen());
@@ -2244,7 +2248,7 @@ function wireConditions(sb) {
 }
 function rerenderForFilters() { const v = currentView(); if (v === 'camps') return renderCamps(); if (v === 'trends') return renderTrendsRoute(); if (v === 'list' || v === 'c') return renderList(); }  // returns the redraw (#465 D waits on it to put focus back)
 /* #18: the phone drawer covers the page, so its foot carries a button that closes it on what the filters and the
-   search select. Pills and conditions already close it; this is for a reader who typed a search or wants to look
+   search select. Pills and conditions already close it (not on Programs, #465 D); this is for a reader who typed a search or wants to look
    before choosing. It counts what the Program View would list (filteredPrograms: search, pills and conditions);
    the camp and Pipelines views list camps and pipelines, so there it names the view instead of a count. */
 function showResultsLabel() {

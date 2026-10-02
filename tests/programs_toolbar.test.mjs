@@ -201,6 +201,46 @@ test('phones: More filters is a modal sheet - aria-modal, and the page, header a
   assert.match(HTML, /for \(const sel of \['#main', '#sidebar', '\.header', '\.bottom-nav'\]\)/, 'the #400 sheet leaves the bottom bar reachable');
 });
 
+test('phones: a pick inside the sheet keeps it open (class pill, condition added or removed); other pages\' drawer still closes', async () => {
+  // Huatuo on #472: the sheet closes only on Show N, its ✕, Escape (or the overlay), as a conference toggle already did
+  const pg = await open({ width: 375 });
+  const sb = pg.$('#sidebar');
+  const stillOpen = what => {
+    assert.ok(sb.classList.contains('open'), `${what} closed the sheet`);
+    assert.equal(sb.getAttribute('aria-modal'), 'true', `${what} dropped aria-modal`);
+    assert.deepEqual([pg.$('#main').inert, pg.header.inert, pg.bar.inert], [true, true, true], `${what} un-inerted the page`);
+  };
+  pg.$('#moreFilters').onclick();
+  const year = /data-class="(\d{4})"/.exec(sb.innerHTML)?.[1];
+  assert.ok(year, 'no Highlight class pill in the sheet');
+  sb.querySelector(`[data-class="${year}"]`).onclick(); await settle(150);
+  assert.deepEqual([...pg.sb.S.filters.classYear], [year]);
+  stillOpen('a Highlight class pill');
+  assert.equal(pg.FOCUS.el, `#sidebar > button[data-class="${year}"]`, `focus did not stay on the pill: ${pg.FOCUS.el}`);
+  pg.$('#condAdd').onclick();
+  pg.$('#condValue').value = '50';
+  pg.$('#condForm').onsubmit({ preventDefault() { } }); await settle(150);
+  assert.equal(pg.sb.S.filters.cond.length, 1, 'the condition was not added');
+  stillOpen('adding a condition');
+  assert.equal(pg.FOCUS.el, '#condAdd');
+  sb.querySelector('[data-cond-rm="0"]').onclick(); await settle(150);
+  assert.equal(pg.sb.S.filters.cond.length, 0, 'the condition was not removed');
+  stillOpen('removing a condition');
+  pg.$('#showResults').onclick();
+  assert.ok(!sb.classList.contains('open'), 'Show N did not close the sheet');
+  assert.deepEqual([pg.$('#main').inert, pg.header.inert, pg.bar.inert], [false, false, false]);
+  assert.equal(pg.FOCUS.el, '#moreFilters');
+
+  const other = await open({ hash: '#/faq', width: 375 });
+  const osb = other.$('#sidebar');
+  other.$('#sidebarToggle').onclick();
+  assert.ok(osb.classList.contains('open'));
+  const y = /data-class="(\d{4})"/.exec(osb.innerHTML)?.[1];
+  osb.querySelector(`[data-class="${y}"]`).onclick(); await settle(150);
+  assert.ok(!osb.classList.contains('open'), 'off Programs a pill no longer closes the drawer');
+  assert.equal(other.FOCUS.el, '#sidebarToggle');
+});
+
 test('the toolbar\'s pills commit once and put focus back on the same pill after the list redraws', async () => {
   const pg = await open();
   const before = pg.hist.pushes;
