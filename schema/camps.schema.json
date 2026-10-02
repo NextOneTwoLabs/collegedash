@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://collegedash.local/schema/camps.schema.json",
+  "title": "CollegeDash camps index (public/data/camps/index.json, /api/v1/camps; issues #65, #78, #465)",
+  "description": "Every upcoming camp across the published programs, one row per camp. build.check_camps_index also checks it against the profiles and the programs index of the same build (each row equal to the profile item it came from, each `program` block equal to that program's index row); this schema pins the shape. A row carries exactly `slug`, build.CAMP_INDEX_FIELDS and `program` (build.CAMP_PROGRAM_FIELDS), in that order.",
+  "type": "object",
+  "required": ["updated", "window", "counts", "camps"],
+  "additionalProperties": false,
+  "properties": {
+    "updated": {"type": "string", "minLength": 1, "description": "When the build wrote the file: the page's 'List refreshed' date. Not a per-camp check date."},
+    "window": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "from": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "to": {"type": ["string", "null"]}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["total", "id", "youth", "unknown"],
+      "additionalProperties": false,
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "id": {"type": "integer", "minimum": 0},
+        "youth": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "camps": {"type": "array", "items": {"$ref": "#/$defs/row"}}
+  },
+  "$defs": {
+    "nullableString": {"type": ["string", "null"]},
+    "row": {
+      "type": "object",
+      "required": ["slug", "name", "startDate", "endDate", "dateText", "precision", "yearInferred", "location", "ages",
+                   "price", "registerUrl", "sourceUrl", "kind", "campType", "confidence", "program"],
+      "additionalProperties": false,
+      "properties": {
+        "slug": {"type": "string", "pattern": "^[a-z0-9-]{1,64}$"},
+        "name": {"type": "string"},
+        "startDate": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}(-[0-9]{2})?$"},
+        "endDate": {"type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}(-[0-9]{2})?$"},
+        "dateText": {"$ref": "#/$defs/nullableString"},
+        "precision": {"enum": ["day", "month"]},
+        "yearInferred": {"type": "boolean"},
+        "location": {"$ref": "#/$defs/nullableString", "description": "The event location when the camp states one; never the program's city."},
+        "ages": {"$ref": "#/$defs/nullableString", "description": "Free text as published (grades or ages); not parsed."},
+        "price": {"$ref": "#/$defs/nullableString", "description": "Free text as published."},
+        "registerUrl": {"$ref": "#/$defs/nullableString"},
+        "sourceUrl": {"$ref": "#/$defs/nullableString"},
+        "kind": {"enum": ["camp", "news", "curated"]},
+        "campType": {"enum": ["id", "youth", "unknown"]},
+        "confidence": {"$ref": "#/$defs/nullableString"},
+        "program": {"$ref": "#/$defs/program"}
+      }
+    },
+    "program": {
+      "type": "object",
+      "description": "Issue #465: a copy of these fields of the program's programs/index.json row, so a view can name, place and filter a camp without the programs index. A view shows `shortName || name`.",
+      "required": ["name", "shortName", "division", "city", "state", "region"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "shortName": {"$ref": "#/$defs/nullableString"},
+        "division": {"enum": ["D1", "D2", "D3"]},
+        "city": {"$ref": "#/$defs/nullableString"},
+        "state": {"$ref": "#/$defs/nullableString"},
+        "region": {"$ref": "#/$defs/nullableString"}
+      }
+    }
+  }
+}

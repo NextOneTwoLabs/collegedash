@@ -71,6 +71,12 @@ async function setup(extra = {}) {
 }
 const token = () => mint(SECRET);
 const cookie = t => `${COOKIE}=${t}`;
+/* #473: a forged token that always differs from the one it forges. The old forgery set the last two characters to
+   "AA", which IS the real token whenever its signature already ends in "AA" (about 1 in 1,024 for these signatures),
+   so the refusal test then failed by chance. This changes the second-to-last character instead: it carries six full
+   bits of the signature (the last carries four, then padding), so another letter there always changes the signature
+   bytes, and the token keeps its exact shape, so it is refused by the HMAC check, never by the token pattern. */
+const forge = t => t.slice(0, -2) + (t.at(-2) === 'A' ? 'B' : 'A') + t.at(-1);
 function req(path, { headers = {}, method = 'GET', host = HOST, body } = {}) {
   return new Request(`https://${host}${path}`, { method, body, headers: { 'cf-connecting-ip': IP, 'user-agent': UA, ...headers } });
 }
@@ -282,7 +288,8 @@ test('/api/perf at the owner\'s rate of 1: each report stands for one page load 
 });
 
 test('/api/perf: every refusal is 204 and writes nothing', async () => {
-  const t = await token();
+  const t = await token(), forged = forge(t);
+  assert.notEqual(forged, t, 'the forged session is the real one');
   const refusals = [
     ['sampling off', { PERF_SAMPLE: '0' }, beacon({ rate: 0 }), {}],
     ['sampling unset', { PERF_SAMPLE: undefined }, beacon(), {}],
@@ -294,7 +301,7 @@ test('/api/perf: every refusal is 204 and writes nothing', async () => {
     ['none', {}, beacon(), { headers: { 'sec-fetch-site': 'none' } }],
     ['no Sec-Fetch-Site', {}, beacon(), { headers: { 'sec-fetch-site': '' } }],
     ['no session', {}, beacon(), { headers: { cookie: '' } }],
-    ['forged session', {}, beacon(), { headers: { cookie: cookie(t.slice(0, -2) + 'AA') } }],
+    ['forged session', {}, beacon(), { headers: { cookie: cookie(forged) } }],
     ['no secret', { SESSION_SECRET: undefined }, beacon(), {}],
     ['RL_IP exceeded', { RL_IP: limiter(0) }, beacon(), {}],
     ['RL_PERF exceeded', { RL_PERF: limiter(0) }, beacon(), {}],
@@ -326,6 +333,30 @@ test('/api/perf: every refusal is 204 and writes nothing', async () => {
     assert.equal(env.PERF_STATS.points.length, 0, name);
     assert.equal(env.API_GATE_STATS.points.length, 0, name);
   }
+});
+
+test('#473 the forged session differs and is refused even when the real token already ends in "AA"', async () => {
+  // A fixed clock and session id whose real token ends in "AA" (found once, offline): the exact case that made the old
+  // forgery identical to the token it forged. Date.now is pinned so the Worker verifies at that same moment.
+  const NOW = Date.UTC(2026, 9, 2, 12, 0, 0), SID = 'edgecase473ckAAAAAAAAA', realNow = Date.now;
+  Date.now = () => NOW + 1000;
+  try {
+    const t = await mint(SECRET, NOW, SID);
+    assert.ok(t.endsWith('AA'), 'the edge case: a real token whose signature ends in "AA"');
+    assert.equal(t.slice(0, -2) + 'AA', t, 'the old forgery would have sent the real token');
+    assert.equal((await verify(SECRET, t)).state, 'valid');
+    const forged = forge(t);
+    assert.notEqual(forged, t, 'the forgery differs');
+    assert.equal(forged.length, t.length, 'and keeps the token shape');
+    assert.equal((await verify(SECRET, forged)).state, 'invalid', 'refused by the signature check');
+    const { env } = await setup();
+    assert.equal((await post(env, beacon(), { t: forged })).status, 204);
+    assert.equal(writes(env), 0, 'the forged session writes nothing');
+    const control = await setup();
+    assert.equal((await post(control.env, beacon(), { t })).status, 204);
+    assert.equal(control.env.PERF_STATS.points.length, 1, 'CONTROL the real token, on the same clock, is accepted and writes one point');
+  } finally { Date.now = realNow; }
+  for (const t of ['xA', 'xB', 'xAA', 'xBA', 'xzA']) assert.notEqual(forge(t), t, `forge(${t}) differs`);
 });
 
 test('/api/perf: RL_PERF is keyed per session id and allows 10 a minute', async () => {

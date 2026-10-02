@@ -1507,9 +1507,12 @@ def build_camps(camps, news, curated) -> dict | None:
 
 # ---------- camps index ----------
 # public/data/camps/index.json: every program's camp items in one file, so a site-wide camp view
-# does not have to load 350 profiles. Rows carry the camp fields plus `slug` and nothing else -
-# program name, region, conference and colours are already on the programs index row the view holds,
-# and are joined by slug there.
+# does not have to load 350 profiles. Rows carry the camp fields, the `slug` that joins them to the
+# programs index, and (issue #465, owner decision D2) a small `program` block: CAMP_PROGRAM_FIELDS,
+# copied from that program's programs/index.json row. With it the Home camp preview and the ID Camps
+# page can name, place and filter a camp without the 2 MB programs index (161 KB gzipped) - the
+# camps document is ~6.5 KB gzipped. The block is a copy, so check_camps_index requires it to equal
+# the index row's fields: the two cannot drift. Conference and colours stay on the index row.
 #
 # Whether a row is a real women's soccer camp, another sport's camp or a review widget is decided at
 # source in collect/camps.py, where the page structure that proves it is still available (issues #39
@@ -1529,6 +1532,10 @@ CAMP_INDEX_FIELDS = ("name", "startDate", "endDate", "dateText", "precision", "y
 # purpose" from "forgotten", which is the whole point of #69.
 # `sources` (issue #74): every place a merged camp was found; the row's own sourceUrl and kind are the kept entry's.
 CAMP_ITEM_UNPUBLISHED = ("newsTitle", "newsUrl", "newsDate", "sources")
+# Issue #465 (PR C): the program fields each row carries in its `program` block, equal to the same keys of the
+# program's programs/index.json row (summary_row). `name` is there because 89 programs have no shortName, and a
+# camp must never be shown under a blank name or a slug (#405): a view renders `shortName || name`.
+CAMP_PROGRAM_FIELDS = ("name", "shortName", "division", "city", "state", "region")
 
 
 def camps_window(today: dt.date | None = None) -> dict:
@@ -1583,10 +1590,18 @@ def camp_in_window(item, window: dict) -> bool:
     return True
 
 
-def camp_row(slug: str, item: dict) -> dict:
+def camp_program(index_row: dict | None) -> dict:
+    """The `program` block of a camps row (#465): CAMP_PROGRAM_FIELDS of the program's index row, null where absent."""
+    row = index_row if isinstance(index_row, dict) else {}
+    return {k: row.get(k) for k in CAMP_PROGRAM_FIELDS}
+
+
+def camp_row(slug: str, item: dict, index_row: dict | None) -> dict:
     """One published row: the camp fields, in a fixed order, plus the slug that joins it to a
-    program. Missing fields are published as null so the shape never varies between rows."""
-    return {"slug": slug, **{k: item.get(k) for k in CAMP_INDEX_FIELDS}}
+    program and, last, that program's `program` block (#465). Missing fields are published as null
+    so the shape never varies between rows. `index_row` is the program's programs/index.json row
+    (summary_row); it is required, so no caller can emit a row without its block."""
+    return {"slug": slug, **{k: item.get(k) for k in CAMP_INDEX_FIELDS}, "program": camp_program(index_row)}
 
 
 def camp_counts(rows: list) -> dict:
@@ -2213,7 +2228,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                                 "collegeName": program.get("shortName") or program["name"]})
         for it in ((profile.get("camps") or {}).get("items") or []):
             if camp_in_window(it, window):
-                all_camps.append(camp_row(program["slug"], it))
+                all_camps.append(camp_row(program["slug"], it, rows[-1]))  # rows[-1]: this program's index row (#465)
             elif not (isinstance(it, dict) and isinstance(it.get("startDate"), str) and it.get("startDate")):
                 camps_undated += 1  # no date to place it by (camp_in_window); its program page lists it undated
         common.log(f"build: {program['slug']} completeness {profile['_build']['completeness']} "
@@ -2228,8 +2243,10 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": common.now_iso(), "commitments": all_commits})
     camp_tally = camp_counts(all_camps)
+    # Written compact (#465), like the slim list (#395): Home loads it for its camp preview (owner decision D2).
     common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "window": window, "counts": camp_tally, "camps": all_camps})
+                      {"updated": common.now_iso(), "window": window, "counts": camp_tally, "camps": all_camps},
+                      compact=True)
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
                f"window from {window['from']}; "
                f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
@@ -2497,11 +2514,12 @@ def check_camps_index(registry: dict) -> bool:
     except Exception as e:  # noqa: BLE001 - issue #70: reported like the camps file above, never raised
         print(f"CAMPS: {index_path} is not readable JSON: {type(e).__name__}: {e}")
         return False
-    known = {r.get("slug") for r in ((idx if isinstance(idx, dict) else {}).get("programs") or []) if isinstance(r, dict)}
+    index_rows = {r.get("slug"): r for r in ((idx if isinstance(idx, dict) else {}).get("programs") or []) if isinstance(r, dict)}
+    known = set(index_rows)
     if not known:
         print(f"CAMPS: cannot read program slugs from {index_path}, so no row's slug can be resolved")
         return False
-    allowed = {"slug", *CAMP_INDEX_FIELDS}
+    allowed = {"slug", *CAMP_INDEX_FIELDS, "program"}
     for i, row in enumerate(published):
         if not isinstance(row, dict):
             print(f"CAMPS: row {i} is a {type(row).__name__}, not an object")
@@ -2522,6 +2540,20 @@ def check_camps_index(registry: dict) -> bool:
             print(f"CAMPS: row {i} ({slug}) carries {extra or 'no extra fields'} and is missing "
                   f"{missing or 'nothing'}; the published shape is fixed")
             ok = False
+        # Issue #465: the `program` block is a copy of the program's index row, so it must equal that row's fields.
+        block = row.get("program")
+        if "program" in row and slug in known:
+            want = camp_program(index_rows[slug])
+            if not isinstance(block, dict) or list(block) != list(CAMP_PROGRAM_FIELDS):
+                print(f"CAMPS: row {i} ({slug}) has a program block {sorted(block) if isinstance(block, dict) else block!r}; "
+                      f"it must carry exactly {list(CAMP_PROGRAM_FIELDS)}, in that order")
+                ok = False
+            else:
+                drift = [k for k in CAMP_PROGRAM_FIELDS if block.get(k) != want[k]]
+                if drift:
+                    print(f"CAMPS: row {i} ({slug}) program block differs from {os.path.basename(index_path)} in "
+                          f"{', '.join(drift)}; the copy has drifted from the program's row")
+                    ok = False
 
     expected: list[dict] = []
     item_fields: set = set()
@@ -2542,7 +2574,7 @@ def check_camps_index(registry: dict) -> bool:
             if isinstance(it, dict):
                 item_fields |= set(it)
             if camp_in_window(it, window):
-                expected.append(camp_row(slug, it))
+                expected.append(camp_row(slug, it, index_rows.get(slug)))
     # Issue #69: CAMP_INDEX_FIELDS is an allow-list, so a per-item field added to build_camps is
     # dropped on the way out and nothing said so - which is how `campType` would have reached no
     # row at all while every other check here passed. Withheld-on-purpose is declared, so the only
@@ -2599,7 +2631,21 @@ def check_camps_index(registry: dict) -> bool:
                       f"{differs}: the index says {[pub.get(f) for f in differs]}, the profile says "
                       f"{[exp.get(f) for f in differs]}")
                 ok = False
+    # Issue #465: the published shape, pinned by schema/camps.schema.json like the list (#395) and fit (#400) files.
+    schema = common.read_json(CAMPS_SCHEMA_PATH)
+    try:
+        import jsonschema
+    except ImportError:
+        jsonschema = None
+    if schema and jsonschema:
+        errs = sorted(jsonschema.Draft202012Validator(schema).iter_errors(doc), key=lambda e: list(e.path))
+        for e in errs[:10]:
+            print(f"CAMPS: schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}")
+        ok = ok and not errs
     return ok
+
+
+CAMPS_SCHEMA_PATH = os.path.join(os.path.dirname(common.SCHEMA_PATH), "camps.schema.json")
 
 
 def check_seasons(registry: dict) -> bool:

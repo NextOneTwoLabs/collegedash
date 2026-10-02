@@ -24,7 +24,7 @@ scraping.
 | `/api/v1/fit` | the recommender's fit facts (`public/data/fit/index.json`, issue #400): per program, by slug, the climate label and the figures it comes from, the College Scorecard and NOAA station ids its source links use, and when each source was fetched; plus the taxonomy version and its constants (size bands, climate thresholds, regions). Region, division and enrollment are on the list rows. The site loads it only when "Find programs for me" opens |
 | `/api/v1/programs/{slug}` | one program's profile (`public/data/programs/{slug}.json`); a slug is `[a-z0-9-]{1,64}` |
 | `/api/v1/commitments` | the commitments index |
-| `/api/v1/camps` | the camps index |
+| `/api/v1/camps` | the camps index (`public/data/camps/index.json`, shape in `schema/camps.schema.json`): `updated` (when the build wrote it; not a per-camp check date), the date `window`, the id/youth/unknown `counts`, and one row per upcoming camp with its `slug`, the camp's own fields and, since issue #465, a `program` block of `name`, `shortName`, `division`, `city`, `state`, `region` copied from that program's index row, so a camp can be named, placed and filtered without the program index. The program's city is not the camp's venue; that is the row's `location`, when stated |
 | `/api/v1/trends` | the clubs and high-schools index (counts only) |
 | `/api/v1/status` | the refresh state (`public/archive/refresh-state.json`) |
 
