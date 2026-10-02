@@ -299,6 +299,13 @@ tr:hover td { background: var(--row-hover); }
 .pchip button { border: 0; background: none; color: inherit; font-weight: 800; min-width: 32px; min-height: 32px; border-radius: 50%; }
 .pchips-clear { border: 0; background: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; min-height: 32px; }
 @media (max-width: 768px) { .mf-opt { min-height: 44px; } .sheet-head { display: flex; } .pchips { display: flex; } }
+/* The sheet is #sidebar, a sibling of #main (never inside what goes inert). While it is open it runs the full height,
+   above the header (100) and #447's panel (120), which are inert behind it, with its backdrop between; the #400 phone
+   sheet (200) stays above everything. */
+@media (max-width: 768px) {
+  body.sheet-open .sidebar { top: 0; z-index: 130; padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
+  body.sheet-open .sidebar-overlay { z-index: 125; }
+}
 .shortcut-hint { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--text-secondary); padding: 10px 16px; border-top: 1px solid var(--border); margin-top: auto; background: var(--bg-surface-alt); }
 .shortcut-hint span { white-space: nowrap; }
 .shortcut-hint kbd { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-family: var(--font); }
@@ -1314,6 +1321,7 @@ function drawerSheetState(open) {
   if (modal) { sb.setAttribute('role', 'dialog'); sb.setAttribute('aria-modal', 'true'); sb.setAttribute('aria-labelledby', 'sheetHeading'); }
   else { sb.removeAttribute?.('role'); sb.removeAttribute?.('aria-modal'); sb.removeAttribute?.('aria-labelledby'); }
   for (const sel of ['#main', '.header', '.bottom-nav']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+  document.body.classList.toggle('sheet-open', modal);  // drawn above the header while open (CSS)
 }
 function openDrawer() {
   $('#sidebar').classList.add('open'); $('#sidebarOverlay').classList.add('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'true');

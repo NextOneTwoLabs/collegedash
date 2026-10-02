@@ -178,6 +178,14 @@ test('phones: the opener is named, says whether the sheet is open and what it co
   assert.deepEqual([sb.getAttribute('role'), sb.getAttribute('aria-modal'), sb.getAttribute('aria-labelledby')], ['dialog', 'true', 'sheetHeading']);
   assert.deepEqual([pg.$('#main').inert, pg.header.inert, pg.bar.inert], [true, true, true], 'something behind the sheet is reachable');
   assert.equal(pg.FOCUS.el, '#sheetHeading', 'focus did not move to the sheet\'s heading');
+  // Huatuo on #471: the sheet must not sit inside what goes inert, and must draw above the header it inerts
+  assert.match(HTML, /<div class="layout" id="layout">\s*<aside class="sidebar" id="sidebar"[^>]*><\/aside>\s*<div class="main" id="main">/, 'the sheet is not a sibling of #main');
+  assert.ok(pg.body.classList.contains('sheet-open'), 'the open sheet is not drawn above the header');
+  const z = (at, sel) => Number(decl(at, sel, 'z-index')), PHONE = '@media (max-width: 768px)';
+  assert.equal(decl(PHONE, 'body.sheet-open .sidebar', 'top'), '0', 'the sheet starts under the header');
+  assert.ok(z('', '.header') < z(PHONE, 'body.sheet-open .sidebar-overlay') && z(PHONE, 'body.sheet-open .sidebar-overlay') < z(PHONE, 'body.sheet-open .sidebar'),
+    'not header < backdrop < sheet');
+  assert.ok(z(PHONE, 'body.sheet-open .sidebar') > z('', '.qpanel') && z(PHONE, 'body.sheet-open .sidebar') < z(PHONE, '.recs-panel'), 'not #447 panel < sheet < #400 sheet');
 });
 
 test('phones: every close - Show N, ✕, Escape, the overlay - clears inert, drops the dialog role and returns focus to the opener', async () => {
@@ -195,6 +203,7 @@ test('phones: every close - Show N, ✕, Escape, the overlay - clears inert, dro
     assert.ok(!sb.classList.contains('open'), `${what} did not close the sheet`);
     assert.deepEqual([pg.$('#main').inert, pg.header.inert, pg.bar.inert], [false, false, false], `${what} left the page inert`);
     assert.deepEqual([sb.getAttribute('role'), sb.getAttribute('aria-modal')], [null, null], `${what} left the dialog role`);
+    assert.ok(!pg.body.classList.contains('sheet-open'), `${what} left the sheet drawn above the header`);
     assert.equal(pg.$('#sidebarToggle').getAttribute('aria-expanded'), 'false', `${what}: the opener still says expanded`);
     assert.equal(pg.FOCUS.el, '#sidebarToggle', `${what}: focus went to ${pg.FOCUS.el}`);
   }
