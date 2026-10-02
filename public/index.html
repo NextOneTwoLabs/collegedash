@@ -377,39 +377,54 @@ tr:hover td { background: var(--row-hover); }
 .hero { font-size: 48px; font-weight: 600; line-height: 1; }
 
 /* ===== PROGRAM CARDS (kept; tokens updated) ===== */
-.band { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 6px; padding: 14px 16px 12px; }  /* #426 (c): badge under the name */
-.band.neutral { background: var(--bg-surface-alt); color: var(--text-primary); }
-.band h3 { color: inherit; }
-.band .nick { display: block; font-size: 12px; font-weight: 500; opacity: .85; margin-top: 2px; }
-.band .titles { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; opacity: .9; white-space: nowrap; }
-.stripe { height: 5px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+/* #465 E (D6 b): the program card - a crest (the school's colour, small; a division tint when none is on file), the
+   name and nickname; D-tag · conference · city; the season summary; ONE fact row; Save and Compare. */
+.band { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: start; gap: 4px 12px; padding: 14px 16px 6px; }
+.band h3 { color: var(--text-primary); }
+.band .crest { grid-row: 1 / span 2; width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; font-size: 12px; font-weight: 800; letter-spacing: -.3px; background: var(--crest, var(--bg-surface-alt)); color: var(--crest-ink, var(--text-primary)); box-shadow: inset 0 -4px 0 var(--crest2, var(--border)); }
+.band .nick { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-top: 2px; }
+.band .titles { grid-column: 2; justify-self: start; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; color: var(--text-secondary); white-space: nowrap; }
 .cards { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .pcard { display: flex; flex-direction: column; padding: 0; overflow: hidden; cursor: pointer; transition: border-color var(--transition-fast); }
 .pcard:hover { border-color: var(--accent); }
 .pcard.in-compare { box-shadow: inset 3px 0 0 var(--accent); }
 .pcard .band h3 { font-size: 17px; line-height: 1.2; }
-.pcard .body { flex: 1; padding: 14px 16px 12px; }
-.pcard .meta { color: var(--text-secondary); font-size: 12px; margin-bottom: 12px; }
-.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
-.facts .label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
-.facts .value { font-size: 18px; font-weight: 600; margin-top: 2px; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.facts .value small { display: block; font-size: 13px; }
+.pcard .body { flex: 1; padding: 0 16px 12px; }
+.pcard .meta { color: var(--text-secondary); font-size: 12px; margin-bottom: 6px; }
+.pcard .card-sum { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.pcard .card-fact { font-size: 13px; }
+.card-fact .fl { color: var(--text-secondary); }
+.card-fact .fv { font-weight: 600; font-variant-numeric: tabular-nums; }
+.card-fact .na { color: var(--text-secondary); font-weight: 500; }
 .pcard .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 16px; border-top: 1px solid var(--border-light); color: var(--text-secondary); font-size: 12px; }
-.pcard .foot b { color: var(--text-primary); }
-.pcard .foot .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-left: 6px; vertical-align: middle; }
-.pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; margin-left: 6px; font-size: 11px; }
-.foot-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
-/* #426 (a): every card in a row of the grid takes the tallest band, meta line, detail block and foot in that row.
-   Tracks: 1 band, 2 stripe, 3 meta, 4 detail (facts + Recommended reasons, one wrapper), 5 foot. Names never truncate:
-   a long one makes its row's band track taller for every card in the row. Phones in one column: one card per row. */
+.pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; font-size: 11px; }
+.foot-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; margin-left: auto; }
+/* #426 (a), five tracks since #465 E: 1 band (crest, name, badge), 2 meta, 3 summary, 4 the fact row (or Recommended's
+   reasons, one wrapper), 5 foot. Every card in a grid row takes the tallest of each, so the rows line up; names never
+   truncate. Phones in one column: one card per row. */
 @supports (grid-template-rows: subgrid) {
   .grid.cards > .pcard { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
   .grid.cards > .pcard > .band { grid-row: 1; }
-  .grid.cards > .pcard > .stripe { grid-row: 2; }
-  .grid.cards > .pcard > .body { grid-row: 3 / span 2; display: grid; grid-template-rows: subgrid; row-gap: 0; }
+  .grid.cards > .pcard > .body { grid-row: 2 / span 3; display: grid; grid-template-rows: subgrid; row-gap: 0; }
   .grid.cards > .pcard > .body > .meta { grid-row: 1; }
-  .grid.cards > .pcard > .body > .card-detail { grid-row: 2; }
+  .grid.cards > .pcard > .body > .card-sum { grid-row: 2; }
+  .grid.cards > .pcard > .body > .card-detail { grid-row: 3; }
   .grid.cards > .pcard > .foot { grid-row: 5; }
+}
+/* #465 E: the Compare tray, under the Programs list while anything is picked; it stays in view at the foot of the page
+   area (which ends above the phone bar), so it never covers the bar or the last card's actions. */
+.cmp-tray-wrap { position: sticky; bottom: 0; z-index: 2; }
+.cmp-tray { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0 0; padding: 10px 14px; background: var(--bg-surface); border: 1px solid var(--accent); border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+.cmp-tray-n { font-weight: 600; }
+.cmp-tray-list { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.cmp-tray-list li { display: inline-flex; align-items: center; gap: 2px; padding-left: 10px; border-radius: 999px; background: var(--accent-surface); font-size: 13px; font-weight: 600; }
+.cmp-tray-x { border: 0; background: none; cursor: pointer; color: var(--text-secondary); min-width: 32px; min-height: 32px; border-radius: 999px; font-size: 13px; }
+.cmp-tray-x:hover { color: var(--danger-text); }
+.cmp-tray-go { margin-left: auto; }
+/* #465 E: touch sizes at the site's touch breakpoint - Save, Compare and the tray's controls are 44px */
+@media (max-width: 768px) {
+  .pcard .foot-actions .star-btn, .pcard .foot-actions .cmp-btn { min-height: 44px; min-width: 44px; }
+  .cmp-tray-x, .cmp-tray .btn { min-height: 44px; min-width: 44px; }
 }
 .star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.35; transition: all var(--transition-fast); line-height: 1; color: var(--text-primary); }
 .star-btn:hover { opacity: 0.8; transform: scale(1.15); }
@@ -946,8 +961,9 @@ function teamColors(p) {
                 : { primary: null, secondary: null, text: null, neutral: true }; } // unknown division: the old grey
   return { primary: c[0], secondary: c[1] || null, text: contrastText(c[0]), neutral: false };
 }
-const bandAttrs = tc => tc.neutral ? 'class="band neutral"' : `class="band" style="background:${esc(tc.primary)};color:${tc.text}"`;
-const stripeHtml = tc => `<div class="stripe" style="background:${esc(tc.secondary || 'var(--border-light)')}"></div>`;
+// #465 E: the card's crest - the program's colours as CSS variables on the band (its first two letters drawn on them).
+const crestVars = tc => tc.neutral ? '' : ` style="--crest:${esc(tc.primary)};--crest2:${esc(tc.secondary || tc.primary)};--crest-ink:${tc.text}"`;
+const crestText = p => (displayName(p).match(/[A-Za-z0-9]+/g) || []).filter(w => !/^(of|the|at|and)$/i.test(w)).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 const swatchesHtml = (p, lg) => { const tc = teamColors(p); return `<span class="swatches${lg ? ' lg' : ''}" aria-hidden="true"><i style="background:${esc(tc.primary || 'var(--border)')}"></i><i style="background:${esc(tc.secondary || 'var(--border-light)')}"></i></span>`; };
 function tuitionHtml(inS, outS, state) { // one figure when equal or one side missing; two short lines otherwise
   if (inS == null && outS == null) return '—';
@@ -956,7 +972,6 @@ function tuitionHtml(inS, outS, state) { // one figure when equal or one side mi
   const away = S.residency && state && S.residency !== state;
   return `<small class="${away ? 'dim' : ''}">${fmtUsd(inS)} in</small><small class="${home ? 'dim' : ''}">${fmtUsd(outS)} out</small>`;
 }
-const fact = (label, value, title) => `<div${title ? ` title="${esc(title)}"` : ''}><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`;
 
 /* ---------- search: word-prefix matching over school names (+ nickname), ranked ---------- */
 // "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st mary s", "Hawaiʻi" -> "hawaii"
@@ -1835,8 +1850,10 @@ function toggleCompare(slug) {
   else S.compare.push(slug);
   saveState(); renderSidebar(); return true;
 }
-const starBtn = (slug, wide) => { const on = S.favorites.has(slug); return `<button class="star-btn${on ? ' starred' : ''}${wide ? ' star-btn-label' : ''}" data-fav="${esc(slug)}" aria-pressed="${on}" title="${on ? 'Remove from shortlist' : 'Save to shortlist'}">${wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆')}</button>`; };
-const cmpBtn = (slug, wide) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}" title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${on ? 'Comparing' : 'Compare'}</button>`; };
+// `name` (#465 E): a card's buttons are named for their program ("Save Stanford", "Compare Stanford"), so a list of
+// cards does not read as a list of identical "Save" buttons; aria-pressed still says whether it is on.
+const starBtn = (slug, wide, name) => { const on = S.favorites.has(slug); return `<button class="star-btn${on ? ' starred' : ''}${wide ? ' star-btn-label' : ''}" data-fav="${esc(slug)}" aria-pressed="${on}"${name ? ` aria-label="Save ${esc(name)}"` : ''} title="${on ? 'Remove from shortlist' : 'Save to shortlist'}">${wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆')}</button>`; };
+const cmpBtn = (slug, wide, name) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}"${name ? ` aria-label="Compare ${esc(name)}"` : ''} title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${on ? 'Comparing' : 'Compare'}</button>`; };
 // delegated: works for cards, table rows, glance panel and sidebar lists
 document.addEventListener('click', e => {
   const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav, f); syncToggles(); return; }
@@ -1849,6 +1866,7 @@ function syncToggles() {
   document.querySelectorAll('[data-fav]' + NOT_RM).forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
   document.querySelectorAll('[data-cmp]' + NOT_RM).forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
   document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('in-compare', S.compare.includes(c.dataset.slug)));
+  cmpTraySync();
 }
 
 /* ---------- sidebar ---------- */
@@ -3899,8 +3917,9 @@ async function renderList() {
   const crumbs = f.conf.length ? [{ label: 'Home', href: '#/' }, { label: 'Programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'Home', href: '#/' }, { label: 'Programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${appliedChipsHtml()}${recsPausedLine()}${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${appliedChipsHtml()}${recsPausedLine()}${body}<div class="cmp-tray-wrap" id="cmpTrayWrap">${cmpTrayHtml()}</div></div>`;
   const app = $('#app');
+  wireCmpTray($('#cmpTrayWrap'));
   wireAskBanner();
   wireRecsPaused();
   wireAppliedChips(app);
@@ -3919,30 +3938,84 @@ const TABLE_COL_HAS = {
   commits: (p, cy) => commitsFor(p, cy) > 0, titles: p => has.rowTitles(p), cups: p => has.rowCups(p),
   region: p => !!p.region, type: p => !!p.ownership,
 };
+/* #465 E (D6 b): the card keeps ONE fact row, chosen by what the visitor is looking at (the first rule that applies):
+   Recommended mode - its reasons; a sort by a fact the card does not already show - that value, with the sort's own label;
+   a highlighted class (#15) - that class's commits, after the sorted value in the same row (Huatuo; a Commits sort already
+   is them, so they show once); otherwise Undergrads. A missing value the visitor asked for says why in a word (never a
+   bare dash); a missing default leaves the row empty, its track kept so the cards in a row still line up. */
+const factNa = (word, why) => `<span class="na" title="${esc(why)}">${esc(word)}<span class="sr-only">: ${esc(why)}</span></span>`;
+const NOT_REPORTED = 'The school reports none to College Scorecard';
+const CARD_SORT_FACTS = {
+  admit: p => p.admissionRate != null ? fmtPct(p.admissionRate) : factNa('Not reported', NOT_REPORTED),
+  academicRank: p => p.academicRank != null ? `#${p.academicRank}` : factNa('Not ranked', rankTitle(p)),
+  tuition: p => { const v = p.tuitionOutOfState ?? p.tuitionInState; return v != null ? `$${fmtNum(v)} / yr` : factNa('Not reported', NOT_REPORTED); },
+  undergrads: p => p.undergradEnrollment != null ? fmtNum(p.undergradEnrollment) : factNa('Not reported', NOT_REPORTED),
+  commits: p => cardCommits(p, S.filters.classYear),
+  titles: p => titleCount(p, p.nationalTitles || 0) != null ? fmtNum(p.nationalTitles || 0) : factNa('Not applicable', `No ${p.division || ''} titles table`.replace('  ', ' ')),
+  cups: p => appliesTo('collegeCups', p) ? fmtNum(p.collegeCups || 0) : factNa('Not applicable', 'College Cups are a Division I measure'),
+  region: p => p.region ? esc(p.region) : factNa('Not reported', 'No region on file'),
+  type: p => p.ownership ? esc(p.ownership.replace(/ (nonprofit|for-profit)$/, '')) : factNa('Not reported', NOT_REPORTED),
+};
+// Commits for the chosen classes: a count in a division that collects them (0 included), else "Not collected" - or the
+// incidental count with #438's "(partial)" note, from the same commitsPartial the profile uses.
+function cardCommits(p, years) {
+  const n = commitsFor(p, years || []);
+  if (commitsCollected(p)) return fmtNum(n);
+  return n > 0 ? `${fmtNum(n)} ${commitsPartial(p, true)}` : factNa('Not collected', `Commits are collected for ${COMMIT_DIVISIONS.join(', ')} programs only`);
+}
+const classFactLabel = years => `Class of ${years.join(' + ')} commits`;
+function cardFactHtml(p) {
+  const f = S.filters, cy = f.classYear || [], parts = [];
+  if (CARD_SORT_FACTS[f.sort]) parts.push([f.sort === 'commits' && cy.length ? classFactLabel(cy) : sortLabel(f.sort), CARD_SORT_FACTS[f.sort](p)]);
+  if (cy.length && f.sort !== 'commits') parts.push([classFactLabel(cy), cardCommits(p, cy)]);
+  if (!parts.length && p.undergradEnrollment != null) parts.push(['Undergrads', fmtNum(p.undergradEnrollment)]);
+  return `<div class="card-fact">${parts.map(([l, v]) => `<span class="fl">${esc(l)}</span> <span class="fv">${v}</span>`).join(' · ')}</div>`;
+}
+// The season line: this fall's record, and the RPI where it applies and has a rank, named with its season - "RPI 2026
+// (in progress) #3" while the season runs, "RPI 2025 #2" once final (#249: the live rank always says so).
+function cardSummary(p) {
+  const cs = p.currentSeason, year = cs?.year ?? S.index?.season?.current;
+  const rec = cs?.record ? `${year}: ${esc(cs.record)}` : `No ${year ?? ''} results yet`.replace('  ', ' ');
+  const r = has.rowRpi(p) ? rpiOf(p) : null;
+  return r != null ? `${rec} · ${esc(rpiLabel())} #${r}` : rec;
+}
 function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); anything but a string is ignored (map's index)
-  const tc = teamColors(p), cy = S.filters.classYear;
-  const years = Object.entries(p.commitmentsByYear || {});
-  const commits = years.length ? years.map(([y, n]) => cy.includes(y) ? `<b>'${y.slice(2)} ${n}</b>` : `'${y.slice(2)} ${n}`).join(' · ') : '—';
-  const facts = [has.rowRpi(p) ? fact(rpiLabel(), rpiCell(p)) : '', has.rowAcademicRank(p) ? fact('US rank (THE)', rankHtml(p), rankTitle(p)) : '',
-    p.undergradEnrollment != null ? fact('Undergrads', fmtNum(p.undergradEnrollment)) : '',
-    p.tuitionInState != null || p.tuitionOutOfState != null ? fact('Tuition / yr', tuitionHtml(p.tuitionInState, p.tuitionOutOfState, p.state)) : ''];
-  const foot = [has.rowCommits(p) ? `Commits ${commits} ${commitsPartial(p, true)}`.trim() : '', has.rowRoster(p) ? `${p.rosterSize ?? '—'} on roster` : ''].filter(Boolean).join(' · ');
-  const meta = [programLine(p), esc((p.ownership || '').replace(/ (nonprofit|for-profit)$/, ''))].filter(Boolean).join(' · ');
+  const tc = teamColors(p), name = displayName(p);
   const recs = typeof why === 'string';
   return `<div class="card pcard${S.compare.includes(p.slug) ? ' in-compare' : ''}" data-slug="${esc(p.slug)}"${recs ? ' tabindex="-1"' : ''}>
-    <div ${bandAttrs(tc)}><h3>${esc(displayName(p))}<span class="nick">${esc(p.nickname || '')}</span></h3>
-      ${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
-    ${stripeHtml(tc)}
-    <div class="body"><div class="meta">${meta}</div>
-      <div class="card-detail">${facts.some(Boolean) ? `<div class="facts">
-        ${facts[0]}
-        ${facts[1]}
-        ${facts[2]}
-        ${facts[3]}
-      </div>` : ''}${recs ? why : ''}</div></div>
-    <div class="foot"><span>${foot}${p.completeness < 0.4 ? '<i class="dot" title="Profile incomplete"></i>' : ''}${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
-      <span class="foot-actions">${cmpBtn(p.slug)}${starBtn(p.slug)}</span></div>
+    <div class="band"${crestVars(tc)}><span class="crest" aria-hidden="true">${esc(crestText(p))}</span><h3>${esc(name)}<span class="nick">${esc(p.nickname || '')}</span></h3>${p.nationalTitles > 0 ? `<span class="titles">${p.division === 'D1' || !p.division ? `${p.nationalTitles} title${p.nationalTitles === 1 ? '' : 's'}` : titlesPhrase(p.nationalTitles, p.division)}</span>` : ''}</div>
+    <div class="body"><div class="meta">${programLine(p)}</div><div class="card-sum">${cardSummary(p)}</div>
+      <div class="card-detail">${recs ? why : cardFactHtml(p)}</div></div>
+    <div class="foot"><span>${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
+      <span class="foot-actions">${cmpBtn(p.slug, false, name)}${starBtn(p.slug, false, name)}</span></div>
   </div>`;
+}
+/* #465 E: the Compare tray - under the Programs list while one or more programs are picked: "Compare 2 of 4", each
+   program with a remove button named for it, Compare →, and Clear. capCompare's limit of 4 is unchanged. */
+function cmpTrayHtml() {
+  const list = presentSlugs(S.compare);
+  if (!list.length) return '';
+  const items = list.map(slug => { const n = displayName(programBySlug(slug)); return `<li><span>${esc(n)}</span><button type="button" class="cmp-tray-x" data-cmp-rm="${esc(slug)}" aria-label="Remove ${esc(n)} from comparison" title="Remove ${esc(n)}">✕</button></li>`; }).join('');
+  return `<div class="cmp-tray" id="cmpTray" role="region" aria-label="Compare"><span class="cmp-tray-n">Compare ${list.length} of 4</span><ul class="cmp-tray-list">${items}</ul><a class="btn primary cmp-tray-go" href="${compareUrl(S.compare)}">Compare →</a><button type="button" class="btn cmp-tray-clear" id="cmpTrayClear">Clear</button></div>`;
+}
+function cmpTraySync() {
+  const wrap = $('#cmpTrayWrap');
+  if (wrap) wrap.innerHTML = cmpTrayHtml();
+}
+function wireCmpTray(wrap) {
+  if (!wrap) return;
+  wrap.onclick = e => {
+    const x = e.target?.closest?.('[data-cmp-rm]');
+    if (x) {
+      const list = presentSlugs(S.compare), at = list.indexOf(x.dataset.cmpRm);
+      toggleCompare(x.dataset.cmpRm); syncToggles();
+      // focus: the next program's remove button, else the one before, else the list's heading
+      const xs = [...wrap.querySelectorAll('.cmp-tray-x')];
+      (xs[Math.min(at, xs.length - 1)] || $('#app h1'))?.focus();
+      return;
+    }
+    if (e.target?.closest?.('#cmpTrayClear')) { S.compare = []; saveState(); renderSidebar(); syncToggles(); $('#app h1')?.focus(); }
+  };
 }
 function tableHtml(rows, opts = {}) { // opts.ranked: Recommended mode's order, so no column claims the sort (#400)
   const f = S.filters, cy = f.classYear;

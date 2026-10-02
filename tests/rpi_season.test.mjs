@@ -148,8 +148,7 @@ test('an in-progress season is never the finished season: last-season figures st
 test('wherever the live rank is shown, it says "in progress"', async () => {
   const { sb, app } = await ready('live');
   const [alpha] = sb.S.index.programs;
-  assert.ok(byLabel(sb.cardHtml(alpha), 'RPI 2026 (in progress)'), 'card');
-  assert.match(sb.cardHtml(alpha), /RPI 2026 \(in progress\)<\/div><div class="value">#3</);
+  assert.match(sb.cardHtml(alpha), /<div class="card-sum">[^<]*· RPI 2026 \(in progress\) #3<\/div>/, 'card');
   assert.equal(sb.COND_FIELDS.find(d => d.key === 'rpiRank').label, 'RPI 2026 (in progress)', 'condition field');
   assert.equal(sb.COND_FIELDS.find(d => d.key === 'rpiRank').missing, 'no 2026 RPI');
   // sort: by the live rank, and named as such in the list's own subtitle
@@ -170,7 +169,7 @@ test('a finished season carries no "in progress" label anywhere', async () => {
     const { sb, app } = await ready(stage);
     const y = CALENDAR[stage].expect.season;
     const alpha = sb.S.index.programs[0];
-    assert.ok(byLabel(sb.cardHtml(alpha), `RPI ${y}`), `${stage}: card`);
+    assert.match(sb.cardHtml(alpha), new RegExp(`<div class="card-sum">[^<]*· RPI ${y} #\\d+</div>`), `${stage}: card`);
     assert.match(sb.tableHtml(sb.S.index.programs), new RegExp(`RPI is the ${y} season as published by the NCAA`), `${stage}: footnote`);
     await sb.renderProfile('alpha');
     assert.doesNotMatch(app(), /in progress/, `${stage}: profile`);

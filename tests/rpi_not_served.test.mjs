@@ -283,7 +283,8 @@ test('every program shows the RPI it showed when the page read the table, on the
     const shown = before == null ? '—' : '#' + before;
     const card = sandbox.cardHtml(p);
     const tableRow = sandbox.tableHtml([p]);
-    const cardFact = card.match(/RPI \d{4}(?: \(in progress\))?<\/[^>]+>\s*<[^>]+>([^<]*)</);
+    // #465 E: the card's season line reads "2026: 7-2-2 · RPI 2026 (in progress) #13"
+    const cardFact = card.match(/<div class="card-sum">[^<]*· RPI \d{4}(?: \(in progress\))? (#\d+)<\/div>/);
     const rankCell = tableRow.match(/<span class="rank-num[^"]*">([^<]*)<\/span>/);
     // Since issue #115 a program with no RPI shows no RPI fact on its card, and a one-row table for it has
     // no rank column at all - the em dash is only for a program that shares a table with a ranked one.
