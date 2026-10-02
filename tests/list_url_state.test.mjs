@@ -417,8 +417,9 @@ test('static: one writer of list addresses; pushState only from listCommit and t
   const script = HTML.slice(HTML.indexOf('<script>'), HTML.indexOf('</script>'));
   const code = script.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
   const pushSites = [...code.matchAll(/history\.pushState\(|'pushState'/g)].length;
-  assert.equal(pushSites, 2, 'a pushState outside listUrlWrite and trendsCommit');
+  assert.equal(pushSites, 3, 'a pushState outside listUrlWrite, trendsCommit and campsCommit (#465)');
   assert.match(code, /history\.pushState\(null, '', trendsUrl\(sel\)\)/);
+  assert.match(code, /function campsCommit\(next, focus\) \{[^]*?history\.pushState\(null, '', h\)/);
   assert.match(code, /function listUrlWrite\(mode, st = listSnapshot\(\)\) \{[^]*?history\[mode === 'push' \? 'pushState' : 'replaceState'\]\(null, '', h\)/);
   assert.ok(!/history\.replaceState\(null, '', '#\/'\); return go/.test(code), '#/c/ still rewrites to a bare #/');
   assert.equal([...code.matchAll(/listCommit\(\);/g)].length, 16, 'the commit sites changed: pills (4), sort, direction, two conditions, the c key, Cards/Stats (2), table headers (2), Ask applied and undone, Recommended\'s clear');

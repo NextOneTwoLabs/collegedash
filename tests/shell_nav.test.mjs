@@ -233,7 +233,7 @@ test('filters belong to their destination: Home draws no filter rail; Programs k
   }
   // Pipelines (#467, PR G) and ID Camps (PR F) join NO_RAIL in the PRs that stop them reading the Programs filters; hiding
   // the rail before that would leave those pages narrowed by filters nobody can see. Update this list with them.
-  assert.deepEqual([...pg.sb.NO_RAIL], ['home']);
+  assert.deepEqual([...pg.sb.NO_RAIL], ['home', 'camps']);  // ID Camps joined with PR F (#471)
   assert.match(HTML, /body\.no-rail \.sidebar, body\.no-rail \.sidebar-overlay, body\.no-rail \.hamburger \{ display: none; \}/);
 });
 
