@@ -29,8 +29,8 @@ test('A1 combined conflict: a D1 filter and a D3 must-have give no matches; both
   assert.deepEqual(cardSlugs(pg.app()), []);
   assert.match(pg.app(), /No programs can match:<\/b> your filter keeps only D1, and your must-have keeps only D3\./);
   assert.match(pg.app(), /Division: D3 \(must have\)/, 'the preference summary is not visible');
-  pg.sb.renderSidebar();
-  assert.match(pg.sidebar(), /data-division="D1" aria-pressed="true"/, 'the D1 filter is not visible as on');
+  // #465 D: on Programs the Division pills are the toolbar's, above the results
+  assert.match(pg.app(), /data-division="D1" aria-pressed="true"/, 'the D1 filter is not visible as on');
   assert.deepEqual(plain(pg.sb.S.filters.division), ['D1']);
   assert.deepEqual(doc(pg).prefs.division, { mode: 'must', values: ['D3'] });
   assert.match(pg.app(), /data-recs-unfilter="division">Remove the D1 filter<\/button>/, 'removing one is not offered as an explicit action');
@@ -70,7 +70,8 @@ test('A4 no preferences: an all-Skip save keeps ordinary browsing, claims no per
   assert.equal(pg.sb.S.recs.active, false);
   assert.equal(pg.sb.S.recs.status, 'Choose at least one preference to get recommendations.');
   await pg.sb.renderList();
-  assert.ok(!/for you|Recommended/i.test(text(pg.app())), 'a personalization claim');
+  // #465 D: the toolbar's sort select lists Recommended as an option while recs is on - an option is not a claim
+  assert.ok(!/for you|Recommended/i.test(text(pg.app().replace(/<select[\s\S]*?<\/select>/g, ''))), 'a personalization claim');
   assert.equal(pg.store.get('cd.filters'), filters, 'the saved filters changed');
   assert.ok(!pg.store.has('cd.recs'));
 });

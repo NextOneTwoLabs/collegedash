@@ -253,8 +253,9 @@ test('the table header, the sidebar select and the sidebar direction button stay
   assert.match(src, /th\[data-sort\] \.th-sort'\)\.forEach\(b => b\.onclick = async \(\) => \{ const k = b\.closest\('th'\)\.dataset\.sort;\s*setSort\(k\); syncSortControls\(\);/, 'the header click does not go through setSort and syncSortControls');
   // #400 PR 4: the select's one extra option, Recommended, is not a stored sort (it shows the saved preferences);
   // every other value still goes through setSort, then syncSortControls.
-  assert.match(src, /sortSel\.onchange = e => \{ const v = e\.target\.value;\n\s+if \(v === 'recommended'\) return recsShowRecommended\(\);\n[^\n]*\n\s+if \(!\(was && v === f\.sort\)\) setSort\(v\); syncSortControls\(\);/, 'the sidebar select does not go through setSort and syncSortControls');
-  assert.match(src, /dirBtn\.onclick = \(\) => \{ setSort\(f\.sort\); syncSortControls\(\);/, 'the direction button does not go through setSort and syncSortControls');
+  // #465 D: one wiring for the select wherever it is drawn (the toolbar on Programs, the sidebar elsewhere)
+  assert.match(src, /sortSel\.onchange = async e => \{ const v = e\.target\.value;\n\s+if \(v === 'recommended'\) return recsShowRecommended\(\);\n[^\n]*\n\s+if \(!\(was && v === f\.sort\)\) setSort\(v\); syncSortControls\(\);/, 'the sort select does not go through setSort and syncSortControls');
+  assert.match(src, /dirBtn\.onclick = async \(\) => \{ setSort\(f\.sort\); syncSortControls\(\);/, 'the direction button does not go through setSort and syncSortControls');  // #465 D: awaits the redraw, then focus back
 });
 
 test('syncSortControls updates the sidebar select and direction button in place, without rebuilding the sidebar', async () => {

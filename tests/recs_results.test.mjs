@@ -57,7 +57,7 @@ test('no saved preferences, or the switch off: no paused line, and the sort has 
   const none = await ready({ status: ON });
   await none.sb.renderList();
   assert.ok(!/Personalization paused|recs-/.test(none.app()));
-  assert.match(none.sidebar(), /<option value="recommended" >Recommended<\/option>/);
+  assert.match(none.app(), /<option value="recommended" >Recommended<\/option>/);  // #465 D: the sort is the toolbar's
   const off = await ready({ status: { local: false }, storage: stored(PREFS) });
   await off.sb.renderList();
   assert.ok(!/Personalization paused|Recommended|recs-/.test(off.app() + off.sidebar()));
@@ -80,8 +80,7 @@ test('Show matches ranks: the fit file is fetched once, then the list is Recomme
   assert.ok(!html.includes('id="recsCount"'), 'the count is redrawn inside #app');
   assert.match(html, /id="recsMore">Show 25 more<\/button>/);
   assert.equal(pg.$('#sortSelect').value, 'recommended', 'the sort select does not show Recommended');
-  pg.sb.renderSidebar();
-  assert.match(pg.sidebar(), /<option value="recommended" selected>Recommended<\/option>/);
+  assert.match(pg.app(), /<option value="recommended" selected>Recommended<\/option>/);  // #465 D: the toolbar's sort
   await pg.sb.renderList();
   assert.equal(pg.requests.filter((u) => u === '/api/v1/fit').length, 1, 'the fit file was fetched again');
 });

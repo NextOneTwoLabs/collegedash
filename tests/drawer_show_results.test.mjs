@@ -158,7 +158,8 @@ test('tapping it closes the drawer, tells the toggle, and hands focus back to th
   assert.ok(!$('#sidebar').classList.contains('open'), 'the drawer is still open');
   assert.ok(!$('#sidebarOverlay').classList.contains('visible'), 'the overlay is still showing');
   assert.equal($('#sidebarToggle').getAttribute('aria-expanded'), 'false', 'the toggle still says expanded');
-  assert.equal(focused, '#sidebarToggle', 'focus did not go back to the toggle');
+  // #465 D: on Programs the drawer is More filters, so focus goes back to its button (the toggle is hidden there)
+  assert.equal(focused, '#moreFilters', 'focus did not go back to More filters');
   assert.equal(sb.location.hash, '#/programs', 'the list view navigated away');
 });
 
@@ -176,6 +177,7 @@ test('from a program page it goes to the list; on the camp view it names the vie
 });
 
 test('only the programs tab carries it, and only phones draw it', () => {
+  sb.location.hash = '#/faq';  // #465 D: the tabs are the sidebar's off Programs; on Programs it is More filters
   for (const tab of ['shortlist', 'compare']) {
     S.sidebarTab = tab;
     sb.renderSidebar();

@@ -266,9 +266,11 @@ test('typing in the header box filters the list through the shared search; the s
   assert.ok(!/id="q"|Find a program|id="qStatus"|id="askSlot"/.test(pg.$('#sidebar').innerHTML), 'the sidebar still has a search box');
 });
 
+// #465 D: on Programs the sidebar is the More filters panel (no tabs, Sort in the toolbar); every other page keeps the
+// Browse rail this test pins, so it runs on one of them.
 test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, no search, no repeated heading', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/programs';
+  pg.sb.location.hash = '#/faq';
   pg.sb.S.sidebarTab = 'programs';
   pg.sb.renderSidebar();
   const side = pg.$('#sidebar').innerHTML;

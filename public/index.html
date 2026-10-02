@@ -642,6 +642,46 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
 :root { --safe-top: env(safe-area-inset-top, 0px); }
 .header { padding-top: var(--safe-top); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 
+/* ===== PROGRAMS TOOLBAR AND MORE FILTERS (#465 D) ===== */
+/* The default controls sit above the results; everything else is one click away in More filters. On Programs the
+   sidebar IS the More filters panel: closed until its button opens it - a non-modal disclosure beside the results on
+   desktop, a modal sheet on phones (the rest of the page inert while it is open). */
+.ptoolbar { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; padding: 0 0 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+.ptoolbar .pill-row { margin: 0; }
+.more-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; }
+.more-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent-text); background: var(--accent-surface); }
+.pt-count { margin-left: auto; color: var(--text-secondary); font-weight: 600; font-size: 13px; white-space: nowrap; }
+.pt-sort { display: flex; align-items: center; gap: 6px; }
+.pt-sort .season-select { flex: none; width: auto; }
+.pchips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: -4px 0 12px; }
+.pchip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 4px 3px 10px; border-radius: 999px; background: var(--accent-surface); color: var(--accent-text); font-size: 12px; font-weight: 700; }
+.pchip button { border: 0; background: none; color: inherit; font-weight: 800; min-width: 24px; min-height: 24px; border-radius: 50%; }
+.pchip button:hover { background: var(--accent-glow); }
+.pchips-clear { border: 0; background: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; }
+.mf-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 16px 10px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.mf-head h2 { font-size: 16px; }
+.mf-close { border: 1px solid transparent; background: none; border-radius: 8px; min-width: 36px; min-height: 36px; color: var(--text-secondary); }
+.mf-close:hover { background: var(--bg-surface-alt); color: var(--text-primary); }
+body.rail-panel .hamburger { display: none; }
+/* The Conference control in More filters (#465 D): chips for what is selected, a text box that narrows the list, and the
+   list itself - every conference of the divisions on screen, grouped by division, each with its count. */
+.mf-conf { padding: 0 16px 8px; }
+.conf-chips { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.conf-chip { border: 1px solid var(--accent); background: var(--accent-surface); color: var(--accent-text); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; min-height: 28px; }
+.mf-conf-label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+.mf-conf .cond-input { width: 100%; }
+.mf-conf-list { margin-top: 6px; border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; background: var(--bg-surface); }
+.mf-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); padding: 8px 10px 4px; }
+.mf-opt { display: flex; align-items: center; gap: 8px; padding: 7px 10px; min-height: 36px; cursor: pointer; }
+.mf-opt::before { content: ''; width: 14px; height: 14px; border: 1.5px solid var(--text-secondary); border-radius: 4px; flex: none; }
+.mf-opt[aria-selected="true"]::before { content: '✓'; background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); font-size: 10px; line-height: 12px; text-align: center; }
+.mf-opt.active { background: var(--accent-surface); outline: 2px solid var(--accent-text); outline-offset: -2px; }
+.mf-opt .n { margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.mf-opt.pill-zero { color: var(--text-secondary); }
+.mf-nomatch { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); }
+@media (max-width: 768px) { .mf-opt { min-height: 44px; } }
+@media (min-width: 769px) { body.rail-panel:not(.more-open) .sidebar { display: none; } }
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
 @media (max-width: 1024px) { .conf-layout { grid-template-columns: 1fr; } .glance-panel { order: -1; position: static; } }
@@ -1284,9 +1324,13 @@ function toggleSidebar() {
   btn.setAttribute('aria-expanded', String(!collapsed));
   lsSet('cd.sidebar', collapsed ? 'collapsed' : 'open');
 }
-function closeDrawer() { if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); } }
+function closeDrawer() {
+  if (!isPhone()) return;
+  if (isProgramsView()) return closeMoreFilters({ focus: false });  // #465 D: the sheet; its caller places focus
+  $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false');
+}
 $('#sidebarToggle').onclick = toggleSidebar;
-$('#sidebarOverlay').onclick = toggleSidebar;
+$('#sidebarOverlay').onclick = () => (isProgramsView() ? closeMoreFilters() : toggleSidebar());
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- data ---------- */
@@ -1805,6 +1849,7 @@ const confPillName = (d, c, n) => `${confShared(c) ? `${c} (${d})` : c}, ${progr
 // Typing a search changes the counts without rebuilding the drawer (focus stays in the search box, as for #18).
 function syncConfCounts() {
   const sb = $('#sidebar'); if (!sb || !S.index) return;
+  if (isProgramsView()) renderConfCombo();  // #465 D: the Conference control's counts follow the search too
   const counts = confCounts();
   sb.querySelectorAll('[data-conf-div]').forEach(b => {
     const n = counts.get(confKey(b.dataset.confDiv, b.dataset.conf)) || 0;
@@ -1859,25 +1904,37 @@ const SORTS = [['name', 'Name'], ['rpi', 'RPI'], ['admit', 'Admission rate'], ['
 // sidebar select lists the active one as an extra option while it is active, and the two never disagree.
 const sortLabel = k => k === 'recommended' ? 'Recommended' : k === 'rpi' ? rpiLabel() : SORTS.find(s => s[0] === k)?.[1] ?? SORT_SPECS[k]?.label();
 const sortOptions = () => (S.recs?.on ? ['recommended'] : []).concat(SORTS.map(s => s[0])).concat(SORTS.some(s => s[0] === S.filters.sort) || !SORT_SPECS[S.filters.sort] ? [] : [S.filters.sort]);
+// #465 D: the Division and Region pills and the sort block, drawn in the sidebar on every other view and in Programs'
+// toolbar there - one markup, so both read and write exactly what they did.
+function divisionPillsHtml() {
+  const f = S.filters, divs = S.index.divisions || [];
+  if (divs.length <= 1) return '';
+  return `<div class="pill-row" role="group" aria-label="Division"><button ${pillAttrs('division', '', !f.division.length)}>All</button>${divs.map(d => {
+    const n = S.index.byDiv[d] || 0;
+    return `<button ${pillAttrs('division', d, f.division.includes(d))} title="${esc(divisionName(d))} · ${programsPhrase(n)}" aria-label="${esc(`${d} (${divisionName(d)}), ${programsPhrase(n)}`)}">${esc(d)}<span class="pill-sub">${n}</span></button>`;
+  }).join('')}</div>`;
+}
+const regionPillsHtml = () => `<div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !S.filters.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, S.filters.region.includes(r))}>${esc(r)}</button>`).join('')}</div>`;
+const sortSelectHtml = () => `<select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${(k === 'recommended' ? S.recs?.active : !S.recs?.active && S.filters.sort === k) ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}`;
+// Programs is the one view whose sidebar is the More filters panel (#465 D).
+const isProgramsView = () => ['list', 'c'].includes(currentView());
 function renderSidebar() {
   const sb = $('#sidebar'); if (!S.index) return;
+  const panel = isProgramsView();
   const f = S.filters, tab = S.sidebarTab;
   const nFav = presentSlugs(S.favorites).length, nCmp = presentSlugs(S.compare).length;  // #111: live programs only
   // #434 decision 3: the tab only browses now (sort and filters); search is the header box. The key stays `programs`.
   const tabs = [['programs', 'Browse'], ['shortlist', `★ Shortlist${nFav ? ` (${nFav})` : ''}`], ['compare', `⇄ Compare${nCmp ? ` (${nCmp})` : ''}`]];
   let body = '';
-  if (tab === 'programs') {
+  if (tab === 'programs' || panel) {
     const years = S.index.season?.gradYears || [];
     /* Division. The row exists only when the loaded data actually holds more than one division - with
        today's D1-only index it is a control with a single option, which is nothing but chrome, the same
        reasoning that omits the sort select and the class pills in the camp view. It appears by itself
        the day D3 is published and again when D2 is, because `divisions` is derived in loadIndex. */
-    const divs = S.index.divisions || [];
-    const divisionBlock = divs.length > 1 ? `<div class="browse-label">Division</div>
-      <div class="pill-row" role="group" aria-label="Division"><button ${pillAttrs('division', '', !f.division.length)}>All</button>${divs.map(d => {
-        const n = S.index.byDiv[d] || 0;
-        return `<button ${pillAttrs('division', d, f.division.includes(d))} title="${esc(divisionName(d))} · ${programsPhrase(n)}" aria-label="${esc(`${d} (${divisionName(d)}), ${programsPhrase(n)}`)}">${esc(d)}<span class="pill-sub">${n}</span></button>`;
-      }).join('')}</div>` : '';
+    const divisionPills = divisionPillsHtml();
+    const divisionBlock = divisionPills ? `<div class="browse-label">Division</div>
+      ${divisionPills}` : '';
     // Conference, grouped under the divisions on screen. One group -> the flat row this page has always had.
     const groups = conferenceGroups();
     const counts = confCounts();
@@ -1912,16 +1969,18 @@ function renderSidebar() {
         <div class="cond-error" id="condError" role="alert">${esc(cf.error || '')}</div>
         <div class="cond-actions"><button type="submit" class="btn primary" id="condSubmit">Add condition</button><button type="button" class="btn" id="condCancel">Cancel</button></div>
       </form>` : ''}`;
+    // #465 D: on Programs, Sort, Division and Region are the toolbar's; this panel is "More filters".
     body = `
-      ${onCamps ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label><select class="season-select" id="sortSelect">${sortOptions().map(k => `<option value="${k}" ${(k === 'recommended' ? S.recs?.active : !S.recs?.active && f.sort === k) ? 'selected' : ''}>${esc(sortLabel(k))}</option>`).join('')}</select>${sortDirBtn()}</div>`}
-      ${divisionBlock}
+      ${panel ? `<div class="mf-head"><h2 id="mfHeading" tabindex="-1">More filters</h2><button type="button" class="mf-close" id="mfClose" aria-label="Close more filters">✕</button></div>` : ''}
+      ${onCamps || panel ? '' : `<div class="browse-row"><label class="browse-label" for="sortSelect">Sort</label>${sortSelectHtml()}</div>`}
+      ${panel ? '' : divisionBlock}
       ${condBlock}
-      <div class="browse-label">Region</div>
-      <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
+      ${panel ? '' : `<div class="browse-label">Region</div>
+      ${regionPillsHtml()}`}
       ${onCamps ? '' : `<div class="browse-label">Highlight class</div>
       <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))} aria-label="'${String(y).slice(2)}, class of ${esc(String(y))}">'${String(y).slice(2)}</button>`).join('')}</div>`}
-      <div class="browse-label">Conference</div>
-      ${confBlock}
+      ${panel ? confComboHtml() : `<div class="browse-label">Conference</div>
+      ${confBlock}`}
       <div class="drawer-show"><button type="button" class="btn primary" id="showResults">${esc(showResultsLabel())}</button></div>`;
   } else if (tab === 'shortlist') {
     const rows = shortlistRows();
@@ -1936,7 +1995,8 @@ function renderSidebar() {
          <div class="side-actions"><a class="btn primary" href="${compareUrl(S.compare)}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
       : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
   }
-  sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
+  sb.setAttribute('aria-label', panel ? 'More filters' : 'Navigation');
+  sb.innerHTML = `${panel ? '' : `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>`}
     ${body}
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
@@ -1945,7 +2005,7 @@ function renderSidebar() {
   // <body>. pillPressed puts it back on the same pill - found again by its data-* key, a conference pill by its division
   // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does).
   const pillPressed = (attr, value, div) => {
-    if (isPhone()) { $('#sidebarToggle')?.focus(); return; }
+    if (isPhone()) { $(isProgramsView() ? '#moreFilters' : '#sidebarToggle')?.focus(); return; }
     const q = v => String(v).replace(/["\\]/g, '\\$&');
     $('#sidebar')?.querySelector(`[data-${attr}="${q(value)}"]${div ? `[data-conf-div="${q(div)}"]` : ''}`)?.focus();
   };
@@ -1956,19 +2016,203 @@ function renderSidebar() {
   sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('division', v); });
   sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('class', v); });
   wireConditions(sb);
+  const mfc = $('#mfClose'); if (mfc) mfc.onclick = () => closeMoreFilters();
+  if (panel) wireConfCombo();
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   // #400 PR 4: Recommended is not a stored sort. Choosing it shows the saved preferences; choosing any other sort pauses
   // them, and picking the sort that was already underneath doesn't flip its direction.
-  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = e => { const v = e.target.value;
-    if (v === 'recommended') return recsShowRecommended();
-    const was = S.recs?.active; if (S.recs) recsPause();
-    if (!(was && v === f.sort)) setSort(v); syncSortControls(); listCommit(); rerenderForFilters(); };
-  const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = () => { setSort(f.sort); syncSortControls(); listCommit(); rerenderForFilters(); };
+  if (!panel) wireSortControls();
   const cs = $('#cmpShortlist'); if (cs) cs.onclick = () => { S.compare = shortlistRows().slice(0, 4).map(p => p.slug); saveState(); location.hash = compareUrl(S.compare); };
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   updateSearchStatus();  // the header box's count follows the filters just changed (#23)
 }
+function wireSortControls() {
+  const f = S.filters;
+  const back = id => { if (isProgramsView()) $(id)?.focus(); };
+  const sortSel = $('#sortSelect'); if (sortSel) sortSel.onchange = async e => { const v = e.target.value;
+    if (v === 'recommended') return recsShowRecommended();
+    const was = S.recs?.active; if (S.recs) recsPause();
+    if (!(was && v === f.sort)) setSort(v); syncSortControls(); listCommit(); await rerenderForFilters(); back('#sortSelect'); };
+  const dirBtn = $('#sortDir'); if (dirBtn) dirBtn.onclick = async () => { setSort(f.sort); syncSortControls(); listCommit(); await rerenderForFilters(); back('#sortDir'); };
+}
+/* ---------- Programs' toolbar and More filters (#465 D) ----------
+   The default controls (owner-approved plan, #465): Division, Region, More filters (with how many of its filters are on),
+   the result count, Sort with its direction; Cards / Stats stays the page header's switch. What More filters holds -
+   conditions, highlight class, conference - shows as removable chips under the toolbar while it is on. Compare (n) bridges
+   to the comparison until PR E's tray replaces it. */
+function moreCount() { const f = S.filters; return f.conf.length + f.cond.length + f.classYear.length; }
+const moreIsOpen = () => document.body.classList.contains('more-open') || (isPhone() && $('#sidebar')?.classList.contains('open'));
+function programsToolbar(count) {
+  const n = moreCount(), nCmp = presentSlugs(S.compare).length;
+  return `<div class="ptoolbar" role="group" aria-label="Filter and sort programs">${divisionPillsHtml()}${regionPillsHtml()}`
+    + `<button type="button" class="btn more-btn" id="moreFilters" aria-expanded="${moreIsOpen()}" aria-controls="sidebar">More filters${n ? `<span class="nav-count">${n}</span>` : ''}</button>`
+    + `<span class="pt-count" id="ptCount">${esc(count)}</span>`
+    + `<div class="pt-sort"><label class="sr-only" for="sortSelect">Sort</label>${sortSelectHtml()}</div>`
+    + (nCmp ? `<a class="btn" href="${compareUrl(S.compare)}">⇄ Compare (${nCmp})</a>` : '') + `</div>${appliedChipsHtml()}`;
+}
+function appliedChipsHtml() {
+  const f = S.filters;
+  const chip = (label, attr, val) => `<span class="pchip">${esc(label)}<button type="button" data-${attr}="${esc(val)}" aria-label="Remove ${esc(label)}">✕</button></span>`;
+  const confChips = f.conf.map((k, i) => chip(confLabel(k), 'chip-conf', String(i)));  // an index, never the raw key (#431)
+  const chips = [...confChips, ...f.cond.map((c, i) => chip(condText(c), 'chip-cond', String(i))),
+    ...f.classYear.map(y => chip(`Class of ${y} highlighted`, 'chip-class', y))];
+  return chips.length ? `<div class="pchips" role="group" aria-label="Filters from More filters">${chips.join('')}<button type="button" class="pchips-clear" id="chipsClear">Clear these</button></div>` : '';
+}
+// After a toolbar change the list redraws the toolbar, so focus goes back to the same control by its data-* key - the
+// toolbar's version of #455's pillPressed.
+function toolbarRefocus(sel) { $('#app')?.querySelector(sel)?.focus(); }
+function wireToolbar(app) {
+  const f = S.filters;
+  const q = v => String(v).replace(/["\\]/g, '\\$&');
+  const commit = async sel => { saveState(); listCommit(); renderSidebar(); await renderList(); toolbarRefocus(sel); };
+  app.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); commit(`[data-division="${q(v)}"]`); });
+  app.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); commit(`[data-region="${q(v)}"]`); });
+  // A removed chip hands focus to the chip after it, else the one before, else More filters.
+  const chipGone = (attr, val) => {
+    const all = [...app.querySelectorAll('.pchip button')], i = all.findIndex(b => b.getAttribute(attr) === val);
+    return all[i + 1] ? `.pchip button[${attr}="${q(all[i + 1].getAttribute(attr))}"]` : i > 0 ? `.pchip button[${attr}="${q(all[i - 1].getAttribute(attr))}"]` : '#moreFilters';
+  };
+  app.querySelectorAll('[data-chip-conf]').forEach(b => b.onclick = () => { const i = Number(b.dataset.chipConf), next = chipGone('data-chip-conf', b.dataset.chipConf); if (f.conf[i] == null) return; f.conf.splice(i, 1); commit(next.replace(/\[data-chip-conf="(\d+)"\]/, (m, j) => `[data-chip-conf="${Number(j) > i ? Number(j) - 1 : j}"]`)); });
+  app.querySelectorAll('[data-chip-cond]').forEach(b => b.onclick = () => { const i = Number(b.dataset.chipCond); if (removeCond(i)) commit('#moreFilters'); });
+  app.querySelectorAll('[data-chip-class]').forEach(b => b.onclick = () => { const y = b.dataset.chipClass, next = chipGone('data-chip-class', y); toggleIn(f.classYear, y); commit(next); });
+  const clr = app.querySelector('#chipsClear'); if (clr) clr.onclick = () => { f.conf = []; f.cond = []; f.classYear = []; S.condForm = null; commit('#moreFilters'); };
+  const more = $('#moreFilters'); if (more) more.onclick = () => (moreIsOpen() ? closeMoreFilters() : openMoreFilters());
+  wireSortControls();
+}
+// Desktop: a non-modal disclosure - the button's aria-expanded, focus to the panel's heading on open, Escape or the ✕
+// closes it and focus goes back to the button. Phones: the drawer as a modal sheet - aria-modal, and the page, header
+// and bottom bar inert behind it, as the #400 sheet does (Huatuo's condition 4 on the #465 D note).
+function moreSheetState(open) {
+  const sb = $('#sidebar'); if (!sb) return;
+  const modal = !!(open && isPhone());
+  if (modal) { sb.setAttribute('role', 'dialog'); sb.setAttribute('aria-modal', 'true'); sb.setAttribute('aria-labelledby', 'mfHeading'); }
+  else { sb.removeAttribute?.('role'); sb.removeAttribute?.('aria-modal'); sb.removeAttribute?.('aria-labelledby'); }
+  for (const sel of ['#main', '.header', '.bottom-nav']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+}
+function openMoreFilters() {
+  if (isPhone()) { $('#sidebar').classList.add('open'); $('#sidebarOverlay').classList.add('visible'); moreSheetState(true); }
+  else document.body.classList.add('more-open');
+  $('#moreFilters')?.setAttribute('aria-expanded', 'true');
+  $('#mfHeading')?.focus();
+}
+function closeMoreFilters({ focus = true } = {}) {
+  const was = moreIsOpen();
+  document.body.classList.remove('more-open');
+  if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); }
+  moreSheetState(false);
+  $('#moreFilters')?.setAttribute('aria-expanded', 'false');
+  $('#sidebarToggle')?.setAttribute('aria-expanded', 'false');  // the drawer's own toggle (hidden on Programs) agrees
+  if (focus && was) $('#moreFilters')?.focus();
+}
+$('#sidebar').addEventListener('keydown', e => { if (e.key === 'Escape' && isProgramsView() && moreIsOpen() && !e.defaultPrevented) { e.preventDefault(); closeMoreFilters(); } });
+
+/* ---------- the Conference control in More filters (#465 D) ----------
+   A multi-select combobox, per the ARIA note Huatuo approved on #465 (with his four conditions):
+   - the text box is the combobox (aria-autocomplete="list", aria-controls the listbox, aria-activedescendant the active
+     option); the listbox is aria-multiselectable with one labelled group per division on screen; each option's name is
+     #444's confPillName - what it shows, the division where the name is shared, the count with the other filters (#16:
+     a 0 stays, drawn quieter);
+   - values go through #425's toggleConf (a bare saved name lights every option it covers and expands only on a toggle)
+     and are pruned by division exactly as the pills were; #14's conf= is unchanged;
+   - keys as #q's: Down/Up open, then move (wrapping); Enter toggles and keeps the list open; Space types; Escape closes,
+     then clears the text; Tab leaves; Backspace in an empty box moves to the last chip without removing it;
+   - option ids are stable and unique across redraws: a reversible encoding of the keyed value (condition 3), so the
+     active option survives a toggle; after a toggle the active descendant is cleared and set again on the next frame,
+     so a reader that does not announce the aria-selected flip re-reads the option with its new state (condition 1);
+   - "No conference matches" is a plain line OUTSIDE the listbox, which then holds nothing and is collapsed (condition 2);
+   - no live region: the selection is read from the option, the results from Show N programs and the toolbar count. */
+const CONFQ = { text: '', open: false, active: -1, items: [] };
+// [A-Za-z0-9_] only, '_' only ever as an escape: encodeURIComponent, then its few unescaped punctuation marks escaped
+// too, then '%' -> '_'. confOptKey() reverses it.
+const confOptId = key => 'mfConf-' + encodeURIComponent(key).replace(/[!'()*._~-]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase()).replace(/%/g, '_');
+const confOptKey = id => decodeURIComponent(id.replace(/^mfConf-/, '').replace(/_/g, '%'));
+function confComboHtml() {
+  return `<div class="mf-conf" role="group" aria-labelledby="mfConfLabel"><div class="browse-label" id="mfConfLabel">Conference</div>
+    <ul class="conf-chips" id="mfConfChips" aria-label="Selected conferences" hidden></ul>
+    <label class="mf-conf-label" for="mfConfInput">Find a conference</label>
+    <input class="cond-input" id="mfConfInput" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="mfConfList" aria-describedby="mfConfHint" autocomplete="off" value="${esc(CONFQ.text)}">
+    <span class="sr-only" id="mfConfHint">Type to narrow. Down arrow for the list, Enter to add or remove.</span>
+    <div class="mf-conf-list" id="mfConfList" role="listbox" aria-multiselectable="true" aria-label="Conferences" hidden></div>
+    <p class="mf-nomatch" id="mfConfNone" hidden></p></div>`;
+}
+function confComboItems() {
+  const t = normText(CONFQ.text), counts = confCounts(), f = S.filters;
+  return conferenceGroups().map(([d, list]) => [d, list.map(([c]) => c).filter(c => !t || normText(c).includes(t))
+    .map(c => ({ d, c, key: confKeyOf(d, c), n: counts.get(confKey(d, c)) || 0, on: confPicked(f.conf, d, c) }))]).filter(([, l]) => l.length);
+}
+function renderConfCombo() {
+  const input = $('#mfConfInput'), list = $('#mfConfList'), none = $('#mfConfNone'), chips = $('#mfConfChips');
+  if (!input || !list || !S.index) return;
+  const f = S.filters;
+  if (chips) {
+    chips.innerHTML = f.conf.map((k, i) => `<li><button type="button" class="conf-chip" data-conf-chip="${i}" aria-label="Remove ${esc(confLabel(k))}">${esc(confLabel(k))} <span aria-hidden="true">✕</span></button></li>`).join('');
+    chips.hidden = !f.conf.length;
+    chips.querySelectorAll('[data-conf-chip]').forEach(b => b.onclick = () => confChipRemove(Number(b.dataset.confChip)));
+  }
+  const groups = confComboItems();
+  CONFQ.items = groups.flatMap(([, l]) => l);
+  if (CONFQ.active >= CONFQ.items.length) CONFQ.active = CONFQ.items.length - 1;
+  let i = 0;
+  list.innerHTML = groups.map(([d, l]) => `<div role="group" aria-label="${esc(divisionName(d))}"><div class="mf-group-label" aria-hidden="true">${esc(divisionName(d))}</div>`
+    + l.map(it => { const k = i++; return `<div role="option" id="${confOptId(it.key)}" class="mf-opt${it.n ? '' : ' pill-zero'}${k === CONFQ.active ? ' active' : ''}" aria-selected="${it.on}" data-i="${k}" aria-label="${esc(confPillName(it.d, it.c, it.n))}">${esc(it.c)} ${divisionTag(it.d)}<span class="n">${it.n}</span></div>`; }).join('') + '</div>').join('');
+  const open = CONFQ.open && CONFQ.items.length > 0;
+  list.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
+  const noMatch = CONFQ.open && !CONFQ.items.length && !!CONFQ.text.trim();
+  if (none) { none.hidden = !noMatch; none.textContent = noMatch ? `No conference matches “${CONFQ.text.trim()}”` : ''; }
+  if (open && CONFQ.active >= 0) input.setAttribute('aria-activedescendant', confOptId(CONFQ.items[CONFQ.active].key));
+  else input.removeAttribute?.('aria-activedescendant');
+}
+function confComboToggle(i) {
+  const it = CONFQ.items[i]; if (!it) return;
+  const input = $('#mfConfInput');
+  toggleConf(it.d, it.c);
+  saveState(); listCommit();
+  CONFQ.active = i; CONFQ.open = true;
+  renderConfCombo();
+  // Huatuo's condition 1: re-point the active descendant so the option is re-read with its new state
+  const id = confOptId(it.key);
+  if (input) { input.removeAttribute?.('aria-activedescendant'); setTimeout(() => { if (CONFQ.open && $('#mfConfInput') === input) input.setAttribute('aria-activedescendant', id); }, 0); }
+  syncShowResults(); renderList();
+}
+function confChipRemove(i) {
+  const f = S.filters; if (f.conf[i] == null) return;
+  f.conf.splice(i, 1); saveState(); listCommit();
+  renderConfCombo(); syncShowResults(); renderList();
+  // #455: focus to the chip that took its place, else the one before, else the text box
+  const chips = $('#mfConfChips')?.querySelectorAll?.('[data-conf-chip]') || [];
+  const next = f.conf.length ? (i < f.conf.length ? i : f.conf.length - 1) : -1;
+  if (next >= 0) ($('#mfConfChips').querySelector(`[data-conf-chip="${next}"]`) || chips[next])?.focus();
+  else $('#mfConfInput')?.focus();
+}
+function wireConfCombo() {
+  const input = $('#mfConfInput'), list = $('#mfConfList'); if (!input || !list) return;
+  renderConfCombo();
+  input.addEventListener('input', e => { CONFQ.text = e.target.value; CONFQ.open = true; CONFQ.active = -1; renderConfCombo(); });
+  input.addEventListener('keydown', e => {
+    const n = CONFQ.items.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!CONFQ.open) { CONFQ.open = true; renderConfCombo(); CONFQ.active = CONFQ.items.length ? (e.key === 'ArrowDown' ? 0 : CONFQ.items.length - 1) : -1; }
+      else if (n) CONFQ.active = e.key === 'ArrowDown' ? (CONFQ.active + 1) % n : (CONFQ.active <= 0 ? n - 1 : CONFQ.active - 1);
+      return renderConfCombo();
+    }
+    if (e.key === 'Enter') { if (CONFQ.open && CONFQ.active >= 0) { e.preventDefault(); confComboToggle(CONFQ.active); } return; }
+    if (e.key === 'Escape') {
+      if (CONFQ.open) { e.preventDefault(); e.stopPropagation(); CONFQ.open = false; CONFQ.active = -1; return renderConfCombo(); }
+      if (CONFQ.text) { e.preventDefault(); e.stopPropagation(); CONFQ.text = ''; input.value = ''; return renderConfCombo(); }
+      return;  // nothing left to undo here: the panel's own Escape closes it
+    }
+    if (e.key === 'Tab') { if (CONFQ.open) { CONFQ.open = false; CONFQ.active = -1; renderConfCombo(); } return; }
+    if (e.key === 'Backspace' && !input.value && S.filters.conf.length) {
+      e.preventDefault(); $('#mfConfChips')?.querySelector(`[data-conf-chip="${S.filters.conf.length - 1}"]`)?.focus();
+    }
+  });
+  list.addEventListener('mousedown', e => e.preventDefault());  // the box keeps focus while an option is pressed
+  list.addEventListener('click', e => { const o = e.target.closest?.('[role="option"]'); if (o) confComboToggle(Number(o.dataset.i)); });
+}
+
 /* The condition controls. Every handler ends the way a pill click does (save, rebuild the sidebar,
    re-render the view in place) and then puts focus back somewhere sensible, because rebuilding the
    sidebar would otherwise drop a keyboard user's focus on <body>. The drawer is left open while the form
@@ -1998,7 +2242,7 @@ function wireConditions(sb) {
   $('#condOp').onchange = e => { st.op = e.target.value; };
   $('#condValue').oninput = e => { st.text = e.target.value; };
 }
-function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
+function rerenderForFilters() { const v = currentView(); if (v === 'camps') return renderCamps(); if (v === 'trends') return renderTrendsRoute(); if (v === 'list' || v === 'c') return renderList(); }  // returns the redraw (#465 D waits on it to put focus back)
 /* #18: the phone drawer covers the page, so its foot carries a button that closes it on what the filters and the
    search select. Pills and conditions already close it; this is for a reader who typed a search or wants to look
    before choosing. It counts what the Program View would list (filteredPrograms: search, pills and conditions);
@@ -2019,7 +2263,7 @@ function showResults() {
   const v = currentView();
   closeDrawer();
   if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/programs';  // from Home, a profile etc., to the list
-  $('#sidebarToggle')?.focus();
+  $(isProgramsView() ? '#moreFilters' : '#sidebarToggle')?.focus();
 }
 // #465 (owner's D1): a bare #/ (or no hash) is Home. Programs is #/programs and keeps the internal view name 'list', so
 // every check of 'list' still means the program list; #14's #/?… and the old #/list are Programs too (route() rewrites
@@ -2465,7 +2709,7 @@ function recsSheetState() {
   const modal = !!(S.recs.on && S.recs.open && isPhone());
   const el = $('#recsPanel');
   if (el && S.recs.open) el.setAttribute('aria-modal', String(modal));
-  for (const sel of ['#main', '#sidebar', '.header']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+  for (const sel of ['#main', '#sidebar', '.header', '.bottom-nav']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
 }
 window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
 function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
@@ -2764,10 +3008,11 @@ function renderRecsList(idx) {
   const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
   const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
   $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
-    + `<div class="content-body">${askBanner()}${bar}${body}</div>`;
+    + `<div class="content-body">${programsToolbar(recsCount(conf.length, 'confirmed match', 'confirmed matches'))}${askBanner()}${bar}${body}</div>`;
   recsAnnounce(`Showing ${shown.length} of ${conf.length} confirmed matches`);
   syncShowResults();
   const app = $('#app');
+  wireToolbar(app);
   wireAskBanner();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a, details')) return; location.hash = `#/p/${c.dataset.slug}`; }));
@@ -3320,6 +3565,9 @@ function syncNav(view) {
   const cur = view === 'c' ? 'list' : view;
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute?.('aria-current'); });
   document.body.classList.toggle('no-rail', NO_RAIL.has(view));
+  const programs = view === 'list' || view === 'c';
+  if (!programs && moreIsOpen()) closeMoreFilters({ focus: false });  // #465 D: More filters belongs to Programs
+  document.body.classList.toggle('rail-panel', programs);
   syncNavCounts();
 }
 function syncNavCounts() {
@@ -3665,8 +3913,10 @@ async function renderList() {
   const crumbs = f.conf.length ? [{ label: 'Home', href: '#/' }, { label: 'Programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'Home', href: '#/' }, { label: 'Programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs })
+    + `<div class="content-body">${programsToolbar(`${rows.length.toLocaleString('en-US')} program${rows.length === 1 ? '' : 's'}`)}${askBanner()}${recsPausedLine()}${body}</div>`;
   const app = $('#app');
+  wireToolbar(app);
   wireAskBanner();
   wireRecsPaused();
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });

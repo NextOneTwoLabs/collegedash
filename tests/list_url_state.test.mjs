@@ -139,12 +139,25 @@ const settle = (ms = 60) => new Promise(r => setTimeout(r, ms));
 async function open(opts) { const pg = loadPage(opts); await settle(250); return pg; }
 const pushes = pg => pg.writes.filter(w => w.kind === 'push').length;
 function pill(pg, attr, value, div) {
-  const nodes = pg.$('#sidebar')._q[`[data-${attr}]`] || [];
+  // #465 D: on Programs, Division and Region are the toolbar's (in #app); the rest stay in the sidebar (More filters)
+  const nodes = [...(pg.$('#sidebar')._q[`[data-${attr}]`] || []), ...(pg.$('#app')._q[`[data-${attr}]`] || [])];
   const key = camel(attr), n = nodes.find(x => x.dataset[key] === value && (div === undefined || x.dataset.confDiv === div));
-  assert.ok(n, `no ${attr} pill "${value}" in the sidebar`);
+  assert.ok(n, `no ${attr} pill "${value}" in the sidebar or the toolbar`);
   return n;
 }
 async function click(pg, attr, value, div) { pill(pg, attr, value, div).onclick(); await settle(); }
+// #465 D: on Programs a conference is picked in More filters' Conference control, not a pill. Its options are drawn into
+// #mfConfList (id: the keyed value, reversibly encoded); a pick goes through the list's own click listener.
+const confOption = (pg, d, c) => {
+  const html = pg.$('#mfConfList').innerHTML;
+  return [...html.matchAll(/<div role="option" id="([^"]+)"[^>]*aria-selected="(true|false)" data-i="(\d+)"/g)].map(m => ({ id: m[1], selected: m[2] === 'true', i: Number(m[3]) }))
+    .find(o => decodeURIComponent(o.id.replace(/^mfConf-/, '').replace(/_/g, '%')) === `${d}|${c}`);
+};
+async function pickConf(pg, d, c) {
+  const o = confOption(pg, d, c); assert.ok(o, `no ${d} ${c} option in the Conference control`);
+  for (const fn of pg.$('#mfConfList')._listeners.click || []) fn({ target: { closest: () => ({ dataset: { i: String(o.i) } }) } });
+  await settle();
+}
 async function type(pg, text) {
   const box = pg.$('#q');
   assert.equal((box._listeners.input || []).length, 1, 'the header box has no input handler');
@@ -242,7 +255,7 @@ test('arriving on a link applies it over the saved filters, saves it, and rewrit
   assert.equal(f.sort, 'name'); assert.equal(f.view, 'cards');
   assert.equal(pg.sb.S.qRaw, 'Ohio'); assert.equal(pg.$('#q').value, 'Ohio', 'the search box does not show the link\'s search');
   assert.match(pg.$('#app').innerHTML, /matching “Ohio”/);
-  assert.equal(pill(pg, 'conf', 'Independent', 'D2')._attrs['aria-pressed'], 'true', 'the D2 Independent pill is not lit');
+  assert.equal(confOption(pg, 'D2', 'Independent')?.selected, true, 'the D2 Independent option is not selected');
   assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).division, ['D2'], 'the link\'s state is not saved');
   assert.deepEqual(pg.hist.entries, ['#/programs?div=D2&conf=D2:Independent&q=Ohio&sort=name'], 'arriving added an entry or did not canonicalise');
   assert.equal(pushes(pg), 0, 'arriving pushed');
@@ -322,7 +335,7 @@ test('old links: #/c/<name>, a keyed #/c/, #/rpi, #pilot=, #/p/ and #/trends kee
   assert.deepEqual(plain(pg.sb.S.filters.conf), ['ACC']); assert.deepEqual(plain(pg.sb.S.filters.division), []);
   assert.deepEqual(pg.hist.entries, ['#/programs?conf=ACC&sort=name']);
   assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).conf, ['ACC'], '#/c/ no longer saves the conference');
-  assert.equal(pill(pg, 'conf', 'ACC')._attrs['aria-pressed'], 'true', 'the sidebar was not redrawn for #/c/');
+  assert.equal(confOption(pg, 'D1', 'ACC')?.selected, true, 'the Conference control was not redrawn for #/c/');
   pg = await open({ hash: '#/c/D2%7CIndependent' });
   assert.deepEqual(pg.hist.entries, ['#/programs?conf=D2:Independent&sort=name']);
   for (const h of ['#/c/%E0', '#/c/Nowhere', '#/c/%3Cscript%3E']) {
@@ -379,7 +392,7 @@ test('privacy: no address ever carries recommendations, the pilot, compare, shor
     session: { 'cd.recs.pilot': 'SENTINEL_PILOT' },
   });
   await click(pg, 'region', 'West'); await click(pg, 'division', 'D1'); await click(pg, 'class', '2027');
-  await click(pg, 'conf', 'ACC', 'D1');
+  await pickConf(pg, 'D1', 'ACC');
   pg.$('#sortSelect').onchange({ target: { value: 'admit' } }); pg.$('#sortDir').onclick(); await settle();
   pg.sb.condFormOpen(); pg.$('#condValue').value = '40'; pg.sb.condFormSubmit(); await settle();
   await type(pg, 'Secret Player'); await settle(150);
@@ -421,7 +434,7 @@ test('static: one writer of list addresses; pushState only from listCommit and t
   assert.match(code, /history\.pushState\(null, '', trendsUrl\(sel\)\)/);
   assert.match(code, /function listUrlWrite\(mode, st = listSnapshot\(\)\) \{[^]*?history\[mode === 'push' \? 'pushState' : 'replaceState'\]\(null, '', h\)/);
   assert.ok(!/history\.replaceState\(null, '', '#\/'\); return go/.test(code), '#/c/ still rewrites to a bare #/');
-  assert.equal([...code.matchAll(/listCommit\(\);/g)].length, 16, 'the commit sites changed: pills (4), sort, direction, two conditions, the c key, Cards/Stats (2), table headers (2), Ask applied and undone, Recommended\'s clear');
+  assert.equal([...code.matchAll(/listCommit\(\);/g)].length, 19, 'the commit sites changed: pills (4), sort, direction, two conditions, the c key, Cards/Stats (2), table headers (2), Ask applied and undone, Recommended\'s clear, the toolbar\'s one commit (#465 D: its Division and Region pills and its chips), and the Conference control\'s toggle and chip removal');
   assert.match(code, /route: feedbackRoute\(\)/);
   assert.ok(!/route: location\.hash/.test(code), 'feedback still sends the raw address');
   // About the data says what a shared link carries (Bianque, non-blocking)
