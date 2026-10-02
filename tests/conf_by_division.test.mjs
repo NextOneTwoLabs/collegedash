@@ -174,16 +174,17 @@ test('one label helper: every place that prints the selection says "Independent 
   reset({ conf: ['D2|Independent'], view: 'table' });
   await sb.renderList();
   assert.match(app(), /<div class="flight-title">Independent \(D2\)<\/div>/, 'Stats table title');
+  // #465 (D4): the ID Camps page no longer prints or applies the Programs conference selection
   reset({ conf: ['D2|Independent'] });
   sb.location.hash = '#/camps';
   await sb.renderCamps();
-  assert.match(app(), /Independent \(D2\)/, 'camps subtitle or empty sentence');
+  assert.doesNotMatch(app(), /Independent \(D2\)/, 'the camps page carried the Programs conference selection');
   sb.location.hash = '#/';
 });
 
-test('the shared predicate: the camp view takes a keyed selection too (counted from the camps index)', async () => {
-  // No Independent has an ID camp today, so this uses the D2 conference with the most: a keyed selection must list
-  // exactly its camps (on the page before #425 a keyed value matched nothing, and the camp view went empty).
+test('#465 D4: a keyed Programs conference selection does not narrow the ID Camps page', async () => {
+  // Before #465 the camp view applied the Programs pills (and #425 made a keyed value work there). The owner's D4: the
+  // Programs filters do not narrow camps, so the page lists every upcoming ID camp whatever the pills say.
   const CAMPS = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'camps', 'index.json'), 'utf8'));
   const bySlug = new Map(INDEX.programs.map(p => [p.slug, p]));
   const tally = {};
@@ -193,8 +194,11 @@ test('the shared predicate: the camp view takes a keyed selection too (counted f
   reset({ conf: [`D2|${conf}`] });
   sb.location.hash = '#/camps';
   await sb.renderCamps();
-  const got = Number((/(\d+) upcoming ID camps? of/.exec(app()) || [])[1]);
-  assert.equal(got, n, `D2|${conf}: the camp view lists ${got}, the camps index has ${n}`);
+  const today = new Date(), iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const all = CAMPS.camps.filter(c => c.campType === 'id' && (bySlug.has(c.slug) || c.program) && (c.endDate || c.startDate) >= iso).length;
+  const got = Number((/(\d+) upcoming ID camps? at/.exec(app()) || [])[1]);
+  assert.ok(!/upcoming ID camps? of/.test(app()), 'the subtitle reads as filtered');
+  assert.equal(got, all, `D2|${conf} (${n} camps) narrowed the camps page to ${got}; it lists ${all}`);
   sb.location.hash = '#/';
   reset({});
 });
