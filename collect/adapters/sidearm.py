@@ -1006,14 +1006,14 @@ def _parse_game_cards(soup: BeautifulSoup, base_url: str, season: int | None) ->
         links = _game_links(c, base_url)
         if not opponent:
             continue
-        games.append({
+        games.append(common.with_game_status({
             "date": date, "datetime": None,
             "exhibition": exhibition,
             "conferenceGame": bool(c.select_one(".s-game-card__header__conf-text, .s-game-card__header__conf-logo")),
             "homeAway": "A" if stamp_txt.startswith("at") else "H" if stamp_txt.startswith("vs") else None,
             "opponent": opponent, "opponentRank": rank, "opponentSeed": seed, "location": location,
             "result": result, "score": score, "links": links,
-        })
+        }, " ".join(st)))  # #24: 'Canceled', 'PPD to 9/12' sit in the same box as W/L/T
     return games
 
 
@@ -1196,7 +1196,9 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
             date = _two_team_date(li, season)
             if result is None:
                 result, score = _two_team_result(li)
-        games.append({
+        # #24: every result box of the row, so a two-team row's per-side boxes are read too
+        status_text = " ".join(t for el in li.select(".sidearm-schedule-game-result") for t in _lines(el))
+        games.append(common.with_game_status({
             "date": date,
             "datetime": None,
             "exhibition": exhibition,
@@ -1205,7 +1207,7 @@ def _parse_legacy_games(soup: BeautifulSoup, base_url: str, season: int | None) 
             "opponent": opponent, "opponentRank": rank, "opponentSeed": seed,
             "location": ", ".join(loc_toks[:2]) if loc_toks else None,
             "result": result, "score": score, "links": _game_links(li, base_url),
-        })
+        }, status_text))
     return season, games
 
 

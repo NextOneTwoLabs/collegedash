@@ -1004,7 +1004,12 @@ def reconcile_ncaa_results(seasons: list[dict], program: dict, table_years: set[
 
 
 def _record_from_games(games: list[dict]) -> dict:
+    # #24: a game the school marks canceled or postponed (`status`, never set on a game with a result) will not be
+    # played on that row, so it is not `scheduled`; `notPlayed` counts those. A postponed game's make-up is a row of
+    # its own with its own result, and both used to be counted. W/L/T, `played` and the conference record cannot change.
+    # inProgress (below, `played < scheduled`) follows: a season whose only unplayed game is canceled is complete.
     real = [g for g in games if not g.get("exhibition")]
+    not_played = sum(1 for g in real if g.get("status") and not g.get("result"))
     w = sum(1 for g in real if g.get("result") == "W")
     l = sum(1 for g in real if g.get("result") == "L")
     t = sum(1 for g in real if g.get("result") == "T")
@@ -1012,7 +1017,7 @@ def _record_from_games(games: list[dict]) -> dict:
     cw = sum(1 for g in conf if g.get("result") == "W")
     cl = sum(1 for g in conf if g.get("result") == "L")
     ct = sum(1 for g in conf if g.get("result") == "T")
-    return {"wins": w, "losses": l, "ties": t, "text": f"{w}-{l}-{t}", "played": w + l + t, "scheduled": len(real),
+    return {"wins": w, "losses": l, "ties": t, "text": f"{w}-{l}-{t}", "played": w + l + t, "scheduled": len(real) - not_played, "notPlayed": not_played,
             "confText": f"{cw}-{cl}-{ct}" if conf else None, "exhibitions": len(games) - len(real)}
 
 

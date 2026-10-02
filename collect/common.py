@@ -1357,6 +1357,46 @@ def club_guard_line(where: str) -> str | None:
     return f"  !! {where} club: {n} pronoun-shaped value{'s' if n != 1 else ''} not stored as club (source: {sources})"
 
 
+# Issue #24: a game the school's schedule marks as not played. Read from the SAME box a parser reads W/L/T from
+# (Sidearm's score-time box or legacy result box, WMT's result element) - never from score tickers, news titles or a
+# row's promotion line, which also say "Postponed" and are not about the row. Two values, as a family reads them:
+#   canceled  - canceled / cancelled, no contest, abandoned: the game will not be played;
+#   postponed - postponed, PPD, suspended: not played on its date; a make-up is a new row with its own result.
+# Set only on a game with NO result: a forfeit ("L, - Forfeit") or a game completed after a delay ("W 2-1 Game
+# abandoned with 0:30 remaining") is a played game and keeps its result. The key is absent, never null, on every
+# other game. Measured over the 1,326 cached schedule pages (26,793 rows), see the #24 PR.
+GAME_STATUS_RES = (
+    ("canceled", re.compile(r"\b(?:cancell?ed|no[\s-]*contest|abandoned)(?!\w)", re.I)),
+    ("postponed", re.compile(r"\b(?:postponed|ppd\.?|suspended)(?!\w)", re.I)),
+)
+
+
+def game_status(text: str | None) -> str | None:
+    """'canceled', 'postponed' or None for the text of a game's result box (issue #24)."""
+    t = " ".join(str(text or "").split())
+    for value, rx in GAME_STATUS_RES:
+        if rx.search(t):
+            return value
+    return None
+
+
+def with_game_status(game: dict, result_text: str | None) -> dict:
+    """`game`, with `status` added when its result box says it was not played and it has no result (issue #24)."""
+    if not game.get("result"):
+        status = game_status(result_text)
+        if status:
+            game["status"] = status
+    return game
+
+
+def game_status_line(where: str, games: list[dict]) -> str | None:
+    """'  2026 schedule: 2 canceled, 1 postponed' for the refresh log, or None. Counts only (issue #24)."""
+    n = collections.Counter(g.get("status") for g in games if g.get("status"))
+    if not n:
+        return None
+    return f"  {where} schedule: " + ", ".join(f"{n[k]} {k}" for k in ("canceled", "postponed") if n[k])
+
+
 # Position labels, in two dicts (#263). POS_EXACT keys match a whole label part only: every 1-2
 # letter abbreviation lives here, so 'Manager' is not M, 'Fullback' is not F and 'Student Intern'
 # is nothing. POS_MAP keys also match as a prefix ('Midfielders', 'Center Backs'), longest key

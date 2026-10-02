@@ -215,6 +215,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     shtml, _ = common.fetch_text(u["schedule"], max_age_hours=12)
     sched = ad.parse_schedule(shtml, base)
     common.log(f"  {sched['season']} schedule: {len(sched['games'])} games")
+    status_line = common.game_status_line(str(sched["season"] or season), sched["games"])  # #24: counts only
+    if status_line:
+        common.log(status_line)
     if not sched["games"]:
         # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Say, name-free,
         # what the page holds instead, so the parser fix can be planned from evidence. Log-only; no request.
@@ -238,6 +241,9 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
                            f"so the page is not the {y} season")
                 continue
             sched_hist[str(y)] = s["games"]
+            status_line = common.game_status_line(str(y), s["games"])  # #24: counts only
+            if status_line:
+                common.log(status_line)
         except common.RobotsDisallowed:
             kept = (stored.get("scheduleHistory") or {}).get(str(y))
             if kept:
