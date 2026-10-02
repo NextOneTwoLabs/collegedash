@@ -57,6 +57,7 @@ import hashlib
 import io
 import json
 import os
+import random
 import shutil
 import sys
 import tempfile
@@ -78,10 +79,12 @@ LIVE_INDEX = os.path.join(common.PUBLIC_DATA_DIR, "camps", "index.json")
 # #465 size pins (gzip -9 of the file as build writes it, compact): a fixed allowance plus a per-row rate. The rows
 # follow the calendar, and the document has a fixed head (updated, window, counts: ~132 B gzipped with no rows) while
 # gzip has little to share across a handful of rows, so a pure per-row pin fails a correct build in an off-season with
-# ~20 or fewer camps (Bianque's review of #468). Measured for the PR on 2026-10-02: 7,004 B for 98 rows, of which the
-# program blocks are 1,803 B; and on a scratch document, 458 B for one row (71 B of it the block).
-CAMPS_GZ_BASE, CAMPS_GZ_PER_ROW = 600, 85
-PROGRAM_BLOCK_GZ_BASE, PROGRAM_BLOCK_GZ_PER_ROW = 150, 24
+# ~20 or fewer camps (Bianque's review of #468). Real rows at small n cost ~100 B each (gzip shares less across them),
+# so the bases are set over the worst of Bianque's 300-draw simulation on real rows (a document base of ~860 needed,
+# the blocks within 16 B of a 150 base): 1,000 and 250. Measured for the PR on 2026-10-02: 7,004 B for 98 rows, of
+# which the program blocks are 1,803 B. test_emitter checks the pins on seeded subsets of the real built rows.
+CAMPS_GZ_BASE, CAMPS_GZ_PER_ROW = 1000, 85
+PROGRAM_BLOCK_GZ_BASE, PROGRAM_BLOCK_GZ_PER_ROW = 250, 24
 
 
 def camps_size_ok(gz: int, rows: int) -> bool:
@@ -415,6 +418,30 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
        camps_size_ok(gz, len(rows)), f"{gz} B for {len(rows)} rows")
     ok(f"#465 size: the program blocks add at most {PROGRAM_BLOCK_GZ_BASE} + {PROGRAM_BLOCK_GZ_PER_ROW} B per row, gzipped",
        block_size_ok(gz - gz0, len(rows)), f"+{gz - gz0} B for {len(rows)} rows")
+    # The same pins on subsets of the REAL built rows (Bianque's re-review of #468): a thin season is a handful of real
+    # rows, which compress far worse than synthetic ones. The first and last n by date, and seeded random draws.
+    head = {k: doc[k] for k in ("updated", "window")}
+    worst: dict[int, tuple[int, int]] = {}
+    for n in (0, 1, 5, 10, 15, 20, 30, len(rows)):
+        if n > len(rows):
+            continue
+        subsets = [rows[:n], rows[len(rows) - n:]] + [random.Random(seed).sample(rows, n) for seed in range(12)]
+        for sub in subsets:
+            g = len(gzip.compress((json.dumps({**head, "counts": build.camp_counts(sub), "camps": sub},
+                                              ensure_ascii=False, separators=(",", ":")) + "\n").encode(), 9))
+            g0 = len(gzip.compress((json.dumps({**head, "counts": build.camp_counts(sub),
+                                                "camps": [{k: v for k, v in r.items() if k != "program"} for r in sub]},
+                                               ensure_ascii=False, separators=(",", ":")) + "\n").encode(), 9))
+            w = worst.get(n, (0, 0))
+            worst[n] = (max(w[0], g), max(w[1], g - g0))
+    over = [(n, g, CAMPS_GZ_BASE + CAMPS_GZ_PER_ROW * n) for n, (g, _b) in worst.items() if not camps_size_ok(g, n)]
+    over_b = [(n, b, PROGRAM_BLOCK_GZ_BASE + PROGRAM_BLOCK_GZ_PER_ROW * n) for n, (_g, b) in worst.items() if not block_size_ok(b, n)]
+    ok("#465 size: on subsets of the real built rows (0 to all, first, last and 12 seeded draws each) the document is within its pin",
+       not over, f"over the pin (n, gzipped, pin): {over}")
+    ok("#465 size: ... and the program blocks within theirs", not over_b, f"over the pin (n, block, pin): {over_b}")
+    if VERBOSE:
+        print("       worst real-row subsets (n: document / blocks gzipped): "
+              + ", ".join(f"{n}: {g}/{b}" for n, (g, b) in sorted(worst.items())))
     if VERBOSE:
         print(f"       camps index: {len(raw)} B raw, {gz} B gzipped ({gz0} B without the program blocks), {len(rows)} rows")
 
