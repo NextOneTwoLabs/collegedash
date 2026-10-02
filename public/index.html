@@ -1335,13 +1335,20 @@ function toggleSidebar() {
   btn.setAttribute('aria-expanded', String(!collapsed));
   lsSet('cd.sidebar', collapsed ? 'collapsed' : 'open');
 }
+// It clears the sheet at any width (Bianque on #476): a sheet left open when the window widened must still end.
 function closeDrawer({ focus = false } = {}) {
-  if (!isPhone()) return;
   const sb = $('#sidebar'), was = sb.classList.contains('open');
-  sb.classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false');
+  if (!was && !isPhone()) return;  // a desktop rail with no drawer open: nothing to close, and its toggle's state is its own
+  sb.classList.remove('open'); $('#sidebarOverlay').classList.remove('visible');
+  // on a phone the drawer is now shut; past 768 px the toggle speaks for the desktop rail again (shown unless collapsed)
+  $('#sidebarToggle').setAttribute('aria-expanded', isPhone() ? 'false' : String(!$('#layout').classList.contains('sidebar-collapsed')));
   drawerSheetState(false);
   if (focus && was) $('#sidebarToggle')?.focus();
 }
+// #465 D (Bianque on #476): widening past 768 px with the sheet open (a phone turned to landscape, 844-932 px) ends it,
+// as the #400 sheet re-checks on resize - otherwise the page stays inert under an overlay that no tap or key can close
+// there. Focus goes to the opener, which the desktop layout shows (the sheet's heading and close button it does not).
+window.addEventListener('resize', () => { if (!isPhone() && $('#sidebar').classList.contains('open')) closeDrawer({ focus: true }); });
 // A pick inside the drawer closes it, except on Programs, where the sheet stays open until Show N, ✕, Escape or the overlay.
 function closeDrawerOnPick() { if (!isProgramsView()) closeDrawer(); }
 $('#sidebarToggle').onclick = toggleSidebar;

@@ -136,7 +136,7 @@ function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sb: sandbox, $: bySelector, body, header, bar, hist, FOCUS, docListeners };
+  return { sb: sandbox, $: bySelector, body, header, bar, hist, FOCUS, docListeners, winListeners };
 }
 const settle = (ms = 80) => new Promise(r => setTimeout(r, ms));
 async function open(opts) { const pg = loadPage(opts); await settle(300); return pg; }
@@ -186,6 +186,26 @@ test('phones: the opener is named, says whether the sheet is open and what it co
   assert.ok(z('', '.header') < z(PHONE, 'body.sheet-open .sidebar-overlay') && z(PHONE, 'body.sheet-open .sidebar-overlay') < z(PHONE, 'body.sheet-open .sidebar'),
     'not header < backdrop < sheet');
   assert.ok(z(PHONE, 'body.sheet-open .sidebar') > z('', '.qpanel') && z(PHONE, 'body.sheet-open .sidebar') < z(PHONE, '.recs-panel'), 'not #447 panel < sheet < #400 sheet');
+});
+
+// Bianque on #476: a phone turned to landscape (844-932 px) with the sheet open used to leave the page inert under an
+// overlay that nothing could close there (closeDrawer and the sheet's Escape both stood down above 768 px).
+test('a window widened past 768 px with the sheet open ends it: nothing inert, no overlay, focus on the opener', async () => {
+  for (const wide of [844, 900, 932]) {
+    const pg = await open({ width: 390 });
+    const sb = pg.$('#sidebar');
+    pg.$('#sidebarToggle').onclick();
+    assert.equal(pg.$('#main').inert, true);
+    pg.sb.innerWidth = wide;
+    (pg.winListeners.resize || []).forEach(fn => fn({ type: 'resize' }));
+    assert.ok(!sb.classList.contains('open'), `${wide}px: the sheet is still open`);
+    assert.ok(!pg.$('#sidebarOverlay').classList.contains('visible'), `${wide}px: the overlay still covers the page`);
+    assert.deepEqual([pg.$('#main').inert, pg.header.inert, pg.bar.inert], [false, false, false], `${wide}px: the page is still inert`);
+    assert.deepEqual([sb.getAttribute('role'), sb.getAttribute('aria-modal')], [null, null], `${wide}px: the rail is still a dialog`);
+    assert.ok(!pg.body.classList.contains('sheet-open'), `${wide}px: still drawn above the header`);
+    assert.equal(pg.FOCUS.el, '#sidebarToggle', `${wide}px: focus went to ${pg.FOCUS.el}`);
+    assert.equal(pg.$('#sidebarToggle').getAttribute('aria-expanded'), 'true', `${wide}px: the toggle does not say the desktop rail is shown`);
+  }
 });
 
 test('phones: every close - Show N, ✕, Escape, the overlay - clears inert, drops the dialog role and returns focus to the opener', async () => {
