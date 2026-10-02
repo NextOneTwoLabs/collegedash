@@ -121,7 +121,7 @@ test('#465: Home still draws its heading and destinations when the program index
   await settle();
   const html = page.app();
   assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/, 'Home did not draw');
-  assert.match(html, /href="#\/programs"[^>]*>Browse Programs<\/a>.*href="#\/camps"[^>]*>Find ID Camps<\/a>.*href="#\/trends"[^>]*>Explore Pipelines<\/a>/s, 'a destination is missing');
+  assert.match(html, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Browse Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*Find ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Explore Pipelines/, 'a destination is missing');
   assert.ok(html.includes(CARD) && html.includes('id="loadRetry"'), 'the try-again card is missing from Home');
   fail = false;
   page.el('#loadRetry').onclick();

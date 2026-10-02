@@ -166,12 +166,14 @@ test('a profile tab switch focuses the new active tab, not the heading', async (
   assert.equal(f.at(-1).opts?.preventScroll, true);
 });
 
-test('a view tab used to reach ID Camps focuses the ID Camps tab', async () => {
+// #465 B: ID Camps is a global destination (the header's nav, the phone's bottom bar), no longer a tab beside Cards/Stats,
+// so it has no tab strip: whatever control was used, its heading takes focus. The tab rule still holds where tabs
+// exist (a profile's tab switch, above).
+test('ID Camps has no tab strip any more: reached from a focused view tab, its heading takes focus', async () => {
   const pg = await open('#/');
   pg.sb.document.activeElement = ON_VIEW_TAB;
   const f = await nav(pg, '#/camps', 400);
-  assert.equal(f.at(-1)?.el, '.view-tab.active', `ID Camps did not focus its tab (${JSON.stringify(f)})`);
-  assert.equal(f.at(-1).href, '#/camps');
+  assert.ok(headingFocus(f), `ID Camps did not focus its heading (${JSON.stringify(f)})`);
 });
 
 test('the same page drawn again (a retry, an address rewritten in place) takes no focus', async () => {

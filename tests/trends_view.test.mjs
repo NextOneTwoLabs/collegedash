@@ -495,14 +495,15 @@ test('#315 phone first load: Loading, then a failed load leaves S.trends unset a
 });
 
 /* ---------- the tab's name (#322) ---------- */
-test('the tab and the breadcrumb read "Pipelines"; the page title reads "From Youth Clubs/High Schools to Colleges" (#329); the #/trends URL is unchanged', async () => {
+test('the nav and the breadcrumb read "Pipelines"; the page title reads "From Youth Clubs/High Schools to Colleges" (#329); the #/trends URL is unchanged', async () => {
   const page = await open('#/trends');
   const html = page.app();
-  const tabs = [...html.matchAll(/<a href="([^"]*)" class="view-tab[^"]*"[^>]*>([^<]*)<\/a>/g)];
-  const tab = tabs.find(m => m[1] === '#/trends');
-  assert.ok(tab, 'the tab still links to #/trends');
-  assert.equal(tab[2], 'Pipelines');
-  assert.ok(tab[0].includes('aria-selected="true"'), 'and is the selected tab');
+  // #465 B: Pipelines is a global destination - the header's nav and the phone's bottom bar link it - so the page has no
+  // tab strip; the label still reads Pipelines and still points at #/trends.
+  assert.ok(!/class="view-tab|data-view=/.test(html), 'the Pipelines page still carries a tab strip');
+  const PAGE_HTML = fs.readFileSync(HTML, 'utf8');
+  assert.match(PAGE_HTML, /<nav class="gnav" aria-label="Main">[^]*?<a href="#\/trends" data-nav="trends">Pipelines<\/a>/, 'the header nav does not link Pipelines at #/trends');
+  assert.match(PAGE_HTML, /<nav class="bottom-nav" aria-label="Main">[^]*?<a href="#\/trends" data-nav="trends">[^]*?<span>Pipelines<\/span>/, 'the bottom bar does not link Pipelines');
   assert.ok(!/Clubs &amp; schools|Clubs &amp; high schools|Clubs & high schools/.test(html), 'no old label left on the page');
   assert.ok(/class="breadcrumb-current"[^>]*>Pipelines</.test(html), 'the breadcrumb reads Pipelines');
   assert.ok(/<h1 class="content-title">From Youth Clubs\/High Schools to Colleges</.test(html), 'the page title reads the owner\'s wording (#329)');
