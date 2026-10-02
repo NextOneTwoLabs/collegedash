@@ -107,7 +107,8 @@ tr:hover td { background: var(--row-hover); }
 .theme-toggle:hover { background: var(--bg-surface-alt); }
 
 /* ===== LAYOUT ===== */
-.layout { display: flex; height: calc(100vh - var(--header-height)); margin-top: var(--header-height); }
+.layout { display: flex; height: calc(100vh - var(--header-height)); height: calc(100dvh - var(--header-height)); margin-top: var(--header-height);
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }  /* #465 B: dvh (100vh before it is supported); the side insets under viewport-fit=cover */
 .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 49; opacity: 0; transition: opacity var(--transition-med); }
 .sidebar-overlay.visible { display: block; opacity: 1; }
 .sidebar { width: var(--sidebar-width); min-width: var(--sidebar-width); background: var(--bg-surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; padding: 12px 0 0; transition: transform var(--transition-med), background var(--transition-med); z-index: 50; }
@@ -218,10 +219,12 @@ tr:hover td { background: var(--row-hover); }
 .recs-toast .btn { min-height: 44px; }
 @media (max-width: 768px) { .recs-toast { margin: 0 16px 12px; } }
 @media (min-width: 769px) and (max-width: 1180px) {
-  .recs-panel { position: fixed; top: var(--header-height); right: 0; bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }
+  .recs-panel { position: fixed; top: var(--header-height); right: env(safe-area-inset-right, 0px); bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }  /* #465 B: clear of a landscape notch */
 }
 @media (max-width: 768px) {
-  .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0; }
+  .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px)); padding-left: calc(16px + env(safe-area-inset-left, 0px)); padding-right: calc(16px + env(safe-area-inset-right, 0px)); }  /* #465 B: the sheet covers the header, so it keeps out of the notch itself */
+  .recs-actions { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }  /* #465 B: Show matches and Clear stay off the home indicator */
 }
 .browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
 .browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
@@ -646,7 +649,7 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
   .observed-top, .header-link { display: none; }
   .sidebar { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: 280px; min-width: 280px; transform: translateX(-100%); box-shadow: none; }
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
-  .drawer-show { display: block; position: sticky; bottom: 0; z-index: 1; padding: 10px 16px; background: var(--bg-surface); border-top: 1px solid var(--border); }
+  .drawer-show { display: block; position: sticky; bottom: 0; z-index: 1; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--bg-surface); border-top: 1px solid var(--border); }  /* #465 B: off the home indicator */
   .drawer-show .btn { width: 100%; justify-content: center; padding: 10px 12px; font-size: 14px; }
   .content-header { padding: 14px 16px 0; }
   .content-header-row { flex-direction: column; align-items: flex-start; }
@@ -690,8 +693,9 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
 @media (max-width: 900px) { .gnav a { padding: 7px 6px; font-size: 13px; } }
 /* #465 B, phones: the bar of four destinations, inside the safe area. --bottom-nav-h is its height; .layout ends above it,
    so the last row, the feedback form and the drawer's "Show N programs" are never under it; it is 0 while the
-   keyboard is up. Stacking: page < bar (45) < drawer and its overlay (49/50) < #400 panel (60/200) < header (100) and
-   #447's panel (120), which is capped to end above the bar. */
+   keyboard is up. Stacking: page < bar (45) < drawer overlay (49) < drawer (50) < #400 side panel (60) < header (100) <
+   #447's panel (120), which is capped to end above the bar; the #400 phone sheet (200) is modal and covers all of them.
+   Heights use 100dvh (the visible viewport while the browser's toolbars show) after a 100vh fallback. */
 @media (max-width: 768px) {
   :root { --bottom-nav-h: calc(56px + env(safe-area-inset-bottom, 0px)); }
   body.kbd-open { --bottom-nav-h: 0px; }
@@ -703,8 +707,9 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
   .bottom-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 44px; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
   .bottom-nav a[aria-current="page"] { color: var(--accent-text); }
   .bottom-nav svg { width: 22px; height: 22px; }
-  .layout { height: calc(100vh - var(--header-height) - var(--bottom-nav-h)); }
-  .qpanel { max-height: calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px); overflow-y: auto; }
+  .layout { height: calc(100vh - var(--header-height) - var(--bottom-nav-h)); height: calc(100dvh - var(--header-height) - var(--bottom-nav-h)); }
+  .qpanel { max-height: calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px); max-height: calc(100dvh - var(--header-height) - var(--bottom-nav-h) - 8px); overflow-y: auto; }
+  .sidebar { padding-left: env(safe-area-inset-left, 0px); }  /* #465 B: the drawer's left edge, clear of a landscape notch */
   .home-find { display: none; }  /* the search box is right above, in the sticky second row */
   .home-entries { grid-template-columns: 1fr; gap: 8px; }
   .home-entry { flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; }

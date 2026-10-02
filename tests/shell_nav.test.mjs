@@ -33,6 +33,8 @@ const INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', '
 const BODY = HTML.slice(HTML.indexOf('<body'), HTML.indexOf('<script>'));
 const CSS = parseCss([...HTML.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n'));
 const decl = (at, sel, prop) => CSS.filter(r => r.at.join(' ') === at && r.selectors.includes(sel)).flatMap(r => decls(r.body)).filter(d => d.prop === prop).map(d => d.value).pop();
+// every value a property is given, in order: a fallback first, then the value that wins where it is supported
+const declAll = (at, sel, prop) => CSS.filter(r => r.at.join(' ') === at && r.selectors.includes(sel)).flatMap(r => decls(r.body)).filter(d => d.prop === prop).map(d => d.value);
 const PHONE = '@media (max-width: 768px)';
 
 // ---------- 1. markup ----------
@@ -81,10 +83,12 @@ test('CSS: the bar shows on phones only, fixed at the foot, inside the safe area
 });
 
 test('CSS: nothing is drawn under the bar - the layout ends above it, the keyboard hides it, #447\'s panel stops above it', () => {
-  assert.equal(decl(PHONE, '.layout', 'height'), 'calc(100vh - var(--header-height) - var(--bottom-nav-h))', 'the last row can sit under the bar');
+  // Bianque on #470: 100vh is the large viewport (toolbars retracted); while they show, only 100dvh ends above the bar
+  assert.deepEqual(declAll(PHONE, '.layout', 'height'), ['calc(100vh - var(--header-height) - var(--bottom-nav-h))', 'calc(100dvh - var(--header-height) - var(--bottom-nav-h))'], 'the last row can sit under the bar');
+  assert.deepEqual(declAll('', '.layout', 'height'), ['calc(100vh - var(--header-height))', 'calc(100dvh - var(--header-height))'], 'the desktop layout ignores the dynamic viewport');
   assert.equal(decl(PHONE, 'body.kbd-open', '--bottom-nav-h'), '0px');
   assert.equal(decl(PHONE, 'body.kbd-open .bottom-nav', 'display'), 'none', 'the bar can cover a focused field');
-  assert.equal(decl(PHONE, '.qpanel', 'max-height'), 'calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px)', '#447\'s panel can end under the bar');
+  assert.deepEqual(declAll(PHONE, '.qpanel', 'max-height'), ['calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px)', 'calc(100dvh - var(--header-height) - var(--bottom-nav-h) - 8px)'], '#447\'s panel can end under the bar');
   assert.equal(decl(PHONE, '.qpanel', 'overflow-y'), 'auto');
 });
 
@@ -107,6 +111,21 @@ test('CSS: the header keeps its content inside the safe area (top inset, side in
   assert.equal(decl('@media (max-width: 460px)', '.header', 'padding-right'), 'max(12px, env(safe-area-inset-right, 0px))');
   assert.equal(decl('', ':root', '--header-height'), 'calc(60px + env(safe-area-inset-top, 0px))');
   assert.equal(decl(PHONE, ':root', '--header-height'), 'calc(112px + env(safe-area-inset-top, 0px))');
+});
+
+// Bianque on #470: viewport-fit=cover puts EVERY edge-anchored surface into the notch and home-indicator areas, not
+// only the header and the bar - so each one that touches an edge keeps its content clear of the inset there.
+test('CSS: every surface on a screen edge keeps clear of the safe areas (the #400 sheet, the drawer, the layout, the side panel)', () => {
+  const at768 = '@media (max-width: 768px)';
+  assert.equal(decl(at768, '.recs-panel', 'padding-top'), 'calc(12px + env(safe-area-inset-top, 0px))', 'the #400 sheet\'s heading and Close sit under the notch');
+  assert.equal(decl(at768, '.recs-panel', 'padding-left'), 'calc(16px + env(safe-area-inset-left, 0px))');
+  assert.equal(decl(at768, '.recs-panel', 'padding-right'), 'calc(16px + env(safe-area-inset-right, 0px))');
+  assert.equal(decl(at768, '.recs-actions', 'padding-bottom'), 'calc(14px + env(safe-area-inset-bottom, 0px))', 'Show matches and Clear sit on the home indicator');
+  assert.equal(decl(PHONE, '.drawer-show', 'padding-bottom'), 'calc(10px + env(safe-area-inset-bottom, 0px))', 'the drawer\'s Show N programs sits on the home indicator');
+  assert.equal(decl(PHONE, '.sidebar', 'padding-left'), 'env(safe-area-inset-left, 0px)', 'the drawer\'s left edge runs under a landscape notch');
+  assert.equal(decl('', '.layout', 'padding-left'), 'env(safe-area-inset-left, 0px)', 'a landscape phone over 768 px: the sidebar runs under the notch');
+  assert.equal(decl('', '.layout', 'padding-right'), 'env(safe-area-inset-right, 0px)');
+  assert.equal(decl('@media (min-width: 769px) and (max-width: 1180px)', '.recs-panel', 'right'), 'env(safe-area-inset-right, 0px)', 'the #400 side panel runs under the rounded corner');
 });
 
 // ---------- 3. behaviour ----------
